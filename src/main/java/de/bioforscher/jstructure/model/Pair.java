@@ -26,6 +26,14 @@ public class Pair<T> {
         return t2;
     }
 
+    /**
+     * Returns a new pair container with reversed order.
+     * @return a new pair where the first entry is now second and vice versa
+     */
+    public Pair<T> flip() {
+        return new Pair<>(t2, t1);
+    }
+
     @Override
     public String toString() {
         return "(" + t1 + ", " + t2 + ")";
@@ -53,7 +61,7 @@ public class Pair<T> {
         List<Pair<T>> unorderedPairs = new ArrayList<>();
         for(int i = 0; i < collection.size() - 1; i++) {
             for(int j = i + 1; j <  collection.size(); j++) {
-                unorderedPairs.add(new Pair(collection.get(i), collection.get(j)));
+                unorderedPairs.add(new Pair<>(collection.get(i), collection.get(j)));
             }
         }
         return unorderedPairs.stream();

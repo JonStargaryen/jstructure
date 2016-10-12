@@ -32,7 +32,7 @@ public enum AminoAcid {
 
     private static Map<String, AminoAcid> allAminoAcids;
 
-    interface ATOM_NAMES {
+    public interface ATOM_NAMES {
         /**
          * Handle to the list of names representing hydrogen atoms.
          */
@@ -41,6 +41,9 @@ public enum AminoAcid {
          * Handle to the list of names representing alpha carbons.
          */
         List<String> CA_ATOM_NAMES = Arrays.asList("CA");
+        List<String> C_ATOM_NAMES = Arrays.asList("C");
+        List<String> N_ATOM_NAMES = Arrays.asList("N");
+        List<String> O_ATOM_NAMES = Arrays.asList("O");
         /**
          * Handle to the list of names representing backbone atoms.
          */
@@ -129,11 +132,9 @@ public enum AminoAcid {
      * Orders all atoms associated to this {@link AtomContainer} in an reproducible way in agreement with the ordering
      * in <tt>PDB</tt> files.
      */
-    public static void orderAtomsByName() {
-        //TODO argument?
+    public static void orderAtomsByName(Residue residue) {
         //TODO implement
-        AminoAcid aminoAcid = valueOfIgnoreCase("");
-        Collections.sort(null, aminoAcid.atomNameComparator);
+//        Collections.sort(residue.atoms, aminoAcid.atomNameComparator);
     }
 
     /**

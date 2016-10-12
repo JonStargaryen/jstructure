@@ -11,11 +11,11 @@ import java.util.stream.Stream;
  * The container element representing a {@link Protein} chain. Is composed of {@link Residue} objects.
  * Created by S on 27.09.2016.
  */
-public class Chain implements ResidueContainer, AtomRecordWriter {
+public class Chain implements GroupContainer, AtomRecordWriter {
     /**
      * The container of all residues associated to this chain.
      */
-    private List<Residue> residues;
+    private List<Group> groups;
     /**
      * The unique chain name. Usually one character, e.g. 'A'.
      */
@@ -32,17 +32,17 @@ public class Chain implements ResidueContainer, AtomRecordWriter {
      */
     public Chain(String chainId) {
         this.chainId = chainId;
-        this.residues = new ArrayList<>();
+        this.groups = new ArrayList<>();
         this.featureMap = new HashMap<>();
     }
 
     /**
      * Registers a child. This object will assign a reference to itself to the residue.
-     * @param residue the residue to process
+     * @param group the residue to process
      */
-    public void addResidue(Residue residue) {
-        residues.add(residue);
-        residue.setParentChain(this);
+    public void addGroup(Group group) {
+        groups.add(group);
+        group.setParentChain(this);
     }
 
     /**
@@ -79,9 +79,8 @@ public class Chain implements ResidueContainer, AtomRecordWriter {
         return this.getClass().getSimpleName() + " name='" + this.chainId + "'";
     }
 
-    @Override
     public Stream<Residue> residues() {
-        return residues.stream();
+        return groups.stream().filter(Residue.class::isInstance).map(Residue.class::cast);
     }
 
     @Override
@@ -92,5 +91,10 @@ public class Chain implements ResidueContainer, AtomRecordWriter {
     @Override
     public Map<String, Object> getFeatureMap() {
         return featureMap;
+    }
+
+    @Override
+    public Stream<Group> groups() {
+        return groups.stream();
     }
 }

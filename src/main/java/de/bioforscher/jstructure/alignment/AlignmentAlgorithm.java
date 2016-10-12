@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.alignment;
 
 import de.bioforscher.jstructure.model.structure.AtomContainer;
+import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.linear.MatrixUtils;
 
 /**
@@ -33,8 +34,8 @@ public interface AlignmentAlgorithm {
     /**
      * Reports what atoms are aligned by this algorithm. Some will align all atoms handed to them, some will select the
      * considered atoms by name.
-     * @return the {@link AtomContainer.AtomNameFilter} the implementing
+     * @return the {@link AtomNameFilter} the implementing
      * algorithm applies
      */
-    AtomContainer.AtomNameFilter getAlignedAtomNameFilter();
+    AtomNameFilter getAlignedAtomNameFilter();
 }

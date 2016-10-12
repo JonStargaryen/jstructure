@@ -152,7 +152,7 @@ public class ProteinParser {
             if(this.currentResidue == null || this.currentResidue.getResidueNumber() != resNum) {
                 // residue changed - create new residue object and set reference
                 this.currentResidue = new Residue(aminoAcidName, resNum);
-                this.currentChain.addResidue(this.currentResidue);
+                this.currentChain.addGroup(this.currentResidue);
             }
 
             // we append the current residue container with additional atoms

@@ -141,6 +141,35 @@ public class LinearAlgebra3D {
     }
 
     /**
+     *
+     * @param v1
+     * @param v2
+     * @param v3
+     * @param v4
+     * @return
+     */
+    public static double torsionAngle(double[] v1, double[] v2, double[] v3, double[] v4) {
+        double[] ab = subtract(v1, v2);
+        double[] cb = subtract(v3, v2);
+        double[] bc = subtract(v2, v3);
+        double[] dc = subtract(v4, v3);
+
+        double[] abc = vectorProduct(ab, cb);
+        double[] bcd = vectorProduct(bc, dc);
+
+        double angle = angle(abc, bcd);
+        /* calc the sign: */
+        double[] vecprod = vectorProduct(abc, bcd);
+        double val = dotProduct(cb, vecprod);
+        if (val < 0.0) {
+            angle = -angle;
+        }
+
+        return angle;
+    }
+
+
+    /**
      * Computes the vector product between 2 3D vectors.
      * @param v1 the first 3D vector
      * @param v2 the second 3D vector

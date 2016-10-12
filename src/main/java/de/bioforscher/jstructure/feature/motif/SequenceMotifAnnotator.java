@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Residue;
-import de.bioforscher.jstructure.model.structure.ResidueContainer;
+import de.bioforscher.jstructure.model.structure.GroupContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,9 @@ import java.util.stream.Collectors;
  * Searches for sequence fragments matching any {@link SequenceMotifDefinition} and reports hits.
  * Created by S on 02.10.2016.
  */
-public class SequenceMotifAnnotator implements FeatureProvider<ResidueContainer> {
-    public enum FeatureNames {
-        SEQUENCE_MOTIF
-    }
-
+public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
     @Override
-    public void process(ResidueContainer residueContainer) {
+    public void process(GroupContainer residueContainer) {
         // we need chain information as motifs cannot be part of 2 chains
         Map<String, List<Residue>> chains = residueContainer.residues().collect(Collectors.groupingBy(residue ->
                 residue.getParentChain().getChainId()));
@@ -59,12 +55,11 @@ public class SequenceMotifAnnotator implements FeatureProvider<ResidueContainer>
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue, sequence);
                     residueList.forEach(residue -> {
                         //TODO this is horrifyingly fragile - standardize/boilerplate this
-                        List<SequenceMotif> value = residue.getFeature(List.class,
-                                FeatureNames.SEQUENCE_MOTIF.name());
+                        List<SequenceMotif> value = residue.getFeature(List.class, SEQUENCE_MOTIF);
                         // entry will be null at first - create list and assign reference
                         if(value == null) {
                             value = new ArrayList<>();
-                            residue.setFeature(FeatureNames.SEQUENCE_MOTIF.name(), value);
+                            residue.setFeature(SEQUENCE_MOTIF, value);
                         }
                         value.add(sequenceMotif);
 

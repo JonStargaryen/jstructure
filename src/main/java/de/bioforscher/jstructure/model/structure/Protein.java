@@ -11,6 +11,7 @@ import java.util.stream.Stream;
  * The root element of protein structures. A really simplified model, reduced to our particularized needs. Consists of
  * {@link Chain} objects.<br />
  * Created by S on 27.09.2016.
+ * TODO: at some point a wide range of fields should probably become final
  */
 public class Protein implements ChainContainer, AtomRecordWriter {
     /**
@@ -83,13 +84,18 @@ public class Protein implements ChainContainer, AtomRecordWriter {
     }
 
     @Override
+    public Stream<Group> groups() {
+        return chains().flatMap(Chain::groups);
+    }
+
+    @Override
     public Stream<Residue> residues() {
         return chains().flatMap(Chain::residues);
     }
 
     @Override
     public Stream<Atom> atoms() {
-        return residues().flatMap(Residue::atoms);
+        return groups().flatMap(Group::atoms);
     }
 
     @Override

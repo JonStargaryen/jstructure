@@ -1,12 +1,9 @@
 package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.feature.FeatureProvider;
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ResidueContainer;
+import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.filter.AtomDistanceCutoffFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +24,10 @@ import java.util.stream.Collectors;
  * Shrake, A., and J. A. Rupley. "Environment and Exposure to Solvent of Protein Atoms.
  * Lysozyme and Insulin." JMB (1973) 79:351-371.
  * Lee, B., and Richards, F.M. "The interpretation of Protein Structures: Estimation of
- * Static Accessibility" JMB (1971) 55:379-400
- * @author duarte_j</pre>
+ * Static Accessibility" JMB (1971) 55:379-400</pre>
+ * @author duarte_j
  */
-public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueContainer> {
+public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupContainer> {
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
     public static final int DEFAULT_N_SPHERE_POINTS = 960;
@@ -73,12 +70,11 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueC
     }
 
     @Override
-    public void process(ResidueContainer residueContainer) {
+    public void process(GroupContainer residueContainer) {
         // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-        nonHydrogenAtoms = residueContainer.nonHydrogenAtoms().map(atom -> {
-            atom.setFeature(FeatureNames.ATOM_RADIUS.name(), determineRadius(atom));
-            return atom;
-        }).collect(Collectors.toList());
+        nonHydrogenAtoms = residueContainer.nonHydrogenAtoms().collect(Collectors.toList());
+        nonHydrogenAtoms.parallelStream().forEach(atom -> atom.setFeature(FeatureNames.ATOM_RADIUS.name(),
+                determineRadius(atom)));
 
         // initialising the sphere points to sample
         spherePoints = generateSpherePoints(numberOfSpherePoints);
@@ -91,7 +87,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueC
     }
 
     /**
-     * Returns list of 3d coordinates of points on a sphere using the
+     * Returns list of 3D coordinates of points on a sphere using the
      * Golden Section Spiral algorithm.
      * @param nSpherePoints the number of points to be used in generating the spherical dot-density
      * @return
@@ -117,6 +113,8 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueC
      * @return the atom's radiues
      */
     private double determineRadius(Atom atom) {
+        Residue parentResidue = (Residue) atom.getParentGroup();
+
         switch(atom.getElement()) {
             case H: case D:
                 return Element.H.getVDWRadius();
@@ -137,7 +135,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueC
                         atomName.equals("CG2")) {
                     return TETRAHEDRAL_CARBON_VDW;
                 }
-                switch(atom.getParentResidue().getAminoAcid()) {
+                switch(parentResidue.getAminoAcid()) {
                     case PHENYLALANINE: case TRYPTOPHAN: case TYROSINE: case HISTIDINE: case ASPARTIC_ACID: case ASPARAGINE:
                         return TRIGONAL_CARBON_VDW;
                     case PROLINE: case LYSINE: case ARGININE: case METHIONINE: case ISOLEUCINE: case LEUCINE:
@@ -145,7 +143,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueC
                     case GLUTAMIC_ACID: case GLUTAMINE:
                         return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
                     default:
-                        throw new IllegalArgumentException("unknown case for residue: " + atom.getParentResidue());
+                        throw new IllegalArgumentException("unknown case for residue: " + atom.getParentGroup());
                 }
             default:
                 throw new IllegalArgumentException("unknown case for atom: " + atom);
@@ -159,8 +157,8 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<ResidueC
      */
     private List<Atom> findNeighbors(Atom atom) {
         final double cutoff = probeSize + probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS.name());
-        final CoordinateUtils.AtomDistanceCutoffFilter atomDistanceCutoffFilter = new
-                CoordinateUtils.AtomDistanceCutoffFilter(atom, cutoff);
+        final AtomDistanceCutoffFilter atomDistanceCutoffFilter = new
+                AtomDistanceCutoffFilter(atom, cutoff);
         return nonHydrogenAtoms.stream().filter(atomDistanceCutoffFilter).collect(Collectors.toList());
     }
 

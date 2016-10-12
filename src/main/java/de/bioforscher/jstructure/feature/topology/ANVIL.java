@@ -1,11 +1,10 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.FeatureProvider;
-import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ResidueContainer;
+import de.bioforscher.jstructure.model.structure.filter.AminoAcidFilter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,10 +58,10 @@ public class ANVIL implements FeatureProvider<Protein> {
      * Definition of amino acids which prefer to interact with water as a solvent and have a low tendency of being
      * embedded in the cell membrane.
      */
-    public static final ResidueContainer.AminoAcidFilter SOLVENT_AMINO_ACID_FILTER =
-            new ResidueContainer.AminoAcidFilter(Stream.of("ARG", "ASP", "LYS", "GLU", "ASN", "GLN", "PRO", "THR",
+    public static final AminoAcidFilter SOLVENT_AMINO_ACID_FILTER =
+            new AminoAcidFilter(Stream.of("ARG", "ASP", "LYS", "GLU", "ASN", "GLN", "PRO", "THR",
                     "TYR").map(AminoAcid::valueOfIgnoreCase)
-                    .collect(Collectors.toList()), false);
+                    .collect(Collectors.toList()));
 
     private static final int DEFAULT_NUMBER_OF_SPHERE_POINTS = 350;
     private static final double DEFAULT_STEP = 1.0;
@@ -155,9 +154,10 @@ public class ANVIL implements FeatureProvider<Protein> {
     private int[] hphobHphil(boolean checkMembranePlane, double[] diam, double[] c1, double[] c2) {
         int[] hphobHphil = { 0, 0 };
 
-        protein.alphaCarbons().filter(residue -> residue.getFeature(double.class,
-                    AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA.name()) <
-                afilter).filter(residue -> true);
+//        protein.residues().filter(residue -> residue.alphaCarbons().filter(alphaCarbon ->
+//                alphaCarbon.getFeature(double.class,
+//                        AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA.name()) <
+//                afilter).findAny().isPresent()).filter(residue -> checkMembranePlane && !(isInSpace(residue)));
         //TODO implement
 //        for(Chain chain : this.protein.chains) {
 //            for(Residue residue : chain.residues) {

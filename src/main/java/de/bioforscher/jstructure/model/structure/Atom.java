@@ -12,15 +12,17 @@ import java.util.Map;
  * Created by S on 27.09.2016.
  */
 public class Atom implements AtomRecordWriter, Container {
+    public static final float DEFAULT_BFACTOR = 1.0f;
+    public static final float DEFAULT_OCCUPANCY = 1.0f;
     private Element element;
     private String name;
     private int pdbSerial;
     private double[] coordinates;
-    private Residue parentResidue;
+    private Group parentGroup;
     private float occupancy;
     private float bfactor;
+    private boolean virtual;
     private Map<String, Object> featureMap;
-
 
     /**
      * Constructs an atom.
@@ -53,6 +55,26 @@ public class Atom implements AtomRecordWriter, Container {
      */
     public Atom(String name, int pdbSerial, String elementName, double[] coordinates, float occupancy, float bfactor) {
         this(name, pdbSerial, Element.valueOfIgnoreCase(elementName), coordinates, occupancy, bfactor);
+    }
+
+    /**
+     *
+     * @param name
+     * @param pdbSerial
+     * @param element
+     * @param coordinates
+     */
+    public Atom(String name, int pdbSerial, Element element, double[] coordinates) {
+        this(name, pdbSerial, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
+    }
+
+    /**
+     *
+     * @param coordinates
+     */
+    public Atom(double[] coordinates) {
+        this.coordinates = coordinates;
+        this.virtual = true;
     }
 
     /**
@@ -94,18 +116,18 @@ public class Atom implements AtomRecordWriter, Container {
 
     /**
      * Package-private method to set the parent reference.
-     * @param parentResidue the parent
+     * @param parentGroup the parent
      */
-    void setParentResidue(Residue parentResidue) {
-        this.parentResidue = parentResidue;
+    void setParentGroup(Group parentGroup) {
+        this.parentGroup = parentGroup;
     }
 
     /**
      * Returns the {@link Residue} this atom is associated to.
      * @return the parent container
      */
-    public Residue getParentResidue() {
-        return parentResidue;
+    public Group getParentGroup() {
+        return parentGroup;
     }
 
     @Override
@@ -118,7 +140,8 @@ public class Atom implements AtomRecordWriter, Container {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " name='" + this.name + "' coords='" + Arrays.toString(this.coordinates) + "' element='" + this.element + "'";
+        return this.getClass().getSimpleName() + " name='" + this.name + "' coords='" +
+                Arrays.toString(this.coordinates) + "' element='" + this.element + "'";
     }
 
     /**
@@ -150,6 +173,10 @@ public class Atom implements AtomRecordWriter, Container {
         return featureMap;
     }
 
+    public boolean isVirtual() {
+        return virtual;
+    }
+
     /**
      * Inner class to write <tt>ATOM</tt> records.
      */
@@ -171,10 +198,11 @@ public class Atom implements AtomRecordWriter, Container {
         }
 
         public static String toPDBString(Atom atom) {
-            String record = "ATOM  ";
+            Group parentGroup = atom.parentGroup;
+            String record = parentGroup instanceof Residue ? "ATOM  " : "HETATM";
             // format output ...
-            String resName = atom.parentResidue.getAminoAcid().getThreeLetterCode();
-            String pdbcode = String.valueOf(atom.parentResidue.getResidueNumber());
+            String resName = parentGroup.getPdbName();
+            String pdbcode = String.valueOf(parentGroup.getResidueNumber());
 
             int seri = atom.pdbSerial;
             String serial = String.format("%5d", seri);
@@ -198,7 +226,7 @@ public class Atom implements AtomRecordWriter, Container {
             s.append(altLoc);
             s.append(leftResName);
             s.append(" ");
-            s.append(atom.parentResidue.getParentChain().getChainId());
+            s.append(parentGroup.getParentChain().getChainId());
             s.append(resseq);
             s.append("   ");
             s.append(x);

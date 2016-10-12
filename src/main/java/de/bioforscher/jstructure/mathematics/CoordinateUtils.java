@@ -1,14 +1,17 @@
 package de.bioforscher.jstructure.mathematics;
 
-import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.AtomContainer;
+import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import de.bioforscher.jstructure.model.structure.filter.AtomPairDistanceCutoffFilter;
+import de.bioforscher.jstructure.model.structure.filter.GroupPairDistanceCutoffFilter;
+import de.bioforscher.jstructure.model.structure.filter.ResiduePairDistanceCutoffFilter;
+import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,44 +25,15 @@ import java.util.stream.Stream;
  */
 public class CoordinateUtils {
     /**
-     *
-     * @param fragmentOfSize4
-     * @return
-     */
-    public static double torsionAngle(Fragment<Atom> fragmentOfSize4) {
-        double[] ab = LinearAlgebra3D.subtract(fragmentOfSize4.getElement(0).getCoordinates(),
-                fragmentOfSize4.getElement(1).getCoordinates());
-        double[] cb = LinearAlgebra3D.subtract(fragmentOfSize4.getElement(2).getCoordinates(),
-                fragmentOfSize4.getElement(1).getCoordinates());
-        double[] bc = LinearAlgebra3D.subtract(fragmentOfSize4.getElement(1).getCoordinates(),
-                fragmentOfSize4.getElement(2).getCoordinates());
-        double[] dc = LinearAlgebra3D.subtract(fragmentOfSize4.getElement(3).getCoordinates(),
-                fragmentOfSize4.getElement(2).getCoordinates());
-
-        double[] abc = LinearAlgebra3D.vectorProduct(ab, cb);
-        double[] bcd = LinearAlgebra3D.vectorProduct(bc, dc);
-
-        double angle = LinearAlgebra3D.angle(abc, bcd);
-        /* calc the sign: */
-        double[] vecprod = LinearAlgebra3D.vectorProduct(abc, bcd);
-        double val = LinearAlgebra3D.dotProduct(cb, vecprod);
-        if (val < 0.0) {
-            angle = -angle;
-        }
-
-        return angle;
-    }
-
-    /**
      * Returns a stream of all atom combination whose euclidean distance is below a defined threshold.
      * @param atoms a collection of atoms
      * @param distanceCutoff the distance threshold below two atoms are considered to be in contact
      * @return all atom pairs in contact according to the distance cutoff
      * @see Pair#unorderedPairsOf(List)
-     * @see PairDistanceCutoffFilter
+     * @see AtomPairDistanceCutoffFilter
      */
     public static Stream<Pair<Atom>> atomPairsInContact(Stream<Atom> atoms, double distanceCutoff) {
-        PairDistanceCutoffFilter distanceCutoffFilter = new PairDistanceCutoffFilter(distanceCutoff);
+        final AtomPairDistanceCutoffFilter distanceCutoffFilter = new AtomPairDistanceCutoffFilter(distanceCutoff);
         return Pair.unorderedPairsOf(atoms.collect(Collectors.toList())).filter(distanceCutoffFilter);
     }
 
@@ -95,53 +69,8 @@ public class CoordinateUtils {
      * @return the maximal distance occurring between the centroid and any other atom
      */
     public static double maximalExtent(Stream<Atom> atoms, double[] centroid) {
-        //TODO use reduce() here
-        return atoms.filter(AtomContainer.AtomNameFilter.CA_ATOM_FILTER).mapToDouble(atom ->
+        return atoms.filter(AtomNameFilter.CA_ATOM_FILTER).mapToDouble(atom ->
                 LinearAlgebra3D.distance(atom.getCoordinates(), centroid)).max().getAsDouble();
-    }
-
-    /**
-     * A filter which returns <code>true</code> when the euclidean distance between a {@link Pair} of atoms is smaller
-     * than a given threshold.
-     */
-    public static class PairDistanceCutoffFilter implements Predicate<Pair<Atom>> {
-        //TODO maybe define some filter interface and standardize the behaviour of filters
-        private final double squaredDistanceCutoff;
-
-        public PairDistanceCutoffFilter(double distanceCutoff) {
-            // square for faster computations
-            this.squaredDistanceCutoff = distanceCutoff * distanceCutoff;
-        }
-
-        @Override
-        public boolean test(Pair<Atom> atomPair) {
-            return LinearAlgebra3D.distanceFast(atomPair.getFirst().getCoordinates(),
-                    atomPair.getSecond().getCoordinates()) < squaredDistanceCutoff;
-        }
-    }
-
-    /**
-     * A filter which returns <code>true</code> for each atom of a collection whose euclidean distance to a reference
-     * atom is smaller than a given threshold.
-     */
-    public static final class AtomDistanceCutoffFilter implements Predicate<Atom> {
-        private final Atom referenceAtom;
-        private final double[] referenceCoordinates;
-        private final double squaredDistanceCutoff;
-
-        public AtomDistanceCutoffFilter(Atom referenceAtom, double distanceCutoff) {
-            this.referenceAtom = referenceAtom;
-            this.referenceCoordinates = this.referenceAtom.getCoordinates();
-            // square for faster computations
-            this.squaredDistanceCutoff = distanceCutoff * distanceCutoff;
-        }
-
-        @Override
-        public boolean test(Atom atomToTest) {
-            // return true when distance is smaller than threshold, but ensure atoms are not equal
-            return !atomToTest.equals(referenceAtom) && LinearAlgebra3D.distanceFast(referenceCoordinates,
-                    atomToTest.getCoordinates()) < squaredDistanceCutoff;
-        }
     }
 
     /**
@@ -167,15 +96,13 @@ public class CoordinateUtils {
      * @param rotation the <tt>3 x 3</tt> matrix describing the desired rotation
      */
     public static Stream<Atom> transform(Stream<Atom> atoms, double[] translation, double[][] rotation) {
-        return atoms.map(atom -> {
-            //TODO wrap in function?
+        return atoms.peek(atom -> {
             double[] vector = atom.getCoordinates();
             atom.setCoordinates(new double[] {
                     (rotation[0][0] * vector[0] + rotation[0][1] * vector[1] + rotation[0][2] * vector[2]) + translation[0],
                     (rotation[1][0] * vector[0] + rotation[1][1] * vector[1] + rotation[1][2] * vector[2]) + translation[1],
                     (rotation[2][0] * vector[0] + rotation[2][1] * vector[1] + rotation[2][2] * vector[2]) + translation[2]
             });
-            return atom;
         });
     }
 
@@ -201,10 +128,8 @@ public class CoordinateUtils {
      * @param shiftVector the vector to add to each atom's coordinates
      */
     public static Stream<Atom> shift(Stream<Atom> atoms, double[] shiftVector) {
-        return atoms.map(atom -> {
-            //TODO wrap in function?
+        return atoms.peek(atom -> {
             atom.setCoordinates(LinearAlgebra3D.add(atom.getCoordinates(), shiftVector));
-            return atom;
         });
     }
 
@@ -244,5 +169,21 @@ public class CoordinateUtils {
             rmsd += LinearAlgebra3D.distanceFast(atomList1.get(i).getCoordinates(), atomList2.get(i).getCoordinates());
         }
         return Math.sqrt(rmsd / atomList1.size());
+    }
+
+    /**
+     * Returns a stream of all residue combination whose euclidean distance is below a defined threshold.
+     * @param residues a collection of residues
+     * @param distanceCutoff the distance threshold below two atoms are considered to be in contact
+     * @param representationScheme how to represent residues?
+     * @return all residue pairs in contact according to the distance cutoff
+     * @see Pair#unorderedPairsOf(List)
+     * @see GroupPairDistanceCutoffFilter
+     */
+    public static Stream<Pair<Residue>> residuePairsInContact(Stream<Residue> residues, double distanceCutoff,
+                                                              RepresentationScheme representationScheme) {
+        final ResiduePairDistanceCutoffFilter distanceCutoffFilter = new ResiduePairDistanceCutoffFilter(distanceCutoff,
+                representationScheme);
+        return Pair.unorderedPairsOf(residues.collect(Collectors.toList())).filter(distanceCutoffFilter);
     }
 }

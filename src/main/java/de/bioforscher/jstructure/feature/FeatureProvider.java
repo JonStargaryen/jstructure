@@ -13,4 +13,6 @@ import de.bioforscher.jstructure.model.structure.Residue;
  */
 public interface FeatureProvider<F extends FeatureContainer> {
     void process(F featureContainer);
+
+    //TODO define some clean-up routine
 }

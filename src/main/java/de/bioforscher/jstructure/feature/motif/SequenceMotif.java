@@ -1,13 +1,12 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.feature.ComplexFeatureValue;
 import de.bioforscher.jstructure.model.structure.Residue;
 
 /**
  * The container object of a found sequence motif.
  * Created by S on 02.10.2016.
  */
-public class SequenceMotif implements ComplexFeatureValue {
+public class SequenceMotif {
     private final SequenceMotifDefinition motifDefinition;
     private final Residue startResidue;
     private final Residue endResidue;
@@ -39,6 +38,7 @@ public class SequenceMotif implements ComplexFeatureValue {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " motifDefinition='" + motifDefinition + "' sequence='" + sequence +
-                "' startResidue='" + startResidue.getName() + "' endResidue='" + endResidue.getName() + "'";
+                "' startResidue='" + startResidue.getPdbName() + "-" + startResidue.getResidueNumber() +
+                "' endResidue='" + endResidue.getPdbName() + "-" + endResidue.getResidueNumber() + "'";
     }
 }

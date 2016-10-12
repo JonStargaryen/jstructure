@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.AtomContainer;
+import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -17,10 +18,10 @@ import java.util.stream.Collectors;
  * Created by S on 30.09.2016.
  */
 public class SVDSuperimposer implements AlignmentAlgorithm {
-    public static final AtomContainer.AtomNameFilter DEFAULT_ALIGNED_ATOMS = AtomContainer.AtomNameFilter.CA_ATOM_FILTER;
-    private AtomContainer.AtomNameFilter alignedAtomNameFilter;
+    public static final AtomNameFilter DEFAULT_ALIGNED_ATOMS = AtomNameFilter.CA_ATOM_FILTER;
+    private AtomNameFilter alignedAtomNameFilter;
 
-    public SVDSuperimposer(AtomContainer.AtomNameFilter alignedAtomNameFilter) {
+    public SVDSuperimposer(AtomNameFilter alignedAtomNameFilter) {
         this.alignedAtomNameFilter = alignedAtomNameFilter;
     }
 
@@ -76,7 +77,7 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
     }
 
     @Override
-    public AtomContainer.AtomNameFilter getAlignedAtomNameFilter() {
+    public AtomNameFilter getAlignedAtomNameFilter() {
         return alignedAtomNameFilter;
     }
 }
