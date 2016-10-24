@@ -28,7 +28,7 @@ public class LinearAlgebra3D {
      * parameter; the return value is constrained to the range [0,{@link Math#PI}].
      * @param v1 the first 3D vector
      * @param v2 the second 3D vector
-     * @return the angle in radians in the range [0,{@link Math#PI}]
+     * @return the angle in degrees in the range [-180,180]
      */
     public static double angle(double[] v1, double[] v2) {
         double vDot = dotProduct(v1, v2) / (norm(v1) * norm(v2));
@@ -43,7 +43,7 @@ public class LinearAlgebra3D {
      * @return the original value if it lies in the interval [x_l,x_u], else x_l or x_u
      */
     public static double capToInterval(double lowerBound, double value, double upperBound) {
-        return lowerBound < value ? lowerBound : upperBound > value ? upperBound : value;
+        return value < lowerBound ? lowerBound : value > upperBound ? upperBound : value;
     }
 
     /**
