@@ -1,4 +1,4 @@
-package mds;
+package mathematics.mds;
 
 import de.bioforscher.jstructure.mathematics.mds.MultiDimensionalScaling;
 import org.junit.Assert;
@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
  * Created by S on 27.09.2016.
  */
 public class MultiDimensionalScalingFunctionalTest {
-    private static final String POCKET_ALIGN_CSV_1_PATH = "mds/scheme1.csv";
-    private static final String POCKET_ALIGN_CSV_2_PATH = "mds/scheme2.csv";
+    private static final String POCKET_ALIGN_CSV_1_PATH = "mathematics/mds/scheme1.csv";
+    private static final String POCKET_ALIGN_CSV_2_PATH = "mathematics/mds/scheme2.csv";
 
     @Test
     public void shouldRunMultiDimensionalScaling() {

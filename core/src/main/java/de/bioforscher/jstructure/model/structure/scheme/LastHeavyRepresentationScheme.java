@@ -15,11 +15,12 @@ public class LastHeavyRepresentationScheme implements RepresentationScheme {
     @Override
     public Atom determineRepresentingAtom(Group group) {
         if(!(group instanceof Residue)) {
-            throw new IllegalArgumentException(getClass().getSimpleName() + " can only be employed to residue objects use CentroidScheme instead");
+            throw new IllegalArgumentException(getClass().getSimpleName() +
+                    " can only be employed to residue objects use CentroidScheme instead");
         }
-        Atom alphaCarbon = alphaCarbonRepresentationScheme.determineRepresentingAtom(group);
-        return group.nonHydrogenAtoms().max((a1, a2) -> LinearAlgebra3D.distanceFast(alphaCarbon.getCoordinates(),
-                a1.getCoordinates()) < LinearAlgebra3D.distanceFast(alphaCarbon.getCoordinates(), a2.getCoordinates())
-                ? 1 : -1).get();
+        final Atom alphaCarbon = alphaCarbonRepresentationScheme.determineRepresentingAtom(group);
+        return group.nonHydrogenAtoms()
+                    .max((a1, a2) -> LinearAlgebra3D.distanceFast(alphaCarbon.getCoordinates(), a1.getCoordinates()) <
+                        LinearAlgebra3D.distanceFast(alphaCarbon.getCoordinates(), a2.getCoordinates()) ? 1 : -1).get();
     }
 }

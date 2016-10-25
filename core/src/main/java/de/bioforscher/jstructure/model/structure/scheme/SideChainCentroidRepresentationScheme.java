@@ -12,7 +12,8 @@ public class SideChainCentroidRepresentationScheme implements RepresentationSche
     @Override
     public Atom determineRepresentingAtom(Group group) {
         if(!(group instanceof Residue)) {
-            throw new IllegalArgumentException(getClass().getSimpleName() + " can only be employed to residue objects use CentroidScheme instead");
+            throw new IllegalArgumentException(getClass().getSimpleName() +
+                    " can only be employed to residue objects use CentroidScheme instead");
         }
         return new Atom(CoordinateUtils.centroid(((Residue) group).sideChainAtoms()));
     }

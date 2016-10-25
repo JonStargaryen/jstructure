@@ -17,9 +17,9 @@ public class LinearAlgebra3D {
      */
     public static double[] add(double[] v1, double[] v2) {
         return new double[] {
-                v1[0] + v2[0],
-                v1[1] + v2[1],
-                v1[2] + v2[2]
+            v1[0] + v2[0],
+            v1[1] + v2[1],
+            v1[2] + v2[2]
         };
     }
 
@@ -78,9 +78,9 @@ public class LinearAlgebra3D {
      */
     public static double[] divide(double[] v, double scalar) {
         return new double[] {
-                v[0] / scalar,
-                v[1] / scalar,
-                v[2] / scalar
+            v[0] / scalar,
+            v[1] / scalar,
+            v[2] / scalar
         };
     }
 
@@ -102,9 +102,9 @@ public class LinearAlgebra3D {
      */
     public static double[] multiply(double[] v, double scalar) {
         return new double[] {
-                v[0] * scalar,
-                v[1] * scalar,
-                v[2] * scalar
+            v[0] * scalar,
+            v[1] * scalar,
+            v[2] * scalar
         };
     }
 
@@ -114,7 +114,7 @@ public class LinearAlgebra3D {
      * @return the norm of that vector
      */
     public static double norm(double[] v) {
-        return Math.sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
+        return Math.sqrt(dotProduct(v, v));
     }
 
     /**
@@ -134,14 +134,14 @@ public class LinearAlgebra3D {
      */
     public static double[] subtract(double[] v1, double[] v2) {
         return new double[] {
-                v1[0] - v2[0],
-                v1[1] - v2[1],
-                v1[2] - v2[2]
+            v1[0] - v2[0],
+            v1[1] - v2[1],
+            v1[2] - v2[2]
         };
     }
 
     /**
-     *
+     * Computes the torsion angle of 4 consecutive points.
      * @param v1
      * @param v2
      * @param v3
@@ -177,9 +177,9 @@ public class LinearAlgebra3D {
      */
     public static double[] vectorProduct(double[] v1, double[] v2) {
         return new double[] {
-                v1[1] * v2[2] - v1[2] * v2[1],
-                v1[2] * v2[0] - v1[0] * v2[2],
-                v1[0] * v2[1] - v1[1] * v2[0]
+            v1[1] * v2[2] - v1[2] * v2[1],
+            v1[2] * v2[0] - v1[0] * v2[2],
+            v1[0] * v2[1] - v1[1] * v2[0]
         };
     }
 }

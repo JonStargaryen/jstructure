@@ -15,11 +15,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Checks functions of the PDB parser and its integrity with the data model.
  * Created by S on 29.09.2016.
  */
 public class ProteinParserFunctionalTest {
-    private static final String PDB_EXTENSION = ".pdb";
-    private static final String PDB_DIRECTORY = "pdb/";
+    private static final String PDB_EXTENSION = ".parser";
+    private static final String PDB_DIRECTORY = "parser/";
     private static final String PDB_PARSED_DIRECTORY = PDB_DIRECTORY + "parsed/";
     private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "1brr", "4cha");
     private static final List<String> PDB_FILE_PATHS = PDB_IDS.stream()

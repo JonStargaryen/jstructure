@@ -24,7 +24,7 @@ public class Chain implements GroupContainer, AtomRecordWriter {
      * Handle to the containing element.
      */
     private Protein parentProtein;
-    private Map<String, Object> featureMap;
+    private Map<Enum, Object> featureMap;
 
     /**
      * Constructor for chain objects.
@@ -71,7 +71,8 @@ public class Chain implements GroupContainer, AtomRecordWriter {
 
     @Override
     public String composePDBRecord() {
-        return residues().map(Residue::composePDBRecord).collect(Collectors.joining(System.lineSeparator()));
+        return residues().map(Residue::composePDBRecord)
+                         .collect(Collectors.joining(System.lineSeparator()));
     }
 
     @Override
@@ -80,7 +81,9 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     }
 
     public Stream<Residue> residues() {
-        return groups.stream().filter(Residue.class::isInstance).map(Residue.class::cast);
+        return groups.stream()
+                     .filter(Residue.class::isInstance)
+                     .map(Residue.class::cast);
     }
 
     @Override
@@ -89,7 +92,7 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     }
 
     @Override
-    public Map<String, Object> getFeatureMap() {
+    public Map<Enum, Object> getFeatureMap() {
         return featureMap;
     }
 

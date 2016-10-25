@@ -22,7 +22,7 @@ public class Atom implements AtomRecordWriter, Container {
     private float occupancy;
     private float bfactor;
     private boolean virtual;
-    private Map<String, Object> featureMap;
+    private Map<Enum, Object> featureMap;
 
     /**
      * Constructs an atom.
@@ -133,6 +133,7 @@ public class Atom implements AtomRecordWriter, Container {
     @Override
     public String composePDBRecord() {
         if (AtomRecordProvider.toPDBString(this).length() == 0) {
+            //TODO logging/error-handling
             System.out.println(this);
         }
         return AtomRecordProvider.toPDBString(this);
@@ -169,7 +170,7 @@ public class Atom implements AtomRecordWriter, Container {
     }
 
     @Override
-    public Map<String, Object> getFeatureMap() {
+    public Map<Enum, Object> getFeatureMap() {
         return featureMap;
     }
 
@@ -178,7 +179,7 @@ public class Atom implements AtomRecordWriter, Container {
     }
 
     /**
-     * Inner class to write <tt>ATOM</tt> records.
+     * Inner class to write <tt>ATOM</tt> records. BioJava-Code.
      */
     static final class AtomRecordProvider {
         static DecimalFormat d3 = (DecimalFormat) NumberFormat.getInstance(Locale.US);

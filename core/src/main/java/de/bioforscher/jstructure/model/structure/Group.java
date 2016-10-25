@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  */
 public abstract class Group implements AtomContainer, AtomRecordWriter {
     protected List<Atom> atoms;
-    protected Map<String, Object> featureMap;
+    protected Map<Enum, Object> featureMap;
     protected int residueNumber;
     protected String pdbName;
     /**
@@ -42,7 +42,8 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
 
     @Override
     public String composePDBRecord() {
-        return atoms().map(Atom::composePDBRecord).collect(Collectors.joining(System.lineSeparator()));
+        return atoms().map(Atom::composePDBRecord)
+                      .collect(Collectors.joining(System.lineSeparator()));
     }
 
     /**
@@ -75,7 +76,7 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
         return atoms.stream();
     }
 
-    public Map<String, Object> getFeatureMap() {
+    public Map<Enum, Object> getFeatureMap() {
         return featureMap;
     }
 }

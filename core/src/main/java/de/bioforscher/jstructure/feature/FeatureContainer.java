@@ -3,68 +3,57 @@ package de.bioforscher.jstructure.feature;
 import java.util.Map;
 
 /**
- * Specifies the capabilities to store arbitrary information linked to an implementing container.
+ * Specifies the capabilities to store arbitrary information linked to an implementing container. Map entries are
+ * identified by enums.
  * Created by S on 02.10.2016.
  */
 public interface FeatureContainer {
     /**
-     *
-     * @return
+     * Handle to the internal feature map of the container. Access should be realized using the high-level functions.
+     * @return the map storing all additional data attached to this element
+     * @see FeatureContainer#getFeature(Class, Enum)
+     * @see FeatureContainer#setFeature(Enum, Object)
      */
-    Map<String, Object> getFeatureMap();
+    Map<Enum, Object> getFeatureMap();
 
     /**
-     * Retrieves one entry from the feature map.
-     * @param featureKey the name of the element to retrieve
-     * @param <ContentType> the content of this feature
-     * @return the value of the requested feature or <code>null</code>
-     */
-    default <ContentType> ContentType getFeature(Class<ContentType> expectedContentType, String featureKey) {
-        return expectedContentType.cast(getFeatureMap().get(featureKey));
-    }
-
-    /**
-     *
-     * @param expectedContentType
-     * @param enumKey
-     * @param <ContentType>
-     * @return
+     * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
+     * element can be casted.
+     * @param expectedContentType the class of the retrieved element
+     * @param enumKey the unique identifier of the map entry
+     * @param <ContentType> the class the entry will be cast to
+     * @return the retrieved, casted entry
      */
     default <ContentType> ContentType getFeature(Class<ContentType> expectedContentType, Enum enumKey) {
-        return getFeature(expectedContentType, enumKey.name());
+        return expectedContentType.cast(getFeatureMap().get(enumKey));
     }
 
-    default double getDoubleFeature(String featureKey) {
-        return getFeature(double.class, featureKey);
-    }
-
-    default double getFeature(Enum enumKey) {
-        return getDoubleFeature(enumKey.name());
-    }
-
-    default int getIntFeature(String featureKey) {
-        return getFeature(int.class, featureKey);
-    }
-
+    /**
+     * Convenience function to retrieve int features.
+     * @param enumKey the unique identifier of the entry
+     * @return the value as primitive int
+     * @see FeatureContainer#getFeature(Class, Enum)
+     */
     default int getIntFeature(Enum enumKey) {
-        return getIntFeature(enumKey.name());
+        return getFeature(Integer.class, enumKey);
+    }
+
+    /**
+     * Convenience function to retrieve double features.
+     * @param enumKey the unique identifier of the entry
+     * @return the value as primitive double
+     * @see FeatureContainer#getFeature(Class, Enum)
+     */
+    default double getDoubleFeature(Enum enumKey) {
+        return getFeature(Double.class, enumKey);
     }
 
     /**
      * Stores one object in the feature container.
-     * @param featureKey the name of this feature, old entries will be replaced
+     * @param enumKey the enum representing this feature, old entries will be replaced
      * @param featureValue the actual content
      */
-    default void setFeature(String featureKey, Object featureValue) {
-        getFeatureMap().put(featureKey, featureValue);
-    }
-
-    /**
-     *
-     * @param enumKey
-     * @param featureValue
-     */
     default void setFeature(Enum enumKey, Object featureValue) {
-        setFeature(enumKey.name(), featureValue);
+        getFeatureMap().put(enumKey, featureValue);
     }
 }

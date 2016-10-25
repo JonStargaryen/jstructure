@@ -36,6 +36,11 @@ public class SVDSuperimposerFunctionalTest {
     }
 
     @Test
+    public void shouldAlignSimilarStructureFragments() {
+        //TODO implement
+    }
+
+    @Test
     public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
         Protein protein1acjCopy = proteinParser.parseProteinById("1acj");
         CoordinateUtils.transform(protein1acjCopy.atoms(),

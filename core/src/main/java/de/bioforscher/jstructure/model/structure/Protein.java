@@ -1,9 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,7 +23,7 @@ public class Protein implements ChainContainer, AtomRecordWriter {
      * The <tt>PDB</tt> description of this protein.
      */
     private String title;
-    private Map<String, Object> featureMap;
+    private Map<Enum, Object> featureMap;
 
     /**
      * The default constructor.
@@ -109,7 +106,7 @@ public class Protein implements ChainContainer, AtomRecordWriter {
     }
 
     @Override
-    public Map<String, Object> getFeatureMap() {
+    public Map<Enum, Object> getFeatureMap() {
         return featureMap;
     }
 }

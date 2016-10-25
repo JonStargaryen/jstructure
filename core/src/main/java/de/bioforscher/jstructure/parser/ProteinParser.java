@@ -143,16 +143,16 @@ public class ProteinParser {
             String chainId = line.substring(21, 22);
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
 
-            if(this.currentChain == null || !this.currentChain.getChainId().equals(chainId)) {
+            if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
                 // chain changed - create new chain object and set reference
-                this.currentChain = new Chain(chainId);
-                this.protein.addChain(this.currentChain);
+                currentChain = new Chain(chainId);
+                protein.addChain(currentChain);
             }
 
-            if(this.currentResidue == null || this.currentResidue.getResidueNumber() != resNum) {
+            if(currentResidue == null || currentResidue.getResidueNumber() != resNum) {
                 // residue changed - create new residue object and set reference
-                this.currentResidue = new Residue(aminoAcidName, resNum);
-                this.currentChain.addGroup(this.currentResidue);
+                currentResidue = new Residue(aminoAcidName, resNum);
+                currentChain.addGroup(currentResidue);
             }
 
             // we append the current residue container with additional atoms
@@ -165,7 +165,7 @@ public class ProteinParser {
                     },
                     Float.valueOf(line.substring(54, 60).trim()),
                     Float.valueOf(line.substring(60, 66).trim()));
-            this.currentResidue.addAtom(atom);
+            currentResidue.addAtom(atom);
         }
     }
 }

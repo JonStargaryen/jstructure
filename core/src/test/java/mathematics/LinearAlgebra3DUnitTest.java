@@ -1,10 +1,14 @@
-package unit.mathematics;
+package mathematics;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static util.TestUtils.TOLERANT_ERROR_MARGIN;
+import static util.TestUtils.ZERO_VECTOR;
+
 /**
+ * Unit tests for LinearAlgebra3D.
  * Created by S on 24.10.2016.
  */
 public class LinearAlgebra3DUnitTest {
@@ -14,9 +18,6 @@ public class LinearAlgebra3DUnitTest {
     private static final double[] orthogonalVector2 = new double[] { 1, 0, 0 };
     private static final double scalar1 = 0.5;
     private static final double scalar2 = 2.0;
-
-    private static final double[] ZERO_VECTOR = new double[] { 0, 0, 0 };
-    public static final double TOLERANT_ERROR_MARGIN = 0.001;
 
     @Test
     public void testAdditionAndMultiplication() {
@@ -61,7 +62,9 @@ public class LinearAlgebra3DUnitTest {
 
     @Test
     public void testDivide() {
-        Assert.assertArrayEquals(LinearAlgebra3D.multiply(vector1, 0.5), LinearAlgebra3D.divide(vector1, 2), 0.0);
+        Assert.assertArrayEquals(LinearAlgebra3D.multiply(vector1, scalar1),
+                LinearAlgebra3D.divide(vector1, scalar2),
+                0.0);
     }
 
     @Test
