@@ -41,20 +41,4 @@ a stream-based API to work with protein structures in *PDB* format.
  i.e. `Stream<Atom> atoms()` in contrast to `List<Atom> getAtoms()`
  
 ### Using The API
-No way!
-
-### Current Problems, Flaws & Questions
-* often a stream has to be converted to a `List` in order to traverse it 
-multiple times etc - should there be a standardized way of doing so?
-* improve `Filter`/`Predicate` approach - provide a way to combine and chain
-them together
-* the data model (and `ProteinParser`) should be extended to handle ligands and hetatoms
-* the `FeatureProvider` and `FeatureContainer` approach is not too convincing
-at the moment - currently the feature keys are `String` objects, however it
-could become really difficult to keep track of all possible entry in the feature
-map - a central `enum` approach on the other hand would mean that no external
-module could add features to the map as all possible entry name would need be 
-known beforehand - also they `FeatureProvider` should keep track of the content type
-it adds to the feature map
-* how to handle `null` values in the feature map?
-* logging, Maven and project structure, documentation and tests
+Coming soon!
