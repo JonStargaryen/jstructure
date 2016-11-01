@@ -24,6 +24,11 @@ public class Residue extends Group {
         this.aminoAcid = aminoAcid;
     }
 
+    @Override
+    public String getPdbName() {
+        return aminoAcid.getThreeLetterCode();
+    }
+
     /**
      * The constructor of residues.
      * @param aminoAcidName the amino acid this residue represents as String
@@ -41,6 +46,14 @@ public class Residue extends Group {
      */
     public AminoAcid getAminoAcid() {
         return aminoAcid;
+    }
+
+    /**
+     * Sets the amino acid for this residue.
+     * @param aminoAcid the new value
+     */
+    public void setAminoAcid(AminoAcid aminoAcid) {
+        this.aminoAcid = aminoAcid;
     }
 
     @Override
@@ -68,8 +81,8 @@ public class Residue extends Group {
         return atoms().filter(AtomNameFilter.N_ATOM_FILTER).findFirst();
     }
 
-    public Optional<Atom> backboneHydrogen() { return atoms().filter(AtomNameFilter.BACKBONE_ATOM_FILTER)
-            .filter(AtomNameFilter.HYDROGEN_FILTER).findFirst(); }
+    public Optional<Atom> backboneHydrogen() { return atoms().filter(AtomNameFilter.BACKBONE_ATOM_FILTER
+            .and(AtomNameFilter.HYDROGEN_FILTER)).findFirst(); }
 
 
     /**

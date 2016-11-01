@@ -163,7 +163,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
      * @return all neighbored atoms
      */
     private List<Atom> findNeighbors(Atom atom) {
-        final double cutoff = probeSize + probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS.name());
+        final double cutoff = probeSize + probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS);
         final AtomDistanceCutoffFilter atomDistanceCutoffFilter = new
                 AtomDistanceCutoffFilter(atom, cutoff);
         return nonHydrogenAtoms.stream()
@@ -178,14 +178,14 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
      */
     private double calcSingleAsa(Atom atom) {
         List<Atom> neighborAtoms = findNeighbors(atom);
-        double radius = probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS.name());
+        double radius = probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS);
         int accessiblePoints = 0;
 
         for (double[] point : this.spherePoints) {
             boolean isAccessible = true;
             double[] testPoint = LinearAlgebra3D.add(LinearAlgebra3D.multiply(point, radius), atom.getCoordinates());
             for(Atom neighborAtom : neighborAtoms) {
-                double neighborAtomRadius = neighborAtom.getDoubleFeature(FeatureNames.ATOM_RADIUS.name()) + this.probeSize;
+                double neighborAtomRadius = neighborAtom.getDoubleFeature(FeatureNames.ATOM_RADIUS) + this.probeSize;
                 double differenceSquared = LinearAlgebra3D.distanceFast(testPoint, neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;

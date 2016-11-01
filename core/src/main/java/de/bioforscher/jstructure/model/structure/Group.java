@@ -28,6 +28,11 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
         this.featureMap = new HashMap<>();
     }
 
+    @Override
+    public void clear() {
+        atoms.clear();
+    }
+
     public String getPdbName() {
         return pdbName;
     }

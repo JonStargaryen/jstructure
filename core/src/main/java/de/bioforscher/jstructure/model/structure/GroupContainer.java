@@ -1,10 +1,13 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import de.bioforscher.jstructure.model.structure.filter.ResiduePairDistanceCutoffFilter;
 import de.bioforscher.jstructure.model.structure.scheme.AlphaCarbonRepresentationScheme;
+import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -21,52 +24,51 @@ public interface GroupContainer extends AtomContainer {
     Stream<Residue> residues();
 
     /**
-     * Returns all residue pairs which are closer to each other than defined by some distance threshold.
-     * @param distanceCutoff a distance threshold in Angstrom
-     * @return a stream of all residue pairs in contact
-     * @see CoordinateUtils#atomPairsInContact(Stream, double)
+     *
+     * @param residueNumber
+     * @return
      */
-    default Stream<Pair<Residue>> residuesInContact(double distanceCutoff) {
-        return CoordinateUtils.residuePairsInContact(residues(), distanceCutoff, new AlphaCarbonRepresentationScheme());
+    default Optional<Residue> residue(int residueNumber) {
+        return residues().filter(residue -> residue.getResidueNumber() == residueNumber).findFirst();
     }
 
     /**
-     * @return a stream of non-hydrogen atoms
-     * @see AtomNameFilter#HYDROGEN_FILTER
+     *
+     * @return
      */
-    default Stream<Atom> nonHydrogenAtoms() {
-        return atoms().filter(AtomNameFilter.HYDROGEN_FILTER.negate());
+    default String getSequence() {
+        return residues().map(Residue::getAminoAcid)
+                         .map(AminoAcid::getOneLetterCode)
+                         .collect(Collectors.joining());
     }
 
     /**
-     * @return a stream of all backbone hydrogen atoms
-     * @see AtomNameFilter#HYDROGEN_FILTER
+     * Returns a stream of all residue combination whose euclidean distance is below a defined threshold.
+     * @param distanceCutoff the distance threshold below two atoms are considered to be in contact
+     * @param representationScheme how to represent groups?
+     * @return all residue pairs in contact according to the distance cutoff
+     * @see Pair#uniquePairsOf(List)
+     * @see de.bioforscher.jstructure.model.structure.filter.GroupPairDistanceCutoffFilter
      */
-    default Stream<Atom> backboneHydrogens() {
-        return atoms().filter(AtomNameFilter.HYDROGEN_FILTER);
-    }
-
-    default Stream<Atom> backboneCarbon() {
-        return atoms().filter(AtomNameFilter.C_ATOM_FILTER);
-    }
-
-    default Stream<Atom> backboneOxygen() {
-        return atoms().filter(AtomNameFilter.O_ATOM_FILTER);
-    }
-
-    default Stream<Atom> backboneNitrogen() {
-        return atoms().filter(AtomNameFilter.N_ATOM_FILTER);
+    default Stream<Pair<Residue, Residue>> residuePairsInContact(double distanceCutoff,
+                                                                 RepresentationScheme representationScheme) {
+        final ResiduePairDistanceCutoffFilter distanceCutoffFilter = new ResiduePairDistanceCutoffFilter(distanceCutoff,
+                representationScheme);
+        return Pair.uniquePairsOf(residues().collect(Collectors.toList())).filter(distanceCutoffFilter);
     }
 
     /**
-     * @return a stream of alpha carbons
-     * @see AtomNameFilter#CA_ATOM_FILTER
+     * @see GroupContainer#residuePairsInContact(double, RepresentationScheme)
      */
-    default Stream<Atom> alphaCarbons() {
-        return atoms().filter(AtomNameFilter.CA_ATOM_FILTER);
+    default Stream<Pair<Residue, Residue>> residuePairsInContact(double distanceCutoff) {
+        return residuePairsInContact(distanceCutoff, new AlphaCarbonRepresentationScheme());
     }
 
-    default Stream<Atom> betaCarbons() {
-        return atoms().filter(AtomNameFilter.CB_ATOM_FILTER);
+    /**
+     * Returns all residue pairs.
+     * @return a stream of all residue pairs
+     */
+    default Stream<Pair<Residue, Residue>> residuePairs() {
+        return Pair.uniquePairsOf(residues().collect(Collectors.toList()));
     }
 }

@@ -3,7 +3,6 @@ package parser;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import util.TestUtils;
 
@@ -19,18 +18,12 @@ import java.util.stream.Collectors;
  * Created by S on 29.09.2016.
  */
 public class ProteinParserFunctionalTest {
-    private static final String PDB_EXTENSION = ".parser";
+    private static final String PDB_EXTENSION = ".pdb";
     private static final String PDB_DIRECTORY = "parser/";
     private static final String PDB_PARSED_DIRECTORY = PDB_DIRECTORY + "parsed/";
     private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "1brr", "4cha");
     private static final List<String> PDB_FILE_PATHS = PDB_IDS.stream()
             .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION).collect(Collectors.toList());
-    private ProteinParser proteinParser;
-
-    @Before
-    public void setup() {
-        this.proteinParser = new ProteinParser();
-    }
 
     /**
      * Tests whether the parser can handle some usual structures.
@@ -42,13 +35,7 @@ public class ProteinParserFunctionalTest {
 
     @Test
     public void shouldFetchPdbStructureFromPDB() {
-        PDB_IDS.forEach(i -> {
-            try {
-                proteinParser.parseProteinById(i);
-            } catch (IOException e) {
-                Assert.fail("failed with IOException: " + e.getLocalizedMessage());
-            }
-        });
+        PDB_IDS.forEach(ProteinParser::parseProteinById);
     }
 
     /**
@@ -88,12 +75,6 @@ public class ProteinParserFunctionalTest {
 
     private Protein parseFilepath(String filepath) {
         System.out.println("parsing PDB file " + filepath);
-        try {
-            return this.proteinParser.parsePDBFile(TestUtils.getResourceAsFilepath(filepath));
-        } catch (IOException e) {
-            Assert.fail("failed with IOException: " + e.getLocalizedMessage());
-        }
-        // compiler please...
-        return null;
+        return ProteinParser.parsePDBFile(TestUtils.getResourceAsFilepath(filepath));
     }
 }

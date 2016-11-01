@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.scheme.AlphaCarbonRepresentationScheme;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,21 +36,20 @@ public class CoordinateUtilsUnitTest {
     @Test
     public void testAtomPairsInContact() {
         final double cutoff = 8.0;
-        Stream<Atom> alphaCarbons = protein1acj.alphaCarbons();
-        CoordinateUtils.atomPairsInContact(alphaCarbons, cutoff)
-                       .filter(pair -> LinearAlgebra3D.distance(pair.getFirst().getCoordinates(),
-                                                                pair.getSecond().getCoordinates()) > cutoff)
-                       .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
+        protein1acj.atomPairsInContact(cutoff)
+                   .filter(pair -> LinearAlgebra3D.distance(pair.getFirst().getCoordinates(),
+                                                            pair.getSecond().getCoordinates()) > cutoff)
+                   .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
                                ", this is violated for pair: " + pair));
     }
 
     @Test
     public void testResiduePairsInContact() {
         final double cutoff = 8.0;
-        CoordinateUtils.residuePairsInContact(protein1acj.residues(), cutoff, new AlphaCarbonRepresentationScheme())
-                .filter(pair -> LinearAlgebra3D.distance(pair.getFirst().alphaCarbon().get().getCoordinates(),
+        protein1acj.residuePairsInContact(cutoff)
+                   .filter(pair -> LinearAlgebra3D.distance(pair.getFirst().alphaCarbon().get().getCoordinates(),
                         pair.getSecond().alphaCarbon().get().getCoordinates()) > cutoff)
-                .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
+                   .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
                         ", this is violated for pair: " + pair));
     }
 

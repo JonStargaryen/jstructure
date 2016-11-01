@@ -72,23 +72,24 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * N,H (-q2,+q2)
      */
     public static final double Q = -27888.0;
-    private GroupContainer residueContainer;
+
     private List<BetaBridge> bridges;
     private List<Ladder> ladders;
 
-    enum FeatureNames {
-        SECONDARY_STRUCTURE_STATES,
-        LADDERS
+    public enum FeatureNames {
+        SECONDARY_STRUCTURE_STATES
     }
 
     private List<Residue> residues;
 
     @Override
     public void process(GroupContainer residueContainer) {
-        this.residueContainer = residueContainer;
         residues = residueContainer.residues().collect(Collectors.toList());
         bridges = new ArrayList<>();
         ladders = new ArrayList<>();
+        // init mapping
+        residues.forEach(r -> r.setFeature(FeatureNames.SECONDARY_STRUCTURE_STATES,
+                new SecStrucState(DSSPSecondaryStructureElement.COIL)));
 
         calculateHAtoms();
         calculateHBonds();
@@ -97,6 +98,10 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
         buildHelices();
         detectBends();
         detectStrands();
+
+//        residues.stream()
+//                .map(r -> r.getFeature(SecStrucState.class, FeatureNames.SECONDARY_STRUCTURE_STATES))
+//                .forEach(System.out::println);
     }
 
     private void detectStrands() {
@@ -143,7 +148,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
             if(ladder.getConnectedTo() == 0) {
                 continue;
             }
-            Ladder conladder = this.ladders.get(ladder.getConnectedTo());
+            Ladder conladder = ladders.get(ladder.getConnectedTo());
 
             if (ladder.getBtype().equals(BridgeType.ANTIPARALLEL)) {
 				/* set one side */
@@ -169,15 +174,18 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     }
 
     private void connectLadders() {
-        Pair.unorderedPairsOf(residues).forEach(residuePair -> {
-            Ladder l1 = residuePair.getFirst().getFeature(Ladder.class, FeatureNames.LADDERS);
-            Ladder l2 = residuePair.getSecond().getFeature(Ladder.class, FeatureNames.LADDERS);
-            if(hasBulge(l1, l2)) {
-                l1.setConnectedTo(residues.indexOf(residuePair.getSecond()));
-                l2.setConnectedFrom(residues.indexOf(residuePair.getFirst()));
-//                    this.logger.log(LogService.LOG_DEBUG, "Bulge from " + i + " to " + j);
+        for(int i = 0; i < ladders.size(); i++) {
+            for(int j = i; j < ladders.size(); j++) {
+                Ladder l1 = ladders.get(i);
+                Ladder l2 = ladders.get(j);
+                System.out.println(l1 + " : " + l2);
+                if (hasBulge(l1, l2)) {
+                    l1.setConnectedTo(i);
+                    l2.setConnectedFrom(j);
+//                    System.out.println("Bulge for: (" + i + ", " + j + ")");
+                }
             }
-        });
+        }
     }
 
     /**
@@ -214,9 +222,9 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     }
 
     private void createLadders(){
-        for (BetaBridge b : this.bridges) {
+        for (BetaBridge b : bridges) {
             boolean found = false;
-            for(Ladder ladder : this.ladders) {
+            for(Ladder ladder : ladders) {
                 if(shouldExtendLadder(ladder, b)) {
                     found = true;
                     ladder.setTo(ladder.getTo() + 1); //we go forward in this direction
@@ -239,7 +247,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
                 l.setLfrom(b.getPartner2());
                 l.setLto(b.getPartner2());
                 l.setBtype(b.getType());
-                this.ladders.add(l);
+                ladders.add(l);
             }
         }
     }
@@ -385,7 +393,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
         boolean b2 = getState(residues.get(j)).addBridge(bridge);
 
         if (!b1 && !b2) {
-//            this.logger.log(LogService.LOG_DEBUG, "Ignoring Bridge between residues" + i + " and " + j + ". DSSP assignment might differ.");
+//            System.out.println("Ignoring Bridge between residues" + i + " and " + j +
+//                    ". DSSP assignment might differ.");
         }
 
         bridges.add(bridge);
@@ -393,7 +402,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
 
     private void detectBends() {
-        f1: for (int i = 2; i < this.residues.size() - 2; i++) {
+        f1: for (int i = 2; i < residues.size() - 2; i++) {
             // Check if all atoms form peptide bonds (backbone discontinuity)
             for (int k = 0; k < 4; k++) {
                 int index = i + k - 2;
@@ -489,9 +498,9 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      */
     private void checkSetHelix(int n, DSSPSecondaryStructureElement type) {
         int idx = n - 3;
-//        this.logger.log(LogService.LOG_DEBUG, "Set helix " + type + " " + n + " " + idx);
+//        System.out.println("Set helix " + type + " " + n + " " + idx);
 
-        for (int i = 1; i < this.residues.size() - n; i++) {
+        for (int i = 1; i < residues.size() - n; i++) {
             SecStrucState state = getState(residues.get(i));
             SecStrucState previousState = getState(residues.get(i - 1));
 
@@ -534,7 +543,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
                 Residue residue2 = residues.get(i + turn);
                 // Check for H bond from NH(i+n) to CO(i)
                 if (isBonded(i, i + turn)) {
-//                    this.logger.log(LogService.LOG_DEBUG, "Turn at (" + i + "," + (i + turn) + ") turn " + turn);
+//                    System.out.println("Turn at (" + i + "," + (i + turn) + ") turn " + turn);
                     getState(residue1).setTurn('>', turn);
                     getState(residue2).setTurn('<', turn);
                     // Bracketed residues get the helix number
@@ -577,11 +586,11 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
         Residue acc2p = state2.getAccept2().getPartner();
 
         // Either donor from i is j, or accept from j is i
-        boolean hbond = (don1p.equals(residue2) && don1e < HBONDHIGHENERGY) || (don2p.equals(residue2) && don2e < HBONDHIGHENERGY)
-                || (acc1p.equals(residue1) && acc1e < HBONDHIGHENERGY) || (acc2p.equals(residue1) && acc2e < HBONDHIGHENERGY);
+        boolean hbond = (residue2.equals(don1p) && don1e < HBONDHIGHENERGY) || (residue2.equals(don2p) && don2e < HBONDHIGHENERGY)
+                || (residue1.equals(acc1p) && acc1e < HBONDHIGHENERGY) || (residue1.equals(acc2p) && acc2e < HBONDHIGHENERGY);
 
         if (hbond) {
-//            this.logger.log(LogService.LOG_DEBUG, "*** H-bond from CO of " + i + " to NH of " + j);
+//            System.out.println("*** H-bond from CO of " + i + " to NH of " + j);
             return true;
         }
         return false;
@@ -611,7 +620,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
             double omega = LinearAlgebra3D.torsionAngle(ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates());
 
             SecStrucState state1 = getState(res1);
-            SecStrucState state2 = getState(res1);
+            SecStrucState state2 = getState(res2);
 
             state2.setPhi(phi);
             state1.setPsi(psi);
@@ -624,25 +633,37 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * Modified to use only the contact map
      */
     private void calculateHBonds() {
-        residueContainer.residuesInContact(CA_MIN_DIST).forEach(residuePair -> {
-            checkAddHBond(residuePair);
-            if(residuePair.getFirst().getResidueNumber() + 1 != residuePair.getSecond().getResidueNumber()) {
-                checkAddHBond(residuePair.flip());
+//        residues.
+        double squaredDistanceCutoff = CA_MIN_DIST * CA_MIN_DIST;
+        for (int i = 0; i < residues.size() - 1; i++) {
+            for (int j = i + 1; j < residues.size(); j++) {
+                Residue res1 = residues.get(i);
+                Residue res2 = residues.get(j);
+                double squaredDistance = LinearAlgebra3D.distanceFast(
+                        res1.alphaCarbon().get().getCoordinates(),
+                        res2.alphaCarbon().get().getCoordinates());
+                if (squaredDistance > squaredDistanceCutoff) {
+                    continue;
+                }
+                checkAddHBond(res1, res2);
+                if (j != (i + 1)) {
+                    checkAddHBond(res2, res1);
+                }
             }
-        });
+        }
     }
 
-    private void checkAddHBond(Pair<Residue> residuePair) {
-        Residue res1 = residuePair.getFirst();
-        if (res1.getAminoAcid().equals(AminoAcid.PROLINE)) {
-//            this.logger.log(LogService.LOG_DEBUG, "Ignore: PRO " + res1.residueNumber);
+    private void checkAddHBond(Residue residue1, Residue residue2) {
+        if (residue1.getAminoAcid().equals(AminoAcid.PROLINE)) {
+//            System.out.println("Ignore: PRO " + residue1.getResidueNumber());
             return;
         }
-        if (lacksBackboneHydrogen(res1)) {
-//            this.logger.log(LogService.LOG_DEBUG, "Residue " + res1.residueNumber + " has no H");
+        if (lacksBackboneHydrogen(residue1)) {
+//            System.out.println("Residue " + residue1.getResidueNumber() + " has no H");
             return;
         }
 
+        Pair<Residue, Residue> residuePair = new Pair<>(residue1, residue2);
         trackHBondEnergy(residuePair, calculateHBondEnergy(residuePair));
     }
 
@@ -650,11 +671,11 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * Store Hbonds in the Groups. DSSP allows two HBonds per amino acid to
      * allow bifurcated bonds.
      */
-    private void trackHBondEnergy(Pair<Residue> residuePair, double energy) {
+    private void trackHBondEnergy(Pair<Residue, Residue> residuePair, double energy) {
         Residue res1 = residuePair.getFirst();
         Residue res2 = residuePair.getSecond();
         if (res1.getAminoAcid().equals(AminoAcid.PROLINE)) {
-//            this.logger.log(LogService.LOG_DEBUG, "Ignore: PRO " + res1.residueNumber);
+//            System.out.println("Ignore: PRO " + res1.getResidueNumber());
             return;
         }
 
@@ -670,7 +691,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
         // Acceptor: N-H-->O
         if (energy < acc1e) {
-//            this.logger.log(LogService.LOG_DEBUG, energy + "<" + acc1e);
+//            System.out.println(energy + "<" + acc1e);
             state1.setAccept2(state1.getAccept1());
 
             HBond bond = new HBond();
@@ -679,7 +700,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
             state1.setAccept1(bond);
         } else if (energy < acc2e) {
-//            this.logger.log(LogService.LOG_DEBUG, energy + "<" + acc2e);
+//            System.out.println(energy + "<" + acc2e);
 
             HBond bond = new HBond();
             bond.setEnergy(energy);
@@ -690,7 +711,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
         // The other side of the bond: donor O-->N-H
         if (energy < don1e) {
-//            this.logger.log(LogService.LOG_DEBUG, energy + "<" + don1e);
+//            System.out.println(energy + "<" + don1e);
             state2.setDonor2(state2.getDonor1());
 
             HBond bond = new HBond();
@@ -699,7 +720,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
             state2.setDonor1(bond);
         } else if (energy < don2e) {
-//            this.logger.log(LogService.LOG_DEBUG, energy + "<" + don2e);
+//            System.out.println(energy + "<" + don2e);
 
             HBond bond = new HBond();
             bond.setEnergy(energy);
@@ -721,7 +742,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * @param residuePair
      * @return the energy of this h-bond
      */
-    private double calculateHBondEnergy(Pair<Residue> residuePair) {
+    private double calculateHBondEnergy(Pair<Residue, Residue> residuePair) {
         Residue res1 = residuePair.getFirst();
         Residue res2 = residuePair.getSecond();
         Atom nAtom = res1.backboneNitrogen().get();
@@ -737,9 +758,10 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
         double dho = LinearAlgebra3D.distance(o, h);
         double dnc = LinearAlgebra3D.distance(c, n);
 
-//        this.logger.log(LogService.LOG_DEBUG, "     cccc: " + res1.residueNumber + " " + res1.aminoAcid + " " + res2.residueNumber + " " +
-//                res2.aminoAcid + String.format( " O (" + oAtom.pdbSerial + ")..N (" + nAtom.pdbSerial +
-//                "):%4.1f  |  ho:%4.1f - hc:%4.1f + nc:%4.1f - no:%4.1f ", dno, dho, dhc, dnc, dno));
+//        System.out.println("     cccc: " + res1.getResidueNumber() + " " + res1.getAminoAcid() + " " +
+//                res2.getResidueNumber() + " " + res2.getAminoAcid() + String.format( " O (" + oAtom.getPdbSerial() +
+//                ")..N (" + nAtom.getPdbSerial() + "):%4.1f  |  ho:%4.1f - hc:%4.1f + nc:%4.1f - no:%4.1f ", dno, dho,
+//                dhc, dnc, dno));
 
         // there seems to be a contact!
         if ((dno < MINDIST) || (dhc < MINDIST) || (dnc < MINDIST) || (dno < MINDIST)) {
@@ -751,8 +773,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
         double energy = e1 + e2;
 
-//        this.logger.log(LogService.LOG_DEBUG, String.format("      N (%d) O(%d): %4.1f : %4.2f ", nAtom.pdbSerial, oAtom.pdbSerial,
-//                (float) dno, energy));
+//        System.out.println(String.format("      N (%d) O(%d): %4.1f : %4.2f ", nAtom.getPdbSerial(),
+//                oAtom.getPdbSerial(), (float) dno, energy));
 
         // Avoid too strong energy
         if (energy > HBONDLOWENERGY) {
@@ -777,7 +799,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * @return true if no backbone hydrogen is present
      */
     private boolean lacksBackboneHydrogen(Fragment<Residue> fragmentOfSize2) {
-        return fragmentOfSize2.getElement(1).atoms().filter(atom -> atom.getName().equals("H")).findAny().isPresent();
+        return lacksBackboneHydrogen(fragmentOfSize2.getElement(1));
     }
 
     /**
@@ -786,7 +808,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * @return true if no backbone hydrogen is present
      */
     private boolean lacksBackboneHydrogen(Residue residue) {
-        return residue.atoms().filter(atom -> atom.getName().equals("H")).findAny().isPresent();
+        return !residue.backboneHydrogen().isPresent();
     }
 
     /**
@@ -803,5 +825,6 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
 
         // pdbSerial of minimal int value flags them as pseudo-hydrogen
         fragmentOfSize2.getElement(1).addAtom(new Atom("H", Integer.MIN_VALUE, Element.H, xyz));
+//        System.out.println("placed H at " + Arrays.toString(xyz));
     }
 }

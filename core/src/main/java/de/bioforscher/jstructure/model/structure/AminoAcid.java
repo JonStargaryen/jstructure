@@ -28,7 +28,8 @@ public enum AminoAcid {
 	THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }),
 	TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }),
 	TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }),
-    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" });
+    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }),
+    UNKNOWN("UNK", "X", new String[] {});
 
     private static Map<String, AminoAcid> allAminoAcids;
 
@@ -47,7 +48,8 @@ public enum AminoAcid {
         /**
          * Handle to the list of names representing backbone atoms.
          */
-        List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O");
+        //TODO check whether side-chain atoms are also labeled as H
+        List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O", "H");
         /**
          * Handle to the list of names representing side chain atoms of (any of) the standard amino acid. The intersection
          * of this 'set' and that of backbone atoms is empty.
@@ -91,9 +93,12 @@ public enum AminoAcid {
      */
     public static AminoAcid valueOfIgnoreCase(String aminoAcidName) throws IllegalArgumentException {
         AminoAcid aa = allAminoAcids.get(aminoAcidName.toLowerCase());
-        if (aa != null)
+        if (aa != null) {
             return aa;
-        throw new IllegalArgumentException("Invalid amino acid name: " + aminoAcidName);
+        }
+        //TODO warnings?
+//        throw new IllegalArgumentException("Invalid amino acid name: " + aminoAcidName);
+        return AminoAcid.UNKNOWN;
     }
 
     /**

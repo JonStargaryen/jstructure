@@ -33,6 +33,19 @@ public class Protein implements ChainContainer, AtomRecordWriter {
         this.featureMap = new HashMap<>();
     }
 
+    @Override
+    public void clear() {
+        chains().forEach(Chain::clear);
+    }
+
+    /**
+     * The number of groups associated to this protein.
+     * @return the number of amino acids, hetatms and nucleotids
+     */
+    public int getSize() {
+        return (int) residues().count();
+    }
+
     /**
      * The name of this structure as <tt>PDB</tt> id (or the parsed file's name as fallback).
      * @return the name of this protein

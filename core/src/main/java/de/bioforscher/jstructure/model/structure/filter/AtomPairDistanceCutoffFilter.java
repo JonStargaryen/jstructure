@@ -10,7 +10,7 @@ import java.util.function.Predicate;
  * A filter which returns <code>true</code> when the euclidean distance between a {@link Pair} of atoms is smaller
  * than a given threshold.
  */
-public class AtomPairDistanceCutoffFilter implements Predicate<Pair<Atom>> {
+public class AtomPairDistanceCutoffFilter implements Predicate<Pair<Atom, Atom>> {
     private final double squaredDistanceCutoff;
 
     public AtomPairDistanceCutoffFilter(double distanceCutoff) {
@@ -19,7 +19,7 @@ public class AtomPairDistanceCutoffFilter implements Predicate<Pair<Atom>> {
     }
 
     @Override
-    public boolean test(Pair<Atom> atomPair) {
+    public boolean test(Pair<Atom, Atom> atomPair) {
         return LinearAlgebra3D.distanceFast(atomPair.getFirst().getCoordinates(),
                 atomPair.getSecond().getCoordinates()) < squaredDistanceCutoff;
     }

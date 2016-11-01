@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.feature.sse;
 
+import java.util.Arrays;
+
 /**
  * This class extends the basic container for secondary structure annotation,
  * including all the information used in the DSSP algorithm.
@@ -48,6 +50,25 @@ public class SecStrucState {
 
         this.bend = false;
         this.kappa = 360;
+    }
+
+    @Override
+    public String toString() {
+        return "SecStrucState{" +
+                "secondaryStructure=" + secondaryStructure +
+                ", phi=" + phi +
+                ", psi=" + psi +
+                ", omega=" + omega +
+                ", kappa=" + kappa +
+                ", accept1=" + accept1 +
+                ", accept2=" + accept2 +
+                ", donor1=" + donor1 +
+                ", donor2=" + donor2 +
+                ", turn=" + Arrays.toString(turn) +
+                ", bend=" + bend +
+                ", bridge1=" + bridge1 +
+                ", bridge2=" + bridge2 +
+                '}';
     }
 
     public boolean isBend() {

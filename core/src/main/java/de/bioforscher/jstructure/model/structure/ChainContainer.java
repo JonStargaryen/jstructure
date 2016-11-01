@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -13,6 +15,22 @@ public interface ChainContainer extends GroupContainer {
      */
     Stream<Chain> chains();
 
-    //TODO functionality to access aminoAcid chains, ligands, nucleotides etc
-    //TODO chainFilter class
+    /**
+     *
+     * @param chainId
+     * @return
+     */
+    default Optional<Chain> chain(final String chainId) {
+        return chains().filter(chain -> chain.getChainId().equals(chainId)).findFirst();
+    }
+
+    /**
+     *
+     * @param chainId
+     * @param residueNumber
+     * @return
+     */
+    default Optional<Residue> residue(final String chainId, final int residueNumber) {
+        return chain(chainId).orElseThrow(NoSuchElementException::new).residue(residueNumber);
+    }
 }

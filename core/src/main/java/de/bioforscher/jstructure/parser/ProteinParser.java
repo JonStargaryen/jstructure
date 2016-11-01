@@ -8,6 +8,8 @@ import de.bioforscher.jstructure.model.structure.Residue;
 import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * A minimalistic parser for protein structures in <tt>PDB</tt> format.
@@ -21,7 +23,7 @@ public class ProteinParser {
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
-    public static final String PDB_FETCH_URL = "https://files.rcsb.org/download/%s.pdb";
+    private static final String PDB_FETCH_URL = "https://files.rcsb.org/download/%s.pdb";
     private Protein protein;
     private StringBuilder titleString;
     private Chain currentChain;
@@ -29,14 +31,31 @@ public class ProteinParser {
 
     /**
      * Fetches a <tt>PDB</tt> file from the <tt>PDB</tt> based on a <tt>PDB</tt> id.
-     * @param pdbId
+     * @param pdbId the 4 digit pdb code to fetch
      * @return the parsed protein
      * @see ProteinParser#PDB_FETCH_URL
      * @see ProteinParser#parsePDBFile(InputStream, String)
-     * @throws IOException
      */
-    public Protein parseProteinById(String pdbId) throws IOException {
-        return parsePDBFile(new URL(String.format(PDB_FETCH_URL, pdbId)).openStream(), pdbId);
+    public static Protein parseProteinById(String pdbId) {
+        try {
+            return new ProteinParser().parsePDBFile(new URL(String.format(PDB_FETCH_URL, pdbId)).openStream(), pdbId);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Parses a local file based on a filepath.
+     * @param path path of the file to parse
+     * @return the parsed protein
+     * @see ProteinParser#parsePDBFile(InputStream, String)
+     */
+    public static Protein parsePDBFile(Path path) {
+        try {
+            return new ProteinParser().parsePDBFile(path.toFile());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**
@@ -44,10 +63,9 @@ public class ProteinParser {
      * @param filepath filepath of the file to parse
      * @return the parsed protein
      * @see ProteinParser#parsePDBFile(InputStream, String)
-     * @throws IOException
      */
-    public Protein parsePDBFile(String filepath) throws IOException {
-        return parsePDBFile(new File(filepath));
+    public static Protein parsePDBFile(String filepath) {
+        return parsePDBFile(Paths.get(filepath));
     }
 
     /**
@@ -55,9 +73,9 @@ public class ProteinParser {
      * @param pdbFile reference of the file to parse
      * @return the parsed protein
      * @see ProteinParser#parsePDBFile(InputStream, String)
-     * @throws IOException
+     * @throws IOException when IO fails at some point
      */
-    public Protein parsePDBFile(File pdbFile) throws IOException {
+    private Protein parsePDBFile(File pdbFile) throws IOException {
         return parsePDBFile(Files.newInputStream(pdbFile.toPath()), pdbFile.getName().split("\\.")[0]);
     }
 
@@ -69,7 +87,7 @@ public class ProteinParser {
      * @return a {@link Protein} instance wrapping all (relevant) parsed information
      * @throws IOException when IO fails at some point
      */
-    public Protein parsePDBFile(InputStream inputStream, String proteinName) throws IOException {
+    private Protein parsePDBFile(InputStream inputStream, String proteinName) throws IOException {
         protein = new Protein();
         // 'initialize' title field as it tends to be split over multiple lines - thus, we have to append previous results when we find further entries
         titleString = new StringBuilder();

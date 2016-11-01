@@ -1,23 +1,46 @@
 package de.bioforscher.jstructure.feature.sse;
 
 /**
+ * The dictionary of DSSP secondary structure elements.
  * Created by S on 04.10.2016.
  */
 public enum DSSPSecondaryStructureElement {
-    COIL,
-    BEND,
-    TURN,
-    PIHELIX,
-    THREE10HELIX,
-    BRIDGE,
-    EXTENDED,
-    ALPHA_HELIX;
+    COIL("c"),
+    BEND("S"),
+    TURN("T"),
+    PIHELIX("I"),
+    THREE10HELIX("G"),
+    BRIDGE("B"),
+    EXTENDED("E"),
+    ALPHA_HELIX("H");
+
+    private String oneLetterRepresentation;
+
+    DSSPSecondaryStructureElement(String oneLetterRepresentation) {
+        this.oneLetterRepresentation = oneLetterRepresentation;
+    }
+
+    public String getOneLetterRepresentation() {
+        return oneLetterRepresentation;
+    }
+
+    public String getReducedRepresentation() {
+        if(isHelixType()) {
+            return ALPHA_HELIX.oneLetterRepresentation;
+        }
+
+        if(isStrandType()) {
+            return EXTENDED.oneLetterRepresentation;
+        }
+
+        return " ";
+    }
 
     public boolean isHelixType() {
-        return this.name().contains("HELIX");
+        return name().contains("HELIX");
     }
 
     public boolean isStrandType() {
-        return this.equals(BRIDGE) || this.equals(EXTENDED);
+        return equals(BRIDGE) || equals(EXTENDED);
     }
 }

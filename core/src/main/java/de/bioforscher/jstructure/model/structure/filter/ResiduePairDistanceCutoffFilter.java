@@ -7,7 +7,7 @@ import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 
 import java.util.function.Predicate;
 
-public class ResiduePairDistanceCutoffFilter implements Predicate<Pair<Residue>> {
+public class ResiduePairDistanceCutoffFilter implements Predicate<Pair<Residue, Residue>> {
     private final double squaredDistanceCutoff;
     private final RepresentationScheme representationScheme;
 
@@ -17,7 +17,7 @@ public class ResiduePairDistanceCutoffFilter implements Predicate<Pair<Residue>>
     }
 
     @Override
-    public boolean test(Pair<Residue> residuePair) {
+    public boolean test(Pair<Residue, Residue> residuePair) {
         return LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(residuePair.getFirst()).getCoordinates(),
                 representationScheme.determineRepresentingAtom(residuePair.getSecond()).getCoordinates()) < squaredDistanceCutoff;
     }

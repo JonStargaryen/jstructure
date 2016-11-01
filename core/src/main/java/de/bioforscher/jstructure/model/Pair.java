@@ -1,28 +1,29 @@
 package de.bioforscher.jstructure.model;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
  * Implementation of a unordered pair of equal objects.
  * Created by S on 02.10.2016.
  */
-public class Pair<T> {
-    private final T t1;
-    private final T t2;
+public class Pair<L, R> {
+    private final L t1;
+    private final R t2;
 
-    public Pair(T t1, T t2) {
+    public Pair(L t1, R t2) {
         this.t1 = t1;
         this.t2 = t2;
     }
 
-    public T getFirst() {
+    public L getFirst() {
         return t1;
     }
 
-    public T getSecond() {
+    public R getSecond() {
         return t2;
     }
 
@@ -30,7 +31,7 @@ public class Pair<T> {
      * Returns a new pair container with reversed order.
      * @return a new pair where the first entry is now second and vice versa
      */
-    public Pair<T> flip() {
+    public Pair<R, L> flip() {
         return new Pair<>(t2, t1);
     }
 
@@ -52,13 +53,14 @@ public class Pair<T> {
      * @param <T> the content of the collection
      * @return all {@link Pair} objects which can be created from the collection
      */
-//    public static <T> Stream<Pair<T>> unorderPairsOf(List<T> collection) {
-//        return IntStream.range(0, collection.size()).mapToObj(index1 -> IntStream.range(index1 + 1,
-//                collection.size() + 1).mapToObj(index2 -> new Pair<>(collection.get(index1),
-//                collection.get(index2))));
-//    }
-    public static <T> Stream<Pair<T>> unorderedPairsOf(List<T> collection) {
-        List<Pair<T>> unorderedPairs = new ArrayList<>();
+    public static <T> Stream<Pair<T, T>> uniquePairsOf(List<T> collection) {
+        //TODO streamify
+        //TODO rename
+//        IntStream.range(0, collection.size() - 1)
+//                 .flatMap(i -> IntStream.range(i + 1, collection.size())
+//                                        .mapToObj());
+
+        List<Pair<T, T>> unorderedPairs = new ArrayList<>();
         for(int i = 0; i < collection.size() - 1; i++) {
             for(int j = i + 1; j <  collection.size(); j++) {
                 unorderedPairs.add(new Pair<>(collection.get(i), collection.get(j)));
@@ -68,15 +70,25 @@ public class Pair<T> {
     }
 
     /**
-     * Composes the cartesian product of two sets. They have the same content type.
+     * Composes the cartesian product of two sets
      * @param collection1 a set of elements
      * @param collection2 another set of elements
-     * @param <T> the content of the collections
+     * @param <L> the content of the first collection
+     * @param <R> the content of the second collection
      * @return the cartesian product of both sets
      */
-    public static <T> Stream<Pair<T>> cartesianProductOf(Collection<T> collection1, Collection<T> collection2) {
+    public static <L, R> Stream<Pair<L, R>> cartesianProductOf(Collection<L> collection1, Collection<R> collection2) {
         return collection1.stream().flatMap(element1 ->
             collection2.stream().map(element2 -> new Pair<>(element1, element2))
         );
+    }
+
+    public static <L, R> Stream<Pair<L, R>> sequentialPairsOf(List<L> collection1, List<R> collection2) {
+        if(collection1.size() != collection2.size()) {
+            throw new IllegalArgumentException("collections must agree in size. found " + collection1.size() + " and " +
+                collection2.size());
+        }
+
+        return IntStream.range(0, collection1.size()).mapToObj(i -> new Pair<>(collection1.get(i), collection2.get(i)));
     }
 }

@@ -132,11 +132,12 @@ public class Atom implements AtomRecordWriter, Container {
 
     @Override
     public String composePDBRecord() {
-        if (AtomRecordProvider.toPDBString(this).length() == 0) {
+        String pdbRecord = AtomRecordProvider.toPDBString(this);
+        if (pdbRecord.length() == 0) {
             //TODO logging/error-handling
             System.out.println(this);
         }
-        return AtomRecordProvider.toPDBString(this);
+        return pdbRecord;
     }
 
     @Override

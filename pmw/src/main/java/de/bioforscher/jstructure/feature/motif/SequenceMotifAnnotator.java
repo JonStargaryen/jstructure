@@ -7,6 +7,8 @@ import de.bioforscher.jstructure.model.structure.Residue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -14,11 +16,14 @@ import java.util.stream.Collectors;
  * Created by S on 02.10.2016.
  */
 public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
+    private static final Logger LOGGER = Logger.getLogger(SequenceMotifAnnotator.class.getName());
+
     public enum FeatureNames {
         SEQUENCE_MOTIF
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void process(GroupContainer residueContainer) {
         // we need chain information as motifs cannot be part of 2 chains
         Map<String, List<Residue>> chains = residueContainer.residues().collect(Collectors.groupingBy(residue ->
@@ -58,7 +63,6 @@ public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
                             residue.getAminoAcid().getOneLetterCode()).collect(Collectors.joining());
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue, sequence);
                     residueList.forEach(residue -> {
-                        //TODO this is horrifyingly fragile - standardize/boilerplate this
                         List<SequenceMotif> value = residue.getFeature(List.class, FeatureNames.SEQUENCE_MOTIF);
                         // entry will be null at first - create list and assign reference
                         if(value == null) {
@@ -68,8 +72,7 @@ public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
                         value.add(sequenceMotif);
 
                     });
-                    //TODO logging
-//                    System.out.println("found sequence motif: " + sequenceMotif);
+                    LOGGER.log(Level.FINER, "found sequence motif: " + sequenceMotif);
                 }
             }
         }

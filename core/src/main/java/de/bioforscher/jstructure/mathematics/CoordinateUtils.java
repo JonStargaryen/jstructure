@@ -1,13 +1,7 @@
 package de.bioforscher.jstructure.mathematics;
 
-import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Residue;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
-import de.bioforscher.jstructure.model.structure.filter.AtomPairDistanceCutoffFilter;
-import de.bioforscher.jstructure.model.structure.filter.GroupPairDistanceCutoffFilter;
-import de.bioforscher.jstructure.model.structure.filter.ResiduePairDistanceCutoffFilter;
-import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 
@@ -25,19 +19,6 @@ import java.util.stream.Stream;
  * Created by S on 30.09.2016.
  */
 public class CoordinateUtils {
-    /**
-     * Returns a stream of all atom combination whose euclidean distance is below a defined threshold.
-     * @param atoms a collection of atoms
-     * @param distanceCutoff the distance threshold below two atoms are considered to be in contact
-     * @return all atom pairs in contact according to the distance cutoff
-     * @see Pair#unorderedPairsOf(List)
-     * @see AtomPairDistanceCutoffFilter
-     */
-    public static Stream<Pair<Atom>> atomPairsInContact(Stream<Atom> atoms, double distanceCutoff) {
-        final AtomPairDistanceCutoffFilter distanceCutoffFilter = new AtomPairDistanceCutoffFilter(distanceCutoff);
-        return Pair.unorderedPairsOf(atoms.collect(Collectors.toList())).filter(distanceCutoffFilter);
-    }
-
     /**
      * Computes the center of mass of a collection of atoms. In contrast to the centroid, the center of mass considers
      * the unique mass of each atom in the structure (i.e. a {@link de.bioforscher.jstructure.model.structure.Element#H})
@@ -257,21 +238,5 @@ public class CoordinateUtils {
             rmsd += LinearAlgebra3D.distanceFast(atomList1.get(i).getCoordinates(), atomList2.get(i).getCoordinates());
         }
         return Math.sqrt(rmsd / atomList1.size());
-    }
-
-    /**
-     * Returns a stream of all residue combination whose euclidean distance is below a defined threshold.
-     * @param residues a collection of residues
-     * @param distanceCutoff the distance threshold below two atoms are considered to be in contact
-     * @param representationScheme how to represent residues?
-     * @return all residue pairs in contact according to the distance cutoff
-     * @see Pair#unorderedPairsOf(List)
-     * @see GroupPairDistanceCutoffFilter
-     */
-    public static Stream<Pair<Residue>> residuePairsInContact(Stream<Residue> residues, double distanceCutoff,
-                                                              RepresentationScheme representationScheme) {
-        final ResiduePairDistanceCutoffFilter distanceCutoffFilter = new ResiduePairDistanceCutoffFilter(distanceCutoff,
-                representationScheme);
-        return Pair.unorderedPairsOf(residues.collect(Collectors.toList())).filter(distanceCutoffFilter);
     }
 }

@@ -36,7 +36,7 @@ public class CombinatoricsFunctionalTest {
 
     @Test
     public void shouldGenerateUnorderedPairs() {
-        List<Pair<Integer>> pairs = Pair.unorderedPairsOf(elements1).collect(Collectors.toList());
+        List<Pair<Integer, Integer>> pairs = Pair.uniquePairsOf(elements1).collect(Collectors.toList());
         // generation of unordered pairs for n elements should return n * (n - 1) / 2
         Assert.assertEquals(pairs.size(), elements1.size() * (elements1.size() - 1) / 2);
         pairs.forEach(System.out::println);
@@ -44,7 +44,7 @@ public class CombinatoricsFunctionalTest {
 
     @Test
     public void shouldComposeCartesianProduct() {
-        List<Pair<Integer>> pairs = Pair.cartesianProductOf(elements1, elements2).collect(Collectors.toList());
+        List<Pair<Integer, Integer>> pairs = Pair.cartesianProductOf(elements1, elements2).collect(Collectors.toList());
         // cartesian product of N x M should return |N| * |M| elements
         Assert.assertEquals(pairs.size(), elements1.size() * elements2.size());
         pairs.forEach(System.out::println);

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * The sequence motif annotator test.
+ * TODO need sophisticated tests
  * Created by S on 24.10.2016.
  */
 public class SequenceMotifAnnotatorFunctionalTest {
@@ -28,8 +30,7 @@ public class SequenceMotifAnnotatorFunctionalTest {
     public void shouldAnnotateSequenceMotifs() {
         SequenceMotifAnnotator sequenceMotifAnnotator = new SequenceMotifAnnotator();
         sequenceMotifAnnotator.process(protein1acj);
-        //TODO can map entries be null?
         protein1acj.residues().map(residue -> residue.getFeature(List.class,
-                SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF.name())).forEach(System.out::println);
+                SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)).forEach(System.out::println);
     }
 }

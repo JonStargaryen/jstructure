@@ -8,7 +8,7 @@ import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 
 import java.util.function.Predicate;
 
-public class GroupPairDistanceCutoffFilter implements Predicate<Pair<Group>> {
+public class GroupPairDistanceCutoffFilter implements Predicate<Pair<Group, Group>> {
     private final double squaredDistanceCutoff;
     private final RepresentationScheme representationScheme;
 
@@ -18,7 +18,7 @@ public class GroupPairDistanceCutoffFilter implements Predicate<Pair<Group>> {
     }
 
     @Override
-    public boolean test(Pair<Group> groupPair) {
+    public boolean test(Pair<Group, Group> groupPair) {
         return LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(groupPair.getFirst()).getCoordinates(),
                 representationScheme.determineRepresentingAtom(groupPair.getSecond()).getCoordinates()) <
                 squaredDistanceCutoff;

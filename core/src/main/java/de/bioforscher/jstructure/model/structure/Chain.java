@@ -36,6 +36,11 @@ public class Chain implements GroupContainer, AtomRecordWriter {
         this.featureMap = new HashMap<>();
     }
 
+    @Override
+    public void clear() {
+        residues().forEach(Residue::clear);
+    }
+
     /**
      * Registers a child. This object will assign a reference to itself to the residue.
      * @param group the residue to process
