@@ -38,6 +38,11 @@ public class Protein implements ChainContainer, AtomRecordWriter {
         chains().forEach(Chain::clear);
     }
 
+    @Override
+    public void clearPseudoAtoms() {
+        chains.forEach(Chain::clearPseudoAtoms);
+    }
+
     /**
      * The number of groups associated to this protein.
      * @return the number of amino acids, hetatms and nucleotids

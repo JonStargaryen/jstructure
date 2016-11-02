@@ -20,6 +20,7 @@ public class ProteinParser {
     private static final String TITLE_PREFIX = "TITLE";
     private static final String ATOM_PREFIX = "ATOM";
     private static final String DEFAULT_PROTEIN_TITLE = "NO DESCRIPTION";
+    private static final String END_MODEL_PREFIX = "ENDMDL";
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
@@ -28,6 +29,7 @@ public class ProteinParser {
     private StringBuilder titleString;
     private Chain currentChain;
     private Residue currentResidue;
+    private boolean passedFirstModel;
 
     /**
      * Fetches a <tt>PDB</tt> file from the <tt>PDB</tt> based on a <tt>PDB</tt> id.
@@ -111,6 +113,10 @@ public class ProteinParser {
      * @param line the line to process
      */
     private void parseLine(String line) {
+        //TODO this is kinda hacky, however that way only the first model is parsed in any case
+        if(passedFirstModel) {
+            return;
+        }
         // indices taken from: ftp://ftp.wwpdb.org/pub/pdb/doc/format_descriptions/Format_v33_Letter.pdf
         // their column definition has certain offset to the definition of String#substring(int, int)
 
@@ -184,6 +190,11 @@ public class ProteinParser {
                     Float.valueOf(line.substring(54, 60).trim()),
                     Float.valueOf(line.substring(60, 66).trim()));
             currentResidue.addAtom(atom);
+        }
+
+        if(line.startsWith(END_MODEL_PREFIX)) {
+            passedFirstModel = true;
+            System.out.println("skipping models for " + protein.getName());
         }
     }
 }

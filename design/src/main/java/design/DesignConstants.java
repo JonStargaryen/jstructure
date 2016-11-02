@@ -29,6 +29,16 @@ public class DesignConstants {
     public static final String OPM_RAW_DIR = BASE_DIR + "opm-raw/";
 
     /**
+     * Motif fragment directory.
+     */
+    public static final String MOTIF_FRAGMENT_DIR = BASE_DIR + "motif-fragments/";
+
+    /**
+     * Motif fragments grouped by opm topology.
+     */
+    public static final String MOTIF_FRAGMENT_BY_TOPOLOGY_DIR = MOTIF_FRAGMENT_DIR + "by-topology/";
+
+    /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
     public static final String PDB_FETCH_URL = "https://files.rcsb.org/download/%s.pdb";

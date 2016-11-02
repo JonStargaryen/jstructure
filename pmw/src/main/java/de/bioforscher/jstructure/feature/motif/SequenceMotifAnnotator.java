@@ -59,9 +59,7 @@ public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
                     }
 
                     List<Residue> residueList = residueInChain.subList(resNum, resNum + motifLength + 1);
-                    String sequence = residueList.stream().map(residue ->
-                            residue.getAminoAcid().getOneLetterCode()).collect(Collectors.joining());
-                    SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue, sequence);
+                    SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue);
                     residueList.forEach(residue -> {
                         List<SequenceMotif> value = residue.getFeature(List.class, FeatureNames.SEQUENCE_MOTIF);
                         // entry will be null at first - create list and assign reference

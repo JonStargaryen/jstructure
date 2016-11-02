@@ -69,8 +69,20 @@ public class Atom implements AtomRecordWriter, Container {
     }
 
     /**
-     *
-     * @param coordinates
+     * The constructor for a virtual atom with some extra information if necessary.  Calling {@link Atom#isVirtual()}
+     * will return <code>true</code>.
+     * @param name the name of this atom
+     * @param element the element of this atom
+     * @param coordinates the coordinates
+     */
+    public Atom(String name, Element element, double[] coordinates) {
+        this(name, Integer.MIN_VALUE, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
+        this.virtual = true;
+    }
+
+    /**
+     * The constructor for a virtual atom. Calling {@link Atom#isVirtual()} will return <code>true</code>.
+     * @param coordinates the coordinates
      */
     public Atom(double[] coordinates) {
         this.coordinates = coordinates;

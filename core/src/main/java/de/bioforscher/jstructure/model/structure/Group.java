@@ -33,6 +33,11 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
         atoms.clear();
     }
 
+    @Override
+    public void clearPseudoAtoms() {
+        atoms.removeIf(Atom::isVirtual);
+    }
+
     public String getPdbName() {
         return pdbName;
     }

@@ -48,4 +48,10 @@ public interface AtomContainer extends Container {
     default Stream<Pair<Atom, Atom>> atomPairs() {
         return Pair.uniquePairsOf(atoms().collect(Collectors.toList()));
     }
+
+    /**
+     * Deletes all pseudo atoms originating by internal computations. They are identified by a pdbSerial of
+     * {@link Integer#MIN_VALUE}.
+     */
+    void clearPseudoAtoms();
 }

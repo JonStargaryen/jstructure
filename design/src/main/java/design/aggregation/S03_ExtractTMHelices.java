@@ -11,6 +11,7 @@ import static design.ProteinSource.loadProteins;
  * <pre>
  *     Merely parse proteins and load opm information.
  * </pre>
+ * Moved to class {@link design.ProteinSource}.
  * Created by S on 29.10.2016.
  */
 public class S03_ExtractTMHelices {

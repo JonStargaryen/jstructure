@@ -41,6 +41,11 @@ public class Chain implements GroupContainer, AtomRecordWriter {
         residues().forEach(Residue::clear);
     }
 
+    @Override
+    public void clearPseudoAtoms() {
+        residues().forEach(Residue::clearPseudoAtoms);
+    }
+
     /**
      * Registers a child. This object will assign a reference to itself to the residue.
      * @param group the residue to process

@@ -14,13 +14,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Adds secondary structure information to proteins.
+ * Adds secondary structure information to proteins and prints all aggregated information to the console.
+ * Moved to {@link ProteinSource}.
  * Created by S on 31.10.2016.
  */
 public class S04_ExtractSecondaryStructure {
     public static void main(String[] args) throws IOException {
-        List<Protein> proteins = ProteinSource.loadProteins();
-        proteins.forEach(S04_ExtractSecondaryStructure::printInformation);
+        ProteinSource.loadProteins().forEach(S04_ExtractSecondaryStructure::printInformation);
     }
 
     public static void printInformation(Protein protein) {

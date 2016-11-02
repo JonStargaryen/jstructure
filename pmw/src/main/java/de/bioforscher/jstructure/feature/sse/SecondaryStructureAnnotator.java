@@ -9,6 +9,7 @@ import de.bioforscher.jstructure.model.structure.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
@@ -99,6 +100,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
         detectBends();
         detectStrands();
 
+        residueContainer.clearPseudoAtoms();
 //        residues.stream()
 //                .map(r -> r.getFeature(SecStrucState.class, FeatureNames.SECONDARY_STRUCTURE_STATES))
 //                .forEach(System.out::println);
@@ -816,15 +818,20 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * @param fragmentOfSize2 the fragment where the atom shall be placed
      */
     private void calcSimpleH(Fragment<Residue> fragmentOfSize2) {
-        double[] c = fragmentOfSize2.getElement(0).backboneCarbon().get().getCoordinates();
-        double[] o = fragmentOfSize2.getElement(0).backboneOxygen().get().getCoordinates();
-        double[] n = fragmentOfSize2.getElement(1).backboneNitrogen().get().getCoordinates();
+        try {
+            double[] c = fragmentOfSize2.getElement(0).backboneCarbon().get().getCoordinates();
+            double[] o = fragmentOfSize2.getElement(0).backboneOxygen().get().getCoordinates();
+            double[] n = fragmentOfSize2.getElement(1).backboneNitrogen().get().getCoordinates();
 
-        double[] xyz = LinearAlgebra3D.add(n, LinearAlgebra3D.divide(LinearAlgebra3D.subtract(c, o),
-                LinearAlgebra3D.distance(o, c)));
+            double[] xyz = LinearAlgebra3D.add(n, LinearAlgebra3D.divide(LinearAlgebra3D.subtract(c, o),
+                    LinearAlgebra3D.distance(o, c)));
 
-        // pdbSerial of minimal int value flags them as pseudo-hydrogen
-        fragmentOfSize2.getElement(1).addAtom(new Atom("H", Integer.MIN_VALUE, Element.H, xyz));
+            // pdbSerial of minimal int value flags them as pseudo-hydrogen
+            fragmentOfSize2.getElement(1).addAtom(new Atom("H", Element.H, xyz));
 //        System.out.println("placed H at " + Arrays.toString(xyz));
+        } catch (NoSuchElementException e) {
+            //TODO warning
+            e.printStackTrace();
+        }
     }
 }
