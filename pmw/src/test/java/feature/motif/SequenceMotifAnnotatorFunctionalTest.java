@@ -1,4 +1,4 @@
-package pmw;
+package feature.motif;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.Protein;

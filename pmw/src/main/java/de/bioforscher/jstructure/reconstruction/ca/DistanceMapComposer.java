@@ -1,6 +1,11 @@
 package de.bioforscher.jstructure.reconstruction.ca;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Residue;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Converts an existing protein into its distance map representation.
@@ -13,21 +18,19 @@ public class DistanceMapComposer {
 
     public double[][] computeDistanceMap(Protein protein) {
         double[][] distanceMap = new double[protein.getSize()][protein.getSize()];
-        protein.residuePairs();
-//        for(Chain chain1 : protein.chains) {
-//            for(Residue residue1 : chain1.residues) {
-//                for(Chain chain2 : protein.chains) {
-//                    for(Residue residue2 : chain2.residues) {
-//                        double distance = this.linearAlgebra.distance(this.modelConverter.getCA(residue1).xyz,
-//                                this.modelConverter.getCA(residue2).xyz);
-//                        int i = residue1.residueId;
-//                        int j = residue2.residueId;
-//                        distanceMap[i][j] = distance;
-//                        distanceMap[j][i] = distance;
-//                    }
-//                }
-//            }
-//        }
+        // we need a mapping from residues to their index in the containing list
+        List<Residue> residues = protein.residues().collect(Collectors.toList());
+
+        protein.residuePairs()
+               .forEach(pair -> {
+                   Residue first = pair.getFirst();
+                   Residue second = pair.getSecond();
+                   int indexFirst = residues.indexOf(first);
+                   int indexSecond = residues.indexOf(second);
+                   distanceMap[indexFirst][indexSecond] = LinearAlgebra3D.distance(first.alphaCarbon().get().getCoordinates(),
+                           second.alphaCarbon().get().getCoordinates());
+               });
+
         return distanceMap;
     }
 }

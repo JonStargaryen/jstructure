@@ -1,17 +1,17 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.FeatureProvider;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
+import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.filter.AminoAcidFilter;
+import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.function.IntConsumer;
+import java.util.function.Predicate;
 
 /**
  * <p>An adaptation of the ANVIL algorithm which processes protein structures and places the membrane in the most suitable
@@ -54,14 +54,10 @@ import java.util.stream.Stream;
  knowledge of the CeCILL license and that you accept its terms.</pre>
  */
 public class ANVIL implements FeatureProvider<Protein> {
-    /**
-     * Definition of amino acids which prefer to interact with water as a solvent and have a low tendency of being
-     * embedded in the cell membrane.
-     */
-    public static final AminoAcidFilter SOLVENT_AMINO_ACID_FILTER =
-            new AminoAcidFilter(Stream.of("ARG", "ASP", "LYS", "GLU", "ASN", "GLN", "PRO", "THR",
-                    "TYR").map(AminoAcid::valueOfIgnoreCase)
-                    .collect(Collectors.toList()));
+    public enum FeatureNames {
+        MEMBRANE,
+        TOPOLOGY
+    }
 
     private static final int DEFAULT_NUMBER_OF_SPHERE_POINTS = 350;
     private static final double DEFAULT_STEP = 1.0;
@@ -79,9 +75,12 @@ public class ANVIL implements FeatureProvider<Protein> {
     private double afilter;
     private int numberOfSpherePoints;
     private double density;
+    private Predicate<Residue> asaFilter;
     private double maximalExtent;
     private double[] centerOfMass;
     private Protein protein;
+    private int[] initialHphobHphil;
+    private Membrane membrane;
 
     /**
      *
@@ -100,6 +99,8 @@ public class ANVIL implements FeatureProvider<Protein> {
         this.maxthick = maxthick;
         this.step = step;
         this.density = density;
+        this.asaFilter = residue ->
+                residue.getDoubleFeature(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA) > afilter;
     }
 
     public ANVIL() {
@@ -108,9 +109,141 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     @Override
-    public void process(Protein featureContainer) {
-        this.protein = featureContainer;
-        //TODO implement
+    public void process(Protein protein) {
+        this.protein = protein;
+        // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
+        this.centerOfMass = CoordinateUtils.centroid(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER));
+        this.maximalExtent = 1.2 * CoordinateUtils.maximalExtent(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER), 
+                centerOfMass);
+        
+        this.initialHphobHphil = hphobHphil();
+        Membrane initialMembrane = processSpherePoints(generateSpherePoints(numberOfSpherePoints));
+
+        Membrane alternativeMembrane = processSpherePoints(findProximateAxes(initialMembrane));
+
+        membrane = initialMembrane.qmax > alternativeMembrane.qmax ? initialMembrane : alternativeMembrane;
+
+        step = 0.3;
+        double thickness = LinearAlgebra3D.distance(membrane.planePoint1, membrane.planePoint2);
+
+        assignTopology();
+        placeMembraneMolecules();
+
+    }
+
+    /**
+     * Places evenly distributed pseudo-atoms for sake of membrane visualization.
+     */
+    private void placeMembraneMolecules() {
+        // square maximal extent to speed up computations later on
+        double radius = maximalExtent * maximalExtent;
+        double[] normalVector = membrane.normalVector;
+        for(double[] layer : Arrays.asList(membrane.planePoint1, membrane.planePoint2)) {
+            double d = - LinearAlgebra3D.dotProduct(normalVector, layer);
+            for(double i = -1000; i < 1000; i += density) {
+                for(double j = -1000; j < 1000; j += density) {
+                    double[] atom = new double[] { i, j, 0 };
+                    try {
+                        atom[2] = -(d + i * normalVector[0] + j * normalVector[1]) / normalVector[2];
+                    } catch (ArithmeticException e) {
+
+                    }
+
+                    // distance cutoff is also squared
+                    if(LinearAlgebra3D.distanceFast(atom, layer) <= radius &&
+                            minimalSquaredDistanceToProteinCAAtom(atom, protein) > 12.0) {
+                        membrane.membraneAtoms.add(atom);
+                    }
+                }
+            }
+        }
+    }
+
+    private double minimalSquaredDistanceToProteinCAAtom(double[] atom, Protein protein) {
+        return protein.residues()
+                      .map(residue -> residue.alphaCarbon().get())
+                      .map(Atom::getCoordinates)
+                      .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, atom))
+                      .min()
+                      .getAsDouble();
+    }
+
+    private void assignTopology() {
+        protein.setFeature(ANVIL.FeatureNames.MEMBRANE, membrane);
+        protein.residues()
+               .filter(residue -> isInMembranePlane(residue.alphaCarbon().get().getCoordinates(),
+                       membrane.normalVector,
+                       membrane.planePoint1,
+                       membrane.planePoint2))
+               .forEach(residue ->  residue.setFeature(FeatureNames.TOPOLOGY, membrane)
+        );
+    }
+
+
+    private Membrane processSpherePoints(List<double[]> spherePoints) {
+        // best performing membrane
+        Membrane membrane = null;
+        // best performing membrane's score
+        double qmax = 0;
+
+        // construct slices of thickness 1.0 along the axis connecting the centerOfMass and the spherePoint
+        for (double[] spherePoint : spherePoints) {
+            double[] diam = LinearAlgebra3D.multiply(LinearAlgebra3D.subtract(centerOfMass, spherePoint), 2.0);
+            double diamNorm = LinearAlgebra3D.norm(diam);
+
+            List<Membrane> qvartemp = new ArrayList<>();
+
+            for (double i = 0; i < diamNorm - this.step; i += this.step) {
+                double dPointC1 = i;
+                double dPointC2 = i + this.step;
+
+                double[] c1 = thales(diam, dPointC1, spherePoint);
+                double[] c2 = thales(diam, dPointC2, spherePoint);
+
+                // evaluate how well this membrane slice embeddeds the peculiar residues
+                int[] hphobHphil = hphobHphil(true, diam, c1, c2);
+
+                qvartemp.add(new Membrane(c1, c2, hphobHphil[0], hphobHphil[1]));
+            }
+
+            int jmax = (int) ((this.minthick / this.step) - 1);
+
+            for (double width = 0; width < this.maxthick; width = (jmax + 1) * this.step) {
+                int imax = qvartemp.size() - 1 - jmax;
+
+                for (int i = 0; i < imax; i++) {
+                    double[] c1 = qvartemp.get(i).planePoint1;
+                    double[] c2 = qvartemp.get(i + jmax).planePoint2;
+
+                    double hphob = 0;
+                    double hphil = 0;
+                    double total = 0;
+
+                    for (int j = 0; j < jmax; j++) {
+                        Membrane ij = qvartemp.get(i + j);
+                        if (j == 0 || j == jmax - 1) {
+                            hphob += 0.5 * ij.hphob;
+                            hphil += 0.5 * ij.hphil;
+                        } else {
+                            hphob += ij.hphob;
+                            hphil += ij.hphil;
+                        }
+                        total += ij.total;
+                    }
+
+                    if (hphob > 0) {
+                        double qvaltest = qValue(hphil, hphob, initialHphobHphil[1], initialHphobHphil[0]);
+                        if (qvaltest > qmax) {
+                            qmax = qvaltest;
+                            membrane = new Membrane(spherePoint, c1, c2, hphob, hphil, total, qmax);
+                        }
+                    }
+                }
+                jmax++;
+            }
+        }
+
+        return membrane;
     }
 
     /**
@@ -118,16 +251,16 @@ public class ANVIL implements FeatureProvider<Protein> {
      * @param membrane a well-positioned, but potentially not optimal, membrane
      * @return 350 axes close to that of the membrane
      */
-    private List<double[]> findProximateAxes(PotentialMembrane membrane) {
+    private List<double[]> findProximateAxes(Membrane membrane) {
         List<double[]> points = generateSpherePoints(30000);
         Collections.sort(points, new Comparator<double[]>() {
             @Override
             public int compare(double[] d1, double[] d2) {
-                return Double.compare(distance(d1), distance(d2));
+                return Double.compare(distanceFast(d1), distanceFast(d2));
             }
 
-            private double distance(double[] d) {
-                return LinearAlgebra3D.distance(d, membrane.point);
+            private double distanceFast(double[] d) {
+                return LinearAlgebra3D.distanceFast(d, membrane.point);
             }
         });
         return points.subList(0, this.numberOfSpherePoints);
@@ -151,37 +284,52 @@ public class ANVIL implements FeatureProvider<Protein> {
      * @param c2 parameters describing the membrane placement
      * @return [countOfHydrophobicResidues, countOfHydrophilicResidues]
      */
-    private int[] hphobHphil(boolean checkMembranePlane, double[] diam, double[] c1, double[] c2) {
-        int[] hphobHphil = { 0, 0 };
+    private int[] hphobHphil(final boolean checkMembranePlane, final double[] diam, final double[] c1, final double[] c2) {
+        return protein.residues()
+                      // filter out exposed residues
+                      .filter(asaFilter)
+                      // filter for residues within the membrane plane
+                      .filter(residue -> !checkMembranePlane ||
+                              isInMembranePlane(residue.alphaCarbon().get().getCoordinates(), diam, c1, c2))
+                      // map to index representation - 0: membrane-tendency, 1: polar residue
+                      .mapToInt(residue -> residue.getAminoAcid().getANVILGrouping().ordinal())
+                      // unknown amino acids could be mapped to indices exceeding the array
+                      .filter(index -> index < 2)
+                      .collect(HphobHphilConsumer::new, HphobHphilConsumer::accept, HphobHphilConsumer::combine)
+                      .getHphobHpil();
+    }
 
-//        protein.residues().filter(residue -> residue.alphaCarbons().filter(alphaCarbon ->
-//                alphaCarbon.getFeature(double.class,
-//                        AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA.name()) <
-//                afilter).findAny().isPresent()).filter(residue -> checkMembranePlane && !(isInSpace(residue)));
-        //TODO implement
-//        for(Chain chain : this.protein.chains) {
-//            for(Residue residue : chain.residues) {
-//                // skip residues with too low ASA values - in the original code this is
-//                // checked after determining whether the residue is within the membrane
-//                // but this check should be way faster and, thus, reduce computational load
-//                if(residue.features.get(FeatureType.ACCESSIBLE_SURFACE_AREA.name())[0] < this.afilter) {
-//                    continue;
-//                }
-//
-//                // give the option to ignore the membrane placement
-//                if(checkMembranePlane && !isInSpace(this.modelConverter.getCA(residue).xyz, diam, c1, c2)) {
-//                    continue;
-//                }
-//
-//                if(MEMBRANE_AMINO_ACIDS.contains(residue.aminoAcid)) {
-//                    hphobHphil[0]++;
-//                } else {
-//                    hphobHphil[1]++;
-//                }
-//            }
-//        }
+    static class HphobHphilConsumer implements IntConsumer {
+        private int[] values = new int[2];
 
-        return hphobHphil;
+        int[] getHphobHpil() {
+            return values;
+        }
+
+        public void accept(int index) {
+            values[index]++;
+        }
+
+        void combine(HphobHphilConsumer other) {
+            values[0] += other.values[0];
+            values[1] += other.values[1];
+        }
+    }
+
+    /**
+     *
+     * @param pointToTest
+     * @param normalVector
+     * @param planePoint1
+     * @param planePoint2
+     * @return
+     */
+    private boolean isInMembranePlane(double[] pointToTest, double[] normalVector, double[] planePoint1, double[] planePoint2) {
+        normalVector = LinearAlgebra3D.normalize(normalVector);
+        final double d1 = - LinearAlgebra3D.dotProduct(normalVector, planePoint1);
+        final double d2 = - LinearAlgebra3D.dotProduct(normalVector, planePoint2);
+        final double d = - LinearAlgebra3D.dotProduct(normalVector, pointToTest);
+        return d > Math.min(d1, d2) && d < Math.max(d1, d2);
     }
 
     /**
@@ -240,34 +388,5 @@ public class ANVIL implements FeatureProvider<Protein> {
         }
 
         return points;
-    }
-}
-
-class PotentialMembrane {
-    double[] point;
-    double[] c1;
-    double[] c2;
-    double hphob;
-    double hphil;
-    double total;
-    double qmax;
-
-    public PotentialMembrane(double[] c1, double[] c2, int[] hphobHphil) {
-        this.c1 = c1;
-        this.c2 = c2;
-        this.hphob = hphobHphil[0];
-        this.hphil = hphobHphil[1];
-        this.total = this.hphob + this.hphil;
-    }
-
-    public PotentialMembrane(double[] spherePoint, double[] c1, double[] c2, double hphob, double hphil, double total,
-                             double qmax) {
-        this.point = spherePoint;
-        this.c1 = c1;
-        this.c2 = c2;
-        this.hphob = hphob;
-        this.hphil = hphil;
-        this.total = total;
-        this.qmax = qmax;
     }
 }

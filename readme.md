@@ -36,9 +36,48 @@ a stream-based API to work with protein structures in *PDB* format.
  attached to any one of them.
 
 ### Design Approach
-* methods could primarily run on and return streams
+* methods are `Stream`-first and avoid returning `Collections`
 * stream-returning methods are named by their content, 
  i.e. `Stream<Atom> atoms()` in contrast to `List<Atom> getAtoms()`
  
 ### Using The API
-Coming soon!
+    // fetch/parse structure by id
+     Protein protein = ProteinParser.parseProteinById("1brr");
+    
+     // print all residue pairs whose distance is less than 8.0 A
+     protein.residuePairsInContact(8.0)
+            .forEach(System.out::println);
+    
+     // custom filters
+     Predicate<Residue> alanineFilter = new AminoAcidFilter(Collections.singletonList(ALANINE));
+     // print coordinates of all alanines
+     protein.residues()
+            .filter(alanineFilter)
+            .map(Residue::composePDBRecord)
+            .forEach(System.out::println);
+    
+     // count all alanines
+     double alanineRatio = protein.residues()
+             .filter(alanineFilter)
+             .count() / (double) protein.getSize() * 100.0;
+    
+     // store count
+     protein.setFeature(FeatureNames.ALANINE_RATIO, alanineRatio);
+    
+     // retrieve it
+     System.out.printf("alanine ratio: %3.2f%%", protein.getDoubleFeature(FeatureNames.ALANINE_RATIO));
+
+Examples of extending the core API are given in the `pmw` module which contains 
+algorithms to predict or annotate certain features of a `Protein` such as the 
+accessible surface area, sequence motifs, secondary structure elements, the 
+of membrane proteins. Basically, any information that can be computed based on 
+a protein sequence or structure. Furthermore, structure reconstruction algorithms
+are provided which can generate an all-atom representation of a `Protein` merely 
+by providing distance and constraints between particular amino acid positions in
+a sequence.
+
+These classes are used to tweak the `core` package and spot shortcomings of the
+current design. Also they provide examples on how to employ the capabilities of it.
+
+The `design` package contains example classes on how to aggregate information and 
+store respectively analyze it.
