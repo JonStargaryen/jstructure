@@ -115,7 +115,7 @@ public class Protein implements ChainContainer, AtomRecordWriter {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " name='" + this.name + "'";
+        return getClass().getSimpleName() + " name='" + name + "'";
     }
 
     @Override

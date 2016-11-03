@@ -27,7 +27,7 @@ public class Fragment<T> {
 
     @Override
     public String toString() {
-        return "[" + elements.stream().map(Object::toString).collect(Collectors.joining(", ")) + "]";
+        return elements.stream().map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
     }
 
     /**

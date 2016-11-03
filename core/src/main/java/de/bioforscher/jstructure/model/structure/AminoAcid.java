@@ -9,29 +9,50 @@ import java.util.stream.Stream;
  * Created by S on 28.09.2016.
  */
 public enum AminoAcid {
-    ALANINE("ALA", "A", new String[] { "CB" }),
-	ARGININE("ARG", "R", new String[] { "CB", "CG", "CD", "NE", "CZ", "NH1", "NH2" }),
-	ASPARAGINE("ASN", "N", new String[] { "CB", "CG", "OD1", "ND2" }),
-    ASPARTIC_ACID("ASP", "D", new String[] { "CB", "CG", "OD1", "OD2" }),
-	CYSTEINE("CYS", "C", new String[] { "CB", "SG" }),
-	GLUTAMINE("GLN", "Q", new String[] { "CB", "CG", "CD", "OE1", "NE2" }),
-	GLUTAMIC_ACID("GLU", "E", new String[] { "CB", "CG", "CD", "OE1", "OE2" }),
-	GLYCINE("GLY", "G", new String[] {}),
-	HISTIDINE("HIS", "H", new String[] { "CB", "CG", "ND1", "CD2", "CE1", "NE2" }),
-	ISOLEUCINE("ILE", "I", new String[] { "CB", "CG1", "CG2", "CD1" }),
-	LEUCINE("LEU", "L", new String[] { "CB", "CG", "CD1", "CD2" }),
-	LYSINE("LYS", "K", new String[] { "CB", "CG", "CD", "CE", "NZ" }),
-	METHIONINE("MET", "M", new String[] { "CB", "CG", "SD", "CE" }),
-	PHENYLALANINE("PHE", "F", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ" }),
-	PROLINE("PRO", "P", new String[] { "CB", "CG", "CD" }),
-	SERINE("SER", "S", new String[] { "CB", "OG" }),
-	THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }),
-	TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }),
-	TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }),
-    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }),
-    UNKNOWN("UNK", "X", new String[] {});
+    ALANINE("ALA", "A", new String[] { "CB" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+	ARGININE("ARG", "R", new String[] { "CB", "CG", "CD", "NE", "CZ", "NH1", "NH2" }, GutteridgeGrouping.GUANIDINIUM, ANVILGrouping.POLAR),
+	ASPARAGINE("ASN", "N", new String[] { "CB", "CG", "OD1", "ND2" }, GutteridgeGrouping.AMIDE, ANVILGrouping.POLAR),
+    ASPARTIC_ACID("ASP", "D", new String[] { "CB", "CG", "OD1", "OD2" }, GutteridgeGrouping.CARBOXYLATE, ANVILGrouping.POLAR),
+	CYSTEINE("CYS", "C", new String[] { "CB", "SG" }, GutteridgeGrouping.THIOL, ANVILGrouping.MEMBRANE),
+	GLUTAMINE("GLN", "Q", new String[] { "CB", "CG", "CD", "OE1", "NE2" }, GutteridgeGrouping.AMIDE, ANVILGrouping.POLAR),
+	GLUTAMIC_ACID("GLU", "E", new String[] { "CB", "CG", "CD", "OE1", "OE2" }, GutteridgeGrouping.CARBOXYLATE, ANVILGrouping.POLAR),
+	GLYCINE("GLY", "G", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+	HISTIDINE("HIS", "H", new String[] { "CB", "CG", "ND1", "CD2", "CE1", "NE2" }, GutteridgeGrouping.IMIDAZOLE, ANVILGrouping.MEMBRANE),
+	ISOLEUCINE("ILE", "I", new String[] { "CB", "CG1", "CG2", "CD1" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+	LEUCINE("LEU", "L", new String[] { "CB", "CG", "CD1", "CD2" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+	LYSINE("LYS", "K", new String[] { "CB", "CG", "CD", "CE", "NZ" }, GutteridgeGrouping.AMINO, ANVILGrouping.POLAR),
+	METHIONINE("MET", "M", new String[] { "CB", "CG", "SD", "CE" }, GutteridgeGrouping.THIOL, ANVILGrouping.MEMBRANE),
+	PHENYLALANINE("PHE", "F", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+	PROLINE("PRO", "P", new String[] { "CB", "CG", "CD" }, GutteridgeGrouping.NONE, ANVILGrouping.POLAR),
+	SERINE("SER", "S", new String[] { "CB", "OG" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.MEMBRANE),
+	THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.MEMBRANE),
+	TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }, GutteridgeGrouping.NONE, ANVILGrouping.POLAR),
+	TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.POLAR),
+    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+    UNKNOWN("UNK", "X", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.UNKNOWN);
 
-    private static Map<String, AminoAcid> allAminoAcids;
+    /**
+     * Gutteridge grouping (doi:10.1016/j.tibs.2005.09.006)
+     */
+    public enum GutteridgeGrouping {
+        NONE,
+        THIOL,
+        HYDROXYL,
+        GUANIDINIUM,
+        IMIDAZOLE,
+        AMINO,
+        CARBOXYLATE,
+        AMIDE
+    }
+
+    /**
+     * The grouping by the ANVIL algorithm according to the tendency of amino acids to be placed within the membrane layer.
+     */
+    public enum ANVILGrouping {
+        MEMBRANE,
+        POLAR,
+        UNKNOWN
+    }
 
     public interface ATOM_NAMES {
         /**
@@ -41,10 +62,10 @@ public enum AminoAcid {
         /**
          * Handle to the list of names representing alpha carbons.
          */
-        List<String> CA_ATOM_NAMES = Arrays.asList("CA");
-        List<String> C_ATOM_NAMES = Arrays.asList("C");
-        List<String> N_ATOM_NAMES = Arrays.asList("N");
-        List<String> O_ATOM_NAMES = Arrays.asList("O");
+        List<String> CA_ATOM_NAMES = Collections.singletonList("CA");
+        List<String> C_ATOM_NAMES = Collections.singletonList("C");
+        List<String> N_ATOM_NAMES = Collections.singletonList("N");
+        List<String> O_ATOM_NAMES = Collections.singletonList("O");
         /**
          * Handle to the list of names representing backbone atoms.
          */
@@ -59,6 +80,8 @@ public enum AminoAcid {
                 "OG", "OG1", "NE1", "CE3", "CZ2", "CZ3", "CH2", "OH"
         );
     }
+
+    private static Map<String, AminoAcid> allAminoAcids;
 
     static {
         /*
@@ -76,13 +99,18 @@ public enum AminoAcid {
     private final String oneLetterCode;
     private final String threeLetterCode;
     private final List<String> sideChainAtomNames;
+    private final GutteridgeGrouping gutteridgeGrouping;
+    private final ANVILGrouping anvilGrouping;
     private final AtomNameComparator atomNameComparator;
 
-    AminoAcid(String threeLetterCode, String oneLetterCode, String[] sideChainAtomNames) {
+    AminoAcid(String threeLetterCode, String oneLetterCode, String[] sideChainAtomNames,
+              GutteridgeGrouping gutteridgeGrouping, ANVILGrouping anvilGrouping) {
         this.oneLetterCode = oneLetterCode;
         this.threeLetterCode = threeLetterCode;
         this.sideChainAtomNames = Arrays.asList(sideChainAtomNames);
         this.atomNameComparator = new AtomNameComparator(allAtomNames().collect(Collectors.toList()));
+        this.gutteridgeGrouping = gutteridgeGrouping;
+        this.anvilGrouping = anvilGrouping;
     }
 
     /**
@@ -131,6 +159,23 @@ public enum AminoAcid {
      */
     public Stream<String> allAtomNames() {
         return Stream.concat(ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(), sideChainAtomNames.stream());
+    }
+
+    /**
+     * Grouping of amino acids by their functional group.
+     * doi:10.1016/j.tibs.2005.09.006
+     * @return the enum representing this group
+     */
+    public GutteridgeGrouping getGutteridgeGrouping() {
+        return gutteridgeGrouping;
+    }
+
+    /**
+     * Grouping of amino acids by their tendency to be embedded in the membrane.
+     * @return the enum representing this group
+     */
+    public ANVILGrouping getANVILGrouping() {
+        return anvilGrouping;
     }
 
     /**

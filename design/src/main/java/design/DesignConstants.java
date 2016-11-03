@@ -39,6 +39,26 @@ public class DesignConstants {
     public static final String MOTIF_FRAGMENT_BY_TOPOLOGY_DIR = MOTIF_FRAGMENT_DIR + "by-topology/";
 
     /**
+     * The directory containing all extracted sequences.
+     */
+    public static final String EXTRACTED_SEQUENCES_DIR = BASE_DIR + "extracted-sequences/";
+
+    /**
+     * All extracted sequences by topology.
+     */
+    public static final String EXTRACTED_SEQUENCES_BY_TOPOLOGY_DIR = EXTRACTED_SEQUENCES_DIR + "by-topology/";
+
+    /**
+     * The directory containing data as *.arff file.
+     */
+    public static final String ARFF_DIR = BASE_DIR + "arff/";
+
+    /**
+     * Where the sequences grouped by length live.
+     */
+    public static final String MOTIF_SEQUENCES_BY_LENGTH_DIR = ARFF_DIR + "motif-sequences-by-lengths/";
+
+    /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
     public static final String PDB_FETCH_URL = "https://files.rcsb.org/download/%s.pdb";
@@ -63,6 +83,16 @@ public class DesignConstants {
      * The suffix of raw OPM files.
      */
     public static final String OPM_SUFFIX = ".opm";
+
+    /**
+     * The suffix of sequence files.
+     */
+    public static final String SEQUENCE_SUFFIX = ".seq";
+
+    /**
+     * The suffix of arff files.
+     */
+    public static final String ARFF_SUFFIX = ".arff";
 
     // general predicates
     /**

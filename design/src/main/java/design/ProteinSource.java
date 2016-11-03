@@ -45,10 +45,16 @@ public class ProteinSource {
 
         proteins.forEach(protein -> {
             System.out.println("parsing information for " + protein.getName());
-            OPMParser.parse(protein, Paths.get(DesignConstants.OPM_RAW_DIR + protein.getName() +
-                    DesignConstants.OPM_SUFFIX));
-//            addSecondaryStructureInformation(protein);
-            addSequenceMotifInformation(protein);
+            if(annotateTopology) {
+                OPMParser.parse(protein, Paths.get(DesignConstants.OPM_RAW_DIR + protein.getName() +
+                        DesignConstants.OPM_SUFFIX));
+            }
+            if(annotateSSE) {
+                addSecondaryStructureInformation(protein);
+            }
+            if(annotateMotifs) {
+                addSequenceMotifInformation(protein);
+            }
         });
 
         return proteins;
