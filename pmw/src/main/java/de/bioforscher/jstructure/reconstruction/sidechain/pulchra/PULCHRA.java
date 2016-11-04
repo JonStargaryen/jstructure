@@ -1,0 +1,207 @@
+package de.bioforscher.jstructure.reconstruction.sidechain.pulchra;
+
+import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.Fragment;
+import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+/**
+ * Reduced implementation of the Pulchra algorithm.<br />
+ * Intellectual and implementation credit to:<br />
+ * <b>[Rotkiewicz, 2008] - Fast procedure for reconstruction of full-atom protein models from reduced representations, 10.1002/jcc.20906</b><br /><br />
+ *
+ * Places side chains by finding suitable rotamers from a library.<br /><br />
+ *
+ * A rather rudimentary adaptation of the PULCHRA algorithm for side chain
+ * placement.<br />
+ * Actually, several other features are available in the native impl such as
+ * backbone placement or several refinement steps. Long term, they may be added
+ * to this implementation. For now only plain side chain reconstruction is
+ * supported.<br />
+ * <br />
+ *
+ * original comment:
+ *
+ * <pre>
+ * PULCHRA Protein Chain Restoration Algorithm
+ *
+ * Version 3.04 July 2007 Contact: Piotr Rotkiewicz, piotr -at- pirx -dot- com
+ * </pre>
+ *
+ * J Comput Chem. 2008 July 15; 29(9): 1460–1465. doi:10.1002/jcc.20906.
+ */
+public class PULCHRA implements ReconstructionAlgorithm {
+    private static final double BIN_SIZE = 0.3;
+    private static final String BASE_PATH = "de/bioforscher/jstructure/reconstruction/sidechain/pulchra/";
+    private static final String ROT_STAT_IDX_LIBRARY = BASE_PATH + "rot_data_idx.dat";
+    private static final String ROT_STAT_COORDS_LIBRARY = BASE_PATH + "rot_data_coords.dat";
+    private static final String ROT_STAT_LIBRARY = BASE_PATH + "nco_data.dat";
+
+    private static Map<String, String[]> sideChainAtomNames;
+    private static List<int[]> rotStatIdx;
+    private static List<double[]> rotStatCoords;
+    private static Map<int[], double[]> ncoStat;
+    private static Map<int[], double[]> ncoStatPro;
+
+    public PULCHRA() {
+        if(rotStatIdx == null) {
+            initializeLibrary();
+        }
+    }
+
+    @Override
+    public void reconstruct(Protein protein) {
+    }
+
+    private void reconstructSidechains(Protein protein) {
+        // TODO again reconstruct missing leading/tailing residues
+        Fragment.fragmentsOf(protein.residues().collect(Collectors.toList()), 4)
+                .forEach(fragment -> {
+                    Residue residueToReconstruct = fragment.getElement(2);
+                    if (residueToReconstruct.getAminoAcid().equals(AminoAcid.GLYCINE) ||
+                            residueToReconstruct.getAminoAcid().equals(AminoAcid.UNKNOWN)) {
+                        return;
+                    }
+
+                    double[] ca_p2 = fragment.getElement(0).alphaCarbon().get().getCoordinates();
+                    double[] ca_p1 = fragment.getElement(1).alphaCarbon().get().getCoordinates();
+                    double[] ca_tr = residueToReconstruct.alphaCarbon().get().getCoordinates();
+                    double[] ca_n1 = fragment.getElement(3).alphaCarbon().get().getCoordinates();
+
+                    double d13 = LinearAlgebra3D.distance(ca_p2, ca_tr);
+                    double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
+                    double d14 = LinearAlgebra3D.distance14(ca_p2, ca_p1, ca_tr, ca_n1);
+                    int[] residueBinning = binResidues(d13, d24, d14);
+
+                    // find closest rotamer conformation
+                    int[] bestMatchingRotamer = null;
+                    double bestMatchingRotamerDistance = Double.MAX_VALUE;
+                    int aminoAcidIndex = getAminoAcidIndex(residueToReconstruct);
+
+                    for (int[] rotamer : rotStatIdx) {
+                        if (residueBinning[0] != aminoAcidIndex) {
+                            continue;
+                        }
+
+                        double rotamerDistance = difference(rotamer, residueBinning);
+                        if (rotamerDistance < bestMatchingRotamerDistance) {
+                            bestMatchingRotamerDistance = rotamerDistance;
+                            bestMatchingRotamer = rotamer;
+                        }
+                    }
+
+                    // new rebuild
+                    double[][] rotation = rotation(ca_p1, ca_tr, ca_n1);
+
+                    int pos = bestMatchingRotamer[5];
+                    int nsc = (int) residueToReconstruct.getAminoAcid().sideChainAtomNames().count();
+
+                    // all atoms within the coordinate file describing this residue
+                    for (int i = 0; i < nsc; i++) {
+                        String atomName = residueToReconstruct.getAminoAcid().getSideChainAtomNames().get(i);
+                        Atom reconstructedAtom = new Atom(atomName, 0,
+                                Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
+                        // transform atom
+                        reconstructedAtom = new CoordinateUtils.Transformation(ca_tr,
+                                rotation).transformCoordinates(reconstructedAtom);
+                        residueToReconstruct.addAtom(reconstructedAtom);
+                    }
+                });
+    }
+
+    private double[][] rotation(double[] ca_p1, double[] ca_tr, double[] ca_n1) {
+        double[] difference21 = LinearAlgebra3D.normalize(LinearAlgebra3D.subtract(ca_tr, ca_p1));
+        double[] difference23 = LinearAlgebra3D.normalize(LinearAlgebra3D.subtract(ca_tr, ca_n1));
+        double[] difference13m = LinearAlgebra3D.normalize(LinearAlgebra3D.subtract(difference21, difference23));
+        double[] difference13p = LinearAlgebra3D.normalize(LinearAlgebra3D.add(difference21, difference23));
+
+        return new double[][] { difference13m, difference13p,
+                { difference13m[1] * difference13p[2] - difference13m[2] * difference13p[1],
+                        difference13m[2] * difference13p[0] - difference13m[0] * difference13p[2],
+                        difference13m[0] * difference13p[1] - difference13m[1] * difference13p[0]
+                }};
+    }
+
+    private double difference(int[] v1, int[] v2) {
+        return Math.abs(v1[0] - v2[0]) + Math.abs(v1[1] - v2[1]) + 0.2 * Math.abs(v1[2] - v2[2]);
+    }
+
+    private static int getAminoAcidIndex(Residue residue) {
+        final String aminoAcids = "GASCVTIPMDNLKEQRHFYWX";
+        return aminoAcids.indexOf(residue.getAminoAcid().getOneLetterCode());
+    }
+
+    private int[] binResidues(double d13_1, double d13_2, double d14) {
+        int bin13_1 = (int) ((d13_1 - 4.6) / BIN_SIZE);
+        int bin13_2 = (int) ((d13_2 - 4.6) / BIN_SIZE);
+        int bin14 = (int) ((d14 + 11.0) / BIN_SIZE);
+
+        bin13_1 = LinearAlgebra3D.capToInterval(0, bin13_1, 9);
+        bin13_2 = LinearAlgebra3D.capToInterval(0, bin13_2, 9);
+        bin14 = LinearAlgebra3D.capToInterval(0, bin14, 73);
+
+        return new int[] { bin13_1, bin13_2, bin14 };
+    }
+
+    private static final Predicate<String> LINE_FILTER = line -> line.contains("},");
+    private static final Function<String, String[]> STRING_MAPPER = line -> line.replace("{", "").replace("}", "").split(",");
+
+    private synchronized void initializeLibrary() {
+        // parse sidechain indices
+        InputStream idxIs = getResourceAsStream(ROT_STAT_IDX_LIBRARY);
+        rotStatIdx = new BufferedReader(new InputStreamReader(idxIs)).lines()
+            // filter lines which do not contain information
+            .filter(LINE_FILTER)
+            // remove padding
+            .map(STRING_MAPPER)
+            .map(this::parseRotStatIdxLine)
+            .collect(Collectors.toList());
+
+        // parse side chain coordinates
+        InputStream coordsIs = getResourceAsStream(ROT_STAT_COORDS_LIBRARY);
+        rotStatCoords = new BufferedReader(new InputStreamReader(coordsIs)).lines()
+            // filter lines which do not contain information
+            .filter(LINE_FILTER)
+            // remove padding
+            .map(STRING_MAPPER)
+            .map(this::parseRotStatCoordsLine)
+            .collect(Collectors.toList());
+
+        // parse backbone library for proline
+//		ncoStat = new HashMap<>();
+        //TODO: impl
+
+        // parse backbone lirbary for non-prolines
+//		ncoStatPro = new HashMap<>();
+        //TODO: impl
+    }
+
+    private double[] parseRotStatCoordsLine(String[] tmp) {
+        return Arrays.stream(tmp)
+                     .map(String::trim)
+                     .mapToDouble(Double::valueOf)
+                     .toArray();
+    }
+
+    private int[] parseRotStatIdxLine(String[] tmp) {
+        return Arrays.stream(tmp)
+                     .map(String::trim)
+                     .mapToInt(Integer::valueOf)
+                     .toArray();
+    }
+
+    private InputStream getResourceAsStream(String filepath) {
+        return Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath);
+    }
+}

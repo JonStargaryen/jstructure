@@ -147,10 +147,18 @@ public enum AminoAcid {
 
     /**
      * Access to the side chain atom names of this amino acid.
-     * @return a list containing all side chain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     * @return a stream containing all side chain atom names - that of {@link AminoAcid#GLYCINE} is empty
      */
     public Stream<String> sideChainAtomNames() {
-        return sideChainAtomNames.stream();
+        return getSideChainAtomNames().stream();
+    }
+
+    /**
+     * Access to the side chain atom names of this amino acid.
+     * @return a list containing all side chain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     */
+    public List<String> getSideChainAtomNames() {
+        return sideChainAtomNames;
     }
 
     /**

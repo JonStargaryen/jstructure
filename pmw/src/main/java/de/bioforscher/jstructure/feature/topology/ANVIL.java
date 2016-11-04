@@ -59,6 +59,9 @@ public class ANVIL implements FeatureProvider<Protein> {
         TOPOLOGY
     }
 
+    /*
+     * default values
+     */
     private static final int DEFAULT_NUMBER_OF_SPHERE_POINTS = 350;
     private static final double DEFAULT_STEP = 1.0;
     private static final double DEFAULT_MINTHICK = 20.0;
@@ -66,13 +69,12 @@ public class ANVIL implements FeatureProvider<Protein> {
     private static final double DEFAULT_AFILTER = 40.0;
     private static final double DEFAULT_DENSITY_OF_MEMBRANE_POINTS = 2.0;
 
-    /**
+    /*
      * parameters
      */
     private double step;
     private double minthick;
     private double maxthick;
-    private double afilter;
     private int numberOfSpherePoints;
     private double density;
     private Predicate<Residue> asaFilter;
@@ -83,18 +85,17 @@ public class ANVIL implements FeatureProvider<Protein> {
     private Membrane membrane;
 
     /**
-     *
-     * @param numberOfSpherePoints
-     * @param afilter
-     * @param minthick
-     * @param maxthick
-     * @param step
-     * @param density
+     * The fine-grained constructor.
+     * @param numberOfSpherePoints how many points to generate initially
+     * @param afilter the maximal accessible surface area value of a residue to still be considered
+     * @param minthick the minimum thickness of the membrane
+     * @param maxthick the maximum thickness of the membrane
+     * @param step the step size when adjusting the thickness of the membrane
+     * @param density how dense pseudo atoms representing the membrane layers are placed
      */
     public ANVIL(int numberOfSpherePoints, double afilter, double minthick, double maxthick, double step,
                  double density) {
         this.numberOfSpherePoints = numberOfSpherePoints;
-        this.afilter = afilter;
         this.minthick = minthick;
         this.maxthick = maxthick;
         this.step = step;
@@ -103,8 +104,15 @@ public class ANVIL implements FeatureProvider<Protein> {
                 residue.getDoubleFeature(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA) > afilter;
     }
 
+    /**
+     * The constructor using default values.
+     */
     public ANVIL() {
-        this(DEFAULT_NUMBER_OF_SPHERE_POINTS, DEFAULT_AFILTER, DEFAULT_MINTHICK, DEFAULT_MAXTHICK, DEFAULT_STEP,
+        this(DEFAULT_NUMBER_OF_SPHERE_POINTS,
+                DEFAULT_AFILTER,
+                DEFAULT_MINTHICK,
+                DEFAULT_MAXTHICK,
+                DEFAULT_STEP,
                 DEFAULT_DENSITY_OF_MEMBRANE_POINTS);
     }
 
@@ -151,7 +159,7 @@ public class ANVIL implements FeatureProvider<Protein> {
 
                     // distance cutoff is also squared
                     if(LinearAlgebra3D.distanceFast(atom, layer) <= radius &&
-                            minimalSquaredDistanceToProteinCAAtom(atom, protein) > 12.0) {
+                            minimalSquaredDistanceToProteinCAAtom(atom) > 12.0) {
                         membrane.membraneAtoms.add(atom);
                     }
                 }
@@ -159,15 +167,23 @@ public class ANVIL implements FeatureProvider<Protein> {
         }
     }
 
-    private double minimalSquaredDistanceToProteinCAAtom(double[] atom, Protein protein) {
+    /**
+     * Computes the minimal distance of a point to any alpha carbon of a structure.
+     * @param membranePseudoAtom the point to check
+     * @return the closest distance to any alpha carbon of the protein
+     */
+    private double minimalSquaredDistanceToProteinCAAtom(final double[] membranePseudoAtom) {
         return protein.residues()
                       .map(residue -> residue.alphaCarbon().get())
                       .map(Atom::getCoordinates)
-                      .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, atom))
+                      .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
                       .min()
                       .getAsDouble();
     }
 
+    /**
+     * Assign the topology to each residue which is embedded in the membrane.
+     */
     private void assignTopology() {
         protein.setFeature(ANVIL.FeatureNames.MEMBRANE, membrane);
         protein.residues()
@@ -179,7 +195,11 @@ public class ANVIL implements FeatureProvider<Protein> {
         );
     }
 
-
+    /**
+     * Checks a set of points to check and returns the most suitable membrane orientation.
+     * @param spherePoints a collection of sphere points to evaluate
+     * @return the most promising membrane for the given set of points
+     */
     private Membrane processSpherePoints(List<double[]> spherePoints) {
         // best performing membrane
         Membrane membrane = null;
@@ -193,22 +213,22 @@ public class ANVIL implements FeatureProvider<Protein> {
 
             List<Membrane> qvartemp = new ArrayList<>();
 
-            for (double i = 0; i < diamNorm - this.step; i += this.step) {
+            for (double i = 0; i < diamNorm - step; i += step) {
                 double dPointC1 = i;
-                double dPointC2 = i + this.step;
+                double dPointC2 = i + step;
 
                 double[] c1 = thales(diam, dPointC1, spherePoint);
                 double[] c2 = thales(diam, dPointC2, spherePoint);
 
-                // evaluate how well this membrane slice embeddeds the peculiar residues
+                // evaluate how well this membrane slice embedded the peculiar residues
                 int[] hphobHphil = hphobHphil(true, diam, c1, c2);
 
                 qvartemp.add(new Membrane(c1, c2, hphobHphil[0], hphobHphil[1]));
             }
 
-            int jmax = (int) ((this.minthick / this.step) - 1);
+            int jmax = (int) ((minthick / step) - 1);
 
-            for (double width = 0; width < this.maxthick; width = (jmax + 1) * this.step) {
+            for (double width = 0; width < maxthick; width = (jmax + 1) * step) {
                 int imax = qvartemp.size() - 1 - jmax;
 
                 for (int i = 0; i < imax; i++) {
@@ -247,13 +267,13 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     * creates a number of axes close to that of the given membrane
+     * Creates a number of axes close to that of the given membrane.
      * @param membrane a well-positioned, but potentially not optimal, membrane
-     * @return 350 axes close to that of the membrane
+     * @return 30000 axes close to that of the membrane
      */
     private List<double[]> findProximateAxes(Membrane membrane) {
         List<double[]> points = generateSpherePoints(30000);
-        Collections.sort(points, new Comparator<double[]>() {
+        points.sort(new Comparator<double[]>() {
             @Override
             public int compare(double[] d1, double[] d2) {
                 return Double.compare(distanceFast(d1), distanceFast(d2));
@@ -267,8 +287,8 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     * counts the total number of exposed hydrophobic respectively hydrophilic residues
-     * @return
+     * Counts the total number of exposed hydrophobic respectively hydrophilic residues.
+     * @return an <code>int[]</code>: the first index is the count of hydrophobic, the second that of hydrophilic
      */
     private int[] hphobHphil() {
         // delegate the more fine-grained impl when not interested in the placement of a residue relative
@@ -317,12 +337,12 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     *
-     * @param pointToTest
-     * @param normalVector
-     * @param planePoint1
-     * @param planePoint2
-     * @return
+     * Checks whether a certain point is within the membrane planes.
+     * @param pointToTest the peculiar points
+     * @param normalVector the normal vector of this membrane
+     * @param planePoint1 a point representing one side of the membrane
+     * @param planePoint2 the point representing the other side of the membrane
+     * @return true iff the given point is within the membrane
      */
     private boolean isInMembranePlane(double[] pointToTest, double[] normalVector, double[] planePoint1, double[] planePoint2) {
         normalVector = LinearAlgebra3D.normalize(normalVector);
@@ -333,11 +353,11 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     * evaluates the quality of any given membrane slice
-     * @param hphil
-     * @param hphob
-     * @param hphiltotal
-     * @param hphobtotal
+     * Evaluates the quality of any given membrane slice.
+     * @param hphil the current number of embedded hydrophilic residues
+     * @param hphob the current number of embedded hydrophobic residues
+     * @param hphiltotal the maximal number of hydrophilic residues
+     * @param hphobtotal the maximal number of hydrophobic residues
      * @return the qValue - the higher, the better is the embedding described by this membrane
      */
     private double qValue(double hphil, double hphob, double hphiltotal, double hphobtotal) {
@@ -354,7 +374,7 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     * return a point S so that S = V * d + P
+     * Return a point S so that S = V * d + P.
      * @param vector V
      * @param distance d
      * @param point P
@@ -365,7 +385,8 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     * generates a defined number of points on a sphere with radiues <code>maximalExtent</code> around <code>centerOfMass</code>
+     * Generates a defined number of points on a sphere with radiues <code>maximalExtent</code> around
+     * <code>centerOfMass</code>
      * @return a collection of sphere points
      */
     private List<double[]> generateSpherePoints(int numberOfSpherePoints) {

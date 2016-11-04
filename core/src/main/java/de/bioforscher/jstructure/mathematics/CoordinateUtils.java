@@ -105,7 +105,7 @@ public class CoordinateUtils {
         return atoms.map(transformation::transformCoordinates);
     }
 
-    static class Transformation {
+    public static class Transformation {
         private double[] translation;
         private double[][] rotation;
 
@@ -113,7 +113,7 @@ public class CoordinateUtils {
          * Mere shift.
          * @param translation the translation vector
          */
-        Transformation(double[] translation) {
+        public Transformation(double[] translation) {
             this.translation = translation;
         }
 
@@ -122,7 +122,7 @@ public class CoordinateUtils {
          * @param translation the translation vector
          * @param rotation the rotation matrix
          */
-        Transformation(double[] translation, double[][] rotation) {
+        public Transformation(double[] translation, double[][] rotation) {
             this.translation = translation;
             this.rotation = rotation;
         }
@@ -131,11 +131,11 @@ public class CoordinateUtils {
          * Mere rotation.
          * @param rotation the rotation matrix
          */
-        Transformation(double[][] rotation) {
+        public Transformation(double[][] rotation) {
             this.rotation = rotation;
         }
 
-        Atom transformCoordinates(Atom atom) {
+        public Atom transformCoordinates(Atom atom) {
             double[] vector = atom.getCoordinates();
             // apply transformation if needed
             if(translation != null) {

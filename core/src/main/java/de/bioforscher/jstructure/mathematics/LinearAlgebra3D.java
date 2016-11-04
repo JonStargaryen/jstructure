@@ -47,6 +47,17 @@ public class LinearAlgebra3D {
     }
 
     /**
+     * Caps a number to a defined interval.
+     * @param lowerBound the lowest accepted value x_l
+     * @param value the raw value
+     * @param upperBound the highest accepted value x_u
+     * @return the original value if it lies in the interval [x_l,x_u], else x_l or x_u
+     */
+    public static int capToInterval(int lowerBound, int value, int upperBound) {
+        return value < lowerBound ? lowerBound : value > upperBound ? upperBound : value;
+    }
+
+    /**
      * Calculates the distance between 2 3D points. Calls {@link LinearAlgebra3D#distanceFast(double[], double[])} and
      * takes the square root of the result. You are encouraged to use
      * {@link LinearAlgebra3D#distanceFast(double[], double[])} where appropriate (e.g. to sort distances or to check
@@ -181,5 +192,21 @@ public class LinearAlgebra3D {
             v1[2] * v2[0] - v1[0] * v2[2],
             v1[0] * v2[1] - v1[1] * v2[0]
         };
+    }
+
+    public static double distance14(double[] ca_p2, double[] ca_p1, double[] ca_tr, double[] ca_n1) {
+        double d14 = distance(ca_p2, ca_n1);
+        if(isLeftHandedTwist(ca_p2, ca_p1, ca_tr, ca_n1)) {
+            d14 = -d14;
+        }
+        return d14;
+    }
+
+    private static boolean isLeftHandedTwist(double[] ca_p2, double[] ca_p1, double[] ca_tr, double[] ca_n1) {
+        double[] d21 = subtract(ca_p1, ca_p2);
+        double[] d31 = subtract(ca_tr, ca_p2);
+        double[] d41 = subtract(ca_n1, ca_p2);
+
+        return dotProduct(d21, vectorProduct(d31, d41)) < 0.0;
     }
 }
