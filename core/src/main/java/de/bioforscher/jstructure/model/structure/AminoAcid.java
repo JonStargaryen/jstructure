@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.model.structure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +33,8 @@ public enum AminoAcid {
 	TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.POLAR),
     VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
     UNKNOWN("UNK", "X", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.UNKNOWN);
+
+    static Logger logger = LoggerFactory.getLogger(AminoAcid.class);
 
     /**
      * Gutteridge grouping (doi:10.1016/j.tibs.2005.09.006)
@@ -69,8 +74,7 @@ public enum AminoAcid {
         /**
          * Handle to the list of names representing backbone atoms.
          */
-        //TODO check whether side-chain atoms are also labeled as H
-        List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O", "H");
+        List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O");
         /**
          * Handle to the list of names representing side chain atoms of (any of) the standard amino acid. The intersection
          * of this 'set' and that of backbone atoms is empty.
@@ -124,7 +128,8 @@ public enum AminoAcid {
         if (aa != null) {
             return aa;
         }
-        //TODO warnings?
+        //TODO handling of non-standard amino acids
+        logger.warn("encountered non-standard amino acid {} - falling back to {}", aminoAcidName, AminoAcid.UNKNOWN);
 //        throw new IllegalArgumentException("Invalid amino acid name: " + aminoAcidName);
         return AminoAcid.UNKNOWN;
     }

@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.startsWith;
+
 /**
  * Checks functions of the PDB parser and its integrity with the data model.
  * Created by S on 29.09.2016.
@@ -24,6 +26,22 @@ public class ProteinParserFunctionalTest {
     private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "1brr", "4cha");
     private static final List<String> PDB_FILE_PATHS = PDB_IDS.stream()
             .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION).collect(Collectors.toList());
+    /**
+     * contains selenomethionine at pos 1, marked as HETATM
+     */
+    private static final String NON_STANDARD_PDB_ID = "1dw9";
+
+    @Test
+    public void shouldParseNonStandardAminoAcid() {
+        parseFilepath(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb");
+    }
+
+    @Test
+    public void shouldHandleProteinWithNonStandardAminoAcids() {
+        Protein protein = ProteinParser.parseProteinById(NON_STANDARD_PDB_ID);
+        // ensure that the initial selenomethionine stored as HETATM is correctly parsed
+        Assert.assertThat(protein.getSequence(), startsWith("M"));
+    }
 
     /**
      * Tests whether the parser can handle some usual structures.

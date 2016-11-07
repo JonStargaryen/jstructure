@@ -58,9 +58,11 @@ public class Residue extends Group {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " name='" + aminoAcid + "' resNum='" + residueNumber + "' size='" + atoms.size() + "'";
+        return getClass().getSimpleName() + " name='" + aminoAcid + "' resNum='" + residueNumber + "' size='" +
+                atoms.size() + "'";
     }
 
+    //TODO handling of Optional externally clogs up code - maybe throw an exception here instead
     public Optional<Atom> alphaCarbon() {
         return atoms().filter(AtomNameFilter.CA_ATOM_FILTER).findFirst();
     }
@@ -81,9 +83,8 @@ public class Residue extends Group {
         return atoms().filter(AtomNameFilter.N_ATOM_FILTER).findFirst();
     }
 
-    public Optional<Atom> backboneHydrogen() { return atoms().filter(AtomNameFilter.BACKBONE_ATOM_FILTER
-            .and(AtomNameFilter.HYDROGEN_FILTER)).findFirst(); }
-
+    //TODO check whether this is correct - side-chain hydrogens should have other names
+    public Optional<Atom> backboneHydrogen() { return atoms().filter(AtomNameFilter.HYDROGEN_FILTER).findFirst(); }
 
     /**
      * @return a stream of backbone atoms

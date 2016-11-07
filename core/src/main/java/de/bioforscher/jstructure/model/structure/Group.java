@@ -15,6 +15,9 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
     protected List<Atom> atoms;
     protected Map<Enum, Object> featureMap;
     protected int residueNumber;
+    /**
+     * 3-letter pdb name
+     */
     protected String pdbName;
     /**
      * Handle to the container element.

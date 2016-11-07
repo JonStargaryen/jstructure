@@ -3,12 +3,12 @@ package de.bioforscher.jstructure.feature.motif;
 import de.bioforscher.jstructure.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.GroupContainer;
 import de.bioforscher.jstructure.model.structure.Residue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Created by S on 02.10.2016.
  */
 public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
-    private static final Logger LOGGER = Logger.getLogger(SequenceMotifAnnotator.class.getName());
+    final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
 
     public enum FeatureNames {
         SEQUENCE_MOTIF
@@ -70,7 +70,7 @@ public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
                         value.add(sequenceMotif);
 
                     });
-                    LOGGER.log(Level.FINER, "found sequence motif: " + sequenceMotif);
+                   logger.info("found sequence motif: {}", sequenceMotif);
                 }
             }
         }

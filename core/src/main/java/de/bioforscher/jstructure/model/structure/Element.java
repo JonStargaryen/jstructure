@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.model.structure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,7 +120,11 @@ public enum Element {
      * R-group to represent generic groups that are sometimes present in MDL .sdf
      * files.
      */
-    R(104, 0, 0.0f, 0.000f); // this is an R-group
+    R(104, 0, 0.0f, 0.000f), // this is an R-group
+    X(105, 0, 0.0f, 0.000f); // this is an unknown element
+
+    static Logger logger = LoggerFactory.getLogger(Element.class);
+
     private final int atomicNumber;
     private final int period;
     private final float VDWRadius; // in Angstroms
@@ -164,7 +171,8 @@ public enum Element {
         Element e = allElements.get(elementSymbol.toLowerCase());
         if ( e != null)
             return e;
-        throw new IllegalArgumentException("Invalid element symbol: " + elementSymbol);
+        logger.warn("Invalid element symbol: {} - falling back to {}", elementSymbol, Element.X);
+        return Element.X;
     }
 
     /**

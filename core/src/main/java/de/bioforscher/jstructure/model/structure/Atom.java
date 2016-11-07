@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.model.structure;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
@@ -12,6 +15,7 @@ import java.util.Map;
  * Created by S on 27.09.2016.
  */
 public class Atom implements AtomRecordWriter, Container {
+    final Logger logger = LoggerFactory.getLogger(Atom.class);
     public static final float DEFAULT_BFACTOR = 1.0f;
     public static final float DEFAULT_OCCUPANCY = 1.0f;
     private Element element;
@@ -44,7 +48,7 @@ public class Atom implements AtomRecordWriter, Container {
     }
 
     /**
-     * Constructs an atom.
+     * Constructs an atom with all information assigned (mostly by being parsed from a <code>PDB</code> file).
      * @param name the unique {@link AtomContainer}-wide identifier
      * @param pdbSerial the unique protein-wide identifier
      * @param elementName this atom's chemical element as <code>String</code> which will be parsed by
@@ -58,11 +62,12 @@ public class Atom implements AtomRecordWriter, Container {
     }
 
     /**
-     *
-     * @param name
-     * @param pdbSerial
-     * @param element
-     * @param coordinates
+     * Constructs an atom without occupancy and bfactor explicitly set (mostly by reconstructing this atom)
+     * @param name the unique {@link AtomContainer}-wide identifier
+     * @param pdbSerial the u nique protein-wide identifier
+     * @param element this atom's chemical element as <code>String</code> which will be parsed by
+     * {@link Element#valueOfIgnoreCase(String)}
+     * @param coordinates the spatial coordinates of this atom
      */
     public Atom(String name, int pdbSerial, Element element, double[] coordinates) {
         this(name, pdbSerial, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
@@ -88,6 +93,29 @@ public class Atom implements AtomRecordWriter, Container {
         this.coordinates = coordinates;
         this.virtual = true;
     }
+
+//    /**
+//     * Private constructor to clone.
+//     */
+//    private Atom() {
+//
+//    }
+//
+//    @Override
+//    public Atom clone() {
+//        Atom clone = new Atom();
+//        clone.name = name;
+//        clone.pdbSerial = pdbSerial;
+//        clone.element = element;
+//        clone.coordinates = Arrays.copyOf(coordinates, 3);
+//        clone.occupancy = occupancy;
+//        clone.bfactor = bfactor;
+//        clone.virtual = virtual;
+//        // beware no deep copy of references
+//        clone.parentGroup = parentGroup;
+//        clone.featureMap = featureMap;
+//        return clone;
+//    }
 
     /**
      * Returns a 3D vector of the atom's spatial coordinates.
@@ -146,8 +174,7 @@ public class Atom implements AtomRecordWriter, Container {
     public String composePDBRecord() {
         String pdbRecord = AtomRecordProvider.toPDBString(this);
         if (pdbRecord.length() == 0) {
-            //TODO logging/error-handling
-            System.out.println(this);
+            logger.warn("peculiar ATOM record {}", this.toString());
         }
         return pdbRecord;
     }
@@ -211,7 +238,7 @@ public class Atom implements AtomRecordWriter, Container {
             d2.setMaximumFractionDigits(2);
         }
 
-        public static String toPDBString(Atom atom) {
+        static String toPDBString(Atom atom) {
             Group parentGroup = atom.parentGroup;
             String record = parentGroup instanceof Residue ? "ATOM  " : "HETATM";
             // format output ...
@@ -232,26 +259,25 @@ public class Atom implements AtomRecordWriter, Container {
             String tempfactor = String.format("%6s", d2.format(atom.bfactor));
             String leftResName = String.format("%3s", resName);
 
-            StringBuilder s = new StringBuilder();
-            s.append(record);
-            s.append(serial);
-            s.append(" ");
-            s.append(fullName);
-            s.append(altLoc);
-            s.append(leftResName);
-            s.append(" ");
-            s.append(parentGroup.getParentChain().getChainId());
-            s.append(resseq);
-            s.append("   ");
-            s.append(x);
-            s.append(y);
-            s.append(z);
-            s.append(occupancy);
-            s.append(tempfactor);
+            String s = record +
+                    serial +
+                    " " +
+                    fullName +
+                    altLoc +
+                    leftResName +
+                    " " +
+                    parentGroup.getParentChain().getChainId() +
+                    resseq +
+                    "   " +
+                    x +
+                    y +
+                    z +
+                    occupancy +
+                    tempfactor;
 
             String e = atom.element.toString().toUpperCase();
 
-            return String.format("%-76s%2s", s.toString(), e) + "  ";
+            return String.format("%-76s%2s", s, e) + "  ";
         }
 
         static String formatAtomName(Atom atom) {

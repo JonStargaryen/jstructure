@@ -9,11 +9,11 @@ import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -43,16 +43,24 @@ import java.util.stream.Collectors;
  */
 public class PULCHRA implements ReconstructionAlgorithm {
     private static final double BIN_SIZE = 0.3;
-    private static final String BASE_PATH = "de/bioforscher/jstructure/reconstruction/sidechain/pulchra/";
+    private static final String BASE_PATH = "pulchra/";
+    /*
+     * side-chain library
+     */
     private static final String ROT_STAT_IDX_LIBRARY = BASE_PATH + "rot_data_idx.dat";
     private static final String ROT_STAT_COORDS_LIBRARY = BASE_PATH + "rot_data_coords.dat";
-    private static final String ROT_STAT_LIBRARY = BASE_PATH + "nco_data.dat";
+    /*
+     * backbone library
+     */
+    private static final String NCO_LIBRARY = BASE_PATH + "nco_data.dat";
+    private static final String NCO_PRO_LIBRARY = BASE_PATH + "nco_data_pro.dat";
 
-    private static Map<String, String[]> sideChainAtomNames;
     private static List<int[]> rotStatIdx;
     private static List<double[]> rotStatCoords;
     private static Map<int[], double[]> ncoStat;
     private static Map<int[], double[]> ncoStatPro;
+    private Map<int[], List<double[]>> ncoLibrary;
+    private Map<int[], List<double[]>> ncoProLibrary;
 
     public PULCHRA() {
         if(rotStatIdx == null) {
@@ -62,6 +70,12 @@ public class PULCHRA implements ReconstructionAlgorithm {
 
     @Override
     public void reconstruct(Protein protein) {
+        reconstructBackbone(protein);
+        reconstructSidechains(protein);
+    }
+
+    private void reconstructBackbone(Protein protein) {
+
     }
 
     private void reconstructSidechains(Protein protein) {
@@ -83,18 +97,22 @@ public class PULCHRA implements ReconstructionAlgorithm {
                     double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
                     double d14 = LinearAlgebra3D.distance14(ca_p2, ca_p1, ca_tr, ca_n1);
                     int[] residueBinning = binResidues(d13, d24, d14);
+//                    System.out.println("residueBinning : " + Arrays.toString(residueBinning));
 
                     // find closest rotamer conformation
                     int[] bestMatchingRotamer = null;
                     double bestMatchingRotamerDistance = Double.MAX_VALUE;
                     int aminoAcidIndex = getAminoAcidIndex(residueToReconstruct);
+//                    System.out.println("aminoAcidIndex : " + aminoAcidIndex);
 
                     for (int[] rotamer : rotStatIdx) {
-                        if (residueBinning[0] != aminoAcidIndex) {
+//                        System.out.println("rotamer : " + Arrays.toString(rotamer));
+                        if (rotamer[0] != aminoAcidIndex) {
                             continue;
                         }
 
                         double rotamerDistance = difference(rotamer, residueBinning);
+//                        System.out.println("distance : " + rotamerDistance);
                         if (rotamerDistance < bestMatchingRotamerDistance) {
                             bestMatchingRotamerDistance = rotamerDistance;
                             bestMatchingRotamer = rotamer;
@@ -104,12 +122,13 @@ public class PULCHRA implements ReconstructionAlgorithm {
                     // new rebuild
                     double[][] rotation = rotation(ca_p1, ca_tr, ca_n1);
 
-                    int pos = bestMatchingRotamer[5];
+                    int pos = Objects.requireNonNull(bestMatchingRotamer)[5];
                     int nsc = (int) residueToReconstruct.getAminoAcid().sideChainAtomNames().count();
 
                     // all atoms within the coordinate file describing this residue
                     for (int i = 0; i < nsc; i++) {
                         String atomName = residueToReconstruct.getAminoAcid().getSideChainAtomNames().get(i);
+                        //TODO as pdbSerial cannot be decided yet, we need to update them later or externally, boilerplately
                         Atom reconstructedAtom = new Atom(atomName, 0,
                                 Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
                         // transform atom
@@ -137,7 +156,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
         return Math.abs(v1[0] - v2[0]) + Math.abs(v1[1] - v2[1]) + 0.2 * Math.abs(v1[2] - v2[2]);
     }
 
-    private static int getAminoAcidIndex(Residue residue) {
+    private int getAminoAcidIndex(Residue residue) {
         final String aminoAcids = "GASCVTIPMDNLKEQRHFYWX";
         return aminoAcids.indexOf(residue.getAminoAcid().getOneLetterCode());
     }
@@ -155,9 +174,12 @@ public class PULCHRA implements ReconstructionAlgorithm {
     }
 
     private static final Predicate<String> LINE_FILTER = line -> line.contains("},");
-    private static final Function<String, String[]> STRING_MAPPER = line -> line.replace("{", "").replace("}", "").split(",");
+    private static final Function<String, String[]> STRING_MAPPER = line -> line.replace("{", "").replace("}",
+            "").split(",");
 
     private synchronized void initializeLibrary() {
+        //TODO this could use some sophisticated parser - further versions of the data could easily break the code
+
         // parse sidechain indices
         InputStream idxIs = getResourceAsStream(ROT_STAT_IDX_LIBRARY);
         rotStatIdx = new BufferedReader(new InputStreamReader(idxIs)).lines()
@@ -179,17 +201,73 @@ public class PULCHRA implements ReconstructionAlgorithm {
             .collect(Collectors.toList());
 
         // parse backbone library for proline
-//		ncoStat = new HashMap<>();
-        //TODO: impl
+        InputStream ncoData = getResourceAsStream(NCO_LIBRARY);
+        ncoLibrary = new BufferedReader(new InputStreamReader(ncoData)).lines()
+                .collect(NCOConsumer::new, NCOConsumer::accept, NCOConsumer::combine)
+                .getData();
 
         // parse backbone lirbary for non-prolines
-//		ncoStatPro = new HashMap<>();
-        //TODO: impl
+        InputStream ncoProDat = getResourceAsStream(NCO_PRO_LIBRARY);
+        ncoProLibrary = new BufferedReader(new InputStreamReader(ncoProDat)).lines()
+                .collect(NCOConsumer::new, NCOConsumer::accept, NCOConsumer::combine)
+                .getData();
+    }
+
+    static class NCOConsumer implements Consumer<String> {
+        private Map<int[], List<double[]>> data;
+        private int[] currentBinIndex;
+        private List<double[]> currentPieceOfData;
+
+        NCOConsumer() {
+            this.data = new HashMap<>();
+        }
+
+        @Override
+        public void accept(String line) {
+            // entry starting
+            if(line.contains("{")) {
+                currentBinIndex = splitToBinIndex(line);
+                currentPieceOfData = new ArrayList<>();
+            } else if(line.contains("}}")) {
+                // entry ending
+                data.put(currentBinIndex, currentPieceOfData);
+            } else {
+                // coordinate line
+                currentPieceOfData.add(splitToData(line));
+            }
+        }
+
+        private double[] splitToData(String line) {
+            return Pattern.compile(",").splitAsStream(line)
+                                       .map(String::trim)
+                                       .mapToDouble(Double::valueOf)
+                                       .toArray();
+        }
+
+        private int[] splitToBinIndex(String line) {
+            return Pattern.compile(",").splitAsStream(line.split("\\{  \\{")[1].split("},")[0])
+                                       .map(String::trim)
+                                       .mapToInt(Integer::valueOf)
+                                       .toArray();
+        }
+
+        void combine(NCOConsumer other) {
+            data.putAll(other.data);
+        }
+
+        /**
+         * Gets the composed data as map.
+         * @return the composed data
+         */
+        Map<int[], List<double[]>> getData() {
+            return data;
+        }
     }
 
     private double[] parseRotStatCoordsLine(String[] tmp) {
         return Arrays.stream(tmp)
                      .map(String::trim)
+                     .filter(line -> !line.isEmpty())
                      .mapToDouble(Double::valueOf)
                      .toArray();
     }
@@ -197,11 +275,13 @@ public class PULCHRA implements ReconstructionAlgorithm {
     private int[] parseRotStatIdxLine(String[] tmp) {
         return Arrays.stream(tmp)
                      .map(String::trim)
+                     .filter(line -> !line.isEmpty())
                      .mapToInt(Integer::valueOf)
                      .toArray();
     }
 
     private InputStream getResourceAsStream(String filepath) {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath);
+        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
+                "failed to get resource as InputStream");
     }
 }

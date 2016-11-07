@@ -8,7 +8,6 @@ import java.util.stream.Stream;
  * The root element of protein structures. A really simplified model, reduced to our particularized needs. Consists of
  * {@link Chain} objects.<br />
  * Created by S on 27.09.2016.
- * TODO: at some point a wide range of fields should probably become final
  */
 public class Protein implements ChainContainer, AtomRecordWriter {
     /**

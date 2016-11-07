@@ -4,6 +4,8 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.Residue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -16,9 +18,11 @@ import java.nio.file.Paths;
  * Created by S on 29.09.2016.
  */
 public class ProteinParser {
+    final Logger logger = LoggerFactory.getLogger(ProteinParser.class);
     private static final String HEADER_PREFIX = "HEADER";
     private static final String TITLE_PREFIX = "TITLE";
     private static final String ATOM_PREFIX = "ATOM";
+    private static final String HETATM_PREFIX = "HETATM";
     private static final String DEFAULT_PROTEIN_TITLE = "NO DESCRIPTION";
     private static final String END_MODEL_PREFIX = "ENDMDL";
     /**
@@ -132,7 +136,8 @@ public class ProteinParser {
             // trim to omit tailing white-spaces
             // extra whitespace to ensure that words are separated
             // maybe some StringJoiner is the way to go
-            titleString.append((titleString.length() == 0 ? "" : " ") + line.substring(10, 80).trim());
+            titleString.append(titleString.length() == 0 ? "" : " ")
+                       .append(line.substring(10, 80).trim());
         }
 
         // parsing atom record - information we need is marked with an '*' - indirectly needed information (chain/residue) marked with an '#'
@@ -154,14 +159,15 @@ public class ProteinParser {
 			61 - 66        Real(6.2)    tempFactor    Temperature factor.
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
-        if(line.startsWith(ATOM_PREFIX)) {
+        if(line.startsWith(ATOM_PREFIX) || line.startsWith(HETATM_PREFIX)) {
             // we check for valid amino acids here, so no empty (nucleotide/ligand-only) chains are parsed
-            String aminoAcidName = line.substring(17, 20).trim();
-            if(aminoAcidName.length() < 3) {
-                // if aminoAcidName is less than 3 chars long, this is no amino acid - e.g. 'U' vs 'THR'
-                // TODO at some point parsing nucleotides and ligands would be nice
-                return;
-            }
+            String pdbName = line.substring(17, 20).trim();
+//            System.out.println(line);
+//            if(pdbName.length() < 3) {
+//                // if pdbName is less than 3 chars long, this is no amino acid - e.g. 'U' vs 'THR'
+//                // TODO at some point parsing nucleotides and ligands would be nice
+//                return;
+//            }
 
             // actually there is something to parse
             String chainId = line.substring(21, 22);
@@ -175,7 +181,7 @@ public class ProteinParser {
 
             if(currentResidue == null || currentResidue.getResidueNumber() != resNum) {
                 // residue changed - create new residue object and set reference
-                currentResidue = new Residue(aminoAcidName, resNum);
+                currentResidue = new Residue(pdbName, resNum);
                 currentChain.addGroup(currentResidue);
             }
 
@@ -194,7 +200,7 @@ public class ProteinParser {
 
         if(line.startsWith(END_MODEL_PREFIX)) {
             passedFirstModel = true;
-            System.out.println("skipping models for " + protein.getName());
+            logger.info("skipping models for {}", protein.getName());
         }
     }
 }

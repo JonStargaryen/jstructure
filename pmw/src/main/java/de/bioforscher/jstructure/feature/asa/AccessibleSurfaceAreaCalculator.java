@@ -53,9 +53,9 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
     private List<double[]> spherePoints;
 
     /**
-     *
-     * @param numberOfSpherePoints
-     * @param probeSize
+     * The fine-grained constructor.
+     * @param numberOfSpherePoints how many points to use
+     * @param probeSize sphere size to probe for ASA
      */
     public AccessibleSurfaceAreaCalculator(int numberOfSpherePoints, double probeSize) {
         this.numberOfSpherePoints = numberOfSpherePoints;
@@ -97,7 +97,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
      * Returns list of 3D coordinates of points on a sphere using the
      * Golden Section Spiral algorithm.
      * @param nSpherePoints the number of points to be used in generating the spherical dot-density
-     * @return
+     * @return the collection of generated sphere points
      */
     private List<double[]> generateSpherePoints(int nSpherePoints) {
         List<double[]> points = new ArrayList<>();
@@ -181,11 +181,11 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
         double radius = probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS);
         int accessiblePoints = 0;
 
-        for (double[] point : this.spherePoints) {
+        for (double[] point : spherePoints) {
             boolean isAccessible = true;
             double[] testPoint = LinearAlgebra3D.add(LinearAlgebra3D.multiply(point, radius), atom.getCoordinates());
             for(Atom neighborAtom : neighborAtoms) {
-                double neighborAtomRadius = neighborAtom.getDoubleFeature(FeatureNames.ATOM_RADIUS) + this.probeSize;
+                double neighborAtomRadius = neighborAtom.getDoubleFeature(FeatureNames.ATOM_RADIUS) + probeSize;
                 double differenceSquared = LinearAlgebra3D.distanceFast(testPoint, neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;
@@ -197,6 +197,6 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
             }
         }
 
-        return this.cons * accessiblePoints * radius * radius;
+        return cons * accessiblePoints * radius * radius;
     }
 }

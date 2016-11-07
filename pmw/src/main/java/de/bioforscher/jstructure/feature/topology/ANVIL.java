@@ -8,8 +8,13 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.Residue;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
@@ -54,6 +59,8 @@ import java.util.function.Predicate;
  knowledge of the CeCILL license and that you accept its terms.</pre>
  */
 public class ANVIL implements FeatureProvider<Protein> {
+    final Logger logger = LoggerFactory.getLogger(ANVIL.class);
+
     public enum FeatureNames {
         MEMBRANE,
         TOPOLOGY
@@ -126,17 +133,18 @@ public class ANVIL implements FeatureProvider<Protein> {
         
         this.initialHphobHphil = hphobHphil();
         Membrane initialMembrane = processSpherePoints(generateSpherePoints(numberOfSpherePoints));
+        logger.debug("initial membrane quality: {}", initialMembrane.qmax);
 
         Membrane alternativeMembrane = processSpherePoints(findProximateAxes(initialMembrane));
+        logger.debug("alternative membrane quality: {}", alternativeMembrane.qmax);
 
         membrane = initialMembrane.qmax > alternativeMembrane.qmax ? initialMembrane : alternativeMembrane;
 
         step = 0.3;
-        double thickness = LinearAlgebra3D.distance(membrane.planePoint1, membrane.planePoint2);
+        logger.debug("membrane thickness is {} A", LinearAlgebra3D.distance(membrane.planePoint1, membrane.planePoint2));
 
         assignTopology();
         placeMembraneMolecules();
-
     }
 
     /**
@@ -154,7 +162,7 @@ public class ANVIL implements FeatureProvider<Protein> {
                     try {
                         atom[2] = -(d + i * normalVector[0] + j * normalVector[1]) / normalVector[2];
                     } catch (ArithmeticException e) {
-
+                        logger.warn(e.getLocalizedMessage());
                     }
 
                     // distance cutoff is also squared
@@ -362,7 +370,7 @@ public class ANVIL implements FeatureProvider<Protein> {
      */
     private double qValue(double hphil, double hphob, double hphiltotal, double hphobtotal) {
         if(hphobtotal < 1) {
-            hphobtotal=0.1;
+            hphobtotal = 0.1;
         }
         if(hphiltotal < 1) {
             hphiltotal += 1;
