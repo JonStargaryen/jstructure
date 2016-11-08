@@ -27,8 +27,8 @@ public class DistanceMapComposer {
                    Residue second = pair.getSecond();
                    int indexFirst = residues.indexOf(first);
                    int indexSecond = residues.indexOf(second);
-                   distanceMap[indexFirst][indexSecond] = LinearAlgebra3D.distance(first.alphaCarbon().get().getCoordinates(),
-                           second.alphaCarbon().get().getCoordinates());
+                   distanceMap[indexFirst][indexSecond] = LinearAlgebra3D.distance(first.getAlphaCarbon().getCoordinates(),
+                           second.getAlphaCarbon().getCoordinates());
                });
 
         return distanceMap;

@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * Represents one amino acid within a {@link Protein} and is identified by a residue number, e.g. ALA-103. Is composed
+ * Represents one amino acid within a {@link Protein} and is identified by a getResidue number, e.g. ALA-103. Is composed
  * of {@link Atom} objects.
  * Created by S on 27.09.2016.
  */
@@ -15,33 +15,18 @@ public class Residue extends Group {
 
     /**
      * The constructor of residues.
-     * @param aminoAcid the amino acid this residue represents as Object
-     * @param residueNumber a {@link Chain}-wide unique number to identify this residue
-     * @see AminoAcid
-     */
-    public Residue(AminoAcid aminoAcid, int residueNumber) {
-        super(aminoAcid.getThreeLetterCode(), residueNumber);
-        this.aminoAcid = aminoAcid;
-    }
-
-    @Override
-    public String getPdbName() {
-        return aminoAcid.getThreeLetterCode();
-    }
-
-    /**
-     * The constructor of residues.
-     * @param aminoAcidName the amino acid this residue represents as String
-     * @param residueNumber a {@link Chain}-wide unique number to identify this residue
+     * @param pdbName the amino acid this getResidue represents as String
+     * @param residueNumber a {@link Chain}-wide unique number to identify this getResidue
      * @see AminoAcid#valueOfIgnoreCase(String)
      */
-    public Residue(String aminoAcidName, int residueNumber) {
-        this(AminoAcid.valueOfIgnoreCase(aminoAcidName), residueNumber);
+    public Residue(String pdbName, int residueNumber) {
+        super(pdbName, residueNumber);
+        this.aminoAcid = AminoAcid.valueOfIgnoreCase(pdbName);
     }
 
     /**
-     * Returns which of the 20 canonical amino acids this residue represents.
-     * @return the type of this residue
+     * Returns which of the 20 canonical amino acids this getResidue represents.
+     * @return the type of this getResidue
      * @see AminoAcid
      */
     public AminoAcid getAminoAcid() {
@@ -49,42 +34,58 @@ public class Residue extends Group {
     }
 
     /**
-     * Sets the amino acid for this residue.
+     * Sets the amino acid for this getResidue.
      * @param aminoAcid the new value
      */
     public void setAminoAcid(AminoAcid aminoAcid) {
         this.aminoAcid = aminoAcid;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " name='" + aminoAcid + "' resNum='" + residueNumber + "' size='" +
-                atoms.size() + "'";
+    public Atom getAlphaCarbon() {
+        return getAtomByName(AtomNameFilter.CA_ATOM_FILTER);
     }
 
-    //TODO handling of Optional externally clogs up code - maybe throw an exception here instead
-    public Optional<Atom> alphaCarbon() {
-        return atoms().filter(AtomNameFilter.CA_ATOM_FILTER).findFirst();
+    public Optional<Atom> findAlphaCarbon() {
+        return tryToGetAtomByName(AtomNameFilter.CA_ATOM_FILTER);
     }
 
-    public Optional<Atom> backboneCarbon() {
-        return atoms().filter(AtomNameFilter.C_ATOM_FILTER).findFirst();
+    public Atom getBackboneCarbon() {
+        return getAtomByName(AtomNameFilter.C_ATOM_FILTER);
     }
 
-    public Optional<Atom> backboneOxygen() {
-        return atoms().filter(AtomNameFilter.O_ATOM_FILTER).findFirst();
+    public Optional<Atom> findBackboneCarbon() {
+        return tryToGetAtomByName(AtomNameFilter.C_ATOM_FILTER);
     }
 
-    public Optional<Atom> betaCarbon() {
-        return atoms().filter(AtomNameFilter.CB_ATOM_FILTER).findFirst();
+    public Atom getBackboneOxygen() {
+        return getAtomByName(AtomNameFilter.O_ATOM_FILTER);
     }
 
-    public Optional<Atom> backboneNitrogen() {
-        return atoms().filter(AtomNameFilter.N_ATOM_FILTER).findFirst();
+    public Optional<Atom> findBackboneOxygen() {
+        return tryToGetAtomByName(AtomNameFilter.O_ATOM_FILTER);
     }
 
-    //TODO check whether this is correct - side-chain hydrogens should have other names
-    public Optional<Atom> backboneHydrogen() { return atoms().filter(AtomNameFilter.HYDROGEN_FILTER).findFirst(); }
+    public Atom getBetaCarbon() {
+        return getAtomByName(AtomNameFilter.CB_ATOM_FILTER);
+    }
+
+    public Optional<Atom> findBetaCarbon() {
+        return tryToGetAtomByName(AtomNameFilter.CB_ATOM_FILTER);
+    }
+
+    public Atom getBackboneNitrogen() {
+        return getAtomByName(AtomNameFilter.N_ATOM_FILTER);
+    }
+
+    public Optional<Atom> findBackboneNitrogen() {
+        return tryToGetAtomByName(AtomNameFilter.N_ATOM_FILTER);
+    }
+
+    public Atom getBackboneHydrogen() { return getAtomByName(AtomNameFilter.HYDROGEN_FILTER); }
+
+    public Optional<Atom> findBackboneHydrogen() {
+        return tryToGetAtomByName(AtomNameFilter.HYDROGEN_FILTER);
+    }
 
     /**
      * @return a stream of backbone atoms
@@ -95,7 +96,7 @@ public class Residue extends Group {
     }
 
     /**
-     * @return a stream of side chain atoms
+     * @return a stream of side getChain atoms
      * @see AtomNameFilter#SIDE_CHAIN_ATOM_FILTER
      */
     public Stream<Atom> sideChainAtoms() {

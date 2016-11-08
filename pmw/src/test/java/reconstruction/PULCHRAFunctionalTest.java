@@ -22,7 +22,7 @@ public class PULCHRAFunctionalTest {
 
     @Before
     public void setup() {
-        // for sake of simplicity a structure with a single chain
+        // for sake of simplicity a structure with a single getChain
         protein = ProteinParser.parseProteinById("1acj");
         proteinCopy = ProteinParser.parseProteinById("1acj");
     }
@@ -40,7 +40,7 @@ public class PULCHRAFunctionalTest {
         // forget everything but alpha carbons
         List<Residue> residues = proteinCopy.residues().collect(Collectors.toList());
         List<Atom> alphaCarbons =  residues.stream()
-               .map(Residue::alphaCarbon)
+               .map(Residue::findAlphaCarbon)
                .map(Optional::get)
                .collect(Collectors.toList());
         proteinCopy.clear();

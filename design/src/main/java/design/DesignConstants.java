@@ -38,6 +38,10 @@ public class DesignConstants {
      */
     public static final String MOTIF_FRAGMENT_BY_TOPOLOGY_DIR = MOTIF_FRAGMENT_DIR + "by-topology/";
 
+    public static final String ALIGNED_MOTIF_FRAGMENT_DIR = BASE_DIR + "aligned-motif-fragments/";
+
+    public static final String ALIGNED_MOTIF_FRAGMNET_BY_TOPOLOGY_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "by-topology/";
+
     /**
      * The directory containing all extracted sequences.
      */

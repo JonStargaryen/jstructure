@@ -14,8 +14,8 @@ public class AlphaCarbonRepresentationScheme implements RepresentationScheme {
     public Atom determineRepresentingAtom(Group group) {
         if(!(group instanceof Residue)) {
             throw new IllegalArgumentException(getClass().getSimpleName() +
-                    " can only be employed to residue objects use CentroidScheme instead");
+                    " can only be employed to getResidue objects use CentroidScheme instead");
         }
-        return ((Residue) group).alphaCarbon().orElse(new Atom(CoordinateUtils.centroid(group.atoms())));
+        return ((Residue) group).findAlphaCarbon().orElse(new Atom(CoordinateUtils.centroid(group)));
     }
 }

@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
  *
  * Places side chains by finding suitable rotamers from a library.<br /><br />
  *
- * A rather rudimentary adaptation of the PULCHRA algorithm for side chain
+ * A rather rudimentary adaptation of the PULCHRA algorithm for side getChain
  * placement.<br />
  * Actually, several other features are available in the native impl such as
  * backbone placement or several refinement steps. Long term, they may be added
- * to this implementation. For now only plain side chain reconstruction is
+ * to this implementation. For now only plain side getChain reconstruction is
  * supported.<br />
  * <br />
  *
@@ -45,7 +45,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
     private static final double BIN_SIZE = 0.3;
     private static final String BASE_PATH = "pulchra/";
     /*
-     * side-chain library
+     * side-getChain library
      */
     private static final String ROT_STAT_IDX_LIBRARY = BASE_PATH + "rot_data_idx.dat";
     private static final String ROT_STAT_COORDS_LIBRARY = BASE_PATH + "rot_data_coords.dat";
@@ -88,10 +88,10 @@ public class PULCHRA implements ReconstructionAlgorithm {
                         return;
                     }
 
-                    double[] ca_p2 = fragment.getElement(0).alphaCarbon().get().getCoordinates();
-                    double[] ca_p1 = fragment.getElement(1).alphaCarbon().get().getCoordinates();
-                    double[] ca_tr = residueToReconstruct.alphaCarbon().get().getCoordinates();
-                    double[] ca_n1 = fragment.getElement(3).alphaCarbon().get().getCoordinates();
+                    double[] ca_p2 = fragment.getElement(0).getAlphaCarbon().getCoordinates();
+                    double[] ca_p1 = fragment.getElement(1).getAlphaCarbon().getCoordinates();
+                    double[] ca_tr = residueToReconstruct.getAlphaCarbon().getCoordinates();
+                    double[] ca_n1 = fragment.getElement(3).getAlphaCarbon().getCoordinates();
 
                     double d13 = LinearAlgebra3D.distance(ca_p2, ca_tr);
                     double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
@@ -125,7 +125,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
                     int pos = Objects.requireNonNull(bestMatchingRotamer)[5];
                     int nsc = (int) residueToReconstruct.getAminoAcid().sideChainAtomNames().count();
 
-                    // all atoms within the coordinate file describing this residue
+                    // all atoms within the coordinate file describing this getResidue
                     for (int i = 0; i < nsc; i++) {
                         String atomName = residueToReconstruct.getAminoAcid().getSideChainAtomNames().get(i);
                         //TODO as pdbSerial cannot be decided yet, we need to update them later or externally, boilerplately
@@ -190,7 +190,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
             .map(this::parseRotStatIdxLine)
             .collect(Collectors.toList());
 
-        // parse side chain coordinates
+        // parse side getChain coordinates
         InputStream coordsIs = getResourceAsStream(ROT_STAT_COORDS_LIBRARY);
         rotStatCoords = new BufferedReader(new InputStreamReader(coordsIs)).lines()
             // filter lines which do not contain information

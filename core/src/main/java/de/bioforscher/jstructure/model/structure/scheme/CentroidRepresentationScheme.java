@@ -11,6 +11,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 public class CentroidRepresentationScheme implements RepresentationScheme {
     @Override
     public Atom determineRepresentingAtom(Group group) {
-        return new Atom(CoordinateUtils.centroid(group.atoms()));
+        return new Atom(CoordinateUtils.centroid(group));
     }
 }

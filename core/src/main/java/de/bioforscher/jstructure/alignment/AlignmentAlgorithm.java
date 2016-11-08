@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.model.structure.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.linear.MatrixUtils;
 
@@ -9,7 +9,7 @@ import org.apache.commons.math3.linear.MatrixUtils;
  * {@link AlignmentResult} object which can be used to recreate the alignment - even though the coordinates of the 2nd
  * atom set handed to the {@link AlignmentAlgorithm#align(AtomContainer, AtomContainer)} method are by contract modified
  * to match the reference atom set in the best possible way.
- * TODO maybe the algorithms need some abstracted way to report what atoms are aligned and whether container have to match in size - the current way does not seem to convincing
+ * TODO maybe the algorithms need some abstracted way to report whether container have to match in size - the current way does not seem to convincing
  * Created by S on 30.09.2016.
  */
 public interface AlignmentAlgorithm {
@@ -24,7 +24,8 @@ public interface AlignmentAlgorithm {
 
     /**
      * Aligns 2 atom sets.
-     * @param atomContainer1 a collection of 'reference' atoms, the other collection will be superimposed on this stream
+     * @param atomContainer1 a collection of 'reference' atoms, the other collection will be superimposed onto this
+     *                       stream
      * @param atomContainer2 another collection of atoms whose coordinates will be manipulated, so their coordinates are
      *               optimally superimposed
      * @return statistics on the alignment

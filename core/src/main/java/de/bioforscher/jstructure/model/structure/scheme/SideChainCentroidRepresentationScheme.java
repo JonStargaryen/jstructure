@@ -4,9 +4,10 @@ import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 /**
- * Created by S on 05.10.2016.
+ * Created by S on 08.11.2016.
  */
 public class SideChainCentroidRepresentationScheme implements RepresentationScheme {
     @Override
@@ -15,6 +16,7 @@ public class SideChainCentroidRepresentationScheme implements RepresentationSche
             throw new IllegalArgumentException(getClass().getSimpleName() +
                     " can only be employed to residue objects use CentroidScheme instead");
         }
-        return new Atom(CoordinateUtils.centroid(((Residue) group).sideChainAtoms()));
+        AtomContainer sideChainAtoms = AtomContainer.of(((Residue) group).sideChainAtoms());
+        return new Atom(CoordinateUtils.centroid(sideChainAtoms));
     }
 }

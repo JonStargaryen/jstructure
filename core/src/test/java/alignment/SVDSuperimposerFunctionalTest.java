@@ -13,18 +13,17 @@ import org.junit.Test;
 import java.io.IOException;
 
 /**
+ * Tests the capabilities of the SVDSuperimposer.
  * Created by S on 02.10.2016.
  */
 public class SVDSuperimposerFunctionalTest {
-    private ProteinParser proteinParser;
     private Protein protein1acj;
     private Protein protein1brr;
 
     @Before
     public void setup() throws IOException {
-        proteinParser = new ProteinParser();
-        protein1acj = proteinParser.parseProteinById("1acj");
-        protein1brr = proteinParser.parseProteinById("1brr");
+        protein1acj = ProteinParser.parseProteinById("1acj");
+        protein1brr = ProteinParser.parseProteinById("1brr");
     }
 
     @Test
@@ -42,8 +41,8 @@ public class SVDSuperimposerFunctionalTest {
 
     @Test
     public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
-        Protein protein1acjCopy = proteinParser.parseProteinById("1acj");
-        CoordinateUtils.transform(protein1acjCopy.atoms(),
+        Protein protein1acjCopy = ProteinParser.parseProteinById("1acj");
+        CoordinateUtils.transform(protein1acjCopy,
                 new double[] { 10, 20, 30},
                 AlignmentAlgorithm.NEUTRAL_ROTATION);
 

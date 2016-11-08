@@ -24,7 +24,7 @@ public class SecStrucState {
     private HBond donor2; // this is the acceptor of donor partner
 
     // Symbols: starting '>', ending '<', or both 'X'.
-    // Number means bracketed n-turn residue without h-bond
+    // Number means bracketed n-turn getResidue without h-bond
     private char[] turn;
     private boolean bend;
 
@@ -179,8 +179,8 @@ public class SecStrucState {
     }
 
     /**
-     * Adds a Bridge to the residue. Each residue can only store two bridges. If
-     * the residue contains already two Bridges, the Bridge will not be added
+     * Adds a Bridge to the getResidue. Each getResidue can only store two bridges. If
+     * the getResidue contains already two Bridges, the Bridge will not be added
      * and the method returns false.
      *
      * @param bridge

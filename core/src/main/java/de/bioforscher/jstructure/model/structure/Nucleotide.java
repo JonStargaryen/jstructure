@@ -1,25 +1,38 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+
 import java.util.Optional;
 
 /**
- *
- * Created by S on 06.10.2016.
+ * Created by S on 08.11.2016.
  */
 public class Nucleotide extends Group {
     public Nucleotide(String pdbName, int residueNumber) {
         super(pdbName, residueNumber);
     }
-//TODO implement
-    public Optional<Atom> O3Prime() {
-        return null;
+
+    public Atom getO3Prime() {
+        return getAtomByName(AtomNameFilter.O3PRIME_FILTER);
     }
 
-    public Optional<Atom> O5Prime() {
-        return null;
+    public Optional<Atom> findO3Prime() {
+        return tryToGetAtomByName(AtomNameFilter.O3PRIME_FILTER);
     }
 
-    public Optional<Atom> Phosphate() {
-        return null;
+    public Atom getO5Prime() {
+        return getAtomByName(AtomNameFilter.O5PRIME_FILTER);
+    }
+
+    public Optional<Atom> findO5Prime() {
+        return tryToGetAtomByName(AtomNameFilter.O5PRIME_FILTER);
+    }
+
+    public Atom getPhosphate() {
+        return getAtomByName(AtomNameFilter.PHOSPHATE_FILTER);
+    }
+
+    public Optional<Atom> findPhosphate() {
+        return tryToGetAtomByName(AtomNameFilter.PHOSPHATE_FILTER);
     }
 }

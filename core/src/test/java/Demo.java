@@ -23,7 +23,7 @@ public class Demo {
         // fetch/parse structure by id
         Protein protein = ProteinParser.parseProteinById("1brr");
 
-        // print all residue pairs whose distance is less than 8.0 A
+        // print all getResidue pairs whose distance is less than 8.0 A
         protein.residuePairsInContact(8.0)
                .forEach(System.out::println);
 

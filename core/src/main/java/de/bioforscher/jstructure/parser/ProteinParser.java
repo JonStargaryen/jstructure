@@ -140,8 +140,8 @@ public class ProteinParser {
                        .append(line.substring(10, 80).trim());
         }
 
-        // parsing atom record - information we need is marked with an '*' - indirectly needed information (chain/residue) marked with an '#'
-        // some information will inform us about changing chain/residue
+        // parsing atom record - information we need is marked with an '*' - indirectly needed information (getChain/getResidue) marked with an '#'
+        // some information will inform us about changing getChain/getResidue
 		/*	COLUMNS        DATA TYPE     FIELD        DEFINITION
 			-------------------------------------------------------------------------------------
 			1 - 6          Record name   "ATOM  "
@@ -174,18 +174,18 @@ public class ProteinParser {
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
 
             if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
-                // chain changed - create new chain object and set reference
+                // getChain changed - create new getChain object and set reference
                 currentChain = new Chain(chainId);
                 protein.addChain(currentChain);
             }
 
             if(currentResidue == null || currentResidue.getResidueNumber() != resNum) {
-                // residue changed - create new residue object and set reference
+                // getResidue changed - create new getResidue object and set reference
                 currentResidue = new Residue(pdbName, resNum);
                 currentChain.addGroup(currentResidue);
             }
 
-            // we append the current residue container with additional atoms
+            // we append the current getResidue container with additional atoms
             Atom atom = new Atom(line.substring(12, 16).trim(),
                     Integer.valueOf(line.substring(6, 11).trim()),
                     line.substring(76, 78).trim(),
@@ -195,7 +195,11 @@ public class ProteinParser {
                     },
                     Float.valueOf(line.substring(54, 60).trim()),
                     Float.valueOf(line.substring(60, 66).trim()));
-            currentResidue.addAtom(atom);
+            if(currentResidue.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
+                currentResidue.addAtom(atom);
+            } else {
+                logger.info("skipping atoms for {}", atom);
+            }
         }
 
         if(line.startsWith(END_MODEL_PREFIX)) {

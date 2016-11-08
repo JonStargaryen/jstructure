@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * Masks all residues which are not part of a sequence motif by 'X'. Done to investigate structures further by Florian
- * and the itemset miner. This time chain-specific.
+ * and the itemset miner. This time getChain-specific.
  * Created by S on 07.11.2016.
  */
 public class Z02_MaskNonSequenceMotifResiduesByChain {
@@ -38,12 +38,12 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
 
                     System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getSequence());
 
-                    // select appropriate chain
+                    // select appropriate getChain
                     Chain chain;
                     try {
-                        chain = protein.chain(splitLine[1]).get();
+                        chain = protein.getChain(splitLine[1]);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        chain = protein.chain(" ").get();
+                        chain = protein.getChain(" ");
                     }
 
                     // write structures
@@ -61,13 +61,8 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
         List<SequenceMotif> motifAnnotations = residue.getFeature(List.class,
                 SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
 
-        if(motifAnnotations == null || motifAnnotations.isEmpty()) {
-            return true;
-        }
+        return motifAnnotations == null || motifAnnotations.isEmpty() || motifAnnotations.stream().filter(motif ->
+                motif.getStartResidue().equals(residue) || motif.getEndResidue().equals(residue)).count() == 0;
 
-        return motifAnnotations.stream()
-                .filter(motif -> motif.getStartResidue().equals(residue) ||
-                        motif.getEndResidue().equals(residue))
-                .count() == 0;
     }
 }

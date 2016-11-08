@@ -22,7 +22,7 @@ public class S01_DownloadPDBStructures {
     public static void main(String[] args) throws IOException {
         Files.lines(Paths.get(DesignConstants.NR_ALPHA_IDS))
              .filter(DesignConstants.isCommentLine.negate())
-             // forget chain identifier
+             // forget getChain identifier
              .map(line -> line.substring(0, 4))
              // ensure entries are unique
              .collect(Collectors.toSet())

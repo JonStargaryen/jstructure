@@ -3,14 +3,18 @@ package de.bioforscher.jstructure.alignment;
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.AtomContainer;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -18,11 +22,13 @@ import java.util.stream.Collectors;
  * Created by S on 30.09.2016.
  */
 public class SVDSuperimposer implements AlignmentAlgorithm {
+    final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
     public static final AtomNameFilter DEFAULT_ALIGNED_ATOMS = AtomNameFilter.CA_ATOM_FILTER;
     private AtomNameFilter alignedAtomNameFilter;
 
     public SVDSuperimposer(AtomNameFilter alignedAtomNameFilter) {
         this.alignedAtomNameFilter = alignedAtomNameFilter;
+        BasicConfigurator.configure();
     }
 
     /**
@@ -34,19 +40,34 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
 
     @Override
     public AlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2) {
-        List<Atom> atomList1 = atomContainer1.atoms().filter(alignedAtomNameFilter).collect(Collectors.toList());
-        List<Atom> atomList2 = atomContainer2.atoms().filter(alignedAtomNameFilter).collect(Collectors.toList());
+        atomContainer1 = AtomContainer.of(atomContainer1.atoms().filter(alignedAtomNameFilter));
+        atomContainer2 = AtomContainer.of(atomContainer2.atoms().filter(alignedAtomNameFilter));
+
+        if(atomContainer1.getAtoms().size() != atomContainer2.getAtoms().size()) {
+            logger.error("arrays do not match in size\n\tsequence1: {}\n\tatoms1: {}\n\tsequence2: {}\n\tatoms2: {}\n{}\n{}",
+                    atomContainer1.atoms().map(Atom::getParentGroup).distinct().map(Group::getPdbName).collect(Collectors.joining()),
+                    atomContainer1.atoms().map(Atom::getName).collect(Collectors.joining("-")),
+                    atomContainer2.atoms().map(Atom::getParentGroup).distinct().map(Group::getPdbName).collect(Collectors.joining()),
+                    atomContainer2.atoms().map(Atom::getName).collect(Collectors.joining("-")),
+                    atomContainer1.composePDBRecord(),
+                    atomContainer2.composePDBRecord());
+            throw new DimensionMismatchException(atomContainer1.getAtoms().size(), atomContainer2.getAtoms().size());
+        }
 
         // compute centroids
-        double[] centroid1 = LinearAlgebra3D.multiply(CoordinateUtils.centroid(atomList1.stream()), -1.0);
-        double[] centroid2 = LinearAlgebra3D.multiply(CoordinateUtils.centroid(atomList2.stream()), -1.0);
+        double[] centroid1 = LinearAlgebra3D.multiply(CoordinateUtils.centroid(atomContainer1), -1.0);
+        double[] centroid2 = LinearAlgebra3D.multiply(CoordinateUtils.centroid(atomContainer2), -1.0);
+//        logger.warn("centroid of reference {}", Arrays.toString(centroid1));
+//        logger.warn("centroid of query {}", Arrays.toString(centroid2));
         // center atoms
-        CoordinateUtils.shift(atomList1.stream(), centroid1);
-        CoordinateUtils.shift(atomList2.stream(), centroid2);
+        CoordinateUtils.shift(atomContainer1, centroid1);
+        CoordinateUtils.shift(atomContainer2, centroid2);
+//        logger.warn("centroid of reference after shift {}", Arrays.toString(CoordinateUtils.centroid(atomContainer1)));
+//        logger.warn("centroid of query after shift {}", Arrays.toString(CoordinateUtils.centroid(atomContainer2)));
 
         // compose covariance matrix and calculate SVD
-        RealMatrix matrix1 = CoordinateUtils.convertToMatrix(atomList1.stream());
-        RealMatrix matrix2 = CoordinateUtils.convertToMatrix(atomList2.stream());
+        RealMatrix matrix1 = CoordinateUtils.convertToMatrix(atomContainer1);
+        RealMatrix matrix2 = CoordinateUtils.convertToMatrix(atomContainer2);
         RealMatrix covariance = matrix2.transpose().multiply(matrix1);
         SingularValueDecomposition svd = new SingularValueDecomposition(covariance);
         // R = (V * U')'
@@ -65,15 +86,12 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
         // compute translation
         RealMatrix referenceCentroidMatrix = new Array2DRowRealMatrix(centroid1).transpose();
         RealMatrix fragmentCentroidMatrix = new Array2DRowRealMatrix(centroid2).transpose();
-        double[] translation = referenceCentroidMatrix.subtract(
-                fragmentCentroidMatrix.multiply(rotationMatrix)).getRow(0);
+        double[] translation = referenceCentroidMatrix.subtract(fragmentCentroidMatrix.multiply(rotationMatrix)).getRow(0);
 
         /* transform 2nd atom stream - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */
-        double rmsd = CoordinateUtils.calculateRMSD(atomList1.stream(),
-                CoordinateUtils.transform(atomList2.stream(),
-                NEUTRAL_TRANSLATION,
-                rotation));
+        CoordinateUtils.transform(atomContainer2, NEUTRAL_TRANSLATION, rotation);
+        double rmsd = CoordinateUtils.calculateRMSD(atomContainer1, atomContainer2);
         // return alignment
         return new AlignmentResult(rmsd, translation, rotation);
     }

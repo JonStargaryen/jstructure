@@ -63,7 +63,7 @@ public class ProteinParserFunctionalTest {
     public void shouldWriteEqualAtomRecords() {
         for (String pdbFilePath : PDB_FILE_PATHS) {
             Protein protein = parseFilepath(pdbFilePath);
-            protein.chains().forEach(chain -> System.out.println("parsed chain '" + chain.getChainId() + "'"));
+            protein.chains().forEach(chain -> System.out.println("parsed getChain '" + chain.getChainId() + "'"));
             String parsedFilepath = TestUtils.getResourceAsFilepath(pdbFilePath.replace(PDB_DIRECTORY, PDB_PARSED_DIRECTORY));
             try {
                 List<String> originalLines = Files.readAllLines(new File(parsedFilepath).toPath());

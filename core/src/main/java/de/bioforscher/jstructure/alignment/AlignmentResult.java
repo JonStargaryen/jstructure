@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.alignment;
 
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 import java.util.stream.Stream;
 
@@ -31,11 +31,11 @@ public class AlignmentResult {
     /**
      * Convenience method to transform a {@link AtomContainer} based on the
      * translation and rotation described by this alignment result.
-     * @param atoms the atom collection to transform
-     * @see CoordinateUtils#transform(Stream, double[], double[][])
+     * @param atomContainer the atom collection to transform
+     * @see CoordinateUtils#transform(List, double[], double[][])
      */
-    public void transform(Stream<Atom> atoms) {
-        CoordinateUtils.transform(atoms, translation, rotation);
+    public void transform(AtomContainer atomContainer) {
+        CoordinateUtils.transform(atomContainer, translation, rotation);
     }
 
     /**

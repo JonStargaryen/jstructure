@@ -1,11 +1,9 @@
 package de.bioforscher.jstructure.model.structure;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+
+import java.util.*;
 
 /**
  *
@@ -32,13 +30,8 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
     }
 
     @Override
-    public void clear() {
-        atoms.clear();
-    }
-
-    @Override
-    public void clearPseudoAtoms() {
-        atoms.removeIf(Atom::isVirtual);
+    public List<Atom> getAtoms() {
+        return atoms;
     }
 
     public String getPdbName() {
@@ -46,7 +39,7 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
     }
 
     /**
-     * Returns the {@link Chain}-wide unique number to identify this residue.
+     * Returns the {@link Chain}-wide unique number to identify this getResidue.
      * @return an integer
      */
     public int getResidueNumber() {
@@ -54,9 +47,9 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
     }
 
     @Override
-    public String composePDBRecord() {
-        return atoms().map(Atom::composePDBRecord)
-                      .collect(Collectors.joining(System.lineSeparator()));
+    public String toString() {
+        return getClass().getSimpleName() + " name='" + pdbName + "' resNum='" + residueNumber + "' size='" +
+                atoms.size() + "'";
     }
 
     /**
@@ -68,8 +61,17 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
         atom.setParentGroup(this);
     }
 
+    Optional<Atom> tryToGetAtomByName(final AtomNameFilter filter) {
+        return atoms().filter(filter).findFirst();
+    }
+
+    Atom getAtomByName(final AtomNameFilter filter) {
+        return tryToGetAtomByName(filter).orElseThrow(() -> new NoSuchElementException(String.format("no atom matching " +
+                "%s in residue %s", filter.getAcceptedAtomNames(), toString())));
+    }
+
     /**
-     * Returns the {@link Chain} this residue is associated to.
+     * Returns the {@link Chain} this getResidue is associated to.
      * @return the parent container
      */
     public Chain getParentChain() {
@@ -82,11 +84,6 @@ public abstract class Group implements AtomContainer, AtomRecordWriter {
      */
     void setParentChain(Chain parentChain) {
         this.parentChain = parentChain;
-    }
-
-    @Override
-    public Stream<Atom> atoms() {
-        return atoms.stream();
     }
 
     public Map<Enum, Object> getFeatureMap() {

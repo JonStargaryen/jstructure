@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
- * Annotates the secondary structure element of each residue in a
+ * Annotates the secondary structure element of each getResidue in a
  * {@link Protein}.<br />
  * This is BioJava-code which itself it strongly motivated by Kabsch & Sander's
  * DSSP.<br />
@@ -36,14 +36,14 @@ import java.util.stream.Collectors;
  * @author Anthony Bradley
  *
  */
-public class SecondaryStructureAnnotator implements FeatureProvider<GroupContainer> {
+public class SecondaryStructureAnnotator implements FeatureProvider {
     final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
     /**
-     * DSSP assigns helices one residue shorter at each end, because the
+     * DSSP assigns helices one getResidue shorter at each end, because the
      * residues at (i-1) and (i+n+1) are not assigned helix type although they
      * contain a consistent turn (H-bond). If this parameter is true, the
      * helices will be the length of the original DSSP convention. If it is
-     * false, they will be two residue longer.
+     * false, they will be two getResidue longer.
      */
     private static final boolean DSSP_HELICES = true;
 
@@ -87,8 +87,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     private List<Residue> residues;
 
     @Override
-    public void process(GroupContainer residueContainer) {
-        residues = residueContainer.residues().collect(Collectors.toList());
+    public void process(Protein protein) {
+        residues = protein.residues().collect(Collectors.toList());
         bridges = new ArrayList<>();
         ladders = new ArrayList<>();
         // init mapping
@@ -103,7 +103,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
         detectBends();
         detectStrands();
 
-        residueContainer.clearPseudoAtoms();
+        protein.clearPseudoAtoms();
 //        residues.stream()
 //                .map(r -> r.getFeature(SecStrucState.class, FeatureNames.SECONDARY_STRUCTURE_STATES))
 //                .forEach(System.out::println);
@@ -196,7 +196,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     /**
      * For beta structures, we define explicitly: a bulge-linked
      * ladder consists of two (perfect) ladder or bridges of the
-     * same type connected by at most one extra residue on one
+     * same type connected by at most one extra getResidue on one
      * strand and at most four extra residues on the other strand,
      * all residues in bulge-linked ladders are marked "E,"
      * including the extra residues.
@@ -260,9 +260,9 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     /**
      * Conditions to extend a ladder with a given beta Bridge:
      * <li>The bridge and ladder are of the same type.
-     * <li>The smallest bridge residue is sequential to the first
+     * <li>The smallest bridge getResidue is sequential to the first
      * 		strand ladder.
-     * <li>The second bridge residue is either sequential (parallel)
+     * <li>The second bridge getResidue is either sequential (parallel)
      * 		or previous (antiparallel) to the second strand of the ladder
      * </li>
      * @param ladder the ladder candidate to extend
@@ -276,7 +276,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
             return false;
         }
 
-        //Only extend if residue 1 is sequential to ladder strand
+        //Only extend if getResidue 1 is sequential to ladder strand
         boolean sequential = (b.getPartner1() == ladder.getTo() + 1);
         if (!sequential) {
             return false;
@@ -320,8 +320,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
                 Residue res1 = residues.get(i);
                 Residue res2 = residues.get(j);
                 double distance = LinearAlgebra3D.distanceFast(
-                        res1.alphaCarbon().get().getCoordinates(),
-                        res2.alphaCarbon().get().getCoordinates());
+                        res1.getAlphaCarbon().getCoordinates(),
+                        res2.getAlphaCarbon().getCoordinates());
                 if (distance > CA_MIN_DIST) {
                     continue;
                 }
@@ -410,8 +410,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
             // Check if all atoms form peptide bonds (backbone discontinuity)
             for (int k = 0; k < 4; k++) {
                 int index = i + k - 2;
-                Atom c = residues.get(index).backboneCarbon().get();
-                Atom n = residues.get(index + 1).backboneNitrogen().get();
+                Atom c = residues.get(index).getBackboneCarbon();
+                Atom n = residues.get(index + 1).getBackboneNitrogen();
                 // Peptide bond C-N
                 if (LinearAlgebra3D.distanceFast(c.getCoordinates(), n.getCoordinates()) >
                         MAX_PEPTIDE_BOND_LENGTH_SQUARED) {
@@ -419,9 +419,9 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
                 }
             }
 
-            Atom caim2 = residues.get(i - 2).alphaCarbon().get();
-            Atom cag = residues.get(i).alphaCarbon().get();
-            Atom caip2 = residues.get(i + 2).alphaCarbon().get();
+            Atom caim2 = residues.get(i - 2).getAlphaCarbon();
+            Atom cag = residues.get(i).getAlphaCarbon();
+            Atom caip2 = residues.get(i + 2).getAlphaCarbon();
 
             // Create vectors ( Ca i to Ca i-2 ) ; ( Ca i to CA i + 2 )
             double[] caminus2 = LinearAlgebra3D.subtract(caim2.getCoordinates(), cag.getCoordinates());
@@ -473,10 +473,10 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     }
 
     /**
-     * Set the new type only if it has more preference than the current residue
+     * Set the new type only if it has more preference than the current getResidue
      * SS type.
      *
-     * @param pos the residue index to manipulate
+     * @param pos the getResidue index to manipulate
      * @param type the type to assign
      */
     private void setSecStrucType(int pos, DSSPSecondaryStructureElement type) {
@@ -493,8 +493,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      * type 4) at residues (i-1) and i.
      * <p>
      * Note that the orignal DSSP implementation does not assign helix type to
-     * residue (i-1) and residue (i+n+1), although they contain a helix turn. As
-     * they state in the original paper, "the helices are one residue shorter
+     * getResidue (i-1) and getResidue (i+n+1), although they contain a helix turn. As
+     * they state in the original paper, "the helices are one getResidue shorter
      * than they would be according to rule 6.3 of IUPAC-IUB".
      *
      * @param n
@@ -611,13 +611,13 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
             Residue res1 = residues.get(i);
             Residue res2 = residues.get(i + 1);
 
-            Atom n1 = res1.backboneNitrogen().get();
-            Atom ca1 = res1.alphaCarbon().get();
-            Atom c1 = res1.backboneCarbon().get();
+            Atom n1 = res1.getBackboneNitrogen();
+            Atom ca1 = res1.getAlphaCarbon();
+            Atom c1 = res1.getBackboneCarbon();
 
-            Atom n2 = res2.backboneNitrogen().get();
-            Atom ca2 = res2.alphaCarbon().get();
-            Atom c2 = res2.backboneCarbon().get();
+            Atom n2 = res2.getBackboneNitrogen();
+            Atom ca2 = res2.getAlphaCarbon();
+            Atom c2 = res2.getBackboneCarbon();
 
             double phi = LinearAlgebra3D.torsionAngle(c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates(), c2.getCoordinates());
             double psi = LinearAlgebra3D.torsionAngle(n1.getCoordinates(), ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates());
@@ -644,8 +644,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
                 Residue res1 = residues.get(i);
                 Residue res2 = residues.get(j);
                 double squaredDistance = LinearAlgebra3D.distanceFast(
-                        res1.alphaCarbon().get().getCoordinates(),
-                        res2.alphaCarbon().get().getCoordinates());
+                        res1.getAlphaCarbon().getCoordinates(),
+                        res2.getAlphaCarbon().getCoordinates());
                 if (squaredDistance > squaredDistanceCutoff) {
                     continue;
                 }
@@ -749,13 +749,13 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     private double calculateHBondEnergy(Pair<Residue, Residue> residuePair) {
         Residue res1 = residuePair.getFirst();
         Residue res2 = residuePair.getSecond();
-        Atom nAtom = res1.backboneNitrogen().get();
+        Atom nAtom = res1.getBackboneNitrogen();
         double[] n = nAtom.getCoordinates();
-        double[] h = res1.backboneHydrogen().get().getCoordinates();
+        double[] h = res1.getBackboneHydrogen().getCoordinates();
 
-        Atom oAtom = res2.backboneOxygen().get();
+        Atom oAtom = res2.getBackboneOxygen();
         double[] o = oAtom.getCoordinates();
-        double[] c = res2.backboneCarbon().get().getCoordinates();
+        double[] c = res2.getBackboneCarbon().getCoordinates();
 
         double dno = LinearAlgebra3D.distance(o, n);
         double dhc = LinearAlgebra3D.distance(c, h);
@@ -798,7 +798,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     }
 
     /**
-     * <code>true</code> iff the 2nd residue of this fragment lacks the backbone hydrogen
+     * <code>true</code> iff the 2nd getResidue of this fragment lacks the backbone hydrogen
      * @param fragmentOfSize2 2 consecutively connected residues
      * @return true if no backbone hydrogen is present
      */
@@ -807,12 +807,12 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
     }
 
     /**
-     * <code>true</code> iff the 2nd residue of this fragment lacks the backbone hydrogen
-     * @param residue the residue to check
+     * <code>true</code> iff the 2nd getResidue of this fragment lacks the backbone hydrogen
+     * @param residue the getResidue to check
      * @return true if no backbone hydrogen is present
      */
     private boolean lacksBackboneHydrogen(Residue residue) {
-        return !residue.backboneHydrogen().isPresent();
+        return !residue.findBackboneHydrogen().isPresent();
     }
 
     /**
@@ -821,9 +821,9 @@ public class SecondaryStructureAnnotator implements FeatureProvider<GroupContain
      */
     private void calcSimpleH(Fragment<Residue> fragmentOfSize2) {
         try {
-            double[] c = fragmentOfSize2.getElement(0).backboneCarbon().get().getCoordinates();
-            double[] o = fragmentOfSize2.getElement(0).backboneOxygen().get().getCoordinates();
-            double[] n = fragmentOfSize2.getElement(1).backboneNitrogen().get().getCoordinates();
+            double[] c = fragmentOfSize2.getElement(0).getBackboneCarbon().getCoordinates();
+            double[] o = fragmentOfSize2.getElement(0).getBackboneOxygen().getCoordinates();
+            double[] n = fragmentOfSize2.getElement(1).getBackboneNitrogen().getCoordinates();
 
             double[] xyz = LinearAlgebra3D.add(n, LinearAlgebra3D.divide(LinearAlgebra3D.subtract(c, o),
                     LinearAlgebra3D.distance(o, c)));

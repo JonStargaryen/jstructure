@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.GroupContainer;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.Residue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Searches for sequence fragments matching any {@link SequenceMotifDefinition} and reports hits.
  * Created by S on 02.10.2016.
  */
-public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
+public class SequenceMotifAnnotator implements FeatureProvider {
     final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
 
     public enum FeatureNames {
@@ -24,9 +24,9 @@ public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void process(GroupContainer residueContainer) {
-        // we need chain information as motifs cannot be part of 2 chains
-        Map<String, List<Residue>> chains = residueContainer.residues().collect(Collectors.groupingBy(residue ->
+    public void process(Protein protein) {
+        // we need getChain information as motifs cannot be part of 2 chains
+        Map<String, List<Residue>> chains = protein.residues().collect(Collectors.groupingBy(residue ->
                 residue.getParentChain().getChainId()));
         for (String chainId : chains.keySet()) {
             List<Residue> residueInChain = chains.get(chainId);
@@ -41,7 +41,7 @@ public class SequenceMotifAnnotator implements FeatureProvider<GroupContainer> {
                     char motifStart = candidate.name().charAt(0);
                     char motifEnd = candidate.name().charAt(1);
 
-                    // chain not long enough to cover the proposed motif
+                    // getChain not long enough to cover the proposed motif
                     if (resNum + motifLength >= chainLength) {
                         continue;
                     }

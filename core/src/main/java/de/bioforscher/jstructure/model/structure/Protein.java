@@ -1,8 +1,12 @@
 package de.bioforscher.jstructure.model.structure;
 
-import java.util.*;
+import de.bioforscher.jstructure.model.structure.container.ChainContainer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The root element of protein structures. A really simplified model, reduced to our particularized needs. Consists of
@@ -11,7 +15,7 @@ import java.util.stream.Stream;
  */
 public class Protein implements ChainContainer, AtomRecordWriter {
     /**
-     * The chain container.
+     * The getChain container.
      */
     private List<Chain> chains;
     /**
@@ -32,14 +36,20 @@ public class Protein implements ChainContainer, AtomRecordWriter {
         this.featureMap = new HashMap<>();
     }
 
-    @Override
-    public void clear() {
-        chains().forEach(Chain::clear);
+    public List<Chain> getChains() {
+        return chains;
     }
 
-    @Override
-    public void clearPseudoAtoms() {
-        chains.forEach(Chain::clearPseudoAtoms);
+    public List<Group> getGroups() {
+        return chains()
+                .flatMap(Chain::groups)
+                .collect(Collectors.toList());
+    }
+
+    public List<Atom> getAtoms() {
+        return getGroups().stream()
+                .flatMap(Group::atoms)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -84,8 +94,8 @@ public class Protein implements ChainContainer, AtomRecordWriter {
     }
 
     /**
-     * Registers a child. This object will assign a reference to itself to the chain.
-     * @param chain the chain to process
+     * Registers a child. This object will assign a reference to itself to the getChain.
+     * @param chain the getChain to process
      */
     public void addChain(Chain chain) {
         chains.add(chain);
@@ -93,33 +103,8 @@ public class Protein implements ChainContainer, AtomRecordWriter {
     }
 
     @Override
-    public Stream<Chain> chains() {
-        return chains.stream();
-    }
-
-    @Override
-    public Stream<Group> groups() {
-        return chains().flatMap(Chain::groups);
-    }
-
-    @Override
-    public Stream<Residue> residues() {
-        return chains().flatMap(Chain::residues);
-    }
-
-    @Override
-    public Stream<Atom> atoms() {
-        return groups().flatMap(Group::atoms);
-    }
-
-    @Override
     public String toString() {
         return getClass().getSimpleName() + " name='" + name + "'";
-    }
-
-    @Override
-    public String composePDBRecord() {
-        return chains.stream().map(Chain::composePDBRecord).collect(Collectors.joining(System.lineSeparator()));
     }
 
     @Override

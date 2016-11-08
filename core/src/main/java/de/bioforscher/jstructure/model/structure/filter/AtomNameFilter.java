@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -17,7 +18,7 @@ public class AtomNameFilter implements Predicate<Atom> {
      */
     public static final AtomNameFilter BACKBONE_ATOM_FILTER = new AtomNameFilter(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES);
     /**
-     * Retains all atoms which are side chain atoms (i.e. part of the atom names occurring for the 20 standard amino
+     * Retains all atoms which are side getChain atoms (i.e. part of the atom names occurring for the 20 standard amino
      * acid, but neither 'N', 'CA', 'C' or 'O'.
      */
     public static final AtomNameFilter SIDE_CHAIN_ATOM_FILTER = new AtomNameFilter(AminoAcid.ATOM_NAMES.SIDECHAIN_ATOM_NAMES);
@@ -48,13 +49,17 @@ public class AtomNameFilter implements Predicate<Atom> {
      */
     public static final AtomNameFilter HYDROGEN_FILTER = new AtomNameFilter(AminoAcid.ATOM_NAMES.H_ATOM_NAME);
 
-    public static final AtomNameFilter O3PRIME_FILTER = new AtomNameFilter(null);
+    public static final AtomNameFilter O3PRIME_FILTER = new AtomNameFilter(Collections.singletonList("O3'"));
 
-    public static final AtomNameFilter O5PRIME_FILTER = new AtomNameFilter(null);
+    public static final AtomNameFilter O5PRIME_FILTER = new AtomNameFilter(Collections.singletonList("O5'"));
 
-    public static final AtomNameFilter PHOSPHATE_FILTER = new AtomNameFilter(null);
+    public static final AtomNameFilter PHOSPHATE_FILTER = new AtomNameFilter(Collections.singletonList("P"));
 
     private final List<String> acceptedAtomNames;
+
+    public List<String> getAcceptedAtomNames() {
+        return acceptedAtomNames;
+    }
 
     public AtomNameFilter(final List<String> acceptedAtomNames) {
         this.acceptedAtomNames = Objects.requireNonNull(acceptedAtomNames);

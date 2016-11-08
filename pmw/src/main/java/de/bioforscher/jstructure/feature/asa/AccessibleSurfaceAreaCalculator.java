@@ -2,7 +2,10 @@ package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.feature.FeatureProvider;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Residue;
 import de.bioforscher.jstructure.model.structure.filter.AtomDistanceCutoffFilter;
 
 import java.util.ArrayList;
@@ -10,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>Computes the accessible surface area of each residue in a {@link Protein}.</p>
+ * <p>Computes the accessible surface area of each getResidue in a {@link Protein}.</p>
  *
  * <p>Wide parts are BioJava code. Original BioJava doc:</p>
  * <pre>Class to calculate Accessible Surface Areas based on
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pre>
  * @author duarte_j
  */
-public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupContainer> {
+public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
     public static final int DEFAULT_N_SPHERE_POINTS = 960;
@@ -81,16 +84,16 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
     }
 
     @Override
-    public void process(GroupContainer residueContainer) {
+    public void process(Protein protein) {
         // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-        nonHydrogenAtoms = residueContainer.nonHydrogenAtoms().collect(Collectors.toList());
+        nonHydrogenAtoms = protein.nonHydrogenAtoms().collect(Collectors.toList());
         nonHydrogenAtoms.parallelStream().forEach(this::assignRadius);
 
         // initialising the sphere points to sample
         spherePoints = generateSpherePoints(numberOfSpherePoints);
         cons = 4.0 * Math.PI / numberOfSpherePoints;
 
-        residueContainer.residues().parallel().forEach(this::assignSingleAsa);
+        protein.residues().parallel().forEach(this::assignSingleAsa);
     }
 
     /**
@@ -150,7 +153,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
                     case GLUTAMIC_ACID: case GLUTAMINE:
                         return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
                     default:
-                        throw new IllegalArgumentException("unknown case for residue: " + atom.getParentGroup());
+                        throw new IllegalArgumentException("unknown case for getResidue: " + atom.getParentGroup());
                 }
             default:
                 throw new IllegalArgumentException("unknown case for atom: " + atom);
@@ -164,10 +167,8 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider<GroupCon
      */
     private List<Atom> findNeighbors(Atom atom) {
         final double cutoff = probeSize + probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS);
-        final AtomDistanceCutoffFilter atomDistanceCutoffFilter = new
-                AtomDistanceCutoffFilter(atom, cutoff);
         return nonHydrogenAtoms.stream()
-                               .filter(atomDistanceCutoffFilter)
+                               .filter(new AtomDistanceCutoffFilter(atom, cutoff))
                                .collect(Collectors.toList());
     }
 

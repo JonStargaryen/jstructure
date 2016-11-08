@@ -1,23 +1,24 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * The container element representing a {@link Protein} chain. Is composed of {@link Residue} objects.
+ * The container element representing a {@link Protein} getChain. Is composed of {@link Residue} objects.
  * Created by S on 27.09.2016.
  */
 public class Chain implements GroupContainer, AtomRecordWriter {
     /**
-     * The container of all residues associated to this chain.
+     * The container of all residues associated to this getChain.
      */
     private List<Group> groups;
     /**
-     * The unique chain name. Usually one character, e.g. 'A'.
+     * The unique getChain name. Usually one character, e.g. 'A'.
      */
     private String chainId;
     /**
@@ -27,8 +28,8 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     private Map<Enum, Object> featureMap;
 
     /**
-     * Constructor for chain objects.
-     * @param chainId the unique name of this chain
+     * Constructor for getChain objects.
+     * @param chainId the unique name of this getChain
      */
     public Chain(String chainId) {
         this.chainId = chainId;
@@ -36,19 +37,18 @@ public class Chain implements GroupContainer, AtomRecordWriter {
         this.featureMap = new HashMap<>();
     }
 
-    @Override
-    public void clear() {
-        residues().forEach(Residue::clear);
+    public List<Group> getGroups() {
+        return groups;
     }
 
-    @Override
-    public void clearPseudoAtoms() {
-        residues().forEach(Residue::clearPseudoAtoms);
+    public List<Atom> getAtoms() {
+        return groups().flatMap(Group::atoms)
+                       .collect(Collectors.toList());
     }
 
     /**
-     * Registers a child. This object will assign a reference to itself to the residue.
-     * @param group the residue to process
+     * Registers a child. This object will assign a reference to itself to the getResidue.
+     * @param group the getResidue to process
      */
     public void addGroup(Group group) {
         groups.add(group);
@@ -56,7 +56,7 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     }
 
     /**
-     * Returns the unique name of this chain.
+     * Returns the unique name of this getChain.
      * @return a String, usually containing only a single char
      */
     public String getChainId() {
@@ -72,7 +72,7 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     }
 
     /**
-     * Returns the {@link Protein} this chain is associated to.
+     * Returns the {@link Protein} this getChain is associated to.
      * @return the parent container
      */
     public Protein getParentProtein() {
@@ -80,34 +80,12 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     }
 
     @Override
-    public String composePDBRecord() {
-        return residues().map(Residue::composePDBRecord)
-                         .collect(Collectors.joining(System.lineSeparator()));
-    }
-
-    @Override
     public String toString() {
         return this.getClass().getSimpleName() + " name='" + this.chainId + "'";
-    }
-
-    public Stream<Residue> residues() {
-        return groups.stream()
-                     .filter(Residue.class::isInstance)
-                     .map(Residue.class::cast);
-    }
-
-    @Override
-    public Stream<Atom> atoms() {
-        return residues().flatMap(Residue::atoms);
     }
 
     @Override
     public Map<Enum, Object> getFeatureMap() {
         return featureMap;
-    }
-
-    @Override
-    public Stream<Group> groups() {
-        return groups.stream();
     }
 }

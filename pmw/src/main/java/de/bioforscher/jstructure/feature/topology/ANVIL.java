@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +59,7 @@ import java.util.function.Predicate;
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.</pre>
  */
-public class ANVIL implements FeatureProvider<Protein> {
+public class ANVIL implements FeatureProvider {
     final Logger logger = LoggerFactory.getLogger(ANVIL.class);
 
     public enum FeatureNames {
@@ -94,7 +95,7 @@ public class ANVIL implements FeatureProvider<Protein> {
     /**
      * The fine-grained constructor.
      * @param numberOfSpherePoints how many points to generate initially
-     * @param afilter the maximal accessible surface area value of a residue to still be considered
+     * @param afilter the maximal accessible surface area value of a getResidue to still be considered
      * @param minthick the minimum thickness of the membrane
      * @param maxthick the maximum thickness of the membrane
      * @param step the step size when adjusting the thickness of the membrane
@@ -126,10 +127,10 @@ public class ANVIL implements FeatureProvider<Protein> {
     @Override
     public void process(Protein protein) {
         this.protein = protein;
+        AtomContainer alphaCarbons = AtomContainer.of(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER));
         // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
-        this.centerOfMass = CoordinateUtils.centroid(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER));
-        this.maximalExtent = 1.2 * CoordinateUtils.maximalExtent(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER), 
-                centerOfMass);
+        this.centerOfMass = CoordinateUtils.centroid(alphaCarbons);
+        this.maximalExtent = 1.2 * CoordinateUtils.maximalExtent(alphaCarbons, centerOfMass);
         
         this.initialHphobHphil = hphobHphil();
         Membrane initialMembrane = processSpherePoints(generateSpherePoints(numberOfSpherePoints));
@@ -182,7 +183,7 @@ public class ANVIL implements FeatureProvider<Protein> {
      */
     private double minimalSquaredDistanceToProteinCAAtom(final double[] membranePseudoAtom) {
         return protein.residues()
-                      .map(residue -> residue.alphaCarbon().get())
+                      .map(Residue::getAlphaCarbon)
                       .map(Atom::getCoordinates)
                       .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
                       .min()
@@ -190,12 +191,12 @@ public class ANVIL implements FeatureProvider<Protein> {
     }
 
     /**
-     * Assign the topology to each residue which is embedded in the membrane.
+     * Assign the topology to each getResidue which is embedded in the membrane.
      */
     private void assignTopology() {
         protein.setFeature(ANVIL.FeatureNames.MEMBRANE, membrane);
         protein.residues()
-               .filter(residue -> isInMembranePlane(residue.alphaCarbon().get().getCoordinates(),
+               .filter(residue -> isInMembranePlane(residue.getAlphaCarbon().getCoordinates(),
                        membrane.normalVector,
                        membrane.planePoint1,
                        membrane.planePoint2))
@@ -299,7 +300,7 @@ public class ANVIL implements FeatureProvider<Protein> {
      * @return an <code>int[]</code>: the first index is the count of hydrophobic, the second that of hydrophilic
      */
     private int[] hphobHphil() {
-        // delegate the more fine-grained impl when not interested in the placement of a residue relative
+        // delegate the more fine-grained impl when not interested in the placement of a getResidue relative
         // to the potential membrane plane
         return hphobHphil(false, null, null, null);
     }
@@ -318,8 +319,8 @@ public class ANVIL implements FeatureProvider<Protein> {
                       .filter(asaFilter)
                       // filter for residues within the membrane plane
                       .filter(residue -> !checkMembranePlane ||
-                              isInMembranePlane(residue.alphaCarbon().get().getCoordinates(), diam, c1, c2))
-                      // map to index representation - 0: membrane-tendency, 1: polar residue
+                              isInMembranePlane(residue.getAlphaCarbon().getCoordinates(), diam, c1, c2))
+                      // map to index representation - 0: membrane-tendency, 1: polar getResidue
                       .mapToInt(residue -> residue.getAminoAcid().getANVILGrouping().ordinal())
                       // unknown amino acids could be mapped to indices exceeding the array
                       .filter(index -> index < 2)

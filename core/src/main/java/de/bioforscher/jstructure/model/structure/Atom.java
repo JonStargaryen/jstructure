@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.Container;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,29 +95,6 @@ public class Atom implements AtomRecordWriter, Container {
         this.coordinates = coordinates;
         this.virtual = true;
     }
-
-//    /**
-//     * Private constructor to clone.
-//     */
-//    private Atom() {
-//
-//    }
-//
-//    @Override
-//    public Atom clone() {
-//        Atom clone = new Atom();
-//        clone.name = name;
-//        clone.pdbSerial = pdbSerial;
-//        clone.element = element;
-//        clone.coordinates = Arrays.copyOf(coordinates, 3);
-//        clone.occupancy = occupancy;
-//        clone.bfactor = bfactor;
-//        clone.virtual = virtual;
-//        // beware no deep copy of references
-//        clone.parentGroup = parentGroup;
-//        clone.featureMap = featureMap;
-//        return clone;
-//    }
 
     /**
      * Returns a 3D vector of the atom's spatial coordinates.

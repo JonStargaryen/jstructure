@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Residue;
 
 /**
- * Represents a residue by the non-hydrogen atom most distant to the alpha carbon.
+ * Represents a getResidue by the non-hydrogen atom most distant to the alpha carbon.
  * Created by S on 05.10.2016.
  */
 public class LastHeavyRepresentationScheme implements RepresentationScheme {
@@ -16,7 +16,7 @@ public class LastHeavyRepresentationScheme implements RepresentationScheme {
     public Atom determineRepresentingAtom(Group group) {
         if(!(group instanceof Residue)) {
             throw new IllegalArgumentException(getClass().getSimpleName() +
-                    " can only be employed to residue objects use CentroidScheme instead");
+                    " can only be employed to getResidue objects use CentroidScheme instead");
         }
         final Atom alphaCarbon = alphaCarbonRepresentationScheme.determineRepresentingAtom(group);
         return group.nonHydrogenAtoms()

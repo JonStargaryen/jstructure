@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,10 @@ public enum AminoAcid {
     UNKNOWN("UNK", "X", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.UNKNOWN);
 
     static Logger logger = LoggerFactory.getLogger(AminoAcid.class);
+
+    public boolean isStandardAminoAcid() {
+        return !oneLetterCode.equals(UNKNOWN.getOneLetterCode());
+    }
 
     /**
      * Gutteridge grouping (doi:10.1016/j.tibs.2005.09.006)
@@ -76,7 +81,7 @@ public enum AminoAcid {
          */
         List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O");
         /**
-         * Handle to the list of names representing side chain atoms of (any of) the standard amino acid. The intersection
+         * Handle to the list of names representing side getChain atoms of (any of) the standard amino acid. The intersection
          * of this 'set' and that of backbone atoms is empty.
          */
         List<String> SIDECHAIN_ATOM_NAMES = Arrays.asList("CB", "CG", "CD", "NE", "CZ", "NH1", "NH2", "OD1", "ND2",
@@ -129,8 +134,7 @@ public enum AminoAcid {
             return aa;
         }
         //TODO handling of non-standard amino acids
-        logger.warn("encountered non-standard amino acid {} - falling back to {}", aminoAcidName, AminoAcid.UNKNOWN);
-//        throw new IllegalArgumentException("Invalid amino acid name: " + aminoAcidName);
+        logger.info("encountered non-standard amino acid {} - falling back to {}", aminoAcidName, AminoAcid.UNKNOWN);
         return AminoAcid.UNKNOWN;
     }
 
@@ -151,16 +155,16 @@ public enum AminoAcid {
     }
 
     /**
-     * Access to the side chain atom names of this amino acid.
-     * @return a stream containing all side chain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     * Access to the side getChain atom names of this amino acid.
+     * @return a stream containing all side getChain atom names - that of {@link AminoAcid#GLYCINE} is empty
      */
     public Stream<String> sideChainAtomNames() {
         return getSideChainAtomNames().stream();
     }
 
     /**
-     * Access to the side chain atom names of this amino acid.
-     * @return a list containing all side chain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     * Access to the side getChain atom names of this amino acid.
+     * @return a list containing all side getChain atom names - that of {@link AminoAcid#GLYCINE} is empty
      */
     public List<String> getSideChainAtomNames() {
         return sideChainAtomNames;
@@ -197,7 +201,7 @@ public enum AminoAcid {
      */
     public static void orderAtomsByName(Residue residue) {
         //TODO implement
-//        Collections.sort(residue.atoms, aminoAcid.atomNameComparator);
+//        Collections.sort(getResidue.atoms, aminoAcid.atomNameComparator);
     }
 
     /**
