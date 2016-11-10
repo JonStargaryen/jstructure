@@ -19,13 +19,12 @@ import java.util.stream.Collectors;
  * Implementation of the singular value decomposition rigid body alignment algorithm.
  * Created by S on 30.09.2016.
  */
-public class SVDSuperimposer implements AlignmentAlgorithm {
+public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
     final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
     public static final AtomNameFilter DEFAULT_ALIGNED_ATOMS = AtomNameFilter.CA_ATOM_FILTER;
-    private AtomNameFilter alignedAtomNameFilter;
 
     public SVDSuperimposer(AtomNameFilter alignedAtomNameFilter) {
-        this.alignedAtomNameFilter = alignedAtomNameFilter;
+        super(alignedAtomNameFilter);
     }
 
     /**
@@ -36,10 +35,8 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
     }
 
     @Override
-    public AlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2) {
-        atomContainer1 = getAtomsToAlign(atomContainer1);
-        atomContainer2 = getAtomsToAlign(atomContainer2);
-
+    AlignmentResult alignInternal(AtomContainer atomContainer1, AtomContainer atomContainer2) {
+        //TODO move to abstract impl and provide flag/interface
         if(atomContainer1.getAtoms().size() != atomContainer2.getAtoms().size()) {
             logger.error("arrays do not match in size\n\tsequence1: {}\n\tatoms1: {}\n\tsequence2: {}\n\tatoms2: {}\n{}\n{}",
                     atomContainer1.atoms().map(Atom::getParentGroup).distinct().map(Group::getPdbName).collect(Collectors.joining()),
@@ -84,10 +81,5 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
         double rmsd = CoordinateUtils.calculateRMSD(atomContainer1, atomContainer2);
         // return alignment
         return new AlignmentResult(rmsd, translation, rotation);
-    }
-
-    @Override
-    public AtomNameFilter getAlignedAtomNameFilter() {
-        return alignedAtomNameFilter;
     }
 }
