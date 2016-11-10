@@ -33,6 +33,18 @@ public enum AminoAcid {
 	TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }, GutteridgeGrouping.NONE, ANVILGrouping.POLAR),
 	TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.POLAR),
     VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
+//    // MSE is only found as a molecular replacement for MET
+//    SELENOMETHIONINE("MSE", "M", new String[] { "CB", "CG", "SE", "CE" }, METHIONINE.gutteridgeGrouping, METHIONINE.anvilGrouping),
+//    // 'non-standard', genetically encoded
+//    // http://www.chem.qmul.ac.uk/iubmb/newsletter/1999/item3.html
+//    // IUBMB recommended name is 'SEC' but the wwPDB currently use 'CSE'
+//    // likewise 'PYL' (IUBMB) and 'PYH' (PDB)
+//
+//		aminoAcids.put("CSE", 'U');
+//		aminoAcids.put("SEC", 'U');
+//		aminoAcids.put("PYH", 'O');
+//		aminoAcids.put("PYL", 'O');
+//    // the 'absolutely' unknown case
     UNKNOWN("UNK", "X", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.UNKNOWN);
 
     static Logger logger = LoggerFactory.getLogger(AminoAcid.class);
@@ -200,8 +212,7 @@ public enum AminoAcid {
      * in <tt>PDB</tt> files.
      */
     public static void orderAtomsByName(Residue residue) {
-        //TODO implement
-//        Collections.sort(getResidue.atoms, aminoAcid.atomNameComparator);
+        residue.getAtoms().sort(residue.getAminoAcid().atomNameComparator);
     }
 
     /**

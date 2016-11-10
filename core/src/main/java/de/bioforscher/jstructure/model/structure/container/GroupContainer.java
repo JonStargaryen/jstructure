@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -92,5 +93,9 @@ public interface GroupContainer extends AtomContainer {
      */
     default Stream<Pair<Residue, Residue>> residuePairs() {
         return Pair.uniquePairsOf(getResidues());
+    }
+
+    static GroupContainer of(Stream<? extends Group> groupStream) {
+        return groupStream.collect(StructureCollectors.toGroupContainer());
     }
 }

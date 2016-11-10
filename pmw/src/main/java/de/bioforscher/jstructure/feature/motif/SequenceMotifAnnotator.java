@@ -25,6 +25,8 @@ public class SequenceMotifAnnotator implements FeatureProvider {
     @Override
     @SuppressWarnings("unchecked")
     public void process(Protein protein) {
+        List<SequenceMotif> globalListOfSequenceMotifs = new ArrayList<>();
+
         // we need getChain information as motifs cannot be part of 2 chains
         Map<String, List<Residue>> chains = protein.residues().collect(Collectors.groupingBy(residue ->
                 residue.getParentChain().getChainId()));
@@ -68,11 +70,14 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                             residue.setFeature(FeatureNames.SEQUENCE_MOTIF, value);
                         }
                         value.add(sequenceMotif);
-
+                        globalListOfSequenceMotifs.add(sequenceMotif);
                     });
                    logger.info("found sequence motif: {}", sequenceMotif);
                 }
             }
         }
+
+        // set global reference to all entries
+        protein.setFeature(FeatureNames.SEQUENCE_MOTIF, globalListOfSequenceMotifs);
     }
 }

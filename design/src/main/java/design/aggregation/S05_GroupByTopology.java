@@ -33,8 +33,8 @@ public class S05_GroupByTopology {
                     SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
             .flatMap(residue -> residue.getFeature(List.class,
                     SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF).stream())
-            .map(SequenceMotif.class::cast)
             .distinct()
+            .map(SequenceMotif.class::cast)
             .forEach(S05_GroupByTopology::writeFragment);
     }
 

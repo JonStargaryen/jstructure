@@ -6,7 +6,10 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomDistanceCutoffFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,7 @@ import java.util.stream.Collectors;
  * @author duarte_j
  */
 public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
+    final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
     public static final int DEFAULT_N_SPHERE_POINTS = 960;
@@ -86,7 +90,9 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
     @Override
     public void process(Protein protein) {
         // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-        nonHydrogenAtoms = protein.nonHydrogenAtoms().collect(Collectors.toList());
+        //TODO not too nice - need to dodge non-amino acid groups though
+        GroupContainer residueContainer = GroupContainer.of(protein.residues());
+        nonHydrogenAtoms = residueContainer.nonHydrogenAtoms().collect(Collectors.toList());
         nonHydrogenAtoms.parallelStream().forEach(this::assignRadius);
 
         // initialising the sphere points to sample
@@ -153,7 +159,10 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
                     case GLUTAMIC_ACID: case GLUTAMINE:
                         return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
                     default:
-                        throw new IllegalArgumentException("unknown case for getResidue: " + atom.getParentGroup());
+                        //TODO this is not optimal
+                        logger.warn("unknown radius for atom of residue  {}", atom.getParentGroup());
+                        //TODO what value to return?
+                        return TETRAHEDRAL_CARBON_VDW;
                 }
             default:
                 throw new IllegalArgumentException("unknown case for atom: " + atom);

@@ -1,14 +1,12 @@
 package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import de.bioforscher.jstructure.model.structure.filter.AtomPairDistanceCutoffFilter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,48 +71,6 @@ public interface AtomContainer extends Container {
     }
 
     static AtomContainer of(Stream<Atom> atomStream) {
-        return atomStream.collect(AtomContainerConsumer::new,
-                AtomContainerConsumer::accept,
-                AtomContainerConsumer::combine)
-            .getContainer();
-    }
-
-    class AtomContainerConsumer implements Consumer<Atom> {
-        List<Atom> atoms;
-
-        AtomContainerConsumer() {
-            this.atoms = new ArrayList<>();
-        }
-
-        AtomContainer getContainer() {
-            return new BasicAtomContainer(atoms);
-        }
-
-        @Override
-        public void accept(Atom atom) {
-            atoms.add(atom);
-        }
-
-        void combine(AtomContainerConsumer other) {
-            atoms.addAll(other.atoms);
-        }
-    }
-
-    class BasicAtomContainer implements AtomContainer {
-        private List<Atom> atoms;
-
-        BasicAtomContainer(List<Atom> atomList) {
-            this.atoms = atomList;
-        }
-
-        @Override
-        public List<Atom> getAtoms() {
-            return atoms;
-        }
-
-        @Override
-        public Map<Enum, Object> getFeatureMap() {
-            throw new UnsupportedOperationException();
-        }
+        return atomStream.collect(StructureCollectors.toAtomContainer());
     }
 }

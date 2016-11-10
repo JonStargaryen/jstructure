@@ -1,8 +1,13 @@
 package de.bioforscher.jstructure.alignment;
 
+import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Residue;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.linear.MatrixUtils;
+
+import java.util.Objects;
 
 /**
  * Defines the capabilities of an implementing algorithm to align two atom collections. The alignment is reported as
@@ -39,4 +44,21 @@ public interface AlignmentAlgorithm {
      * algorithm applies
      */
     AtomNameFilter getAlignedAtomNameFilter();
+
+    /**
+     * Selects a subset of this container containing only atoms which will actually be align (specified by
+     * {@link #getAlignedAtomNameFilter()}). Furthermore, ensures correct ordering of the atoms.
+     * @return the subset of atoms to align
+     */
+    default AtomContainer getAtomsToAlign(AtomContainer atomContainer) {
+        // sort atoms in each residue container
+        atomContainer.atoms()
+                     .map(Atom::getParentGroup)
+                     .filter(Objects::nonNull)
+                     .distinct()
+                     .map(Residue.class::cast)
+                     .forEach(AminoAcid::orderAtomsByName);
+        // filter and wrap in container
+        return AtomContainer.of(atomContainer.atoms().filter(getAlignedAtomNameFilter()));
+    }
 }

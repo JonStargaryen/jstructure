@@ -45,7 +45,7 @@ public class MultiDimensionalScalingFunctionalTest {
 
     private List<String> parseLabels(String filepath) throws IOException {
         String line = Files.readAllLines(new File(filepath).toPath()).get(0);
-        return Arrays.asList(line.split(",")).stream().collect(Collectors.toList());
+        return Arrays.stream(line.split(",")).collect(Collectors.toList());
     }
 
     private double[][] parseDistancesFromPocketAlignCSV(String filepath) throws IOException {

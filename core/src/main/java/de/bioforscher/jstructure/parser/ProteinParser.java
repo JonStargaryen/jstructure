@@ -82,7 +82,9 @@ public class ProteinParser {
      * @throws IOException when IO fails at some point
      */
     private Protein parsePDBFile(File pdbFile) throws IOException {
-        return parsePDBFile(Files.newInputStream(pdbFile.toPath()), pdbFile.getName().split("\\.")[0]);
+        try(InputStream inputStream = Files.newInputStream(pdbFile.toPath())) {
+            return parsePDBFile(inputStream, pdbFile.getName().split("\\.")[0]);
+        }
     }
 
     /**
@@ -103,13 +105,17 @@ public class ProteinParser {
         currentResidue = null;
 
         // parse file
-        new BufferedReader(new InputStreamReader(inputStream)).lines().forEach(this::parseLine);
+        try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream)) {
+            try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                bufferedReader.lines().forEach(this::parseLine);
 
-        if(protein.getName() == null || protein.getName().isEmpty()) {
-            protein.setName(proteinName);
+                if(protein.getName() == null || protein.getName().isEmpty()) {
+                    protein.setName(proteinName);
+                }
+                protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
+                return protein;
+            }
         }
-        protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
-        return protein;
     }
 
     /**
@@ -198,13 +204,15 @@ public class ProteinParser {
             if(currentResidue.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
                 currentResidue.addAtom(atom);
             } else {
-                logger.info("skipping atoms for {}", atom);
+                //TODO find solution for this
+//                logger.info("skipping atoms for {}", atom);
             }
         }
 
         if(line.startsWith(END_MODEL_PREFIX)) {
+            //TODO handling of multiple models
             passedFirstModel = true;
-            logger.info("skipping models for {}", protein.getName());
+//            logger.info("skipping models for {}", protein.getName());
         }
     }
 }

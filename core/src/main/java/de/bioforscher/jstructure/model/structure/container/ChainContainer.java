@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.container;
 
-import com.sun.org.apache.regexp.internal.RE;
+import de.bioforscher.jstructure.model.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.Residue;
@@ -50,5 +50,9 @@ public interface ChainContainer extends GroupContainer {
 
     default Optional<Chain> findChain(String chainId) {
         return chains().filter(chain -> chain.getChainId().equals(chainId)).findFirst();
+    }
+
+    static ChainContainer of(Stream<Chain> chainStream) {
+        return chainStream.collect(StructureCollectors.toChainContainer());
     }
 }

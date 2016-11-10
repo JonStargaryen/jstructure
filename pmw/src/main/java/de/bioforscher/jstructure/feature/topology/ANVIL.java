@@ -126,6 +126,7 @@ public class ANVIL implements FeatureProvider {
 
     @Override
     public void process(Protein protein) {
+        //TODO bugged
         this.protein = protein;
         AtomContainer alphaCarbons = AtomContainer.of(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER));
         // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
@@ -143,6 +144,7 @@ public class ANVIL implements FeatureProvider {
 
         step = 0.3;
         logger.debug("membrane thickness is {} A", LinearAlgebra3D.distance(membrane.planePoint1, membrane.planePoint2));
+        logger.debug("embedding quality is {}", membrane.qmax);
 
         assignTopology();
         placeMembraneMolecules();

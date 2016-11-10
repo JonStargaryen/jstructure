@@ -7,11 +7,9 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.exception.DimensionMismatchException;
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +26,6 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
 
     public SVDSuperimposer(AtomNameFilter alignedAtomNameFilter) {
         this.alignedAtomNameFilter = alignedAtomNameFilter;
-        BasicConfigurator.configure();
     }
 
     /**
@@ -40,8 +37,8 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
 
     @Override
     public AlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2) {
-        atomContainer1 = AtomContainer.of(atomContainer1.atoms().filter(alignedAtomNameFilter));
-        atomContainer2 = AtomContainer.of(atomContainer2.atoms().filter(alignedAtomNameFilter));
+        atomContainer1 = getAtomsToAlign(atomContainer1);
+        atomContainer2 = getAtomsToAlign(atomContainer2);
 
         if(atomContainer1.getAtoms().size() != atomContainer2.getAtoms().size()) {
             logger.error("arrays do not match in size\n\tsequence1: {}\n\tatoms1: {}\n\tsequence2: {}\n\tatoms2: {}\n{}\n{}",
@@ -55,16 +52,11 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
         }
 
         // compute centroids
-        double[] centroid1 = LinearAlgebra3D.multiply(CoordinateUtils.centroid(atomContainer1), -1.0);
-        double[] centroid2 = LinearAlgebra3D.multiply(CoordinateUtils.centroid(atomContainer2), -1.0);
-//        logger.warn("centroid of reference {}", Arrays.toString(centroid1));
-//        logger.warn("centroid of query {}", Arrays.toString(centroid2));
+        double[] centroid1 = CoordinateUtils.centroid(atomContainer1);
+        double[] centroid2 = CoordinateUtils.centroid(atomContainer2);
         // center atoms
-        CoordinateUtils.shift(atomContainer1, centroid1);
-        CoordinateUtils.shift(atomContainer2, centroid2);
-//        logger.warn("centroid of reference after shift {}", Arrays.toString(CoordinateUtils.centroid(atomContainer1)));
-//        logger.warn("centroid of query after shift {}", Arrays.toString(CoordinateUtils.centroid(atomContainer2)));
-
+        CoordinateUtils.shift(atomContainer1, LinearAlgebra3D.multiply(centroid1, -1.0));
+        CoordinateUtils.shift(atomContainer2, LinearAlgebra3D.multiply(centroid2, -1.0));
         // compose covariance matrix and calculate SVD
         RealMatrix matrix1 = CoordinateUtils.convertToMatrix(atomContainer1);
         RealMatrix matrix2 = CoordinateUtils.convertToMatrix(atomContainer2);
@@ -84,13 +76,11 @@ public class SVDSuperimposer implements AlignmentAlgorithm {
         double[][] rotation = rotationMatrix.getData();
 
         // compute translation
-        RealMatrix referenceCentroidMatrix = new Array2DRowRealMatrix(centroid1).transpose();
-        RealMatrix fragmentCentroidMatrix = new Array2DRowRealMatrix(centroid2).transpose();
-        double[] translation = referenceCentroidMatrix.subtract(fragmentCentroidMatrix.multiply(rotationMatrix)).getRow(0);
+        double[] translation = LinearAlgebra3D.subtract(centroid1, centroid2);
 
         /* transform 2nd atom stream - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */
-        CoordinateUtils.transform(atomContainer2, NEUTRAL_TRANSLATION, rotation);
+        CoordinateUtils.transform(atomContainer2, new CoordinateUtils.Transformation(rotation));
         double rmsd = CoordinateUtils.calculateRMSD(atomContainer1, atomContainer2);
         // return alignment
         return new AlignmentResult(rmsd, translation, rotation);

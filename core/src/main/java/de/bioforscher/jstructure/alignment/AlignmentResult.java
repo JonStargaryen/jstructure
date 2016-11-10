@@ -1,10 +1,7 @@
 package de.bioforscher.jstructure.alignment;
 
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
-import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-
-import java.util.stream.Stream;
 
 /**
  * The object representing the result of an {@link AlignmentAlgorithm}. Provides RMSD, translation vector and rotation
@@ -13,8 +10,7 @@ import java.util.stream.Stream;
  */
 public class AlignmentResult {
     private final double rmsd;
-    private final double[] translation;
-    private final double[][] rotation;
+    private final CoordinateUtils.Transformation transformation;
 
     /**
      * Constructs a new alignment result container.
@@ -24,18 +20,17 @@ public class AlignmentResult {
      */
     public AlignmentResult(double rmsd, double[] translation, double[][] rotation) {
         this.rmsd = rmsd;
-        this.translation = translation;
-        this.rotation = rotation;
+        this.transformation = new CoordinateUtils.Transformation(translation, rotation);
     }
 
     /**
      * Convenience method to transform a {@link AtomContainer} based on the
      * translation and rotation described by this alignment result.
      * @param atomContainer the atom collection to transform
-     * @see CoordinateUtils#transform(List, double[], double[][])
+     * @see CoordinateUtils#transform(AtomContainer, double[], double[][])
      */
     public void transform(AtomContainer atomContainer) {
-        CoordinateUtils.transform(atomContainer, translation, rotation);
+        CoordinateUtils.transform(atomContainer, transformation);
     }
 
     /**
@@ -51,7 +46,7 @@ public class AlignmentResult {
      * @return a 3D vector
      */
     public double[] getTranslation() {
-        return translation;
+        return transformation.getTranslation();
     }
 
     /**
@@ -59,6 +54,6 @@ public class AlignmentResult {
      * @return a <tt>3 x 3</tt> rotation matrix
      */
     public double[][] getRotation() {
-        return rotation;
+        return transformation.getRotation();
     }
 }

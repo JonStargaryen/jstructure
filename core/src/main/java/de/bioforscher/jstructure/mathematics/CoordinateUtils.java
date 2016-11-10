@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * A collection of commonly used function to manipulate atom coordinates. In contrast to the the functions in
@@ -33,31 +33,7 @@ public class CoordinateUtils {
      * @see CoordinateUtils#centroid(AtomContainer)
      */
     public static double[] centerOfMass(AtomContainer atomContainer) {
-        return atomContainer.atoms()
-                .collect(CenterOfMassAverager::new,
-                         CenterOfMassAverager::accept,
-                         CenterOfMassAverager::combine)
-                .average();
-    }
-
-    static class CenterOfMassAverager implements Consumer<Atom> {
-        private double[] coordinate = new double[3];
-        private double mass = 0;
-
-        double[] average() {
-            return mass > 0 ? LinearAlgebra3D.divide(coordinate, mass) : new double[3];
-        }
-
-        @Override
-        public void accept(Atom atom) {
-            coordinate = LinearAlgebra3D.add(coordinate, LinearAlgebra3D.multiply(atom.getCoordinates(), atom.getElement().getAtomicMass()));
-            mass += atom.getElement().getAtomicMass();
-        }
-
-        void combine(CenterOfMassAverager other) {
-            coordinate = LinearAlgebra3D.add(coordinate, other.coordinate);
-            mass += other.mass;
-        }
+        return atomContainer.atoms().collect(StructureCollectors.toCenterOfMass());
     }
 
     /**
@@ -107,7 +83,17 @@ public class CoordinateUtils {
      * @param rotation the <tt>3 x 3</tt> matrix describing the desired rotation
      */
     public static void transform(AtomContainer atomContainer, double[] translation, double[][] rotation) {
-        atomContainer.atoms().forEach(new Transformation(translation, rotation)::transformCoordinates);
+        transform(atomContainer, new Transformation(translation, rotation));
+    }
+
+    /**
+     * Employs a transformation (i.e. a rotation & translation or 'rototranslation') on a collection of atoms. The
+     * operation will manipulate the provided atom's coordinates directly (rather than creating new Objects).
+     * @param atomContainer a collection of atoms
+     * @param transformation the transformation to employ
+     */
+    public static void transform(AtomContainer atomContainer, Transformation transformation) {
+        atomContainer.atoms().forEach(transformation::transformCoordinates);
     }
 
     public static class Transformation {
@@ -142,7 +128,6 @@ public class CoordinateUtils {
 
         public Atom transformCoordinates(Atom atom) {
             double[] vector = atom.getCoordinates();
-//            logger.debug("translated vector from {}", Arrays.toString(vector));
             // apply transformation if needed
             if(translation != null) {
                 atom.setCoordinates(new double[] {
@@ -153,7 +138,6 @@ public class CoordinateUtils {
             }
 
             vector = atom.getCoordinates();
-//            logger.debug("\tto {}", Arrays.toString(vector));
             // apply rotation if needed
             if(rotation != null) {
                 atom.setCoordinates(new double[] {
@@ -162,8 +146,15 @@ public class CoordinateUtils {
                     (rotation[2][0] * vector[0] + rotation[2][1] * vector[1] + rotation[2][2] * vector[2])
                 });
             }
-//            logger.debug("\tand rotated to {}", Arrays.toString(atom.getCoordinates()));
             return atom;
+        }
+
+        public double[] getTranslation() {
+            return translation;
+        }
+
+        public double[][] getRotation() {
+            return rotation;
         }
     }
 
@@ -197,31 +188,7 @@ public class CoordinateUtils {
      * @return a <code>double[]</code> describing the coordinates of the centroid
      */
     public static double[] centroid(AtomContainer atomContainer) {
-        return atomContainer.atoms()
-                .collect(CentroidAverager::new,
-                         CentroidAverager::accept,
-                         CentroidAverager::combine)
-                .average();
-    }
-
-    static class CentroidAverager implements Consumer<Atom> {
-        private double[] total = new double[3];
-        private int count = 0;
-
-        double[] average() {
-            return count > 0 ? LinearAlgebra3D.divide(total, count) : new double[3];
-        }
-
-        @Override
-        public void accept(Atom atom) {
-            total = LinearAlgebra3D.add(total, atom.getCoordinates());
-            count++;
-        }
-
-        void combine(CentroidAverager other) {
-            total = LinearAlgebra3D.add(total, other.total);
-            count += other.count;
-        }
+        return atomContainer.atoms().collect(StructureCollectors.toCentroid());
     }
 
     /**
