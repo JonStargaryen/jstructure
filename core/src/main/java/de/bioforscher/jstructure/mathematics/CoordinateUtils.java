@@ -128,24 +128,20 @@ public class CoordinateUtils {
 
         public Atom transformCoordinates(Atom atom) {
             double[] vector = atom.getCoordinates();
-            // apply transformation if needed
-            if(translation != null) {
-                atom.setCoordinates(new double[] {
-                    vector[0] + translation[0],
-                    vector[1] + translation[1],
-                    vector[2] + translation[2]
-                });
+            logger.debug("initial atom {}", atom.composePDBRecord());
+
+            // apply rotation if needed
+            if(rotation != null) {
+                atom.setCoordinates(LinearAlgebra3D.multiply(vector, rotation));
             }
 
             vector = atom.getCoordinates();
-            // apply rotation if needed
-            if(rotation != null) {
-                atom.setCoordinates(new double[] {
-                    (rotation[0][0] * vector[0] + rotation[0][1] * vector[1] + rotation[0][2] * vector[2]),
-                    (rotation[1][0] * vector[0] + rotation[1][1] * vector[1] + rotation[1][2] * vector[2]),
-                    (rotation[2][0] * vector[0] + rotation[2][1] * vector[1] + rotation[2][2] * vector[2])
-                });
+            // apply transformation if needed
+            if(translation != null) {
+                atom.setCoordinates(LinearAlgebra3D.add(vector, translation));
             }
+
+            logger.debug("transf. atom {}", atom.composePDBRecord());
             return atom;
         }
 
@@ -193,16 +189,29 @@ public class CoordinateUtils {
 
     /**
      * Computes the root-mean-square deviation between 2 atom sets. Both atom containers must have the same number of
-     * atoms.
+     * atoms in the same order.
      * @param atomContainer1 a collection of atoms - it is supposed to share its ordering with the 2nd container
      * @param atomContainer2 another collection of atoms
      * @return the RMSD value of this alignment
      * @throws IllegalArgumentException is thrown when the number of atoms does no match
      */
     public static double calculateRMSD(AtomContainer atomContainer1, AtomContainer atomContainer2) throws IllegalArgumentException {
-        double sd = Pair.sequentialPairsOf(atomContainer1.getAtoms(), atomContainer2.getAtoms())
-            .mapToDouble(pair -> LinearAlgebra3D.distanceFast(pair.getFirst().getCoordinates(), pair.getSecond().getCoordinates()))
-            .sum();
-        return Math.sqrt(sd / atomContainer1.getAtoms().size());
+        logger.debug("aligned {} atoms to compute rmsd", atomContainer1.getAtoms().size());
+        return Math.sqrt(Pair.sequentialPairsOf(atomContainer1.getAtoms(), atomContainer2.getAtoms())
+//                .peek(pair -> System.out.println(Arrays.toString(pair.getLeft().getCoordinates()) + " : " +
+//                        Arrays.toString(pair.getRight().getCoordinates())))
+                //TODO 'api rules' do we skip hydrogens in any case?
+                .filter(CoordinateUtils::nonHydrogenAtomPair)
+//                .peek(pair -> System.out.println(pair.getLeft() + " vs. " + pair.getRight()))
+                .mapToDouble(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(),
+                        pair.getRight().getCoordinates()))
+//                .peek(System.out::println)
+                .average()
+                .orElseThrow(() -> new IllegalArgumentException("cannot compute rmsd for empty containers")));
+    }
+
+    private static boolean nonHydrogenAtomPair(Pair<Atom, Atom> atomPair) {
+        return AtomNameFilter.HYDROGEN_FILTER.negate().test(atomPair.getLeft()) &&
+                AtomNameFilter.HYDROGEN_FILTER.negate().test(atomPair.getRight());
     }
 }

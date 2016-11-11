@@ -676,8 +676,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
      * allow bifurcated bonds.
      */
     private void trackHBondEnergy(Pair<Residue, Residue> residuePair, double energy) {
-        Residue res1 = residuePair.getFirst();
-        Residue res2 = residuePair.getSecond();
+        Residue res1 = residuePair.getLeft();
+        Residue res2 = residuePair.getRight();
         if (res1.getAminoAcid().equals(AminoAcid.PROLINE)) {
             logger.debug("Ignore: PRO {}", res1.getResidueNumber());
             return;
@@ -747,8 +747,8 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
      * @return the energy of this h-bond
      */
     private double calculateHBondEnergy(Pair<Residue, Residue> residuePair) {
-        Residue res1 = residuePair.getFirst();
-        Residue res2 = residuePair.getSecond();
+        Residue res1 = residuePair.getLeft();
+        Residue res2 = residuePair.getRight();
         Atom nAtom = res1.getBackboneNitrogen();
         double[] n = nAtom.getCoordinates();
         double[] h = res1.getBackboneHydrogen().getCoordinates();

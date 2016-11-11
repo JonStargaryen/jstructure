@@ -30,8 +30,8 @@ public class MultiDimensionalScalingReconstruction implements ReconstructionAlgo
 
         Pair.sequentialPairsOf(residues, placedAtoms)
             .forEach(pair -> {
-                Residue residue = pair.getFirst();
-                residue.addAtom(new Atom("CA", 0, Element.C, pair.getSecond()));
+                Residue residue = pair.getLeft();
+                residue.addAtom(new Atom("CA", 0, Element.C, pair.getRight()));
             });
     }
 }

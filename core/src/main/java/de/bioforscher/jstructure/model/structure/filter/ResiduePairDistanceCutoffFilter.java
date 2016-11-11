@@ -18,7 +18,7 @@ public class ResiduePairDistanceCutoffFilter implements Predicate<Pair<Residue, 
 
     @Override
     public boolean test(Pair<Residue, Residue> residuePair) {
-        return LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(residuePair.getFirst()).getCoordinates(),
-                representationScheme.determineRepresentingAtom(residuePair.getSecond()).getCoordinates()) < squaredDistanceCutoff;
+        return LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(residuePair.getLeft()).getCoordinates(),
+                representationScheme.determineRepresentingAtom(residuePair.getRight()).getCoordinates()) < squaredDistanceCutoff;
     }
 }

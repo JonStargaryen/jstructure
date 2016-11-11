@@ -19,8 +19,8 @@ public class GroupPairDistanceCutoffFilter implements Predicate<Pair<Group, Grou
 
     @Override
     public boolean test(Pair<Group, Group> groupPair) {
-        return LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(groupPair.getFirst()).getCoordinates(),
-                representationScheme.determineRepresentingAtom(groupPair.getSecond()).getCoordinates()) <
+        return LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(groupPair.getLeft()).getCoordinates(),
+                representationScheme.determineRepresentingAtom(groupPair.getRight()).getCoordinates()) <
                 squaredDistanceCutoff;
     }
 }

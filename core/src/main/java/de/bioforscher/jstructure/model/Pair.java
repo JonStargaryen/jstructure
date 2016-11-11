@@ -7,24 +7,27 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Implementation of a unordered pair of equal objects.
+ * Implementation of a unordered pair of equal objects. No ordering is assumed, however, as the entries can be of
+ * different content types, one is referred to as left and the other as right entry.
+ * @param <L> the content type of the left element
+ * @param <R> the content type of the right element
  * Created by S on 02.10.2016.
  */
 public class Pair<L, R> {
-    private final L t1;
-    private final R t2;
+    private final L left;
+    private final R right;
 
     public Pair(L t1, R t2) {
-        this.t1 = t1;
-        this.t2 = t2;
+        this.left = t1;
+        this.right = t2;
     }
 
-    public L getFirst() {
-        return t1;
+    public L getLeft() {
+        return left;
     }
 
-    public R getSecond() {
-        return t2;
+    public R getRight() {
+        return right;
     }
 
     /**
@@ -32,12 +35,12 @@ public class Pair<L, R> {
      * @return a new pair where the first entry is now second and vice versa
      */
     public Pair<R, L> flip() {
-        return new Pair<>(t2, t1);
+        return new Pair<>(right, left);
     }
 
     @Override
     public String toString() {
-        return "(" + t1 + ", " + t2 + ")";
+        return "(" + left + ", " + right + ")";
     }
 
     /**

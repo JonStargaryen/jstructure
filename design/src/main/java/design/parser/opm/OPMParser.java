@@ -81,10 +81,10 @@ public class OPMParser {
                     .map(s -> s.split("\\(")[1].split("\\)")[0])
                     .map(s -> s.split("-"))
                     .map(s -> new Pair<>(Integer.valueOf(s[0].trim()), Integer.valueOf(s[1].trim())))
-                    .map(p -> new Pair<>(protein.findResidue(chainId, p.getFirst()), protein.findResidue(chainId, p.getSecond())))
+                    .map(p -> new Pair<>(protein.findResidue(chainId, p.getLeft()), protein.findResidue(chainId, p.getRight())))
                     //TODO replace or handle error case
-                    .filter(p -> p.getFirst().isPresent() && p.getSecond().isPresent())
-                    .map(p -> new TMHelix(tilt, p.getFirst().get(), p.getSecond().get()))
+                    .filter(p -> p.getLeft().isPresent() && p.getRight().isPresent())
+                    .map(p -> new TMHelix(tilt, p.getLeft().get(), p.getRight().get()))
                     .collect(Collectors.toList());
 
                 // assign tm helices to specified residues

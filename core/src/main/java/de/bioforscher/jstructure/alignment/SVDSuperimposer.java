@@ -13,6 +13,7 @@ import org.apache.commons.math3.linear.SingularValueDecomposition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
@@ -54,6 +55,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         // center atoms
         CoordinateUtils.shift(atomContainer1, LinearAlgebra3D.multiply(centroid1, -1.0));
         CoordinateUtils.shift(atomContainer2, LinearAlgebra3D.multiply(centroid2, -1.0));
+
         // compose covariance matrix and calculate SVD
         RealMatrix matrix1 = CoordinateUtils.convertToMatrix(atomContainer1);
         RealMatrix matrix2 = CoordinateUtils.convertToMatrix(atomContainer2);
@@ -73,7 +75,10 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         double[][] rotation = rotationMatrix.getData();
 
         // compute translation
-        double[] translation = LinearAlgebra3D.subtract(centroid1, centroid2);
+        double[] translation = LinearAlgebra3D.subtract(centroid1, LinearAlgebra3D.multiply(centroid2, rotation));
+
+        logger.debug("rotation matrix\n{}\ntranslation vector\n{}", Arrays.deepToString(rotationMatrix.getData()),
+                Arrays.toString(translation));
 
         /* transform 2nd atom stream - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */

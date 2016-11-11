@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Tests whether an atom is of a certain <tt>PDB</tt> name. This allows for filtering for CA or backbone atoms.
@@ -22,6 +24,11 @@ public class AtomNameFilter implements Predicate<Atom> {
      * acid, but neither 'N', 'CA', 'C' or 'O'.
      */
     public static final AtomNameFilter SIDE_CHAIN_ATOM_FILTER = new AtomNameFilter(AminoAcid.ATOM_NAMES.SIDECHAIN_ATOM_NAMES);
+    /**
+     * Retains all atoms.
+     */
+    public static final AtomNameFilter ALL_ATOM_FILTER = new AtomNameFilter(Stream.concat(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(),
+            AminoAcid.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.stream()).collect(Collectors.toList()));
     /**
      * Retains all atoms whose {@link Atom#getName()} equals the alpha carbon name 'CA'.
      */

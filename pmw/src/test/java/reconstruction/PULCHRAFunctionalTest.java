@@ -45,7 +45,7 @@ public class PULCHRAFunctionalTest {
                .collect(Collectors.toList());
         proteinCopy.clear();
         Pair.sequentialPairsOf(residues, alphaCarbons)
-            .forEach(pair -> pair.getFirst().addAtom(pair.getSecond()));
+            .forEach(pair -> pair.getLeft().addAtom(pair.getRight()));
 
         // reconstruct and count again - all atoms should be reconstructed
         new PULCHRA().reconstruct(proteinCopy);

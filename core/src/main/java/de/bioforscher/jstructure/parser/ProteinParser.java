@@ -1,9 +1,6 @@
 package de.bioforscher.jstructure.parser;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +29,7 @@ public class ProteinParser {
     private Protein protein;
     private StringBuilder titleString;
     private Chain currentChain;
-    private Residue currentResidue;
+    private Group currentGroup;
     private boolean passedFirstModel;
 
     /**
@@ -102,7 +99,7 @@ public class ProteinParser {
 
         // null fields, so the same instance can be used multiple times
         currentChain = null;
-        currentResidue = null;
+        currentGroup = null;
 
         // parse file
         try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream)) {
@@ -166,6 +163,12 @@ public class ProteinParser {
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
         if(line.startsWith(ATOM_PREFIX) || line.startsWith(HETATM_PREFIX)) {
+            //TODO wrap in flag/option
+            Element element = Element.valueOfIgnoreCase(line.substring(76, 78).trim());
+            if(element.isHydrogen()) {
+                return;
+            }
+
             // we check for valid amino acids here, so no empty (nucleotide/ligand-only) chains are parsed
             String pdbName = line.substring(17, 20).trim();
 //            System.out.println(line);
@@ -185,24 +188,24 @@ public class ProteinParser {
                 protein.addChain(currentChain);
             }
 
-            if(currentResidue == null || currentResidue.getResidueNumber() != resNum) {
+            if(currentGroup == null || currentGroup.getResidueNumber() != resNum) {
                 // getResidue changed - create new getResidue object and set reference
-                currentResidue = new Residue(pdbName, resNum);
-                currentChain.addGroup(currentResidue);
+                currentGroup = line.startsWith(ATOM_PREFIX) ? new Residue(pdbName, resNum) : new Group(pdbName, resNum);
+                currentChain.addGroup(currentGroup);
             }
 
             // we append the current getResidue container with additional atoms
             Atom atom = new Atom(line.substring(12, 16).trim(),
                     Integer.valueOf(line.substring(6, 11).trim()),
-                    line.substring(76, 78).trim(),
+                    element,
                     new double[] { Double.valueOf(line.substring(30, 38).trim()),
                             Double.valueOf(line.substring(38, 46).trim()),
                             Double.valueOf(line.substring(46, 54).trim())
                     },
                     Float.valueOf(line.substring(54, 60).trim()),
                     Float.valueOf(line.substring(60, 66).trim()));
-            if(currentResidue.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
-                currentResidue.addAtom(atom);
+            if(currentGroup.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
+                currentGroup.addAtom(atom);
             } else {
                 //TODO find solution for this
 //                logger.info("skipping atoms for {}", atom);

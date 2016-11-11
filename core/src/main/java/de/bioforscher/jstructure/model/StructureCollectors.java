@@ -13,6 +13,8 @@ import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
  * Created by S on 09.11.2016.
  */
 public class StructureCollectors {
+    static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
+
     public static Collector<Protein, ?, List<Protein>> toAlignedEnsemble() {
         return Collector.of(ProteinSuperimposerByReference::new,
                 ProteinSuperimposerByReference::accept,
@@ -57,13 +61,19 @@ public class StructureCollectors {
         @Override
         public void accept(Protein protein) {
             if(reference == null) {
+                // initially center reference
+//                CoordinateUtils.center(protein);
                 reference = protein;
+                alignedProteins.add(protein);
+                return;
             }
 
-            alignedProteins.add(protein);
             try {
                 AlignmentResult alignmentResult = alignmentStrategy.align(reference, protein);
+                logger.debug("partial rmsd of {} between {} and {}", alignmentResult.getRmsd(), reference.getName(),
+                        protein.getName(), alignmentResult.getRmsd());
                 alignmentResult.transform(protein);
+                alignedProteins.add(protein);
             } catch (DimensionMismatchException e) {
                 e.printStackTrace();
             }

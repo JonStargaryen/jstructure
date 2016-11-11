@@ -33,7 +33,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
 
         //TODO implement real test, respectively fix differences
         Pair.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
-            Assert.assertEquals(doublePair.getFirst(), doublePair.getSecond(), 0.001)
+            Assert.assertEquals(doublePair.getLeft(), doublePair.getRight(), 0.001)
         );
     }
 

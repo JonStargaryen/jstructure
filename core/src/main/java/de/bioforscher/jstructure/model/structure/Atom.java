@@ -31,6 +31,22 @@ public class Atom implements AtomRecordWriter, Container {
     private Map<Enum, Object> featureMap;
 
     /**
+     * Copy constructor.
+     * @param atom the original instance
+     */
+    public Atom(Atom atom) {
+        this.element = atom.element;
+        this.name = atom.name;
+        this.pdbSerial = atom.pdbSerial;
+        this.coordinates = Arrays.copyOf(atom.coordinates, 3);
+        this.parentGroup = atom.parentGroup;
+        this.occupancy = atom.occupancy;
+        this.bfactor = atom.bfactor;
+        this.virtual = atom.virtual;
+        this.featureMap = atom.featureMap;
+    }
+
+    /**
      * Constructs an atom.
      * @param name the unique {@link AtomContainer}-wide identifier
      * @param pdbSerial the unique protein-wide identifier
@@ -151,11 +167,16 @@ public class Atom implements AtomRecordWriter, Container {
 
     @Override
     public String composePDBRecord() {
-        String pdbRecord = AtomRecordProvider.toPDBString(this);
-        if (pdbRecord.length() == 0) {
-            logger.warn("peculiar ATOM record {}", this.toString());
+        try {
+            String pdbRecord = AtomRecordProvider.toPDBString(this);
+            if (pdbRecord.length() == 0) {
+                logger.warn("peculiar ATOM record {}", this.toString());
+            }
+            return pdbRecord;
+        } catch (NullPointerException e) {
+            //TODO replace with actual fallback - will fail for virtual atoms without parent references
+            return this.toString();
         }
-        return pdbRecord;
     }
 
     @Override
@@ -200,7 +221,7 @@ public class Atom implements AtomRecordWriter, Container {
     /**
      * Inner class to write <tt>ATOM</tt> records. BioJava-Code.
      */
-    static final class AtomRecordProvider {
+    static class AtomRecordProvider {
         static DecimalFormat d3 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
 
         static {

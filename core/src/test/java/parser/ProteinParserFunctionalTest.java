@@ -20,8 +20,8 @@ import static org.hamcrest.CoreMatchers.startsWith;
  * Created by S on 29.09.2016.
  */
 public class ProteinParserFunctionalTest {
-    private static final String PDB_EXTENSION = ".pdb";
-    private static final String PDB_DIRECTORY = "parser/";
+    public static final String PDB_EXTENSION = ".pdb";
+    public static final String PDB_DIRECTORY = "parser/";
     private static final String PDB_PARSED_DIRECTORY = PDB_DIRECTORY + "parsed/";
     private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "1brr", "4cha");
     private static final List<String> PDB_FILE_PATHS = PDB_IDS.stream()
@@ -48,7 +48,7 @@ public class ProteinParserFunctionalTest {
      */
     @Test
     public void shouldParseAllStructureFiles() {
-        PDB_FILE_PATHS.forEach(this::parseFilepath);
+        PDB_FILE_PATHS.forEach(ProteinParserFunctionalTest::parseFilepath);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class ProteinParserFunctionalTest {
         }
     }
 
-    private Protein parseFilepath(String filepath) {
+    public static Protein parseFilepath(String filepath) {
         System.out.println("parsing PDB file " + filepath);
         return ProteinParser.parsePDBFile(TestUtils.getResourceAsFilepath(filepath));
     }

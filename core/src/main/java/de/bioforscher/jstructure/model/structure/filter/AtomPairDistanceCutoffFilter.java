@@ -20,7 +20,7 @@ public class AtomPairDistanceCutoffFilter implements Predicate<Pair<Atom, Atom>>
 
     @Override
     public boolean test(Pair<Atom, Atom> atomPair) {
-        return LinearAlgebra3D.distanceFast(atomPair.getFirst().getCoordinates(),
-                atomPair.getSecond().getCoordinates()) < squaredDistanceCutoff;
+        return LinearAlgebra3D.distanceFast(atomPair.getLeft().getCoordinates(),
+                atomPair.getRight().getCoordinates()) < squaredDistanceCutoff;
     }
 }

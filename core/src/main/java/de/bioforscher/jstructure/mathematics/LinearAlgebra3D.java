@@ -119,6 +119,14 @@ public class LinearAlgebra3D {
         };
     }
 
+    public static double[] multiply(double[] v, double[][] matrix) {
+        return new double[] {
+            (matrix[0][0] * v[0] + matrix[1][0] * v[1] + matrix[2][0] * v[2]),
+            (matrix[0][1] * v[0] + matrix[1][1] * v[1] + matrix[2][1] * v[2]),
+            (matrix[0][2] * v[0] + matrix[1][2] * v[1] + matrix[2][2] * v[2])
+        };
+    }
+
     /**
      * Calculates the length (the norm) of this vector.
      * @param v a 3D vector

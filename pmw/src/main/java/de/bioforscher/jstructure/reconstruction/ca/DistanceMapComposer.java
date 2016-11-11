@@ -23,8 +23,8 @@ public class DistanceMapComposer {
 
         protein.residuePairs()
                .forEach(pair -> {
-                   Residue first = pair.getFirst();
-                   Residue second = pair.getSecond();
+                   Residue first = pair.getLeft();
+                   Residue second = pair.getRight();
                    int indexFirst = residues.indexOf(first);
                    int indexSecond = residues.indexOf(second);
                    distanceMap[indexFirst][indexSecond] = LinearAlgebra3D.distance(first.getAlphaCarbon().getCoordinates(),

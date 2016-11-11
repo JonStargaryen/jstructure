@@ -33,15 +33,23 @@ public abstract class AbstractAlignmentAlgorithm implements AlignmentAlgorithm {
     private AtomContainer prepareAtomContainer(AtomContainer atomContainer) {
         // sort atoms in each residue container
         atomContainer.atoms()
+//                .peek(atom -> System.out.println(atom.composePDBRecord()))
+                // move to parent group level to be able to sort atoms by name
                 .map(Atom::getParentGroup)
                 .filter(Objects::nonNull)
+                // multiple atoms will point to the same parent
                 .distinct()
+                .filter(Residue.class::isInstance)
                 .map(Residue.class::cast)
+//                .peek(System.out::println)
                 .forEach(AminoAcid::orderAtomsByName);
-        // filter and wrap in container
+        // filter, clone and wrap in container
         return AtomContainer.of(atomContainer.atoms()
-                //TODO clone here?
-                .filter(getAlignedAtomNameFilter()));
+                .filter(alignedAtomNameFilter)
+//                .peek(atom -> System.out.println(atom.composePDBRecord()))
+                //TODO need clone here? - define 'API rules/behaviour'
+                // clone atom, so coordinates can be manipulated without affecting the original
+                .map(Atom::new));
     }
 
     @Override

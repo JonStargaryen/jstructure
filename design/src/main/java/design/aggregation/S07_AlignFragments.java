@@ -24,28 +24,32 @@ public class S07_AlignFragments {
 
     private static void handleTopology(final String topology) {
         System.out.println("topology: " + topology);
-        Stream.of(SequenceMotifDefinition.values()).map(SequenceMotifDefinition::name).forEach(motif -> {
-            System.out.println("motif: " + motif);
-            try {
-                System.out.println("aligning structures");
-                List<Protein> alignedProteins = Files.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/"))
-                        .filter(path -> path.getFileName().toString().startsWith(motif))
-                        .map(ProteinParser::parsePDBFile)
-                        .collect(StructureCollectors.toAlignedEnsemble());
+        Stream.of(SequenceMotifDefinition.values())
+                .map(SequenceMotifDefinition::name)
+                .forEach(motif -> {
+                        System.out.println("motif: " + motif);
+                        try {
+                            System.out.println("aligning structures");
+                            List<Protein> alignedProteins = Files.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
+                                            topology + "/"))
+                                    .filter(path -> path.getFileName().toString().startsWith(motif))
+                                    .map(ProteinParser::parsePDBFile)
+                                    .collect(StructureCollectors.toAlignedEnsemble());
 
-                System.out.println("writing aligned files");
-                // write structures
-                alignedProteins.forEach(protein -> {
-                    try {
-                        Files.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMNET_BY_TOPOLOGY_DIR + topology + "/" +
-                                protein.getName() + DesignConstants.PDB_SUFFIX), protein.composePDBRecord().getBytes());
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                });
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        });
+                            System.out.println("writing aligned files");
+                            // write structures
+                            alignedProteins.forEach(protein -> {
+                                try {
+                                    Files.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMNET_BY_TOPOLOGY_DIR +
+                                            topology + "/" + protein.getName() + DesignConstants.PDB_SUFFIX),
+                                            protein.composePDBRecord().getBytes());
+                                } catch (IOException e) {
+                                    throw new UncheckedIOException(e);
+                                }
+                            });
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
     }
 }

@@ -9,18 +9,18 @@ import java.util.*;
  *
  * Created by S on 06.10.2016.
  */
-public abstract class Group implements AtomContainer, AtomRecordWriter {
+public class Group implements AtomContainer, AtomRecordWriter {
     protected List<Atom> atoms;
-    protected Map<Enum, Object> featureMap;
-    protected int residueNumber;
+    private Map<Enum, Object> featureMap;
+    private int residueNumber;
     /**
      * 3-letter pdb name
      */
-    protected String pdbName;
+    private String pdbName;
     /**
      * Handle to the container element.
      */
-    protected Chain parentChain;
+    private Chain parentChain;
 
     public Group(String pdbName, int residueNumber) {
         this.pdbName = pdbName;
