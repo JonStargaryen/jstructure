@@ -1,6 +1,7 @@
 package alignment;
 
 import de.bioforscher.jstructure.alignment.svd.ConsensusTreeComposer;
+import de.bioforscher.jstructure.model.BinaryTree;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -25,6 +26,10 @@ public class ConsensusTreeComposerFunctionalTest {
                 .map(ProteinParser::parsePDBFile)
                 .collect(StructureCollectors.toAlignedEnsemble());
 
-        new ConsensusTreeComposer().composeConsensusTree(alignedFragments);
+        ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
+        consensusTreeComposer.composeConsensusTree(alignedFragments);
+        BinaryTree consensusTree = consensusTreeComposer.getConsensusTree();
+
+        System.out.println(consensusTree.composeNewickRepresentation());
     }
 }

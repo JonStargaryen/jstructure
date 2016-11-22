@@ -28,6 +28,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
      */
     private Chain parentChain;
     private GroupType groupType;
+    private String identifier;
 
     public Group(String pdbName, int residueNumber) {
         this.pdbName = pdbName;
@@ -46,6 +47,10 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
         // reference parent
         this.parentChain = group.parentChain;
         this.groupType = group.groupType;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public Group(List<Atom> atoms) {
@@ -125,6 +130,6 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     @Override
     public String getIdentifier() {
-        return pdbName + "-" + residueNumber;
+        return identifier == null ? pdbName + "-" + residueNumber : identifier;
     }
 }

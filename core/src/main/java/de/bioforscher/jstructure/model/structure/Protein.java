@@ -22,6 +22,7 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
      */
     private String title;
     private List<Chain> chains;
+    private String identifier;
 
     public Protein() {
         this.chains = new ArrayList<>();
@@ -98,11 +99,15 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
 
     @Override
     public String getIdentifier() {
-        return name;
+        return identifier == null ? name : identifier;
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' chains='"  + getChains().size() + "'";
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

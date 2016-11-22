@@ -21,6 +21,7 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
      * Handle to the containing element.
      */
     private Protein parentProtein;
+    private String identifier;
 
     /**
      * Constructor for getChain objects.
@@ -95,6 +96,10 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
 
     @Override
     public String getIdentifier() {
-        return chainId;
+        return identifier == null ? chainId : identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

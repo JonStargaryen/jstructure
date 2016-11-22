@@ -27,6 +27,8 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
     private float occupancy;
     private float bfactor;
     private boolean virtual;
+    private String identifier;
+
     /**
      * Copy constructor.
      * @param atom the original instance
@@ -105,6 +107,11 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
     public Atom(double[] coordinates) {
         this.coordinates = coordinates;
         this.virtual = true;
+    }
+
+    @Override
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     /**
@@ -210,7 +217,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
 
     @Override
     public String getIdentifier() {
-        return element + "-" + pdbSerial;
+        return identifier == null ? element + "-" + pdbSerial : identifier;
     }
 
     /**

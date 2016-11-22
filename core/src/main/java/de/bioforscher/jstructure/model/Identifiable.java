@@ -15,4 +15,6 @@ public interface Identifiable {
      * @return the source of this container
      */
     String getIdentifier();
+
+    void setIdentifier(String identifier);
 }

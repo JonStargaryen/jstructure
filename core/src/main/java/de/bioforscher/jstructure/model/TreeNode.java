@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.model;
 
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -74,5 +76,14 @@ public class TreeNode<T> extends Pair<Optional<TreeNode<T>>, Optional<TreeNode<T
                 .peek(System.out::println)
                 .filter(node -> node.data.equals(data))
                 .findAny();
+    }
+
+    public String composeNewickRepresentation() {
+        // return data itself when no children are present
+        if(!getLeft().isPresent() || !getRight().isPresent()) {
+            return ((AtomContainer) data).getIdentifier();
+        }
+        return "(" + getLeft().get().composeNewickRepresentation() + "," +
+                getRight().get().composeNewickRepresentation() + ")";
     }
 }

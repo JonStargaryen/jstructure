@@ -35,6 +35,7 @@ public class ConsensusTreeComposer {
     private List<AlignmentPair> alignmentPairs;
     private List<TreeNode<AtomContainer>> leaves;
     private List<BinaryTree<AtomContainer>> consensusTrees;
+    private AtomContainer consensus;
     private boolean firstEntry;
 
     public ConsensusTreeComposer() {
@@ -51,6 +52,9 @@ public class ConsensusTreeComposer {
                                            .backboneAtoms()
                                            .asAtomContainer())
                 .collect(Collectors.toList());
+        Combinatorics.sequentialPairsOf(ensembles, containers)
+                .forEach(pair -> pair.getLeft().setIdentifier(pair.getRight().getIdentifier()));
+
         logger.debug("processing {} structures", ensembles.size());
 
         // set up also as tree nodes
@@ -70,7 +74,7 @@ public class ConsensusTreeComposer {
             logger.debug("current ensemble size: {}", ensembles.size());
             // find and merge closest pair
             AlignmentPair mergedPair = mergeClosestPair();
-            AtomContainer consensus = mergedPair.getMergedEntry();
+            consensus = mergedPair.getMergedEntry();
 
             // create tree nodes
             TreeNode<AtomContainer> leftNode;
@@ -85,10 +89,20 @@ public class ConsensusTreeComposer {
                 firstEntry = false;
             } else {
                 // try to find matching node in existing tree, if node not found in existing tree it has to be a leave
-                leftNode = findNode(mergedPair.getLeft()).orElse(findLeaf(mergedPair.getLeft()).get());
+                Optional<TreeNode<AtomContainer>> potentialLeftNode = findNode(mergedPair.getLeft());
+                if(potentialLeftNode.isPresent()) {
+                    leftNode = potentialLeftNode.get();
+                } else {
+                    leftNode = findLeaf(mergedPair.getLeft()).get();
+                }
 
                 // try to find matching node in existing trees, if node not found in existing tree it has to be a leave
-                rightNode = findNode(mergedPair.getRight()).orElse(findLeaf(mergedPair.getRight()).get());
+                Optional<TreeNode<AtomContainer>> potentialRightNode = findNode(mergedPair.getRight());
+                if(potentialRightNode.isPresent()) {
+                    rightNode = potentialRightNode.get();
+                } else {
+                    rightNode = findLeaf(mergedPair.getRight()).get();
+                }
 
                 consensusNode = new TreeNode<>(consensus, leftNode, rightNode);
             }
@@ -106,7 +120,6 @@ public class ConsensusTreeComposer {
      */
     private Optional<TreeNode<AtomContainer>> findLeaf(final AtomContainer observation) {
         return leaves.stream()
-                .peek(leaf -> System.out.println(leaf.getData() + " : " + observation))
                 .filter(leave -> leave.getData().equals(observation))
                 .findAny();
     }
@@ -119,7 +132,7 @@ public class ConsensusTreeComposer {
     private Optional<TreeNode<AtomContainer>> findNode(final AtomContainer observation) {
         return consensusTrees.stream()
                 .flatMap(BinaryTree::children)
-                .filter(node -> node.getData().equals(observation))
+                .filter(node -> node.getData().getIdentifier().equals(observation.getIdentifier()))
                 .findAny();
     }
 
@@ -143,6 +156,14 @@ public class ConsensusTreeComposer {
         ensembles.add(mergedEntry);
 
         return pairToMerge;
+    }
+
+    public BinaryTree<AtomContainer> getConsensusTree() {
+        return consensusTrees.get(consensusTrees.size() - 1);
+    }
+
+    public AtomContainer getConsensus() {
+        return consensus;
     }
 
     /**
@@ -180,6 +201,13 @@ public class ConsensusTreeComposer {
                         .map(this::mergeAtomPair)
                         .collect(StructureCollectors.toAtomContainer());
             }
+
+            getLeft().setIdentifier(getLeft().getIdentifier().split(":")[0]);
+            getRight().setIdentifier(getRight().getIdentifier().split(":")[0]);
+            mergedEntry.setIdentifier(getLeft().getIdentifier() + "+" + getRight().getIdentifier() + ":" + rmsd);
+            getLeft().setIdentifier(getLeft().getIdentifier() + ":" + 1000 * rmsd / 2);
+            getRight().setIdentifier(getRight().getIdentifier() + ":" + 1000 * rmsd / 2);
+
             return mergedEntry;
         }
 

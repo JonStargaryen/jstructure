@@ -23,6 +23,11 @@ public class FeatureContainerIntegrationTest {
         }
 
         @Override
+        public void setIdentifier(String identifier) {
+
+        }
+
+        @Override
         public String composePDBRecord() {
             return null;
         }

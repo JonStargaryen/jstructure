@@ -58,6 +58,11 @@ public class DesignConstants {
     public static final String ARFF_DIR = BASE_DIR + "arff/";
 
     /**
+     * The directory containing statistics output.
+     */
+    public static final String STATISTICS_DIR = BASE_DIR + "statistics/";
+
+    /**
      * Where the sequences grouped by length live.
      */
     public static final String MOTIF_SEQUENCES_BY_LENGTH_DIR = ARFF_DIR + "motif-sequences-by-lengths/";

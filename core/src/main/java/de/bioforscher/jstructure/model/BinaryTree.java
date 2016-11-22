@@ -47,4 +47,8 @@ public class BinaryTree<T> {
     public Stream<TreeNode<T>> children() {
         return root.children();
     }
+
+    public String composeNewickRepresentation() {
+        return root.composeNewickRepresentation();
+    }
 }
