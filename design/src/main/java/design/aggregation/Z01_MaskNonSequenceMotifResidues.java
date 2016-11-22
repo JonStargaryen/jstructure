@@ -3,7 +3,8 @@ package design.aggregation;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.AminoAcid;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -28,11 +29,13 @@ public class Z01_MaskNonSequenceMotifResidues {
                  new SequenceMotifAnnotator().process(protein);
 
                  // mask residues not part sequence motif
-                 protein.residues()
-                        .filter(Z01_MaskNonSequenceMotifResidues::isNotStartOrEndOfSequenceMotif)
-                        .forEach(residue -> residue.setAminoAcid(AminoAcid.UNKNOWN));
+                 Selection.on(protein)
+                         .aminoAcids()
+                         .filteredGroups()
+                         .filter(Z01_MaskNonSequenceMotifResidues::isNotStartOrEndOfSequenceMotif)
+                         .forEach(residue -> residue.setPdbName(AminoAcid.UNKNOWN.getThreeLetterCode()));
 
-                 System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getSequence());
+                 System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getAminoAcidSequence());
 
                  // write structures
                  try {
@@ -45,17 +48,12 @@ public class Z01_MaskNonSequenceMotifResidues {
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean isNotStartOrEndOfSequenceMotif(Residue residue) {
+    private static boolean isNotStartOrEndOfSequenceMotif(Group residue) {
         List<SequenceMotif> motifAnnotations = residue.getFeature(List.class,
                 SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
 
-        if(motifAnnotations == null || motifAnnotations.isEmpty()) {
-            return true;
-        }
+        return motifAnnotations == null || motifAnnotations.isEmpty() || motifAnnotations.stream().filter(motif ->
+                motif.getStartGroup().equals(residue) || motif.getEndGroup().equals(residue)).count() == 0;
 
-        return motifAnnotations.stream()
-                               .filter(motif -> motif.getStartResidue().equals(residue) ||
-                                                motif.getEndResidue().equals(residue))
-                               .count() == 0;
     }
 }

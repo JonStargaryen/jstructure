@@ -1,8 +1,9 @@
 package de.bioforscher.jstructure.alignment;
 
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.linear.MatrixUtils;
+
+import java.util.List;
 
 /**
  * Defines the capabilities of an implementing algorithm to align two atom collections. The alignment is reported as
@@ -25,7 +26,7 @@ public interface AlignmentAlgorithm {
     /**
      * Aligns 2 atom sets.
      * @param atomContainer1 a collection of 'reference' atoms, the other collection will be superimposed onto this
-     *                       stream
+     *                       select
      * @param atomContainer2 another collection of atoms whose coordinates will be manipulated, so their coordinates are
      *               optimally superimposed
      * @return statistics on the alignment
@@ -33,10 +34,9 @@ public interface AlignmentAlgorithm {
     AlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2);
 
     /**
-     * Reports what atoms are aligned by this algorithm. Some will align all atoms handed to them, some will select the
+     * Reports what atoms are aligned by this algorithm. Some will align all atoms handed to them, some will selectionBuilder the
      * considered atoms by name.
-     * @return the {@link AtomNameFilter} the implementing
-     * algorithm applies
+     * @return the collection of aligned atom names the implementing algorithm applies
      */
-    AtomNameFilter getAlignedAtomNameFilter();
+    List<String> getAlignedAtomNames();
 }

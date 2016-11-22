@@ -2,6 +2,7 @@ package design.parser.opm;
 
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -70,7 +71,10 @@ public class OPMParser {
             if(line.contains("Tilt:")) {
                 line = betweenTdTags(line);
                 final String chainId = betweenBoldTags(line);
-                if(!protein.findChain(chainId).isPresent()) {
+                if(!Selection.on(protein)
+                        .chainName(chainId)
+                        .asOptionalChain()
+                        .isPresent()) {
                     // some OPM files refer to chains not actually present in a non-assembled PDB structure
                     continue;
                 }
@@ -81,7 +85,13 @@ public class OPMParser {
                     .map(s -> s.split("\\(")[1].split("\\)")[0])
                     .map(s -> s.split("-"))
                     .map(s -> new Pair<>(Integer.valueOf(s[0].trim()), Integer.valueOf(s[1].trim())))
-                    .map(p -> new Pair<>(protein.findResidue(chainId, p.getLeft()), protein.findResidue(chainId, p.getRight())))
+                    .map(p -> new Pair<>(Selection.on(protein)
+                            .chainName(chainId)
+                            .residueNumber(p.getLeft())
+                            .asOptionalGroup(), Selection.on(protein)
+                            .chainName(chainId)
+                            .residueNumber(p.getRight())
+                            .asOptionalGroup()))
                     //TODO replace or handle error case
                     .filter(p -> p.getLeft().isPresent() && p.getRight().isPresent())
                     .map(p -> new TMHelix(tilt, p.getLeft().get(), p.getRight().get()))
@@ -89,8 +99,9 @@ public class OPMParser {
 
                 // assign tm helices to specified residues
                 for (TMHelix tmhelix : helices) {
-                    tmhelix.residues()
-                           .forEach(residue -> residue.setFeature(TM_HELIX, tmhelix));
+                    tmhelix.getGroupContainer()
+                            .groups()
+                            .forEach(residue -> residue.setFeature(TM_HELIX, tmhelix));
                 }
             }
         }

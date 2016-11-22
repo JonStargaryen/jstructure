@@ -1,7 +1,7 @@
 package design.aggregation;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
-import de.bioforscher.jstructure.model.StructureCollectors;
+import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;

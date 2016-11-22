@@ -2,8 +2,9 @@ package de.bioforscher.jstructure.reconstruction.sidechain.pulchra;
 
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.Fragment;
+import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 
 import java.io.BufferedReader;
@@ -80,18 +81,33 @@ public class PULCHRA implements ReconstructionAlgorithm {
 
     private void reconstructSidechains(Protein protein) {
         // TODO again reconstruct missing leading/tailing residues
-        Fragment.fragmentsOf(protein.residues().collect(Collectors.toList()), 4)
+        Combinatorics.fragmentsOf(Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
+                .collect(Collectors.toList()), 4)
                 .forEach(fragment -> {
-                    Residue residueToReconstruct = fragment.getElement(2);
-                    if (residueToReconstruct.getAminoAcid().equals(AminoAcid.GLYCINE) ||
-                            residueToReconstruct.getAminoAcid().equals(AminoAcid.UNKNOWN)) {
+                    Group residueToReconstruct = fragment.getElement(2);
+                    AminoAcid aminoAcid = AminoAcid.valueOfIgnoreCase(residueToReconstruct.getPdbName());
+                    if (aminoAcid.equals(AminoAcid.GLYCINE) || aminoAcid.equals(AminoAcid.UNKNOWN)) {
                         return;
                     }
 
-                    double[] ca_p2 = fragment.getElement(0).getAlphaCarbon().getCoordinates();
-                    double[] ca_p1 = fragment.getElement(1).getAlphaCarbon().getCoordinates();
-                    double[] ca_tr = residueToReconstruct.getAlphaCarbon().getCoordinates();
-                    double[] ca_n1 = fragment.getElement(3).getAlphaCarbon().getCoordinates();
+                    double[] ca_p2 = Selection.on(fragment.getElement(0))
+                            .alphaCarbonAtoms()
+                            .asAtom()
+                            .getCoordinates();
+                    double[] ca_p1 = Selection.on(fragment.getElement(1))
+                            .alphaCarbonAtoms()
+                            .asAtom()
+                            .getCoordinates();
+                    double[] ca_tr = Selection.on(residueToReconstruct)
+                            .alphaCarbonAtoms()
+                            .asAtom()
+                            .getCoordinates();
+                    double[] ca_n1 = Selection.on(fragment.getElement(3))
+                            .alphaCarbonAtoms()
+                            .asAtom()
+                            .getCoordinates();
 
                     double d13 = LinearAlgebra3D.distance(ca_p2, ca_tr);
                     double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
@@ -123,11 +139,11 @@ public class PULCHRA implements ReconstructionAlgorithm {
                     double[][] rotation = rotation(ca_p1, ca_tr, ca_n1);
 
                     int pos = Objects.requireNonNull(bestMatchingRotamer)[5];
-                    int nsc = (int) residueToReconstruct.getAminoAcid().sideChainAtomNames().count();
+                    int nsc = (int) aminoAcid.sideChainAtomNames().count();
 
                     // all atoms within the coordinate file describing this getResidue
                     for (int i = 0; i < nsc; i++) {
-                        String atomName = residueToReconstruct.getAminoAcid().getSideChainAtomNames().get(i);
+                        String atomName = aminoAcid.getSideChainAtomNames().get(i);
                         //TODO as pdbSerial cannot be decided yet, we need to update them later or externally, boilerplately
                         Atom reconstructedAtom = new Atom(atomName, 0,
                                 Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
@@ -156,9 +172,9 @@ public class PULCHRA implements ReconstructionAlgorithm {
         return Math.abs(v1[0] - v2[0]) + Math.abs(v1[1] - v2[1]) + 0.2 * Math.abs(v1[2] - v2[2]);
     }
 
-    private int getAminoAcidIndex(Residue residue) {
+    private int getAminoAcidIndex(Group residue) {
         final String aminoAcids = "GASCVTIPMDNLKEQRHFYWX";
-        return aminoAcids.indexOf(residue.getAminoAcid().getOneLetterCode());
+        return aminoAcids.indexOf(AminoAcid.valueOfIgnoreCase(residue.getPdbName()).getOneLetterCode());
     }
 
     private int[] binResidues(double d13_1, double d13_2, double d14) {
@@ -183,7 +199,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
         // parse sidechain indices
         InputStream idxIs = getResourceAsStream(ROT_STAT_IDX_LIBRARY);
         rotStatIdx = new BufferedReader(new InputStreamReader(idxIs)).lines()
-            // filter lines which do not contain information
+            // select lines which do not contain information
             .filter(LINE_FILTER)
             // remove padding
             .map(STRING_MAPPER)
@@ -193,7 +209,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
         // parse side getChain coordinates
         InputStream coordsIs = getResourceAsStream(ROT_STAT_COORDS_LIBRARY);
         rotStatCoords = new BufferedReader(new InputStreamReader(coordsIs)).lines()
-            // filter lines which do not contain information
+            // select lines which do not contain information
             .filter(LINE_FILTER)
             // remove padding
             .map(STRING_MAPPER)
@@ -282,6 +298,6 @@ public class PULCHRA implements ReconstructionAlgorithm {
 
     private InputStream getResourceAsStream(String filepath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
-                "failed to get resource as InputStream");
+                "failed to findAny resource as InputStream");
     }
 }

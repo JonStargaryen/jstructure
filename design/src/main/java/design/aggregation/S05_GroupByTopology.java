@@ -2,8 +2,8 @@ package design.aggregation;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import design.DesignConstants;
 import design.ProteinSource;
 
@@ -25,10 +25,12 @@ import static java.util.Objects.nonNull;
 @SuppressWarnings("unchecked")
 public class S05_GroupByTopology {
     public static void main(String[] args) throws IOException {
-        // get proteins with sequence motif information
+        // findAny proteins with sequence motif information
         loadProteins(false, true, true)
             .stream()
-            .flatMap(Protein::residues)
+            .flatMap(protein -> Selection.on(protein)
+                    .aminoAcids()
+                    .filteredGroups())
             .filter(residue -> nonNull(residue.getFeature(List.class,
                     SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
             .flatMap(residue -> residue.getFeature(List.class,
@@ -42,15 +44,18 @@ public class S05_GroupByTopology {
         // why?
         SequenceMotif motif = (SequenceMotif) motifObject;
         System.out.println("writing file for " + motif);
-        String proteinName = motif.getStartResidue().getParentChain().getParentProtein().getName();
+        String proteinName = motif.getStartGroup().getParentChain().getParentProtein().getName();
         String topology = mapTopology(ProteinSource.determineTopologyGroup(motif));
-        String chainId = motif.getStartResidue().getParentChain().getChainId();
-        String content = motif.residues().map(Residue::composePDBRecord).collect(Collectors.joining(System.lineSeparator()));
+        String chainId = motif.getStartGroup().getParentChain().getChainId();
+        String content = motif.getGroupContainer()
+                .groups()
+                .map(Group::composePDBRecord)
+                .collect(Collectors.joining(System.lineSeparator()));
         try {
             String filename = DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/" + motif.getMotifDefinition() +
-                    "-" + proteinName + "-" + chainId + "-" + motif.getStartResidue().getPdbName() +
-                    motif.getStartResidue().getResidueNumber() + "-" + motif.getEndResidue().getPdbName() +
-                    motif.getEndResidue().getResidueNumber() + DesignConstants.PDB_SUFFIX;
+                    "-" + proteinName + "-" + chainId + "-" + motif.getStartGroup().getPdbName() +
+                    motif.getStartGroup().getResidueNumber() + "-" + motif.getEndGroup().getPdbName() +
+                    motif.getEndGroup().getResidueNumber() + DesignConstants.PDB_SUFFIX;
             Files.write(Paths.get(filename), content.getBytes());
         } catch (IOException e) {
             throw new UncheckedIOException(e);

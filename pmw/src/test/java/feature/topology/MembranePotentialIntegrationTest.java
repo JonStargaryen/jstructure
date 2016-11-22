@@ -5,7 +5,9 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;
+import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,19 +33,25 @@ public class MembranePotentialIntegrationTest {
     @Test
     public void shouldComputeMembraneDistanceForEachResidue() {
         Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
-        protein1brr.residues()
-                   .map(residue -> residue.getParentChain().getChainId() + "-" + residue.getAminoAcid() + "-" +
-                        residue.getResidueNumber() + " : " + membrane.distanceToMembraneCenter(residue))
-                   .forEach(System.out::println);
+        Selection.on(protein1brr)
+                .aminoAcids()
+                .filteredGroups()
+                .map(residue -> residue.getParentChain().getChainId() + "-" +
+                        AminoAcid.valueOfIgnoreCase(residue.getPdbName()) + "-" + residue.getResidueNumber() + " : " +
+                        membrane.distanceToMembraneCenter(residue))
+                .forEach(System.out::println);
     }
 
     @Test
     public void shouldComputeMembranePotentialForEachResidue() {
         Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
-        protein1brr.residues()
-                   .map(residue -> residue.getParentChain().getChainId() + "-" + residue.getAminoAcid() + "-" +
-                        residue.getResidueNumber() + " : " + membrane.computePotential(residue))
-                   .forEach(System.out::println);
+        Selection.on(protein1brr)
+                .aminoAcids()
+                .filteredGroups()
+                .map(residue -> residue.getParentChain().getChainId() + "-" +
+                        AminoAcid.valueOfIgnoreCase(residue.getPdbName()) + "-" + residue.getResidueNumber() + " : " +
+                        membrane.computePotential(residue))
+                .forEach(System.out::println);
     }
 
     @Test

@@ -1,8 +1,9 @@
 package feature.asa;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureException;
@@ -32,7 +33,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
         List<Double> biojavaASA = getBioJavaASA(id);
 
         //TODO implement real test, respectively fix differences
-        Pair.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
+        Combinatorics.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
             Assert.assertEquals(doublePair.getLeft(), doublePair.getRight(), 0.001)
         );
     }
@@ -44,9 +45,11 @@ public class AccessibleSurfaceAreaFunctionalTest {
         new AccessibleSurfaceAreaCalculator().process(protein);
 
         // return complete DSSP annotation string from jstructrue
-        return protein.residues()
+        return Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
                 .map(residue ->
-                        residue.getDoubleFeature(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA))
+                        residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA))
                 .collect(Collectors.toList());
     }
 

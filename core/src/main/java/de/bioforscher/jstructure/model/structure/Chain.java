@@ -1,21 +1,17 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * The container element representing a {@link Protein} getChain. Is composed of {@link Residue} objects.
+ * The container element representing a {@link Protein} getChain. Is composed of {@link Group} objects.
  * Created by S on 27.09.2016.
  */
-public class Chain implements GroupContainer, AtomRecordWriter {
-    /**
-     * The container of all residues associated to this getChain.
-     */
+public class Chain extends AbstractFeatureContainer implements GroupContainer {
     private List<Group> groups;
     /**
      * The unique getChain name. Usually one character, e.g. 'A'.
@@ -25,7 +21,6 @@ public class Chain implements GroupContainer, AtomRecordWriter {
      * Handle to the containing element.
      */
     private Protein parentProtein;
-    private Map<Enum, Object> featureMap;
 
     /**
      * Constructor for getChain objects.
@@ -34,16 +29,20 @@ public class Chain implements GroupContainer, AtomRecordWriter {
     public Chain(String chainId) {
         this.chainId = chainId;
         this.groups = new ArrayList<>();
-        this.featureMap = new HashMap<>();
     }
 
-    public List<Group> getGroups() {
-        return groups;
+    public Chain(Chain chain) {
+        // deep clone entries
+        this.groups = chain.groups()
+                .map(Group::new)
+                .collect(Collectors.toList());
+        this.chainId = chain.chainId;
+        // reference parent
+        this.parentProtein = chain.parentProtein;
     }
 
-    public List<Atom> getAtoms() {
-        return groups().flatMap(Group::atoms)
-                       .collect(Collectors.toList());
+    public Chain(List<Group> groups) {
+        this.groups = groups;
     }
 
     /**
@@ -51,7 +50,7 @@ public class Chain implements GroupContainer, AtomRecordWriter {
      * @param group the getResidue to process
      */
     public void addGroup(Group group) {
-        groups.add(group);
+        getGroups().add(group);
         group.setParentChain(this);
     }
 
@@ -81,11 +80,21 @@ public class Chain implements GroupContainer, AtomRecordWriter {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " name='" + this.chainId + "'";
+        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' groups='" + getGroups().size() + "'";
     }
 
     @Override
-    public Map<Enum, Object> getFeatureMap() {
-        return featureMap;
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public List<Atom> getAtoms() {
+        return groups().flatMap(Group::atoms).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getIdentifier() {
+        return chainId;
     }
 }

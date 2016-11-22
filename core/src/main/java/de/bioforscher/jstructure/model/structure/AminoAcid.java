@@ -80,18 +80,21 @@ public enum AminoAcid {
         /**
          * Handle to the list of names representing hydrogen atoms.
          */
-        List<String> H_ATOM_NAME = Arrays.asList("H", "D", "T");
+        List<String> H_ATOM_NAMES = Arrays.asList("H", "D", "T");
         /**
          * Handle to the list of names representing alpha carbons.
          */
-        List<String> CA_ATOM_NAMES = Collections.singletonList("CA");
-        List<String> C_ATOM_NAMES = Collections.singletonList("C");
-        List<String> N_ATOM_NAMES = Collections.singletonList("N");
-        List<String> O_ATOM_NAMES = Collections.singletonList("O");
+        String CA_ATOM_NAME = "CA";
+        String C_ATOM_NAME = "C";
+        String N_ATOM_NAME = "N";
+        String O_ATOM_NAME = "O";
         /**
          * Handle to the list of names representing backbone atoms.
          */
         List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O");
+
+        String CB_ATOM_NAME = "CB";
+
         /**
          * Handle to the list of names representing side getChain atoms of (any of) the standard amino acid. The intersection
          * of this 'set' and that of backbone atoms is empty.
@@ -168,7 +171,7 @@ public enum AminoAcid {
 
     /**
      * Access to the side getChain atom names of this amino acid.
-     * @return a stream containing all side getChain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     * @return a select containing all side getChain atom names - that of {@link AminoAcid#GLYCINE} is empty
      */
     public Stream<String> sideChainAtomNames() {
         return getSideChainAtomNames().stream();
@@ -211,8 +214,11 @@ public enum AminoAcid {
      * Orders all atoms associated to this {@link AtomContainer} in an reproducible way in agreement with the ordering
      * in <tt>PDB</tt> files.
      */
-    public static void orderAtomsByName(Residue residue) {
-        residue.getAtoms().sort(residue.getAminoAcid().atomNameComparator);
+    public static void orderAtomsByName(Group group) {
+        if(!group.isAminoAcid()) {
+            throw new IllegalArgumentException("cannot sort atoms by name for non-amino acids");
+        }
+        group.getAtoms().sort(AminoAcid.valueOfIgnoreCase(group.getPdbName()).atomNameComparator);
     }
 
     /**

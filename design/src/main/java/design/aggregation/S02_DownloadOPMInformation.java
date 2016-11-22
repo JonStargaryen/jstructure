@@ -29,7 +29,7 @@ public class S02_DownloadOPMInformation {
              .map(pdbId -> String.format(DesignConstants.OPM_FETCH_URL, pdbId))
              // fetch results
              .map(S02_DownloadOPMInformation::getDocument)
-             // filter missing entries
+             // select missing entries
              .filter(S02_DownloadOPMInformation::filterAvailable)
              .forEach(document -> {
                  String pdbId = extractPdbId(document);

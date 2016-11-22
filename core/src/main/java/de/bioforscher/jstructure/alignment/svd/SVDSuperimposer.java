@@ -1,11 +1,11 @@
-package de.bioforscher.jstructure.alignment;
+package de.bioforscher.jstructure.alignment.svd;
 
+import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
+import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -14,7 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Implementation of the singular value decomposition rigid body alignment algorithm.
@@ -22,28 +23,24 @@ import java.util.stream.Collectors;
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
     final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
-    public static final AtomNameFilter DEFAULT_ALIGNED_ATOMS = AtomNameFilter.CA_ATOM_FILTER;
+    public static final List<String> DEFAULT_ALIGNED_ATOMS = Collections.singletonList(AminoAcid.ATOM_NAMES.CA_ATOM_NAME);
 
-    public SVDSuperimposer(AtomNameFilter alignedAtomNameFilter) {
-        super(alignedAtomNameFilter);
+    public SVDSuperimposer(List<String> alignedAtomNames) {
+        super(alignedAtomNames);
     }
 
     /**
-     * The default constructor will filter for alpha carbons and align them.
+     * The default constructor will select for alpha carbons and align them.
      */
     public SVDSuperimposer() {
         this(DEFAULT_ALIGNED_ATOMS);
     }
 
     @Override
-    AlignmentResult alignInternal(AtomContainer atomContainer1, AtomContainer atomContainer2) {
+    protected AlignmentResult alignInternal(AtomContainer atomContainer1, AtomContainer atomContainer2) {
         //TODO move to abstract impl and provide flag/interface
         if(atomContainer1.getAtoms().size() != atomContainer2.getAtoms().size()) {
-            logger.error("arrays do not match in size\n\tsequence1: {}\n\tatoms1: {}\n\tsequence2: {}\n\tatoms2: {}\n{}\n{}",
-                    atomContainer1.atoms().map(Atom::getParentGroup).distinct().map(Group::getPdbName).collect(Collectors.joining()),
-                    atomContainer1.atoms().map(Atom::getName).collect(Collectors.joining("-")),
-                    atomContainer2.atoms().map(Atom::getParentGroup).distinct().map(Group::getPdbName).collect(Collectors.joining()),
-                    atomContainer2.atoms().map(Atom::getName).collect(Collectors.joining("-")),
+            logger.error("arrays do not match in size\n{}\n{}",
                     atomContainer1.composePDBRecord(),
                     atomContainer2.composePDBRecord());
             throw new DimensionMismatchException(atomContainer1.getAtoms().size(), atomContainer2.getAtoms().size());
@@ -77,14 +74,14 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         // compute translation
         double[] translation = LinearAlgebra3D.subtract(centroid1, LinearAlgebra3D.multiply(centroid2, rotation));
 
-        logger.debug("rotation matrix\n{}\ntranslation vector\n{}", Arrays.deepToString(rotationMatrix.getData()),
+        logger.trace("rotation matrix\n{}\ntranslation vector\n{}", Arrays.deepToString(rotationMatrix.getData()),
                 Arrays.toString(translation));
 
-        /* transform 2nd atom stream - employ neutral translation (3D vector of zeros), because the atoms are already
+        /* transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */
         CoordinateUtils.transform(atomContainer2, new CoordinateUtils.Transformation(rotation));
         double rmsd = CoordinateUtils.calculateRMSD(atomContainer1, atomContainer2);
         // return alignment
-        return new AlignmentResult(rmsd, translation, rotation);
+        return new AlignmentResult(atomContainer1, atomContainer2, rmsd, translation, rotation);
     }
 }

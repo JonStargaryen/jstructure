@@ -9,6 +9,10 @@ package de.bioforscher.jstructure.mathematics;
  * Created by S on 28.09.2016.
  */
 public class LinearAlgebra3D {
+    private LinearAlgebra3D() {
+        // deny instantiation
+    }
+
     /**
      * Add 2 3D vectors and returns their sum.
      * @param v1 the first 3D vector

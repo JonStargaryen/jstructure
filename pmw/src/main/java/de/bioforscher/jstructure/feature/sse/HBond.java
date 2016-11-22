@@ -1,9 +1,9 @@
 package de.bioforscher.jstructure.feature.sse;
 
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.Group;
 
 /**
- * Container that represents a hydrogen bond. It contains the energy of the bond
+ * StructureContainer that represents a hydrogen bond. It contains the energy of the bond
  * in cal/mol and the partner index.
  *
  * @author Andreas Prlic
@@ -12,7 +12,7 @@ import de.bioforscher.jstructure.model.structure.Residue;
  */
 public class HBond {
     private double energy;
-    private Residue partner;
+    private Group partner;
 
     public HBond() {
         this.energy = 0;
@@ -42,11 +42,11 @@ public class HBond {
         this.energy = energy;
     }
 
-    public Residue getPartner() {
+    public Group getPartner() {
         return this.partner;
     }
 
-    public void setPartner(Residue partner) {
+    public void setPartner(Group partner) {
         this.partner = partner;
     }
 }

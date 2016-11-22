@@ -1,28 +1,18 @@
-package de.bioforscher.jstructure.model;
+package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
 import de.bioforscher.jstructure.alignment.AlignmentResult;
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.container.ChainContainer;
-import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import de.bioforscher.jstructure.model.structure.container.*;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /**
  * A custom collection of structure collectors.
@@ -30,6 +20,10 @@ import java.util.stream.Collectors;
  */
 public class StructureCollectors {
     static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
+
+    private StructureCollectors() {
+        // deny instantiation
+    }
 
     public static Collector<Protein, ?, List<Protein>> toAlignedEnsemble() {
         return Collector.of(ProteinSuperimposerByReference::new,
@@ -55,14 +49,12 @@ public class StructureCollectors {
 
         ProteinSuperimposerByReference() {
             alignedProteins = new ArrayList<>();
-            alignmentStrategy = new SVDSuperimposer(AtomNameFilter.BACKBONE_ATOM_FILTER);
+            alignmentStrategy = new SVDSuperimposer(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES);
         }
 
         @Override
         public void accept(Protein protein) {
             if(reference == null) {
-                // initially center reference
-//                CoordinateUtils.center(protein);
                 reference = protein;
                 alignedProteins.add(protein);
                 return;
@@ -174,7 +166,7 @@ public class StructureCollectors {
         }
 
         AtomContainer getContainer() {
-            return new BasicAtomContainer(atoms);
+            return new Group(atoms);
         }
 
         @Override
@@ -185,26 +177,6 @@ public class StructureCollectors {
         AtomContainerConsumer combine(AtomContainerConsumer other) {
             atoms.addAll(other.atoms);
             return this;
-        }
-    }
-
-    static class BasicAtomContainer implements AtomContainer {
-        private List<Atom> atoms;
-        private Map<Enum, Object> featureMap;
-
-        BasicAtomContainer(List<Atom> atomList) {
-            this.atoms = atomList;
-            this.featureMap = new HashMap<>();
-        }
-
-        @Override
-        public List<Atom> getAtoms() {
-            return atoms;
-        }
-
-        @Override
-        public Map<Enum, Object> getFeatureMap() {
-            return featureMap;
         }
     }
 
@@ -224,7 +196,7 @@ public class StructureCollectors {
         }
 
         GroupContainer getContainer() {
-            return new BasicGroupContainer(groups);
+            return new Chain(groups);
         }
 
         @Override
@@ -235,31 +207,6 @@ public class StructureCollectors {
         GroupContainerConsumer combine(GroupContainerConsumer other) {
             groups.addAll(other.groups);
             return this;
-        }
-    }
-
-    static class BasicGroupContainer implements AtomContainer, GroupContainer {
-        private List<Group> groups;
-        private Map<Enum, Object> featureMap;
-
-        BasicGroupContainer(List<Group> groupList) {
-            this.groups = groupList;
-            this.featureMap = new HashMap<>();
-        }
-
-        @Override
-        public List<Atom> getAtoms() {
-            return groups().flatMap(Group::atoms).collect(Collectors.toList());
-        }
-
-        @Override
-        public List<Group> getGroups() {
-            return groups;
-        }
-
-        @Override
-        public Map<Enum, Object> getFeatureMap() {
-            return featureMap;
         }
     }
 
@@ -279,7 +226,7 @@ public class StructureCollectors {
         }
 
         ChainContainer getContainer() {
-            return new BasicChainContainer(chains);
+            return new Protein(chains);
         }
 
         @Override
@@ -290,36 +237,6 @@ public class StructureCollectors {
         ChainContainerConsumer combine(ChainContainerConsumer other) {
             chains.addAll(other.chains);
             return this;
-        }
-    }
-
-    static class BasicChainContainer implements ChainContainer {
-        private List<Chain> chains;
-        private Map<Enum, Object> featureMap;
-
-        BasicChainContainer(List<Chain> atomList) {
-            this.chains = atomList;
-            this.featureMap = new HashMap<>();
-        }
-
-        @Override
-        public List<Chain> getChains() {
-            return chains;
-        }
-
-        @Override
-        public List<Group> getGroups() {
-            return chains().flatMap(Chain::groups).collect(Collectors.toList());
-        }
-
-        @Override
-        public List<Atom> getAtoms() {
-            return groups().flatMap(Group::atoms).collect(Collectors.toList());
-        }
-
-        @Override
-        public Map<Enum, Object> getFeatureMap() {
-            return featureMap;
         }
     }
 }

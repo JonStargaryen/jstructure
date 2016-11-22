@@ -169,8 +169,9 @@ public enum Element {
      */
     public static Element valueOfIgnoreCase(String elementSymbol) throws IllegalArgumentException {
         Element e = allElements.get(elementSymbol.toLowerCase());
-        if (e != null)
+        if (e != null) {
             return e;
+        }
         logger.warn("Invalid element symbol: {} - falling back to {}", elementSymbol, Element.X);
         return Element.X;
     }

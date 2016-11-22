@@ -1,10 +1,12 @@
 package de.bioforscher.jstructure.mathematics;
 
+import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.StructureCollectors;
+import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.slf4j.Logger;
@@ -22,6 +24,10 @@ import java.util.List;
  */
 public class CoordinateUtils {
     static final Logger logger = LoggerFactory.getLogger(CoordinateUtils.class);
+
+    private CoordinateUtils() {
+        // deny instantiation
+    }
 
     /**
      * Computes the center of mass of a collection of atoms. In contrast to the centroid, the center of mass considers
@@ -53,8 +59,9 @@ public class CoordinateUtils {
      * @return the maximal distance occurring between the centroid and any other atom
      */
     public static double maximalExtent(AtomContainer atomContainer, final double[] centroid) {
-        return atomContainer.atoms()
-                .filter(AtomNameFilter.CA_ATOM_FILTER)
+        return Selection.on(atomContainer)
+                .alphaCarbonAtoms()
+                .filteredAtoms()
                 .mapToDouble(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), centroid))
                 .max()
                 .orElseThrow(() -> new IllegalArgumentException("cannot compute maximal extent for single atom"));
@@ -128,7 +135,7 @@ public class CoordinateUtils {
 
         public Atom transformCoordinates(Atom atom) {
             double[] vector = atom.getCoordinates();
-            logger.debug("initial atom {}", atom.composePDBRecord());
+            logger.trace("initial atom {}", atom.composePDBRecord());
 
             // apply rotation if needed
             if(rotation != null) {
@@ -141,7 +148,7 @@ public class CoordinateUtils {
                 atom.setCoordinates(LinearAlgebra3D.add(vector, translation));
             }
 
-            logger.debug("transf. atom {}", atom.composePDBRecord());
+            logger.trace("transf. atom {}", atom.composePDBRecord());
             return atom;
         }
 
@@ -196,22 +203,18 @@ public class CoordinateUtils {
      * @throws IllegalArgumentException is thrown when the number of atoms does no match
      */
     public static double calculateRMSD(AtomContainer atomContainer1, AtomContainer atomContainer2) throws IllegalArgumentException {
-        logger.debug("aligned {} atoms to compute rmsd", atomContainer1.getAtoms().size());
-        return Math.sqrt(Pair.sequentialPairsOf(atomContainer1.getAtoms(), atomContainer2.getAtoms())
-//                .peek(pair -> System.out.println(Arrays.toString(pair.getLeft().getCoordinates()) + " : " +
-//                        Arrays.toString(pair.getRight().getCoordinates())))
+        logger.trace("aligned {} atoms to compute rmsd", atomContainer1.getAtoms().size());
+        return Math.sqrt(Combinatorics.sequentialPairsOf(atomContainer1.getAtoms(), atomContainer2.getAtoms())
                 //TODO 'api rules' do we skip hydrogens in any case?
                 .filter(CoordinateUtils::nonHydrogenAtomPair)
-//                .peek(pair -> System.out.println(pair.getLeft() + " vs. " + pair.getRight()))
                 .mapToDouble(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(),
                         pair.getRight().getCoordinates()))
-//                .peek(System.out::println)
                 .average()
                 .orElseThrow(() -> new IllegalArgumentException("cannot compute rmsd for empty containers")));
     }
 
     private static boolean nonHydrogenAtomPair(Pair<Atom, Atom> atomPair) {
-        return AtomNameFilter.HYDROGEN_FILTER.negate().test(atomPair.getLeft()) &&
-                AtomNameFilter.HYDROGEN_FILTER.negate().test(atomPair.getRight());
+        return !AminoAcid.ATOM_NAMES.H_ATOM_NAMES.contains(atomPair.getLeft().getName()) &&
+                !AminoAcid.ATOM_NAMES.H_ATOM_NAMES.contains(atomPair.getRight().getName());
     }
 }

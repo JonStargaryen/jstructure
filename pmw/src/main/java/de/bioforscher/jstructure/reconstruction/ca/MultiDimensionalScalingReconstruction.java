@@ -1,11 +1,12 @@
 package de.bioforscher.jstructure.reconstruction.ca;
 
 import de.bioforscher.jstructure.mathematics.mds.MultiDimensionalScaling;
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 
 import java.util.List;
@@ -20,17 +21,21 @@ public class MultiDimensionalScalingReconstruction implements ReconstructionAlgo
     @Override
     public void reconstruct(Protein protein) {
         // ensure container is empty
-        protein.clear();
-        List<Residue> residues = protein.residues().collect(Collectors.toList());
+        protein.clearAtoms();
+        List<Group> residues = Selection.on(protein)
+                .aminoAcids()
+                .cloneElements()
+                .filteredGroups()
+                .collect(Collectors.toList());
 
         // create mapping using MDS
         MultiDimensionalScaling mds = new MultiDimensionalScaling();
         double[][] distanceMap = protein.getFeature(double[][].class, DistanceMapComposer.FeatureNames.DISTANCE_MAP);
         List<double[]> placedAtoms = mds.computeEmbedding(distanceMap);
 
-        Pair.sequentialPairsOf(residues, placedAtoms)
+        Combinatorics.sequentialPairsOf(residues, placedAtoms)
             .forEach(pair -> {
-                Residue residue = pair.getLeft();
+                Group residue = pair.getLeft();
                 residue.addAtom(new Atom("CA", 0, Element.C, pair.getRight()));
             });
     }

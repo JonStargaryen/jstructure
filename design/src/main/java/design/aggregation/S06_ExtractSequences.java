@@ -52,7 +52,7 @@ public class S06_ExtractSequences {
                 // parse fragment
                 .map(ProteinParser::parsePDBFile)
                 // extract sequence
-                .map(Protein::getSequence)
+                .map(Protein::getAminoAcidSequence)
                 .collect(Collectors.joining(System.lineSeparator()));
         } catch (IOException e) {
            throw new UncheckedIOException(e);

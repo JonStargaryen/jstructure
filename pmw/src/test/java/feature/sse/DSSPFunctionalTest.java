@@ -3,6 +3,7 @@ package feature.sse;
 import de.bioforscher.jstructure.feature.sse.DSSPSecondaryStructureElement;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.structure.Group;
 import org.biojava.nbio.structure.GroupType;
@@ -42,13 +43,15 @@ public class DSSPFunctionalTest {
         new SecondaryStructureAnnotator().process(protein);
 
         // return complete DSSP annotation string from jstructrue
-        return protein.residues()
-                      .map(residue -> residue.getFeature(de.bioforscher.jstructure.feature.sse.SecStrucState.class,
-                              SecondaryStructureAnnotator.FeatureNames.SECONDARY_STRUCTURE_STATES))
-                      .map(de.bioforscher.jstructure.feature.sse.SecStrucState::getSecondaryStructure)
-                      .map(DSSPSecondaryStructureElement::getOneLetterRepresentation)
-                      .map(character -> character.equals("c") ? " " : character)
-                      .collect(Collectors.joining());
+        return Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
+                .map(residue -> residue.getFeature(de.bioforscher.jstructure.feature.sse.SecStrucState.class,
+                        SecondaryStructureAnnotator.FeatureNames.SECONDARY_STRUCTURE_STATES))
+                .map(de.bioforscher.jstructure.feature.sse.SecStrucState::getSecondaryStructure)
+                .map(DSSPSecondaryStructureElement::getOneLetterRepresentation)
+                .map(character -> character.equals("c") ? " " : character)
+                .collect(Collectors.joining());
     }
 
     private static String getDSSPAnnotatedStructure(String id) throws IOException, StructureException {

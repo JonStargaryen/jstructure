@@ -1,14 +1,15 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.feature.FeatureProvider;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ import java.util.function.Predicate;
  * way.</p>
  *
  * <p>Intellectual and implementation credit to:</p>
- * <p><b>[Postic, 2015] - Membrane positioning for high- and low-resolution protein structures through a binary classification approach - Guillaume Postic, Yassine Ghouzam, Vincent Guiraud, and Jean-Christophe Gelly, Protein Engineering, Design & Selection, 2015, 1–5, doi: 10.1093/protein/gzv063</b></p>
+ * <p><b>[Postic, 2015] - Membrane positioning for high- and low-resolution protein structures through a binary classification approach - Guillaume Postic, Yassine Ghouzam, Vincent Guiraud, and Jean-Christophe Gelly, Protein Engineering, Design & SelectionOld, 2015, 1–5, doi: 10.1093/protein/gzv063</b></p>
  *
  * <pre>© Univ. Paris Diderot & Inserm, 2015
  guillaume.postic@univ-paris-diderot.fr
@@ -85,7 +86,7 @@ public class ANVIL implements FeatureProvider {
     private double maxthick;
     private int numberOfSpherePoints;
     private double density;
-    private Predicate<Residue> asaFilter;
+    private Predicate<Group> asaFilter;
     private double maximalExtent;
     private double[] centerOfMass;
     private Protein protein;
@@ -109,7 +110,7 @@ public class ANVIL implements FeatureProvider {
         this.step = step;
         this.density = density;
         this.asaFilter = residue ->
-                residue.getDoubleFeature(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA) > afilter;
+                residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA) > afilter;
     }
 
     /**
@@ -126,9 +127,11 @@ public class ANVIL implements FeatureProvider {
 
     @Override
     public void process(Protein protein) {
-        //TODO bugged
+        //TODO generally bugged
         this.protein = protein;
-        AtomContainer alphaCarbons = AtomContainer.of(protein.atoms().filter(AtomNameFilter.CA_ATOM_FILTER));
+        AtomContainer alphaCarbons = Selection.on(protein)
+                .alphaCarbonAtoms()
+                .asAtomContainer();
         // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
         this.centerOfMass = CoordinateUtils.centroid(alphaCarbons);
         this.maximalExtent = 1.2 * CoordinateUtils.maximalExtent(alphaCarbons, centerOfMass);
@@ -184,12 +187,14 @@ public class ANVIL implements FeatureProvider {
      * @return the closest distance to any alpha carbon of the protein
      */
     private double minimalSquaredDistanceToProteinCAAtom(final double[] membranePseudoAtom) {
-        return protein.residues()
-                      .map(Residue::getAlphaCarbon)
-                      .map(Atom::getCoordinates)
-                      .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
-                      .min()
-                      .getAsDouble();
+        return Selection.on(protein)
+                    .aminoAcids()
+                    .alphaCarbonAtoms()
+                    .filteredAtoms()
+                    .map(Atom::getCoordinates)
+                    .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
+                    .min()
+                    .orElse(Double.MAX_VALUE);
     }
 
     /**
@@ -197,12 +202,17 @@ public class ANVIL implements FeatureProvider {
      */
     private void assignTopology() {
         protein.setFeature(ANVIL.FeatureNames.MEMBRANE, membrane);
-        protein.residues()
-               .filter(residue -> isInMembranePlane(residue.getAlphaCarbon().getCoordinates(),
-                       membrane.normalVector,
-                       membrane.planePoint1,
-                       membrane.planePoint2))
-               .forEach(residue ->  residue.setFeature(FeatureNames.TOPOLOGY, membrane)
+        Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
+                .filter(residue -> isInMembranePlane(Selection.on(residue)
+                                .alphaCarbonAtoms()
+                                .asAtom()
+                                .getCoordinates(),
+                        membrane.normalVector,
+                        membrane.planePoint1,
+                        membrane.planePoint2))
+                .forEach(residue ->  residue.setFeature(FeatureNames.TOPOLOGY, membrane)
         );
     }
 
@@ -316,18 +326,23 @@ public class ANVIL implements FeatureProvider {
      * @return [countOfHydrophobicResidues, countOfHydrophilicResidues]
      */
     private int[] hphobHphil(final boolean checkMembranePlane, final double[] diam, final double[] c1, final double[] c2) {
-        return protein.residues()
-                      // filter out exposed residues
-                      .filter(asaFilter)
-                      // filter for residues within the membrane plane
-                      .filter(residue -> !checkMembranePlane ||
-                              isInMembranePlane(residue.getAlphaCarbon().getCoordinates(), diam, c1, c2))
-                      // map to index representation - 0: membrane-tendency, 1: polar getResidue
-                      .mapToInt(residue -> residue.getAminoAcid().getANVILGrouping().ordinal())
-                      // unknown amino acids could be mapped to indices exceeding the array
-                      .filter(index -> index < 2)
-                      .collect(HphobHphilConsumer::new, HphobHphilConsumer::accept, HphobHphilConsumer::combine)
-                      .getHphobHpil();
+        return Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
+                // select out exposed residues
+                .filter(asaFilter)
+                // select for residues within the membrane plane
+                .filter(residue -> !checkMembranePlane ||
+                      isInMembranePlane(Selection.on(residue)
+                              .alphaCarbonAtoms()
+                              .asAtom()
+                              .getCoordinates(), diam, c1, c2))
+                // map to index representation - 0: membrane-tendency, 1: polar getResidue
+                .mapToInt(residue -> AminoAcid.valueOfIgnoreCase(residue.getPdbName()).getANVILGrouping().ordinal())
+                // unknown amino acids could be mapped to indices exceeding the array
+                .filter(index -> index < 2)
+                .collect(HphobHphilConsumer::new, HphobHphilConsumer::accept, HphobHphilConsumer::combine)
+                .getHphobHpil();
     }
 
     static class HphobHphilConsumer implements IntConsumer {

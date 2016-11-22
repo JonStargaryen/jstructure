@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,8 +35,8 @@ public class CoordinateUtilsUnitTest {
     public void testRotation() {
         // example from http://stackoverflow.com/questions/34050929/3d-point-rotation-algorithm
         double[] point = { 1, 0, 0 };
-        final double[] expectedPoint = { 0, 1, 0 };
-        System.out.printf("rotating %s by 90° yields ", Arrays.toString(point));
+        final double[] expectedPoint = { 0, -1, 0 };
+        System.out.printf("rotating %s by -90 degree yields ", Arrays.toString(point));
         // describes a rotation by 90°
         double[][] rotation = {{ 0, -1, 0 },{ 1, 0, 0 },{ 0, 0, 1 }};
         CoordinateUtils.Transformation transformation = new CoordinateUtils.Transformation(rotation);
@@ -48,9 +49,9 @@ public class CoordinateUtilsUnitTest {
     @Test
     public void testTransformation() {
         double[] point = { 3, 0, 0 };
-        final double[] expectedPoint = { 0, 1, 0 };
+        final double[] expectedPoint = { -2, -3, 0 };
         double[] translation = { -2, 0, 0 };
-        System.out.printf("translating %s by 2 length units toward origin and rotating it by 90° yields ",
+        System.out.printf("translating %s by 2 length units toward origin and rotating it by -90 degree yields ",
                 Arrays.toString(point));
         // describes a rotation by 90°
         double[][] rotation = { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
@@ -64,20 +65,28 @@ public class CoordinateUtilsUnitTest {
     @Test
     public void testAtomPairsInContact() {
         final double cutoff = 8.0;
-        protein1acj.atomPairsInContact(cutoff)
-                   .filter(pair -> LinearAlgebra3D.distance(pair.getLeft().getCoordinates(),
+        Selection.pairsOn(protein1acj).distance(cutoff)
+                .filteredAtomPairs()
+                .filter(pair -> LinearAlgebra3D.distance(pair.getLeft().getCoordinates(),
                                                             pair.getRight().getCoordinates()) > cutoff)
-                   .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
+                .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
                                ", this is violated for pair: " + pair));
     }
 
     @Test
     public void testResiduePairsInContact() {
         final double cutoff = 8.0;
-        protein1acj.residuePairsInContact(cutoff)
-                   .filter(pair -> LinearAlgebra3D.distance(pair.getLeft().getAlphaCarbon().getCoordinates(),
-                        pair.getRight().getAlphaCarbon().getCoordinates()) > cutoff)
-                   .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
+        Selection.pairsOn(protein1acj).alphaCarbonDistance(cutoff)
+                .filteredGroupPairs()
+                .filter(pair -> LinearAlgebra3D.distance(Selection.on(pair.getLeft())
+                        .alphaCarbonAtoms()
+                        .asAtom()
+                        .getCoordinates(),
+                Selection.on(pair.getRight())
+                        .alphaCarbonAtoms()
+                        .asAtom()
+                        .getCoordinates()) > cutoff)
+                .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
                         ", this is violated for pair: " + pair));
     }
 

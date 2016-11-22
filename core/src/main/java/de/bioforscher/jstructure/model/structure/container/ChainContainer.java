@@ -1,13 +1,9 @@
 package de.bioforscher.jstructure.model.structure.container;
 
-import de.bioforscher.jstructure.model.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -19,40 +15,9 @@ public interface ChainContainer extends GroupContainer {
 
     /**
      * Access to all getChain objects associated to this container.
-     * @return a stream of chains
+     * @return a select of chains
      */
     default Stream<Chain> chains() {
         return getChains().stream();
-    }
-
-    /**
-     *
-     * @param chainId
-     * @return
-     */
-    default Chain getChain(final String chainId) {
-        return findChain(chainId).orElseThrow(NoSuchElementException::new);
-    }
-
-    /**
-     *
-     * @param chainId
-     * @param residueNumber
-     * @return
-     */
-    default Residue getResidue(final String chainId, final int residueNumber) {
-        return findResidue(chainId, residueNumber).orElseThrow(NoSuchElementException::new);
-    }
-
-    default Optional<Residue> findResidue(final String chainId, final int residueNumber) {
-        return findChain(chainId).orElseThrow(NoSuchElementException::new).findResidue(residueNumber);
-    }
-
-    default Optional<Chain> findChain(String chainId) {
-        return chains().filter(chain -> chain.getChainId().equals(chainId)).findFirst();
-    }
-
-    static ChainContainer of(Stream<Chain> chainStream) {
-        return chainStream.collect(StructureCollectors.toChainContainer());
     }
 }

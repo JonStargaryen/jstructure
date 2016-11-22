@@ -1,8 +1,10 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,17 +30,19 @@ public class SequenceMotifAnnotator implements FeatureProvider {
         List<SequenceMotif> globalListOfSequenceMotifs = new ArrayList<>();
 
         // we need getChain information as motifs cannot be part of 2 chains
-        Map<String, List<Residue>> chains = protein.residues().collect(Collectors.groupingBy(residue ->
-                residue.getParentChain().getChainId()));
+        Map<String, List<Group>> chains = Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
+                .collect(Collectors.groupingBy(residue -> residue.getParentChain().getChainId()));
         for (String chainId : chains.keySet()) {
-            List<Residue> residueInChain = chains.get(chainId);
+            List<Group> residueInChain = chains.get(chainId);
             int chainLength = residueInChain.size();
             for (int resNum = 0; resNum < chainLength; resNum++) {
-                Residue startResidue = residueInChain.get(resNum);
+                Group startResidue = residueInChain.get(resNum);
                 // even though we express 1-letter-codes as Strings, excessive matching is probably much faster when done with chars
-                char startAminoAcid = startResidue.getAminoAcid().getOneLetterCode().charAt(0);
+                char startAminoAcid = AminoAcid.valueOfIgnoreCase(startResidue.getPdbName()).getOneLetterCode().charAt(0);
                 for (SequenceMotifDefinition candidate : SequenceMotifDefinition.values()) {
-                    // get motif length
+                    // findAny motif length
                     int motifLength = Integer.parseInt(candidate.name().substring(2));
                     char motifStart = candidate.name().charAt(0);
                     char motifEnd = candidate.name().charAt(1);
@@ -53,14 +57,14 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                         continue;
                     }
 
-                    Residue endResidue = residueInChain.get(resNum + motifLength);
+                    Group endResidue = residueInChain.get(resNum + motifLength);
 
                     // end amino acid does not match
-                    if (endResidue.getAminoAcid().getOneLetterCode().charAt(0) != motifEnd) {
+                    if (AminoAcid.valueOfIgnoreCase(endResidue.getPdbName()).getOneLetterCode().charAt(0) != motifEnd) {
                         continue;
                     }
 
-                    List<Residue> residueList = residueInChain.subList(resNum, resNum + motifLength + 1);
+                    List<Group> residueList = residueInChain.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue);
                     residueList.forEach(residue -> {
                         List<SequenceMotif> value = residue.getFeature(List.class, FeatureNames.SEQUENCE_MOTIF);

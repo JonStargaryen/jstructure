@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 import java.io.BufferedReader;
@@ -77,7 +77,7 @@ public class Membrane {
 
     private InputStream getResourceAsStream(String filepath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
-                "failed to get resource as InputStream");
+                "failed to findAny resource as InputStream");
     }
 
     private synchronized void initializeLibrary() {
@@ -139,7 +139,8 @@ public class Membrane {
      */
     public double computePotential(SequenceMotif sequenceMotif) {
        return sequenceMotif
-               .residues()
+               .getGroupContainer()
+               .groups()
                .mapToDouble(this::computePotential)
                .average()
                .getAsDouble();
@@ -150,8 +151,8 @@ public class Membrane {
      * @param residue a collection of residues
      * @return observed potential
      */
-    public double computePotential(Residue residue) {
-        return fittingFunctions.getOrDefault(residue.getAminoAcid(),
+    public double computePotential(Group residue) {
+        return fittingFunctions.getOrDefault(AminoAcid.valueOfIgnoreCase(residue.getPdbName()),
                 FittingFunction.DEFAULT_FITTING_FUNCTION).apply(distanceToMembraneCenter(residue));
     }
 

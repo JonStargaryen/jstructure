@@ -40,7 +40,7 @@ public class ProteinParserFunctionalTest {
     public void shouldHandleProteinWithNonStandardAminoAcids() {
         Protein protein = ProteinParser.parseProteinById(NON_STANDARD_PDB_ID);
         // ensure that the initial selenomethionine stored as HETATM is correctly parsed
-        Assert.assertThat(protein.getSequence(), startsWith("M"));
+        Assert.assertThat(protein.getAminoAcidSequence(), startsWith("M"));
     }
 
     /**
@@ -57,7 +57,7 @@ public class ProteinParserFunctionalTest {
     }
 
     /**
-     * Tests whether <tt>ATOM</tt> records get parsed and written correctly.
+     * Tests whether <tt>ATOM</tt> records findAny parsed and written correctly.
      */
     @Test
     public void shouldWriteEqualAtomRecords() {

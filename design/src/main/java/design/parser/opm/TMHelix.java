@@ -1,12 +1,10 @@
 package design.parser.opm;
 
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Residue;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.StructureCollectors;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 /**
  * Describes a trans-membrane helix in OPM terms.
@@ -14,52 +12,51 @@ import java.util.stream.Stream;
  */
 public class TMHelix {
     private final double tilt;
-    private final Residue startResidue;
-    private final Residue endResidue;
-    private final List<Residue> residues;
+    private final Group startGroup;
+    private final Group endGroup;
+    private final GroupContainer residues;
 
-    public TMHelix(double tilt, Residue startResidue, Residue endResidue) {
+    public TMHelix(double tilt, Group startGroup, Group endGroup) {
         this.tilt = tilt;
-        this.startResidue = startResidue;
-        this.endResidue = endResidue;
+        this.startGroup = startGroup;
+        this.endGroup = endGroup;
 
-        int startResNum = startResidue.getResidueNumber();
-        int endResNum = endResidue.getResidueNumber();
-        Chain chain = startResidue.getParentChain();
+        int startResNum = startGroup.getResidueNumber();
+        int endResNum = endGroup.getResidueNumber();
+        Chain chain = startGroup.getParentChain();
 
         // extract residues
-        this.residues = chain.residues()
-            .filter(residue -> residue.getResidueNumber() >= startResNum && residue.getResidueNumber() <= endResNum)
-            .collect(Collectors.toList());
+        this.residues = Selection.on(chain)
+                .aminoAcids()
+                .filteredGroups()
+                .filter(residue -> residue.getResidueNumber() >= startResNum && residue.getResidueNumber() <= endResNum)
+                .collect(StructureCollectors.toGroupContainer());
     }
 
     public double getTilt() {
         return tilt;
     }
 
-    public Residue getStartResidue() {
-        return startResidue;
+    public Group getStartGroup() {
+        return startGroup;
     }
 
-    public Residue getEndResidue() {
-        return endResidue;
+    public Group getEndGroup() {
+        return endGroup;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " tilt='" + tilt + "°' startResidue='" + startResidue.getPdbName() + "-" +
-                startResidue.getResidueNumber() + "' endResidue='" + endResidue.getPdbName() + "-" +
-                endResidue.getResidueNumber() + "'";
+        return getClass().getSimpleName() + " tilt='" + tilt + "°' startGroup='" + startGroup.getPdbName() + "-" +
+                startGroup.getResidueNumber() + "' endGroup='" + endGroup.getPdbName() + "-" +
+                endGroup.getResidueNumber() + "'";
     }
 
-    public Stream<Residue> residues() {
-        return residues.stream();
+    public GroupContainer getGroupContainer() {
+        return residues;
     }
 
     public String getSequence() {
-        return residues.stream()
-                       .map(Residue::getAminoAcid)
-                       .map(AminoAcid::getOneLetterCode)
-                       .collect(Collectors.joining());
+        return residues.getAminoAcidSequence();
     }
 }

@@ -2,16 +2,11 @@ package alignment;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
 import de.bioforscher.jstructure.alignment.AlignmentResult;
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.StructureCollectors;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static util.TestUtils.FRAGMENT_DIR;
+
 /**
  * Tests the capabilities of the SVDSuperimposer.
  * Created by S on 02.10.2016.
@@ -33,7 +30,6 @@ import java.util.stream.Stream;
 public class SVDSuperimposerFunctionalTest {
     private Protein protein1acj;
     private Protein protein1brr;
-    private static final String FRAGMENT_DIR = "alignment/fragment/";
     private GroupContainer container1;
     private GroupContainer container2;
     private GroupContainer container3;
@@ -46,37 +42,37 @@ public class SVDSuperimposerFunctionalTest {
         protein1brr = ProteinParserFunctionalTest.parseFilepath(ProteinParserFunctionalTest.PDB_DIRECTORY + "1brr" +
                 ProteinParserFunctionalTest.PDB_EXTENSION);
 
-        Residue his1 = new Residue("HIS", 1);
-        Residue asp1 = new Residue("ASP", 2);
-        Residue ser1 = new Residue("SER", 3);
+        Group his1 = new Group("HIS", 1);
+        Group asp1 = new Group("ASP", 2);
+        Group ser1 = new Group("SER", 3);
         his1.addAtom(new Atom("CA", Element.C, new double[] { 6.994, 8.354, 42.405 }));
         asp1.addAtom(new Atom("CA", Element.C, new double[] { 9.429, 7.479, 48.266 }));
         ser1.addAtom(new Atom("CA", Element.C, new double[] { 5.547, 0.158, 42.050 }));
-        container1 = GroupContainer.of(Stream.of(his1, asp1, ser1));
+        container1 = Stream.of(his1, asp1, ser1).collect(StructureCollectors.toGroupContainer());
 
-        Residue his2 = new Residue("HIS", 1);
-        Residue asp2 = new Residue("ASP", 2);
-        Residue ser2 = new Residue("SER", 3);
+        Group his2 = new Group("HIS", 1);
+        Group asp2 = new Group("ASP", 2);
+        Group ser2 = new Group("SER", 3);
         his2.addAtom(new Atom("CA", Element.C, new double[] { 3.908, 12.066, -6.159 }));
         asp2.addAtom(new Atom("CA", Element.C, new double[] { 4.588, 6.531, -9.119 }));
         ser2.addAtom(new Atom("CA", Element.C, new double[] { 12.080, 12.645, -7.073 }));
-        container2 = GroupContainer.of(Stream.of(his2, asp2, ser2));
+        container2 = Stream.of(his2, asp2, ser2).collect(StructureCollectors.toGroupContainer());
 
-        Residue ala1 = new Residue("HIS", 1);
-        Residue his3 = new Residue("ASP", 2);
-        Residue cys1 = new Residue("SER", 3);
+        Group ala1 = new Group("HIS", 1);
+        Group his3 = new Group("ASP", 2);
+        Group cys1 = new Group("SER", 3);
         ala1.addAtom(new Atom("CA", Element.C, new double[] { 5.055, 74.865, 22.585 }));
         his3.addAtom(new Atom("CA", Element.C, new double[] { 7.320, 76.960, 20.325 }));
         cys1.addAtom(new Atom("CA", Element.C, new double[] { 6.021, 74.874, 17.385 }));
-        container3 = GroupContainer.of(Stream.of(ala1, his3, cys1));
+        container3 = Stream.of(ala1, his3, cys1).collect(StructureCollectors.toGroupContainer());
 
-        Residue ala2 = new Residue("HIS", 1);
-        Residue his4 = new Residue("ASP", 2);
-        Residue cys2 = new Residue("SER", 3);
+        Group ala2 = new Group("HIS", 1);
+        Group his4 = new Group("ASP", 2);
+        Group cys2 = new Group("SER", 3);
         ala2.addAtom(new Atom("CA", Element.C, new double[] { 5.055, 74.864, 22.583 }));
         his4.addAtom(new Atom("CA", Element.C, new double[] { 7.321, 76.962, 20.326 }));
         cys2.addAtom(new Atom("CA", Element.C, new double[] { 6.020, 74.873, 17.386 }));
-        container4 = GroupContainer.of(Stream.of(ala2, his4, cys2));
+        container4 = Stream.of(ala2, his4, cys2).collect(StructureCollectors.toGroupContainer());
     }
 
     @Test
@@ -103,7 +99,7 @@ public class SVDSuperimposerFunctionalTest {
     @Test
     public void shouldAlignArbitraryPoints() {
         // compute alignment
-        AlignmentResult alignmentResult = new SVDSuperimposer(AtomNameFilter.CA_ATOM_FILTER).align(container1, container2);
+        AlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
         System.out.println("rmsd " + alignmentResult.getRmsd());
@@ -113,7 +109,7 @@ public class SVDSuperimposerFunctionalTest {
     @Test
     public void shouldAlignAnotherSetOfArbitraryPoints() {
         // compute alignment
-        AlignmentResult alignmentResult = new SVDSuperimposer(AtomNameFilter.CA_ATOM_FILTER).align(container3, container4);
+        AlignmentResult alignmentResult = new SVDSuperimposer().align(container3, container4);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
         System.out.println("rmsd " + alignmentResult.getRmsd());
@@ -124,7 +120,7 @@ public class SVDSuperimposerFunctionalTest {
     public void shouldSuperimposeBasedOnAlignment() {
         String initialCoordinates1 = container1.composePDBRecord();
         String initialCoordinates2 = container2.composePDBRecord();
-        AlignmentResult alignmentResult = new SVDSuperimposer(AtomNameFilter.CA_ATOM_FILTER).align(container1, container2);
+        AlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
         double rmsd1 = alignmentResult.getRmsd();
         // coordinates should not be changed by aligning
         Assert.assertEquals(initialCoordinates1, container1.composePDBRecord());

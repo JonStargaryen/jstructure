@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature;
+package de.bioforscher.jstructure.model.feature;
 
 import de.bioforscher.jstructure.model.structure.Protein;
 

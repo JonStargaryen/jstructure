@@ -1,13 +1,11 @@
 package de.bioforscher.jstructure.feature.asa;
 
-import de.bioforscher.jstructure.feature.FeatureProvider;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomDistanceCutoffFilter;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +54,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
     private int numberOfSpherePoints;
     private double probeSize;
     private double cons;
-    private List<Atom> nonHydrogenAtoms;
+    private AtomContainer nonHydrogenAtoms;
     private List<double[]> spherePoints;
 
     /**
@@ -80,26 +78,35 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
         atom.setFeature(FeatureNames.ATOM_RADIUS, determineRadius(atom));
     }
 
-    private void assignSingleAsa(Residue residue) {
-        residue.setFeature(FeatureNames.ACCESSIBLE_SURFACE_AREA,
-            residue.nonHydrogenAtoms()
-                   .mapToDouble(this::calcSingleAsa)
-                   .sum());
+    private void assignSingleAsa(Group group) {
+        group.setFeature(FeatureNames.ACCESSIBLE_SURFACE_AREA,
+                Selection.on(group)
+                        .nonHydrogenAtoms()
+                        .filteredAtoms()
+                        .mapToDouble(this::calcSingleAsa)
+                        .sum());
     }
 
     @Override
     public void process(Protein protein) {
         // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-        //TODO not too nice - need to dodge non-amino acid groups though
-        GroupContainer residueContainer = GroupContainer.of(protein.residues());
-        nonHydrogenAtoms = residueContainer.nonHydrogenAtoms().collect(Collectors.toList());
-        nonHydrogenAtoms.parallelStream().forEach(this::assignRadius);
+        GroupContainer residueContainer = Selection.on(protein)
+                .aminoAcids()
+                .asGroupContainer();
+        nonHydrogenAtoms = Selection.on(residueContainer)
+                .nonHydrogenAtoms()
+                .asAtomContainer();
+        nonHydrogenAtoms.atoms()
+                .parallel()
+                .forEach(this::assignRadius);
 
         // initialising the sphere points to sample
         spherePoints = generateSpherePoints(numberOfSpherePoints);
         cons = 4.0 * Math.PI / numberOfSpherePoints;
 
-        protein.residues().parallel().forEach(this::assignSingleAsa);
+        residueContainer.groups()
+                .parallel()
+                .forEach(this::assignSingleAsa);
     }
 
     /**
@@ -129,7 +136,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
      * @return the atom's radiues
      */
     private double determineRadius(Atom atom) {
-        Residue parentResidue = (Residue) atom.getParentGroup();
+        Group parentResidue = atom.getParentGroup();
 
         switch(atom.getElement()) {
             case H: case D:
@@ -151,7 +158,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
                         atomName.equals("CG2")) {
                     return TETRAHEDRAL_CARBON_VDW;
                 }
-                switch(parentResidue.getAminoAcid()) {
+                switch(AminoAcid.valueOfIgnoreCase(parentResidue.getPdbName())) {
                     case PHENYLALANINE: case TRYPTOPHAN: case TYROSINE: case HISTIDINE: case ASPARTIC_ACID: case ASPARAGINE:
                         return TRIGONAL_CARBON_VDW;
                     case PROLINE: case LYSINE: case ARGININE: case METHIONINE: case ISOLEUCINE: case LEUCINE:
@@ -175,10 +182,11 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
      * @return all neighbored atoms
      */
     private List<Atom> findNeighbors(Atom atom) {
-        final double cutoff = probeSize + probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS);
-        return nonHydrogenAtoms.stream()
-                               .filter(new AtomDistanceCutoffFilter(atom, cutoff))
-                               .collect(Collectors.toList());
+        final double cutoff = probeSize + probeSize + atom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS);
+        return Selection.on(nonHydrogenAtoms)
+                .distance(atom, cutoff)
+                .filteredAtoms()
+                .collect(Collectors.toList());
     }
 
     /**
@@ -188,14 +196,14 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
      */
     private double calcSingleAsa(Atom atom) {
         List<Atom> neighborAtoms = findNeighbors(atom);
-        double radius = probeSize + atom.getDoubleFeature(FeatureNames.ATOM_RADIUS);
+        double radius = probeSize + atom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS);
         int accessiblePoints = 0;
 
         for (double[] point : spherePoints) {
             boolean isAccessible = true;
             double[] testPoint = LinearAlgebra3D.add(LinearAlgebra3D.multiply(point, radius), atom.getCoordinates());
             for(Atom neighborAtom : neighborAtoms) {
-                double neighborAtomRadius = neighborAtom.getDoubleFeature(FeatureNames.ATOM_RADIUS) + probeSize;
+                double neighborAtomRadius = neighborAtom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS) + probeSize;
                 double differenceSquared = LinearAlgebra3D.distanceFast(testPoint, neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;

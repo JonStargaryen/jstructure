@@ -86,7 +86,7 @@ public class ProteinParser {
 
     /**
      * Parses an {@link InputStream} of a <tt>PDB</tt> file. All other functions delegate to this method.
-     * @param inputStream an input stream of <tt>PDB</tt> content
+     * @param inputStream an input select of <tt>PDB</tt> content
      * @param proteinName the desired name - will only be assigned, when the parsed lines do not contain a valid
      *                    <tt>HEADER</tt> record
      * @return a {@link Protein} instance wrapping all (relevant) parsed information
@@ -174,7 +174,7 @@ public class ProteinParser {
 //            System.out.println(line);
 //            if(pdbName.length() < 3) {
 //                // if pdbName is less than 3 chars long, this is no amino acid - e.g. 'U' vs 'THR'
-//                // TODO at some point parsing nucleotides and ligands would be nice
+//                // TODO at some point parsing nucleotides and hetatms would be nice
 //                return;
 //            }
 
@@ -190,7 +190,9 @@ public class ProteinParser {
 
             if(currentGroup == null || currentGroup.getResidueNumber() != resNum) {
                 // getResidue changed - create new getResidue object and set reference
-                currentGroup = line.startsWith(ATOM_PREFIX) ? new Residue(pdbName, resNum) : new Group(pdbName, resNum);
+                currentGroup = new Group(pdbName, resNum);
+                //TODO do we need explicit information on hetam/atom here?
+//                currentGroup = line.startsWith(ATOM_PREFIX);
                 currentChain.addGroup(currentGroup);
             }
 

@@ -1,7 +1,10 @@
 package reconstruction;
 
-import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.reconstruction.sidechain.pulchra.PULCHRA;
 import org.junit.Assert;
@@ -9,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,13 +40,15 @@ public class PULCHRAFunctionalTest {
         int proteinAtomCount = determineAtomCount(protein);
 
         // forget everything but alpha carbons
-        List<Residue> residues = proteinCopy.residues().collect(Collectors.toList());
-        List<Atom> alphaCarbons =  residues.stream()
-               .map(Residue::findAlphaCarbon)
-               .map(Optional::get)
-               .collect(Collectors.toList());
-        proteinCopy.clear();
-        Pair.sequentialPairsOf(residues, alphaCarbons)
+        GroupContainer residues = Selection.on(proteinCopy)
+                .aminoAcids()
+                .asGroupContainer();
+        List<Atom> alphaCarbons = Selection.on(residues)
+                .alphaCarbonAtoms()
+                .filteredAtoms()
+                .collect(Collectors.toList());
+        proteinCopy.clearAtoms();
+        Combinatorics.sequentialPairsOf(residues.getGroups(), alphaCarbons)
             .forEach(pair -> pair.getLeft().addAtom(pair.getRight()));
 
         // reconstruct and count again - all atoms should be reconstructed
@@ -66,8 +70,6 @@ public class PULCHRAFunctionalTest {
     }
 
     private int determineAtomCount(Protein protein) {
-        return (int) protein.residues()
-                            .flatMap(Residue::atoms)
-                            .count();
+        return protein.getAtoms().size();
     }
 }

@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.model.structure.scheme;
 import de.bioforscher.jstructure.mathematics.CoordinateUtils;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 /**
  * Represents a group by its alpha carbon atom. The centroid of all atoms is used as fallback.
@@ -12,10 +12,13 @@ import de.bioforscher.jstructure.model.structure.Residue;
 public class AlphaCarbonRepresentationScheme implements RepresentationScheme {
     @Override
     public Atom determineRepresentingAtom(Group group) {
-        if(!(group instanceof Residue)) {
+        if(!group.isAminoAcid()) {
             throw new IllegalArgumentException(getClass().getSimpleName() +
                     " can only be employed to getResidue objects use CentroidScheme instead");
         }
-        return ((Residue) group).findAlphaCarbon().orElse(new Atom(CoordinateUtils.centroid(group)));
+        return Selection.on(group)
+                .alphaCarbonAtoms()
+                .asOptionalAtom()
+                .orElse(new Atom(CoordinateUtils.centroid(group)));
     }
 }

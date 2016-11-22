@@ -4,8 +4,9 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -22,7 +23,7 @@ import java.util.List;
 public class Z02_MaskNonSequenceMotifResiduesByChain {
     public static void main(String[] args) throws IOException {
         Files.lines(Paths.get(DesignConstants.NR_ALPHA_IDS))
-                // filter for non-comment lines
+                // select for non-comment lines
                 .filter(DesignConstants.isCommentLine.negate())
                 .forEach(line -> {
                     System.out.println(line);
@@ -32,19 +33,24 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
                     new SequenceMotifAnnotator().process(protein);
 
                     // mask residues not part sequence motif
-                    protein.residues()
+                    Selection.on(protein)
+                            .aminoAcids()
+                            .filteredGroups()
                             .filter(Z02_MaskNonSequenceMotifResiduesByChain::isNotStartOrEndOfSequenceMotif)
-                            .forEach(residue -> residue.setAminoAcid(AminoAcid.UNKNOWN));
+                            .forEach(residue -> residue.setPdbName(AminoAcid.UNKNOWN.getThreeLetterCode()));
 
-                    System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getSequence());
+                    System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getAminoAcidSequence());
 
-                    // select appropriate getChain
-                    Chain chain;
+                    // selectionBuilder appropriate getChain
+                    String chainName;
                     try {
-                        chain = protein.getChain(splitLine[1]);
+                        chainName = splitLine[1];
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        chain = protein.getChain(" ");
+                        chainName = " ";
                     }
+                    Chain chain = Selection.on(protein)
+                            .chainName(chainName)
+                            .asChain();
 
                     // write structures
                     try {
@@ -57,12 +63,12 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean isNotStartOrEndOfSequenceMotif(Residue residue) {
+    private static boolean isNotStartOrEndOfSequenceMotif(Group residue) {
         List<SequenceMotif> motifAnnotations = residue.getFeature(List.class,
                 SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
 
         return motifAnnotations == null || motifAnnotations.isEmpty() || motifAnnotations.stream().filter(motif ->
-                motif.getStartResidue().equals(residue) || motif.getEndResidue().equals(residue)).count() == 0;
+                motif.getStartGroup().equals(residue) || motif.getEndGroup().equals(residue)).count() == 0;
 
     }
 }

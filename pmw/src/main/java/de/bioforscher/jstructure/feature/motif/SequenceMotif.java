@@ -2,11 +2,11 @@ package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.StructureCollectors;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The container object of a found sequence motif.
@@ -14,42 +14,43 @@ import java.util.stream.Stream;
  */
 public class SequenceMotif {
     private final SequenceMotifDefinition motifDefinition;
-    private final Residue startResidue;
-    private final Residue endResidue;
-    private final List<Residue> residues;
+    private final Group startGroup;
+    private final Group endGroup;
+    private final GroupContainer groups;
 
-    public SequenceMotif(SequenceMotifDefinition candidate, Residue startResidue, Residue endResidue) {
+    public SequenceMotif(SequenceMotifDefinition candidate, Group startGroup, Group endGroup) {
         this.motifDefinition = candidate;
-        this.startResidue = startResidue;
-        this.endResidue = endResidue;
+        this.startGroup = startGroup;
+        this.endGroup = endGroup;
 
-        int startResNum = startResidue.getResidueNumber();
-        int endResNum = endResidue.getResidueNumber();
-        Chain chain = startResidue.getParentChain();
+        int startResNum = startGroup.getResidueNumber();
+        int endResNum = endGroup.getResidueNumber();
+        Chain chain = startGroup.getParentChain();
 
-        // extract residues
-        this.residues = chain.residues()
-                .filter(residue -> residue.getResidueNumber() >= startResNum && residue.getResidueNumber() <= endResNum)
-                .collect(Collectors.toList());
+        // extract groups
+        this.groups = chain.groups()
+                .filter(group -> group.getResidueNumber() >= startResNum && group.getResidueNumber() <= endResNum)
+                .collect(StructureCollectors.toGroupContainer());
     }
 
-    public Stream<Residue> residues() {
-        return residues.stream();
+    public GroupContainer getGroupContainer() {
+        return groups;
     }
 
     public String getSequence() {
-        return residues.stream()
-                .map(Residue::getAminoAcid)
+        return groups.groups()
+                .map(Group::getPdbName)
+                .map(AminoAcid::valueOfIgnoreCase)
                 .map(AminoAcid::getOneLetterCode)
                 .collect(Collectors.joining());
     }
 
-    public Residue getEndResidue() {
-        return endResidue;
+    public Group getEndGroup() {
+        return endGroup;
     }
 
-    public Residue getStartResidue() {
-        return startResidue;
+    public Group getStartGroup() {
+        return startGroup;
     }
 
     public SequenceMotifDefinition getMotifDefinition() {
@@ -59,7 +60,7 @@ public class SequenceMotif {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " motifDefinition='" + motifDefinition + "' sequence='" + getSequence() +
-                "' startResidue='" + startResidue.getPdbName() + "-" + startResidue.getResidueNumber() +
-                "' endResidue='" + endResidue.getPdbName() + "-" + endResidue.getResidueNumber() + "'";
+                "' startGroup='" + startGroup.getPdbName() + "-" + startGroup.getResidueNumber() +
+                "' endGroup='" + endGroup.getPdbName() + "-" + endGroup.getResidueNumber() + "'";
     }
 }

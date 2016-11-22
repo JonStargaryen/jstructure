@@ -1,5 +1,6 @@
-package de.bioforscher.jstructure.feature;
+package de.bioforscher.jstructure.model.feature;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,12 +30,31 @@ public interface FeatureContainer {
     }
 
     /**
+     * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
+     * element can be casted.
+     * @param expectedListContentType the class of the retrieved collection
+     * @param enumKey the unique identifier of the map entry
+     * @param <ContentType> the class the entries of this list will be cast to
+     * @return a collection of retrieved entries
+     * @see FeatureContainer#getFeature(Class, Enum)
+     */
+    @SuppressWarnings("unchecked")
+    default <ContentType> List<ContentType> getFeatureAsList(Class<ContentType> expectedListContentType, Enum enumKey) {
+        List entry = (List) getFeatureMap().get(enumKey);
+        if(!entry.isEmpty()) {
+            //TODO some fail-fast safety net, as the correct cast completely depends on the way how this method is invoked and ClassCastException could arise later on
+            expectedListContentType.cast(entry.get(0));
+        }
+        return (List<ContentType>) entry;
+    }
+
+    /**
      * Convenience function to retrieve int features.
      * @param enumKey the unique identifier of the entry
      * @return the value as primitive int
      * @see FeatureContainer#getFeature(Class, Enum)
      */
-    default int getIntFeature(Enum enumKey) {
+    default int getFeatureAsInt(Enum enumKey) {
         return getFeature(Integer.class, enumKey);
     }
 
@@ -44,7 +64,7 @@ public interface FeatureContainer {
      * @return the value as primitive double
      * @see FeatureContainer#getFeature(Class, Enum)
      */
-    default double getDoubleFeature(Enum enumKey) {
+    default double getFeatureAsDouble(Enum enumKey) {
         return getFeature(Double.class, enumKey);
     }
 

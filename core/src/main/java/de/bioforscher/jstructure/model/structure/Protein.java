@@ -1,11 +1,10 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -13,11 +12,7 @@ import java.util.stream.Collectors;
  * {@link Chain} objects.<br />
  * Created by S on 27.09.2016.
  */
-public class Protein implements ChainContainer, AtomRecordWriter {
-    /**
-     * The getChain container.
-     */
-    private List<Chain> chains;
+public class Protein extends AbstractFeatureContainer implements ChainContainer {
     /**
      * The <tt>PDB</tt> id of this protein. If none is known (e.g. because this is a modeled structure, the filename is returned)
      */
@@ -26,30 +21,29 @@ public class Protein implements ChainContainer, AtomRecordWriter {
      * The <tt>PDB</tt> description of this protein.
      */
     private String title;
-    private Map<Enum, Object> featureMap;
+    private List<Chain> chains;
 
-    /**
-     * The default constructor.
-     */
     public Protein() {
         this.chains = new ArrayList<>();
-        this.featureMap = new HashMap<>();
     }
 
+    public Protein(List<Chain> chains) {
+        this.chains = chains;
+    }
+
+    @Override
     public List<Chain> getChains() {
         return chains;
     }
 
+    @Override
     public List<Group> getGroups() {
-        return chains()
-                .flatMap(Chain::groups)
-                .collect(Collectors.toList());
+        return chains().flatMap(Chain::groups).collect(Collectors.toList());
     }
 
+    @Override
     public List<Atom> getAtoms() {
-        return getGroups().stream()
-                .flatMap(Group::atoms)
-                .collect(Collectors.toList());
+        return chains().flatMap(Chain::atoms).collect(Collectors.toList());
     }
 
     /**
@@ -57,7 +51,7 @@ public class Protein implements ChainContainer, AtomRecordWriter {
      * @return the number of amino acids, hetatms and nucleotids
      */
     public int getSize() {
-        return (int) residues().count();
+        return (int) groups().count();
     }
 
     /**
@@ -98,17 +92,17 @@ public class Protein implements ChainContainer, AtomRecordWriter {
      * @param chain the getChain to process
      */
     public void addChain(Chain chain) {
-        chains.add(chain);
+        getChains().add(chain);
         chain.setParentProtein(this);
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + " name='" + name + "'";
+    public String getIdentifier() {
+        return name;
     }
 
     @Override
-    public Map<Enum, Object> getFeatureMap() {
-        return featureMap;
+    public String toString() {
+        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' chains='"  + getChains().size() + "'";
     }
 }

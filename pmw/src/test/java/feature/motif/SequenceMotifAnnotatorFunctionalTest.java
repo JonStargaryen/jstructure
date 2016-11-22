@@ -2,6 +2,7 @@ package feature.motif;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,22 +16,24 @@ import java.util.List;
  * Created by S on 24.10.2016.
  */
 public class SequenceMotifAnnotatorFunctionalTest {
-    private ProteinParser proteinParser;
     private Protein protein1acj;
     private Protein protein1brr;
 
     @Before
     public void setup() throws IOException {
-        proteinParser = new ProteinParser();
-        protein1acj = proteinParser.parseProteinById("1acj");
-        protein1brr = proteinParser.parseProteinById("1brr");
+        protein1acj = ProteinParser.parseProteinById("1acj");
+        protein1brr = ProteinParser.parseProteinById("1brr");
     }
 
     @Test
     public void shouldAnnotateSequenceMotifs() {
         SequenceMotifAnnotator sequenceMotifAnnotator = new SequenceMotifAnnotator();
         sequenceMotifAnnotator.process(protein1acj);
-        protein1acj.residues().map(residue -> residue.getFeature(List.class,
-                SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)).forEach(System.out::println);
+        Selection.on(protein1acj)
+                .aminoAcids()
+                .filteredGroups()
+                .map(residue -> residue.getFeature(List.class,
+                        SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF))
+                .forEach(System.out::println);
     }
 }

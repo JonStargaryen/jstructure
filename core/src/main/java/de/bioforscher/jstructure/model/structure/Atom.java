@@ -1,25 +1,24 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.container.Container;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * The most fine-grained element describing a {@link Protein}.
  * Created by S on 27.09.2016.
  */
-public class Atom implements AtomRecordWriter, Container {
+public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
     final Logger logger = LoggerFactory.getLogger(Atom.class);
-    public static final float DEFAULT_BFACTOR = 1.0f;
-    public static final float DEFAULT_OCCUPANCY = 1.0f;
+    private static final float DEFAULT_BFACTOR = 1.0f;
+    private static final float DEFAULT_OCCUPANCY = 1.0f;
+
     private Element element;
     private String name;
     private int pdbSerial;
@@ -28,8 +27,6 @@ public class Atom implements AtomRecordWriter, Container {
     private float occupancy;
     private float bfactor;
     private boolean virtual;
-    private Map<Enum, Object> featureMap;
-
     /**
      * Copy constructor.
      * @param atom the original instance
@@ -43,7 +40,6 @@ public class Atom implements AtomRecordWriter, Container {
         this.occupancy = atom.occupancy;
         this.bfactor = atom.bfactor;
         this.virtual = atom.virtual;
-        this.featureMap = atom.featureMap;
     }
 
     /**
@@ -62,7 +58,6 @@ public class Atom implements AtomRecordWriter, Container {
         this.coordinates = coordinates;
         this.occupancy = occupancy;
         this.bfactor = bfactor;
-        this.featureMap = new HashMap<>();
     }
 
     /**
@@ -158,7 +153,7 @@ public class Atom implements AtomRecordWriter, Container {
     }
 
     /**
-     * Returns the {@link Residue} this atom is associated to.
+     * Returns the {@link Group} this atom is associated to.
      * @return the parent container
      */
     public Group getParentGroup() {
@@ -170,19 +165,19 @@ public class Atom implements AtomRecordWriter, Container {
         try {
             String pdbRecord = AtomRecordProvider.toPDBString(this);
             if (pdbRecord.length() == 0) {
-                logger.warn("peculiar ATOM record {}", this.toString());
+                logger.warn("peculiar ATOM record {}", toString());
             }
             return pdbRecord;
         } catch (NullPointerException e) {
             //TODO replace with actual fallback - will fail for virtual atoms without parent references
-            return this.toString();
+            return toString();
         }
     }
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + " name='" + this.name + "' coords='" +
-                Arrays.toString(this.coordinates) + "' element='" + this.element + "'";
+        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' coords='" +
+                Arrays.toString(coordinates);
     }
 
     /**
@@ -209,13 +204,13 @@ public class Atom implements AtomRecordWriter, Container {
         this.coordinates = coordinates;
     }
 
-    @Override
-    public Map<Enum, Object> getFeatureMap() {
-        return featureMap;
-    }
-
     public boolean isVirtual() {
         return virtual;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return element + "-" + pdbSerial;
     }
 
     /**
@@ -240,7 +235,7 @@ public class Atom implements AtomRecordWriter, Container {
 
         static String toPDBString(Atom atom) {
             Group parentGroup = atom.parentGroup;
-            String record = parentGroup instanceof Residue ? "ATOM  " : "HETATM";
+            String record = parentGroup.getGroupType().equals(Group.GroupType.AMINO_ACID) ? "ATOM  " : "HETATM";
             // format output ...
             String resName = parentGroup.getPdbName();
             String pdbcode = String.valueOf(parentGroup.getResidueNumber());
@@ -256,7 +251,7 @@ public class Atom implements AtomRecordWriter, Container {
             String y = String.format("%8s", d3.format(atom.coordinates[1]));
             String z = String.format("%8s", d3.format(atom.coordinates[2]));
             String occupancy = String.format("%6s", d2.format(atom.occupancy));
-            String tempfactor = String.format("%6s", d2.format(atom.bfactor));
+            String bfactor = String.format("%6s", d2.format(atom.bfactor));
             String leftResName = String.format("%3s", resName);
 
             String s = record +
@@ -273,7 +268,7 @@ public class Atom implements AtomRecordWriter, Container {
                     y +
                     z +
                     occupancy +
-                    tempfactor;
+                    bfactor;
 
             String e = atom.element.toString().toUpperCase();
 

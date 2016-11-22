@@ -3,8 +3,9 @@ package design;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.parser.opm.OPMParser;
 import design.parser.opm.TMHelix;
@@ -63,7 +64,9 @@ public class ProteinSource {
     @SuppressWarnings("unchecked")
     public static Set<SequenceMotif> loadSequenceMotifs() throws IOException {
         Stream<SequenceMotif> motifStream = loadProteins().stream()
-                .flatMap(Protein::residues)
+                .flatMap(protein -> Selection.on(protein)
+                                             .aminoAcids()
+                                             .filteredGroups())
                 .filter(residue -> nonNull(residue.getFeature(List.class,
                         SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
                 .flatMap(residue -> residue.getFeature(List.class,
@@ -75,9 +78,11 @@ public class ProteinSource {
     @SuppressWarnings("unchecked")
     public static Map<String, List<SequenceMotif>> groupSequenceMotifByTopology() throws IOException {
         // fetch all residues
-        Stream<Residue> residues = ProteinSource.loadProteins()
+        Stream<Group> residues = ProteinSource.loadProteins()
                 .stream()
-                .flatMap(Protein::residues);
+                .flatMap(protein -> Selection.on(protein)
+                                             .aminoAcids()
+                                             .filteredGroups());
 
         // create topology map
         Stream<SequenceMotif> motifs = residues
@@ -93,9 +98,9 @@ public class ProteinSource {
     }
 
     public static String determineTopologyGroup(SequenceMotif motif) {
-        boolean startTM = nonNull(motif.getStartResidue().getFeature(TMHelix.class,
+        boolean startTM = nonNull(motif.getStartGroup().getFeature(TMHelix.class,
                 OPMParser.FeatureNames.TM_HELIX));
-        boolean endTM = nonNull(motif.getEndResidue().getFeature(TMHelix.class,
+        boolean endTM = nonNull(motif.getEndGroup().getFeature(TMHelix.class,
                 OPMParser.FeatureNames.TM_HELIX));
 
         if(startTM && endTM) {

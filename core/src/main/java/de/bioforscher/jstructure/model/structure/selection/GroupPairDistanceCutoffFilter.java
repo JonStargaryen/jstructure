@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.model.structure.filter;
+package de.bioforscher.jstructure.model.structure.selection;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Pair;
@@ -8,6 +8,7 @@ import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 
 import java.util.function.Predicate;
 
+@Deprecated
 public class GroupPairDistanceCutoffFilter implements Predicate<Pair<Group, Group>> {
     private final double squaredDistanceCutoff;
     private final RepresentationScheme representationScheme;

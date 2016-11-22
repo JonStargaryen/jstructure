@@ -1,8 +1,10 @@
 package de.bioforscher.jstructure.reconstruction.ca;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.Residue;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,16 +21,25 @@ public class DistanceMapComposer {
     public double[][] computeDistanceMap(Protein protein) {
         double[][] distanceMap = new double[protein.getSize()][protein.getSize()];
         // we need a mapping from residues to their index in the containing list
-        List<Residue> residues = protein.residues().collect(Collectors.toList());
+        List<Group> residues = Selection.on(protein)
+                .aminoAcids()
+                .filteredGroups()
+                .collect(Collectors.toList());
 
-        protein.residuePairs()
+        Combinatorics.uniquePairsOf(protein.getGroups())
                .forEach(pair -> {
-                   Residue first = pair.getLeft();
-                   Residue second = pair.getRight();
+                   Group first = pair.getLeft();
+                   Group second = pair.getRight();
                    int indexFirst = residues.indexOf(first);
                    int indexSecond = residues.indexOf(second);
-                   distanceMap[indexFirst][indexSecond] = LinearAlgebra3D.distance(first.getAlphaCarbon().getCoordinates(),
-                           second.getAlphaCarbon().getCoordinates());
+                   distanceMap[indexFirst][indexSecond] = LinearAlgebra3D.distance(Selection.on(first)
+                                   .alphaCarbonAtoms()
+                                   .asAtom()
+                                   .getCoordinates(),
+                           Selection.on(second)
+                                   .alphaCarbonAtoms()
+                                   .asAtom()
+                                   .getCoordinates());
                });
 
         return distanceMap;

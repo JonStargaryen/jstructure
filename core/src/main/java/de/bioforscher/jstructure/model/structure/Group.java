@@ -1,18 +1,24 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.filter.AtomNameFilter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * Created by S on 06.10.2016.
  */
-public class Group implements AtomContainer, AtomRecordWriter {
-    protected List<Atom> atoms;
-    private Map<Enum, Object> featureMap;
+public class Group extends AbstractFeatureContainer implements AtomContainer {
+    public enum GroupType {
+        AMINO_ACID,
+        NUCLEOTIDE,
+        HETATM
+    }
     private int residueNumber;
+    private List<Atom> atoms;
     /**
      * 3-letter pdb name
      */
@@ -21,21 +27,62 @@ public class Group implements AtomContainer, AtomRecordWriter {
      * Handle to the container element.
      */
     private Chain parentChain;
+    private GroupType groupType;
 
     public Group(String pdbName, int residueNumber) {
         this.pdbName = pdbName;
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
-        this.featureMap = new HashMap<>();
+        this.groupType = determineGroupType();
     }
 
-    @Override
+    public Group(Group group) {
+        this.residueNumber = group.residueNumber;
+        // deep clone entries
+        this.atoms = group.atoms()
+                .map(Atom::new)
+                .collect(Collectors.toList());
+        this.pdbName = group.pdbName;
+        // reference parent
+        this.parentChain = group.parentChain;
+        this.groupType = group.groupType;
+    }
+
+    public Group(List<Atom> atoms) {
+        this.atoms = atoms;
+    }
+
+    private GroupType determineGroupType() {
+        //TODO impl
+        return GroupType.AMINO_ACID;
+    }
+
+    public boolean isAminoAcid() {
+        return groupType.equals(GroupType.AMINO_ACID);
+    }
+
+    public boolean isNucleotide() {
+        return groupType.equals(GroupType.NUCLEOTIDE);
+    }
+
+    public boolean isHetatm() {
+        return groupType.equals(GroupType.HETATM);
+    }
+
     public List<Atom> getAtoms() {
         return atoms;
     }
 
     public String getPdbName() {
         return pdbName;
+    }
+
+    public void setPdbName(String pdbName) {
+        this.pdbName = pdbName;
+    }
+
+    public GroupType getGroupType() {
+        return groupType;
     }
 
     /**
@@ -48,8 +95,7 @@ public class Group implements AtomContainer, AtomRecordWriter {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " name='" + pdbName + "' resNum='" + residueNumber + "' size='" +
-                atoms.size() + "'";
+        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' size='" + getAtoms().size() + "'";
     }
 
     /**
@@ -57,17 +103,8 @@ public class Group implements AtomContainer, AtomRecordWriter {
      * @param atom the atom to process
      */
     public void addAtom(Atom atom) {
-        atoms.add(atom);
+        getAtoms().add(atom);
         atom.setParentGroup(this);
-    }
-
-    Optional<Atom> tryToGetAtomByName(final AtomNameFilter filter) {
-        return atoms().filter(filter).findFirst();
-    }
-
-    Atom getAtomByName(final AtomNameFilter filter) {
-        return tryToGetAtomByName(filter).orElseThrow(() -> new NoSuchElementException(String.format("no atom matching " +
-                "%s in residue %s", filter.getAcceptedAtomNames(), toString())));
     }
 
     /**
@@ -86,7 +123,8 @@ public class Group implements AtomContainer, AtomRecordWriter {
         this.parentChain = parentChain;
     }
 
-    public Map<Enum, Object> getFeatureMap() {
-        return featureMap;
+    @Override
+    public String getIdentifier() {
+        return pdbName + "-" + residueNumber;
     }
 }
