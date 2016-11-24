@@ -31,7 +31,7 @@ public class Z01_MaskNonSequenceMotifResidues {
                  // mask residues not part sequence motif
                  Selection.on(protein)
                          .aminoAcids()
-                         .filteredGroups()
+                         .asFilteredGroups()
                          .filter(Z01_MaskNonSequenceMotifResidues::isNotStartOrEndOfSequenceMotif)
                          .forEach(residue -> residue.setPdbName(AminoAcid.UNKNOWN.getThreeLetterCode()));
 

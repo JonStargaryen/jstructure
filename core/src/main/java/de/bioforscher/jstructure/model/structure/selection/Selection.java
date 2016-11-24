@@ -70,7 +70,7 @@ public class Selection {
             return this;
         }
 
-        public Stream<Atom> filteredAtoms() {
+        public Stream<Atom> asFilteredAtoms() {
             Stream<Atom> filteredAtomStream =  atomContainer.atoms()
                     .filter(Selection.compose(atomPredicates));
             if(cloneRequested) {
@@ -82,7 +82,7 @@ public class Selection {
         }
 
         public AtomContainer asAtomContainer() {
-            return filteredAtoms()
+            return asFilteredAtoms()
                     .collect(StructureCollectors.toAtomContainer());
         }
 
@@ -91,7 +91,7 @@ public class Selection {
         }
 
         public Optional<Atom> asOptionalAtom() {
-            return filteredAtoms()
+            return asFilteredAtoms()
                     .findAny();
         }
 
@@ -100,7 +100,7 @@ public class Selection {
                     .orElseThrow(NoSuchElementException::new);
         }
 
-        public AtomSelection element(List<Element> elements) {
+        public AtomSelection element(Collection<Element> elements) {
             return element(elements.toArray(new Element[elements.size()]));
         }
 
@@ -110,7 +110,7 @@ public class Selection {
             return this;
         }
 
-        public AtomSelection atomName(List<String> atomNames){
+        public AtomSelection atomName(Collection<String> atomNames){
             return atomName(atomNames.toArray(new String[atomNames.size()]));
         }
 
@@ -211,7 +211,7 @@ public class Selection {
             return this;
         }
 
-        public Stream<Group> filteredGroups() {
+        public Stream<Group> asFilteredGroups() {
             Stream<Group> filteredGroupStream =  groupContainer.groups()
                     .filter(Selection.compose(groupPredicates));
             if(cloneRequested) {
@@ -223,7 +223,7 @@ public class Selection {
         }
 
         public GroupContainer asGroupContainer() {
-            return filteredGroups()
+            return asFilteredGroups()
                     .collect(StructureCollectors.toGroupContainer());
         }
 
@@ -232,7 +232,7 @@ public class Selection {
         }
 
         public Optional<Group> asOptionalGroup() {
-            return filteredGroups()
+            return asFilteredGroups()
                     .findAny();
         }
         public Group asGroup() {
@@ -298,7 +298,7 @@ public class Selection {
             return this;
         }
 
-        public Stream<Chain> filteredChains() {
+        public Stream<Chain> asFilteredChains() {
             Stream<Chain> filteredChainStream = chainContainer.chains()
                     .filter(Selection.compose(chainPredicates));
             if(cloneRequested) {
@@ -310,12 +310,12 @@ public class Selection {
         }
 
         public ChainContainer asChainContainer() {
-            return filteredChains()
+            return asFilteredChains()
                     .collect(StructureCollectors.toChainContainer());
         }
 
         public Optional<Chain> asOptionalChain() {
-            return filteredChains()
+            return asFilteredChains()
                     .findAny();
         }
 
@@ -324,8 +324,9 @@ public class Selection {
                     .orElseThrow(NoSuchElementException::new);
         }
 
-        public ChainSelection chainName(String chainName) {
-            chainPredicates.add(chain -> chain.getChainId().equals(chainName));
+        public ChainSelection chainName(String... chainNames) {
+            chainPredicates.add(chain -> Stream.of(chainNames)
+                    .anyMatch(groupName -> groupName.equals(chain.getChainId())));
             return this;
         }
     }
@@ -346,7 +347,7 @@ public class Selection {
             return this;
         }
 
-        public Stream<Pair<Atom, Atom>> filteredAtomPairs() {
+        public Stream<Pair<Atom, Atom>> asFilteredAtomPairs() {
             return atomPairs.stream()
                     .filter(Selection.compose(atomPairPredicates));
         }
@@ -377,7 +378,7 @@ public class Selection {
             return this;
         }
 
-        public Stream<Pair<Group, Group>> filteredGroupPairs() {
+        public Stream<Pair<Group, Group>> asFilteredGroupPairs() {
             return groupPairs.stream()
                     .filter(Selection.compose(groupPairPredicates));
         }

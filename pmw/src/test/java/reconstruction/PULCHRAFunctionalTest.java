@@ -45,7 +45,7 @@ public class PULCHRAFunctionalTest {
                 .asGroupContainer();
         List<Atom> alphaCarbons = Selection.on(residues)
                 .alphaCarbonAtoms()
-                .filteredAtoms()
+                .asFilteredAtoms()
                 .collect(Collectors.toList());
         proteinCopy.clearAtoms();
         Combinatorics.sequentialPairsOf(residues.getGroups(), alphaCarbons)

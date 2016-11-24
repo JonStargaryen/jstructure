@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.scheme;
 
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -19,6 +19,6 @@ public class SideChainCentroidRepresentationScheme implements RepresentationSche
         AtomContainer sideChainAtoms = Selection.on(group)
                 .sideChainAtoms()
                 .asAtomContainer();
-        return new Atom(CoordinateUtils.centroid(sideChainAtoms));
+        return new Atom(CoordinateManipulations.centroid(sideChainAtoms));
     }
 }

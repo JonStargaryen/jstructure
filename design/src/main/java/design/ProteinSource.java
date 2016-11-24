@@ -66,7 +66,7 @@ public class ProteinSource {
         Stream<SequenceMotif> motifStream = loadProteins().stream()
                 .flatMap(protein -> Selection.on(protein)
                                              .aminoAcids()
-                                             .filteredGroups())
+                                             .asFilteredGroups())
                 .filter(residue -> nonNull(residue.getFeature(List.class,
                         SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
                 .flatMap(residue -> residue.getFeature(List.class,
@@ -82,7 +82,7 @@ public class ProteinSource {
                 .stream()
                 .flatMap(protein -> Selection.on(protein)
                                              .aminoAcids()
-                                             .filteredGroups());
+                                             .asFilteredGroups());
 
         // create topology map
         Stream<SequenceMotif> motifs = residues

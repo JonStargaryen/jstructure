@@ -82,7 +82,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
         group.setFeature(FeatureNames.ACCESSIBLE_SURFACE_AREA,
                 Selection.on(group)
                         .nonHydrogenAtoms()
-                        .filteredAtoms()
+                        .asFilteredAtoms()
                         .mapToDouble(this::calcSingleAsa)
                         .sum());
     }
@@ -185,7 +185,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
         final double cutoff = probeSize + probeSize + atom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS);
         return Selection.on(nonHydrogenAtoms)
                 .distance(atom, cutoff)
-                .filteredAtoms()
+                .asFilteredAtoms()
                 .collect(Collectors.toList());
     }
 

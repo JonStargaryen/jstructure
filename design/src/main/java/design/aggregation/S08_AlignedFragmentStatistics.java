@@ -2,7 +2,7 @@ package design.aggregation;
 
 import de.bioforscher.jstructure.alignment.svd.ConsensusTreeComposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -49,7 +49,7 @@ public class S08_AlignedFragmentStatistics {
                                 AtomContainer consensus = consensusTreeComposer.getConsensus();
 
                                 for(AtomContainer observation : alignedEnsemble) {
-                                    double rmsd = CoordinateUtils.calculateRMSD(Selection.on(observation)
+                                    double rmsd = CoordinateManipulations.calculateRMSD(Selection.on(observation)
                                             .backboneAtoms()
                                             .asAtomContainer(),
                                             Selection.on(consensus)

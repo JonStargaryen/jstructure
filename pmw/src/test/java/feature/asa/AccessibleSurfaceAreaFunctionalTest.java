@@ -47,7 +47,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
         // return complete DSSP annotation string from jstructrue
         return Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue ->
                         residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA))
                 .collect(Collectors.toList());

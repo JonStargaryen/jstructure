@@ -28,7 +28,7 @@ public class TMHelix {
         // extract residues
         this.residues = Selection.on(chain)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .filter(residue -> residue.getResidueNumber() >= startResNum && residue.getResidueNumber() <= endResNum)
                 .collect(StructureCollectors.toGroupContainer());
     }

@@ -31,7 +31,7 @@ public class SequenceMotifAnnotatorFunctionalTest {
         sequenceMotifAnnotator.process(protein1acj);
         Selection.on(protein1acj)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getFeature(List.class,
                         SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF))
                 .forEach(System.out::println);

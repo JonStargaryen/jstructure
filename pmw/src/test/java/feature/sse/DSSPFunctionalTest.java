@@ -45,7 +45,7 @@ public class DSSPFunctionalTest {
         // return complete DSSP annotation string from jstructrue
         return Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getFeature(de.bioforscher.jstructure.feature.sse.SecStrucState.class,
                         SecondaryStructureAnnotator.FeatureNames.SECONDARY_STRUCTURE_STATES))
                 .map(de.bioforscher.jstructure.feature.sse.SecStrucState::getSecondaryStructure)

@@ -14,6 +14,13 @@ import java.util.stream.Collectors;
  */
 public class Protein extends AbstractFeatureContainer implements ChainContainer {
     /**
+     * reference to an undefined protein - this is used by chains without explicit parent reference
+     */
+    static final Protein UNKNOWN_PROTEIN = new Protein();
+    static {
+        UNKNOWN_PROTEIN.setName("UNKNOWN PROTEIN");
+    }
+    /**
      * The <tt>PDB</tt> id of this protein. If none is known (e.g. because this is a modeled structure, the filename is returned)
      */
     private String name;
@@ -26,6 +33,15 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
 
     public Protein() {
         this.chains = new ArrayList<>();
+    }
+
+    public Protein(Protein protein) {
+        this.name = protein.name;
+        this.title = protein.title;
+        this.chains = protein.chains()
+                .map(Chain::new)
+                .collect(Collectors.toList());
+        this.identifier = protein.identifier;
     }
 
     public Protein(List<Chain> chains) {

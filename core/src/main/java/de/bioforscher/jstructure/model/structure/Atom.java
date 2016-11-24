@@ -164,7 +164,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
      * @return the parent container
      */
     public Group getParentGroup() {
-        return parentGroup;
+        return parentGroup != null ? parentGroup : Group.UNKNOWN_GROUP;
     }
 
     @Override

@@ -22,20 +22,20 @@ public class Demo {
         // print all getResidue pairs whose distance is less than 8.0 A
         Selection.pairsOn(protein)
                 .alphaCarbonDistance(8.0)
-                .filteredGroupPairs()
+                .asFilteredGroupPairs()
                 .forEach(System.out::println);
 
         // print coordinates of all alanines
         Selection.on(protein)
                 .aminoAcids(AminoAcid.ALANINE)
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(Group::composePDBRecord)
                 .forEach(System.out::println);
 
         // count all alanines
         double alanineRatio = Selection.on(protein)
                 .aminoAcids(AminoAcid.ALANINE)
-                .filteredGroups()
+                .asFilteredGroups()
                 .count() / (double) protein.getSize() * 100.0;
 
         // store count

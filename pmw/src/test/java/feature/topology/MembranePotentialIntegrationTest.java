@@ -35,7 +35,7 @@ public class MembranePotentialIntegrationTest {
         Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
         Selection.on(protein1brr)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getParentChain().getChainId() + "-" +
                         AminoAcid.valueOfIgnoreCase(residue.getPdbName()) + "-" + residue.getResidueNumber() + " : " +
                         membrane.distanceToMembraneCenter(residue))
@@ -47,7 +47,7 @@ public class MembranePotentialIntegrationTest {
         Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
         Selection.on(protein1brr)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getParentChain().getChainId() + "-" +
                         AminoAcid.valueOfIgnoreCase(residue.getPdbName()) + "-" + residue.getResidueNumber() + " : " +
                         membrane.computePotential(residue))

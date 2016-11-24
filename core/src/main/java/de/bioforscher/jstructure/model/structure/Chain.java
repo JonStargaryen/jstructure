@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
  * Created by S on 27.09.2016.
  */
 public class Chain extends AbstractFeatureContainer implements GroupContainer {
+    /**
+     * reference to an undefined chain - this is used by groups without explicit parent reference
+     */
+    static final Chain UNKNOWN_CHAIN = new Chain("X");
+
     private List<Group> groups;
     /**
      * The unique getChain name. Usually one character, e.g. 'A'.
@@ -76,7 +81,7 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
      * @return the parent container
      */
     public Protein getParentProtein() {
-        return parentProtein;
+        return parentProtein != null ? parentProtein : Protein.UNKNOWN_PROTEIN;
     }
 
     @Override

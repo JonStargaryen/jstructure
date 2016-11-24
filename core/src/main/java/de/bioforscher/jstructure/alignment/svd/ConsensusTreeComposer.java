@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment.svd;
 
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.BinaryTree;
 import de.bioforscher.jstructure.model.Combinatorics;
@@ -179,7 +179,7 @@ public class ConsensusTreeComposer {
 
         AlignmentPair(AtomContainer atomContainer1, AtomContainer atomContainer2) {
             super(atomContainer1, atomContainer2);
-            this.rmsd = CoordinateUtils.calculateRMSD(getLeft(), getRight());
+            this.rmsd = CoordinateManipulations.calculateRMSD(getLeft(), getRight());
         }
 
         double getRmsd() {

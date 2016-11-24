@@ -49,7 +49,7 @@ public class StructureCollectors {
 
         ProteinSuperimposerByReference() {
             alignedProteins = new ArrayList<>();
-            alignmentStrategy = new SVDSuperimposer(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES);
+            alignmentStrategy = new SVDSuperimposer();
         }
 
         @Override

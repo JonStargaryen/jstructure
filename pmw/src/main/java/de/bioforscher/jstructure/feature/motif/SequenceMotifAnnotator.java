@@ -32,7 +32,7 @@ public class SequenceMotifAnnotator implements FeatureProvider {
         // we need getChain information as motifs cannot be part of 2 chains
         Map<String, List<Group>> chains = Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .collect(Collectors.groupingBy(residue -> residue.getParentChain().getChainId()));
         for (String chainId : chains.keySet()) {
             List<Group> residueInChain = chains.get(chainId);

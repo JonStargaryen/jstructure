@@ -30,7 +30,7 @@ public class S04_ExtractSecondaryStructure {
         // print sequence
         System.out.println(Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(Group::getPdbName)
                 .map(AminoAcid::valueOfIgnoreCase)
                 .map(AminoAcid::getOneLetterCode)
@@ -40,7 +40,7 @@ public class S04_ExtractSecondaryStructure {
         // print sequence motifs
         System.out.println(Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getFeature(List.class,
                       SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF))
                 .map(entry -> Objects.isNull(entry) || entry.isEmpty() ? " " : "S")
@@ -50,7 +50,7 @@ public class S04_ExtractSecondaryStructure {
         // print topology
         System.out.println(Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getFeature(TMHelix.class, OPMParser.FeatureNames.TM_HELIX))
                 .map(entry -> Objects.isNull(entry) ? " " : "M")
                 .collect(Collectors.joining("", "top: ", ""))
@@ -59,7 +59,7 @@ public class S04_ExtractSecondaryStructure {
         // print secondary structure information
         System.out.println(Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .map(residue -> residue.getFeature(SecStrucState.class,
                       SecondaryStructureAnnotator.FeatureNames.SECONDARY_STRUCTURE_STATES))
                 .map(state -> state.getSecondaryStructure().getReducedRepresentation())

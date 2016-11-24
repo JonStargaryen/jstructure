@@ -1,7 +1,7 @@
 package mathematics;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static util.TestUtils.TOLERANT_ERROR_MARGIN;
 
 /**
- * Unit tests for CoordinateUtils.
+ * Unit tests for CoordinateManipulations.
  * Created by S on 24.10.2016.
  */
 public class CoordinateUtilsUnitTest {
@@ -39,7 +39,7 @@ public class CoordinateUtilsUnitTest {
         System.out.printf("rotating %s by -90 degree yields ", Arrays.toString(point));
         // describes a rotation by 90°
         double[][] rotation = {{ 0, -1, 0 },{ 1, 0, 0 },{ 0, 0, 1 }};
-        CoordinateUtils.Transformation transformation = new CoordinateUtils.Transformation(rotation);
+        CoordinateManipulations.Transformation transformation = new CoordinateManipulations.Transformation(rotation);
         Atom atom = new Atom(point);
         transformation.transformCoordinates(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
@@ -55,7 +55,7 @@ public class CoordinateUtilsUnitTest {
                 Arrays.toString(point));
         // describes a rotation by 90°
         double[][] rotation = { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
-        CoordinateUtils.Transformation transformation = new CoordinateUtils.Transformation(translation, rotation);
+        CoordinateManipulations.Transformation transformation = new CoordinateManipulations.Transformation(translation, rotation);
         Atom atom = new Atom(point);
         transformation.transformCoordinates(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
@@ -66,7 +66,7 @@ public class CoordinateUtilsUnitTest {
     public void testAtomPairsInContact() {
         final double cutoff = 8.0;
         Selection.pairsOn(protein1acj).distance(cutoff)
-                .filteredAtomPairs()
+                .asFilteredAtomPairs()
                 .filter(pair -> LinearAlgebra3D.distance(pair.getLeft().getCoordinates(),
                                                             pair.getRight().getCoordinates()) > cutoff)
                 .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
@@ -77,7 +77,7 @@ public class CoordinateUtilsUnitTest {
     public void testResiduePairsInContact() {
         final double cutoff = 8.0;
         Selection.pairsOn(protein1acj).alphaCarbonDistance(cutoff)
-                .filteredGroupPairs()
+                .asFilteredGroupPairs()
                 .filter(pair -> LinearAlgebra3D.distance(Selection.on(pair.getLeft())
                         .alphaCarbonAtoms()
                         .asAtom()
@@ -92,7 +92,7 @@ public class CoordinateUtilsUnitTest {
 
     @Test
     public void testCenterOfMassWithProtein() {
-        double[] com1 = CoordinateUtils.centerOfMass(protein1acj);
+        double[] com1 = CoordinateManipulations.centerOfMass(protein1acj);
         double[] com2 = centerOfMass(protein1acj);
         System.out.println("api-centerOfMass: " + Arrays.toString(com1) + " test-centerOfMass: " + Arrays.toString(com2));
 
@@ -118,26 +118,26 @@ public class CoordinateUtilsUnitTest {
 
     @Test
     public void testMaximalExtentWithProtein() {
-        double maximalExtent = CoordinateUtils.maximalExtent(protein1acj);
+        double maximalExtent = CoordinateManipulations.maximalExtent(protein1acj);
         System.out.println(maximalExtent);
         //TODO this needs a real test
     }
 
     @Test
     public void shouldResultInCenteredStructure() {
-        CoordinateUtils.center(protein1acj);
-        Assert.assertArrayEquals(CoordinateUtils.centroid(protein1acj),
+        CoordinateManipulations.center(protein1acj);
+        Assert.assertArrayEquals(CoordinateManipulations.centroid(protein1acj),
                 AlignmentAlgorithm.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void shouldReturnNoDifferenceInRMSDForIdenticalProtein() {
-        double rmsd = CoordinateUtils.calculateRMSD(protein1acj, protein1acj);
+        double rmsd = CoordinateManipulations.calculateRMSD(protein1acj, protein1acj);
         Assert.assertEquals(0.0, rmsd, 0.0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailForRMSDCalculationOfDifferentProteins() {
-        CoordinateUtils.calculateRMSD(protein1acj, protein1brr);
+        CoordinateManipulations.calculateRMSD(protein1acj, protein1brr);
     }
 }

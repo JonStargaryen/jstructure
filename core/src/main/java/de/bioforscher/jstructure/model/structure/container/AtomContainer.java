@@ -1,9 +1,8 @@
 package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
 
-import java.util.Arrays;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,7 +41,12 @@ public interface AtomContainer extends StructureContainer {
         getAtoms().removeIf(Atom::isVirtual);
     }
 
-    static AtomContainer of(Atom... atoms) {
-        return new Group(Arrays.asList(atoms));
+    default AtomContainer getCopy() {
+        try {
+            return getClass().getConstructor(getClass()).newInstance(this);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            //TODO error-handling and proper exception
+            throw new UnsupportedOperationException(e);
+        }
     }
 }

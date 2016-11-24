@@ -1,16 +1,13 @@
 package de.bioforscher.jstructure.reconstruction.ca;
 
 import de.bioforscher.jstructure.mathematics.mds.MultiDimensionalScaling;
-import de.bioforscher.jstructure.model.Combinatorics;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * A rather basic reconstruction algorithm for the placement of CA atoms by knowing their atomic distances. Finds a
@@ -25,7 +22,7 @@ public class MultiDimensionalScalingReconstruction implements ReconstructionAlgo
         List<Group> residues = Selection.on(protein)
                 .aminoAcids()
                 .cloneElements()
-                .filteredGroups()
+                .asFilteredGroups()
                 .collect(Collectors.toList());
 
         // create mapping using MDS
@@ -33,10 +30,7 @@ public class MultiDimensionalScalingReconstruction implements ReconstructionAlgo
         double[][] distanceMap = protein.getFeature(double[][].class, DistanceMapComposer.FeatureNames.DISTANCE_MAP);
         List<double[]> placedAtoms = mds.computeEmbedding(distanceMap);
 
-        Combinatorics.sequentialPairsOf(residues, placedAtoms)
-            .forEach(pair -> {
-                Group residue = pair.getLeft();
-                residue.addAtom(new Atom("CA", 0, Element.C, pair.getRight()));
-            });
+        IntStream.range(0, residues.size())
+                .forEach(i -> residues.get(i).addAtom(new Atom(AminoAcid.ATOM_NAMES.CA_ATOM_NAME, 0, Element.C, placedAtoms.get(i))));
     }
 }

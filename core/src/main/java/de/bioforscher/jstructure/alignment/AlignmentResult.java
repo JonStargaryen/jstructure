@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 /**
@@ -12,7 +12,7 @@ public class AlignmentResult {
     private final AtomContainer reference;
     private final AtomContainer query;
     private final double rmsd;
-    private final CoordinateUtils.Transformation transformation;
+    private final CoordinateManipulations.Transformation transformation;
 
     /**
      * Constructs a new alignment result container.
@@ -27,17 +27,17 @@ public class AlignmentResult {
         this.reference = reference;
         this.query = query;
         this.rmsd = rmsd;
-        this.transformation = new CoordinateUtils.Transformation(translation, rotation);
+        this.transformation = new CoordinateManipulations.Transformation(translation, rotation);
     }
 
     /**
      * Convenience method to transform a {@link AtomContainer} based on the
      * translation and rotation described by this alignment result.
      * @param atomContainer the atom collection to transform
-     * @see CoordinateUtils#transform(AtomContainer, double[], double[][])
+     * @see CoordinateManipulations#transform(AtomContainer, double[], double[][])
      */
     public void transform(AtomContainer atomContainer) {
-        CoordinateUtils.transform(atomContainer, transformation);
+        CoordinateManipulations.transform(atomContainer, transformation);
     }
 
     /**

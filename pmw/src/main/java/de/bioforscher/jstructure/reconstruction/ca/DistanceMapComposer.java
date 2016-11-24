@@ -23,7 +23,7 @@ public class DistanceMapComposer {
         // we need a mapping from residues to their index in the containing list
         List<Group> residues = Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .collect(Collectors.toList());
 
         Combinatorics.uniquePairsOf(protein.getGroups())

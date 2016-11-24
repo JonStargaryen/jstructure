@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.reconstruction.sidechain.pulchra;
 
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.*;
@@ -83,7 +83,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
         // TODO again reconstruct missing leading/tailing residues
         Combinatorics.fragmentsOf(Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .collect(Collectors.toList()), 4)
                 .forEach(fragment -> {
                     Group residueToReconstruct = fragment.getElement(2);
@@ -148,7 +148,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
                         Atom reconstructedAtom = new Atom(atomName, 0,
                                 Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
                         // transform atom
-                        reconstructedAtom = new CoordinateUtils.Transformation(ca_tr,
+                        reconstructedAtom = new CoordinateManipulations.Transformation(ca_tr,
                                 rotation).transformCoordinates(reconstructedAtom);
                         residueToReconstruct.addAtom(reconstructedAtom);
                     }

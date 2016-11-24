@@ -17,6 +17,12 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
         NUCLEOTIDE,
         HETATM
     }
+
+    /**
+     * reference to an undefined group - this is used by atoms without explicit parent reference
+     */
+    static final Group UNKNOWN_GROUP = new Group(AminoAcid.UNKNOWN.getThreeLetterCode(), 0);
+
     private int residueNumber;
     private List<Atom> atoms;
     /**
@@ -117,7 +123,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
      * @return the parent container
      */
     public Chain getParentChain() {
-        return parentChain;
+        return parentChain != null ? parentChain : Chain.UNKNOWN_CHAIN;
     }
 
     /**

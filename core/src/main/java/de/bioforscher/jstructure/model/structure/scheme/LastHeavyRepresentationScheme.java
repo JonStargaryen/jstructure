@@ -21,7 +21,7 @@ public class LastHeavyRepresentationScheme implements RepresentationScheme {
         final Atom alphaCarbon = alphaCarbonRepresentationScheme.determineRepresentingAtom(group);
         return Selection.on(group)
                 .nonHydrogenAtoms()
-                .filteredAtoms()
+                .asFilteredAtoms()
                 .max((a1, a2) -> LinearAlgebra3D.distanceFast(alphaCarbon.getCoordinates(), a1.getCoordinates()) <
                         LinearAlgebra3D.distanceFast(alphaCarbon.getCoordinates(), a2.getCoordinates()) ? 1 : -1).get();
     }

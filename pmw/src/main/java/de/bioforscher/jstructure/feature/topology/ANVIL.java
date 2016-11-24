@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.AminoAcid;
@@ -133,8 +133,8 @@ public class ANVIL implements FeatureProvider {
                 .alphaCarbonAtoms()
                 .asAtomContainer();
         // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
-        this.centerOfMass = CoordinateUtils.centroid(alphaCarbons);
-        this.maximalExtent = 1.2 * CoordinateUtils.maximalExtent(alphaCarbons, centerOfMass);
+        this.centerOfMass = CoordinateManipulations.centroid(alphaCarbons);
+        this.maximalExtent = 1.2 * CoordinateManipulations.maximalExtent(alphaCarbons, centerOfMass);
         
         this.initialHphobHphil = hphobHphil();
         Membrane initialMembrane = processSpherePoints(generateSpherePoints(numberOfSpherePoints));
@@ -190,7 +190,7 @@ public class ANVIL implements FeatureProvider {
         return Selection.on(protein)
                     .aminoAcids()
                     .alphaCarbonAtoms()
-                    .filteredAtoms()
+                    .asFilteredAtoms()
                     .map(Atom::getCoordinates)
                     .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
                     .min()
@@ -204,7 +204,7 @@ public class ANVIL implements FeatureProvider {
         protein.setFeature(ANVIL.FeatureNames.MEMBRANE, membrane);
         Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 .filter(residue -> isInMembranePlane(Selection.on(residue)
                                 .alphaCarbonAtoms()
                                 .asAtom()
@@ -328,7 +328,7 @@ public class ANVIL implements FeatureProvider {
     private int[] hphobHphil(final boolean checkMembranePlane, final double[] diam, final double[] c1, final double[] c2) {
         return Selection.on(protein)
                 .aminoAcids()
-                .filteredGroups()
+                .asFilteredGroups()
                 // select out exposed residues
                 .filter(asaFilter)
                 // select for residues within the membrane plane

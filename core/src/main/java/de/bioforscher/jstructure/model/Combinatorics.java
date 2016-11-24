@@ -68,7 +68,7 @@ public class Combinatorics {
     public static <L, R> Stream<Pair<L, R>> sequentialPairsOf(List<L> collection1, List<R> collection2) {
         if(collection1.size() != collection2.size()) {
             throw new IllegalArgumentException("collections must agree in size. found " + collection1.size() + " and " +
-                    collection2.size() + "\ncoll1:\n" + collection1 + "\n" + collection2);
+                    collection2.size());
         }
 
         return IntStream.range(0, collection1.size())

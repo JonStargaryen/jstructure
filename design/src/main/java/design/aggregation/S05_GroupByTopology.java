@@ -30,7 +30,7 @@ public class S05_GroupByTopology {
             .stream()
             .flatMap(protein -> Selection.on(protein)
                     .aminoAcids()
-                    .filteredGroups())
+                    .asFilteredGroups())
             .filter(residue -> nonNull(residue.getFeature(List.class,
                     SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
             .flatMap(residue -> residue.getFeature(List.class,

@@ -3,8 +3,6 @@ package de.bioforscher.jstructure.alignment;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import org.apache.commons.math3.linear.MatrixUtils;
 
-import java.util.List;
-
 /**
  * Defines the capabilities of an implementing algorithm to align two atom collections. The alignment is reported as
  * {@link AlignmentResult} object which can be used to recreate the alignment - even though the coordinates of the 2nd
@@ -32,11 +30,4 @@ public interface AlignmentAlgorithm {
      * @return statistics on the alignment
      */
     AlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2);
-
-    /**
-     * Reports what atoms are aligned by this algorithm. Some will align all atoms handed to them, some will selectionBuilder the
-     * considered atoms by name.
-     * @return the collection of aligned atom names the implementing algorithm applies
-     */
-    List<String> getAlignedAtomNames();
 }

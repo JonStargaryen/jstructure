@@ -31,4 +31,9 @@ public interface GroupContainer extends AtomContainer {
                 .map(AminoAcid::getOneLetterCode)
                 .collect(Collectors.joining());
     }
+
+    @Override
+    default GroupContainer getCopy() {
+        return (GroupContainer) AtomContainer.super.getCopy();
+    }
 }

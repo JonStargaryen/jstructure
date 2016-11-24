@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.scheme;
 
-import de.bioforscher.jstructure.mathematics.CoordinateUtils;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -20,6 +20,6 @@ public class BetaCarbonRepresentationScheme implements RepresentationScheme {
         return Selection.on(group)
                 .betaCarbonAtoms()
                 .asOptionalAtom()
-                .orElse(new Atom(CoordinateUtils.centroid(group)));
+                .orElse(new Atom(CoordinateManipulations.centroid(group)));
     }
 }
