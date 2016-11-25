@@ -1,0 +1,243 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>D3.js Calendar Heatmap</title>
+    <style>
+        text.month-name,
+        text.calendar-heatmap-legend-text,
+        text.day-initial {
+            font-size: 10px;
+            fill: #aaaaaa;
+            font-family: Helvetica, arial, 'Open Sans', sans-serif
+        }
+        .day-cell {
+            border: 1px solid gray;
+        }
+        rect.day-cell:hover {
+            stroke: #555555;
+            stroke-width: 1px;
+        }
+        .day-cell-tooltip {
+            position: absolute;
+            z-index: 9999;
+            padding: 5px 9px;
+            color: #bbbbbb;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 3px;
+            text-align: center;
+        }
+        .day-cell-tooltip > span {
+            font-family: Helvetica, arial, 'Open Sans', sans-serif
+        }
+        .calendar-heatmap {
+            box-sizing: initial;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="container"></div>
+
+<script type="text/javascript">
+    function calendarHeatmap() {
+        var selector = 'body';
+        var SQUARE_LENGTH = 11;
+        var SQUARE_PADDING = 2;
+        var MONTH_LABEL_PADDING = 6;
+        var data = [];
+        var colorRange = ['#D8E6E7', '#218380'];
+        var tooltipEnabled = true;
+        var legendEnabled = false;
+        var aminoAcids = ["A", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "Y"];
+        var width;
+        var height;
+
+        // setters and getters
+        chart.data = function (value) {
+            if (!arguments.length) { return data; }
+            data = value;
+            return chart;
+        };
+
+        chart.selector = function (value) {
+            if (!arguments.length) { return selector; }
+            selector = value;
+            return chart;
+        };
+
+        chart.colorRange = function (value) {
+            if (!arguments.length) { return colorRange; }
+            colorRange = value;
+            return chart;
+        };
+
+        chart.tooltipEnabled = function (value) {
+            if (!arguments.length) { return tooltipEnabled; }
+            tooltipEnabled = value;
+            return chart;
+        };
+
+        chart.legendEnabled = function (value) {
+            if (!arguments.length) { return legendEnabled; }
+            legendEnabled = value;
+            return chart;
+        };
+
+        function chart() {
+            d3.select(chart.selector()).selectAll('svg.calendar-heatmap').remove(); // remove the existing chart, if it exists
+
+            var max = d3.max(chart.data()); // max data value
+
+            // color range
+            var color = d3.scale.linear()
+                .range(chart.colorRange())
+                .domain([0, max]);
+
+            var dayRects;
+
+            drawChart();
+
+            function drawChart() {
+                <!-- TODO respect legend -->
+                var width = 25 + motifPosition(chart.data().length) * (SQUARE_LENGTH + SQUARE_PADDING);
+                var height = (aminoAcids.length + 2) *  (SQUARE_LENGTH + SQUARE_PADDING);
+
+                var svg = d3.select(chart.selector())
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('class', 'calendar-heatmap')
+                    .attr('height', height)
+                    .style('padding', '36px');
+
+                dayRects = svg.selectAll('.day-cell')
+                    .data(chart.data());
+
+                dayRects.enter().append('rect')
+                    .attr('class', 'day-cell')
+                    .attr('width', SQUARE_LENGTH)
+                    .attr('height', SQUARE_LENGTH)
+                    .attr('fill', 'gray')
+                    .attr('x', function (d, i) {
+                        var result = motifPosition(i);
+                        return result * (SQUARE_LENGTH + SQUARE_PADDING) + 25;
+                    })
+                    .attr('y', function (d, i) {
+                        return MONTH_LABEL_PADDING + aminoAcidIndex(i) * (SQUARE_LENGTH + SQUARE_PADDING) + 15;
+                    });
+
+                if (chart.tooltipEnabled()) {
+                    dayRects.on('mouseover', function (d, i) {
+                        tooltip = d3.select(chart.selector())
+                            .append('div')
+                            .attr('class', 'day-cell-tooltip')
+                            .html('<strong>' + aminoAcids[aminoAcidIndex(i)] + '</strong> frequency at postition <strong>' + (motifPosition(i) + 1) + '</strong>: <strong>' + round2Fixed(d) + '</strong>')
+                            .style('left', function () { return motifPosition(i) * SQUARE_LENGTH + 'px'; })
+                            .style('top', function () {
+                                return aminoAcidIndex(i) * (SQUARE_LENGTH + SQUARE_PADDING) + MONTH_LABEL_PADDING * 3 + 'px';
+                            });
+                    }).on('mouseout', function (d, i) {
+                        tooltip.remove();
+                    });
+                }
+
+                if (chart.legendEnabled()) {
+                    var colorRange = [color(0)];
+                    for (var i = 1; i <= 4; i++) {
+                        console.log(color(max / i));
+                        colorRange.push(color(max / i));
+                    }
+
+                    var legendGroup = svg.append('g');
+                    legendGroup.selectAll('.calendar-heatmap-legend')
+                        .data(colorRange)
+                        .enter()
+                        .append('rect')
+                        .attr('class', 'calendar-heatmap-legend')
+                        .attr('width', SQUARE_LENGTH)
+                        .attr('height', SQUARE_LENGTH)
+                        .attr('x', width - SQUARE_LENGTH)
+                        .attr('y', function (d, i) { return 30 + (i + 1) * 13; })
+                        .attr('fill', function (d) { return d; });
+
+                    legendGroup.append('text')
+                        .attr('class', 'calendar-heatmap-legend-text')
+                        .attr('x', width - SQUARE_LENGTH)
+                        .attr('y', height - 2 * SQUARE_LENGTH)
+                        .text('Rare');
+
+                    legendGroup.append('text')
+                        .attr('class', 'calendar-heatmap-legend-text')
+                        .attr('x', width - SQUARE_LENGTH)
+                        .attr('y', height - 2 * SQUARE_LENGTH)
+                        .text('Common');
+                }
+
+                // amino acid labels
+                aminoAcids.forEach(function (aminoAcid, index) {
+                    svg.append('text')
+                        .attr('class', 'day-initial')
+                        .attr('transform', 'translate(10,' + (15 + (SQUARE_LENGTH + SQUARE_PADDING) * (index + 1)) + ')')
+                        .style('text-anchor', 'middle')
+                        .attr('dy', '2')
+                        .text(aminoAcid);
+                });
+
+                // sequence motif positions
+                for (var i = 1; i <= motifPosition(chart.data().length); i++) {
+                    svg.append('text')
+                        .attr('class', 'day-initial')
+                        .attr('transform', 'translate(' + (17 + (SQUARE_LENGTH + SQUARE_PADDING) * i) + ',10)')
+                        .style('text-anchor', 'middle')
+                        .attr('dy', '2')
+                        .text(i);
+                }
+            }
+
+            function aminoAcidIndex(d) {
+                return d % aminoAcids.length;
+            }
+
+            function motifPosition(d) {
+                return Math.floor(d / aminoAcids.length);
+            }
+
+            function round2Fixed(value) {
+                value = +value;
+
+                if (isNaN(value))
+                    return NaN;
+
+                value = value.toString().split('e');
+                value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + 2) : 2)));
+
+                value = value.toString().split('e');
+                return (+(value[0] + 'e' + (value[1] ? (+value[1] - 2) : -2))).toFixed(2);
+            }
+
+            // set color to rects
+            dayRects.attr('fill', function (d, i) {
+                return color(chart.data()[i]);
+            });
+        }
+
+        return chart;
+    }
+
+</script>
+
+<script type="text/javascript">
+    var chartData = [];
+    for (var i = 0; i < 20 * 5; i ++) {
+        chartData.push(Math.random());
+    }
+
+    var heatmap = calendarHeatmap()
+        .data(chartData)
+        .selector('.container')
+        .colorRange(['#f4f7f7', '#79a8a9']);
+    heatmap();  // render the chart
+</script>
+</body>
+</html>
