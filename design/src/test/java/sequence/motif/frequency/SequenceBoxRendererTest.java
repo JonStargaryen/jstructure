@@ -1,6 +1,8 @@
-package design;
+package sequence.motif.frequency;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
+import design.DesignConstants;
+import design.sequence.motif.frequency.SequenceBoxRenderer;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.stream.Stream;
 /**
  * Created by S on 24.11.2016.
  */
+@Deprecated
 public class SequenceBoxRendererTest {
     @Test
     public void shouldRenderSequenceBox() throws IOException {

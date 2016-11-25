@@ -1,4 +1,4 @@
-package design;
+package design.sequence.motif.frequency;
 
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 
@@ -20,6 +20,7 @@ import java.util.stream.Stream;
  * Converts an 'alignment' of sequences to an HTML representation.
  * Created by S on 24.11.2016.
  */
+@Deprecated
 public class SequenceBoxRenderer {
     private static final String SEQUENCE_BOX_TEMPLATE = "design/sequenceBoxTemplate.html";
     private String template;
