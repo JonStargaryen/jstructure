@@ -41,9 +41,12 @@
         .calendar-heatmap {
             box-sizing: initial;
         }
+        .container {
+            position: relative;
+        }
         body > div {
             display: inline-block;
-            width: 30%;
+            /*width: 30%;*/
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
@@ -278,9 +281,9 @@
                             .append('div')
                             .attr('class', 'day-cell-tooltip')
                             .html('<strong>' + aminoAcids[aminoAcidIndex(i)] + '</strong> frequency at postition <strong>' + (motifPosition(i) + 1) + '</strong>: <strong>' + round2Fixed(d) + '</strong>')
-                            .style('left', function () { return motifPosition(i) * SQUARE_LENGTH + 'px'; })
+                            .style('left', function () { return -20 + motifPosition(i) * SQUARE_LENGTH + 'px'; })
                             .style('top', function () {
-                                return aminoAcidIndex(i) * (SQUARE_LENGTH + SQUARE_PADDING) + MONTH_LABEL_PADDING * 3 + 'px';
+                                return -25 + aminoAcidIndex(i) * (SQUARE_LENGTH + SQUARE_PADDING) + MONTH_LABEL_PADDING * 3 + 'px';
                             });
                     }).on('mouseout', function (d, i) {
                         tooltip.remove();
