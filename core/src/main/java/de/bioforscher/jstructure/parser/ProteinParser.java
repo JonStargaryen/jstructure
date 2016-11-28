@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.parser;
 
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +10,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * A minimalistic parser for protein structures in <tt>PDB</tt> format.
@@ -183,15 +185,23 @@ public class ProteinParser {
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
 
             if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
-                // getChain changed - create new getChain object and set reference
-                currentChain = new Chain(chainId);
-                protein.addChain(currentChain);
+                Optional<Chain> selectedChain = Selection.on(protein)
+                        .chainName(chainId)
+                        .asOptionalChain();
+                if(selectedChain.isPresent()) {
+                    // chain already present - just an het-group not directly connected
+                    currentChain = selectedChain.get();
+                } else {
+                    // getChain changed - create new getChain object and set reference
+                    currentChain = new Chain(chainId);
+                    protein.addChain(currentChain);
+                }
             }
 
             if(currentGroup == null || currentGroup.getResidueNumber() != resNum) {
                 // getResidue changed - create new getResidue object and set reference
                 currentGroup = new Group(pdbName, resNum);
-                //TODO do we need explicit information on hetam/atom here?
+                //TODO do we need explicit information on hetatm/atom here?
 //                currentGroup = line.startsWith(ATOM_PREFIX);
                 currentChain.addGroup(currentGroup);
             }

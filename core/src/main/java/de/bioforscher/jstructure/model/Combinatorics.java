@@ -100,7 +100,7 @@ public class Combinatorics {
                     fragmentSize + " and " + elements.size() + " elements");
         }
 
-        return IntStream.range(0, elements.size() - fragmentSize + 1).mapToObj(i -> new Fragment<>(elements.subList(i,
-                i + fragmentSize)));
+        return IntStream.range(0, elements.size() - fragmentSize + 1)
+                .mapToObj(i -> new Fragment<>(elements.subList(i, i + fragmentSize)));
     }
 }

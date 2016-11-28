@@ -56,13 +56,19 @@ public class Selection {
     }
 
     public static class AtomSelection {
-        private AtomContainer atomContainer;
-        private List<Predicate<Atom>> atomPredicates;
+        AtomContainer atomContainer;
+        GroupContainer groupContainer;
+        ChainContainer chainContainer;
+        List<Predicate<Atom>> atomPredicates;
+        List<Predicate<Group>> groupPredicates;
+        List<Predicate<Chain>> chainPredicates;
         boolean cloneRequested;
 
         AtomSelection(AtomContainer atomContainer) {
             this.atomContainer = atomContainer;
             this.atomPredicates = new ArrayList<>();
+            this.groupPredicates = new ArrayList<>();
+            this.chainPredicates = new ArrayList<>();
         }
 
         public AtomSelection cloneElements() {
@@ -71,7 +77,29 @@ public class Selection {
         }
 
         public Stream<Atom> asFilteredAtoms() {
-            Stream<Atom> filteredAtomStream =  atomContainer.atoms()
+            //TODO resolve this back-and-forth pain
+            Stream<Group> prefilteredGroupStream = null;
+            Stream<Atom> prefilteredAtomStream = null;
+            // pre-filter groups, when there are requirements on the chains
+            if(this instanceof ChainSelection) {
+                prefilteredGroupStream = chainContainer.chains().filter(Selection.compose(chainPredicates)).flatMap(Chain::groups);
+            }
+
+            if(this instanceof GroupSelection) {
+                // group selection, but no chain selection
+                if(prefilteredGroupStream == null) {
+                    prefilteredGroupStream = groupContainer.groups();
+                }
+
+                prefilteredAtomStream = prefilteredGroupStream.filter(Selection.compose(groupPredicates)).flatMap(Group::atoms);
+            }
+
+            // fallback, when no higher container is present
+            if(prefilteredAtomStream == null) {
+                prefilteredAtomStream = atomContainer.atoms();
+            }
+
+            Stream<Atom> filteredAtomStream = prefilteredAtomStream
                     .filter(Selection.compose(atomPredicates));
             if(cloneRequested) {
                 return filteredAtomStream
@@ -197,13 +225,9 @@ public class Selection {
     }
 
     public static class GroupSelection extends AtomSelection {
-        private GroupContainer groupContainer;
-        private List<Predicate<Group>> groupPredicates;
-
         GroupSelection(GroupContainer groupContainer) {
             super(groupContainer);
             this.groupContainer = groupContainer;
-            this.groupPredicates = new ArrayList<>();
         }
 
         public GroupSelection cloneElements() {
@@ -212,7 +236,15 @@ public class Selection {
         }
 
         public Stream<Group> asFilteredGroups() {
-            Stream<Group> filteredGroupStream =  groupContainer.groups()
+            Stream<Group> prefilteredGroupStream;
+            // pre-filter groups, when there are requirements on the chains
+            if(!(this instanceof ChainSelection)) {
+                prefilteredGroupStream = groupContainer.groups();
+            } else {
+                prefilteredGroupStream = chainContainer.chains().filter(Selection.compose(chainPredicates)).flatMap(Chain::groups);
+            }
+
+            Stream<Group> filteredGroupStream =  prefilteredGroupStream
                     .filter(Selection.compose(groupPredicates));
             if(cloneRequested) {
                 return filteredGroupStream
@@ -235,6 +267,7 @@ public class Selection {
             return asFilteredGroups()
                     .findAny();
         }
+
         public Group asGroup() {
             return asOptionalGroup()
                     .orElseThrow(NoSuchElementException::new);
@@ -284,13 +317,9 @@ public class Selection {
     }
 
     public static class ChainSelection extends GroupSelection {
-        private ChainContainer chainContainer;
-        private List<Predicate<Chain>> chainPredicates;
-
         ChainSelection(ChainContainer chainContainer) {
             super(chainContainer);
             this.chainContainer = chainContainer;
-            this.chainPredicates = new ArrayList<>();
         }
 
         public ChainSelection cloneElements() {
@@ -326,7 +355,7 @@ public class Selection {
 
         public ChainSelection chainName(String... chainNames) {
             chainPredicates.add(chain -> Stream.of(chainNames)
-                    .anyMatch(groupName -> groupName.equals(chain.getChainId())));
+                    .anyMatch(chainName -> chainName.equals(chain.getChainId())));
             return this;
         }
     }
