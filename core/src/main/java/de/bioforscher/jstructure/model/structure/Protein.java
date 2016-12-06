@@ -41,6 +41,7 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
         this.chains = protein.chains()
                 .map(Chain::new)
                 .collect(Collectors.toList());
+        this.chains.forEach(chain -> chain.setParentProtein(this));
         this.identifier = protein.identifier;
     }
 

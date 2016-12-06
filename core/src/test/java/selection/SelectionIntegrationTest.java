@@ -41,7 +41,7 @@ public class SelectionIntegrationTest {
         ChainContainer chains = Selection.on(protein)
                 .chainName("B", "C")
                 .asChainContainer();
-        Assert.assertEquals(2, chains.getGroups().size());
+        Assert.assertEquals(2, chains.getChains().size());
 
         chains.chains().forEach(System.out::println);
     }

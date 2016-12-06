@@ -42,6 +42,7 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
         this.groups = chain.groups()
                 .map(Group::new)
                 .collect(Collectors.toList());
+        this.groups.forEach(group -> group.setParentChain(this));
         this.chainId = chain.chainId;
         // reference parent
         this.parentProtein = chain.parentProtein;

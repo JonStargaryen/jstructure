@@ -1,16 +1,22 @@
 package de.bioforscher.jstructure.mathematics;
 
+import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static de.bioforscher.jstructure.model.structure.selection.Selection.on;
 
@@ -195,105 +201,89 @@ public class CoordinateManipulations {
     }
 
     /**
-     * Computes the root-mean-square deviation between 2 atom sets. Both atom containers must have the same number of
-     * atoms in the same order.
-     * @param atomContainer1 a collection of atoms - it is supposed to share its ordering with the 2nd container
+     * Computes the root-mean-square deviation between 2 atom sets.
+     * @param atomContainer1 a collection of atoms
      * @param atomContainer2 another collection of atoms
      * @return the RMSD value of this alignment
-     * @throws IllegalArgumentException is thrown when the number of atoms does no match
      */
-    public static double calculateRMSD(AtomContainer atomContainer1, AtomContainer atomContainer2) throws IllegalArgumentException {
-        logger.trace("aligned {} atoms to compute rmsd", atomContainer1.getAtoms().size());
-        return 0;
-//        Pair<AtomContainer, AtomContainer> containerPair = prepareAtomContainersForAlignment(atomContainer1, atomContainer2);
-//        return Math.sqrt(Combinatorics.sequentialPairsOf(containerPair.getLeft().getAtoms(), containerPair.getRight().getAtoms())
-//                .filter(CoordinateManipulations::nonHydrogenAtomPair)
-//                .mapToDouble(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(),
-//                        pair.getRight().getCoordinates()))
-//                .average()
-//                .orElseThrow(() -> new IllegalArgumentException("cannot compute rmsd for empty or non-intersecting containers")));
+    public static double calculateRmsd(AtomContainer atomContainer1, AtomContainer atomContainer2) {
+        Pair<AtomContainer, AtomContainer> atomContainerPair = comparableAtomContainerPair(atomContainer1, atomContainer2);
+        double msd = Combinatorics.sequentialPairsOf(atomContainerPair.getLeft().getAtoms(), atomContainerPair.getRight().getAtoms())
+                .mapToDouble(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(), pair.getRight().getCoordinates()))
+                .average()
+                .orElseThrow(() -> new IllegalArgumentException("cannot compute rmsd for empty or non-intersecting containers"));
+        return Math.sqrt(msd);
     }
 
-//    public static Pair<AtomContainer, AtomContainer> prepareAtomContainersForAlignment(AtomContainer atomContainer1,
-//                                                                                       AtomContainer atomContainer2) {
-//        // sort atoms by name to make containers comparable
-//        atomContainer1.atoms()
-//                // move to parent group level to be able to sort atoms by name
-//                .map(Atom::getParentGroup)
-//                .filter(Objects::nonNull)
-//                // multiple atoms will point to the same parent
-//                .distinct()
-//                .filter(Group::isAminoAcid)
-//                .forEach(AminoAcid::orderAtomsByName);
-//        atomContainer2.atoms()
-//                // move to parent group level to be able to sort atoms by name
-//                .map(Atom::getParentGroup)
-//                .filter(Objects::nonNull)
-//                // multiple atoms will point to the same parent
-//                .distinct()
-//                .filter(Group::isAminoAcid)
-//                .forEach(AminoAcid::orderAtomsByName);
-//
-//        // wrap in containers - by contract 'loose' atoms will be gathered in an unknown group parent
-//        GroupContainer groups1 = atomContainer1.atoms()
-//                .map(Atom::getParentGroup)
-//                .distinct()
-//                .collect(StructureCollectors.toGroupContainer());
-//        GroupContainer groups2 = atomContainer2.atoms()
-//                .map(Atom::getParentGroup)
-//                .distinct()
-//                .collect(StructureCollectors.toGroupContainer());
-//
-//        // these containers need to match in size
-//        if(groups1.getGroups().size() != groups2.getGroups().size()) {
-//            throw new IllegalArgumentException(String.format("aligned container need to be comparable in size: found " +
-//                    "%d and %d", groups1.getGroups().size(), groups2.getGroups().size()));
-//        }
-//
-//        // for each group present, collect the subset of equivalent atoms
-//        List<Atom> atoms1 = new ArrayList<>();
-//        List<Atom> atoms2 = new ArrayList<>();
-//        for(int i = 0; i < groups1.getGroups().size(); i++) {
-//            Pair<Group, Group> sharedAtoms = sharedAtoms(new Pair<>(groups1.getGroups().get(i), groups2.getGroups().get(i)));
-//            atoms1.addAll(sharedAtoms.getLeft().atoms().collect(Collectors.toList()));
-//            atoms2.addAll(sharedAtoms.getRight().atoms().collect(Collectors.toList()));
-//        }
-//
-//        return new Pair<>(AtomContainer.of(atoms1.toArray(new Atom[atoms1.size()])),
-//                AtomContainer.of(atoms2.toArray(new Atom[atoms1.size()])));
-//    }
-//
-//    private static Pair<Group, Group> sharedAtoms(Pair<Group, Group> groupPair) {
-//        Set<String> atomNames1 = groupPair.getLeft().atoms()
-//                                                    .map(Atom::getName)
-//                                                    .collect(Collectors.toSet());
-//        Set<String> atomNames2 = groupPair.getRight().atoms()
-//                                                     .map(Atom::getName)
-//                                                     .collect(Collectors.toSet());
-//
-//        // intersection of both sets - all names present in both groups
-//        atomNames1.retainAll(atomNames2);
-//
-//        //TODO this is horrible - move to selection API?
-//        Group group1 = new Group(groupPair.getLeft());
-//        group1.clearAtoms();
-//        Selection.on(groupPair.getLeft())
-//                .atomName(atomNames1.toArray(new String[atomNames1.size()]))
-//                .cloneElements()
-//                .asFilteredAtoms()
-//                .forEach(group1::addAtom);
-//        Group group2 = new Group(groupPair.getRight());
-//        group2.clearAtoms();
-//        Selection.on(groupPair.getRight())
-//                .atomName(atomNames2.toArray(new String[atomNames1.size()]))
-//                .cloneElements()
-//                .asFilteredAtoms()
-//                .forEach(group2::addAtom);
-//        return new Pair<>(group1, group2);
-//    }
+    /**
+     * Creates a comparable entity of 2 {@link AtomContainer} objects. They fulfill certain criteria:
+     * <ul>
+     *     <li>{@link Atom}s are cloned
+     *     <li>for each {@link Group} only shared atoms are retained</li>
+     *     <li>{@link Atom}s are in identical ordering</li>
+     *     <li>{@link Atom}s are wrapped in {@link Group} objects if they were initially</li>
+     * </ul>
+     * @param atomContainer1 a collection of reference atoms
+     * @param atomContainer2 a collection of candidate atoms
+     * @return a pair of both collections which can now be aligned
+     */
+    public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
+                                                                                 AtomContainer atomContainer2) {
+        GroupContainer groupContainer1 = cloneIntoGroupContainer(atomContainer1);
+        GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
 
-    private static boolean nonHydrogenAtomPair(Pair<Atom, Atom> atomPair) {
-        return !AminoAcid.ATOM_NAMES.H_ATOM_NAMES.contains(atomPair.getLeft().getName()) &&
-                !AminoAcid.ATOM_NAMES.H_ATOM_NAMES.contains(atomPair.getRight().getName());
+        if(groupContainer1.getGroups().size() != groupContainer2.getGroups().size()) {
+            throw new IllegalArgumentException("cannot compare atom containers of different size");
+        }
+
+        List<Group> groups1 = new ArrayList<>();
+        List<Group> groups2 = new ArrayList<>();
+        for(int groupIndex = 0; groupIndex < groupContainer1.getGroups().size(); groupIndex++) {
+            Group group1 = groupContainer1.getGroups().get(groupIndex);
+            Group group2 = groupContainer2.getGroups().get(groupIndex);
+            Pair<List<Atom>, List<Atom>> sharedAtoms = selectSharedAtoms(group1, group2);
+
+            // remove additional/not-shared atoms
+            group1.getAtoms().retainAll(sharedAtoms.getLeft());
+            group2.getAtoms().retainAll(sharedAtoms.getRight());
+
+            logger.trace("shared atoms between {} and {}: {}", group1, group2, sharedAtoms);
+            groups1.add(group1);
+            groups2.add(group2);
+        }
+
+        return new Pair<>(new Chain(groups1), new Chain(groups2));
+    }
+
+    private static Pair<List<Atom>, List<Atom>> selectSharedAtoms(Group group1, Group group2) {
+        // no ordering is enforced - rather the filtering by atom names ensures the identical occurrence of atoms
+        Set<String> sharedAtomNames = determineSharedAtomNames(group1, group2);
+        return new Pair<>(group1.atoms()
+                .filter(atom -> sharedAtomNames.contains(atom.getName()))
+                .collect(Collectors.toList()),
+                group2.atoms()
+                .filter(atom -> sharedAtomNames.contains(atom.getName()))
+                .collect(Collectors.toList()));
+    }
+
+    private static Set<String> determineSharedAtomNames(Group group1, Group group2) {
+        // present atom names in each group, determine the shared ones
+        Set<String> sharedAtomNames = group1.atoms()
+                .map(Atom::getName)
+                .collect(Collectors.toSet());
+        sharedAtomNames.retainAll(group2.atoms()
+                .map(Atom::getName)
+                .collect(Collectors.toSet()));
+        return sharedAtomNames;
+    }
+
+    private static GroupContainer cloneIntoGroupContainer(AtomContainer atomContainer) {
+        return atomContainer.atoms()
+                // map to group level - will still collect 'dangling' atoms into a group
+                .map(Atom::getParentGroup)
+                .distinct()
+                // clone
+                .map(Group::new)
+                .collect(StructureCollectors.toGroupContainer());
     }
 }

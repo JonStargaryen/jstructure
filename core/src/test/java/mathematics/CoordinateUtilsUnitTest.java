@@ -82,7 +82,7 @@ public class CoordinateUtilsUnitTest {
                         .alphaCarbonAtoms()
                         .asAtom()
                         .getCoordinates(),
-                Selection.on(pair.getRight())
+                    Selection.on(pair.getRight())
                         .alphaCarbonAtoms()
                         .asAtom()
                         .getCoordinates()) > cutoff)
@@ -132,12 +132,7 @@ public class CoordinateUtilsUnitTest {
 
     @Test
     public void shouldReturnNoDifferenceInRMSDForIdenticalProtein() {
-        double rmsd = CoordinateManipulations.calculateRMSD(protein1acj, protein1acj);
+        double rmsd = CoordinateManipulations.calculateRmsd(protein1acj, protein1acj);
         Assert.assertEquals(0.0, rmsd, 0.0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailForRMSDCalculationOfDifferentProteins() {
-        CoordinateManipulations.calculateRMSD(protein1acj, protein1brr);
     }
 }

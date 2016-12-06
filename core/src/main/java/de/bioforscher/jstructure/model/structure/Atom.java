@@ -96,7 +96,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
      * @param coordinates the coordinates
      */
     public Atom(String name, Element element, double[] coordinates) {
-        this(name, Integer.MIN_VALUE, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
+        this(name, 0, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
         this.virtual = true;
     }
 
@@ -217,7 +217,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? element + "-" + pdbSerial : identifier;
+        return identifier == null ? name + "-" + pdbSerial : identifier;
     }
 
     /**

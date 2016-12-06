@@ -1,10 +1,9 @@
 package alignment;
 
-import de.bioforscher.jstructure.alignment.svd.ConsensusTreeComposer;
+import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Tests the {@link de.bioforscher.jstructure.alignment.svd.ConsensusTreeComposer} on real-world data.
+ * Tests the {@link ConsensusTreeComposer} on real-world data.
  * Created by S on 23.11.2016.
  */
 public class TestConsensusComposerOnRealData {
@@ -32,12 +31,12 @@ public class TestConsensusComposerOnRealData {
 
     @Test
     public void shouldComposeConsensusMotifForTMRegion() throws IOException {
-        List<Protein> alignedEnsemble = getAlignedEnsemble("tm");
+        List<AtomContainer> alignedEnsemble = getAlignedEnsemble("tm");
 
-        Protein reference = alignedEnsemble.remove(0);
+        AtomContainer reference = alignedEnsemble.remove(0);
         double averageReferenceRmsd = alignedEnsemble.stream()
                 .filter(protein -> reference.getAtoms().size() == protein.getAtoms().size())
-                .mapToDouble(protein -> CoordinateManipulations.calculateRMSD(reference, protein))
+                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(reference, protein))
                 .average()
                 .orElse(-1);
 
@@ -47,7 +46,7 @@ public class TestConsensusComposerOnRealData {
 
         double averageConsensusRmsd = alignedEnsemble.stream()
                 .filter(protein -> consensus.getAtoms().size() == protein.getAtoms().size())
-                .mapToDouble(protein -> CoordinateManipulations.calculateRMSD(consensus, protein))
+                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(consensus, protein))
                 .average()
                 .orElse(-1);
 
@@ -65,22 +64,24 @@ public class TestConsensusComposerOnRealData {
 
     @Test
     public void shouldComposeConsensusMotifForNTMRegion() throws IOException {
-        List<Protein> alignedEnsemble = getAlignedEnsemble("ntm");
+        List<AtomContainer> alignedEnsemble = getAlignedEnsemble("ntm");
 
-        Protein reference = alignedEnsemble.remove(0);
+        AtomContainer reference = alignedEnsemble.remove(0);
         double averageRmsd = alignedEnsemble.stream()
                 .filter(protein -> reference.getAtoms().size() == protein.getAtoms().size())
-                .mapToDouble(protein -> CoordinateManipulations.calculateRMSD(reference, protein))
+                .limit(100)
+                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(reference, protein))
                 .average()
                 .getAsDouble();
 
         System.out.println("average RMSD for ntm: " + averageRmsd);
     }
 
-    private List<Protein> getAlignedEnsemble(String topology) throws IOException {
-        return Files.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMNET_BY_TOPOLOGY_DIR + topology + "/"))
+    private List<AtomContainer> getAlignedEnsemble(String topology) throws IOException {
+        return Files.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/"))
                 .filter(path -> path.toFile().getName().startsWith(motif.name()))
+                .limit(100)
                 .map(ProteinParser::parsePDBFile)
-                .collect(StructureCollectors.toAlignedEnsemble());
+                .collect(StructureCollectors.toAlignedEnsembleByConsensus());
     }
 }

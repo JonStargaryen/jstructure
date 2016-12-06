@@ -21,7 +21,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group(AminoAcid.UNKNOWN.getThreeLetterCode(), 0);
+    static final Group UNKNOWN_GROUP = new Group(AminoAcid.UNKNOWN.getThreeLetterCode(), 0, GroupType.AMINO_ACID);
 
     private int residueNumber;
     private List<Atom> atoms;
@@ -37,10 +37,14 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     private String identifier;
 
     public Group(String pdbName, int residueNumber) {
+        this(pdbName, residueNumber, GroupType.AMINO_ACID);
+    }
+
+    public Group(String pdbName, int residueNumber, GroupType groupType) {
         this.pdbName = pdbName;
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
-        this.groupType = determineGroupType();
+        this.groupType = groupType;
     }
 
     public Group(Group group) {
@@ -49,6 +53,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
         this.atoms = group.atoms()
                 .map(Atom::new)
                 .collect(Collectors.toList());
+        this.atoms().forEach(atom -> atom.setParentGroup(this));
         this.pdbName = group.pdbName;
         // reference parent
         this.parentChain = group.parentChain;
@@ -61,11 +66,6 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     public Group(List<Atom> atoms) {
         this.atoms = atoms;
-    }
-
-    private GroupType determineGroupType() {
-        //TODO impl
-        return GroupType.AMINO_ACID;
     }
 
     public boolean isAminoAcid() {

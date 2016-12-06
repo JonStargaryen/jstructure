@@ -1,9 +1,8 @@
 package design.aggregation;
 
-import de.bioforscher.jstructure.alignment.svd.ConsensusTreeComposer;
+import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
-import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -19,6 +18,7 @@ import java.util.List;
  * Compute statistics on sets of aligned fragments grouped by topology.
  * Created by S on 11.11.2016.
  */
+@Deprecated
 public class S08_AlignedFragmentStatistics {
     public static void main(String[] args) throws IOException {
         StringBuilder output = new StringBuilder();
@@ -33,15 +33,15 @@ public class S08_AlignedFragmentStatistics {
                 .append(System.lineSeparator());
 
         for(SequenceMotifDefinition definition : SequenceMotifDefinition.values()) {
-            Files.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMNET_BY_TOPOLOGY_DIR))
+            Files.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR))
                     .forEach(topologyDir -> {
                             System.out.println(topologyDir);
                             try {
                                 // align ensemble
-                                List<Protein> alignedEnsemble = Files.list(topologyDir)
+                                List<AtomContainer> alignedEnsemble = Files.list(topologyDir)
                                         .filter(path -> path.toFile().getName().startsWith(definition.name()))
                                         .map(ProteinParser::parsePDBFile)
-                                        .collect(StructureCollectors.toAlignedEnsemble());
+                                        .collect(StructureCollectors.toAlignedEnsembleByConsensus());
 
                                 // create consensus
                                 ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
@@ -49,7 +49,7 @@ public class S08_AlignedFragmentStatistics {
                                 AtomContainer consensus = consensusTreeComposer.getConsensus();
 
                                 for(AtomContainer observation : alignedEnsemble) {
-                                    double rmsd = CoordinateManipulations.calculateRMSD(Selection.on(observation)
+                                    double rmsd = CoordinateManipulations.calculateRmsd(Selection.on(observation)
                                             .backboneAtoms()
                                             .asAtomContainer(),
                                             Selection.on(consensus)

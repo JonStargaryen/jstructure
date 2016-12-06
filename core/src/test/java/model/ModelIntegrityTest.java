@@ -1,7 +1,7 @@
 package model;
 
 import de.bioforscher.jstructure.model.structure.AminoAcid;
-import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
@@ -31,7 +31,7 @@ public class ModelIntegrityTest {
                 .aminoAcids(AminoAcid.ASPARAGINE)
                 .asGroupContainer()
                 .getCopy();
-        Assert.assertTrue(copiedGroups instanceof Group);
+        Assert.assertTrue(copiedGroups instanceof Chain);
         System.out.println(copiedGroups.composePDBRecord());
     }
 

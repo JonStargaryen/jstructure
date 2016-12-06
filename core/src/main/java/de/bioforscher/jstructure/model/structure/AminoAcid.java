@@ -214,11 +214,12 @@ public enum AminoAcid {
      * Orders all atoms associated to this {@link AtomContainer} in an reproducible way in agreement with the ordering
      * in <tt>PDB</tt> files.
      */
-    public static void orderAtomsByName(Group group) {
+    public static Group orderAtomsByName(Group group) {
         if(!group.isAminoAcid()) {
             throw new IllegalArgumentException("cannot sort atoms by name for non-amino acids");
         }
         group.getAtoms().sort(AminoAcid.valueOfIgnoreCase(group.getPdbName()).atomNameComparator);
+        return group;
     }
 
     /**

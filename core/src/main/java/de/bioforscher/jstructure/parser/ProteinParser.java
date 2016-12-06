@@ -33,6 +33,8 @@ public class ProteinParser {
     private Chain currentChain;
     private Group currentGroup;
     private boolean passedFirstModel;
+    //TODO move to more mature options
+    public static boolean skipHydrogens = true;
 
     /**
      * Fetches a <tt>PDB</tt> file from the <tt>PDB</tt> based on a <tt>PDB</tt> id.
@@ -165,20 +167,19 @@ public class ProteinParser {
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
         if(line.startsWith(ATOM_PREFIX) || line.startsWith(HETATM_PREFIX)) {
-            //TODO wrap in flag/option
             Element element = Element.valueOfIgnoreCase(line.substring(76, 78).trim());
-            if(element.isHydrogen()) {
+            if(skipHydrogens && element.isHydrogen()) {
                 return;
             }
 
             // we check for valid amino acids here, so no empty (nucleotide/ligand-only) chains are parsed
             String pdbName = line.substring(17, 20).trim();
 //            System.out.println(line);
-//            if(pdbName.length() < 3) {
+            if(pdbName.length() < 3 || line.startsWith(HETATM_PREFIX)) {
 //                // if pdbName is less than 3 chars long, this is no amino acid - e.g. 'U' vs 'THR'
 //                // TODO at some point parsing nucleotides and hetatms would be nice
-//                return;
-//            }
+                return;
+            }
 
             // actually there is something to parse
             String chainId = line.substring(21, 22);
@@ -200,9 +201,10 @@ public class ProteinParser {
 
             if(currentGroup == null || currentGroup.getResidueNumber() != resNum) {
                 // getResidue changed - create new getResidue object and set reference
-                currentGroup = new Group(pdbName, resNum);
-                //TODO do we need explicit information on hetatm/atom here?
-//                currentGroup = line.startsWith(ATOM_PREFIX);
+
+                // we provide an additional flag on whether this is an ATOM or HETATM record to assist the assignment of
+                // the correct group type
+                currentGroup = new Group(pdbName, resNum, determineGroupType(pdbName, line.startsWith(ATOM_PREFIX)));
                 currentChain.addGroup(currentGroup);
             }
 
@@ -229,5 +231,17 @@ public class ProteinParser {
             passedFirstModel = true;
 //            logger.info("skipping models for {}", protein.getName());
         }
+    }
+
+    private Group.GroupType determineGroupType(String pdbName, boolean isAtomRecord) {
+        AminoAcid assignedAminoAcid = AminoAcid.valueOfIgnoreCase(pdbName);
+//        Nucleotide assignedNucleotide = Nucleotide.valueOfIgnoreCase(pdbName);
+
+        // the clear case: ATOM record and pdbName matches an amino acid
+        if(isAtomRecord && !assignedAminoAcid.equals(AminoAcid.UNKNOWN)) {
+            return Group.GroupType.AMINO_ACID;
+        }
+
+        return Group.GroupType.HETATM;
     }
 }

@@ -1,17 +1,13 @@
-package de.bioforscher.jstructure.alignment.svd;
+package de.bioforscher.jstructure.alignment.consensus;
 
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
 import de.bioforscher.jstructure.model.BinaryTree;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.TreeNode;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +19,7 @@ import java.util.stream.Collectors;
  * (i.e. averaging its coordinates). The process is repeated until no more merging operations can be performed.
  * Created by S on 11.11.2016.
  */
-public class ConsensusTreeComposer {
-    final Logger logger = LoggerFactory.getLogger(ConsensusTreeComposer.class);
+public class ConsensusTreeComposer extends AbstractConsensusComposer {
     /**
      * all known structures
      */
@@ -37,6 +32,7 @@ public class ConsensusTreeComposer {
     private List<BinaryTree<AtomContainer>> consensusTrees;
     private AtomContainer consensus;
     private boolean firstEntry;
+    private List<? extends AtomContainer> originalContainers;
 
     public ConsensusTreeComposer() {
         this.alignmentPairs = new ArrayList<>();
@@ -45,13 +41,12 @@ public class ConsensusTreeComposer {
     }
 
     public void composeConsensusTree(List<? extends AtomContainer> containers) {
-        // forget anything but backbone atoms
+        originalContainers = containers;
         ensembles = containers.stream()
-                // select for backbone atoms to make things comparable/alignable
-                .map(structure -> Selection.on(structure)
-                                           .backboneAtoms()
-                                           .asAtomContainer())
-                .collect(Collectors.toList());
+            .map(structure -> Selection.on(structure)
+                    .cloneElements()
+                    .asAtomContainer())
+            .collect(Collectors.toList());
         Combinatorics.sequentialPairsOf(ensembles, containers)
                 .forEach(pair -> pair.getLeft().setIdentifier(pair.getRight().getIdentifier()));
 
@@ -64,6 +59,7 @@ public class ConsensusTreeComposer {
 
         // formulate all unordered pairs within the ensemble
         alignmentPairs = Combinatorics.uniquePairsOf(ensembles)
+                .peek(System.out::println)
                 // compute rmsd and wrap in container
                 .map(AlignmentPair::new)
                 .collect(Collectors.toList());
@@ -71,6 +67,7 @@ public class ConsensusTreeComposer {
 
         // iteratively merge pairs
         while(ensembles.size() > 1) {
+            System.out.println("ensemble size: " + ensembles.size());
             logger.debug("current ensemble size: {}", ensembles.size());
             // find and merge closest pair
             AlignmentPair mergedPair = mergeClosestPair();
@@ -90,19 +87,11 @@ public class ConsensusTreeComposer {
             } else {
                 // try to find matching node in existing tree, if node not found in existing tree it has to be a leave
                 Optional<TreeNode<AtomContainer>> potentialLeftNode = findNode(mergedPair.getLeft());
-                if(potentialLeftNode.isPresent()) {
-                    leftNode = potentialLeftNode.get();
-                } else {
-                    leftNode = findLeaf(mergedPair.getLeft()).get();
-                }
+                leftNode = potentialLeftNode.orElseGet(() -> findLeaf(mergedPair.getLeft()).get());
 
                 // try to find matching node in existing trees, if node not found in existing tree it has to be a leave
                 Optional<TreeNode<AtomContainer>> potentialRightNode = findNode(mergedPair.getRight());
-                if(potentialRightNode.isPresent()) {
-                    rightNode = potentialRightNode.get();
-                } else {
-                    rightNode = findLeaf(mergedPair.getRight()).get();
-                }
+                rightNode = potentialRightNode.orElseGet(() -> findLeaf(mergedPair.getRight()).get());
 
                 consensusNode = new TreeNode<>(consensus, leftNode, rightNode);
             }
@@ -139,7 +128,7 @@ public class ConsensusTreeComposer {
     private AlignmentPair mergeClosestPair() {
         // sort alignmentPairs by rmsd
         final AlignmentPair pairToMerge = alignmentPairs.stream()
-                .reduce((a, b) -> a.getRmsd() < b.getRmsd() ? a : b)
+                .reduce((a, b) -> a.getAlignmentResult().getRmsd() < b.getAlignmentResult().getRmsd() ? a : b)
                 .orElseThrow(() -> new IllegalArgumentException("did not find pair to merge"));
 
         // remove entries from ensemble
@@ -147,7 +136,7 @@ public class ConsensusTreeComposer {
         ensembles.remove(pairToMerge.getRight());
         // remove entries dealing with now removed entries from alignment pairs
         alignmentPairs.removeIf(alignmentPair -> alignmentPair.describes(pairToMerge));
-        logger.debug("pair to merge is {} with rmsd of {}", pairToMerge, pairToMerge.getRmsd());
+        logger.debug("pair to merge is {} with rmsd of {}", pairToMerge, pairToMerge.getAlignmentResult().getRmsd());
 
         // merge entry
         AtomContainer mergedEntry = pairToMerge.getMergedEntry();
@@ -156,6 +145,15 @@ public class ConsensusTreeComposer {
         ensembles.add(mergedEntry);
 
         return pairToMerge;
+    }
+
+    public List<AtomContainer> getAlignedContainers() {
+        SVDSuperimposer svdSuperimposer = new SVDSuperimposer();
+        return originalContainers.stream()
+                // align container relative to consensus
+                .map(container -> svdSuperimposer.align(consensus, container))
+                .map(AlignmentResult::getQuery)
+                .collect(Collectors.toList());
     }
 
     public BinaryTree<AtomContainer> getConsensusTree() {
@@ -169,9 +167,9 @@ public class ConsensusTreeComposer {
     /**
      * Internal helper class to deal with combinations of aligned fragments/containers.
      */
-    static class AlignmentPair extends Pair<AtomContainer, AtomContainer> {
-        private final double rmsd;
+    class AlignmentPair extends Pair<AtomContainer, AtomContainer> {
         private AtomContainer mergedEntry;
+        private AlignmentResult alignmentResult;
 
         AlignmentPair(Pair<? extends AtomContainer, ? extends AtomContainer> alignmentPair) {
             this(alignmentPair.getLeft(), alignmentPair.getRight());
@@ -179,11 +177,11 @@ public class ConsensusTreeComposer {
 
         AlignmentPair(AtomContainer atomContainer1, AtomContainer atomContainer2) {
             super(atomContainer1, atomContainer2);
-            this.rmsd = CoordinateManipulations.calculateRMSD(getLeft(), getRight());
+            this.alignmentResult = new SVDSuperimposer().align(atomContainer1, atomContainer2);
         }
 
-        double getRmsd() {
-            return rmsd;
+        AlignmentResult getAlignmentResult() {
+            return alignmentResult;
         }
 
         /**
@@ -197,26 +195,10 @@ public class ConsensusTreeComposer {
 
         AtomContainer getMergedEntry() {
             if(mergedEntry == null) {
-                mergedEntry = Combinatorics.sequentialPairsOf(getLeft().getAtoms(), getRight().getAtoms())
-                        .map(this::mergeAtomPair)
-                        .collect(StructureCollectors.toAtomContainer());
+                mergedEntry = mergeContainerPair(getLeft(), getRight());
             }
 
-            getLeft().setIdentifier(getLeft().getIdentifier().split(":")[0]);
-            getRight().setIdentifier(getRight().getIdentifier().split(":")[0]);
-            mergedEntry.setIdentifier(getLeft().getIdentifier() + "+" + getRight().getIdentifier() + ":" + rmsd);
-            getLeft().setIdentifier(getLeft().getIdentifier() + ":" + 1000 * rmsd / 2);
-            getRight().setIdentifier(getRight().getIdentifier() + ":" + 1000 * rmsd / 2);
-
             return mergedEntry;
-        }
-
-        private Atom mergeAtomPair(Pair<Atom, Atom> atomPair) {
-            Atom atom = atomPair.getLeft();
-            double[] left = atom.getCoordinates();
-            double[] right = atomPair.getRight().getCoordinates();
-            atom.setCoordinates(LinearAlgebra3D.divide(LinearAlgebra3D.add(left, right), 2));
-            return atom;
         }
     }
 }

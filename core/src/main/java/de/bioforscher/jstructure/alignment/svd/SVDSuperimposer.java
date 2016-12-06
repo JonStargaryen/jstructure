@@ -4,8 +4,8 @@ import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
@@ -22,25 +22,21 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
     final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
 
     @Override
-    protected AlignmentResult alignInternal(AtomContainer atomContainer1, AtomContainer atomContainer2) {
-        //TODO move to abstract impl and provide flag/interface
-        if(atomContainer1.getAtoms().size() != atomContainer2.getAtoms().size()) {
-            logger.error("arrays do not match in size\n{}\n{}",
-                    atomContainer1.composePDBRecord(),
-                    atomContainer2.composePDBRecord());
-            throw new DimensionMismatchException(atomContainer1.getAtoms().size(), atomContainer2.getAtoms().size());
-        }
+    public AlignmentResult align(AtomContainer reference, AtomContainer candidate) {
+        Pair<AtomContainer, AtomContainer> atomContainerPair = CoordinateManipulations.comparableAtomContainerPair(reference, candidate);
+        reference = atomContainerPair.getLeft();
+        candidate = atomContainerPair.getRight();
 
         // compute centroids
-        double[] centroid1 = CoordinateManipulations.centroid(atomContainer1);
-        double[] centroid2 = CoordinateManipulations.centroid(atomContainer2);
+        double[] centroid1 = CoordinateManipulations.centroid(reference);
+        double[] centroid2 = CoordinateManipulations.centroid(candidate);
         // center atoms
-        CoordinateManipulations.shift(atomContainer1, LinearAlgebra3D.multiply(centroid1, -1.0));
-        CoordinateManipulations.shift(atomContainer2, LinearAlgebra3D.multiply(centroid2, -1.0));
+        CoordinateManipulations.shift(reference, LinearAlgebra3D.multiply(centroid1, -1.0));
+        CoordinateManipulations.shift(candidate, LinearAlgebra3D.multiply(centroid2, -1.0));
 
         // compose covariance matrix and calculate SVD
-        RealMatrix matrix1 = CoordinateManipulations.convertToMatrix(atomContainer1);
-        RealMatrix matrix2 = CoordinateManipulations.convertToMatrix(atomContainer2);
+        RealMatrix matrix1 = CoordinateManipulations.convertToMatrix(reference);
+        RealMatrix matrix2 = CoordinateManipulations.convertToMatrix(candidate);
         RealMatrix covariance = matrix2.transpose().multiply(matrix1);
         SingularValueDecomposition svd = new SingularValueDecomposition(covariance);
         // R = (V * U')'
@@ -64,9 +60,10 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
 
         /* transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */
-        CoordinateManipulations.transform(atomContainer2, new CoordinateManipulations.Transformation(rotation));
-        double rmsd = CoordinateManipulations.calculateRMSD(atomContainer1, atomContainer2);
+        CoordinateManipulations.transform(candidate, new CoordinateManipulations.Transformation(rotation));
+        double rmsd = CoordinateManipulations.calculateRmsd(reference, candidate);
+
         // return alignment
-        return new AlignmentResult(atomContainer1, atomContainer2, rmsd, translation, rotation);
+        return new AlignmentResult(reference, candidate, rmsd, translation, rotation);
     }
 }
