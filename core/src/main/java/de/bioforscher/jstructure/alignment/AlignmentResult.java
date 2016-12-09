@@ -9,23 +9,25 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
  * Created by S on 30.09.2016.
  */
 public class AlignmentResult {
-    private final AtomContainer reference;
-    private final AtomContainer query;
+    private final AtomContainer originalReference;
+    private final AtomContainer originalQuery;
+    private final AtomContainer alignedQuery;
     private final double rmsd;
     private final CoordinateManipulations.Transformation transformation;
 
     /**
      * Constructs a new alignment result container.
-     * @param reference the original reference container
-     * @param query the original to-be-aligned container
+     * @param originalReference the original originalReference container
+     * @param originalQuery the original to-be-aligned container
      * @param rmsd the RMSD which was achieved for this alignment
      * @param translation the translation vector needed to recreate this alignment
      * @param rotation the rotation matrix needed to recreate this alignment
      */
-    public AlignmentResult(AtomContainer reference, AtomContainer query, double rmsd,
-                           double[] translation, double[][] rotation) {
-        this.reference = reference;
-        this.query = query;
+    public AlignmentResult(AtomContainer originalReference, AtomContainer originalQuery, AtomContainer alignedQuery,
+                           double rmsd, double[] translation, double[][] rotation) {
+        this.originalReference = originalReference;
+        this.originalQuery = originalQuery;
+        this.alignedQuery = alignedQuery;
         this.rmsd = rmsd;
         this.transformation = new CoordinateManipulations.Transformation(translation, rotation);
     }
@@ -64,11 +66,15 @@ public class AlignmentResult {
         return transformation.getRotation();
     }
 
-    public AtomContainer getReference() {
-        return reference;
+    public AtomContainer getOriginalReference() {
+        return originalReference;
     }
 
-    public AtomContainer getQuery() {
-        return query;
+    public AtomContainer getOriginalQuery() {
+        return originalQuery;
+    }
+
+    public AtomContainer getAlignedQuery() {
+        return alignedQuery;
     }
 }

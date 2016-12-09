@@ -233,7 +233,7 @@ public class CoordinateManipulations {
         GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
 
         if(groupContainer1.getGroups().size() != groupContainer2.getGroups().size()) {
-            throw new IllegalArgumentException("cannot compare atom containers of different size");
+            throw new IllegalArgumentException("cannot compare atom containers of different size: " + atomContainer1.getIdentifier() + " : " + atomContainer2.getIdentifier());
         }
 
         List<Group> groups1 = new ArrayList<>();

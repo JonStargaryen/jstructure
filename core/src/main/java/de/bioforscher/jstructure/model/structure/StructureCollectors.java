@@ -62,11 +62,11 @@ public class StructureCollectors {
                     .map(container -> svdSuperimposer.align(consensus, container))
                     // append the identifier by the RMSD, so we can
                     .map(alignmentResult -> {
-                        alignmentResult.getQuery().setFeature(AbstractAlignmentAlgorithm.FeatureNames.FRAGMENT_RMSD,
+                        alignmentResult.getOriginalQuery().setFeature(AbstractAlignmentAlgorithm.FeatureNames.FRAGMENT_RMSD,
                                 alignmentResult.getRmsd());
                         return alignmentResult;
                     })
-                    .map(AlignmentResult::getQuery)
+                    .map(AlignmentResult::getOriginalQuery)
                     .collect(Collectors.toList());
         }
 

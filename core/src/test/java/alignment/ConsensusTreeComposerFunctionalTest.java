@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.fail;
 import static util.TestUtils.FRAGMENT_DIR;
 
 /**
@@ -55,7 +56,22 @@ public class ConsensusTreeComposerFunctionalTest {
     }
 
     @Test
-    public void shouldSerializeConsensusTree() {
+    public void shouldBuildConsensusTreeLikeSinga() throws IOException {
+        List<Protein> fragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath("alignment/consensus/")))
+                .map(ProteinParser::parsePDBFile)
+                .collect(Collectors.toList());
 
+        ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
+        consensusTreeComposer.composeConsensusTree(fragments);
+
+        System.out.println(consensusTreeComposer.getConsensusTree().children().count());
+        System.out.println(consensusTreeComposer.getConsensusTree().composeNewickRepresentation());
+
+        fail("tree is not complete - why?");
+
+//        consensusTreeComposer.getAlignedContainers().stream()
+//                .map(AtomContainer::composePDBRecord)
+//                .map(string -> string + System.lineSeparator())
+//                .forEach(System.out::println);
     }
 }

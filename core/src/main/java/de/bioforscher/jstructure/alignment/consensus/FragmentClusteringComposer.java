@@ -56,11 +56,18 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
                             .map(StructureCluster::getEntries)
                             .flatMap(Collection::stream)
                             .forEach(mergedCluster::add);
+
+                    clusters.add(mergedCluster);
                 }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
+
+        System.out.println("grouped " + clusters.stream()
+                .map(StructureCluster::getEntries)
+                .mapToInt(Collection::size)
+                .sum() + " in " + clusters.size() + " clusters");
     }
 
     public List<StructureCluster> getClusters() {
@@ -97,7 +104,7 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
             AlignmentResult alignment = svdSuperimposer.align(consensus, entries.get(entries.size() - 1));
             // merge new entry to existing consensus
             //TODO this may be fast, but potentially merging everything is more robust
-            return mergeContainerPair(alignment.getReference(), alignment.getQuery());
+            return mergeContainerPair(alignment.getOriginalReference(), alignment.getOriginalQuery());
         }
 
         double getMinimalDistance(AtomContainer container) {

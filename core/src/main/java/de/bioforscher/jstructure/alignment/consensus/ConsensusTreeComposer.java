@@ -59,7 +59,6 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
 
         // formulate all unordered pairs within the ensemble
         alignmentPairs = Combinatorics.uniquePairsOf(ensembles)
-                .peek(System.out::println)
                 // compute rmsd and wrap in container
                 .map(AlignmentPair::new)
                 .collect(Collectors.toList());
@@ -67,11 +66,11 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
 
         // iteratively merge pairs
         while(ensembles.size() > 1) {
-            System.out.println("ensemble size: " + ensembles.size());
             logger.debug("current ensemble size: {}", ensembles.size());
             // find and merge closest pair
             AlignmentPair mergedPair = mergeClosestPair();
             consensus = mergedPair.getMergedEntry();
+            double rmsd = mergedPair.getAlignmentResult().getRmsd();
 
             // create tree nodes
             TreeNode<AtomContainer> leftNode;
@@ -82,7 +81,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
             if (firstEntry) {
                 leftNode = findLeaf(mergedPair.getLeft()).get();
                 rightNode = findLeaf(mergedPair.getRight()).get();
-                consensusNode = new TreeNode<>(consensus, leftNode, rightNode);
+                consensusNode = new TreeNode<>(consensus, leftNode, rightNode, rmsd);
                 firstEntry = false;
             } else {
                 // try to find matching node in existing tree, if node not found in existing tree it has to be a leave
@@ -93,11 +92,12 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
                 Optional<TreeNode<AtomContainer>> potentialRightNode = findNode(mergedPair.getRight());
                 rightNode = potentialRightNode.orElseGet(() -> findLeaf(mergedPair.getRight()).get());
 
-                consensusNode = new TreeNode<>(consensus, leftNode, rightNode);
+                consensusNode = new TreeNode<>(consensus, leftNode, rightNode, rmsd);
             }
 
             // create and set consensus tree
             BinaryTree<AtomContainer> consensusTree = new BinaryTree<>(consensusNode);
+            System.out.println("current consensus: " + consensusTree.composeNewickRepresentation());
             consensusTrees.add(consensusTree);
         }
     }
@@ -152,7 +152,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
         return originalContainers.stream()
                 // align container relative to consensus
                 .map(container -> svdSuperimposer.align(consensus, container))
-                .map(AlignmentResult::getQuery)
+                .map(AlignmentResult::getOriginalQuery)
                 .collect(Collectors.toList());
     }
 

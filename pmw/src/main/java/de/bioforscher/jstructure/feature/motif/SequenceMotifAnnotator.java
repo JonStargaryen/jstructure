@@ -64,6 +64,11 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                         continue;
                     }
 
+                    // motif lacks internal residues or has a invalid ordering
+                    if(startResidue.getResidueNumber() + motifLength - 1 != endResidue.getResidueNumber()) {
+                        continue;
+                    }
+
                     List<Group> residueList = residueInChain.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue);
                     residueList.forEach(residue -> {

@@ -1,4 +1,4 @@
-package design.aggregation;
+package design.statistics;
 
 import design.DesignConstants;
 
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
  * Created by S on 23.11.2016.
  */
 @Deprecated
-public class S09_CleanUpFragmentStatistics {
+public class S02_CleanUpFragmentStatistics {
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Paths.get(DesignConstants.STATISTICS_DIR + "aligned-fragment-statistics.csv"))
                 .filter(line -> !line.contains("trans"))
-                .map(S09_CleanUpFragmentStatistics::handleLine)
+                .map(S02_CleanUpFragmentStatistics::handleLine)
                 .peek(System.out::println)
                 .collect(Collectors.joining(System.lineSeparator()));
 

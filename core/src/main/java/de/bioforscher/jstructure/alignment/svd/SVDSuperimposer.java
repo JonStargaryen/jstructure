@@ -23,6 +23,8 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
 
     @Override
     public AlignmentResult align(AtomContainer reference, AtomContainer candidate) {
+        AtomContainer originalReference = reference;
+        AtomContainer originalCandidate = candidate;
         Pair<AtomContainer, AtomContainer> atomContainerPair = CoordinateManipulations.comparableAtomContainerPair(reference, candidate);
         reference = atomContainerPair.getLeft();
         candidate = atomContainerPair.getRight();
@@ -64,6 +66,6 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         double rmsd = CoordinateManipulations.calculateRmsd(reference, candidate);
 
         // return alignment
-        return new AlignmentResult(reference, candidate, rmsd, translation, rotation);
+        return new AlignmentResult(originalReference, originalCandidate, candidate, rmsd, translation, rotation);
     }
 }

@@ -11,18 +11,22 @@ import java.util.stream.Stream;
  */
 public class TreeNode<T> extends Pair<Optional<TreeNode<T>>, Optional<TreeNode<T>>> {
     private final T data;
+    private final double distance;
 
     public TreeNode(T data) {
-        this(data, null, null);
+        this(data, null, null, UNSET_DISTANCE);
     }
 
-    public TreeNode(T data, TreeNode<T> left, TreeNode<T> right) {
+    public TreeNode(T data, TreeNode<T> left, TreeNode<T> right, double distance) {
         super(Optional.ofNullable(left), Optional.ofNullable(right));
         this.data = data;
+        this.distance = distance;
     }
 
+    public static final double UNSET_DISTANCE = -1.0;
+
     @SuppressWarnings("unchecked")
-    static final TreeNode EMPTY_NODE = new TreeNode(null, null, null) {
+    static final TreeNode EMPTY_NODE = new TreeNode(null, null, null, UNSET_DISTANCE) {
         @Override
         public int size() {
             return 0;
@@ -55,6 +59,10 @@ public class TreeNode<T> extends Pair<Optional<TreeNode<T>>, Optional<TreeNode<T
      */
     public T getData() {
         return data;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 
     /**

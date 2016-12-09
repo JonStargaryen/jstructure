@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * The abstract capabilities of algorithms which merge several observations of fragments or motifs into 1 consensus
+ * representation.
  * Created by S on 05.12.2016.
  */
 public abstract class AbstractConsensusComposer {

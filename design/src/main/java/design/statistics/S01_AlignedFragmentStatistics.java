@@ -1,4 +1,4 @@
-package design.aggregation;
+package design.statistics;
 
 import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by S on 11.11.2016.
  */
 @Deprecated
-public class S08_AlignedFragmentStatistics {
+public class S01_AlignedFragmentStatistics {
     public static void main(String[] args) throws IOException {
         StringBuilder output = new StringBuilder();
         final String delimiter = ",";

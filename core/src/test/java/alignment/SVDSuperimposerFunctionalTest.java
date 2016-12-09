@@ -105,7 +105,7 @@ public class SVDSuperimposerFunctionalTest {
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
         System.out.println("rmsd " + alignmentResult.getRmsd());
-        System.out.println("rmsd2 " + CoordinateManipulations.calculateRmsd(alignmentResult.getReference(), alignmentResult.getQuery()));
+        System.out.println("rmsd2 " + CoordinateManipulations.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
         Assert.assertEquals(0.19986, alignmentResult.getRmsd(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 

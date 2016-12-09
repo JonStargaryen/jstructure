@@ -1,6 +1,13 @@
 package design;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Collection of paths and constants.
@@ -106,6 +113,32 @@ public class DesignConstants {
      * The suffix of arff files.
      */
     public static final String ARFF_SUFFIX = ".arff";
+
+    /**
+     * The default delimiter.
+     */
+    public static final String DELIMITER = "\t";
+
+    /**
+     * The known topologies.
+     */
+    public static final List<String> TOPOLOGIES = Arrays.asList("tm", "ntm", "trans");
+
+    public static Stream<Path> list(Path dir) {
+        try {
+            return Files.list(dir);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static void write(Path path, byte[] bytes) {
+        try {
+            Files.write(path, bytes);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     // general predicates
     /**
