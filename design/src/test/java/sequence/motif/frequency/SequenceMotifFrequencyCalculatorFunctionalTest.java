@@ -3,19 +3,19 @@ package sequence.motif.frequency;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import design.DesignConstants;
 import design.sequence.motif.frequency.SequenceMotifFrequencyCalculator;
+import design.sequence.motif.frequency.SequenceMotifRepresentation;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static design.DesignConstants.DECIMAL_FORMAT;
 
 /**
  * Created by S on 24.11.2016.
@@ -57,15 +57,13 @@ public class SequenceMotifFrequencyCalculatorFunctionalTest {
         System.out.println(data);
     }
 
-    private static final DecimalFormat decimalFormat = new DecimalFormat("0.0000", DecimalFormatSymbols.getInstance(Locale.US));
-
     private String composeArray(String id, Map<SequenceMotifDefinition, SequenceMotifFrequencyCalculator> frequencies) {
         String motifName = id.split("-")[0];
         String topology = id.split("-")[1];
         SequenceMotifDefinition definition = SequenceMotifDefinition.valueOf(motifName);
         SequenceMotifFrequencyCalculator calculator = frequencies.get(definition);
 
-        SequenceMotifFrequencyCalculator.SequenceMotifRepresentation representation;
+        SequenceMotifRepresentation representation;
         switch (topology) {
             case "tm":
                 representation = calculator.getTransmembraneFrequencies();
@@ -87,7 +85,7 @@ public class SequenceMotifFrequencyCalculatorFunctionalTest {
                 .map(Map::entrySet)
                 .flatMap(Collection::stream)
                 .map(Map.Entry::getValue)
-                .map(decimalFormat::format)
+                .map(DECIMAL_FORMAT::format)
                 .collect(Collectors.joining(",",
                         "[",
                         "]"));

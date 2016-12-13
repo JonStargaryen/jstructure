@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -62,6 +65,11 @@ public class DesignConstants {
      * All extracted sequences by topology.
      */
     public static final String EXTRACTED_SEQUENCES_BY_TOPOLOGY_DIR = EXTRACTED_SEQUENCES_DIR + "by-topology/";
+
+    /**
+     * All extracted sequences clustered by their respective structural cluster.
+     */
+    public static final String EXTRACTED_SEQUENCES_CONSENSUS_DIR = EXTRACTED_SEQUENCES_DIR + "consensus/";
 
     /**
      * The directory containing data as *.arff file.
@@ -124,6 +132,22 @@ public class DesignConstants {
      */
     public static final List<String> TOPOLOGIES = Arrays.asList("tm", "ntm", "trans");
 
+    /**
+     * The threshold below a cluster is considered to be rare and will be merged with other seldom clusters to the
+     * 'rare' cluster with id {@link DesignConstants#RARE_CLUSTER_NAME}.
+     */
+    public static final int RARE_CLUSTER_THRESHOLD = 20;
+
+    /**
+     * The threshold below 2 fragments are assumed to be of the same cluster.
+     */
+    public static final double IDENTICAL_CLUSTER_RMSD_THRESHOLD = 1.0;
+
+    /**
+     * The identifier of the merged cluster of seldom occurrences.
+     */
+    public static final String RARE_CLUSTER_NAME = "0";
+
     public static Stream<Path> list(Path dir) {
         try {
             return Files.list(dir);
@@ -145,4 +169,6 @@ public class DesignConstants {
      * True iff a given line starts with the comment prefix.
      */
     public static final Predicate<String> isCommentLine = line -> line.startsWith(COMMENT_PREFIX);
+
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000", DecimalFormatSymbols.getInstance(Locale.US));
 }

@@ -2,9 +2,11 @@ package design;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
+import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.parser.opm.OPMParser;
@@ -13,6 +15,7 @@ import design.parser.opm.TMHelix;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +29,50 @@ import static java.util.Objects.nonNull;
  * Created by S on 31.10.2016.
  */
 public class ProteinSource {
+    /**
+     * Returns all sequences for a given topology, sequence motif and consensus fragment.
+     * @param topology the desired topology
+     * @param sequenceMotifDefinition the desired sequence motif described
+     * @return all fragments describing these requirements
+     */
+    public static Map<String, List<AtomContainer>> getGroupedFragments(String topology,
+                                                                       SequenceMotifDefinition sequenceMotifDefinition) {
+        return DesignConstants.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/"))
+                .filter(path -> path.toFile().getName().startsWith(sequenceMotifDefinition.name()))
+                .map(ProteinParser::parsePDBFile)
+                .collect(Collectors.groupingBy(protein -> protein.getIdentifier().split("-")[5]));
+    }
+
+    /**
+     * Returns all sequences for a given topology, sequence motif and consensus fragment. Deprecated as
+     * {@link this#getGroupedFragments(String, SequenceMotifDefinition)} exactly the same, even though the impl is
+     * different, the underlying data will never return rare clusters.
+     * @param topology the desired topology
+     * @param sequenceMotifDefinition the desired sequence motif described
+     * @return all fragments describing these requirements
+     */
+    @Deprecated
+    public static Map<String, List<AtomContainer>> getGroupedFragmentsWithoutRareClusters(String topology,
+                                                                                          SequenceMotifDefinition sequenceMotifDefinition) {
+        Map<String, List<AtomContainer>> rawFragments = getGroupedFragments(topology, sequenceMotifDefinition);
+
+        // screen for rare clusters
+        List<Map.Entry<String, List<AtomContainer>>> rareClusters = rawFragments.entrySet().stream()
+                .filter(entry -> entry.getValue().size() < DesignConstants.RARE_CLUSTER_THRESHOLD)
+                .collect(Collectors.toList());
+
+        // remove rare clusters from original map
+        rawFragments.entrySet().removeAll(rareClusters);
+
+        // merge rare clusters into unique and identifiable new cluster and add this to the original map
+        rawFragments.put(DesignConstants.RARE_CLUSTER_NAME, rareClusters.stream()
+                .map(Map.Entry::getValue)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList()));
+
+        return rawFragments;
+    }
+
     /**
      * The universal function to load protein structures. All proteins of the data set which also provide <code>*.opm</code>
      * files will be returned with topology information attached to them.

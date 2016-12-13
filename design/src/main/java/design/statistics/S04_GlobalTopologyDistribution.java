@@ -13,6 +13,7 @@ import static design.ProteinSource.loadProteins;
 import static java.util.Objects.nonNull;
 
 /**
+ * Reports the distribution
  * Created by S on 07.12.2016.
  */
 public class S04_GlobalTopologyDistribution {

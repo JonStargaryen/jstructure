@@ -1,6 +1,7 @@
 package design.aggregation;
 
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
+import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -45,17 +46,17 @@ public class S08_BuildFragmentClusters {
                         FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();
                         fragmentClusteringComposer.composeClusterRepresentation(proteins);
 
-                        List<FragmentClusteringComposer.StructureCluster> clusters = fragmentClusteringComposer.getClusters();
+                        List<StructureCluster> clusters = fragmentClusteringComposer.getClusters();
                         System.out.println("composed " + clusters.size() + " clusters");
                         clusters.sort(Comparator.comparingInt(o -> o.getEntries().size()));
                         System.out.println("cluster sizes: " + clusters.stream()
-                                .map(FragmentClusteringComposer.StructureCluster::getEntries)
+                                .map(StructureCluster::getEntries)
                                 .mapToInt(Collection::size)
                                 .mapToObj(String::valueOf)
                                 .collect(Collectors.joining(", ", "[", "]")));
 
                         for (int i = 0; i < clusters.size(); i++) {
-                            FragmentClusteringComposer.StructureCluster structureCluster = clusters.get(i);
+                            StructureCluster structureCluster = clusters.get(i);
                             AtomContainer consensus = structureCluster.getConsensusRepresentation();
                             Files.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR +
                                     topology + "/" + motif + "-" + (i + 1) + "-" + structureCluster.getEntries().size()

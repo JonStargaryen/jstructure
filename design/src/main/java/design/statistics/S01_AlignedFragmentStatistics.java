@@ -1,18 +1,20 @@
 package design.statistics;
 
-import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
+import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import static design.DesignConstants.DELIMITER;
 
 /**
  * Compute statistics on sets of aligned fragments grouped by topology.
@@ -22,46 +24,62 @@ import java.util.List;
 public class S01_AlignedFragmentStatistics {
     public static void main(String[] args) throws IOException {
         StringBuilder output = new StringBuilder();
-        final String delimiter = ",";
         output.append("id")
-                .append(delimiter)
+                .append(DELIMITER)
                 .append("motif")
-                .append(delimiter)
+                .append(DELIMITER)
                 .append("topo")
-                .append(delimiter)
+                .append(DELIMITER)
+                .append("clusterIndex")
+                .append(DELIMITER)
                 .append("rmsd")
                 .append(System.lineSeparator());
 
         for(SequenceMotifDefinition definition : SequenceMotifDefinition.values()) {
             Files.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR))
-                    .forEach(topologyDir -> {
+                    .forEach((Path topologyDir) -> {
                             System.out.println(topologyDir);
-                            try {
-                                // align ensemble
-                                List<AtomContainer> alignedEnsemble = Files.list(topologyDir)
-                                        .filter(path -> path.toFile().getName().startsWith(definition.name()))
-                                        .map(ProteinParser::parsePDBFile)
-                                        .collect(StructureCollectors.toAlignedEnsembleByConsensus());
+                            // align ensemble
+//                                List<AtomContainer> alignedEnsemble = Files.list(topologyDir)
+//                                        .filter(path -> path.toFile().getName().startsWith(definition.name()))
+//                                        .map(ProteinParser::parsePDBFile)
+//                                        .collect(StructureCollectors.toAlignedEnsembleByConsensus());
+//
+//                                // create consensus
+//                                ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
+//                                consensusTreeComposer.composeConsensusTree(alignedEnsemble);
+//                                AtomContainer consensus = consensusTreeComposer.getConsensus();
 
-                                // create consensus
-                                ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
-                                consensusTreeComposer.composeConsensusTree(alignedEnsemble);
-                                AtomContainer consensus = consensusTreeComposer.getConsensus();
+//                        for(AtomContainer observation : alignedEnsemble) {
+//                            double rmsd = CoordinateManipulations.calculateRmsd(Selection.on(observation)
+//                                            .backboneAtoms()
+//                                            .asAtomContainer(),
+//                                    Selection.on(consensus)
+//                                            .backboneAtoms()
+//                                            .asAtomContainer());
+//                            String line = observation.getIdentifier() + delimiter + definition.name() +
+//                                    delimiter + topologyDir.toFile().getName() + delimiter + rmsd + System.lineSeparator();
+//                            System.out.println(line);
+//                            output.append(line);
+//                        }
 
-                                for(AtomContainer observation : alignedEnsemble) {
-                                    double rmsd = CoordinateManipulations.calculateRmsd(Selection.on(observation)
-                                            .backboneAtoms()
-                                            .asAtomContainer(),
-                                            Selection.on(consensus)
-                                            .backboneAtoms()
-                                            .asAtomContainer());
-                                    String line = observation.getIdentifier() + delimiter + definition.name() +
-                                            delimiter + topologyDir.toFile().getName() + delimiter + rmsd + System.lineSeparator();
-                                    System.out.println(line);
+                            // align ensemble
+                            List<StructureCluster> clusters = DesignConstants.list(topologyDir)
+                                    .filter(path -> path.toFile().getName().startsWith(definition.name()))
+                                    .map(ProteinParser::parsePDBFile)
+                                    .collect(StructureCollectors.toAlignedEnsembleByStructuralClustering());
+
+                            for(int clusterIndex = 0; clusterIndex < clusters.size(); clusterIndex++) {
+                                StructureCluster cluster = clusters.get(clusterIndex);
+                                AtomContainer consensus = cluster.getConsensusRepresentation();
+                                for(AtomContainer entry : cluster.getEntries()) {
+                                    double rmsd = CoordinateManipulations.calculateRmsd(consensus, cluster.getConsensusRepresentation());
+                                    String line = entry.getIdentifier() + DELIMITER + definition.name() + DELIMITER +
+                                            topologyDir.toFile().getName() + DELIMITER + clusterIndex + DELIMITER + rmsd
+                                            + System.lineSeparator();
+                                    System.out.print(line);
                                     output.append(line);
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
                     });
 

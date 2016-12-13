@@ -84,7 +84,11 @@ public class ProteinParser {
      */
     private Protein parsePDBFile(File pdbFile) throws IOException {
         try(InputStream inputStream = Files.newInputStream(pdbFile.toPath())) {
-            return parsePDBFile(inputStream, pdbFile.getName().split("\\.")[0]);
+            String fileName = pdbFile.getName();
+            return parsePDBFile(inputStream,
+                    // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
+                    fileName.substring(0, fileName.lastIndexOf("."))
+            );
         }
     }
 

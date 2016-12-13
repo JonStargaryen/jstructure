@@ -71,7 +71,7 @@ public class S09_AlignFragmentsByConsensus {
         List<AtomContainer> fragments = DesignConstants.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR + topology + "/"))
                 .filter(path -> path.toFile().getName().startsWith(motif))
                 .filter(path -> !path.toFile().getName().split("-")[1].equals("0"))
-                .filter(path -> Integer.valueOf(path.toFile().getName().split("-")[2].split("\\.")[0]) > 19)
+                .filter(path -> Integer.valueOf(path.toFile().getName().split("-")[2].split("\\.")[0]) >= DesignConstants.RARE_CLUSTER_THRESHOLD)
                 .map(ProteinParser::parsePDBFile)
                 .collect(Collectors.toList());
 

@@ -24,7 +24,7 @@ public interface AtomContainer extends StructureContainer {
 
     default String composePDBRecord() {
         return atoms().map(Atom::composePDBRecord)
-                      .collect(Collectors.joining(System.lineSeparator()));
+                      .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     }
 
     /**

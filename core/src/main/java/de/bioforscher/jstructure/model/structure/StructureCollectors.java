@@ -3,6 +3,8 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
+import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
+import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
 import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -24,10 +26,40 @@ import java.util.stream.Collectors;
 public class StructureCollectors {
     static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
 
-    private StructureCollectors() {
-        // deny instantiation
+    public static Collector<AtomContainer, ?, List<StructureCluster>> toAlignedEnsembleByStructuralClustering() {
+        return Collector.of(SuperimpositionByFragmentClustering::new,
+                SuperimpositionByFragmentClustering::accept,
+                SuperimpositionByFragmentClustering::combine,
+                SuperimpositionByFragmentClustering::getAlignedAtomContainers,
+                Collector.Characteristics.CONCURRENT);
     }
 
+    static class SuperimpositionByFragmentClustering implements Consumer<AtomContainer> {
+        private final List<AtomContainer> containers;
+
+        SuperimpositionByFragmentClustering() {
+            this.containers = new ArrayList<>();
+        }
+
+        @Override
+        public void accept(AtomContainer atomContainer) {
+            containers.add(atomContainer);
+        }
+
+        SuperimpositionByFragmentClustering combine(SuperimpositionByFragmentClustering other) {
+            containers.addAll(other.containers);
+            return this;
+        }
+
+        List<StructureCluster> getAlignedAtomContainers() {
+            FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();
+            fragmentClusteringComposer.composeClusterRepresentation(containers);
+            return fragmentClusteringComposer.getClusters();
+        }
+    }
+
+
+    @Deprecated
     public static Collector<AtomContainer, ?, List<AtomContainer>> toAlignedEnsembleByConsensus() {
         return Collector.of(SuperimpositionByConsensus::new,
                 SuperimpositionByConsensus::accept,
@@ -36,6 +68,7 @@ public class StructureCollectors {
                 Collector.Characteristics.CONCURRENT);
     }
 
+    @Deprecated
     static class SuperimpositionByConsensus implements Consumer<AtomContainer> {
         private final List<AtomContainer> containers;
         private ConsensusTreeComposer consensusTreeComposer;
@@ -80,57 +113,6 @@ public class StructureCollectors {
             consensusTreeComposer.composeConsensusTree(containers);
         }
     }
-
-//    public static Collector<AtomContainer, ?, List<AtomContainer>> toAlignedEnsembleByReference(AtomContainer reference) {
-//        return Collector.of(new SuperpositionByReference(reference),
-//                SuperpositionByReference::accept,
-//                SuperpositionByReference::combine,
-//                SuperpositionByReference::getAlignedContainers,
-//                Collector.Characteristics.CONCURRENT);
-//    }
-//
-//    static class SuperpositionByReference implements Consumer<AtomContainer> {
-//        /**
-//         * the protein all entries are aligned against
-//         */
-//        AtomContainer reference;
-//        /**
-//         * the container of aligned proteins
-//         */
-//        List<AtomContainer> alignedContainers;
-//        /**
-//         * the approach to align fragments
-//         */
-//        AlignmentAlgorithm alignmentStrategy;
-//
-//        SuperpositionByReference(AtomContainer reference) {
-//            alignedContainers = new ArrayList<>();
-//            alignmentStrategy = new SVDSuperimposer();
-//            this.reference = reference;
-//        }
-//
-//        @Override
-//        public void accept(AtomContainer atomContainer) {
-//            try {
-//                AlignmentResult alignmentResult = alignmentStrategy.align(reference, atomContainer);
-//                logger.debug("partial rmsd of {} between {} and {}", alignmentResult.getRmsd(), reference.getIdentifier(),
-//                        atomContainer.getIdentifier(), alignmentResult.getRmsd());
-//                alignmentResult.transform(atomContainer);
-//                alignedContainers.add(atomContainer);
-//            } catch (DimensionMismatchException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        SuperpositionByReference combine(SuperpositionByReference other) {
-//            other.alignedContainers.forEach(this);
-//            return this;
-//        }
-//
-//        List<AtomContainer> getAlignedContainers() {
-//            return alignedContainers;
-//        }
-//    }
 
     public static Collector<Atom, ?, double[]> toCentroid() {
         return Collector.of(CentroidAverager::new,

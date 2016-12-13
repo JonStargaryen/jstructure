@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import static design.DesignConstants.DELIMITER;
 
 /**
- * Count occurrence of each fragment cluster. This time however, fragments occurring less than 5 times are merged into a
+ * Count occurrence of each fragment cluster. This time however, fragments occurring less than 20 times are merged into a
  * 'others' cluster.
  * Created by S on 08.12.2016.
  */
