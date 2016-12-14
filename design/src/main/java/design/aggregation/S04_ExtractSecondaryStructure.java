@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * Moved to {@link ProteinSource}.
  * Created by S on 31.10.2016.
  */
+@Deprecated
 public class S04_ExtractSecondaryStructure {
     public static void main(String[] args) throws IOException {
         ProteinSource.loadProteins().forEach(S04_ExtractSecondaryStructure::printInformation);

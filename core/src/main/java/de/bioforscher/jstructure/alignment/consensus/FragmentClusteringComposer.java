@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Created by S on 05.12.2016.
  */
 public class FragmentClusteringComposer extends AbstractConsensusComposer {
-    private static final double DEFAULT_RMSD_THRESHOLD = 1.0;
+    private static final double DEFAULT_RMSD_THRESHOLD = 0.5;
     private final double rmsdThreshold;
     private List<StructureCluster> clusters;
 
@@ -31,6 +31,7 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
 
     public void composeClusterRepresentation(List<? extends AtomContainer> containers) {
         for(AtomContainer container : containers) {
+            logger.info("handling container {}", container.getIdentifier());
             try {
                 List<StructureCluster> similarClusters = clusters.parallelStream()
                         .filter(cluster -> cluster.getDistanceToConsensus(container) < rmsdThreshold)

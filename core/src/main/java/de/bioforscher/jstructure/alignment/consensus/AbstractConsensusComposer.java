@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  * representation.
  * Created by S on 05.12.2016.
  */
-public abstract class AbstractConsensusComposer {
+abstract class AbstractConsensusComposer {
     static final Logger logger = LoggerFactory.getLogger(AbstractConsensusComposer.class);
 
     private static Atom mergeAtomPair(Pair<Atom, Atom> atomPair) {
@@ -28,8 +28,9 @@ public abstract class AbstractConsensusComposer {
 
     static AtomContainer mergeContainerPair(AtomContainer reference, AtomContainer candidate) {
         // get intersecting pairs of atoms wrapped in an atom container
+        // 12/14/16 - move to backboneOnly flag
         Pair<AtomContainer, AtomContainer> containerPair =
-                CoordinateManipulations.comparableAtomContainerPair(reference, candidate);
+                CoordinateManipulations.comparableAtomContainerPair(reference, candidate, true);
 
         return Combinatorics.sequentialPairsOf(containerPair.getLeft().getAtoms(), containerPair.getRight().getAtoms())
                 .map(AbstractConsensusComposer::mergeAtomPair)

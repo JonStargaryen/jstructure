@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * Created by S on 02.10.2016.
  */
 public class SequenceMotifAnnotator implements FeatureProvider {
-    final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
+    private static final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
 
     public enum FeatureNames {
         SEQUENCE_MOTIF
@@ -65,7 +65,7 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                     }
 
                     // motif lacks internal residues or has a invalid ordering
-                    if(startResidue.getResidueNumber() + motifLength - 1 != endResidue.getResidueNumber()) {
+                    if(startResidue.getResidueNumber() + motifLength != endResidue.getResidueNumber()) {
                         continue;
                     }
 
@@ -79,9 +79,11 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                             residue.setFeature(FeatureNames.SEQUENCE_MOTIF, value);
                         }
                         value.add(sequenceMotif);
-                        globalListOfSequenceMotifs.add(sequenceMotif);
+                        if(!globalListOfSequenceMotifs.contains(sequenceMotif)) {
+                            globalListOfSequenceMotifs.add(sequenceMotif);
+                        }
                     });
-                   logger.info("found sequence motif: {}", sequenceMotif);
+                    logger.debug("found sequence motif: {}", sequenceMotif);
                 }
             }
         }

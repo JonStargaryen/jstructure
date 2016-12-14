@@ -34,11 +34,13 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
     private AtomContainer consensus;
     private boolean firstEntry;
     private List<? extends AtomContainer> originalContainers;
+    private SVDSuperimposer svdSuperimposer;
 
     public ConsensusTreeComposer() {
         this.alignmentPairs = new ArrayList<>();
         this.consensusTrees = new ArrayList<>();
         this.firstEntry = true;
+        this.svdSuperimposer = new SVDSuperimposer(true);
     }
 
     public void composeConsensusTree(List<? extends AtomContainer> containers) {
@@ -149,7 +151,6 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
     }
 
     public List<AtomContainer> getAlignedContainers() {
-        SVDSuperimposer svdSuperimposer = new SVDSuperimposer();
         return originalContainers.stream()
                 // align container relative to consensus
                 .map(container -> svdSuperimposer.align(consensus, container))
@@ -178,7 +179,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
 
         AlignmentPair(AtomContainer atomContainer1, AtomContainer atomContainer2) {
             super(atomContainer1, atomContainer2);
-            this.alignmentResult = new SVDSuperimposer().align(atomContainer1, atomContainer2);
+            this.alignmentResult = svdSuperimposer.align(atomContainer1, atomContainer2);
         }
 
         AlignmentResult getAlignmentResult() {

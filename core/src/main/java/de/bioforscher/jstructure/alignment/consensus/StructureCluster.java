@@ -17,16 +17,22 @@ public class StructureCluster {
     private AtomContainer consensus;
     private SVDSuperimposer svdSuperimposer;
 
-    StructureCluster(AtomContainer container) {
+    public static final StructureCluster EMPTY_CLUSTER = new StructureCluster();
+
+    private StructureCluster() {
         this.entries = new ArrayList<>();
-        this.entries.add(Objects.requireNonNull(container));
-        this.consensus = container;
-        this.svdSuperimposer = new SVDSuperimposer();
+        this.svdSuperimposer = new SVDSuperimposer(true);
     }
 
-    AtomContainer add(AtomContainer container) {
+    StructureCluster(AtomContainer container) {
+        this();
+        this.entries.add(Objects.requireNonNull(container));
+        this.consensus = container;
+    }
+
+    public AtomContainer add(AtomContainer container) {
         entries.add(container);
-        consensus = computeConsensus();
+        consensus = updateConsensus(container);
         return consensus;
     }
 
@@ -38,8 +44,9 @@ public class StructureCluster {
         return entries;
     }
 
-    private AtomContainer computeConsensus() {
-        AlignmentResult alignment = svdSuperimposer.align(consensus, entries.get(entries.size() - 1));
+    private AtomContainer updateConsensus(AtomContainer container) {
+        //TODO we should store fragments aligned relatively to the consensus, so it is not aligned twice
+        AlignmentResult alignment = svdSuperimposer.align(consensus, container);
         // merge new entry to existing consensus
         //TODO this may be fast, but potentially merging everything is more robust
         //TODO delegating to the abstract class is not really nice

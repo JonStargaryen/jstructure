@@ -19,13 +19,26 @@ import java.util.Arrays;
  * Created by S on 30.09.2016.
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
-    final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
+    private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
+    //TODO move to a more sophisticated predicate
+    private boolean backboneOnly;
+
+    public SVDSuperimposer() {
+        this(false);
+    }
+
+    public SVDSuperimposer(boolean backboneOnly) {
+        this.backboneOnly = backboneOnly;
+    }
 
     @Override
     public AlignmentResult align(AtomContainer reference, AtomContainer candidate) {
         AtomContainer originalReference = reference;
         AtomContainer originalCandidate = candidate;
-        Pair<AtomContainer, AtomContainer> atomContainerPair = CoordinateManipulations.comparableAtomContainerPair(reference, candidate);
+
+        Pair<AtomContainer, AtomContainer> atomContainerPair =
+                CoordinateManipulations.comparableAtomContainerPair(reference, candidate, backboneOnly);
+
         reference = atomContainerPair.getLeft();
         candidate = atomContainerPair.getRight();
 

@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 /**
  * Created by S on 29.11.2016.
  */
+@Deprecated
 public class Z03_SampleExtractedMotifs {
     private static final int limit = 100;
 

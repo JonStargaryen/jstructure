@@ -52,6 +52,7 @@ public class DesignConstants {
 
     public static final String ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "by-topology/";
 
+    @Deprecated
     public static final String ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_SAMPLED_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "by-topology-sampled/";
 
     public static final String ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "consensus/";
@@ -85,6 +86,11 @@ public class DesignConstants {
      * Where the sequences grouped by length live.
      */
     public static final String MOTIF_SEQUENCES_BY_LENGTH_DIR = ARFF_DIR + "motif-sequences-by-lengths/";
+
+    /**
+     * The PyMOL runtime location.
+     */
+    public static final String PYMOL_DIR = "C:/Python27/PyMOL/";
 
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
@@ -136,7 +142,7 @@ public class DesignConstants {
      * The threshold below a cluster is considered to be rare and will be merged with other seldom clusters to the
      * 'rare' cluster with id {@link DesignConstants#RARE_CLUSTER_NAME}.
      */
-    public static final int RARE_CLUSTER_THRESHOLD = 20;
+    public static final double RARE_CLUSTER_THRESHOLD = 0.05;
 
     /**
      * The threshold below 2 fragments are assumed to be of the same cluster.

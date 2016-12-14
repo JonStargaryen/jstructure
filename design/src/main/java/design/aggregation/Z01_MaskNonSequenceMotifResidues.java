@@ -18,6 +18,7 @@ import java.util.List;
  * and the itemset miner.
  * Created by S on 29.10.2016.
  */
+@Deprecated
 public class Z01_MaskNonSequenceMotifResidues {
     public static void main(String[] args) throws IOException {
         Files.list(Paths.get(DesignConstants.PDB_DIR))

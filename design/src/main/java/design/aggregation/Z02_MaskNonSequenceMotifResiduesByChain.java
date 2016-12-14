@@ -20,6 +20,7 @@ import java.util.List;
  * and the itemset miner. This time getChain-specific.
  * Created by S on 07.11.2016.
  */
+@Deprecated
 public class Z02_MaskNonSequenceMotifResiduesByChain {
     public static void main(String[] args) throws IOException {
         Files.lines(Paths.get(DesignConstants.NR_ALPHA_IDS))

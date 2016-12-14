@@ -17,8 +17,11 @@ import java.util.stream.Stream;
 
 /**
  * Aligns fragments against its cluster consensus fragment (if any).
+ * Deprecated as this functionality was moved directly to {@link S08_BuildFragmentClusters}.
+ *
  * Created by S on 09.12.2016.
  */
+@Deprecated
 public class S09_AlignFragmentsByConsensus {
     public static void main(String[] args) {
         S06_ExtractSequences.TOPOLOGIES.stream()

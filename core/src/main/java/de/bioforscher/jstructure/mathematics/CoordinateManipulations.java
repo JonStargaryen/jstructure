@@ -2,10 +2,7 @@ package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.StructureCollectors;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
@@ -228,7 +225,8 @@ public class CoordinateManipulations {
      * @return a pair of both collections which can now be aligned
      */
     public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
-                                                                                 AtomContainer atomContainer2) {
+                                                                                 AtomContainer atomContainer2,
+                                                                                 boolean backboneOnly) {
         GroupContainer groupContainer1 = cloneIntoGroupContainer(atomContainer1);
         GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
 
@@ -241,7 +239,7 @@ public class CoordinateManipulations {
         for(int groupIndex = 0; groupIndex < groupContainer1.getGroups().size(); groupIndex++) {
             Group group1 = groupContainer1.getGroups().get(groupIndex);
             Group group2 = groupContainer2.getGroups().get(groupIndex);
-            Pair<List<Atom>, List<Atom>> sharedAtoms = selectSharedAtoms(group1, group2);
+            Pair<List<Atom>, List<Atom>> sharedAtoms = selectSharedAtoms(group1, group2, backboneOnly);
 
             // remove additional/not-shared atoms
             group1.getAtoms().retainAll(sharedAtoms.getLeft());
@@ -255,9 +253,14 @@ public class CoordinateManipulations {
         return new Pair<>(new Chain(groups1), new Chain(groups2));
     }
 
-    private static Pair<List<Atom>, List<Atom>> selectSharedAtoms(Group group1, Group group2) {
+    public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
+                                                                                 AtomContainer atomContainer2) {
+        return comparableAtomContainerPair(atomContainer1, atomContainer2, false);
+    }
+
+    private static Pair<List<Atom>, List<Atom>> selectSharedAtoms(Group group1, Group group2, boolean backboneOnly) {
         // no ordering is enforced - rather the filtering by atom names ensures the identical occurrence of atoms
-        Set<String> sharedAtomNames = determineSharedAtomNames(group1, group2);
+        Set<String> sharedAtomNames = determineSharedAtomNames(group1, group2, backboneOnly);
         return new Pair<>(group1.atoms()
                 .filter(atom -> sharedAtomNames.contains(atom.getName()))
                 .collect(Collectors.toList()),
@@ -266,7 +269,7 @@ public class CoordinateManipulations {
                 .collect(Collectors.toList()));
     }
 
-    private static Set<String> determineSharedAtomNames(Group group1, Group group2) {
+    private static Set<String> determineSharedAtomNames(Group group1, Group group2, boolean backboneOnly) {
         // present atom names in each group, determine the shared ones
         Set<String> sharedAtomNames = group1.atoms()
                 .map(Atom::getName)
@@ -274,6 +277,11 @@ public class CoordinateManipulations {
         sharedAtomNames.retainAll(group2.atoms()
                 .map(Atom::getName)
                 .collect(Collectors.toSet()));
+
+        if(backboneOnly) {
+            sharedAtomNames.retainAll(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES);
+        }
+
         return sharedAtomNames;
     }
 

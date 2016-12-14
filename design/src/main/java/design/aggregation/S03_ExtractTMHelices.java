@@ -13,7 +13,7 @@ import static design.ProteinSource.loadProteins;
  * </pre>
  * Moved to class {@link design.ProteinSource}.
  * Created by S on 29.10.2016.
- */
+ */@Deprecated
 public class S03_ExtractTMHelices {
     public static void main(String[] args) throws IOException {
         loadProteins();

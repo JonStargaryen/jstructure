@@ -81,7 +81,6 @@ public class ProteinSource {
      */
     public static List<Protein> loadProteins() throws IOException {
         return Files.list(Paths.get(DesignConstants.OPM_RAW_DIR))
-//                                      .limit(1)
                                       .map(path -> ProteinParser.parsePDBFile(DesignConstants.PDB_DIR +
                                               path.toFile().getName().split("\\.")[0] + DesignConstants.PDB_SUFFIX))
                                       .collect(Collectors.toList());

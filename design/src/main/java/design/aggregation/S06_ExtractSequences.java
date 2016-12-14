@@ -17,8 +17,11 @@ import java.util.stream.Stream;
 
 /**
  * Extracts all sequence of 1 sequence motif for a given topology and writes them into 1 file.
+ * Deprecated as this should be replaced by some impl instantly linking a given sequence to a structural cluster (i.e.
+ * {@link S08_BuildFragmentClusters}).
  * Created by S on 02.11.2016.
  */
+@Deprecated
 public class S06_ExtractSequences {
     public static final List<String> TOPOLOGIES = Arrays.asList("tm", "ntm", "trans");
 

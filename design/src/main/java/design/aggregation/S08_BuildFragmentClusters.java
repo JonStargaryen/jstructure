@@ -7,9 +7,6 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Comparator;
@@ -20,6 +17,13 @@ import java.util.stream.Stream;
 /**
  * Move extracted fragments into a number of flexible clusters. Fragments are assigned to clusters when their respective
  * RMSD is <1 A, otherwise a new cluster is created. Clusters are significant, when they contain at least 20 entries.
+ *
+ * Diary:
+ * <pre>
+ *     12.14.16
+ *      - rerun
+ *      - reversed order: now most frequent clusters feature the lowest indices
+ * </pre>
  * Created by S on 06.12.2016.
  */
 public class S08_BuildFragmentClusters {
@@ -31,40 +35,71 @@ public class S08_BuildFragmentClusters {
         System.out.println("topology: " + topology);
         Stream.of(SequenceMotifDefinition.values())
                 .map(SequenceMotifDefinition::name)
-                .forEach((String motif) -> {
-                    System.out.println("motif: " + motif);
-                    try {
-                        System.out.println("aligning structures");
-                        List<AtomContainer> proteins = Files.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
-                                topology + "/"))
-                                .parallel()
-                                .filter(path -> path.getFileName().toString().startsWith(motif))
-                                .map(ProteinParser::parsePDBFile)
-                                .collect(Collectors.toList());
-                        System.out.println("loaded " + proteins.size() + " atom containers");
+                .forEach(motif -> handleMotif(topology, motif));
+    }
 
-                        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();
-                        fragmentClusteringComposer.composeClusterRepresentation(proteins);
+    private static void handleMotif(String topology, String motif) {
+        System.out.println("motif: " + motif);
+        System.out.println("aligning structures");
+        List<AtomContainer> proteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
+                topology + "/"))
+                .parallel()
+                .filter(path -> path.getFileName().toString().startsWith(motif))
+                .map(ProteinParser::parsePDBFile)
+                .collect(Collectors.toList());
+        System.out.println("loaded " + proteins.size() + " atom containers");
 
-                        List<StructureCluster> clusters = fragmentClusteringComposer.getClusters();
-                        System.out.println("composed " + clusters.size() + " clusters");
-                        clusters.sort(Comparator.comparingInt(o -> o.getEntries().size()));
-                        System.out.println("cluster sizes: " + clusters.stream()
-                                .map(StructureCluster::getEntries)
-                                .mapToInt(Collection::size)
-                                .mapToObj(String::valueOf)
-                                .collect(Collectors.joining(", ", "[", "]")));
+        // compose clusters
+        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();
+        fragmentClusteringComposer.composeClusterRepresentation(proteins);
+        List<StructureCluster> clusters = fragmentClusteringComposer.getClusters();
 
-                        for (int i = 0; i < clusters.size(); i++) {
-                            StructureCluster structureCluster = clusters.get(i);
-                            AtomContainer consensus = structureCluster.getConsensusRepresentation();
-                            Files.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR +
-                                    topology + "/" + motif + "-" + (i + 1) + "-" + structureCluster.getEntries().size()
-                                    + DesignConstants.PDB_SUFFIX), consensus.composePDBRecord().getBytes());
-                        }
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
-                    }
-                });
+        // sort clusters by their size
+        System.out.println("composed " + clusters.size() + " clusters");
+        clusters.sort(Comparator.comparingInt(o -> ((StructureCluster) o).getEntries().size()).reversed());
+        System.out.println("cluster sizes: " + clusters.stream()
+                .map(StructureCluster::getEntries)
+                .mapToInt(Collection::size)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.joining(", ", "[", "]")));
+
+        // merge sparsely populated clusters
+        List<StructureCluster> rareClusters = clusters.stream()
+                .filter(cluster -> cluster.getEntries().size() < DesignConstants.RARE_CLUSTER_THRESHOLD)
+                .collect(Collectors.toList());
+        if(rareClusters.size() != 0) {
+            clusters.removeAll(rareClusters);
+            //TODO really 'brute'-merge all lone-wolf-clusters into one consensus?
+            StructureCluster mergedCluster = rareClusters.remove(0);
+            clusters.stream()
+                    .map(StructureCluster::getEntries)
+                    .flatMap(Collection::stream)
+                    .forEach(mergedCluster::add);
+            clusters.add(0, mergedCluster);
+        } else {
+            clusters.add(0, StructureCluster.EMPTY_CLUSTER);
+        }
+
+        System.out.println("cluster sizes: " + clusters.stream()
+                .map(StructureCluster::getEntries)
+                .map(Collection::size)
+                .map(String::valueOf)
+                .collect(Collectors.joining(", ", "[", "]")));
+
+        // output consensus
+        for (int i = 0; i < clusters.size(); i++) {
+            if(i == 0 && clusters.get(0).getEntries().size() == 0) {
+                // no rare clusters were merge - thus, no freak cluster at index 0
+                continue;
+            }
+
+            StructureCluster structureCluster = clusters.get(i);
+            AtomContainer consensus = structureCluster.getConsensusRepresentation();
+            DesignConstants.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR +
+                    topology + "/" + motif + "-" + i + "-" + structureCluster.getEntries().size()
+                    + DesignConstants.PDB_SUFFIX), consensus.composePDBRecord().getBytes());
+        }
+
+        System.exit(0);
     }
 }
