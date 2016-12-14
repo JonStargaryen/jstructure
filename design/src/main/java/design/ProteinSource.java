@@ -93,7 +93,7 @@ public class ProteinSource {
         proteins.forEach(protein -> {
             System.out.println("parsing information for " + protein.getName());
             if(annotateTopology) {
-                OPMParser.parse(protein, Paths.get(DesignConstants.OPM_RAW_DIR + protein.getName() +
+                OPMParser.parse(protein, Paths.get(DesignConstants.OPM_RAW_DIR + protein.getName().toLowerCase() +
                         DesignConstants.OPM_SUFFIX));
             }
             if(annotateSSE) {

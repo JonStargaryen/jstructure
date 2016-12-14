@@ -17,6 +17,8 @@ import java.nio.file.Paths;
  * <pre>
  *     Some (about the half) structures are missing as no *.opm information was available. Potentially, this is rather
  *     nice as we then have a data set to test resulting methods which is by no mean part of the training data set.
+ *
+ *     - 12/14/16 - 5A1S misses a ( which is crucial for parsing - add it when recreating the data
  * </pre>
  * Created by S on 29.10.2016.
  */

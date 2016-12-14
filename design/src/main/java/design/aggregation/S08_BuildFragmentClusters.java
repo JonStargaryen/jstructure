@@ -43,6 +43,7 @@ public class S08_BuildFragmentClusters {
         System.out.println("aligning structures");
         List<AtomContainer> proteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
                 topology + "/"))
+                .limit(100)
                 .parallel()
                 .filter(path -> path.getFileName().toString().startsWith(motif))
                 .map(ProteinParser::parsePDBFile)
@@ -50,7 +51,7 @@ public class S08_BuildFragmentClusters {
         System.out.println("loaded " + proteins.size() + " atom containers");
 
         // compose clusters
-        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();
+        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer(DesignConstants.IDENTICAL_CLUSTER_RMSD_THRESHOLD);
         fragmentClusteringComposer.composeClusterRepresentation(proteins);
         List<StructureCluster> clusters = fragmentClusteringComposer.getClusters();
 
@@ -89,7 +90,7 @@ public class S08_BuildFragmentClusters {
         // output consensus
         for (int i = 0; i < clusters.size(); i++) {
             if(i == 0 && clusters.get(0).getEntries().size() == 0) {
-                // no rare clusters were merge - thus, no freak cluster at index 0
+                // no rare clusters were merged - thus, no freak cluster at index 0
                 continue;
             }
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public class DesignConstants {
     /**
      * The root directory containing all data.
      */
-    public static final String BASE_DIR = "D:/membrane/";
+    public static final String BASE_DIR = "/home/bittrich/membrane/";
 
     /**
      * The list of considered pdb ids of non-redundant alpha-helical membrane proteins.
@@ -164,7 +165,7 @@ public class DesignConstants {
 
     public static void write(Path path, byte[] bytes) {
         try {
-            Files.write(path, bytes);
+            Files.write(path, bytes, StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

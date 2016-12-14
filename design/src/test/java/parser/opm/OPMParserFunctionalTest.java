@@ -32,6 +32,6 @@ public class OPMParserFunctionalTest {
 
     @Test
     public void shouldParseAllOPMFiles() throws IOException {
-        ProteinSource.loadProteins();
+        ProteinSource.loadProteins(false, false, true);
     }
 }
