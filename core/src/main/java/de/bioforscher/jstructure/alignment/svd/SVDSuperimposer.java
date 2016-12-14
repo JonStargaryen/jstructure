@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
     private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
     //TODO move to a more sophisticated predicate
-    private boolean backboneOnly;
+    private final boolean backboneOnly;
 
     public SVDSuperimposer() {
         this(false);

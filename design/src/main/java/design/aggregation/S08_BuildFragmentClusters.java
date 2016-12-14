@@ -24,6 +24,7 @@ import java.util.stream.Stream;
  *      - rerun
  *      - reversed order: now most frequent clusters feature the lowest indices
  * </pre>
+ * TODO extract sequences, create summary files, create folder hierarchy
  * Created by S on 06.12.2016.
  */
 public class S08_BuildFragmentClusters {
@@ -43,7 +44,6 @@ public class S08_BuildFragmentClusters {
         System.out.println("aligning structures");
         List<AtomContainer> proteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
                 topology + "/"))
-                .limit(100)
                 .parallel()
                 .filter(path -> path.getFileName().toString().startsWith(motif))
                 .map(ProteinParser::parsePDBFile)
@@ -57,23 +57,24 @@ public class S08_BuildFragmentClusters {
 
         // sort clusters by their size
         System.out.println("composed " + clusters.size() + " clusters");
-        clusters.sort(Comparator.comparingInt(o -> ((StructureCluster) o).getEntries().size()).reversed());
+        clusters.sort(Comparator.comparingInt(o -> ((StructureCluster) o).getOriginalEntries().size()).reversed());
         System.out.println("cluster sizes: " + clusters.stream()
-                .map(StructureCluster::getEntries)
+                .map(StructureCluster::getOriginalEntries)
                 .mapToInt(Collection::size)
                 .mapToObj(String::valueOf)
                 .collect(Collectors.joining(", ", "[", "]")));
 
         // merge sparsely populated clusters
         List<StructureCluster> rareClusters = clusters.stream()
-                .filter(cluster -> cluster.getEntries().size() < DesignConstants.RARE_CLUSTER_THRESHOLD)
+                .filter(cluster -> (double) cluster.getOriginalEntries().size() / (double) proteins.size() < DesignConstants.RARE_CLUSTER_THRESHOLD)
                 .collect(Collectors.toList());
+        System.out.println("rare clusters: " + rareClusters);
         if(rareClusters.size() != 0) {
             clusters.removeAll(rareClusters);
             //TODO really 'brute'-merge all lone-wolf-clusters into one consensus?
             StructureCluster mergedCluster = rareClusters.remove(0);
-            clusters.stream()
-                    .map(StructureCluster::getEntries)
+            rareClusters.stream()
+                    .map(StructureCluster::getOriginalEntries)
                     .flatMap(Collection::stream)
                     .forEach(mergedCluster::add);
             clusters.add(0, mergedCluster);
@@ -82,14 +83,14 @@ public class S08_BuildFragmentClusters {
         }
 
         System.out.println("cluster sizes: " + clusters.stream()
-                .map(StructureCluster::getEntries)
+                .map(StructureCluster::getOriginalEntries)
                 .map(Collection::size)
                 .map(String::valueOf)
                 .collect(Collectors.joining(", ", "[", "]")));
 
         // output consensus
         for (int i = 0; i < clusters.size(); i++) {
-            if(i == 0 && clusters.get(0).getEntries().size() == 0) {
+            if(i == 0 && clusters.get(0).getOriginalEntries().size() == 0) {
                 // no rare clusters were merged - thus, no freak cluster at index 0
                 continue;
             }
@@ -97,10 +98,8 @@ public class S08_BuildFragmentClusters {
             StructureCluster structureCluster = clusters.get(i);
             AtomContainer consensus = structureCluster.getConsensusRepresentation();
             DesignConstants.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR +
-                    topology + "/" + motif + "-" + i + "-" + structureCluster.getEntries().size()
+                    topology + "/" + motif + "-" + i + "-" + structureCluster.getOriginalEntries().size()
                     + DesignConstants.PDB_SUFFIX), consensus.composePDBRecord().getBytes());
         }
-
-        System.exit(0);
     }
 }

@@ -72,7 +72,7 @@ public class S01_AlignedFragmentStatistics {
                             for(int clusterIndex = 0; clusterIndex < clusters.size(); clusterIndex++) {
                                 StructureCluster cluster = clusters.get(clusterIndex);
                                 AtomContainer consensus = cluster.getConsensusRepresentation();
-                                for(AtomContainer entry : cluster.getEntries()) {
+                                for(AtomContainer entry : cluster.getOriginalEntries()) {
                                     double rmsd = CoordinateManipulations.calculateRmsd(consensus, cluster.getConsensusRepresentation());
                                     String line = entry.getIdentifier() + DELIMITER + definition.name() + DELIMITER +
                                             topologyDir.toFile().getName() + DELIMITER + clusterIndex + DELIMITER + rmsd

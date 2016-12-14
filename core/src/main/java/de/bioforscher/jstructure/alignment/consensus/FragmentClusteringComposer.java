@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * An clustering approach somewhat diametric to {@link ConsensusTreeComposer}.
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * Created by S on 05.12.2016.
  */
 public class FragmentClusteringComposer extends AbstractConsensusComposer {
-    private static final double DEFAULT_RMSD_THRESHOLD = 0.5;
+    private static final double DEFAULT_RMSD_THRESHOLD = 1.0;
     private final double rmsdThreshold;
     private List<StructureCluster> clusters;
 
@@ -31,7 +32,7 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
 
     public void composeClusterRepresentation(List<? extends AtomContainer> containers) {
         for(AtomContainer container : containers) {
-            logger.info("handling container {}", container.getIdentifier());
+            logger.trace("handling container {}", container.getIdentifier());
             try {
                 List<StructureCluster> similarClusters = clusters.parallelStream()
                         .filter(cluster -> cluster.getDistanceToConsensus(container) < rmsdThreshold)
@@ -51,9 +52,12 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
                     StructureCluster mergedCluster = similarClusters.remove(0);
                     // assign each other
                     similarClusters.stream()
-                            .map(StructureCluster::getEntries)
+                            .map(StructureCluster::getOriginalEntries)
                             .flatMap(Collection::stream)
                             .forEach(mergedCluster::add);
+
+                    // 12/14/16 - fix: forgot to add current container to merged containers
+                    mergedCluster.add(container);
 
                     clusters.add(mergedCluster);
                 }
@@ -63,7 +67,7 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
         }
 
         logger.info("grouped {} in {} clusters", clusters.stream()
-                .map(StructureCluster::getEntries)
+                .map(StructureCluster::getOriginalEntries)
                 .mapToInt(Collection::size)
                 .sum(), clusters.size());
     }

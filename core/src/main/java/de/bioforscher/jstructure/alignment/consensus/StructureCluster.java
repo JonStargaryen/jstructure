@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Represents a structure cluster created by {@link FragmentClusteringComposer}.
@@ -30,6 +31,11 @@ public class StructureCluster {
         this.consensus = container;
     }
 
+    /**
+     * Adds a new {@link AtomContainer} to the internally handled list and will update the consensus fragment.
+     * @param container the atom container to add
+     * @return the new consensus fragment
+     */
     public AtomContainer add(AtomContainer container) {
         entries.add(container);
         consensus = updateConsensus(container);
@@ -40,7 +46,7 @@ public class StructureCluster {
         return consensus;
     }
 
-    public List<AtomContainer> getEntries() {
+    public List<AtomContainer> getOriginalEntries() {
         return entries;
     }
 
@@ -50,18 +56,17 @@ public class StructureCluster {
         // merge new entry to existing consensus
         //TODO this may be fast, but potentially merging everything is more robust
         //TODO delegating to the abstract class is not really nice
-        return AbstractConsensusComposer.mergeContainerPair(alignment.getOriginalReference(), alignment.getOriginalQuery());
-    }
-
-    double getMinimalDistance(AtomContainer container) {
-        return entries.stream()
-                .map(entry -> svdSuperimposer.align(entry, container))
-                .mapToDouble(AlignmentResult::getRmsd)
-                .min()
-                .orElseThrow(() -> new IllegalArgumentException("rmsd to clusters could not be computed"));
+        return AbstractConsensusComposer.mergeContainerPair(alignment.getOriginalReference(), alignment.getAlignedQuery());
     }
 
     double getDistanceToConsensus(AtomContainer container) {
         return svdSuperimposer.align(consensus, container).getRmsd();
+    }
+
+    @Override
+    public String toString() {
+        return entries.stream()
+                .map(AtomContainer::getIdentifier)
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 }
