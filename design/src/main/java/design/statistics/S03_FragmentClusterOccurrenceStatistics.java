@@ -15,6 +15,7 @@ import static design.DesignConstants.DELIMITER;
  * Starting point are TOPOLOGY > MOTIF > CLUSTERS.
  * Created by S on 06.12.2016.
  */
+@Deprecated
 public class S03_FragmentClusterOccurrenceStatistics {
     public static void main(String[] args) {
         System.out.println("motif" + DELIMITER + "topology" + DELIMITER + "count");

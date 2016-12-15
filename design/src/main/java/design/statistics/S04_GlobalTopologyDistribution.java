@@ -13,9 +13,10 @@ import static design.ProteinSource.loadProteins;
 import static java.util.Objects.nonNull;
 
 /**
- * Reports the distribution
+ * Reports the distribution of transmembrane and non-transmembrane regions within the data set.
  * Created by S on 07.12.2016.
  */
+@Deprecated
 public class S04_GlobalTopologyDistribution {
     public static void main(String[] args) throws IOException {
         // findAny proteins with sequence motif information

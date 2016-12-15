@@ -15,6 +15,7 @@ import static design.DesignConstants.DELIMITER;
  * Count occurrence of each fragment cluster.
  * Created by S on 08.12.2016.
  */
+@Deprecated
 public class S05_PieChartOccurrence {
     private static final String TOPOLOGY = "tm";
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -194,6 +193,14 @@ public class DesignConstants {
             if(!Files.exists(path)) {
                 Files.createDirectories(path);
             }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static Stream<String> lines(Path path) {
+        try {
+            return Files.lines(path);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

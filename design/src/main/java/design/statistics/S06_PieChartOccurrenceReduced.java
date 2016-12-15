@@ -16,8 +16,10 @@ import static design.DesignConstants.DELIMITER;
 /**
  * Count occurrence of each fragment cluster. This time however, fragments occurring less than 20 times are merged into a
  * 'others' cluster.
+ * Deprecated as this functionality is now natively implemented.
  * Created by S on 08.12.2016.
  */
+@Deprecated
 public class S06_PieChartOccurrenceReduced {
     private static final String TOPOLOGY = "trans";
     private static final int MIN_OCCURRENCE = 20;
