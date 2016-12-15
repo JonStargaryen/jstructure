@@ -1,11 +1,15 @@
 package design.aggregation;
 
+import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
+import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -14,22 +18,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static design.DesignConstants.DELIMITER;
+
 /**
  * Move extracted fragments into a number of flexible clusters. Fragments are assigned to clusters when their respective
  * RMSD is <1 A, otherwise a new cluster is created. Clusters are significant, when they contain at least 20 entries.
  *
  * Diary:
  * <pre>
- *     12.14.16
- *      - rerun
+ *     12/14/16
  *      - reversed order: now most frequent clusters feature the lowest indices
+ *     12/15/16
+ *      - writes summary file
+ *      - writes aligned fragments
+ *      - rerun with cutoff < 1 A
+ *          - this could be too generous -> rerun with more rigorous threshold for tm/trans topology
  * </pre>
- * TODO extract sequences, create summary files, create folder hierarchy
  * Created by S on 06.12.2016.
  */
 public class S08_BuildFragmentClusters {
     public static void main(String[] args) {
-        DesignConstants.TOPOLOGIES.forEach(S08_BuildFragmentClusters::handleTopology);
+        DesignConstants.TOPOLOGIES.stream()
+                // skip ntm for now
+                .filter(topology -> !topology.equals("ntm"))
+                .forEach(S08_BuildFragmentClusters::handleTopology);
     }
 
     private static void handleTopology(final String topology) {
@@ -40,6 +52,9 @@ public class S08_BuildFragmentClusters {
     }
 
     private static void handleMotif(String topology, String motif) {
+        String basePath = DesignConstants.FRAGMENT_CLUSTERS + topology + "/" + motif + "/";
+        DesignConstants.makeDirectoryIfAbsent(Paths.get(basePath));
+
         System.out.println("motif: " + motif);
         System.out.println("aligning structures");
         List<AtomContainer> proteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
@@ -89,17 +104,60 @@ public class S08_BuildFragmentClusters {
                 .collect(Collectors.joining(", ", "[", "]")));
 
         // output consensus
+        StringBuilder output = new StringBuilder();
+        output.append("clusterId")
+                .append(DELIMITER)
+                .append("totalCount")
+                .append(DELIMITER)
+                .append("clusterSize")
+                .append(DELIMITER)
+                .append("fragmentId")
+                .append(DELIMITER)
+                .append("fragmentSequence")
+                .append(DELIMITER)
+                .append("rmsd")
+                .append(System.lineSeparator());
+
         for (int i = 0; i < clusters.size(); i++) {
             if(i == 0 && clusters.get(0).getOriginalEntries().size() == 0) {
                 // no rare clusters were merged - thus, no freak cluster at index 0
                 continue;
             }
 
+            String clusterPath = basePath + i + "/";
+            DesignConstants.makeDirectoryIfAbsent(Paths.get(clusterPath));
+
             StructureCluster structureCluster = clusters.get(i);
             AtomContainer consensus = structureCluster.getConsensusRepresentation();
-            DesignConstants.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR +
-                    topology + "/" + motif + "-" + i + "-" + structureCluster.getOriginalEntries().size()
-                    + DesignConstants.PDB_SUFFIX), consensus.composePDBRecord().getBytes());
+            DesignConstants.write(Paths.get(clusterPath + DesignConstants.CLUSTER_CONSENSUS),
+                    consensus.composePDBRecord().getBytes());
+
+            for(AtomContainer fragment : structureCluster.getOriginalEntries()) {
+                // align fragment relative to consensus
+                SVDSuperimposer svdSuperimposer = new SVDSuperimposer();
+                AlignmentResult alignmentResult = svdSuperimposer.align(consensus, fragment);
+                String rmsd = DesignConstants.DECIMAL_FORMAT.format(alignmentResult.getRmsd());
+
+                // add to summary file
+                output.append(i)
+                        .append(DELIMITER)
+                        .append(proteins.size())
+                        .append(DELIMITER)
+                        .append(structureCluster.getOriginalEntries().size())
+                        .append(DELIMITER)
+                        .append(fragment.getIdentifier())
+                        .append(DELIMITER)
+                        .append(((GroupContainer) fragment).getAminoAcidSequence())
+                        .append(DELIMITER)
+                        .append(rmsd)
+                        .append(System.lineSeparator());
+
+                // write aligned file
+                DesignConstants.write(Paths.get(clusterPath + fragment.getIdentifier() + DesignConstants.PDB_SUFFIX),
+                        alignmentResult.getAlignedQuery().composePDBRecord().getBytes());
+            }
         }
+
+        DesignConstants.write(Paths.get(basePath + DesignConstants.CLUSTER_SUMMARY), output.toString().getBytes());
     }
 }

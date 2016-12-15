@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -49,13 +50,16 @@ public class DesignConstants {
      */
     public static final String MOTIF_FRAGMENT_BY_TOPOLOGY_DIR = MOTIF_FRAGMENT_DIR + "by-topology/";
 
+    @Deprecated
     public static final String ALIGNED_MOTIF_FRAGMENT_DIR = BASE_DIR + "aligned-motif-fragments/";
 
+    @Deprecated
     public static final String ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "by-topology/";
 
     @Deprecated
     public static final String ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_SAMPLED_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "by-topology-sampled/";
 
+    @Deprecated
     public static final String ALIGNED_MOTIF_FRAGMENT_CONSENSUS_DIR = ALIGNED_MOTIF_FRAGMENT_DIR + "consensus/";
 
     /**
@@ -92,6 +96,8 @@ public class DesignConstants {
      * The PyMOL runtime location.
      */
     public static final String PYMOL_DIR = "C:/Python27/PyMOL/";
+
+    public static final String FRAGMENT_CLUSTERS = BASE_DIR + "fragment-clusters/";
 
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
@@ -148,12 +154,16 @@ public class DesignConstants {
     /**
      * The threshold below 2 fragments are assumed to be of the same cluster.
      */
-    public static final double IDENTICAL_CLUSTER_RMSD_THRESHOLD = 1.0;
+    public static final double IDENTICAL_CLUSTER_RMSD_THRESHOLD = 0.5;
 
     /**
      * The identifier of the merged cluster of seldom occurrences.
      */
     public static final String RARE_CLUSTER_NAME = "0";
+
+    public static final String CLUSTER_SUMMARY = "clusters.summary";
+
+    public static final String CLUSTER_CONSENSUS = "consensus" + PDB_SUFFIX;
 
     public static Stream<Path> list(Path dir) {
         try {
@@ -178,4 +188,14 @@ public class DesignConstants {
     public static final Predicate<String> isCommentLine = line -> line.startsWith(COMMENT_PREFIX);
 
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000", DecimalFormatSymbols.getInstance(Locale.US));
+
+    public static void makeDirectoryIfAbsent(Path path) {
+        try {
+            if(!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 }
