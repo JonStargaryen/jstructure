@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.sse;
 
 /**
- * The dictionary of DSSP secondary structure elements.
+ * The enum of DSSP secondary structure elements.
  * Created by S on 04.10.2016.
  */
 public enum DSSPSecondaryStructureElement {

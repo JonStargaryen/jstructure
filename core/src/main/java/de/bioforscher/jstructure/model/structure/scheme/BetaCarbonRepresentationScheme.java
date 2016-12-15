@@ -15,7 +15,7 @@ public class BetaCarbonRepresentationScheme implements RepresentationScheme {
     public Atom determineRepresentingAtom(Group group) {
         if(!group.isAminoAcid()) {
             throw new IllegalArgumentException(getClass().getSimpleName() +
-                    " can only be employed to getResidue objects use CentroidScheme instead");
+                    " can only be employed to amino acids - use CentroidScheme instead");
         }
         return Selection.on(group)
                 .betaCarbonAtoms()
