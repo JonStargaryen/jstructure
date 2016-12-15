@@ -230,13 +230,18 @@ public class CoordinateManipulations {
         GroupContainer groupContainer1 = cloneIntoGroupContainer(atomContainer1);
         GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
 
-        if(groupContainer1.getGroups().size() != groupContainer2.getGroups().size()) {
-            throw new IllegalArgumentException("cannot compare atom containers of different size: " + atomContainer1.getIdentifier() + " : " + atomContainer2.getIdentifier());
-        }
+        //TODO check needed and reasonable?
+//        if(groupContainer1.getGroups().size() != groupContainer2.getGroups().size()) {
+//            throw new IllegalArgumentException("cannot compare atom containers of different size: " + atomContainer1.getIdentifier() + " : " + atomContainer2.getIdentifier());
+//        }
+
+        int limitingSize = Math.min(groupContainer1.getGroups().size(), groupContainer2.getGroups().size());
 
         List<Group> groups1 = new ArrayList<>();
         List<Group> groups2 = new ArrayList<>();
-        for(int groupIndex = 0; groupIndex < groupContainer1.getGroups().size(); groupIndex++) {
+        //TODO check needed and reasonable?
+//        for(int groupIndex = 0; groupIndex < groupContainer1.getGroups().size(); groupIndex++) {
+        for(int groupIndex = 0; groupIndex < limitingSize; groupIndex++) {
             Group group1 = groupContainer1.getGroups().get(groupIndex);
             Group group2 = groupContainer2.getGroups().get(groupIndex);
             Pair<List<Atom>, List<Atom>> sharedAtoms = selectSharedAtoms(group1, group2, backboneOnly);

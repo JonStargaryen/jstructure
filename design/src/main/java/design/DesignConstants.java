@@ -98,6 +98,8 @@ public class DesignConstants {
 
     public static final String FRAGMENT_CLUSTERS = BASE_DIR + "fragment-clusters/";
 
+    public static final String FRAGMENT_CONSENSUS_CLUSTERS = FRAGMENT_CLUSTERS + "consensus/";
+
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
