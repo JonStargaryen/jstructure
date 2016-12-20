@@ -6,14 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The abstract implementation of {@link StructureContainer}. Especially providing access to the featureMap and standardizing its
- * usage.
+ * The abstract implementation of {@link StructureContainer}. Especially providing access to the featureMap and
+ * standardizing its usage.
  * Created by S on 15.11.2016.
  */
 public abstract class AbstractFeatureContainer implements StructureContainer {
     private Map<Enum, Object> featureMap;
 
-    public AbstractFeatureContainer() {
+    protected AbstractFeatureContainer() {
         this.featureMap = new HashMap<>();
     }
 
