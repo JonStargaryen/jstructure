@@ -2,9 +2,6 @@ package design;
 
 import de.bioforscher.jstructure.model.structure.AminoAcid;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -81,10 +78,6 @@ public class ArffWriter {
      * @see #convertToArff(String, List)
      */
     public static void writeToArff(String name, List<String> data, Path path) {
-        try {
-            Files.write(path, convertToArff(name, data).getBytes());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+        DesignConstants.write(path, convertToArff(name, data).getBytes());
     }
 }
