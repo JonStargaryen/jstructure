@@ -166,6 +166,8 @@ public class DesignConstants {
 
     public static final String CLUSTER_CONSENSUS = "consensus" + PDB_SUFFIX;
 
+    public static final String TSV_DIR = BASE_DIR + "tsv/";
+
     public static Stream<Path> list(Path dir) {
         try {
             return Files.list(dir);

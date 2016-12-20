@@ -26,7 +26,7 @@ public class S02_PieChartsForTopologies {
                 .collect(Collectors.joining(System.lineSeparator())));
     }
 
-    private static String mapToTopology(String topology) {
+    static String mapToTopology(String topology) {
         switch (topology) {
             case "tm":
                 return "transmembrane";
