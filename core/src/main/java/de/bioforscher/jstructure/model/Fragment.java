@@ -23,6 +23,10 @@ public class Fragment<T> {
         return elements.get(index);
     }
 
+    public List<T> getElements() {
+        return elements;
+    }
+
     @Override
     public String toString() {
         return elements.stream().map(Object::toString).collect(Collectors.joining(", ", "[", "]"));

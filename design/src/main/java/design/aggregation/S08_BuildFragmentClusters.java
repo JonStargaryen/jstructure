@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -66,7 +65,7 @@ public class S08_BuildFragmentClusters {
         System.out.println("loaded " + proteins.size() + " atom containers");
 
         // compose clusters
-        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer(DesignConstants.IDENTICAL_CLUSTER_RMSD_THRESHOLD);
+        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer(DesignConstants.IDENTICAL_CLUSTER_RMSD_THRESHOLD, false);
         fragmentClusteringComposer.composeClusterRepresentation(proteins);
         List<StructureCluster> clusters = fragmentClusteringComposer.getClusters();
 

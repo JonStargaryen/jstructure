@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * An clustering approach somewhat diametric to {@link ConsensusTreeComposer}.
@@ -19,20 +18,23 @@ import java.util.stream.Stream;
 public class FragmentClusteringComposer extends AbstractConsensusComposer {
     private static final double DEFAULT_RMSD_THRESHOLD = 1.0;
     private final double rmsdThreshold;
+    private final boolean performCleanUp;
     private List<StructureCluster> clusters;
 
     public FragmentClusteringComposer() {
-        this(DEFAULT_RMSD_THRESHOLD);
+        this(DEFAULT_RMSD_THRESHOLD, false);
     }
 
-    public FragmentClusteringComposer(double rmsdThreshold) {
+    public FragmentClusteringComposer(double rmsdThreshold, boolean performCleanUp) {
         this.clusters = new ArrayList<>();
         this.rmsdThreshold = rmsdThreshold;
+        this.performCleanUp = performCleanUp;
     }
 
     public void composeClusterRepresentation(List<? extends AtomContainer> containers) {
-        for(AtomContainer container : containers) {
-            logger.trace("handling container {}", container.getIdentifier());
+        for(int containerIndex = 0; containerIndex < containers.size(); containerIndex++) {
+            AtomContainer container = containers.get(containerIndex);
+            logger.info("handling container {} of {} with id: {}", containerIndex, containers.size(), container.getIdentifier());
             try {
                 List<StructureCluster> similarClusters = clusters.parallelStream()
                         .filter(cluster -> cluster.getDistanceToConsensus(container) < rmsdThreshold)
@@ -66,10 +68,22 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
             }
         }
 
+        if(performCleanUp) {
+            cleanUp();
+        }
+
         logger.info("grouped {} in {} clusters", clusters.stream()
                 .map(StructureCluster::getOriginalEntries)
                 .mapToInt(Collection::size)
                 .sum(), clusters.size());
+    }
+
+    /**
+     * The consensus gets distorted over time: remove all entries which in the end are not significantly similar to the
+     * consensus fragment and add those, which now are similar.
+     */
+    private void cleanUp() {
+        //TODO impl
     }
 
     public List<StructureCluster> getClusters() {

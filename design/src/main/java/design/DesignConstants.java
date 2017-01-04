@@ -22,7 +22,8 @@ public class DesignConstants {
     /**
      * The root directory containing all data.
      */
-    public static final String BASE_DIR = "/home/bittrich/membrane/";
+//    public static final String BASE_DIR = "/home/bittrich/membrane/";
+    public static final String BASE_DIR = "D:/membrane/";
 
     /**
      * The list of considered pdb ids of non-redundant alpha-helical membrane proteins.
@@ -97,6 +98,8 @@ public class DesignConstants {
     public static final String PYMOL_DIR = "C:/Python27/PyMOL/";
 
     public static final String FRAGMENT_CLUSTERS = BASE_DIR + "fragment-clusters/";
+
+    public static final String NAIVE_FRAGMENT_CLUSTERS = BASE_DIR + "naive-clusters/"   ;
 
     public static final String FRAGMENT_CONSENSUS_CLUSTERS = FRAGMENT_CLUSTERS + "consensus/";
 
