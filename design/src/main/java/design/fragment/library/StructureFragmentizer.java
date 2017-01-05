@@ -6,7 +6,9 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import design.ProteinSource;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,9 +33,11 @@ public class StructureFragmentizer {
     private static final double DEFAULT_RMSD_CUTOFF = 1.0;
 
     private final FragmentClusteringComposer fragmentClusteringComposer;
+    private final String topology;
 
-    public StructureFragmentizer() {
+    public StructureFragmentizer(String topology) {
         this.fragmentClusteringComposer = new FragmentClusteringComposer(DEFAULT_RMSD_CUTOFF, false);
+        this.topology = topology;
     }
 
     public List<StructureCluster> fragmentize(List<Protein> proteins) {
@@ -49,13 +53,14 @@ public class StructureFragmentizer {
         return fragmentClusteringComposer.getClusters();
     }
 
-    private List<AtomContainer> fragmentize(Protein protein) {
+    private List<GroupContainer> fragmentize(Protein protein) {
         return protein.getChains().stream()
                 .flatMap(this::fragmentize)
+                .filter(container -> ProteinSource.determineTopologyGroup(container).equals(topology))
                 .collect(Collectors.toList());
     }
 
-    private Stream<AtomContainer> fragmentize(Chain chain) {
+    private Stream<GroupContainer> fragmentize(Chain chain) {
         List<Group> aminoAcids = Selection.on(chain)
                 .aminoAcids()
                 .asGroupContainer()

@@ -22,12 +22,18 @@ import static design.DesignConstants.DELIMITER;
  * Created by S on 29.12.2016.
  */
 public class S01_BuildLibrary {
+    private static final String basePath = DesignConstants.NAIVE_FRAGMENT_CLUSTERS + "/";
+
     public static void main(String[] args) throws IOException {
-        String basePath = DesignConstants.NAIVE_FRAGMENT_CLUSTERS + "/";
         DesignConstants.makeDirectoryIfAbsent(Paths.get(basePath));
+        DesignConstants.TOPOLOGIES.parallelStream().forEach(S01_BuildLibrary::handleTopology);
+    }
+
+    private static void handleTopology(String topology) {
+        String topologyPath = basePath + topology + "/";
 
         List<Protein> proteins = ProteinSource.loadProteins(false, false, true);
-        List<StructureCluster> clusters = new StructureFragmentizer().fragmentize(proteins);
+        List<StructureCluster> clusters = new StructureFragmentizer(topology).fragmentize(proteins);
 
         // output consensus
         StringBuilder output = new StringBuilder();
@@ -50,7 +56,7 @@ public class S01_BuildLibrary {
                 continue;
             }
 
-            String clusterPath = basePath + i + "/";
+            String clusterPath = topologyPath + i + "/";
             DesignConstants.makeDirectoryIfAbsent(Paths.get(clusterPath));
 
             StructureCluster structureCluster = clusters.get(i);
@@ -84,6 +90,6 @@ public class S01_BuildLibrary {
             }
         }
 
-        DesignConstants.write(Paths.get(basePath + DesignConstants.CLUSTER_SUMMARY), output.toString().getBytes());
+        DesignConstants.write(Paths.get(topologyPath + DesignConstants.CLUSTER_SUMMARY), output.toString().getBytes());
     }
 }

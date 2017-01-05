@@ -7,13 +7,13 @@ import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.parser.opm.OPMParser;
 import design.parser.opm.TMHelix;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
@@ -79,15 +79,14 @@ public class ProteinSource {
      * @return a collection of all
      * @throws IOException when directories or files cannot be found
      */
-    public static List<Protein> loadProteins() throws IOException {
-        return Files.list(Paths.get(DesignConstants.OPM_RAW_DIR))
+    public static List<Protein> loadProteins() {
+        return DesignConstants.list(Paths.get(DesignConstants.OPM_RAW_DIR))
                                       .map(path -> ProteinParser.parsePDBFile(DesignConstants.PDB_DIR +
                                               path.toFile().getName().split("\\.")[0] + DesignConstants.PDB_SUFFIX))
                                       .collect(Collectors.toList());
     }
 
-    public static List<Protein> loadProteins(boolean annotateSSE, boolean annotateMotifs, boolean annotateTopology)
-            throws IOException {
+    public static List<Protein> loadProteins(boolean annotateSSE, boolean annotateMotifs, boolean annotateTopology) {
         List<Protein> proteins = loadProteins();
 
         proteins.forEach(protein -> {
@@ -156,6 +155,21 @@ public class ProteinSource {
             return "o";
         }
         return "t";
+    }
+
+    public static String determineTopologyGroup(GroupContainer container) {
+        boolean startTM = nonNull(container.getGroups().get(0).getFeature(TMHelix.class,
+                OPMParser.FeatureNames.TM_HELIX));
+        boolean endTM = nonNull(container.getGroups().get(container.getGroups().size() - 1).getFeature(TMHelix.class,
+                OPMParser.FeatureNames.TM_HELIX));
+
+        if(startTM && endTM) {
+            return "tm";
+        }
+        if(!startTM && !endTM) {
+            return "ntm";
+        }
+        return "trans";
     }
 
     private static void addSequenceMotifInformation(Protein protein) {

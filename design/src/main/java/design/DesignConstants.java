@@ -22,8 +22,8 @@ public class DesignConstants {
     /**
      * The root directory containing all data.
      */
-//    public static final String BASE_DIR = "/home/bittrich/membrane/";
-    public static final String BASE_DIR = "D:/membrane/";
+    public static final String BASE_DIR = "/home/bittrich/membrane/";
+//    public static final String BASE_DIR = "D:/membrane/";
 
     /**
      * The list of considered pdb ids of non-redundant alpha-helical membrane proteins.
