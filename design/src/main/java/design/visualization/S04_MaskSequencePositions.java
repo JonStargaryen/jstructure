@@ -2,10 +2,10 @@ package design.visualization;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -28,7 +28,7 @@ public class S04_MaskSequencePositions {
                 .aminoAcids()
                 .asFilteredGroups()
                 .filter(S04_MaskSequencePositions::isNotStartOrEndOfSequenceMotif)
-                .forEach(residue -> residue.setPdbName(AminoAcid.UNKNOWN.getThreeLetterCode()));
+                .forEach(residue -> residue.setGroupInformation(GroupInformation.UNKNOWN_AMINO_ACID));
 
         System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getAminoAcidSequence());
 

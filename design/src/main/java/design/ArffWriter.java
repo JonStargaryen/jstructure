@@ -1,6 +1,6 @@
 package design;
 
-import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -15,8 +15,8 @@ import java.util.stream.IntStream;
  * Created by S on 02.11.2016.
  */
 public class ArffWriter {
-    private static final String NOMINAL_AMINO_ACID_STRING = Arrays.stream(AminoAcid.values())
-                                                                  .map(AminoAcid::getOneLetterCode)
+    private static final String NOMINAL_AMINO_ACID_STRING = Arrays.stream(AminoAcidFamily.values())
+                                                                  .map(AminoAcidFamily::getOneLetterCode)
                                                                   .collect(Collectors.joining(",", "{", "}"));
 
     /**

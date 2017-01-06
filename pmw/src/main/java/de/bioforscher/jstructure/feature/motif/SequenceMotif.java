@@ -1,10 +1,10 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 
 import java.util.stream.Collectors;
 
@@ -39,9 +39,8 @@ public class SequenceMotif {
 
     public String getSequence() {
         return groups.groups()
-                .map(Group::getPdbName)
-                .map(AminoAcid::valueOfIgnoreCase)
-                .map(AminoAcid::getOneLetterCode)
+                .map(Group::getGroupInformation)
+                .map(GroupInformation::getOneLetterCode)
                 .collect(Collectors.joining());
     }
 
@@ -60,7 +59,7 @@ public class SequenceMotif {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " motifDefinition='" + motifDefinition + "' sequence='" + getSequence() +
-                "' startGroup='" + startGroup.getPdbName() + "-" + startGroup.getResidueNumber() +
-                "' endGroup='" + endGroup.getPdbName() + "-" + endGroup.getResidueNumber() + "'";
+                "' startGroup='" + startGroup.getThreeLetterCode() + "-" + startGroup.getResidueNumber() +
+                "' endGroup='" + endGroup.getThreeLetterCode() + "-" + endGroup.getResidueNumber() + "'";
     }
 }

@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -37,7 +36,7 @@ public class MembranePotentialIntegrationTest {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue -> residue.getParentChain().getChainId() + "-" +
-                        AminoAcid.valueOfIgnoreCase(residue.getPdbName()) + "-" + residue.getResidueNumber() + " : " +
+                        residue.getThreeLetterCode() + "-" + residue.getResidueNumber() + " : " +
                         membrane.distanceToMembraneCenter(residue))
                 .forEach(System.out::println);
     }
@@ -49,7 +48,7 @@ public class MembranePotentialIntegrationTest {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue -> residue.getParentChain().getChainId() + "-" +
-                        AminoAcid.valueOfIgnoreCase(residue.getPdbName()) + "-" + residue.getResidueNumber() + " : " +
+                        residue.getThreeLetterCode() + "-" + residue.getResidueNumber() + " : " +
                         membrane.computePotential(residue))
                 .forEach(System.out::println);
     }

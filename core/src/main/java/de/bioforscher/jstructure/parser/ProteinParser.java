@@ -178,12 +178,12 @@ public class ProteinParser {
 
             // we check for valid amino acids here, so no empty (nucleotide/ligand-only) chains are parsed
             String pdbName = line.substring(17, 20).trim();
-//            System.out.println(line);
-            if(pdbName.length() < 3 || line.startsWith(HETATM_PREFIX)) {
+
+//            if(pdbName.length() < 3 || line.startsWith(HETATM_PREFIX)) {
 //                // if pdbName is less than 3 chars long, this is no amino acid - e.g. 'U' vs 'THR'
 //                // TODO at some point parsing nucleotides and hetatms would be nice
-                return;
-            }
+//                return;
+//            }
 
             // actually there is something to parse
             String chainId = line.substring(21, 22);
@@ -208,7 +208,7 @@ public class ProteinParser {
 
                 // we provide an additional flag on whether this is an ATOM or HETATM record to assist the assignment of
                 // the correct group type
-                currentGroup = new Group(pdbName, resNum, determineGroupType(pdbName, line.startsWith(ATOM_PREFIX)));
+                currentGroup = new Group(pdbName, resNum);
                 currentChain.addGroup(currentGroup);
             }
 
@@ -235,17 +235,5 @@ public class ProteinParser {
             passedFirstModel = true;
 //            logger.info("skipping models for {}", protein.getName());
         }
-    }
-
-    private Group.GroupType determineGroupType(String pdbName, boolean isAtomRecord) {
-        AminoAcid assignedAminoAcid = AminoAcid.valueOfIgnoreCase(pdbName);
-//        Nucleotide assignedNucleotide = Nucleotide.valueOfIgnoreCase(pdbName);
-
-        // the clear case: ATOM record and pdbName matches an amino acid
-        if(isAtomRecord && !assignedAminoAcid.equals(AminoAcid.UNKNOWN)) {
-            return Group.GroupType.AMINO_ACID;
-        }
-
-        return Group.GroupType.HETATM;
     }
 }

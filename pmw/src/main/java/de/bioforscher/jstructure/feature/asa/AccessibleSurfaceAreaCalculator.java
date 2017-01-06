@@ -2,7 +2,10 @@ package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -158,7 +161,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
                         atomName.equals("CG2")) {
                     return TETRAHEDRAL_CARBON_VDW;
                 }
-                switch(AminoAcid.valueOfIgnoreCase(parentResidue.getPdbName())) {
+                switch(parentResidue.getGroupInformation().getAminoAcidFamily()) {
                     case PHENYLALANINE: case TRYPTOPHAN: case TYROSINE: case HISTIDINE: case ASPARTIC_ACID: case ASPARAGINE:
                         return TRIGONAL_CARBON_VDW;
                     case PROLINE: case LYSINE: case ARGININE: case METHIONINE: case ISOLEUCINE: case LEUCINE:

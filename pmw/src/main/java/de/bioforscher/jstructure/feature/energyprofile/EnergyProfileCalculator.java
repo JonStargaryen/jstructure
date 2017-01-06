@@ -80,7 +80,7 @@ public class EnergyProfileCalculator implements FeatureProvider {
 
             double[] currentGroupCoordinates = representationScheme.determineRepresentingAtom(currentGroup).getCoordinates();
             double solvation = 0;
-            double currentGroupSolvationValue = globularSolvationData.get(currentGroup.getPdbName());
+            double currentGroupSolvationValue = globularSolvationData.get(currentGroup.getThreeLetterCode());
 
             for(Group surroundingGroup : protein.getGroups()) {
                 if(!surroundingGroup.isAminoAcid()) {
@@ -93,7 +93,7 @@ public class EnergyProfileCalculator implements FeatureProvider {
                     continue;
                 }
 
-                solvation += currentGroupSolvationValue + globularSolvationData.get(surroundingGroup.getPdbName());
+                solvation += currentGroupSolvationValue + globularSolvationData.get(surroundingGroup.getThreeLetterCode());
             }
 
             currentGroup.setFeature(SOLVATION_ENERGY, solvation);
@@ -119,7 +119,7 @@ public class EnergyProfileCalculator implements FeatureProvider {
                     .filter(pair -> pair.contains(currentResidue))
                     .flatMap(pair -> Stream.of(pair.getLeft(), pair.getRight()))
                     // retrieve amino acid instance for the given residue
-                    .map(Group::getPdbName)
+                    .map(Group::getThreeLetterCode)
                     // safety net for mal-formed pdb names of amino acids
                     .map(String::toUpperCase)
                     // look up preference

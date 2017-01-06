@@ -61,8 +61,8 @@ public class S05_GroupByTopology {
 //        }
 
         String filename = DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/" + motif.getMotifDefinition() +
-                "-" + proteinName + "-" + chainId + "-" + motif.getStartGroup().getPdbName() +
-                motif.getStartGroup().getResidueNumber() + "-" + motif.getEndGroup().getPdbName() +
+                "-" + proteinName + "-" + chainId + "-" + motif.getStartGroup().getThreeLetterCode() +
+                motif.getStartGroup().getResidueNumber() + "-" + motif.getEndGroup().getThreeLetterCode() +
                 motif.getEndGroup().getResidueNumber() + DesignConstants.PDB_SUFFIX;
         DesignConstants.write(Paths.get(filename), content.getBytes());
     }

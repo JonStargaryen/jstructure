@@ -1,6 +1,6 @@
 package design.learning;
 
-import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import design.DesignConstants;
 
 import java.io.IOException;
@@ -22,15 +22,15 @@ import static design.DesignConstants.DELIMITER;
  * Created by bittrich on 12/19/16.
  */
 public class ClusterSummaryToArffConverter {
-    private static final String NOMINAL_AMINO_ACID_STRING = Arrays.stream(AminoAcid.values())
-            .map(AminoAcid::getOneLetterCode)
+    private static final String NOMINAL_AMINO_ACID_STRING = Arrays.stream(AminoAcidFamily.values())
+            .map(AminoAcidFamily::getOneLetterCode)
             .collect(Collectors.joining(",", "{", "}"));
 
     // naive mapping of amino acids to their ordinal numbering of the amino acid enum
     private static final ToIntFunction<char[]> NAIVE_MAPPING = name -> determineAminoAcid(name).ordinal();
 
-    private static AminoAcid determineAminoAcid(char[] name) {
-        return AminoAcid.valueOfIgnoreCase(String.valueOf(name));
+    private static AminoAcidFamily determineAminoAcid(char[] name) {
+        return AminoAcidFamily.valueOfIgnoreCase(String.valueOf(name)).get();
     }
 
     /**

@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -338,7 +337,7 @@ public class ANVIL implements FeatureProvider {
                               .asAtom()
                               .getCoordinates(), diam, c1, c2))
                 // map to index representation - 0: membrane-tendency, 1: polar getResidue
-                .mapToInt(residue -> AminoAcid.valueOfIgnoreCase(residue.getPdbName()).getANVILGrouping().ordinal())
+                .mapToInt(residue -> residue.getGroupInformation().getAminoAcidFamily().getANVILGrouping().ordinal())
                 // unknown amino acids could be mapped to indices exceeding the array
                 .filter(index -> index < 2)
                 .collect(HphobHphilConsumer::new, HphobHphilConsumer::accept, HphobHphilConsumer::combine)

@@ -47,8 +47,8 @@ public class TMHelix {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " tilt='" + tilt + "°' startGroup='" + startGroup.getPdbName() + "-" +
-                startGroup.getResidueNumber() + "' endGroup='" + endGroup.getPdbName() + "-" +
+        return getClass().getSimpleName() + " tilt='" + tilt + "°' startGroup='" + startGroup.getThreeLetterCode() + "-" +
+                startGroup.getResidueNumber() + "' endGroup='" + endGroup.getThreeLetterCode() + "-" +
                 endGroup.getResidueNumber() + "'";
     }
 

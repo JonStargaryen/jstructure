@@ -1,6 +1,6 @@
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Test;
@@ -28,14 +28,14 @@ public class Demo {
 
         // print coordinates of all alanines
         Selection.on(protein)
-                .aminoAcids(AminoAcid.ALANINE)
+                .aminoAcids(AminoAcidFamily.ALANINE)
                 .asFilteredGroups()
                 .map(Group::composePDBRecord)
                 .forEach(System.out::println);
 
         // count all alanines
         double alanineRatio = Selection.on(protein)
-                .aminoAcids(AminoAcid.ALANINE)
+                .aminoAcids(AminoAcidFamily.ALANINE)
                 .asFilteredGroups()
                 .count() / (double) protein.getSize() * 100.0;
 

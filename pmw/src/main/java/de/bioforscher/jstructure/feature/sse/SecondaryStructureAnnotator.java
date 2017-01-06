@@ -5,8 +5,12 @@ import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -708,7 +712,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
     }
 
     private boolean isProline(Group group) {
-        return AminoAcid.valueOfIgnoreCase(group.getPdbName()).equals(AminoAcid.PROLINE);
+        return group.getGroupInformation().getAminoAcidFamily().equals(AminoAcidFamily.PROLINE);
     }
 
     /**

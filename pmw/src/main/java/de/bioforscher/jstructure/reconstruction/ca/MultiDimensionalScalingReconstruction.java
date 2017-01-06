@@ -1,7 +1,11 @@
 package de.bioforscher.jstructure.reconstruction.ca;
 
 import de.bioforscher.jstructure.mathematics.mds.MultiDimensionalScaling;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 
@@ -31,6 +35,6 @@ public class MultiDimensionalScalingReconstruction implements ReconstructionAlgo
         List<double[]> placedAtoms = mds.computeEmbedding(distanceMap);
 
         IntStream.range(0, residues.size())
-                .forEach(i -> residues.get(i).addAtom(new Atom(AminoAcid.ATOM_NAMES.CA_ATOM_NAME, 0, Element.C, placedAtoms.get(i))));
+                .forEach(i -> residues.get(i).addAtom(new Atom(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME, 0, Element.C, placedAtoms.get(i))));
     }
 }

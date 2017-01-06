@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.model.structure.container;
 
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,9 +26,8 @@ public interface GroupContainer extends AtomContainer {
     default String getAminoAcidSequence() {
         return groups()
                 .filter(Group::isAminoAcid)
-                .map(Group::getPdbName)
-                .map(AminoAcid::valueOfIgnoreCase)
-                .map(AminoAcid::getOneLetterCode)
+                .map(Group::getGroupInformation)
+                .map(GroupInformation::getOneLetterCode)
                 .collect(Collectors.joining());
     }
 

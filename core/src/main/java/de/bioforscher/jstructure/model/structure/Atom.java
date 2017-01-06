@@ -134,8 +134,8 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
     /**
      * A unique identifier for each atom in a {@link AtomContainer}.
      * @return a String, e.g. 'CA' or 'CZ'
-     * @see AminoAcid#allAtomNames()
-     * @see AminoAcid#sideChainAtomNames()
+     * @see de.bioforscher.jstructure.model.structure.family.AminoAcidFamily#allAtomNames()
+     * @see de.bioforscher.jstructure.model.structure.family.AminoAcidFamily#sideChainAtomNames()
      */
     public String getName() {
         return name;
@@ -242,9 +242,9 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
 
         static String toPDBString(Atom atom) {
             Group parentGroup = atom.parentGroup;
-            String record = parentGroup.getGroupType().equals(Group.GroupType.AMINO_ACID) ? "ATOM  " : "HETATM";
+            String record = parentGroup.isLigand() ? "HETATM" : "ATOM  ";
             // format output ...
-            String resName = parentGroup.getPdbName();
+            String resName = parentGroup.getThreeLetterCode();
             String pdbcode = String.valueOf(parentGroup.getResidueNumber());
 
             int seri = atom.pdbSerial;

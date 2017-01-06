@@ -2,9 +2,13 @@ package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.slf4j.Logger;
@@ -284,7 +288,7 @@ public class CoordinateManipulations {
                 .collect(Collectors.toSet()));
 
         if(backboneOnly) {
-            sharedAtomNames.retainAll(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES);
+            sharedAtomNames.retainAll(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
         }
 
         return sharedAtomNames;

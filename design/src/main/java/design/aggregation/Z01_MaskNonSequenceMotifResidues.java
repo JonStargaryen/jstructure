@@ -2,9 +2,9 @@ package design.aggregation;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -34,7 +34,7 @@ public class Z01_MaskNonSequenceMotifResidues {
                          .aminoAcids()
                          .asFilteredGroups()
                          .filter(Z01_MaskNonSequenceMotifResidues::isNotStartOrEndOfSequenceMotif)
-                         .forEach(residue -> residue.setPdbName(AminoAcid.UNKNOWN.getThreeLetterCode()));
+                         .forEach(residue -> residue.setGroupInformation(GroupInformation.UNKNOWN_AMINO_ACID));
 
                  System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getAminoAcidSequence());
 

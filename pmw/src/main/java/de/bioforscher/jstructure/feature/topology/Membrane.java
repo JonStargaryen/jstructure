@@ -3,15 +3,19 @@ package de.bioforscher.jstructure.feature.topology;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.parser.CIFParser;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -29,7 +33,7 @@ public class Membrane {
     /**
      * the map of functions assigning a potential to each amino acid observation
      */
-    private static Map<AminoAcid, Function<Double, Double>> fittingFunctions;
+    private static Map<AminoAcidFamily, Function<Double, Double>> fittingFunctions;
     /**
      * the center point of the membrane
      */
@@ -102,13 +106,13 @@ public class Membrane {
      * Ulmschneider MB, Sansom MS, Di Nola A.
      */
     static class FittingFunction implements Function<Double, Double> {
-        AminoAcid aminoAcid;
+        AminoAcidFamily aminoAcid;
         double[] parameters;
 
         static final FittingFunction DEFAULT_FITTING_FUNCTION = new FittingFunction("UNK 0 0 0 0 0 0 0");
 
         FittingFunction(String line) {
-            this.aminoAcid = AminoAcid.valueOfIgnoreCase(line.substring(0, 3));
+            this.aminoAcid = CIFParser.parseLigandInformation(line.substring(0, 3)).getAminoAcidFamily();
             this.parameters = Pattern.compile("\\s+").splitAsStream(line)
                     // skip amino acid annotation
                     .skip(1)
@@ -127,7 +131,7 @@ public class Membrane {
                     parameters[4] * Math.exp(-parameters[5] * q2 * q2);
         }
 
-        AminoAcid getAminoAcid() {
+        AminoAcidFamily getAminoAcid() {
             return aminoAcid;
         }
     }
@@ -152,7 +156,7 @@ public class Membrane {
      * @return observed potential
      */
     public double computePotential(Group residue) {
-        return fittingFunctions.getOrDefault(AminoAcid.valueOfIgnoreCase(residue.getPdbName()),
+        return fittingFunctions.getOrDefault(residue.getGroupInformation().getAminoAcidFamily(),
                 FittingFunction.DEFAULT_FITTING_FUNCTION).apply(distanceToMembraneCenter(residue));
     }
 

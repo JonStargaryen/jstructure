@@ -1,7 +1,7 @@
 package design.aggregation.topology.gmlvq;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import design.ArffWriter;
 import design.DesignConstants;
 
@@ -44,8 +44,8 @@ public class S01_ConvertSequencesToArffByLength {
               .forEach(S01_ConvertSequencesToArffByLength::handleMotifLength);
     }
 
-    private static AminoAcid determineAminoAcid(char[] name) {
-        return AminoAcid.valueOfIgnoreCase(String.valueOf(name));
+    private static AminoAcidFamily determineAminoAcid(char[] name) {
+        return AminoAcidFamily.valueOfIgnoreCase(String.valueOf(name)).get();
     }
 
     private static void handleMotifLength(String lengthString) {

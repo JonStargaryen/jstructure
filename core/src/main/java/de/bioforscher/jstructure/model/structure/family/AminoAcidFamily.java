@@ -1,5 +1,7 @@
-package de.bioforscher.jstructure.model.structure;
+package de.bioforscher.jstructure.model.structure.family;
 
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,44 +12,32 @@ import java.util.stream.Stream;
 
 /**
  * Enumerates all 20 canonical amino acids and keeps track of the present atom names for each amino acid.
- * Created by S on 28.09.2016.
+ * Created by S on 05.01.2017.
  */
-public enum AminoAcid {
-    ALANINE("ALA", "A", new String[] { "CB" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
-	ARGININE("ARG", "R", new String[] { "CB", "CG", "CD", "NE", "CZ", "NH1", "NH2" }, GutteridgeGrouping.GUANIDINIUM, ANVILGrouping.POLAR),
-	ASPARAGINE("ASN", "N", new String[] { "CB", "CG", "OD1", "ND2" }, GutteridgeGrouping.AMIDE, ANVILGrouping.POLAR),
-    ASPARTIC_ACID("ASP", "D", new String[] { "CB", "CG", "OD1", "OD2" }, GutteridgeGrouping.CARBOXYLATE, ANVILGrouping.POLAR),
-	CYSTEINE("CYS", "C", new String[] { "CB", "SG" }, GutteridgeGrouping.THIOL, ANVILGrouping.MEMBRANE),
-	GLUTAMINE("GLN", "Q", new String[] { "CB", "CG", "CD", "OE1", "NE2" }, GutteridgeGrouping.AMIDE, ANVILGrouping.POLAR),
-	GLUTAMIC_ACID("GLU", "E", new String[] { "CB", "CG", "CD", "OE1", "OE2" }, GutteridgeGrouping.CARBOXYLATE, ANVILGrouping.POLAR),
-	GLYCINE("GLY", "G", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
-	HISTIDINE("HIS", "H", new String[] { "CB", "CG", "ND1", "CD2", "CE1", "NE2" }, GutteridgeGrouping.IMIDAZOLE, ANVILGrouping.MEMBRANE),
-	ISOLEUCINE("ILE", "I", new String[] { "CB", "CG1", "CG2", "CD1" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
-	LEUCINE("LEU", "L", new String[] { "CB", "CG", "CD1", "CD2" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
-	LYSINE("LYS", "K", new String[] { "CB", "CG", "CD", "CE", "NZ" }, GutteridgeGrouping.AMINO, ANVILGrouping.POLAR),
-	METHIONINE("MET", "M", new String[] { "CB", "CG", "SD", "CE" }, GutteridgeGrouping.THIOL, ANVILGrouping.MEMBRANE),
-	PHENYLALANINE("PHE", "F", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
-	PROLINE("PRO", "P", new String[] { "CB", "CG", "CD" }, GutteridgeGrouping.NONE, ANVILGrouping.POLAR),
-	SERINE("SER", "S", new String[] { "CB", "OG" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.MEMBRANE),
-	THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.MEMBRANE),
-	TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }, GutteridgeGrouping.NONE, ANVILGrouping.POLAR),
-	TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, GutteridgeGrouping.HYDROXYL, ANVILGrouping.POLAR),
-    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, GutteridgeGrouping.NONE, ANVILGrouping.MEMBRANE),
-//    // MSE is only found as a molecular replacement for MET
-//    SELENOMETHIONINE("MSE", "M", new String[] { "CB", "CG", "SE", "CE" }, METHIONINE.gutteridgeGrouping, METHIONINE.anvilGrouping),
-//    // 'non-standard', genetically encoded
-//    // http://www.chem.qmul.ac.uk/iubmb/newsletter/1999/item3.html
-//    // IUBMB recommended name is 'SEC' but the wwPDB currently use 'CSE'
-//    // likewise 'PYL' (IUBMB) and 'PYH' (PDB)
-//
-//		aminoAcids.put("CSE", 'U');
-//		aminoAcids.put("SEC", 'U');
-//		aminoAcids.put("PYH", 'O');
-//		aminoAcids.put("PYL", 'O');
-//    // the 'absolutely' unknown case
-    UNKNOWN("UNK", "X", new String[] {}, GutteridgeGrouping.NONE, ANVILGrouping.UNKNOWN);
+public enum AminoAcidFamily implements AtomicFamily {
+    ALANINE("ALA", "A", new String[] { "CB" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    ARGININE("ARG", "R", new String[] { "CB", "CG", "CD", "NE", "CZ", "NH1", "NH2" }, AminoAcidFamily.GutteridgeGrouping.GUANIDINIUM, AminoAcidFamily.ANVILGrouping.POLAR),
+    ASPARAGINE("ASN", "N", new String[] { "CB", "CG", "OD1", "ND2" }, AminoAcidFamily.GutteridgeGrouping.AMIDE, AminoAcidFamily.ANVILGrouping.POLAR),
+    ASPARTIC_ACID("ASP", "D", new String[] { "CB", "CG", "OD1", "OD2" }, AminoAcidFamily.GutteridgeGrouping.CARBOXYLATE, AminoAcidFamily.ANVILGrouping.POLAR),
+    CYSTEINE("CYS", "C", new String[] { "CB", "SG" }, AminoAcidFamily.GutteridgeGrouping.THIOL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    GLUTAMINE("GLN", "Q", new String[] { "CB", "CG", "CD", "OE1", "NE2" }, AminoAcidFamily.GutteridgeGrouping.AMIDE, AminoAcidFamily.ANVILGrouping.POLAR),
+    GLUTAMIC_ACID("GLU", "E", new String[] { "CB", "CG", "CD", "OE1", "OE2" }, AminoAcidFamily.GutteridgeGrouping.CARBOXYLATE, AminoAcidFamily.ANVILGrouping.POLAR),
+    GLYCINE("GLY", "G", new String[] {}, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    HISTIDINE("HIS", "H", new String[] { "CB", "CG", "ND1", "CD2", "CE1", "NE2" }, AminoAcidFamily.GutteridgeGrouping.IMIDAZOLE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    ISOLEUCINE("ILE", "I", new String[] { "CB", "CG1", "CG2", "CD1" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    LEUCINE("LEU", "L", new String[] { "CB", "CG", "CD1", "CD2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    LYSINE("LYS", "K", new String[] { "CB", "CG", "CD", "CE", "NZ" }, AminoAcidFamily.GutteridgeGrouping.AMINO, AminoAcidFamily.ANVILGrouping.POLAR),
+    METHIONINE("MET", "M", new String[] { "CB", "CG", "SD", "CE" }, AminoAcidFamily.GutteridgeGrouping.THIOL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    PHENYLALANINE("PHE", "F", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    PROLINE("PRO", "P", new String[] { "CB", "CG", "CD" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.POLAR),
+    SERINE("SER", "S", new String[] { "CB", "OG" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.POLAR),
+    TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.POLAR),
+    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
+    UNKNOWN("UNK", "X", new String[] {}, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.UNKNOWN);
 
-    static Logger logger = LoggerFactory.getLogger(AminoAcid.class);
+    static Logger logger = LoggerFactory.getLogger(AminoAcidFamily.class);
 
     public boolean isStandardAminoAcid() {
         return !oneLetterCode.equals(UNKNOWN.getOneLetterCode());
@@ -105,7 +95,7 @@ public enum AminoAcid {
         );
     }
 
-    private static Map<String, AminoAcid> allAminoAcids;
+    private static Map<String, AminoAcidFamily> allAminoAcids;
 
     static {
         /*
@@ -113,7 +103,7 @@ public enum AminoAcid {
          * be retrieved easily by a String
          */
         allAminoAcids = new HashMap<>();
-        for (AminoAcid aa : AminoAcid.values()){
+        for (AminoAcidFamily aa : AminoAcidFamily.values()){
             allAminoAcids.put(aa.oneLetterCode.toLowerCase(), aa);
             allAminoAcids.put(aa.threeLetterCode.toLowerCase(), aa);
             allAminoAcids.put(aa.toString().toLowerCase(), aa);
@@ -123,34 +113,29 @@ public enum AminoAcid {
     private final String oneLetterCode;
     private final String threeLetterCode;
     private final List<String> sideChainAtomNames;
-    private final GutteridgeGrouping gutteridgeGrouping;
-    private final ANVILGrouping anvilGrouping;
-    private final AtomNameComparator atomNameComparator;
+    private final AminoAcidFamily.GutteridgeGrouping gutteridgeGrouping;
+    private final AminoAcidFamily.ANVILGrouping anvilGrouping;
+    private final AminoAcidFamily.AtomNameComparator atomNameComparator;
 
-    AminoAcid(String threeLetterCode, String oneLetterCode, String[] sideChainAtomNames,
-              GutteridgeGrouping gutteridgeGrouping, ANVILGrouping anvilGrouping) {
+    AminoAcidFamily(String threeLetterCode, String oneLetterCode, String[] sideChainAtomNames,
+              AminoAcidFamily.GutteridgeGrouping gutteridgeGrouping, AminoAcidFamily.ANVILGrouping anvilGrouping) {
         this.oneLetterCode = oneLetterCode;
         this.threeLetterCode = threeLetterCode;
         this.sideChainAtomNames = Arrays.asList(sideChainAtomNames);
-        this.atomNameComparator = new AtomNameComparator(allAtomNames().collect(Collectors.toList()));
+        this.atomNameComparator = new AminoAcidFamily.AtomNameComparator(allAtomNames().collect(Collectors.toList()));
         this.gutteridgeGrouping = gutteridgeGrouping;
         this.anvilGrouping = anvilGrouping;
     }
 
     /**
-     * Convenience access to {@link AminoAcid} objects based on their name.
+     * Convenience access to {@link AminoAcidFamily} objects based on their name.
      * @param aminoAcidName the one-/three-letter code or full name of a amino acid
      * @return the proper amino acid instance
      * @throws IllegalArgumentException if the argument does not correspond to any of the 20 canonical amino acids
      */
-    public static AminoAcid valueOfIgnoreCase(String aminoAcidName) throws IllegalArgumentException {
-        AminoAcid aa = allAminoAcids.get(aminoAcidName.toLowerCase());
-        if (aa != null) {
-            return aa;
-        }
-        //TODO handling of non-standard amino acids
-        logger.info("encountered non-standard amino acid {} - falling back to {}", aminoAcidName, AminoAcid.UNKNOWN);
-        return AminoAcid.UNKNOWN;
+    @Deprecated
+    public static Optional<AminoAcidFamily> valueOfIgnoreCase(String aminoAcidName) throws IllegalArgumentException {
+        return Optional.ofNullable(allAminoAcids.get(aminoAcidName.toLowerCase()));
     }
 
     /**
@@ -171,7 +156,7 @@ public enum AminoAcid {
 
     /**
      * Access to the side getChain atom names of this amino acid.
-     * @return a select containing all side getChain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     * @return a select containing all side getChain atom names - that of {@link AminoAcidFamily#GLYCINE} is empty
      */
     public Stream<String> sideChainAtomNames() {
         return getSideChainAtomNames().stream();
@@ -179,7 +164,7 @@ public enum AminoAcid {
 
     /**
      * Access to the side getChain atom names of this amino acid.
-     * @return a list containing all side getChain atom names - that of {@link AminoAcid#GLYCINE} is empty
+     * @return a list containing all side getChain atom names - that of {@link AminoAcidFamily#GLYCINE} is empty
      */
     public List<String> getSideChainAtomNames() {
         return sideChainAtomNames;
@@ -190,7 +175,7 @@ public enum AminoAcid {
      * @return a list containing all atom names of this amino acid
      */
     public Stream<String> allAtomNames() {
-        return Stream.concat(ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(), sideChainAtomNames.stream());
+        return Stream.concat(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(), sideChainAtomNames.stream());
     }
 
     /**
@@ -198,7 +183,7 @@ public enum AminoAcid {
      * doi:10.1016/j.tibs.2005.09.006
      * @return the enum representing this group
      */
-    public GutteridgeGrouping getGutteridgeGrouping() {
+    public AminoAcidFamily.GutteridgeGrouping getGutteridgeGrouping() {
         return gutteridgeGrouping;
     }
 
@@ -206,7 +191,7 @@ public enum AminoAcid {
      * Grouping of amino acids by their tendency to be embedded in the membrane.
      * @return the enum representing this group
      */
-    public ANVILGrouping getANVILGrouping() {
+    public AminoAcidFamily.ANVILGrouping getANVILGrouping() {
         return anvilGrouping;
     }
 
@@ -218,7 +203,7 @@ public enum AminoAcid {
         if(!group.isAminoAcid()) {
             throw new IllegalArgumentException("cannot sort atoms by name for non-amino acids");
         }
-        group.getAtoms().sort(AminoAcid.valueOfIgnoreCase(group.getPdbName()).atomNameComparator);
+        group.getAtoms().sort(AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).get().atomNameComparator);
         return group;
     }
 

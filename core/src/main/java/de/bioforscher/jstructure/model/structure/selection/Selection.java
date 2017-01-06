@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.scheme.AlphaCarbonRepresentationScheme;
 import de.bioforscher.jstructure.model.structure.scheme.BetaCarbonRepresentationScheme;
 import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
@@ -149,48 +150,48 @@ public class Selection {
         }
 
         public AtomSelection backboneAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES.contains(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
         public AtomSelection sideChainAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.contains(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
         public AtomSelection allAtoms() {
-            atomPredicates.add(atom -> Stream.concat(AminoAcid.ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(),
-                    AminoAcid.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.stream()).collect(Collectors.toList()).contains(atom.getName()));
+            atomPredicates.add(atom -> Stream.concat(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(),
+                    AminoAcidFamily.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.stream()).collect(Collectors.toList()).contains(atom.getName()));
             return this;
         }
 
         public AtomSelection alphaCarbonAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.CA_ATOM_NAME.equals(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection backboneCarbonAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.C_ATOM_NAME.equals(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.C_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection backboneNitrogenAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.N_ATOM_NAME.equals(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.N_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection backboneOxygenAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.O_ATOM_NAME.equals(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.O_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection betaCarbonAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.CB_ATOM_NAME.equals(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection hydrogenAtoms() {
-            atomPredicates.add(atom -> AminoAcid.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
+            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
@@ -201,7 +202,7 @@ public class Selection {
         }
 
         public AtomSelection nonHydrogenAtoms() {
-            atomPredicates.add(atom -> !AminoAcid.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
+            atomPredicates.add(atom -> !AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
@@ -278,12 +279,12 @@ public class Selection {
             return this;
         }
 
-        public GroupSelection aminoAcids(AminoAcid... aminoAcids) {
+        public GroupSelection aminoAcids(AminoAcidFamily... aminoAcids) {
             // pre-filter for group type amino acid
             aminoAcids();
             groupPredicates.add(group -> Stream.of(aminoAcids)
-                    .map(AminoAcid::getThreeLetterCode)
-                    .anyMatch(threeLetterCode -> threeLetterCode.equals(group.getPdbName())));
+                    .map(AminoAcidFamily::getThreeLetterCode)
+                    .anyMatch(threeLetterCode -> threeLetterCode.equals(group.getThreeLetterCode())));
             return this;
         }
 
@@ -293,13 +294,13 @@ public class Selection {
         }
 
         public GroupSelection hetatms() {
-            groupPredicates.add(Group::isHetatm);
+            groupPredicates.add(Group::isLigand);
             return this;
         }
 
         public GroupSelection groupName(String... groupNames) {
             groupPredicates.add(group -> Stream.of(groupNames)
-                    .anyMatch(groupName -> groupName.equals(group.getPdbName())));
+                    .anyMatch(groupName -> groupName.equals(group.getThreeLetterCode())));
             return this;
         }
 

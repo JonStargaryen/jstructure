@@ -12,9 +12,12 @@ import de.bioforscher.jstructure.model.structure.selection.Selection;
 public class AlphaCarbonRepresentationScheme implements RepresentationScheme {
     @Override
     public Atom determineRepresentingAtom(Group group) {
+        System.out.println(group);
+        System.out.println(group.getGroupInformation());
+
         if(!group.isAminoAcid()) {
             throw new IllegalArgumentException(getClass().getSimpleName() +
-                    " can only be employed to getResidue objects use CentroidScheme instead");
+                    " can only be employed to get residue objects use CentroidScheme instead");
         }
         return Selection.on(group)
                 .alphaCarbonAtoms()

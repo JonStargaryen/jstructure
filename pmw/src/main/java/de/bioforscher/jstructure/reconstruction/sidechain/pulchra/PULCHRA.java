@@ -3,7 +3,11 @@ package de.bioforscher.jstructure.reconstruction.sidechain.pulchra;
 import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Combinatorics;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 
@@ -87,8 +91,8 @@ public class PULCHRA implements ReconstructionAlgorithm {
                 .collect(Collectors.toList()), 4)
                 .forEach(fragment -> {
                     Group residueToReconstruct = fragment.getElement(2);
-                    AminoAcid aminoAcid = AminoAcid.valueOfIgnoreCase(residueToReconstruct.getPdbName());
-                    if (aminoAcid.equals(AminoAcid.GLYCINE) || aminoAcid.equals(AminoAcid.UNKNOWN)) {
+                    AminoAcidFamily aminoAcid = residueToReconstruct.getGroupInformation().getAminoAcidFamily();
+                    if (aminoAcid.equals(AminoAcidFamily.GLYCINE) || aminoAcid.equals(AminoAcidFamily.UNKNOWN)) {
                         return;
                     }
 
@@ -174,7 +178,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
 
     private int getAminoAcidIndex(Group residue) {
         final String aminoAcids = "GASCVTIPMDNLKEQRHFYWX";
-        return aminoAcids.indexOf(AminoAcid.valueOfIgnoreCase(residue.getPdbName()).getOneLetterCode());
+        return aminoAcids.indexOf(residue.getGroupInformation().getOneLetterCode());
     }
 
     private int[] binResidues(double d13_1, double d13_2, double d14) {

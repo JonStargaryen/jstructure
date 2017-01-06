@@ -3,10 +3,10 @@ package design.aggregation;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.sse.SecStrucState;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import design.ProteinSource;
 import design.parser.opm.OPMParser;
 import design.parser.opm.TMHelix;
@@ -32,9 +32,8 @@ public class S04_ExtractSecondaryStructure {
         System.out.println(Selection.on(protein)
                 .aminoAcids()
                 .asFilteredGroups()
-                .map(Group::getPdbName)
-                .map(AminoAcid::valueOfIgnoreCase)
-                .map(AminoAcid::getOneLetterCode)
+                .map(Group::getGroupInformation)
+                .map(GroupInformation::getOneLetterCode)
                 .collect(Collectors.joining("", "seq: ", ""))
         );
 

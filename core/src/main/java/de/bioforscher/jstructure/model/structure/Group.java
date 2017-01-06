@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.parser.CIFParser;
+import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,39 +14,24 @@ import java.util.stream.Collectors;
  * Created by S on 06.10.2016.
  */
 public class Group extends AbstractFeatureContainer implements AtomContainer {
-    public enum GroupType {
-        AMINO_ACID,
-        NUCLEOTIDE,
-        HETATM
-    }
-
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group(AminoAcid.UNKNOWN.getThreeLetterCode(), 0, GroupType.AMINO_ACID);
+    static final Group UNKNOWN_GROUP = new Group("UNK", 0);
 
     private int residueNumber;
     private List<Atom> atoms;
     /**
-     * 3-letter pdb name
-     */
-    private String pdbName;
-    /**
      * Handle to the container element.
      */
     private Chain parentChain;
-    private GroupType groupType;
     private String identifier;
+    private GroupInformation groupInformation;
 
     public Group(String pdbName, int residueNumber) {
-        this(pdbName, residueNumber, GroupType.AMINO_ACID);
-    }
-
-    public Group(String pdbName, int residueNumber, GroupType groupType) {
-        this.pdbName = pdbName;
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
-        this.groupType = groupType;
+        this.groupInformation = CIFParser.parseLigandInformation(pdbName);
     }
 
     public Group(Group group) {
@@ -54,10 +41,13 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
                 .map(Atom::new)
                 .collect(Collectors.toList());
         this.atoms().forEach(atom -> atom.setParentGroup(this));
-        this.pdbName = group.pdbName;
         // reference parent
         this.parentChain = group.parentChain;
-        this.groupType = group.groupType;
+        this.groupInformation = group.groupInformation;
+    }
+
+    public GroupInformation getGroupInformation() {
+        return groupInformation;
     }
 
     public void setIdentifier(String identifier) {
@@ -66,34 +56,31 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     public Group(List<Atom> atoms) {
         this.atoms = atoms;
+        this.groupInformation = GroupInformation.UNKNOWN_AMINO_ACID;
     }
 
     public boolean isAminoAcid() {
-        return groupType.equals(GroupType.AMINO_ACID);
+        return groupInformation.isAminoAcid();
     }
 
     public boolean isNucleotide() {
-        return groupType.equals(GroupType.NUCLEOTIDE);
+        return groupInformation.isNucleotide();
     }
 
-    public boolean isHetatm() {
-        return groupType.equals(GroupType.HETATM);
+    public boolean isLigand() {
+        return groupInformation.isLigand();
     }
 
     public List<Atom> getAtoms() {
         return atoms;
     }
 
-    public String getPdbName() {
-        return pdbName;
+    public String getThreeLetterCode() {
+        return groupInformation.getThreeLetterCode();
     }
 
-    public void setPdbName(String pdbName) {
-        this.pdbName = pdbName;
-    }
-
-    public GroupType getGroupType() {
-        return groupType;
+    public void setGroupInformation(GroupInformation groupInformation) {
+        this.groupInformation = groupInformation;
     }
 
     /**
@@ -136,6 +123,6 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? pdbName + "-" + residueNumber : identifier;
+        return identifier == null ? getThreeLetterCode() + "-" + residueNumber : identifier;
     }
 }

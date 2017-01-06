@@ -1,6 +1,6 @@
 package design.sequence.motif.frequency;
 
-import de.bioforscher.jstructure.model.structure.AminoAcid;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,14 +69,15 @@ public class SequenceMotifRepresentation {
                     Map<String, Double> frequency = sequences.stream()
                             .filter(sequence -> sequence.length() > index)
                             .map(sequence -> String.valueOf(sequence.charAt(index)))
-                            .map(AminoAcid::valueOfIgnoreCase)
-                            .collect(Collectors.groupingBy(AminoAcid::getOneLetterCode, Collectors.reducing(0.0, e -> 1.0 / sequenceCount,
+                            .map(AminoAcidFamily::valueOfIgnoreCase)
+                            .map(Optional::get)
+                            .collect(Collectors.groupingBy(AminoAcidFamily::getOneLetterCode, Collectors.reducing(0.0, e -> 1.0 / sequenceCount,
                                     Double::sum)));
 
                     //TODO move/make abstract, other mappings will fail here
-                    Stream.of(AminoAcid.values())
-                            .map(AminoAcid::getOneLetterCode)
-                            .filter(olc -> !olc.equals(AminoAcid.UNKNOWN.getOneLetterCode()))
+                    Stream.of(AminoAcidFamily.values())
+                            .map(AminoAcidFamily::getOneLetterCode)
+                            .filter(olc -> !olc.equals(AminoAcidFamily.UNKNOWN.getOneLetterCode()))
                             .forEach(olc -> frequency.putIfAbsent(olc, 0.0));
 
                     aminoAcidFrequencies.add(frequency);

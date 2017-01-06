@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.AminoAcid;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -40,7 +39,7 @@ public class SequenceMotifAnnotator implements FeatureProvider {
             for (int resNum = 0; resNum < chainLength; resNum++) {
                 Group startResidue = residueInChain.get(resNum);
                 // even though we express 1-letter-codes as Strings, excessive matching is probably much faster when done with chars
-                char startAminoAcid = AminoAcid.valueOfIgnoreCase(startResidue.getPdbName()).getOneLetterCode().charAt(0);
+                char startAminoAcid = startResidue.getGroupInformation().getOneLetterCode().charAt(0);
                 for (SequenceMotifDefinition candidate : SequenceMotifDefinition.values()) {
                     // findAny motif length
                     int motifLength = Integer.parseInt(candidate.name().substring(2));
@@ -60,7 +59,7 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                     Group endResidue = residueInChain.get(resNum + motifLength);
 
                     // end amino acid does not match
-                    if (AminoAcid.valueOfIgnoreCase(endResidue.getPdbName()).getOneLetterCode().charAt(0) != motifEnd) {
+                    if (endResidue.getGroupInformation().getOneLetterCode().charAt(0) != motifEnd) {
                         continue;
                     }
 

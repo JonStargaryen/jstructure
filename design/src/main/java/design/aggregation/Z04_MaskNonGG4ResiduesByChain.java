@@ -2,6 +2,7 @@ package design.aggregation;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
+import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -16,12 +17,10 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Masks all residues which are not part of a sequence motif by 'X'. Done to investigate structures further by Florian
- * and the itemset miner. This time getChain-specific.
- * Created by S on 07.11.2016.
+ * How do GG4 motifs interact with each other?
+ * Created by S on 05.01.2017.
  */
-@Deprecated
-public class Z02_MaskNonSequenceMotifResiduesByChain {
+public class Z04_MaskNonGG4ResiduesByChain {
     public static void main(String[] args) throws IOException {
         Files.lines(Paths.get(DesignConstants.NR_ALPHA_IDS))
                 // select for non-comment lines
@@ -37,7 +36,7 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
                     Selection.on(protein)
                             .aminoAcids()
                             .asFilteredGroups()
-                            .filter(Z02_MaskNonSequenceMotifResiduesByChain::isNotStartOrEndOfSequenceMotif)
+                            .filter(Z04_MaskNonGG4ResiduesByChain::isNotPartOfGG4)
                             .forEach(residue -> residue.setGroupInformation(GroupInformation.UNKNOWN_AMINO_ACID));
 
                     System.out.printf("masked sequence for '%s' is:\n%s\n", protein.getName(), protein.getAminoAcidSequence());
@@ -55,7 +54,7 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
 
                     // write structures
                     try {
-                        Files.write(Paths.get(DesignConstants.BASE_DIR + "masked-pdb-chains/" + protein.getName() + "_"
+                        Files.write(Paths.get(DesignConstants.BASE_DIR + "masked-pdb-chains-gg4/" + protein.getName() + "_"
                                 + chain.getChainId()+ DesignConstants.PDB_SUFFIX), chain.composePDBRecord().getBytes());
                     } catch(IOException e) {
                         e.printStackTrace();
@@ -64,12 +63,17 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
     }
 
     @SuppressWarnings("unchecked")
-    private static boolean isNotStartOrEndOfSequenceMotif(Group residue) {
+    private static boolean isNotPartOfGG4(Group residue) {
         List<SequenceMotif> motifAnnotations = residue.getFeature(List.class,
                 SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
 
-        return motifAnnotations == null || motifAnnotations.isEmpty() || motifAnnotations.stream().filter(motif ->
-                motif.getStartGroup().equals(residue) || motif.getEndGroup().equals(residue)).count() == 0;
+        if(motifAnnotations == null || motifAnnotations.isEmpty()) {
+            return true;
+        }
+
+        return motifAnnotations.stream()
+                .filter(motif -> motif.getMotifDefinition().equals(SequenceMotifDefinition.GG4))
+                .count() == 0;
 
     }
 }
