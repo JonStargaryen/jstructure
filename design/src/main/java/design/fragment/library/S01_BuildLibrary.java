@@ -2,7 +2,7 @@ package design.fragment.library;
 
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
-import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;

@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
-import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * Created by S on 09.11.2016.
  */
 public class StructureCollectors {
-    static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
+    private static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
 
     public static Collector<AtomContainer, ?, List<StructureCluster>> toAlignedEnsembleByStructuralClustering() {
         return Collector.of(SuperimpositionByFragmentClustering::new,

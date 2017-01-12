@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
  * representation.
  * Created by S on 05.12.2016.
  */
+@Deprecated
 abstract class AbstractConsensusComposer {
     static final Logger logger = LoggerFactory.getLogger(AbstractConsensusComposer.class);
 
@@ -28,9 +30,12 @@ abstract class AbstractConsensusComposer {
 
     static AtomContainer mergeContainerPair(AtomContainer reference, AtomContainer candidate) {
         // get intersecting pairs of atoms wrapped in an atom container
-        // 12/14/16 - move to backboneOnly flag
+        // 12/14/16 - moved to backboneOnly flag
         Pair<AtomContainer, AtomContainer> containerPair =
-                CoordinateManipulations.comparableAtomContainerPair(reference, candidate, true);
+                CoordinateManipulations.comparableAtomContainerPair(reference,
+                        candidate,
+                        AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
+                        AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
 
         return Combinatorics.sequentialPairsOf(containerPair.getLeft().getAtoms(), containerPair.getRight().getAtoms())
                 .map(AbstractConsensusComposer::mergeAtomPair)

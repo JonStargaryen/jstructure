@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.alignment.consensus;
 
 import de.bioforscher.jstructure.alignment.AlignmentResult;
-import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.BinaryTree;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
@@ -40,7 +40,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
         this.alignmentPairs = new ArrayList<>();
         this.consensusTrees = new ArrayList<>();
         this.firstEntry = true;
-        this.svdSuperimposer = new SVDSuperimposer(true);
+        this.svdSuperimposer = SVDSuperimposer.BACKBONE_SVD_INSTANCE;
     }
 
     public void composeConsensusTree(List<? extends AtomContainer> containers) {

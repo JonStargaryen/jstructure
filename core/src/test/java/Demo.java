@@ -19,13 +19,6 @@ public class Demo {
         // fetch/parse structure by id
         Protein protein = ProteinParser.parseProteinById("1brr");
 
-        // print all getResidue pairs whose distance is less than 8.0 A
-        //TODO pairsOn(Container) seems to be horribly slow - move to for-loops or drop all together?
-        Selection.pairsOn(protein)
-                .alphaCarbonDistance(8.0)
-                .asFilteredGroupPairs()
-                .forEach(System.out::println);
-
         // print coordinates of all alanines
         Selection.on(protein)
                 .aminoAcids(AminoAcidFamily.ALANINE)

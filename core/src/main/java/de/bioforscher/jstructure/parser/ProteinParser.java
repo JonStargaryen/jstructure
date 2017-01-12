@@ -17,7 +17,7 @@ import java.util.Optional;
  * Created by S on 29.09.2016.
  */
 public class ProteinParser {
-    final Logger logger = LoggerFactory.getLogger(ProteinParser.class);
+    private final Logger logger = LoggerFactory.getLogger(ProteinParser.class);
     private static final String HEADER_PREFIX = "HEADER";
     private static final String TITLE_PREFIX = "TITLE";
     private static final String ATOM_PREFIX = "ATOM";
@@ -176,16 +176,7 @@ public class ProteinParser {
                 return;
             }
 
-            // we check for valid amino acids here, so no empty (nucleotide/ligand-only) chains are parsed
             String pdbName = line.substring(17, 20).trim();
-
-//            if(pdbName.length() < 3 || line.startsWith(HETATM_PREFIX)) {
-//                // if pdbName is less than 3 chars long, this is no amino acid - e.g. 'U' vs 'THR'
-//                // TODO at some point parsing nucleotides and hetatms would be nice
-//                return;
-//            }
-
-            // actually there is something to parse
             String chainId = line.substring(21, 22);
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
 
@@ -225,7 +216,7 @@ public class ProteinParser {
             if(currentGroup.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
                 currentGroup.addAtom(atom);
             } else {
-                //TODO find solution for this
+                //TODO find solution for this - maybe only the atom with the highest occupancy should be kept
 //                logger.info("skipping atoms for {}", atom);
             }
         }

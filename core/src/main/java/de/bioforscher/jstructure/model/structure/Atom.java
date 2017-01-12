@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created by S on 27.09.2016.
  */
 public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
-    final Logger logger = LoggerFactory.getLogger(Atom.class);
+    private final Logger logger = LoggerFactory.getLogger(Atom.class);
     private static final float DEFAULT_BFACTOR = 1.0f;
     private static final float DEFAULT_OCCUPANCY = 1.0f;
 

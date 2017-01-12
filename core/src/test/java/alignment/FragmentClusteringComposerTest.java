@@ -2,7 +2,7 @@ package alignment;
 
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
-import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
