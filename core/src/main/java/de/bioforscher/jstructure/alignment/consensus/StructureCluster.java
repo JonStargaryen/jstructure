@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.alignment.consensus;
 
 import de.bioforscher.jstructure.alignment.AlignmentResult;
-import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  * Represents a structure cluster created by {@link FragmentClusteringComposer}.
  * Created by S on 05.12.2016.
  */
+@Deprecated
 public class StructureCluster {
     private List<AtomContainer> entries;
     private AtomContainer consensus;
@@ -22,7 +23,7 @@ public class StructureCluster {
 
     private StructureCluster() {
         this.entries = new ArrayList<>();
-        this.svdSuperimposer = new SVDSuperimposer(true);
+        this.svdSuperimposer = SVDSuperimposer.BACKBONE_SVD_INSTANCE;
     }
 
     StructureCluster(AtomContainer container) {

@@ -70,7 +70,8 @@ public enum AminoAcidFamily implements AtomicFamily {
         /**
          * Handle to the list of names representing hydrogen atoms.
          */
-        List<String> H_ATOM_NAMES = Arrays.asList("H", "D", "T");
+        Set<String> H_ATOM_NAMES = Stream.of("H", "D", "T").collect(Collectors.toSet());
+
         /**
          * Handle to the list of names representing alpha carbons.
          */
@@ -78,21 +79,30 @@ public enum AminoAcidFamily implements AtomicFamily {
         String C_ATOM_NAME = "C";
         String N_ATOM_NAME = "N";
         String O_ATOM_NAME = "O";
+
         /**
          * Handle to the list of names representing backbone atoms.
          */
-        List<String> BACKBONE_ATOM_NAMES = Arrays.asList("N", "CA", "C", "O");
+        Set<String> BACKBONE_ATOM_NAMES = Stream.of("N", "CA", "C", "O").collect(Collectors.toSet());
 
+        /**
+         * The beta carbon name.
+         */
         String CB_ATOM_NAME = "CB";
 
         /**
          * Handle to the list of names representing side getChain atoms of (any of) the standard amino acid. The intersection
          * of this 'set' and that of backbone atoms is empty.
          */
-        List<String> SIDECHAIN_ATOM_NAMES = Arrays.asList("CB", "CG", "CD", "NE", "CZ", "NH1", "NH2", "OD1", "ND2",
+        Set<String> SIDECHAIN_ATOM_NAMES = Stream.of("CB", "CG", "CD", "NE", "CZ", "NH1", "NH2", "OD1", "ND2",
                 "OD2", "SG", "OE1", "NE2", "OE2", "ND1", "CD2", "CE1", "CG1", "CG2", "CD1", "CE", "NZ", "SD", "CE2",
-                "OG", "OG1", "NE1", "CE3", "CZ2", "CZ3", "CH2", "OH"
-        );
+                "OG", "OG1", "NE1", "CE3", "CZ2", "CZ3", "CH2", "OH").collect(Collectors.toSet());
+
+        /**
+         * All occurring atom names (ignoring hydrogen atoms).
+         */
+        Set<String> ALL_ATOM_NAMES = Stream.concat(SIDECHAIN_ATOM_NAMES.stream(),
+                BACKBONE_ATOM_NAMES.stream()).collect(Collectors.toSet());
     }
 
     private static Map<String, AminoAcidFamily> allAminoAcids;

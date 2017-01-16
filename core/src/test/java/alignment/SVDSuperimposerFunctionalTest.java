@@ -4,6 +4,8 @@ import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;

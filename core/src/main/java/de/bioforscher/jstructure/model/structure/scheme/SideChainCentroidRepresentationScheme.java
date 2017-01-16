@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 /**
+ * Represents a group of atoms by the centroid of all side-chain atoms.
  * Created by S on 08.11.2016.
  */
 public class SideChainCentroidRepresentationScheme implements RepresentationScheme {

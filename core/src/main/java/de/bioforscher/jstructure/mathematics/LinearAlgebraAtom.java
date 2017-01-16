@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -41,7 +42,7 @@ public class LinearAlgebraAtom {
      * Computes the center of mass of a collection of atoms. In contrast to the centroid, the center of mass considers
      * the unique mass of each atom in the structure (i.e. a {@link de.bioforscher.jstructure.model.structure.Element#H})
      * has a different mass than say {@link de.bioforscher.jstructure.model.structure.Element#C} and, thus, will affect
-     * the center of mass computation in a less impactful way.
+     * the center of mass computation in a less impacting way.
      * @param atomContainer a collection of atoms
      * @return the center of mass
      * @see LinearAlgebraAtom#centroid(AtomContainer)
@@ -284,29 +285,30 @@ public class LinearAlgebraAtom {
      * </ul>
      * @param atomContainer1 a collection of reference atoms
      * @param atomContainer2 a collection of candidate atoms
+     * @param minimalSetOfAtomNames the lower bound of required atom names present (e.g. by setting CA, every time an
+     *                              amino acid missing the alpha carbon will result in an exception thrown)
+     * @param maximalSetOfAtomNames the upper bound of required atom names present (e.g. by setting CA, everything else
+     *                              will be dropped, even when both amino acids would share more atoms)
      * @return a pair of both collections which can now be aligned
      */
     public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
                                                                                  AtomContainer atomContainer2,
-                                                                                 boolean backboneOnly) {
+                                                                                 Set<String> minimalSetOfAtomNames,
+                                                                                 Set<String> maximalSetOfAtomNames) {
         GroupContainer groupContainer1 = cloneIntoGroupContainer(atomContainer1);
         GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
-
-        //TODO check needed and reasonable?
-//        if(groupContainer1.getGroups().size() != groupContainer2.getGroups().size()) {
-//            throw new IllegalArgumentException("cannot compare atom containers of different size: " + atomContainer1.getIdentifier() + " : " + atomContainer2.getIdentifier());
-//        }
 
         int limitingSize = Math.min(groupContainer1.getGroups().size(), groupContainer2.getGroups().size());
 
         List<Group> groups1 = new ArrayList<>();
         List<Group> groups2 = new ArrayList<>();
-        //TODO check needed and reasonable?
-//        for(int groupIndex = 0; groupIndex < groupContainer1.getGroups().size(); groupIndex++) {
         for(int groupIndex = 0; groupIndex < limitingSize; groupIndex++) {
             Group group1 = groupContainer1.getGroups().get(groupIndex);
             Group group2 = groupContainer2.getGroups().get(groupIndex);
-            Pair<List<Atom>, List<Atom>> sharedAtoms = selectSharedAtoms(group1, group2, backboneOnly);
+            Pair<List<Atom>, List<Atom>> sharedAtoms = selectSharedAtoms(group1,
+                    group2,
+                    minimalSetOfAtomNames,
+                    maximalSetOfAtomNames);
 
             // remove additional/not-shared atoms
             group1.getAtoms().retainAll(sharedAtoms.getLeft());
@@ -320,14 +322,27 @@ public class LinearAlgebraAtom {
         return new Pair<>(new Chain(groups1), new Chain(groups2));
     }
 
+    /**
+     * Returns the set of atoms shared by both containers.
+     * @see CoordinateManipulations#comparableAtomContainerPair(AtomContainer, AtomContainer, Set, Set)
+     */
     public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
                                                                                  AtomContainer atomContainer2) {
-        return comparableAtomContainerPair(atomContainer1, atomContainer2, false);
+        return comparableAtomContainerPair(atomContainer1,
+                atomContainer2,
+                Collections.emptySet(),
+                AminoAcidFamily.ATOM_NAMES.ALL_ATOM_NAMES);
     }
 
-    private static Pair<List<Atom>, List<Atom>> selectSharedAtoms(Group group1, Group group2, boolean backboneOnly) {
+    private static Pair<List<Atom>, List<Atom>> selectSharedAtoms(Group group1,
+                                                                  Group group2,
+                                                                  Set<String> minimalSetOfAtomNames,
+                                                                  Set<String> maximalSetOfAtomNames) {
         // no ordering is enforced - rather the filtering by atom names ensures the identical occurrence of atoms
-        Set<String> sharedAtomNames = determineSharedAtomNames(group1, group2, backboneOnly);
+        Set<String> sharedAtomNames = determineSharedAtomNames(group1,
+                group2,
+                minimalSetOfAtomNames,
+                maximalSetOfAtomNames);
         return new Pair<>(group1.atoms()
                 .filter(atom -> sharedAtomNames.contains(atom.getName()))
                 .collect(Collectors.toList()),
@@ -336,7 +351,10 @@ public class LinearAlgebraAtom {
                 .collect(Collectors.toList()));
     }
 
-    private static Set<String> determineSharedAtomNames(Group group1, Group group2, boolean backboneOnly) {
+    private static Set<String> determineSharedAtomNames(Group group1,
+                                                        Group group2,
+                                                        Set<String> minimalSetOfAtomNames,
+                                                        Set<String> maximalSetOfAtomNames) {
         // present atom names in each group, determine the shared ones
         Set<String> sharedAtomNames = group1.atoms()
                 .map(Atom::getName)
@@ -345,13 +363,25 @@ public class LinearAlgebraAtom {
                 .map(Atom::getName)
                 .collect(Collectors.toSet()));
 
-        if(backboneOnly) {
-            sharedAtomNames.retainAll(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
+        // fail if the minimal set of atoms is not fulfilled
+        if(!sharedAtomNames.containsAll(minimalSetOfAtomNames)) {
+            throw new IllegalArgumentException("alignment could not fulfill minimal required atom names" +
+                    System.lineSeparator() + "shared: " + sharedAtomNames.stream().collect(Collectors.joining(", ")) +
+                    System.lineSeparator() + "required: " + minimalSetOfAtomNames.stream().collect(Collectors.joining(", ")));
         }
+
+        // ignore all atoms not explicitly wanted in the alignment
+        sharedAtomNames.retainAll(maximalSetOfAtomNames);
 
         return sharedAtomNames;
     }
 
+    /**
+     * Maps an {@link AtomContainer} to a distinct copy of itself.
+     * @param atomContainer the container to clone
+     * @return a {@link GroupContainer} (i.e. motivated by interfaces handling {@link AtomContainer}) which can readily
+     * manipulated without affecting the original entry
+     */
     private static GroupContainer cloneIntoGroupContainer(AtomContainer atomContainer) {
         return atomContainer.atoms()
                 // map to group level - will still collect 'dangling' atoms into a group

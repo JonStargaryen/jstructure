@@ -15,9 +15,9 @@ public class Fragment<T> {
     }
 
     /**
-     *
-     * @param index
-     * @return
+     * Returns a specific element.
+     * @param index the requested index
+     * @return the specified element
      */
     public T getElement(int index) {
         return elements.get(index);

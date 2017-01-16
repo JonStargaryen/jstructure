@@ -83,21 +83,21 @@ public class MultiDimensionalScaling {
     }
 
     public List<double[]> computeEmbedding(RealMatrix distanceMap, int targetDimension) {
-        this.numberOfDataPoints = distanceMap.getRowDimension();
+        numberOfDataPoints = distanceMap.getRowDimension();
         this.targetDimension = targetDimension;
-        if (this.targetDimension > this.numberOfDataPoints) {
+        if (this.targetDimension > numberOfDataPoints) {
             throw new IllegalArgumentException("target dimension must not exceed number of data points");
         }
 
         this.distanceMap = distanceMap;
 
-        this.proximityMap = computeSquaredProximityMap(this.distanceMap);
+        proximityMap = computeSquaredProximityMap(this.distanceMap);
 
-        this.centeringMap = this.computeConfiguration(this.proximityMap);
+        centeringMap = computeConfiguration(proximityMap);
 
-        this.normalizedEigenvectors = new ArrayList<>();
-        this.embedding = new ArrayList<>();
-        EigenDecomposition evd = new EigenDecomposition(this.centeringMap);
+        normalizedEigenvectors = new ArrayList<>();
+        embedding = new ArrayList<>();
+        EigenDecomposition evd = new EigenDecomposition(centeringMap);
         // we are looking for the m biggest eigenvalues - they are at the last elements of the matrix
         RealMatrix eigenvectors = evd.getV();
         // Matrix eigenvalues = evd.getD();
@@ -114,19 +114,19 @@ public class MultiDimensionalScaling {
                 throw new IllegalArgumentException("eigenvalue is negative: " + sortedEigenvalue.getValue());
             }
             double[] eigenvector = eigenvectors.getColumn(sortedEigenvalue.getKey());
-            this.normalizedEigenvectors.add(normalize(eigenvector, Math.sqrt(sortedEigenvalue.getValue())));
+            normalizedEigenvectors.add(normalize(eigenvector, Math.sqrt(sortedEigenvalue.getValue())));
         }
 
         // compose embedded data points from normalized eigenvectors
-        for (int dataPointIndex = 0; dataPointIndex < this.numberOfDataPoints; dataPointIndex++) {
+        for (int dataPointIndex = 0; dataPointIndex < numberOfDataPoints; dataPointIndex++) {
             double[] dataPoint = new double[this.targetDimension];
             for (int dataPointDimension = 0; dataPointDimension < this.targetDimension; dataPointDimension++) {
-                dataPoint[dataPointDimension] = this.normalizedEigenvectors.get(dataPointDimension)[dataPointIndex];
+                dataPoint[dataPointDimension] = normalizedEigenvectors.get(dataPointDimension)[dataPointIndex];
             }
-            this.embedding.add(dataPoint);
+            embedding.add(dataPoint);
         }
 
-        return this.embedding;
+        return embedding;
     }
 
     // TODO: maybe move to some Utils class
@@ -144,34 +144,34 @@ public class MultiDimensionalScaling {
     }
 
     private RealMatrix computeConfiguration(RealMatrix proximityMap) {
-        RealMatrix centeringMap = new Array2DRowRealMatrix(this.numberOfDataPoints, this.numberOfDataPoints);
+        RealMatrix centeringMap = new Array2DRowRealMatrix(numberOfDataPoints, numberOfDataPoints);
 
-        double[] rowAverage = new double[this.numberOfDataPoints];
-        double[] columnAverage = new double[this.numberOfDataPoints];
+        double[] rowAverage = new double[numberOfDataPoints];
+        double[] columnAverage = new double[numberOfDataPoints];
         double overallAverage = 0;
         // assess rows and overall average
-        for (int row = 0; row < this.numberOfDataPoints; row++) {
+        for (int row = 0; row < numberOfDataPoints; row++) {
             double tempRowAverage = 0;
-            for (int column = 0; column < this.numberOfDataPoints; column++) {
+            for (int column = 0; column < numberOfDataPoints; column++) {
                 double entry = proximityMap.getEntry(row, column);
                 tempRowAverage += entry;
                 overallAverage += entry;
             }
-            rowAverage[row] = tempRowAverage / this.numberOfDataPoints;
+            rowAverage[row] = tempRowAverage / numberOfDataPoints;
         }
-        overallAverage /= this.numberOfDataPoints * this.numberOfDataPoints;
+        overallAverage /= numberOfDataPoints * numberOfDataPoints;
 
         // assess columns
-        for (int column = 0; column < this.numberOfDataPoints; column++) {
+        for (int column = 0; column < numberOfDataPoints; column++) {
             double tempColumnAverage = 0;
-            for (int row = 0; row < this.numberOfDataPoints; row++) {
+            for (int row = 0; row < numberOfDataPoints; row++) {
                 tempColumnAverage += proximityMap.getEntry(row, column);
             }
-            columnAverage[column] = tempColumnAverage / this.numberOfDataPoints;
+            columnAverage[column] = tempColumnAverage / numberOfDataPoints;
         }
 
-        for (int row = 0; row < this.numberOfDataPoints; row++) {
-            for (int column = 0; column < this.numberOfDataPoints; column++) {
+        for (int row = 0; row < numberOfDataPoints; row++) {
+            for (int column = 0; column < numberOfDataPoints; column++) {
                 // b_ij = a_ij - a_i* - a_j* + a_**
                 centeringMap.setEntry(row, column,
                         proximityMap.getEntry(row, column) - rowAverage[row] - columnAverage[column] + overallAverage);
@@ -181,10 +181,10 @@ public class MultiDimensionalScaling {
     }
 
     private RealMatrix computeSquaredProximityMap(RealMatrix distanceMap) {
-        RealMatrix proximityMap = new Array2DRowRealMatrix(this.numberOfDataPoints, this.numberOfDataPoints);
+        RealMatrix proximityMap = new Array2DRowRealMatrix(numberOfDataPoints, numberOfDataPoints);
 
-        for (int row = 0; row < this.numberOfDataPoints; row++) {
-            for (int column = 0; column < this.numberOfDataPoints; column++) {
+        for (int row = 0; row < numberOfDataPoints; row++) {
+            for (int column = 0; column < numberOfDataPoints; column++) {
                 // a_ij = -0.5*d_ij^2
                 double entry = distanceMap.getEntry(row, column);
                 proximityMap.setEntry(row, column, -0.5 * entry * entry);

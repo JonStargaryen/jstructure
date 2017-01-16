@@ -1,34 +1,31 @@
-package de.bioforscher.jstructure.alignment.svd;
+package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.AlignmentResult;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Set;
 
 /**
  * Implementation of the singular value decomposition rigid body alignment algorithm.
  * Created by S on 30.09.2016.
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
-    private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
-    //TODO move to a more sophisticated predicate
-    private final boolean backboneOnly;
+    public static final SVDSuperimposer BACKBONE_SVD_INSTANCE = new SVDSuperimposer(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
+            AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
 
     public SVDSuperimposer() {
-        this(false);
+        super();
     }
 
-    public SVDSuperimposer(boolean backboneOnly) {
-        this.backboneOnly = backboneOnly;
+    public SVDSuperimposer(Set<String> minimalSetOfAtomNames, Set<String> maximalSetOfAtomNames) {
+        super(minimalSetOfAtomNames, maximalSetOfAtomNames);
     }
 
     @Override
@@ -37,7 +34,10 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         AtomContainer originalCandidate = candidate;
 
         Pair<AtomContainer, AtomContainer> atomContainerPair =
-                LinearAlgebraAtom.comparableAtomContainerPair(reference, candidate, backboneOnly);
+                CoordinateManipulations.comparableAtomContainerPair(reference,
+                        candidate,
+                        minimalSetOfAtomNames,
+                        maximalSetOfAtomNames);
 
         reference = atomContainerPair.getLeft();
         candidate = atomContainerPair.getRight();

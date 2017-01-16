@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
  * cluster.
  * Created by S on 05.12.2016.
  */
+@Deprecated
 public class FragmentClusteringComposer extends AbstractConsensusComposer {
     private static final double DEFAULT_RMSD_THRESHOLD = 1.0;
     private final double rmsdThreshold;
