@@ -9,6 +9,7 @@ import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.slf4j.Logger;
@@ -29,10 +30,10 @@ import static de.bioforscher.jstructure.model.structure.selection.Selection.on;
  * @see LinearAlgebra3D
  * Created by S on 30.09.2016.
  */
-public class CoordinateManipulations {
-    static final Logger logger = LoggerFactory.getLogger(CoordinateManipulations.class);
+public class LinearAlgebraAtom {
+    static final Logger logger = LoggerFactory.getLogger(LinearAlgebraAtom.class);
 
-    private CoordinateManipulations() {
+    private LinearAlgebraAtom() {
         // deny instantiation
     }
 
@@ -43,17 +44,74 @@ public class CoordinateManipulations {
      * the center of mass computation in a less impactful way.
      * @param atomContainer a collection of atoms
      * @return the center of mass
-     * @see CoordinateManipulations#centroid(AtomContainer)
+     * @see LinearAlgebraAtom#centroid(AtomContainer)
      */
     public static double[] centerOfMass(AtomContainer atomContainer) {
         return atomContainer.atoms().collect(StructureCollectors.toCenterOfMass());
+    }
+
+    public static TorsionAngles computeTorsionAngles(Group group1, Group group2) {
+        // ensure both groups are consecutive
+        if(!group1.getParentChain().equals(group2.getParentChain()) ||
+                group1.getResidueNumber() + 1 != group2.getResidueNumber()) {
+            throw new IllegalArgumentException("2 groups must be connected to compute torison angles" +
+                    System.lineSeparator() + "found: " + group1.getIdentifier() + " and " + group2.getIdentifier());
+        }
+
+        Atom n1 = Selection.on(group1)
+                .backboneNitrogenAtoms()
+                .asAtom();
+        Atom ca1 = Selection.on(group1)
+                .alphaCarbonAtoms()
+                .asAtom();
+        Atom c1 = Selection.on(group1)
+                .backboneCarbonAtoms()
+                .asAtom();
+
+        Atom n2 = Selection.on(group2)
+                .backboneNitrogenAtoms()
+                .asAtom();
+        Atom ca2 = Selection.on(group2)
+                .alphaCarbonAtoms()
+                .asAtom();
+        Atom c2 = Selection.on(group2)
+                .backboneCarbonAtoms()
+                .asAtom();
+
+        double phi = LinearAlgebra3D.torsionAngle(c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates(), c2.getCoordinates());
+        double psi = LinearAlgebra3D.torsionAngle(n1.getCoordinates(), ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates());
+        double omega = LinearAlgebra3D.torsionAngle(ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates());
+
+        return new TorsionAngles(phi, psi, omega);
+    }
+
+    public static class TorsionAngles {
+        double phi, psi, omega;
+
+        TorsionAngles(double phi, double psi, double omega) {
+            this.phi = phi;
+            this.psi = psi;
+            this.omega = omega;
+        }
+
+        public double getPhi() {
+            return phi;
+        }
+
+        public double getPsi() {
+            return psi;
+        }
+
+        public double getOmega() {
+            return omega;
+        }
     }
 
     /**
      * Computes the maximal extent of this protein in any given spatial direction to the centroid of this structure.
      * @param atomContainer a collection of atoms
      * @return the maximal distance occurring between the centroid and any other atom
-     * @see CoordinateManipulations#maximalExtent(AtomContainer, double[])
+     * @see LinearAlgebraAtom#maximalExtent(AtomContainer, double[])
      */
     public static double maximalExtent(AtomContainer atomContainer) {
         return maximalExtent(atomContainer, centroid(atomContainer));
@@ -173,8 +231,8 @@ public class CoordinateManipulations {
      * point from each atom's coordinates. The operation will manipulate the provided atom's coordinates directly
      * (rather than creating new Objects).
      * @param atomContainer the collection of atoms to center
-     * @see CoordinateManipulations#centroid(AtomContainer)
-     * @see CoordinateManipulations#shift(AtomContainer, double[])
+     * @see LinearAlgebraAtom#centroid(AtomContainer)
+     * @see LinearAlgebraAtom#shift(AtomContainer, double[])
      */
     public static void center(AtomContainer atomContainer) {
         // invert the centroid/shift vector as it will be added to the coordinates by the shift function

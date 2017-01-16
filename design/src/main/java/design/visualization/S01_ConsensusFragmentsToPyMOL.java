@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class S01_ConsensusFragmentsToPyMOL {
     public static void main(String[] args) throws IOException {
-        Map<String, List<Path>> consensusPaths = Files.walk(Paths.get(DesignConstants.FRAGMENT_CLUSTERS + "trans/"))
+        Map<String, List<Path>> consensusPaths = Files.walk(Paths.get(DesignConstants.FRAGMENT_CLUSTERS_DIR + "trans/"))
                 .filter(path -> path.toFile().getName().startsWith(DesignConstants.CLUSTER_CONSENSUS))
                 .filter(path -> !path.toFile().getAbsolutePath().contains("/0/"))
                 .collect(Collectors.groupingBy(path -> path.toFile().getAbsolutePath().split("/")[6]));

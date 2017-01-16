@@ -18,7 +18,7 @@ public class S02_ConvertToWebLogo {
     private static final String clusterid = "4";
 
     public static void main(String[] args) throws IOException {
-        Files.lines(Paths.get(DesignConstants.FRAGMENT_CLUSTERS + topology + "/" + motif + "/" + DesignConstants.CLUSTER_SUMMARY))
+        Files.lines(Paths.get(DesignConstants.FRAGMENT_CLUSTERS_DIR + topology + "/" + motif + "/" + DesignConstants.CLUSTER_SUMMARY))
                 .filter(line -> line.startsWith(clusterid))
                 .map(line -> line.split(DELIMITER))
                 .map(split -> split[4])

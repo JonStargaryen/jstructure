@@ -2,7 +2,7 @@ package design.statistics;
 
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -51,7 +51,7 @@ public class S01_AlignedFragmentStatistics {
 //                                AtomContainer consensus = consensusTreeComposer.getConsensus();
 
 //                        for(AtomContainer observation : alignedEnsemble) {
-//                            double rmsd = CoordinateManipulations.calculateRmsd(Selection.on(observation)
+//                            double rmsd = LinearAlgebraAtom.calculateRmsd(Selection.on(observation)
 //                                            .backboneAtoms()
 //                                            .asAtomContainer(),
 //                                    Selection.on(consensus)
@@ -73,7 +73,7 @@ public class S01_AlignedFragmentStatistics {
                                 StructureCluster cluster = clusters.get(clusterIndex);
                                 AtomContainer consensus = cluster.getConsensusRepresentation();
                                 for(AtomContainer entry : cluster.getOriginalEntries()) {
-                                    double rmsd = CoordinateManipulations.calculateRmsd(consensus, cluster.getConsensusRepresentation());
+                                    double rmsd = LinearAlgebraAtom.calculateRmsd(consensus, cluster.getConsensusRepresentation());
                                     String line = entry.getIdentifier() + DELIMITER + definition.name() + DELIMITER +
                                             topologyDir.toFile().getName() + DELIMITER + clusterIndex + DELIMITER + rmsd
                                             + System.lineSeparator();

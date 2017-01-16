@@ -3,7 +3,7 @@ package alignment;
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.svd.SVDSuperimposer;
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -90,7 +90,7 @@ public class SVDSuperimposerFunctionalTest {
         // all others should report a RMSD of 0.0 after alignment
         double maxRmsd = alignedFragments.stream()
                 .skip(1)
-                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(reference, protein))
+                .mapToDouble(protein -> LinearAlgebraAtom.calculateRmsd(reference, protein))
                 .peek(System.out::println)
                 .max()
                 .orElse(Double.MAX_VALUE);
@@ -105,7 +105,7 @@ public class SVDSuperimposerFunctionalTest {
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
         System.out.println("rmsd " + alignmentResult.getRmsd());
-        System.out.println("rmsd2 " + CoordinateManipulations.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
+        System.out.println("rmsd2 " + LinearAlgebraAtom.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
         Assert.assertEquals(0.19986, alignmentResult.getRmsd(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
@@ -129,7 +129,7 @@ public class SVDSuperimposerFunctionalTest {
         Assert.assertEquals(initialCoordinates1, container1.composePDBRecord());
         Assert.assertEquals(initialCoordinates2, container2.composePDBRecord());
         alignmentResult.transform(container2);
-        double rmsd2 = CoordinateManipulations.calculateRmsd(container1, container2);
+        double rmsd2 = LinearAlgebraAtom.calculateRmsd(container1, container2);
         Assert.assertEquals(rmsd1, rmsd2, TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
@@ -145,7 +145,7 @@ public class SVDSuperimposerFunctionalTest {
     public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
         Protein protein1acjCopy = ProteinParser.parseProteinById("1acj");
         double[] translation = new double[] { 10, 20, 30 };
-        CoordinateManipulations.transform(protein1acjCopy,
+        LinearAlgebraAtom.transform(protein1acjCopy,
                 translation,
                 AlignmentAlgorithm.NEUTRAL_ROTATION);
 

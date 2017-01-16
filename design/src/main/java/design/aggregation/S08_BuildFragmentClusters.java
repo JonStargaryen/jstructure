@@ -51,7 +51,7 @@ public class S08_BuildFragmentClusters {
     }
 
     private static void handleMotif(String topology, String motif) {
-        String basePath = DesignConstants.FRAGMENT_CLUSTERS + topology + "/" + motif + "/";
+        String basePath = DesignConstants.FRAGMENT_CLUSTERS_DIR + topology + "/" + motif + "/";
         DesignConstants.makeDirectoryIfAbsent(Paths.get(basePath));
 
         System.out.println("motif: " + motif);

@@ -17,9 +17,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * A delegating wrapper for {@link FragmentClusteringComposer}
+ * A delegating wrapper for {@link FragmentClusteringComposer}.
  * Created by S on 29.12.2016.
  */
+@Deprecated
 public class StructureFragmentizer {
     /**
      * The fragment size into which protein structures are split. 5 seems reasonable as it is in agreement with the most
@@ -31,6 +32,10 @@ public class StructureFragmentizer {
      * The cutoff below 2 fragments are considered to be similar.
      */
     private static final double DEFAULT_RMSD_CUTOFF = 1.0;
+    /**
+     * The default torsion angle bin size in degrees.
+     */
+    private static final double DEFAULT_TORSION_ANGLE_BINSIZE = 10;
 
     private final FragmentClusteringComposer fragmentClusteringComposer;
     private final String topology;

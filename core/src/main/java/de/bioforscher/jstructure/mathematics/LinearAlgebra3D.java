@@ -5,7 +5,7 @@ package de.bioforscher.jstructure.mathematics;
  * for other dimensions, nor will any function check for matching requirements etc. By convention none of the provided
  * functions will happen in place (and manipulate the input data), but rather will create a new primitive instance to
  * return the result.
- * @see CoordinateManipulations
+ * @see LinearAlgebraAtom
  * Created by S on 28.09.2016.
  */
 public class LinearAlgebra3D {

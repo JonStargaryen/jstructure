@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.scheme;
 
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 
@@ -11,6 +11,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 public class CentroidRepresentationScheme implements RepresentationScheme {
     @Override
     public Atom determineRepresentingAtom(Group group) {
-        return new Atom(CoordinateManipulations.centroid(group));
+        return new Atom(LinearAlgebraAtom.centroid(group));
     }
 }

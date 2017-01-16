@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.reconstruction.sidechain.pulchra;
 
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -152,7 +152,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
                         Atom reconstructedAtom = new Atom(atomName, 0,
                                 Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
                         // transform atom
-                        reconstructedAtom = new CoordinateManipulations.Transformation(ca_tr,
+                        reconstructedAtom = new LinearAlgebraAtom.Transformation(ca_tr,
                                 rotation).transformCoordinates(reconstructedAtom);
                         residueToReconstruct.addAtom(reconstructedAtom);
                     }

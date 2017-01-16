@@ -97,11 +97,13 @@ public class DesignConstants {
      */
     public static final String PYMOL_DIR = "C:/Python27/PyMOL/";
 
-    public static final String FRAGMENT_CLUSTERS = BASE_DIR + "fragment-clusters/";
+    public static final String FRAGMENT_CLUSTERS_DIR = BASE_DIR + "fragment-clusters/";
 
-    public static final String NAIVE_FRAGMENT_CLUSTERS = BASE_DIR + "naive-clusters/"   ;
+    public static final String NAIVE_FRAGMENT_CLUSTERS_BY_RMSD_DIR = BASE_DIR + "naive-clusters-rmsd/"   ;
 
-    public static final String FRAGMENT_CONSENSUS_CLUSTERS = FRAGMENT_CLUSTERS + "consensus/";
+    public static final String NAIVE_FRAGMENT_CLUSTERS_BY_TORSION_HASHING_DIR = BASE_DIR + "naive-clusters-torsion/";
+
+    public static final String FRAGMENT_CONSENSUS_CLUSTERS = FRAGMENT_CLUSTERS_DIR + "consensus/";
 
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).

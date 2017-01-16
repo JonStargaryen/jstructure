@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.scheme;
 
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -22,6 +22,6 @@ public class AlphaCarbonRepresentationScheme implements RepresentationScheme {
         return Selection.on(group)
                 .alphaCarbonAtoms()
                 .asOptionalAtom()
-                .orElse(new Atom(CoordinateManipulations.centroid(group)));
+                .orElse(new Atom(LinearAlgebraAtom.centroid(group)));
     }
 }

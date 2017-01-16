@@ -34,7 +34,7 @@ public class S01_PieChartsForFragments {
     }
 
     private static String handleMotif(String topology, SequenceMotifDefinition motif) {
-        return DesignConstants.lines(Paths.get(DesignConstants.FRAGMENT_CLUSTERS + topology + "/" + motif + "/" + DesignConstants.CLUSTER_SUMMARY))
+        return DesignConstants.lines(Paths.get(DesignConstants.FRAGMENT_CLUSTERS_DIR + topology + "/" + motif + "/" + DesignConstants.CLUSTER_SUMMARY))
                 //skip old header
                 .filter(line -> !line.startsWith("clusterId"))
                 .map(line -> motif + DELIMITER + Pattern.compile(DELIMITER).splitAsStream(line)

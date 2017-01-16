@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment.consensus;
 
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
@@ -30,7 +30,7 @@ abstract class AbstractConsensusComposer {
         // get intersecting pairs of atoms wrapped in an atom container
         // 12/14/16 - move to backboneOnly flag
         Pair<AtomContainer, AtomContainer> containerPair =
-                CoordinateManipulations.comparableAtomContainerPair(reference, candidate, true);
+                LinearAlgebraAtom.comparableAtomContainerPair(reference, candidate, true);
 
         return Combinatorics.sequentialPairsOf(containerPair.getLeft().getAtoms(), containerPair.getRight().getAtoms())
                 .map(AbstractConsensusComposer::mergeAtomPair)

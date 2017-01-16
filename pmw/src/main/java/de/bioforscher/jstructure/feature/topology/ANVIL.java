@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -132,8 +132,8 @@ public class ANVIL implements FeatureProvider {
                 .alphaCarbonAtoms()
                 .asAtomContainer();
         // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
-        this.centerOfMass = CoordinateManipulations.centroid(alphaCarbons);
-        this.maximalExtent = 1.2 * CoordinateManipulations.maximalExtent(alphaCarbons, centerOfMass);
+        this.centerOfMass = LinearAlgebraAtom.centroid(alphaCarbons);
+        this.maximalExtent = 1.2 * LinearAlgebraAtom.maximalExtent(alphaCarbons, centerOfMass);
         
         this.initialHphobHphil = hphobHphil();
         Membrane initialMembrane = processSpherePoints(generateSpherePoints(numberOfSpherePoints));

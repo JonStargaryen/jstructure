@@ -48,7 +48,7 @@ public class S05_GroupByTopology {
         String chainId = motif.getStartGroup().getParentChain().getChainId();
 
         // center atoms
-//        CoordinateManipulations.center(motif.getGroupContainer());
+//        LinearAlgebraAtom.center(motif.getGroupContainer());
 
         String content = motif.getGroupContainer()
                 .groups()

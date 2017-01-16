@@ -569,7 +569,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
                 Group residue2 = residues.getGroups().get(i + turn);
                 // Check for H bond from NH(i+n) to CO(i)
                 if (isBonded(i, i + turn)) {
-                    logger.debug("Turn at ({}, {}, {}", i, i + turn, turn);
+                    logger.debug("Turn at ({}, {}, {})", i, i + turn, turn);
                     getState(residue1).setTurn('>', turn);
                     getState(residue2).setTurn('<', turn);
                     // Bracketed residues findAny the helix number

@@ -19,10 +19,18 @@ import static design.DesignConstants.DELIMITER;
  * Previously, we approached the problem from a sequence perspective. However, why rely on Gerstein motifs, when all the
  * necessary information can be obtained directly from the data set.
  * TODO long-term residues surrounding the fragments (sequentially or spatially should be considered)
+ *
+ * <pre>
+ *     01/09/17
+ *     - problems:
+ *          - ntm lack some backbone atoms as some fragments did not contain all atoms - results invalid :<
+ *          - maybe torsion angle based hashing performs better
+ * </pre>
+ *
  * Created by S on 29.12.2016.
  */
 public class S01_BuildLibrary {
-    private static final String basePath = DesignConstants.NAIVE_FRAGMENT_CLUSTERS + "/";
+    private static final String basePath = DesignConstants.NAIVE_FRAGMENT_CLUSTERS_BY_RMSD_DIR + "/";
 
     public static void main(String[] args) throws IOException {
         DesignConstants.makeDirectoryIfAbsent(Paths.get(basePath));

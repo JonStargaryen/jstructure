@@ -1,7 +1,7 @@
 package mathematics;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static util.TestUtils.TOLERANT_ERROR_MARGIN;
 
 /**
- * Unit tests for CoordinateManipulations.
+ * Unit tests for LinearAlgebraAtom.
  * Created by S on 24.10.2016.
  */
 public class CoordinateUtilsUnitTest {
@@ -39,7 +39,7 @@ public class CoordinateUtilsUnitTest {
         System.out.printf("rotating %s by -90 degree yields ", Arrays.toString(point));
         // describes a rotation by 90°
         double[][] rotation = {{ 0, -1, 0 },{ 1, 0, 0 },{ 0, 0, 1 }};
-        CoordinateManipulations.Transformation transformation = new CoordinateManipulations.Transformation(rotation);
+        LinearAlgebraAtom.Transformation transformation = new LinearAlgebraAtom.Transformation(rotation);
         Atom atom = new Atom(point);
         transformation.transformCoordinates(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
@@ -55,7 +55,7 @@ public class CoordinateUtilsUnitTest {
                 Arrays.toString(point));
         // describes a rotation by 90°
         double[][] rotation = { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
-        CoordinateManipulations.Transformation transformation = new CoordinateManipulations.Transformation(translation, rotation);
+        LinearAlgebraAtom.Transformation transformation = new LinearAlgebraAtom.Transformation(translation, rotation);
         Atom atom = new Atom(point);
         transformation.transformCoordinates(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
@@ -92,7 +92,7 @@ public class CoordinateUtilsUnitTest {
 
     @Test
     public void testCenterOfMassWithProtein() {
-        double[] com1 = CoordinateManipulations.centerOfMass(protein1acj);
+        double[] com1 = LinearAlgebraAtom.centerOfMass(protein1acj);
         double[] com2 = centerOfMass(protein1acj);
         System.out.println("api-centerOfMass: " + Arrays.toString(com1) + " test-centerOfMass: " + Arrays.toString(com2));
 
@@ -118,21 +118,21 @@ public class CoordinateUtilsUnitTest {
 
     @Test
     public void testMaximalExtentWithProtein() {
-        double maximalExtent = CoordinateManipulations.maximalExtent(protein1acj);
+        double maximalExtent = LinearAlgebraAtom.maximalExtent(protein1acj);
         System.out.println(maximalExtent);
         //TODO this needs a real test
     }
 
     @Test
     public void shouldResultInCenteredStructure() {
-        CoordinateManipulations.center(protein1acj);
-        Assert.assertArrayEquals(CoordinateManipulations.centroid(protein1acj),
+        LinearAlgebraAtom.center(protein1acj);
+        Assert.assertArrayEquals(LinearAlgebraAtom.centroid(protein1acj),
                 AlignmentAlgorithm.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void shouldReturnNoDifferenceInRMSDForIdenticalProtein() {
-        double rmsd = CoordinateManipulations.calculateRmsd(protein1acj, protein1acj);
+        double rmsd = LinearAlgebraAtom.calculateRmsd(protein1acj, protein1acj);
         Assert.assertEquals(0.0, rmsd, 0.0);
     }
 }

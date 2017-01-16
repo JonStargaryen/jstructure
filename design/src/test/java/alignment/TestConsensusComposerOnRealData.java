@@ -2,7 +2,7 @@ package alignment;
 
 import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -36,7 +36,7 @@ public class TestConsensusComposerOnRealData {
         AtomContainer reference = alignedEnsemble.remove(0);
         double averageReferenceRmsd = alignedEnsemble.stream()
                 .filter(protein -> reference.getAtoms().size() == protein.getAtoms().size())
-                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(reference, protein))
+                .mapToDouble(protein -> LinearAlgebraAtom.calculateRmsd(reference, protein))
                 .average()
                 .orElse(-1);
 
@@ -46,7 +46,7 @@ public class TestConsensusComposerOnRealData {
 
         double averageConsensusRmsd = alignedEnsemble.stream()
                 .filter(protein -> consensus.getAtoms().size() == protein.getAtoms().size())
-                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(consensus, protein))
+                .mapToDouble(protein -> LinearAlgebraAtom.calculateRmsd(consensus, protein))
                 .average()
                 .orElse(-1);
 
@@ -70,7 +70,7 @@ public class TestConsensusComposerOnRealData {
         double averageRmsd = alignedEnsemble.stream()
                 .filter(protein -> reference.getAtoms().size() == protein.getAtoms().size())
                 .limit(100)
-                .mapToDouble(protein -> CoordinateManipulations.calculateRmsd(reference, protein))
+                .mapToDouble(protein -> LinearAlgebraAtom.calculateRmsd(reference, protein))
                 .average()
                 .getAsDouble();
 

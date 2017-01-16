@@ -24,7 +24,7 @@ public class S03_RMSDDistributionBoxPlots {
         for (String topology : DesignConstants.TOPOLOGIES) {
             String mappedTopology = mapToTopology(topology);
             for (SequenceMotifDefinition sequenceMotifDefinition : SequenceMotifDefinition.values()) {
-                Path summaryPath = Paths.get(DesignConstants.FRAGMENT_CLUSTERS + topology + "/" +
+                Path summaryPath = Paths.get(DesignConstants.FRAGMENT_CLUSTERS_DIR + topology + "/" +
                         sequenceMotifDefinition.name() + "/" + DesignConstants.CLUSTER_SUMMARY);
 
                 int size = Integer.valueOf(sequenceMotifDefinition.name().substring(2));

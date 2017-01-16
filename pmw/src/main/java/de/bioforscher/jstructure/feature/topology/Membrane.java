@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -181,6 +181,6 @@ public class Membrane {
      * @return the distance to the center of te membrane plane
      */
     public double distanceToMembraneCenter(AtomContainer atomContainer) {
-        return distanceToMembraneCenter(CoordinateManipulations.centroid(atomContainer));
+        return distanceToMembraneCenter(LinearAlgebraAtom.centroid(atomContainer));
     }
 }

@@ -16,7 +16,7 @@ public class S01_ConvertSummariesToArff {
             for(SequenceMotifDefinition sequenceMotifDefinition : SequenceMotifDefinition.values()) {
                 Path outPath = Paths.get(DesignConstants.ARFF_DIR + "sequence-to-clusters/" + topology + "/");
                 DesignConstants.makeDirectoryIfAbsent(outPath);
-                ClusterSummaryToArffConverter.writeToArff(Paths.get(DesignConstants.FRAGMENT_CLUSTERS + topology +
+                ClusterSummaryToArffConverter.writeToArff(Paths.get(DesignConstants.FRAGMENT_CLUSTERS_DIR + topology +
                         "/" + sequenceMotifDefinition.name() + "/" + DesignConstants.CLUSTER_SUMMARY),
                         Paths.get(outPath + "/" + sequenceMotifDefinition.name() + DesignConstants.ARFF_SUFFIX));
             }
