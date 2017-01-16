@@ -42,8 +42,8 @@ public interface FeatureContainer {
     default <ContentType> List<ContentType> getFeatureAsList(Class<ContentType> expectedListContentType, Enum enumKey) {
         List entry = (List) getFeatureMap().get(enumKey);
         if(!entry.isEmpty()) {
-            //some fail-fast safety net, as the correct cast completely depends on the way how this method is invoked
-            // and ClassCastException could arise later on
+            // some fail-fast safety net, as the correct cast completely depends on the way how and when this method is
+            // invoked, so ClassCastExceptions could arise later on
             expectedListContentType.cast(entry.get(0));
         }
         return (List<ContentType>) entry;

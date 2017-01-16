@@ -43,7 +43,7 @@ import java.util.NoSuchElementException;
  *
  */
 public class SecondaryStructureAnnotator implements FeatureProvider {
-    final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
     /**
      * DSSP assigns helices one getResidue shorter at each end, because the
      * residues at (i-1) and (i+n+1) are not assigned helix type although they

@@ -60,7 +60,7 @@ import java.util.function.Predicate;
  knowledge of the CeCILL license and that you accept its terms.</pre>
  */
 public class ANVIL implements FeatureProvider {
-    final Logger logger = LoggerFactory.getLogger(ANVIL.class);
+    private static final Logger logger = LoggerFactory.getLogger(ANVIL.class);
 
     public enum FeatureNames {
         MEMBRANE,

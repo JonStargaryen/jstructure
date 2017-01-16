@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * @author duarte_j
  */
 public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
-    final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
     public static final int DEFAULT_N_SPHERE_POINTS = 960;

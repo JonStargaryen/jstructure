@@ -45,7 +45,7 @@ import static de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalcu
 public class EnergyProfileCalculator implements FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculator.class);
     /**
-     * 2 residues are considered to be in contact, when the euclidean distance  of their beta-carbons is below 8.0 A.
+     * 2 residues are considered to be in contact, when the euclidean distance of their beta-carbons is below 8.0 A.
      */
     private static final double DEFAULT_INTERACTION_CUTOFF = 8.0;
     private static final String BASE_PATH = "energyprofile/";
@@ -71,7 +71,7 @@ public class EnergyProfileCalculator implements FeatureProvider {
 
     void processNaively(Protein protein) {
         final RepresentationScheme representationScheme = new BetaCarbonRepresentationScheme();
-        final double distanceCutoff = 8 * 8;
+        final double squaredDistanceCutoff = DEFAULT_INTERACTION_CUTOFF * DEFAULT_INTERACTION_CUTOFF;
 
         for(Group currentGroup : protein.getGroups()) {
             if(!currentGroup.isAminoAcid()) {
@@ -89,7 +89,7 @@ public class EnergyProfileCalculator implements FeatureProvider {
 
                 double[] surroundingGroupCoordinates = representationScheme.determineRepresentingAtom(surroundingGroup).getCoordinates();
 
-                if(LinearAlgebra3D.distanceFast(currentGroupCoordinates, surroundingGroupCoordinates) > distanceCutoff) {
+                if(LinearAlgebra3D.distanceFast(currentGroupCoordinates, surroundingGroupCoordinates) > squaredDistanceCutoff) {
                     continue;
                 }
 

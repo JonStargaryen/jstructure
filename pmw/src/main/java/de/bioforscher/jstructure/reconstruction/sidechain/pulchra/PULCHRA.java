@@ -10,6 +10,8 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -47,6 +49,8 @@ import java.util.stream.Collectors;
  * J Comput Chem. 2008 July 15; 29(9): 1460–1465. doi:10.1002/jcc.20906.
  */
 public class PULCHRA implements ReconstructionAlgorithm {
+    private static final Logger logger = LoggerFactory.getLogger(PULCHRA.class);
+
     private static final double BIN_SIZE = 0.3;
     private static final String BASE_PATH = "pulchra/";
     /*
@@ -117,22 +121,22 @@ public class PULCHRA implements ReconstructionAlgorithm {
                     double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
                     double d14 = LinearAlgebra3D.distance14(ca_p2, ca_p1, ca_tr, ca_n1);
                     int[] residueBinning = binResidues(d13, d24, d14);
-//                    System.out.println("residueBinning : " + Arrays.toString(residueBinning));
+                    logger.trace("residueBinning : {}", Arrays.toString(residueBinning));
 
                     // find closest rotamer conformation
                     int[] bestMatchingRotamer = null;
                     double bestMatchingRotamerDistance = Double.MAX_VALUE;
                     int aminoAcidIndex = getAminoAcidIndex(residueToReconstruct);
-//                    System.out.println("aminoAcidIndex : " + aminoAcidIndex);
+                    logger.trace("aminoAcidIndex : {}", aminoAcidIndex);
 
                     for (int[] rotamer : rotStatIdx) {
-//                        System.out.println("rotamer : " + Arrays.toString(rotamer));
+                        logger.trace("rotamer : {}", Arrays.toString(rotamer));
                         if (rotamer[0] != aminoAcidIndex) {
                             continue;
                         }
 
                         double rotamerDistance = difference(rotamer, residueBinning);
-//                        System.out.println("distance : " + rotamerDistance);
+                        logger.trace("distance : {}", rotamerDistance);
                         if (rotamerDistance < bestMatchingRotamerDistance) {
                             bestMatchingRotamerDistance = rotamerDistance;
                             bestMatchingRotamer = rotamer;
