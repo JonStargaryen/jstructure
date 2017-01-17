@@ -44,7 +44,7 @@ public class S07_AlignFragments {
                             alignedProteins.forEach(protein -> {
                                 try {
                                     Files.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
-                                            topology + "/" + protein.getIdentifier() + "-" + protein.getFeatureAsDouble(AbstractAlignmentAlgorithm.FeatureNames.FRAGMENT_RMSD)
+                                            topology + "/" + protein.getIdentifier() + "-" + protein.getFeatureAsDouble(AbstractAlignmentAlgorithm.FRAGMENT_RMSD)
                                                     + DesignConstants.PDB_SUFFIX),
                                             protein.composePDBRecord().getBytes());
                                 } catch (IOException e) {

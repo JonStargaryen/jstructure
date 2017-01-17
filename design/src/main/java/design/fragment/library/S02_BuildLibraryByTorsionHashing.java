@@ -1,6 +1,5 @@
 package design.fragment.library;
 
-import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -46,12 +45,12 @@ public class S02_BuildLibraryByTorsionHashing {
 
         for(Protein protein : proteins) {
             for(Chain chain : protein.getChains()) {
-                List<Group> groups = Selection.on(chain).aminoAcids().asFilteredGroups().collect(Collectors.toList();
+                List<Group> groups = Selection.on(chain).aminoAcids().asFilteredGroups().collect(Collectors.toList());
                 if(groups.size() < 5) {
                     continue;
                 }
 
-                Combinatorics.fragmentsOf(groups, 5).forEach(fragments::add);
+                //Combinatorics.fragmentsOf(groups, 5).forEach(fragments::add);
             }
         }
     }

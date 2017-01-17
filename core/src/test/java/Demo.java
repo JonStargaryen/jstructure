@@ -10,9 +10,7 @@ import org.junit.Test;
  * Created by S on 03.11.2016.
  */
 public class Demo {
-    enum FeatureNames {
-        ALANINE_RATIO
-    }
+    public static final String ALANINE_RATIO = "ALANINE_RATIO";
 
     @Test
     public void demo() {
@@ -33,9 +31,9 @@ public class Demo {
                 .count() / (double) protein.getSize() * 100.0;
 
         // store count
-        protein.setFeature(FeatureNames.ALANINE_RATIO, alanineRatio);
+        protein.setFeature(ALANINE_RATIO, alanineRatio);
 
         // retrieve it
-        System.out.printf("alanine ratio: %3.2f%%", protein.getFeatureAsDouble(FeatureNames.ALANINE_RATIO));
+        System.out.printf("alanine ratio: %3.2f%%", protein.getFeatureAsDouble(ALANINE_RATIO));
     }
 }

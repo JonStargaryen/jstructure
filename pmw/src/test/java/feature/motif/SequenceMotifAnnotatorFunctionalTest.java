@@ -33,7 +33,7 @@ public class SequenceMotifAnnotatorFunctionalTest {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue -> residue.getFeature(List.class,
-                        SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF))
+                        SequenceMotifAnnotator.SEQUENCE_MOTIF))
                 .forEach(System.out::println);
     }
 }

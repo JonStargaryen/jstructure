@@ -113,9 +113,9 @@ public class ProteinSource {
                                              .aminoAcids()
                                              .asFilteredGroups())
                 .filter(residue -> nonNull(residue.getFeature(List.class,
-                        SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
+                        SequenceMotifAnnotator.SEQUENCE_MOTIF)))
                 .flatMap(residue -> residue.getFeature(List.class,
-                        SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF).stream());
+                        SequenceMotifAnnotator.SEQUENCE_MOTIF).stream());
 
         return motifStream.collect(Collectors.toSet());
     }
@@ -132,9 +132,9 @@ public class ProteinSource {
         // create topology map
         Stream<SequenceMotif> motifs = residues
                 .filter(residue -> nonNull(residue.getFeature(List.class,
-                        SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF)))
+                        SequenceMotifAnnotator.SEQUENCE_MOTIF)))
                 .flatMap(residue -> residue.getFeature(List.class,
-                        SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF).stream());
+                        SequenceMotifAnnotator.SEQUENCE_MOTIF).stream());
         // for some reason mapping and instantaneously filtering will not compile
         Set<SequenceMotif> motifSet = motifs.collect(Collectors.toSet());
         // group by topology
@@ -144,9 +144,9 @@ public class ProteinSource {
 
     public static String determineTopologyGroup(SequenceMotif motif) {
         boolean startTM = nonNull(motif.getStartGroup().getFeature(TMHelix.class,
-                OPMParser.FeatureNames.TM_HELIX));
+                OPMParser.TM_HELIX));
         boolean endTM = nonNull(motif.getEndGroup().getFeature(TMHelix.class,
-                OPMParser.FeatureNames.TM_HELIX));
+                OPMParser.TM_HELIX));
 
         if(startTM && endTM) {
             return "I";
@@ -159,9 +159,9 @@ public class ProteinSource {
 
     public static String determineTopologyGroup(GroupContainer container) {
         boolean startTM = nonNull(container.getGroups().get(0).getFeature(TMHelix.class,
-                OPMParser.FeatureNames.TM_HELIX));
+                OPMParser.TM_HELIX));
         boolean endTM = nonNull(container.getGroups().get(container.getGroups().size() - 1).getFeature(TMHelix.class,
-                OPMParser.FeatureNames.TM_HELIX));
+                OPMParser.TM_HELIX));
 
         if(startTM && endTM) {
             return "tm";

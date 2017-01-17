@@ -14,9 +14,7 @@ import java.util.stream.Collectors;
  * Created by S on 26.10.2016.
  */
 public class DistanceMapComposer {
-    public enum FeatureNames {
-        DISTANCE_MAP
-    }
+    public static final String DISTANCE_MAP = "DISTANCE_MAP";
 
     public double[][] computeDistanceMap(Protein protein) {
         double[][] distanceMap = new double[protein.getSize()][protein.getSize()];

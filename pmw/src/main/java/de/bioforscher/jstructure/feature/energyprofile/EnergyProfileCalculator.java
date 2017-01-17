@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.feature.energyprofile;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -20,8 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator.FeatureNames.SOLVATION_ENERGY;
 
 /**
  * The standard implementation of Frank Dressel's energy profiles for globular and trans-membrane proteins. A
@@ -42,7 +41,8 @@ import static de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalcu
  * TODO implement interaction energy term
  * Created by bittrich on 12/15/16.
  */
-public class EnergyProfileCalculator implements FeatureProvider {
+@FeatureProvider(providedFeatures = EnergyProfileCalculator.SOLVATION_ENERGY)
+public class EnergyProfileCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculator.class);
     /**
      * 2 residues are considered to be in contact, when the euclidean distance of their beta-carbons is below 8.0 A.
@@ -52,19 +52,16 @@ public class EnergyProfileCalculator implements FeatureProvider {
     private static final String GLOBULAR_SOLVATION_PATH = BASE_PATH + "globular-solvation.dat";
     private static Map<String, Double> globularSolvationData;
 
+    public static final String SOLVATION_ENERGY = "SOLVATION_ENERGY";
+
     public EnergyProfileCalculator() {
         if(globularSolvationData == null) {
             initializeLibrary();
         }
     }
 
-    public enum FeatureNames {
-        // the energy term describing interactions with the solvent
-        SOLVATION_ENERGY
-    }
-
     @Override
-    public void process(Protein protein) {
+    protected void processInternally(Protein protein) {
 //        processBySelectionAPI(protein); - ~4x slower than naive impl
         processNaively(protein);
     }

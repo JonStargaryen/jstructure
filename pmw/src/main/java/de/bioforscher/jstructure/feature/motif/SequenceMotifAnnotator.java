@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.feature.motif;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -16,16 +17,14 @@ import java.util.stream.Collectors;
  * Searches for sequence fragments matching any {@link SequenceMotifDefinition} and reports hits.
  * Created by S on 02.10.2016.
  */
-public class SequenceMotifAnnotator implements FeatureProvider {
+@FeatureProvider(providedFeatures = SequenceMotifAnnotator.SEQUENCE_MOTIF)
+public class SequenceMotifAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
-
-    public enum FeatureNames {
-        SEQUENCE_MOTIF
-    }
+    public static final String SEQUENCE_MOTIF = "SEQUENCE_MOTIF";
 
     @Override
     @SuppressWarnings("unchecked")
-    public void process(Protein protein) {
+    protected void processInternally(Protein protein) {
         List<SequenceMotif> globalListOfSequenceMotifs = new ArrayList<>();
 
         // we need getChain information as motifs cannot be part of 2 chains
@@ -71,11 +70,11 @@ public class SequenceMotifAnnotator implements FeatureProvider {
                     List<Group> residueList = residueInChain.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue);
                     residueList.forEach(residue -> {
-                        List<SequenceMotif> value = residue.getFeature(List.class, FeatureNames.SEQUENCE_MOTIF);
+                        List<SequenceMotif> value = residue.getFeature(List.class, SEQUENCE_MOTIF);
                         // entry will be null at first - create list and assign reference
                         if(value == null) {
                             value = new ArrayList<>();
-                            residue.setFeature(FeatureNames.SEQUENCE_MOTIF, value);
+                            residue.setFeature(SEQUENCE_MOTIF, value);
                         }
                         value.add(sequenceMotif);
                         if(!globalListOfSequenceMotifs.contains(sequenceMotif)) {
@@ -88,6 +87,6 @@ public class SequenceMotifAnnotator implements FeatureProvider {
         }
 
         // set global reference to all entries
-        protein.setFeature(FeatureNames.SEQUENCE_MOTIF, globalListOfSequenceMotifs);
+        protein.setFeature(SEQUENCE_MOTIF, globalListOfSequenceMotifs);
     }
 }

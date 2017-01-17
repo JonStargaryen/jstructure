@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
@@ -34,7 +35,8 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pre>
  * @author duarte_j
  */
-public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
+@FeatureProvider(providedFeatures = { AccessibleSurfaceAreaCalculator.ATOM_RADIUS, AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
+public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
@@ -49,10 +51,8 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
     public static final double SULFUR_VDW = 1.85;
     public static final double OXIGEN_VDW = 1.40;
 
-    public enum FeatureNames {
-        ATOM_RADIUS,
-        ACCESSIBLE_SURFACE_AREA
-    }
+    public static final String ATOM_RADIUS = "ATOM_RADIUS";
+    public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
 
     private int numberOfSpherePoints;
     private double probeSize;
@@ -78,11 +78,11 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
     }
 
     private void assignRadius(Atom atom) {
-        atom.setFeature(FeatureNames.ATOM_RADIUS, determineRadius(atom));
+        atom.setFeature(ATOM_RADIUS, determineRadius(atom));
     }
 
     private void assignSingleAsa(Group group) {
-        group.setFeature(FeatureNames.ACCESSIBLE_SURFACE_AREA,
+        group.setFeature(ACCESSIBLE_SURFACE_AREA,
                 Selection.on(group)
                         .nonHydrogenAtoms()
                         .asFilteredAtoms()
@@ -91,7 +91,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
     }
 
     @Override
-    public void process(Protein protein) {
+    protected void processInternally(Protein protein) {
         // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
         GroupContainer residueContainer = Selection.on(protein)
                 .aminoAcids()
@@ -185,7 +185,7 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
      * @return all neighbored atoms
      */
     private List<Atom> findNeighbors(Atom atom) {
-        final double cutoff = probeSize + probeSize + atom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS);
+        final double cutoff = probeSize + probeSize + atom.getFeatureAsDouble(ATOM_RADIUS);
         return Selection.on(nonHydrogenAtoms)
                 .distance(atom, cutoff)
                 .asFilteredAtoms()
@@ -199,14 +199,14 @@ public class AccessibleSurfaceAreaCalculator implements FeatureProvider {
      */
     private double calcSingleAsa(Atom atom) {
         List<Atom> neighborAtoms = findNeighbors(atom);
-        double radius = probeSize + atom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS);
+        double radius = probeSize + atom.getFeatureAsDouble(ATOM_RADIUS);
         int accessiblePoints = 0;
 
         for (double[] point : spherePoints) {
             boolean isAccessible = true;
             double[] testPoint = LinearAlgebra3D.add(LinearAlgebra3D.multiply(point, radius), atom.getCoordinates());
             for(Atom neighborAtom : neighborAtoms) {
-                double neighborAtomRadius = neighborAtom.getFeatureAsDouble(FeatureNames.ATOM_RADIUS) + probeSize;
+                double neighborAtomRadius = neighborAtom.getFeatureAsDouble(ATOM_RADIUS) + probeSize;
                 double differenceSquared = LinearAlgebra3D.distanceFast(testPoint, neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;

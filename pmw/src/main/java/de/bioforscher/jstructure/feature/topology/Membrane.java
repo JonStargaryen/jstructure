@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * Created by S on 03.11.2016.
  */
 public class Membrane {
-    private static final String AMINO_ACID_POTENTIAL = "topology/potential/amino_acid_potential.dat";
+    private static final String AMINO_ACID_POTENTIAL = "potential/amino_acid_potential.dat";
     /**
      * the collection of points representing the membrane layers
      */
@@ -81,7 +81,7 @@ public class Membrane {
 
     private InputStream getResourceAsStream(String filepath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
-                "failed to findAny resource as InputStream");
+                "failed to find resource as InputStream");
     }
 
     private synchronized void initializeLibrary() {

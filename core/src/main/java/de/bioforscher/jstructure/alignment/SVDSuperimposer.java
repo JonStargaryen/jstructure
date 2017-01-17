@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.mathematics.CoordinateManipulations;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
@@ -34,7 +34,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         AtomContainer originalCandidate = candidate;
 
         Pair<AtomContainer, AtomContainer> atomContainerPair =
-                CoordinateManipulations.comparableAtomContainerPair(reference,
+                LinearAlgebraAtom.comparableAtomContainerPair(reference,
                         candidate,
                         minimalSetOfAtomNames,
                         maximalSetOfAtomNames);

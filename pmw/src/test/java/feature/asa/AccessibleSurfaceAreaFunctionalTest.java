@@ -49,7 +49,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue ->
-                        residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA))
+                        residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA))
                 .collect(Collectors.toList());
     }
 

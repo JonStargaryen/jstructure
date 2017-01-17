@@ -42,7 +42,7 @@ public class S04_ExtractSecondaryStructure {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue -> residue.getFeature(List.class,
-                      SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF))
+                      SequenceMotifAnnotator.SEQUENCE_MOTIF))
                 .map(entry -> Objects.isNull(entry) || entry.isEmpty() ? " " : "S")
                 .collect(Collectors.joining("", "mot: " , ""))
         );
@@ -51,7 +51,7 @@ public class S04_ExtractSecondaryStructure {
         System.out.println(Selection.on(protein)
                 .aminoAcids()
                 .asFilteredGroups()
-                .map(residue -> residue.getFeature(TMHelix.class, OPMParser.FeatureNames.TM_HELIX))
+                .map(residue -> residue.getFeature(TMHelix.class, OPMParser.TM_HELIX))
                 .map(entry -> Objects.isNull(entry) ? " " : "M")
                 .collect(Collectors.joining("", "top: ", ""))
         );
@@ -61,7 +61,7 @@ public class S04_ExtractSecondaryStructure {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue -> residue.getFeature(SecStrucState.class,
-                      SecondaryStructureAnnotator.FeatureNames.SECONDARY_STRUCTURE_STATES))
+                      SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES))
                 .map(state -> state.getSecondaryStructure().getReducedRepresentation())
                 .collect(Collectors.joining("", "sse: ", ""))
         );

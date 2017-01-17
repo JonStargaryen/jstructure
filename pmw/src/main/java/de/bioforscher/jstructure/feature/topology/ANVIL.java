@@ -1,8 +1,9 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -12,10 +13,7 @@ import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.function.IntConsumer;
 import java.util.function.Predicate;
 
@@ -59,13 +57,11 @@ import java.util.function.Predicate;
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.</pre>
  */
-public class ANVIL implements FeatureProvider {
+@FeatureProvider(providedFeatures = { ANVIL.MEMBRANE, ANVIL.TOPOLOGY }, requiredFeatures = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
+public class ANVIL extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(ANVIL.class);
-
-    public enum FeatureNames {
-        MEMBRANE,
-        TOPOLOGY
-    }
+    public static final String MEMBRANE = "MEMBRANE";
+    public static final String TOPOLOGY = "TOPOLOGY";
 
     /*
      * default values
@@ -108,8 +104,7 @@ public class ANVIL implements FeatureProvider {
         this.maxthick = maxthick;
         this.step = step;
         this.density = density;
-        this.asaFilter = residue ->
-                residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.FeatureNames.ACCESSIBLE_SURFACE_AREA) > afilter;
+        this.asaFilter = residue -> residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) > afilter;
     }
 
     /**
@@ -125,7 +120,7 @@ public class ANVIL implements FeatureProvider {
     }
 
     @Override
-    public void process(Protein protein) {
+    protected void processInternally(Protein protein) {
         //TODO generally bugged
         this.protein = protein;
         AtomContainer alphaCarbons = Selection.on(protein)
@@ -200,7 +195,7 @@ public class ANVIL implements FeatureProvider {
      * Assign the topology to each getResidue which is embedded in the membrane.
      */
     private void assignTopology() {
-        protein.setFeature(ANVIL.FeatureNames.MEMBRANE, membrane);
+        protein.setFeature(MEMBRANE, membrane);
         Selection.on(protein)
                 .aminoAcids()
                 .asFilteredGroups()
@@ -211,7 +206,7 @@ public class ANVIL implements FeatureProvider {
                         membrane.normalVector,
                         membrane.planePoint1,
                         membrane.planePoint2))
-                .forEach(residue ->  residue.setFeature(FeatureNames.TOPOLOGY, membrane)
+                .forEach(residue ->  residue.setFeature(TOPOLOGY, membrane)
         );
     }
 

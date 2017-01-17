@@ -66,7 +66,7 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
     @SuppressWarnings("unchecked")
     private static boolean isNotStartOrEndOfSequenceMotif(Group residue) {
         List<SequenceMotif> motifAnnotations = residue.getFeature(List.class,
-                SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
+                SequenceMotifAnnotator.SEQUENCE_MOTIF);
 
         return motifAnnotations == null || motifAnnotations.isEmpty() || motifAnnotations.stream().filter(motif ->
                 motif.getStartGroup().equals(residue) || motif.getEndGroup().equals(residue)).count() == 0;

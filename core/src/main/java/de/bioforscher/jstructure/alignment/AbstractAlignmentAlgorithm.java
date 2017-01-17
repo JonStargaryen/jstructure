@@ -15,10 +15,7 @@ public abstract class AbstractAlignmentAlgorithm implements AlignmentAlgorithm {
     final static Logger logger = LoggerFactory.getLogger(AbstractAlignmentAlgorithm.class);
     final Set<String> minimalSetOfAtomNames;
     final Set<String> maximalSetOfAtomNames;
-
-    public enum FeatureNames {
-        FRAGMENT_RMSD
-    }
+    public static final String FRAGMENT_RMSD = "FRAGMENT_RMSD";
 
     AbstractAlignmentAlgorithm() {
         this(Collections.emptySet(), AminoAcidFamily.ATOM_NAMES.ALL_ATOM_NAMES);

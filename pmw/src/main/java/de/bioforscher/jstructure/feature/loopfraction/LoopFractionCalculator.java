@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Protein;
 
@@ -7,9 +8,12 @@ import de.bioforscher.jstructure.model.structure.Protein;
  * Computes the loop fraction of a protein.
  * Created by S on 16.01.2017.
  */
-public class LoopFractionCalculator implements FeatureProvider {
+@FeatureProvider(providedFeatures = LoopFractionCalculator.LOOP_FRACTION)
+public class LoopFractionCalculator extends AbstractFeatureProvider {
+    public static final String LOOP_FRACTION = "LOOP_FRACTION";
+
     @Override
-    public void process(Protein protein) {
+    protected void processInternally(Protein protein) {
         //TODO impl
     }
 }

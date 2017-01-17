@@ -12,21 +12,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static design.parser.opm.OPMParser.FeatureNames.*;
-
 /**
  * Parser for .opm files (data dumps of the OPM database by Jsoup).
  * Created by S on 29.10.2016.
  */
 public class OPMParser {
-    public enum FeatureNames {
-        HYDROPHOBIC_THICKNESS,
-        TILT_ANGLE,
-        DELTA_G_TRANSFER,
-        TOPOLOGY,
-        NUMBER_OF_TM_STRUCTURES,
-        TM_HELIX
-    }
+    public static final String HYDROPHOBIC_THICKNESS = "HYDROPHOBIC_THICKNESS";
+    public static final String TILT_ANGLE = "TILT_ANGLE";
+    public static final String DELTA_G_TRANSFER = "DELTA_G_TRANSFER";
+    public static final String TOPOLOGY = "TOPOLOGY";
+    public static final String NUMBER_OF_TM_STRUCTURES = "NUMBER_OF_TM_STRUCTURES";
+    public static final String TM_HELIX = "TM_HELIX";
 
     public static void parse(final Protein protein, Path path) {
         try {

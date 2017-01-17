@@ -32,7 +32,7 @@ abstract class AbstractConsensusComposer {
         // get intersecting pairs of atoms wrapped in an atom container
         // 12/14/16 - moved to backboneOnly flag
         Pair<AtomContainer, AtomContainer> containerPair =
-                CoordinateManipulations.comparableAtomContainerPair(reference,
+                LinearAlgebraAtom.comparableAtomContainerPair(reference,
                         candidate,
                         AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
                         AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);

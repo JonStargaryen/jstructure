@@ -46,28 +46,28 @@ public class FeatureContainerIntegrationTest {
 
     @Test
     public void shouldPutElementIntoContainer() {
-        featureContainer.setFeature(PUT_INT, INT_VALUE_1);
-        featureContainer.setFeature(PUT_DOUBLE, DOUBLE_VALUE);
-        featureContainer.setFeature(PUT_OBJECT, this);
-        Assert.assertEquals(INT_VALUE_1, featureContainer.getFeatureAsInt(PUT_INT));
-        Assert.assertEquals(DOUBLE_VALUE, featureContainer.getFeatureAsDouble(PUT_DOUBLE), 0.0);
-        Assert.assertEquals(this, featureContainer.getFeature(getClass(), PUT_OBJECT));
+        featureContainer.setFeature(PUT_INT.name(), INT_VALUE_1);
+        featureContainer.setFeature(PUT_DOUBLE.name(), DOUBLE_VALUE);
+        featureContainer.setFeature(PUT_OBJECT.name(), this);
+        Assert.assertEquals(INT_VALUE_1, featureContainer.getFeatureAsInt(PUT_INT.name()));
+        Assert.assertEquals(DOUBLE_VALUE, featureContainer.getFeatureAsDouble(PUT_DOUBLE.name()), 0.0);
+        Assert.assertEquals(this, featureContainer.getFeature(getClass(), PUT_OBJECT.name()));
     }
 
     @Test
     public void shouldReplaceElementInContainer() {
-        featureContainer.setFeature(PUT_INT, INT_VALUE_1);
-        Assert.assertEquals(INT_VALUE_1, featureContainer.getFeatureAsInt(PUT_INT));
-        featureContainer.setFeature(PUT_INT, INT_VALUE_2);
-        Assert.assertEquals(INT_VALUE_2, featureContainer.getFeatureAsInt(PUT_INT));
+        featureContainer.setFeature(PUT_INT.name(), INT_VALUE_1);
+        Assert.assertEquals(INT_VALUE_1, featureContainer.getFeatureAsInt(PUT_INT.name()));
+        featureContainer.setFeature(PUT_INT.name(), INT_VALUE_2);
+        Assert.assertEquals(INT_VALUE_2, featureContainer.getFeatureAsInt(PUT_INT.name()));
     }
 
     @Test
     public void testBehaviourWithLists() {
         List<Double> values = Stream.of(1.0, 2.0, 3.0, 4.0, 5.0).collect(Collectors.toList());
-        featureContainer.setFeature(PUT_LIST, values);
+        featureContainer.setFeature(PUT_LIST.name(), values);
 
-        List<Double> content = featureContainer.getFeatureAsList(Double.class, PUT_LIST);
+        List<Double> content = featureContainer.getFeatureAsList(Double.class, PUT_LIST.name());
         content.stream()
                 .peek(System.out::println)
                 .map(Double.class::isInstance)
@@ -77,9 +77,9 @@ public class FeatureContainerIntegrationTest {
     @Test(expected = ClassCastException.class)
     public void testBehaviourWithListsForErroneousCast_expectClassCastException() {
         List<Double> values = Stream.of(1.0, 2.0, 3.0, 4.0, 5.0).collect(Collectors.toList());
-        featureContainer.setFeature(PUT_LIST, values);
+        featureContainer.setFeature(PUT_LIST.name(), values);
 
         // wrong content type provided, will throw ClassCastException
-        featureContainer.getFeatureAsList(Boolean.class, PUT_LIST);
+        featureContainer.getFeatureAsList(Boolean.class, PUT_LIST.name());
     }
 }

@@ -47,7 +47,7 @@ public class DSSPFunctionalTest {
                 .aminoAcids()
                 .asFilteredGroups()
                 .map(residue -> residue.getFeature(de.bioforscher.jstructure.feature.sse.SecStrucState.class,
-                        SecondaryStructureAnnotator.FeatureNames.SECONDARY_STRUCTURE_STATES))
+                        SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES))
                 .map(de.bioforscher.jstructure.feature.sse.SecStrucState::getSecondaryStructure)
                 .map(DSSPSecondaryStructureElement::getOneLetterRepresentation)
                 .map(character -> character.equals("c") ? " " : character)

@@ -31,7 +31,7 @@ public class MembranePotentialIntegrationTest {
 
     @Test
     public void shouldComputeMembraneDistanceForEachResidue() {
-        Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
+        Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.MEMBRANE);
         Selection.on(protein1brr)
                 .aminoAcids()
                 .asFilteredGroups()
@@ -43,7 +43,7 @@ public class MembranePotentialIntegrationTest {
 
     @Test
     public void shouldComputeMembranePotentialForEachResidue() {
-        Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
+        Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.MEMBRANE);
         Selection.on(protein1brr)
                 .aminoAcids()
                 .asFilteredGroups()
@@ -56,8 +56,8 @@ public class MembranePotentialIntegrationTest {
     @Test
     @SuppressWarnings("unchecked")
     public void shouldComputeMembranePotentialForEachSequenceMotif() {
-        Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.FeatureNames.MEMBRANE);
-        List<SequenceMotif> motifs = protein1brr.getFeature(List.class, SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
+        Membrane membrane = protein1brr.getFeature(Membrane.class, ANVIL.MEMBRANE);
+        List<SequenceMotif> motifs = protein1brr.getFeature(List.class, SequenceMotifAnnotator.SEQUENCE_MOTIF);
         motifs.stream()
               .map(motif -> motif + " : " + membrane.computePotential(motif))
               .forEach(System.out::println);

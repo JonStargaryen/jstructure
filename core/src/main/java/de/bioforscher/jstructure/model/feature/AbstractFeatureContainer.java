@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by S on 15.11.2016.
  */
 public abstract class AbstractFeatureContainer implements StructureContainer {
-    private Map<Enum, Object> featureMap;
+    private Map<String, Object> featureMap;
 
     protected AbstractFeatureContainer() {
         this.featureMap = new HashMap<>();
@@ -20,7 +20,7 @@ public abstract class AbstractFeatureContainer implements StructureContainer {
     //TODO maybe some unique name for each impl - protein:pdbName, chain:chainId, group:pdbName-resNum, atom:element-pdbSerial
 
     @Override
-    public Map<Enum, Object> getFeatureMap() {
+    public Map<String, Object> getFeatureMap() {
         return featureMap;
     }
 }

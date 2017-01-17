@@ -65,7 +65,7 @@ public class Z04_MaskNonGG4ResiduesByChain {
     @SuppressWarnings("unchecked")
     private static boolean isNotPartOfGG4(Group residue) {
         List<SequenceMotif> motifAnnotations = residue.getFeature(List.class,
-                SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF);
+                SequenceMotifAnnotator.SEQUENCE_MOTIF);
 
         if(motifAnnotations == null || motifAnnotations.isEmpty()) {
             return true;

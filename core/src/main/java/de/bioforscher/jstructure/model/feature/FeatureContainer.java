@@ -12,35 +12,35 @@ public interface FeatureContainer {
     /**
      * Handle to the internal feature map of the container. Access should be realized using the high-level functions.
      * @return the map storing all additional data attached to this element
-     * @see FeatureContainer#getFeature(Class, Enum)
-     * @see FeatureContainer#setFeature(Enum, Object)
+     * @see FeatureContainer#getFeature(Class, String)
+     * @see FeatureContainer#setFeature(String, Object)
      */
-    Map<Enum, Object> getFeatureMap();
+    Map<String, Object> getFeatureMap();
 
     /**
      * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
      * element can be casted.
      * @param expectedContentType the class of the retrieved element
-     * @param enumKey the unique identifier of the map entry
+     * @param key the unique identifier of the map entry
      * @param <ContentType> the class the entry will be cast to
      * @return the retrieved, casted entry
      */
-    default <ContentType> ContentType getFeature(Class<ContentType> expectedContentType, Enum enumKey) {
-        return expectedContentType.cast(getFeatureMap().get(enumKey));
+    default <ContentType> ContentType getFeature(Class<ContentType> expectedContentType, String key) {
+        return expectedContentType.cast(getFeatureMap().get(key));
     }
 
     /**
      * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
      * element can be casted.
      * @param expectedListContentType the class of the retrieved collection
-     * @param enumKey the unique identifier of the map entry
+     * @param key the unique identifier of the map entry
      * @param <ContentType> the class the entries of this list will be cast to
      * @return a collection of retrieved entries
-     * @see FeatureContainer#getFeature(Class, Enum)
+     * @see FeatureContainer#getFeature(Class, String)
      */
     @SuppressWarnings("unchecked")
-    default <ContentType> List<ContentType> getFeatureAsList(Class<ContentType> expectedListContentType, Enum enumKey) {
-        List entry = (List) getFeatureMap().get(enumKey);
+    default <ContentType> List<ContentType> getFeatureAsList(Class<ContentType> expectedListContentType, String key) {
+        List entry = (List) getFeatureMap().get(key);
         if(!entry.isEmpty()) {
             // some fail-fast safety net, as the correct cast completely depends on the way how and when this method is
             // invoked, so ClassCastExceptions could arise later on
@@ -51,30 +51,30 @@ public interface FeatureContainer {
 
     /**
      * Convenience function to retrieve int features.
-     * @param enumKey the unique identifier of the entry
+     * @param key the unique identifier of the entry
      * @return the value as primitive int
-     * @see FeatureContainer#getFeature(Class, Enum)
+     * @see FeatureContainer#getFeature(Class, String)
      */
-    default int getFeatureAsInt(Enum enumKey) {
-        return getFeature(Integer.class, enumKey);
+    default int getFeatureAsInt(String key) {
+        return getFeature(Integer.class, key);
     }
 
     /**
      * Convenience function to retrieve double features.
-     * @param enumKey the unique identifier of the entry
+     * @param key the unique identifier of the entry
      * @return the value as primitive double
-     * @see FeatureContainer#getFeature(Class, Enum)
+     * @see FeatureContainer#getFeature(Class, String)
      */
-    default double getFeatureAsDouble(Enum enumKey) {
-        return getFeature(Double.class, enumKey);
+    default double getFeatureAsDouble(String key) {
+        return getFeature(Double.class, key);
     }
 
     /**
      * Stores one object in the feature container.
-     * @param enumKey the enum representing this feature, old entries will be replaced
+     * @param key the enum representing this feature, old entries will be replaced
      * @param featureValue the actual content
      */
-    default void setFeature(Enum enumKey, Object featureValue) {
-        getFeatureMap().put(enumKey, featureValue);
+    default void setFeature(String key, Object featureValue) {
+        getFeatureMap().put(key, featureValue);
     }
 }

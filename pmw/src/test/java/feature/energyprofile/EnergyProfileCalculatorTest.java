@@ -1,5 +1,6 @@
-package de.bioforscher.jstructure.feature.energyprofile;
+package feature.energyprofile;
 
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class EnergyProfileCalculatorTest {
                     new EnergyProfileCalculator().process(protein);
 
                     System.out.println(protein.groups()
-                            .mapToDouble(group -> group.getFeatureAsDouble(EnergyProfileCalculator.FeatureNames.SOLVATION_ENERGY))
+                            .mapToDouble(group -> group.getFeatureAsDouble(EnergyProfileCalculator.SOLVATION_ENERGY))
                             .mapToObj(decimalFormat::format)
                             .collect(Collectors.joining(", ", "energy values: ", "")));
                 });

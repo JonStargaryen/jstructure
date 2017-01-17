@@ -31,7 +31,7 @@ public class MultiDimensionalScalingReconstruction implements ReconstructionAlgo
 
         // create mapping using MDS
         MultiDimensionalScaling mds = new MultiDimensionalScaling();
-        double[][] distanceMap = protein.getFeature(double[][].class, DistanceMapComposer.FeatureNames.DISTANCE_MAP);
+        double[][] distanceMap = protein.getFeature(double[][].class, DistanceMapComposer.DISTANCE_MAP);
         List<double[]> placedAtoms = mds.computeEmbedding(distanceMap);
 
         IntStream.range(0, residues.size())

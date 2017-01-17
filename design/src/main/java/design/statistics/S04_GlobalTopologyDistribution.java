@@ -26,7 +26,7 @@ public class S04_GlobalTopologyDistribution {
                         .aminoAcids()
                         .asFilteredGroups())
                 .collect(Collectors.groupingBy(residue -> nonNull(residue.getFeature(TMHelix.class,
-                        OPMParser.FeatureNames.TM_HELIX)), Collectors.counting()));
+                        OPMParser.TM_HELIX)), Collectors.counting()));
 
         System.out.println("topology" + DELIMITER + "count");
         System.out.println("transmembrane" + DELIMITER + count.get(true));

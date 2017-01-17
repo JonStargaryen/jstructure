@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
@@ -42,8 +43,10 @@ import java.util.NoSuchElementException;
  * @author Anthony Bradley
  *
  */
-public class SecondaryStructureAnnotator implements FeatureProvider {
+@FeatureProvider(providedFeatures = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
+public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
+    public static final String SECONDARY_STRUCTURE_STATES = "SECONDARY_STRUCTURE_STATES";
     /**
      * DSSP assigns helices one getResidue shorter at each end, because the
      * residues at (i-1) and (i+n+1) are not assigned helix type although they
@@ -86,14 +89,10 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
     private List<BetaBridge> bridges;
     private List<Ladder> ladders;
 
-    public enum FeatureNames {
-        SECONDARY_STRUCTURE_STATES
-    }
-
     private GroupContainer residues;
 
     @Override
-    public void process(Protein protein) {
+    protected void processInternally(Protein protein) {
         residues = Selection.on(protein)
                 .aminoAcids()
                 .asGroupContainer();
@@ -101,7 +100,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
         ladders = new ArrayList<>();
         // init mapping
         residues.groups()
-                .forEach(r -> r.setFeature(FeatureNames.SECONDARY_STRUCTURE_STATES,
+                .forEach(r -> r.setFeature(SECONDARY_STRUCTURE_STATES,
                         new SecStrucState(DSSPSecondaryStructureElement.COIL)));
 
         calculateHAtoms();
@@ -127,7 +126,7 @@ public class SecondaryStructureAnnotator implements FeatureProvider {
     }
 
     private SecStrucState getState(Group group) {
-        return group.getFeature(SecStrucState.class, FeatureNames.SECONDARY_STRUCTURE_STATES);
+        return group.getFeature(SecStrucState.class, SECONDARY_STRUCTURE_STATES);
     }
 
     private void updateSheets() {

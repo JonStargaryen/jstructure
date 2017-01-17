@@ -34,7 +34,7 @@ public class S05_GroupByTopology {
         // findAny proteins with sequence motif information
         loadProteins(false, true, true)
                 .stream()
-                .map(protein -> protein.getFeatureAsList(SequenceMotif.class, SequenceMotifAnnotator.FeatureNames.SEQUENCE_MOTIF))
+                .map(protein -> protein.getFeatureAsList(SequenceMotif.class, SequenceMotifAnnotator.SEQUENCE_MOTIF))
                 .flatMap(Collection::stream)
                 .forEach(S05_GroupByTopology::writeFragment);
     }
