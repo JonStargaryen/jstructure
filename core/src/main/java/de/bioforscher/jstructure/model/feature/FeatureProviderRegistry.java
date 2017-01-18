@@ -33,9 +33,9 @@ public class FeatureProviderRegistry {
 
         for(Class<?> annotatedFeatureProvider : annotatedFeatureProviders) {
             FeatureProvider annotation = annotatedFeatureProvider.getDeclaredAnnotation(FeatureProvider.class);
-            logger.info("registering provider {} with {}",
+            logger.info("registering provider {} with priority {}",
                     annotatedFeatureProvider.getSimpleName(),
-                    annotation);
+                    annotation.priority());
 
             for(String providedFeature : annotation.providedFeatures()) {
                 TreeMap<Integer, AbstractFeatureProvider> providers = registeredFeatureProviders.getOrDefault(providedFeature, new TreeMap<>());

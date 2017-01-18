@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,9 +33,10 @@ import java.util.stream.Stream;
  *
  * References:<br />
  * <ul>
- *     <li>1</li>
- *     <li>2</li>
- *     <li>3</li>
+ *     <li>F. Heinke and D. Labudde. Membrane protein stability analyses by means of protein energy profiles in case of nephrogenic diabetes insipidus. Comput Math Methods Med, 2012:790281, February 2012.</li>
+ *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of Membrane Protein Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
+ *     <li>F. Heinke and D. Labudde. Predicting functionality of the non-expressed putative human OHCU decarboxylase by means of novel protein energy profile-based methods. Conference proceedings of 13. Nachwuchswissenschaftlerkonferenz, April 2012.</li>
+ *     <li>F. Heinke, D. Stockmann, S. Schildbach, M. Langer and D. Labudde. eProS - A Bioinformatics Knowledgebase, Toolbox and Database for Characterizing Protein Function. BDAS 2015.</li>
  * </ul>
  *
  * TODO implement routine for trans-membrane proteins
@@ -66,20 +68,21 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
         processNaively(protein);
     }
 
-    void processNaively(Protein protein) {
+    private void processNaively(Protein protein) {
         final RepresentationScheme representationScheme = new BetaCarbonRepresentationScheme();
         final double squaredDistanceCutoff = DEFAULT_INTERACTION_CUTOFF * DEFAULT_INTERACTION_CUTOFF;
+        final List<Group> aminoAcids = protein.aminoAcids().collect(Collectors.toList());
 
-        for(Group currentGroup : protein.getGroups()) {
+        for(Group currentGroup : aminoAcids) {
             if(!currentGroup.isAminoAcid()) {
                 continue;
             }
 
             double[] currentGroupCoordinates = representationScheme.determineRepresentingAtom(currentGroup).getCoordinates();
             double solvation = 0;
-            double currentGroupSolvationValue = globularSolvationData.get(currentGroup.getThreeLetterCode());
+            double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
-            for(Group surroundingGroup : protein.getGroups()) {
+            for(Group surroundingGroup : aminoAcids) {
                 if(!surroundingGroup.isAminoAcid()) {
                     continue;
                 }
@@ -90,11 +93,29 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                     continue;
                 }
 
-                solvation += currentGroupSolvationValue + globularSolvationData.get(surroundingGroup.getThreeLetterCode());
+                solvation += currentGroupSolvationValue + resolve(globularSolvationData, surroundingGroup);
             }
 
             currentGroup.setFeature(SOLVATION_ENERGY, solvation);
         }
+    }
+
+    private double resolve(Map<String, Double> preferenceMap, Group group) {
+        String threeLetterCode = group.getThreeLetterCode();
+        // standard amino acid
+        if(preferenceMap.containsKey(threeLetterCode)) {
+            return preferenceMap.get(threeLetterCode);
+        }
+
+        // modified/non-standard - move to fallback
+        String fallback = group.getGroupInformation().getParentCompound();
+        logger.debug("encountered non-standard amino acid {}, using {} as fallback", threeLetterCode, fallback);
+
+        if(preferenceMap.containsKey(fallback)) {
+            return preferenceMap.get(fallback);
+        }
+
+        throw new NoSuchElementException("map does not contain key for " + threeLetterCode + " or " + fallback);
     }
 
     void processBySelectionAPI(Protein protein) {
@@ -140,6 +161,6 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
 
     private InputStream getResourceAsStream(String filepath) {
         return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
-                "failed to findAny resource as InputStream");
+                "failed to find resource as InputStream");
     }
 }

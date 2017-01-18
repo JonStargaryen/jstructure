@@ -43,4 +43,8 @@ public enum DSSPSecondaryStructureElement {
     public boolean isStrandType() {
         return equals(BRIDGE) || equals(EXTENDED);
     }
+
+    public boolean isCoilType() {
+        return !isHelixType() && !isStrandType();
+    }
 }

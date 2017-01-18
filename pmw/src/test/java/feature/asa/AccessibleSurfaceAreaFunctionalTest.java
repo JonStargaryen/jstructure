@@ -2,8 +2,8 @@ package feature.asa;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureException;
@@ -42,12 +42,10 @@ public class AccessibleSurfaceAreaFunctionalTest {
         // load structure
         Protein protein = ProteinParser.parseProteinById(id);
         // assign states
-        new AccessibleSurfaceAreaCalculator().process(protein);
+        FeatureProviderRegistry.getInstance().resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA).process(protein);
 
         // return complete DSSP annotation string from jstructrue
-        return Selection.on(protein)
-                .aminoAcids()
-                .asFilteredGroups()
+        return protein.aminoAcids()
                 .map(residue ->
                         residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA))
                 .collect(Collectors.toList());
@@ -61,8 +59,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
         return Arrays.stream(new AsaCalculator(protein,
                      AsaCalculator.DEFAULT_PROBE_SIZE,
                      AsaCalculator.DEFAULT_N_SPHERE_POINTS,
-                     AsaCalculator.DEFAULT_NTHREADS,
-                     false).getGroupAsas())
+                     AsaCalculator.DEFAULT_NTHREADS, false).getGroupAsas())
                      .map(GroupAsa::getAsaU)
                      .collect(Collectors.toList());
     }

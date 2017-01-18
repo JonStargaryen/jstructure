@@ -2,6 +2,7 @@ package feature.topology;
 
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Before;
@@ -22,7 +23,7 @@ public class ANVILFunctionalTest {
     @Test
     public void shouldRunANVIL() {
         //TODO test
-        new ANVIL().process(protein1brr);
+        FeatureProviderRegistry.getInstance().resolve(ANVIL.MEMBRANE).process(protein1brr);
         System.out.println("membrane quality is " + protein1brr.getFeature(Membrane.class, ANVIL.MEMBRANE).getQmax());
     }
 }

@@ -73,7 +73,7 @@ public class GroupInformation {
 
     public boolean isAminoAcid() {
         //TODO this could fail for single amino acids in a structure which are actually ligands
-        return type.contains("PEPTIDE LINKING");
+        return type.contains("PEPTIDE LINKING") && (!getAminoAcidFamily().equals(AminoAcidFamily.UNKNOWN) || isModified());
     }
 
     public boolean isNucleotide() {
@@ -86,7 +86,7 @@ public class GroupInformation {
     }
 
     public boolean isModified() {
-        return parentCompound.equals(Builder.UNSET_PARENT_COMPOUND);
+        return !parentCompound.equals(Builder.UNSET_PARENT_COMPOUND);
     }
 
     @Override

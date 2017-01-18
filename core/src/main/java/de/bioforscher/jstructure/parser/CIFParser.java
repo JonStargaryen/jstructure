@@ -37,7 +37,7 @@ public class CIFParser {
             knownGroups.put(ligandId, type);
             return type;
         } catch (IOException e) {
-            throw new UncheckedIOException("protein parsing requires an internet connection", e);
+            throw new UncheckedIOException("no correct ligand identifier or no internet connection available", e);
         }
     }
 

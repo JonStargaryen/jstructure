@@ -49,7 +49,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     public static final double TETRAHEDRAL_NITROGEN_VDW = 1.50;
     // values diverge from the vdw in enum Element
     public static final double SULFUR_VDW = 1.85;
-    public static final double OXIGEN_VDW = 1.40;
+    public static final double OXYGEN_VDW = 1.40;
 
     public static final String ATOM_RADIUS = "ATOM_RADIUS";
     public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
@@ -145,7 +145,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
             case H: case D:
                 return Element.H.getVDWRadius();
             case O:
-                return OXIGEN_VDW;
+                return OXYGEN_VDW;
             case S:
                 return SULFUR_VDW;
             case N:

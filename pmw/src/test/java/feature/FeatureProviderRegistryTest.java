@@ -30,6 +30,7 @@ public class FeatureProviderRegistryTest {
 
     @Test
     public void shouldResolveProvider() {
-        instance.resolve();
+        //TODO fails in the core-module because other modules are not visible - can this be actually fixed?
+        instance.resolve("MEMBRANE");
     }
 }

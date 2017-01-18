@@ -196,7 +196,7 @@ public class Selection {
         }
 
         public AtomSelection backboneHydrogen() {
-            backboneAtoms();
+//            backboneAtoms(); - 18/1/17 fix: will never be true as backbone atoms no longer container hydrogen names
             hydrogenAtoms();
             return this;
         }

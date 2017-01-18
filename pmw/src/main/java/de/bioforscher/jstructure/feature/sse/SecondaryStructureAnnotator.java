@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -86,50 +85,48 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      */
     public static final double Q = -27888.0;
 
-    private List<BetaBridge> bridges;
-    private List<Ladder> ladders;
-
-    private GroupContainer residues;
+//    private List<BetaBridge> bridges;
+//    private List<Ladder> ladders;
+//
+//    private GroupContainer residues;
 
     @Override
     protected void processInternally(Protein protein) {
-        residues = Selection.on(protein)
+        GroupContainer residues = Selection.on(protein)
                 .aminoAcids()
                 .asGroupContainer();
-        bridges = new ArrayList<>();
-        ladders = new ArrayList<>();
+        List<BetaBridge> bridges = new ArrayList<>();
+        List<Ladder> ladders = new ArrayList<>();
         // init mapping
-        residues.groups()
-                .forEach(r -> r.setFeature(SECONDARY_STRUCTURE_STATES,
-                        new SecStrucState(DSSPSecondaryStructureElement.COIL)));
+        residues.groups().forEach(r -> r.setFeature(SECONDARY_STRUCTURE_STATES, new SecStrucState(DSSPSecondaryStructureElement.COIL)));
 
-        calculateHAtoms();
-        calculateHBonds();
-        calculateDihedralAngles();
-        calculateTurns();
-        buildHelices();
-        detectBends();
-        detectStrands();
+        calculateHAtoms(residues);
+        calculateHBonds(residues);
+        calculateDihedralAngles(residues);
+        calculateTurns(residues);
+        buildHelices(residues);
+        detectBends(residues);
+        detectStrands(residues, ladders, bridges);
 
         protein.clearPseudoAtoms();
     }
 
-    private void detectStrands() {
+    private void detectStrands(GroupContainer residues, List<Ladder> ladders, List<BetaBridge> bridges) {
         // Find all the beta bridges of the structure
-        findBridges();
+        findBridges(residues, bridges);
         // Create Ladders
-        createLadders();
+        createLadders(bridges, ladders);
         // Detect beta bulges between ladders
-        connectLadders();
+        connectLadders(ladders);
         // AND store SS assignments for Sheets, Strands and Bridges
-        updateSheets();
+        updateSheets(residues, ladders);
     }
 
     private SecStrucState getState(Group group) {
         return group.getFeature(SecStrucState.class, SECONDARY_STRUCTURE_STATES);
     }
 
-    private void updateSheets() {
+    private void updateSheets(GroupContainer residues, List<Ladder> ladders) {
         for(Ladder ladder : ladders){
             for (int lcount = ladder.getFrom(); lcount <= ladder.getTo(); lcount++) {
                 SecStrucState state = getState(residues.getGroups().get(lcount));
@@ -142,14 +139,14 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 DSSPSecondaryStructureElement stype2 = state2.getSecondaryStructure();
 
                 if(ladder.getFrom() != ladder.getTo()) {
-                    setSecStrucType(lcount, DSSPSecondaryStructureElement.EXTENDED);
-                    setSecStrucType(l2count, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, l2count, DSSPSecondaryStructureElement.EXTENDED);
                 } else {
                     if(!stype.isHelixType() && (!stype.equals(DSSPSecondaryStructureElement.EXTENDED)))
-                        setSecStrucType(lcount, DSSPSecondaryStructureElement.BRIDGE);
+                        setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.BRIDGE);
 
                     if(!stype2.isHelixType() && (!stype2.equals(DSSPSecondaryStructureElement.EXTENDED)))
-                        setSecStrucType(l2count, DSSPSecondaryStructureElement.BRIDGE);
+                        setSecStrucType(residues, l2count, DSSPSecondaryStructureElement.BRIDGE);
                 }
             }
 
@@ -163,27 +160,27 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             if (ladder.getBtype().equals(BridgeType.ANTIPARALLEL)) {
 				/* set one side */
                 for(int lcount = ladder.getFrom(); lcount <= conladder.getTo(); lcount++) {
-                    setSecStrucType(lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
                 }
 				/* set other side */
                 for (int lcount = conladder.getLto(); lcount <= ladder.getLfrom(); lcount++) {
-                    setSecStrucType(lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
                 }
 
             } else {
 				/* set one side */
                 for(int lcount = ladder.getFrom(); lcount <= conladder.getTo(); lcount++) {
-                    setSecStrucType(lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
                 }
 				/* set other side */
                 for(int lcount = ladder.getLfrom(); lcount <= conladder.getLto(); lcount++) {
-                    setSecStrucType(lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
                 }
             }
         }
     }
 
-    private void connectLadders() {
+    private void connectLadders(List<Ladder> ladders) {
         for(int i = 0; i < ladders.size(); i++) {
             for(int j = i; j < ladders.size(); j++) {
                 Ladder l1 = ladders.get(i);
@@ -231,7 +228,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         }
     }
 
-    private void createLadders(){
+    private void createLadders(List<BetaBridge> bridges, List<Ladder> ladders){
         for (BetaBridge b : bridges) {
             boolean found = false;
             for(Ladder ladder : ladders) {
@@ -317,7 +314,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      *
      * Optimised to use the contact set
      */
-    private void findBridges() {
+    private void findBridges(GroupContainer residues, List<BetaBridge> bridges) {
         List<int[]> outList = new ArrayList<>();
 
         for (int i = 0; i < residues.getGroups().size() - 1; i++) {
@@ -367,15 +364,15 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             }
         }
 
-        Collections.sort(outList, (o1, o2) -> {
-            if(o1[0] < o2[0]) {
+        outList.sort((o1, o2) -> {
+            if (o1[0] < o2[0]) {
                 return -1;
-            } else if(o1[0] > o2[0]) {
+            } else if (o1[0] > o2[0]) {
                 return +1;
             } else {
-                if(o1[1] < o2[1]) {
+                if (o1[1] < o2[1]) {
                     return -1;
-                } else if(o1[1] > o2[1]) {
+                } else if (o1[1] > o2[1]) {
                     return +1;
                 } else {
                     return 0;
@@ -388,21 +385,21 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             int j = p[1];
             BridgeType btype = null;
             // Now do the bonding
-            if((isBonded(i-1,j) && isBonded(j,i+1)) ||
-                    (isBonded(j-1,i) && isBonded(i,j+1))) {
+            if((isBonded(residues, i-1, j) && isBonded(residues, j,i+1)) ||
+                    (isBonded(residues, j-1, i) && isBonded(residues, i,j+1))) {
                 btype = BridgeType.PARALLEL;
             }
-            else if ((isBonded(i,j) && isBonded(j,i)) ||
-                    (isBonded(i-1,j+1) && (isBonded(j-1,i+1)))) {
+            else if ((isBonded(residues, i, j) && isBonded(residues, j, i)) ||
+                    (isBonded(residues, i-1,j+1) && (isBonded(residues, j-1,i+1)))) {
                 btype = BridgeType.ANTIPARALLEL;
             }
             if (btype != null){
-                registerBridge(i, j, btype);
+                registerBridge(residues, bridges, i, j, btype);
             }
         }
     }
 
-    private void registerBridge(int i, int j, BridgeType btype) {
+    private void registerBridge(GroupContainer residues, List<BetaBridge> bridges, int i, int j, BridgeType btype) {
         BetaBridge bridge = new BetaBridge(i, j, btype);
 
         boolean b1 = getState(residues.getGroups().get(i)).addBridge(bridge);
@@ -416,7 +413,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     }
 
 
-    private void detectBends() {
+    private void detectBends(GroupContainer residues) {
         f1: for (int i = 2; i < residues.getGroups().size() - 2; i++) {
             // Check if all atoms form peptide bonds (backbone discontinuity)
             for (int k = 0; k < 4; k++) {
@@ -455,22 +452,22 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
             // Angles = 360 should be discarded
             if (angle > 70.0 && angle < 359.99) {
-                setSecStrucType(i, DSSPSecondaryStructureElement.BEND);
+                setSecStrucType(residues, i, DSSPSecondaryStructureElement.BEND);
                 state.setBend(true);
             }
         }
     }
 
-    private void buildHelices() {
+    private void buildHelices(GroupContainer residues) {
         // Alpha-helix (i+4), 3-10-helix (i+3), Pi-helix (i+5)
-        checkSetHelix(4, DSSPSecondaryStructureElement.ALPHA_HELIX);
-        checkSetHelix(3, DSSPSecondaryStructureElement.THREE10HELIX);
-        checkSetHelix(5, DSSPSecondaryStructureElement.PIHELIX);
+        checkSetHelix(residues, 4, DSSPSecondaryStructureElement.ALPHA_HELIX);
+        checkSetHelix(residues, 3, DSSPSecondaryStructureElement.THREE10HELIX);
+        checkSetHelix(residues, 5, DSSPSecondaryStructureElement.PIHELIX);
 
-        checkSetTurns();
+        checkSetTurns(residues);
     }
 
-    private void checkSetTurns() {
+    private void checkSetTurns(GroupContainer residues) {
         DSSPSecondaryStructureElement type = DSSPSecondaryStructureElement.TURN;
 
         for(int idx = 0; idx < 3; idx++) {
@@ -482,11 +479,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 if(turn[idx] == '>' || turn[idx] == 'X') {
                     // Mark following n residues as turn
                     for(int k = 1; k < idx + 3; k++) {
-                        setSecStrucType(i + k, type);
+                        setSecStrucType(residues, i + k, type);
                     }
                     if(!DSSP_HELICES) {
-                        setSecStrucType(i, type);
-                        setSecStrucType(i + idx + 3, type);
+                        setSecStrucType(residues, i, type);
+                        setSecStrucType(residues, i + idx + 3, type);
                     }
                 }
             }
@@ -500,7 +497,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @param pos the getResidue index to manipulate
      * @param type the type to assign
      */
-    private void setSecStrucType(int pos, DSSPSecondaryStructureElement type) {
+    private void setSecStrucType(GroupContainer residues, int pos, DSSPSecondaryStructureElement type) {
         SecStrucState ss = getState(residues.getGroups().get(pos));
         // more favorable according to DSSP ranking
         if (type.compareTo(ss.getSecondaryStructure()) > 0) {
@@ -521,7 +518,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @param n
      * @param type
      */
-    private void checkSetHelix(int n, DSSPSecondaryStructureElement type) {
+    private void checkSetHelix(GroupContainer residues, int n, DSSPSecondaryStructureElement type) {
         int idx = n - 3;
         logger.debug("Set helix {} {} {}", type, n, idx);
 
@@ -544,11 +541,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             if ((turn == '>' || turn == 'X') && (pturn == '>' || pturn == 'X')) {
                 // Mark following n residues as turn
                 for (int k = 0; k < n; k++) {
-                    setSecStrucType(i + k, type);
+                    setSecStrucType(residues, i + k, type);
                 }
                 if (!DSSP_HELICES) {
-                    setSecStrucType(i - 1, type);
-                    setSecStrucType(i + n, type);
+                    setSecStrucType(residues, i - 1, type);
+                    setSecStrucType(residues, i + n, type);
                 }
             }
         }
@@ -557,7 +554,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     /**
      * Detect helical turn patterns.
      */
-    private void calculateTurns() {
+    private void calculateTurns(GroupContainer residues) {
         for (int i = 0; i < residues.getGroups().size(); i++) {
             Group residue1 = residues.getGroups().get(i);
             for (int turn = 3; turn <= 5; turn++) {
@@ -567,7 +564,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
                 Group residue2 = residues.getGroups().get(i + turn);
                 // Check for H bond from NH(i+n) to CO(i)
-                if (isBonded(i, i + turn)) {
+                if (isBonded(residues, i, i + turn)) {
                     logger.debug("Turn at ({}, {}, {})", i, i + turn, turn);
                     getState(residue1).setTurn('>', turn);
                     getState(residue2).setTurn('<', turn);
@@ -594,7 +591,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      *            group two
      * @return flag if the two are forming an Hbond
      */
-    private boolean isBonded(int i, int j) {
+    private boolean isBonded(GroupContainer residues, int i, int j) {
         Group residue1 = residues.getGroups().get(i);
         Group residue2 = residues.getGroups().get(j);
         SecStrucState state1 = getState(residue1);
@@ -621,14 +618,14 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         return false;
     }
 
-    private void calculateDihedralAngles() {
+    private void calculateDihedralAngles(GroupContainer residues) {
         // dihedral angles
         // phi: C-N-CA-C
         // psi: N-CA-C-N
         // Chi1: N-CA-CB-CG, N-CA-CB-OG(SER),N-CA-CB-OG1(Thr),
         // N-CA-CB-CG1(ILE/VAL), N-CA-CB-SG(CYS)
         // Omega: CA-C-N-CA
-        for (int i = 0; i < residues.getAtoms().size() - 1; i++) {
+        for (int i = 0; i < residues.getGroups().size() - 1; i++) {
             Group res1 = residues.getGroups().get(i);
             Group res2 = residues.getGroups().get(i + 1);
 
@@ -669,7 +666,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * Calculate the HBonds between different groups. see Creighton page 147 f
      * Modified to use only the contact map
      */
-    private void calculateHBonds() {
+    private void calculateHBonds(GroupContainer residues) {
 //        residues.
         double squaredDistanceCutoff = CA_MIN_DIST * CA_MIN_DIST;
         for (int i = 0; i < residues.getGroups().size() - 1; i++) {
@@ -701,6 +698,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             logger.debug("Ignore: PRO {}", residue1.getResidueNumber());
             return;
         }
+
         if (lacksBackboneHydrogen(residue1)) {
             logger.debug("Residue {} has no H", residue1.getResidueNumber());
             return;
@@ -846,7 +844,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * PDB files as only few experimental methods allow to resolve their
      * location.
      */
-    private void calculateHAtoms() {
+    private void calculateHAtoms(GroupContainer residues) {
         Combinatorics.fragmentsOf(residues.getGroups(), 2)
                 .filter(this::lacksBackboneHydrogen)
                 .forEach(this::calcSimpleH);

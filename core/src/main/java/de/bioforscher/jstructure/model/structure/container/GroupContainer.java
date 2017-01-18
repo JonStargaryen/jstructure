@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.model.structure.container;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +18,18 @@ public interface GroupContainer extends AtomContainer {
 
     /**
      * Access to all groups associated to this container.
-     * @return a select of groups
+     * @return all groups
      */
     default Stream<Group> groups() {
         return getGroups().stream();
+    }
+
+    /**
+     * Access to all amino acids associated to this container
+     * @return all amino acids
+     */
+    default Stream<Group> aminoAcids() {
+        return Selection.on(this).aminoAcids().asFilteredGroups();
     }
 
     default String getAminoAcidSequence() {
