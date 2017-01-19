@@ -5,6 +5,9 @@ import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import org.apache.log4j.BasicConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -20,15 +23,18 @@ import java.util.stream.Collectors;
  * Created by S on 16.01.2017.
  */
 public class EnergyProfileCalculatorRunner {
+    private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculatorRunner.class);
     private static final String DELIMITER = "\t";
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000",DecimalFormatSymbols.getInstance(Locale.US));
 
     public static void main(String... args) {
         if(args.length != 1 && args.length != 2) {
             // print usage
-            System.err.println("java -jar energy.jar /path/to/file.pdb [/path/to/output/file/if/desired.ep2]");
+            System.err.println("usage: java -jar energy.jar /path/to/file.pdb [/path/to/output/file/if/desired.ep2]");
             throw new IllegalArgumentException("too " + (args.length < 1 ? "few" : "many") + " arguments provided");
         }
+
+        BasicConfigurator.configure();
 
         String inputPath = args[0];
         boolean outputRequested = false;
@@ -38,6 +44,9 @@ public class EnergyProfileCalculatorRunner {
             outputRequested = true;
             outputPath = args[1];
         }
+
+        logger.info("computing energy profile for {}", inputPath);
+        logger.info("writing output to {}", outputRequested ? outputPath : "console");
 
         try {
             // read and parse protein
@@ -57,10 +66,10 @@ public class EnergyProfileCalculatorRunner {
                             "chain" + DELIMITER + "resNum" + DELIMITER + "resName" + DELIMITER + "energy" + System.lineSeparator(),
                             ""));
 
-            System.out.println(output);
-
             if(outputRequested) {
                 Files.write(Paths.get(outputPath), output.getBytes());
+            } else {
+                System.out.println(output);
             }
         } catch (UncheckedIOException e) {
             System.err.println("failed to parse PDB file located at " + inputPath);
