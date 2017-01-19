@@ -245,7 +245,8 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
             Chain parentChain = parentGroup.getParentChain();
             //TODO check - needed?
             String chainId = parentChain.getChainId() != null ? parentChain.getChainId() : Chain.UNKNOWN_CHAIN.getChainId();
-            String record = parentGroup.isLigand() ? "HETATM" : "ATOM  ";
+            //TODO bugged!
+            String record = parentGroup.isLigand() ? "ATOM  " : "ATOM  ";
             // format output ...
             String resName = parentGroup.getThreeLetterCode();
             String pdbcode = String.valueOf(parentGroup.getResidueNumber());

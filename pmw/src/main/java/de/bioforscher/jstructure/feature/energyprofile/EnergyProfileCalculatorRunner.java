@@ -26,15 +26,18 @@ public class EnergyProfileCalculatorRunner {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculatorRunner.class);
     private static final String DELIMITER = "\t";
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000",DecimalFormatSymbols.getInstance(Locale.US));
+    private static final AbstractFeatureProvider featureProvider = FeatureProviderRegistry.getInstance().resolve(EnergyProfileCalculator.SOLVATION_ENERGY);
+
+    static {
+        BasicConfigurator.configure();
+    }
 
     public static void main(String... args) {
         if(args.length != 1 && args.length != 2) {
             // print usage
-            System.err.println("usage: java -jar energy.jar /path/to/file.pdb [/path/to/output/file/if/desired.ep2]");
+            System.err.println("usage: java -jar energy.jar /path/to/file.pdb [/path/to/output/file/if/desired.ep]");
             throw new IllegalArgumentException("too " + (args.length < 1 ? "few" : "many") + " arguments provided");
         }
-
-        BasicConfigurator.configure();
 
         String inputPath = args[0];
         boolean outputRequested = false;
@@ -51,9 +54,6 @@ public class EnergyProfileCalculatorRunner {
         try {
             // read and parse protein
             Protein protein = ProteinParser.parsePDBFile(inputPath);
-
-            // resolve feature provider by name
-            AbstractFeatureProvider featureProvider = FeatureProviderRegistry.getInstance().resolve(EnergyProfileCalculator.SOLVATION_ENERGY);
 
             // compute energy profile
             featureProvider.process(protein);
