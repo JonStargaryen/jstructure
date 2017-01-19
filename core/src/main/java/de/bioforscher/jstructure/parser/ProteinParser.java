@@ -112,7 +112,7 @@ public class ProteinParser {
         // parse file
         try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream)) {
             try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                bufferedReader.lines().forEach(this::parseLine);
+                bufferedReader.lines().forEach(this::parseLineChecked);
 
                 if(protein.getName() == null || protein.getName().isEmpty()) {
                     protein.setName(proteinName);
@@ -120,6 +120,14 @@ public class ProteinParser {
                 protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
                 return protein;
             }
+        }
+    }
+
+    private void parseLineChecked(String line) {
+        try {
+            parseLine(line);
+        } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
+            throw new ParsingException("parsing failed for line:" + System.lineSeparator() + line, e);
         }
     }
 
@@ -148,7 +156,7 @@ public class ProteinParser {
             // extra whitespace to ensure that words are separated
             // maybe some StringJoiner is the way to go
             titleString.append(titleString.length() == 0 ? "" : " ")
-                       .append(line.substring(10, 80).trim());
+                       .append(line.substring(10, line.length() < 80 ? line.length() : 80).trim());
         }
 
         // parsing atom record - information we need is marked with an '*' - indirectly needed information (getChain/getResidue) marked with an '#'
@@ -171,7 +179,11 @@ public class ProteinParser {
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
         if(line.startsWith(ATOM_PREFIX) || line.startsWith(HETATM_PREFIX)) {
-            Element element = Element.valueOfIgnoreCase(line.substring(76, 78).trim());
+            String elementString = line.substring(76, 78).trim();
+            if(elementString.isEmpty()) {
+                throw new ParsingException("parsing failed for line:" + System.lineSeparator() + line );
+            }
+            Element element = Element.valueOfIgnoreCase(elementString);
             if(skipHydrogens && element.isHydrogen()) {
                 return;
             }

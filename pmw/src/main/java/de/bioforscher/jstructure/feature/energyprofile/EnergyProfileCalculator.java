@@ -83,7 +83,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
             double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
             for(Group surroundingGroup : aminoAcids) {
-                if(!surroundingGroup.isAminoAcid()) {
+                if(!surroundingGroup.isAminoAcid() || currentGroup.equals(surroundingGroup)) {
                     continue;
                 }
 

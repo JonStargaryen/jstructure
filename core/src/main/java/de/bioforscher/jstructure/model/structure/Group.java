@@ -31,7 +31,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     public Group(String pdbName, int residueNumber) {
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
-        //TODO it is not really nice, that the data model is actually parsing stuff
+        //TODO it is not really nice, that the data model is actually 'parsing' stuff
         this.groupInformation = CIFParser.parseLigandInformation(pdbName);
     }
 

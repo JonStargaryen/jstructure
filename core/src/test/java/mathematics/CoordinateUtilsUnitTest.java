@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
@@ -76,7 +77,9 @@ public class CoordinateUtilsUnitTest {
     @Test
     public void testResiduePairsInContact() {
         final double cutoff = 8.0;
-        Selection.pairsOn(protein1acj).alphaCarbonDistance(cutoff)
+        //TODO hacky
+        GroupContainer protein = Selection.on(protein1acj).aminoAcids().asGroupContainer();
+        Selection.pairsOn(protein).alphaCarbonDistance(cutoff)
                 .asFilteredGroupPairs()
                 .filter(pair -> LinearAlgebra3D.distance(Selection.on(pair.getLeft())
                         .alphaCarbonAtoms()

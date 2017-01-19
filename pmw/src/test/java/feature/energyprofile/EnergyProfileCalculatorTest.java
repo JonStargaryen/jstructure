@@ -3,16 +3,23 @@ package feature.energyprofile;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,5 +73,32 @@ public class EnergyProfileCalculatorTest {
     public void shouldProcessStructure() {
         Protein protein = ProteinParser.parseProteinById("1ATI");
         featureProvider.process(protein);
+    }
+
+    @Test
+    public void shouldAgreeRegardingEnergyTerms() throws IOException {
+        Protein protein = ProteinParser.parseProteinById("1BS2");
+        featureProvider.process(protein);
+
+        Files.lines(Paths.get(getResourceAsFilepath("energy/1bs2.ep2")))
+                .filter(line -> line.startsWith("ENGY"))
+                .map(line -> line.split("\t"))
+                .forEach(split -> {
+                    Group group = Selection.on(protein)
+                            .chainName(split[1])
+                            .residueNumber(Integer.valueOf(split[2]))
+                            .asGroup();
+
+                    Assert.assertEquals(Double.valueOf(split[5]), group.getFeatureAsDouble(EnergyProfileCalculator.SOLVATION_ENERGY), 0.001);
+                });
+    }
+
+    private static String getResourceAsFilepath(String filename) {
+        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        Objects.requireNonNull(ccl);
+        URL resource = ccl.getResource(filename);
+        Objects.requireNonNull(resource);
+        // some a bit hacky way to ensure correct paths on windows (as some / will be added as prefix)
+        return resource.getPath().replaceFirst("^/(.:/)", "$1");
     }
 }

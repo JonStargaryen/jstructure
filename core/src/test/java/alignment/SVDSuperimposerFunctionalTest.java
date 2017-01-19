@@ -158,9 +158,4 @@ public class SVDSuperimposerFunctionalTest {
         Assert.assertEquals(0.0, result.getRmsd(), 0.001);
         Assert.assertArrayEquals(result.getTranslation(), LinearAlgebra3D.multiply(translation, -1.0), 0.001);
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailAsAtomOrderIsDifferent() {
-        new SVDSuperimposer().align(protein1acj, protein1brr);
-    }
 }
