@@ -1,3 +1,4 @@
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
@@ -10,8 +11,6 @@ import org.junit.Test;
  * Created by S on 03.11.2016.
  */
 public class Demo {
-    public static final String ALANINE_RATIO = "ALANINE_RATIO";
-
     @Test
     public void demo() {
         // fetch/parse structure by id
@@ -31,9 +30,18 @@ public class Demo {
                 .count() / (double) protein.getSize() * 100.0;
 
         // store count
-        protein.setFeature(ALANINE_RATIO, alanineRatio);
+        protein.setFeature("ALANINE_RATIO", alanineRatio);
 
         // retrieve it
-        System.out.printf("alanine ratio: %3.2f%%", protein.getFeatureAsDouble(ALANINE_RATIO));
+        System.out.printf("alanine ratio: %3.2f%%", protein.getFeatureAsDouble("ALANINE_RATIO"));
+
+
+        // compute the ASA by a suitable provider
+        FeatureProviderRegistry.getInstance().resolve("ACCESSIBLE_SURFACE_AREA").process(protein);
+
+        // print values
+        protein.aminoAcids()
+                .map(group -> group.getFeatureAsDouble("ACCESSIBLE_SURFACE_AREA"))
+                .forEach(System.out::println);
     }
 }

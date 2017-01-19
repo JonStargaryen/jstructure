@@ -242,6 +242,9 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
 
         static String toPDBString(Atom atom) {
             Group parentGroup = atom.parentGroup;
+            Chain parentChain = parentGroup.getParentChain();
+            //TODO check - needed?
+            String chainId = parentChain.getChainId() != null ? parentChain.getChainId() : Chain.UNKNOWN_CHAIN.getChainId();
             String record = parentGroup.isLigand() ? "HETATM" : "ATOM  ";
             // format output ...
             String resName = parentGroup.getThreeLetterCode();
@@ -268,7 +271,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
                     altLoc +
                     leftResName +
                     " " +
-                    parentGroup.getParentChain().getChainId() +
+                    chainId +
                     resseq +
                     "   " +
                     x +
