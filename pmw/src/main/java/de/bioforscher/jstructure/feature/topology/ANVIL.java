@@ -57,7 +57,7 @@ import java.util.function.Predicate;
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.</pre>
  */
-@FeatureProvider(providedFeatures = { ANVIL.MEMBRANE, ANVIL.TOPOLOGY }, requiredFeatures = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
+@FeatureProvider(provides = { ANVIL.MEMBRANE, ANVIL.TOPOLOGY }, requires = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
 public class ANVIL extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(ANVIL.class);
     public static final String MEMBRANE = "MEMBRANE";

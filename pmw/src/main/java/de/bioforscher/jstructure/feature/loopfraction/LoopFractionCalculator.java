@@ -18,7 +18,7 @@ import java.util.stream.DoubleStream;
  * Computes the loop fraction of a protein.
  * Created by S on 16.01.2017.
  */
-@FeatureProvider(providedFeatures = LoopFractionCalculator.LOOP_FRACTION, requiredFeatures = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
+@FeatureProvider(provides = LoopFractionCalculator.LOOP_FRACTION, requires = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
 public class LoopFractionCalculator extends AbstractFeatureProvider {
     private static final String RAW_LOOP_FRACTION = "RAW_LOOP_FRACTION";
     public static final String LOOP_FRACTION = "LOOP_FRACTION";

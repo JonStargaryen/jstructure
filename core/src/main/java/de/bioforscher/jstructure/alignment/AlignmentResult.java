@@ -8,6 +8,7 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
  * matrix necessary to recreate this particular alignment.
  * Created by S on 30.09.2016.
  */
+//TODO redesign - a container also handling aligned energy profiles would be nicer
 public class AlignmentResult {
     private final AtomContainer originalReference;
     private final AtomContainer originalQuery;

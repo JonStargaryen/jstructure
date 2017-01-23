@@ -24,7 +24,7 @@ public @interface FeatureProvider {
      * All features provided by the implementing class. This list should contain at least 1 element.
      * @return all features provided by this implemented
      */
-    String[] providedFeatures();
+    String[] provides();
 
     /**
      * Access to all required features which need to be present in order for the computation about to happen to succeed.
@@ -33,5 +33,5 @@ public @interface FeatureProvider {
      * compute all requirements beforehand automatically. This list can be empty.
      * @return all features needed for the computation implemented by this provider
      */
-    String[] requiredFeatures() default {};
+    String[] requires() default {};
 }

@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  * @author Anthony Bradley
  *
  */
-@FeatureProvider(providedFeatures = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
+@FeatureProvider(provides = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
 public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
     public static final String SECONDARY_STRUCTURE_STATES = "SECONDARY_STRUCTURE_STATES";

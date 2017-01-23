@@ -43,7 +43,7 @@ import java.util.stream.Stream;
  * TODO implement interaction energy term
  * Created by bittrich on 12/15/16.
  */
-@FeatureProvider(providedFeatures = EnergyProfileCalculator.SOLVATION_ENERGY)
+@FeatureProvider(provides = EnergyProfileCalculator.SOLVATION_ENERGY)
 public class EnergyProfileCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculator.class);
     /**

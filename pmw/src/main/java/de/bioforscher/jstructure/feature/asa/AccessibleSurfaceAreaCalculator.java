@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pre>
  * @author duarte_j
  */
-@FeatureProvider(providedFeatures = { AccessibleSurfaceAreaCalculator.ATOM_RADIUS, AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
+@FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ATOM_RADIUS, AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
 public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same

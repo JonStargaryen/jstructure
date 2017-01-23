@@ -23,8 +23,8 @@ public abstract class AbstractFeatureProvider {
         FeatureProvider annotation = getClass().getDeclaredAnnotation(FeatureProvider.class);
         Group firstGroup = protein.getGroups().get(0);
         // additional features must be computed beforehand
-        if (!Arrays.equals(annotation.requiredFeatures(), new String[0])) {
-            for(String requiredFeature : annotation.requiredFeatures()) {
+        if (!Arrays.equals(annotation.requires(), new String[0])) {
+            for(String requiredFeature : annotation.requires()) {
                 // feature present
                 //TODO maybe move back to some feature container root
                 if(firstGroup.getFeatureMap().containsKey(requiredFeature)) {
@@ -34,7 +34,7 @@ public abstract class AbstractFeatureProvider {
                 // need to compute
                 AbstractFeatureProvider resolvedFeatureProvider = FeatureProviderRegistry.getInstance().resolve(requiredFeature);
                 logger.info("computing {}: using {} to compute required feature {}",
-                        Arrays.toString(annotation.providedFeatures()),
+                        Arrays.toString(annotation.provides()),
                         resolvedFeatureProvider.getClass().getSimpleName(),
                         requiredFeature);
                 resolvedFeatureProvider.process(protein);

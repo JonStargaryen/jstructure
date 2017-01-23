@@ -324,7 +324,7 @@ public class LinearAlgebraAtom {
 
     /**
      * Returns the set of atoms shared by both containers.
-     * @see CoordinateManipulations#comparableAtomContainerPair(AtomContainer, AtomContainer, Set, Set)
+     * @see LinearAlgebraAtom#comparableAtomContainerPair(AtomContainer, AtomContainer, Set, Set)
      */
     public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
                                                                                  AtomContainer atomContainer2) {

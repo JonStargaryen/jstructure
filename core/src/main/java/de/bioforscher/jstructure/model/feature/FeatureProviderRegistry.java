@@ -37,7 +37,7 @@ public class FeatureProviderRegistry {
                     annotatedFeatureProvider.getSimpleName(),
                     annotation.priority());
 
-            for(String providedFeature : annotation.providedFeatures()) {
+            for(String providedFeature : annotation.provides()) {
                 TreeMap<Integer, AbstractFeatureProvider> providers = registeredFeatureProviders.getOrDefault(providedFeature, new TreeMap<>());
                 try {
                     providers.put(annotation.priority(), (AbstractFeatureProvider) annotatedFeatureProvider.newInstance());
@@ -82,6 +82,8 @@ public class FeatureProviderRegistry {
                 .collect(Collectors.toList());
     }
 
+    //TODO builder-esque resolving
+
     /**
      * Allows to resolve arbitrary feature name and returns the {@link FeatureProvider} which should be employed to
      * compute it.
@@ -90,6 +92,7 @@ public class FeatureProviderRegistry {
      * @throws java.util.NoSuchElementException if no {@link FeatureProvider} is registered which can compute the
      * requested feature
      */
+    @Deprecated
     public AbstractFeatureProvider resolve(String requestedFeature) {
         try {
             return registeredFeatureProviders.get(requestedFeature).firstEntry().getValue();

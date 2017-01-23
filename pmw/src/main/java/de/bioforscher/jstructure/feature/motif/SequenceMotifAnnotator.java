@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Searches for sequence fragments matching any {@link SequenceMotifDefinition} and reports hits.
  * Created by S on 02.10.2016.
  */
-@FeatureProvider(providedFeatures = SequenceMotifAnnotator.SEQUENCE_MOTIF)
+@FeatureProvider(provides = SequenceMotifAnnotator.SEQUENCE_MOTIF)
 public class SequenceMotifAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
     public static final String SEQUENCE_MOTIF = "SEQUENCE_MOTIF";

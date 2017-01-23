@@ -8,6 +8,8 @@ import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -17,6 +19,7 @@ import java.util.Set;
  * Created by S on 30.09.2016.
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
+    private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
     public static final SVDSuperimposer BACKBONE_SVD_INSTANCE = new SVDSuperimposer(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
             AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
 
