@@ -37,7 +37,7 @@ public class Demo {
 
 
         // compute the ASA by a suitable provider
-        FeatureProviderRegistry.getInstance().resolve("ACCESSIBLE_SURFACE_AREA").process(protein);
+        FeatureProviderRegistry.resolve("ACCESSIBLE_SURFACE_AREA").process(protein);
 
         // print values
         protein.aminoAcids()

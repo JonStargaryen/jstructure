@@ -61,7 +61,7 @@ public class StructureCluster {
     }
 
     double getDistanceToConsensus(AtomContainer container) {
-        return svdSuperimposer.align(consensus, container).getRmsd();
+        return svdSuperimposer.align(consensus, container).getAlignmentScore();
     }
 
     @Override

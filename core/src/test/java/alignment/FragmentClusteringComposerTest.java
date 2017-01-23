@@ -40,7 +40,7 @@ public class FragmentClusteringComposerTest {
         // which should be similar to each initial fragment
         double maxRmsd = fragments.stream()
                 .map(fragment -> svdSuperimposer.align(fragment, consensus))
-                .mapToDouble(AlignmentResult::getRmsd)
+                .mapToDouble(AlignmentResult::getAlignmentScore)
                 .peek(rmsd -> System.out.println("rmsd of fragment to consensus: " + rmsd))
                 .max()
                 .orElseThrow(IllegalArgumentException::new);

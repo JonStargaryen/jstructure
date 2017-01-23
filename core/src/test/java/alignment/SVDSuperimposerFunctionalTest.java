@@ -104,9 +104,9 @@ public class SVDSuperimposerFunctionalTest {
         AlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
-        System.out.println("rmsd " + alignmentResult.getRmsd());
+        System.out.println("rmsd " + alignmentResult.getAlignmentScore());
         System.out.println("rmsd2 " + LinearAlgebraAtom.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
-        Assert.assertEquals(0.19986, alignmentResult.getRmsd(), TestUtils.TOLERANT_ERROR_MARGIN);
+        Assert.assertEquals(0.19986, alignmentResult.getAlignmentScore(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
@@ -115,8 +115,8 @@ public class SVDSuperimposerFunctionalTest {
         AlignmentResult alignmentResult = new SVDSuperimposer().align(container3, container4);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
-        System.out.println("rmsd " + alignmentResult.getRmsd());
-        Assert.assertEquals(0.0021, alignmentResult.getRmsd(), TestUtils.TOLERANT_ERROR_MARGIN);
+        System.out.println("rmsd " + alignmentResult.getAlignmentScore());
+        Assert.assertEquals(0.0021, alignmentResult.getAlignmentScore(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
@@ -124,7 +124,7 @@ public class SVDSuperimposerFunctionalTest {
         String initialCoordinates1 = container1.composePDBRecord();
         String initialCoordinates2 = container2.composePDBRecord();
         AlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
-        double rmsd1 = alignmentResult.getRmsd();
+        double rmsd1 = alignmentResult.getAlignmentScore();
         // coordinates should not be changed by aligning
         Assert.assertEquals(initialCoordinates1, container1.composePDBRecord());
         Assert.assertEquals(initialCoordinates2, container2.composePDBRecord());
@@ -137,7 +137,7 @@ public class SVDSuperimposerFunctionalTest {
     public void shouldResultInPerfectAlignment() {
         SVDSuperimposer svd = new SVDSuperimposer();
         AlignmentResult result = svd.align(protein1acj, protein1acj);
-        Assert.assertEquals(0.0, result.getRmsd(), 0.001);
+        Assert.assertEquals(0.0, result.getAlignmentScore(), 0.001);
         Assert.assertArrayEquals(result.getTranslation(), AlignmentAlgorithm.NEUTRAL_TRANSLATION, 0.001);
     }
 
@@ -155,7 +155,7 @@ public class SVDSuperimposerFunctionalTest {
                 .asGroupContainer(), Selection.on(protein1acjCopy)
                 .aminoAcids()
                 .asGroupContainer());
-        Assert.assertEquals(0.0, result.getRmsd(), 0.001);
+        Assert.assertEquals(0.0, result.getAlignmentScore(), 0.001);
         Assert.assertArrayEquals(result.getTranslation(), LinearAlgebra3D.multiply(translation, -1.0), 0.001);
     }
 }

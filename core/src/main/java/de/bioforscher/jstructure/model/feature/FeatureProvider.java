@@ -5,13 +5,14 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * Annotation of an algorithm which can compute features and write them to the feature map of a {@link FeatureContainer}.
- * TODO distinction between global and local features
- * TODO distinction between annotations and predictions
+ * TODO distinction between global and local features?
  * Created by S on 02.10.2016.
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FeatureProvider {
     int DEFAULT_PRIORITY = 100;
+
+    FeatureType type() default FeatureType.ANNOTATION;
 
     /**
      * The priority of this feature provider which can be used to assign an ordering on which implementation is employed

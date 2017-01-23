@@ -33,8 +33,13 @@ public interface GroupContainer extends AtomContainer {
     }
 
     default String getAminoAcidSequence() {
-        return groups()
-                .filter(Group::isAminoAcid)
+        //TODO standardize access to amino acids
+//        return groups()
+//                .filter(Group::isAminoAcid)
+//                .map(Group::getGroupInformation)
+//                .map(GroupInformation::getOneLetterCode)
+//                .collect(Collectors.joining());
+        return aminoAcids()
                 .map(Group::getGroupInformation)
                 .map(GroupInformation::getOneLetterCode)
                 .collect(Collectors.joining());

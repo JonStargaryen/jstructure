@@ -50,19 +50,11 @@ public class FeatureProviderRegistry {
     }
 
     /**
-     * Access to this classes
-     * @return the singleton instance of this class
-     */
-    public static FeatureProviderRegistry getInstance() {
-        return INSTANCE;
-    }
-
-    /**
      * A lists all registered {@link FeatureProvider}.
      * @return all registered services
      */
-    public List<AbstractFeatureProvider> getRegisteredFeatureProviders() {
-        return registeredFeatureProviders.entrySet().stream()
+    public static List<AbstractFeatureProvider> getRegisteredFeatureProviders() {
+        return INSTANCE.registeredFeatureProviders.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .map(Map::entrySet)
                 .flatMap(Collection::stream)
@@ -76,13 +68,25 @@ public class FeatureProviderRegistry {
      * @return a list of all features names for which at least 1 {@link FeatureProvider} is registered which can compute
      * it
      */
-    public List<String> getSupportedFeatures() {
-        return registeredFeatureProviders.entrySet().stream()
+    public static List<String> getSupportedFeatures() {
+        return INSTANCE.registeredFeatureProviders.entrySet().stream()
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 
     //TODO builder-esque resolving
+
+    public static AbstractFeatureProvider resolvePredictor(String requestedFeature) {
+        try {
+            return INSTANCE.registeredFeatureProviders.get(requestedFeature).entrySet().stream()
+                    .filter(entry -> entry.getValue().getClass().getAnnotation(FeatureProvider.class).type().equals(FeatureType.PREDICTION))
+                    .findFirst()
+                    .get()
+                    .getValue();
+        } catch (NullPointerException | NoSuchElementException e) {
+            throw new NoSuchElementException("no provider is registered for '" + requestedFeature + "'");
+        }
+    }
 
     /**
      * Allows to resolve arbitrary feature name and returns the {@link FeatureProvider} which should be employed to
@@ -92,10 +96,9 @@ public class FeatureProviderRegistry {
      * @throws java.util.NoSuchElementException if no {@link FeatureProvider} is registered which can compute the
      * requested feature
      */
-    @Deprecated
-    public AbstractFeatureProvider resolve(String requestedFeature) {
+    public static AbstractFeatureProvider resolve(String requestedFeature) {
         try {
-            return registeredFeatureProviders.get(requestedFeature).firstEntry().getValue();
+            return INSTANCE.registeredFeatureProviders.get(requestedFeature).firstEntry().getValue();
         } catch (NullPointerException e) {
             throw new NoSuchElementException("no provider is registered for '" + requestedFeature + "'");
         }

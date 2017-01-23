@@ -31,7 +31,7 @@ public class SecondaryStructureAnnotatorFunctionalTest {
 
     @Before
     public void setup() {
-        featureProvider = FeatureProviderRegistry.getInstance().resolve(SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES);
+        featureProvider = FeatureProviderRegistry.resolve(SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES);
     }
 
     @Test

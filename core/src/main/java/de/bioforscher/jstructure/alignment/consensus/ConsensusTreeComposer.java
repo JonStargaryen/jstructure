@@ -73,7 +73,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
             // find and merge closest pair
             AlignmentPair mergedPair = mergeClosestPair();
             consensus = mergedPair.getMergedEntry();
-            double rmsd = mergedPair.getAlignmentResult().getRmsd();
+            double rmsd = mergedPair.getAlignmentResult().getAlignmentScore();
 
             // create tree nodes
             TreeNode<AtomContainer> leftNode;
@@ -131,7 +131,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
     private AlignmentPair mergeClosestPair() {
         // sort alignmentPairs by rmsd
         final AlignmentPair pairToMerge = alignmentPairs.stream()
-                .reduce((a, b) -> a.getAlignmentResult().getRmsd() < b.getAlignmentResult().getRmsd() ? a : b)
+                .reduce((a, b) -> a.getAlignmentResult().getAlignmentScore() < b.getAlignmentResult().getAlignmentScore() ? a : b)
                 .orElseThrow(() -> new IllegalArgumentException("did not find pair to merge"));
 
         // remove entries from ensemble
@@ -139,7 +139,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
         ensembles.remove(pairToMerge.getRight());
         // remove entries dealing with now removed entries from alignment pairs
         alignmentPairs.removeIf(alignmentPair -> alignmentPair.describes(pairToMerge));
-        logger.debug("pair to merge is {} with rmsd of {}", pairToMerge, pairToMerge.getAlignmentResult().getRmsd());
+        logger.debug("pair to merge is {} with rmsd of {}", pairToMerge, pairToMerge.getAlignmentResult().getAlignmentScore());
 
         // merge entry
         AtomContainer mergedEntry = pairToMerge.getMergedEntry();

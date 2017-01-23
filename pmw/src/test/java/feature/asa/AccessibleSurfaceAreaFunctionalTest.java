@@ -42,7 +42,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
         // load structure
         Protein protein = ProteinParser.parseProteinById(id);
         // assign states
-        FeatureProviderRegistry.getInstance().resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA).process(protein);
+        FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA).process(protein);
 
         // return complete DSSP annotation string from jstructrue
         return protein.aminoAcids()

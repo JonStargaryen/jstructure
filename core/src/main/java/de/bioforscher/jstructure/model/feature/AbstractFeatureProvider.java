@@ -5,7 +5,12 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * The abstract implementation of each {@link FeatureProvider}. Implicitly registers each provider in a global
@@ -32,7 +37,7 @@ public abstract class AbstractFeatureProvider {
                 }
 
                 // need to compute
-                AbstractFeatureProvider resolvedFeatureProvider = FeatureProviderRegistry.getInstance().resolve(requiredFeature);
+                AbstractFeatureProvider resolvedFeatureProvider = FeatureProviderRegistry.resolve(requiredFeature);
                 logger.info("computing {}: using {} to compute required feature {}",
                         Arrays.toString(annotation.provides()),
                         resolvedFeatureProvider.getClass().getSimpleName(),
@@ -44,6 +49,15 @@ public abstract class AbstractFeatureProvider {
         processInternally(protein);
 
         //TODO define some clean-up routine?
+    }
+
+    protected InputStream getResourceAsStream(String filepath) {
+        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
+                "failed to find resource as InputStream");
+    }
+
+    protected Stream<String> getLinesFromResource(String filepath) {
+        return new BufferedReader(new InputStreamReader(getResourceAsStream(filepath))).lines();
     }
 
     protected abstract void processInternally(Protein protein);

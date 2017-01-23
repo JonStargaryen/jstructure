@@ -54,17 +54,17 @@ public class S09_AlignFragmentsByConsensus {
                                 // align each to its most similar consensus fragment
                                 .map(protein -> consensusFragments.stream()
                                         .map(consensus -> SVD_SUPERIMPOSER.align(consensus, protein))
-                                        .reduce((a1, a2) -> a1.getRmsd() < a2.getRmsd() ? a1 : a2)
+                                        .reduce((a1, a2) -> a1.getAlignmentScore() < a2.getAlignmentScore() ? a1 : a2)
                                         .get())
                                 .collect(Collectors.toList());
 
                         System.out.println("writing aligned files");
                         // write structures
                         alignedProteins.stream()
-                                .filter(alignmentResult -> alignmentResult.getRmsd() < 1)
+                                .filter(alignmentResult -> alignmentResult.getAlignmentScore() < 1)
                                 .forEach(alignmentResult -> DesignConstants.write(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
                                         topology + "/" + alignmentResult.getOriginalQuery().getIdentifier() + "-" +
-                                        alignmentResult.getOriginalReference().getIdentifier().split("-")[2] + "-" + DECIMAL_FORMAT.format(alignmentResult.getRmsd())
+                                        alignmentResult.getOriginalReference().getIdentifier().split("-")[2] + "-" + DECIMAL_FORMAT.format(alignmentResult.getAlignmentScore())
                                         + DesignConstants.PDB_SUFFIX),
                                         alignmentResult.getAlignedQuery().composePDBRecord().getBytes()));
                 });

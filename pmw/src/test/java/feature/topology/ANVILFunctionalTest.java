@@ -23,7 +23,7 @@ public class ANVILFunctionalTest {
     @Test
     public void shouldRunANVIL() {
         //TODO test
-        FeatureProviderRegistry.getInstance().resolve(ANVIL.MEMBRANE).process(protein1brr);
+        FeatureProviderRegistry.resolve(ANVIL.MEMBRANE).process(protein1brr);
         System.out.println("membrane quality is " + protein1brr.getFeature(Membrane.class, ANVIL.MEMBRANE).getQmax());
     }
 }

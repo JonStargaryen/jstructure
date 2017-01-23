@@ -26,7 +26,7 @@ public class EnergyProfileCalculatorRunner {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculatorRunner.class);
     private static final String DELIMITER = "\t";
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000",DecimalFormatSymbols.getInstance(Locale.US));
-    private static final AbstractFeatureProvider featureProvider = FeatureProviderRegistry.getInstance().resolve(EnergyProfileCalculator.SOLVATION_ENERGY);
+    private static final AbstractFeatureProvider featureProvider = FeatureProviderRegistry.resolve(EnergyProfileCalculator.SOLVATION_ENERGY);
 
     static {
         BasicConfigurator.configure();

@@ -96,7 +96,7 @@ public class StructureCollectors {
                     // append the identifier by the RMSD, so we can
                     .map(alignmentResult -> {
                         alignmentResult.getOriginalQuery().setFeature(AbstractAlignmentAlgorithm.FRAGMENT_RMSD,
-                                alignmentResult.getRmsd());
+                                alignmentResult.getAlignmentScore());
                         return alignmentResult;
                     })
                     .map(AlignmentResult::getOriginalQuery)

@@ -13,13 +13,9 @@ import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -51,7 +47,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
      */
     private static final double DEFAULT_INTERACTION_CUTOFF = 8.0;
     private static final String BASE_PATH = "energyprofile/";
-    private static final String GLOBULAR_SOLVATION_PATH = BASE_PATH + "globular-solvation.dat";
+    private static final String GLOBULAR_SOLVATION_PATH = BASE_PATH + "ep-solvation-globular.dat";
     private static Map<String, Double> globularSolvationData;
 
     public static final String SOLVATION_ENERGY = "SOLVATION_ENERGY";
@@ -152,15 +148,10 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
 
     private synchronized void initializeLibrary() {
         // parse globular solvation data
-        globularSolvationData = new BufferedReader(new InputStreamReader(getResourceAsStream(GLOBULAR_SOLVATION_PATH))).lines()
+        globularSolvationData = getLinesFromResource(GLOBULAR_SOLVATION_PATH)
                 // skip header line
                 .filter(line -> !line.startsWith("amino_acid"))
                 .map(line -> line.split(" "))
                 .collect(Collectors.toMap(key -> key[0], value -> -Math.log(Double.valueOf(value[1]) / Double.valueOf(value[2]))));
-    }
-
-    private InputStream getResourceAsStream(String filepath) {
-        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
-                "failed to find resource as InputStream");
     }
 }

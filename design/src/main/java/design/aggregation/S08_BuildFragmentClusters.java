@@ -135,7 +135,7 @@ public class S08_BuildFragmentClusters {
                 // align fragment relative to consensus
                 SVDSuperimposer svdSuperimposer = new SVDSuperimposer();
                 AlignmentResult alignmentResult = svdSuperimposer.align(consensus, fragment);
-                String rmsd = DesignConstants.DECIMAL_FORMAT.format(alignmentResult.getRmsd());
+                String rmsd = DesignConstants.DECIMAL_FORMAT.format(alignmentResult.getAlignmentScore());
 
                 // add to summary file
                 output.append(i)
