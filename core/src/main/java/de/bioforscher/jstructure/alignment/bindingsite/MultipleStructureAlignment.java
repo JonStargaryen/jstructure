@@ -23,7 +23,7 @@ public class MultipleStructureAlignment {
     /**
      * The cutoff when a binding site is considered to not be able to extend any further.
      */
-    private static final double RMSD_CUTOFF = 16.0;
+    private static final double RMSD_CUTOFF = 4.0;
     private static final double RMSD_CUTOFF_SQUARED = RMSD_CUTOFF * RMSD_CUTOFF;
     /**
      * The minimal support for a voted originalCentroid which should occur in at least this many containers, otherwise the
