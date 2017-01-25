@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The global registry of known {@link FeatureProvider} instances. Every {@link FeatureProvider} automatically registers
@@ -40,7 +41,17 @@ public class FeatureProviderRegistry {
             for(String providedFeature : annotation.provides()) {
                 TreeMap<Integer, AbstractFeatureProvider> providers = registeredFeatureProviders.getOrDefault(providedFeature, new TreeMap<>());
                 try {
-                    providers.put(annotation.priority(), (AbstractFeatureProvider) annotatedFeatureProvider.newInstance());
+                    int priority = annotation.priority();
+                    if(providers.containsKey(priority)) {
+                        providers.put(priority, (AbstractFeatureProvider) annotatedFeatureProvider.newInstance());
+                    } else {
+                        // decrease priority to dodge duplicates, as only 1 would be registered
+                        while(providers.containsKey(priority)) {
+                            priority++;
+                        }
+
+                        providers.put(priority, (AbstractFeatureProvider) annotatedFeatureProvider.newInstance());
+                    }
                 } catch (InstantiationException | IllegalAccessException e) {
                     throw new InstantiationError("could not create instance of feature provider " + annotatedFeatureProvider.getSimpleName());
                 }
@@ -76,15 +87,25 @@ public class FeatureProviderRegistry {
 
     //TODO builder-esque resolving
 
+    public static AbstractFeatureProvider resolveAnnotator(String requestedFeature) {
+        return resolveInternal(requestedFeature)
+                .filter(provider -> provider.getClass().getAnnotation(FeatureProvider.class).type().equals(FeatureType.ANNOTATION))
+                .findFirst()
+                .orElseThrow(() -> noProvider(requestedFeature));
+    }
+
     public static AbstractFeatureProvider resolvePredictor(String requestedFeature) {
+        return resolveInternal(requestedFeature)
+                .filter(provider -> provider.getClass().getAnnotation(FeatureProvider.class).type().equals(FeatureType.PREDICTION))
+                .findFirst()
+                .orElseThrow(() -> noProvider(requestedFeature));
+    }
+
+    private static Stream<AbstractFeatureProvider> resolveInternal(String requestedFeature) {
         try {
-            return INSTANCE.registeredFeatureProviders.get(requestedFeature).entrySet().stream()
-                    .filter(entry -> entry.getValue().getClass().getAnnotation(FeatureProvider.class).type().equals(FeatureType.PREDICTION))
-                    .findFirst()
-                    .get()
-                    .getValue();
-        } catch (NullPointerException | NoSuchElementException e) {
-            throw new NoSuchElementException("no provider is registered for '" + requestedFeature + "'");
+            return INSTANCE.registeredFeatureProviders.get(requestedFeature).entrySet().stream().map(Map.Entry::getValue);
+        } catch (NullPointerException e) {
+            throw noProvider(requestedFeature);
         }
     }
 
@@ -97,10 +118,10 @@ public class FeatureProviderRegistry {
      * requested feature
      */
     public static AbstractFeatureProvider resolve(String requestedFeature) {
-        try {
-            return INSTANCE.registeredFeatureProviders.get(requestedFeature).firstEntry().getValue();
-        } catch (NullPointerException e) {
-            throw new NoSuchElementException("no provider is registered for '" + requestedFeature + "'");
-        }
+        return resolveInternal(requestedFeature).findFirst().orElseThrow(() -> noProvider(requestedFeature));
+    }
+
+    private static NoSuchElementException noProvider(String requestedFeature) {
+        throw new NoSuchElementException("no provider is registered for '" + requestedFeature + "'");
     }
 }
