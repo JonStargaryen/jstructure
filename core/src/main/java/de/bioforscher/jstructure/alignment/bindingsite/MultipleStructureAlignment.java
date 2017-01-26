@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +22,7 @@ public class MultipleStructureAlignment {
     /**
      * The cutoff when a binding site is considered to not be able to extend any further.
      */
-    private static final double RMSD_CUTOFF = 4.0;
+    private static final double RMSD_CUTOFF = 1.0;
     private static final double RMSD_CUTOFF_SQUARED = RMSD_CUTOFF * RMSD_CUTOFF;
     /**
      * The minimal support for a voted originalCentroid which should occur in at least this many containers, otherwise the
@@ -90,7 +89,7 @@ public class MultipleStructureAlignment {
                 .map(Chain::new)
                 .map(LinearAlgebraAtom::centroid)
                 .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), candidatesForExtension.size());
-        System.out.println("previous centroid: " + Arrays.toString(centroid));
+//        System.out.println("previous centroid: " + Arrays.toString(centroid));
 
         List<Group> closestGroups = candidatesForExtension.parallelStream()
                 .map(candidate -> findClosestGroupToCentroid(candidate, centroid))
@@ -99,7 +98,7 @@ public class MultipleStructureAlignment {
         double[] votedCentroid = LinearAlgebra3D.divide(closestGroups.stream()
                 .map(LinearAlgebraAtom::centroid)
                 .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), closestGroups.size());
-        System.out.println("voted centroid: " + Arrays.toString(votedCentroid));
+//        System.out.println("voted centroid: " + Arrays.toString(votedCentroid));
 
         // for each candidate: find group closest to voted centroid
         Map<GroupContainer, Group> selectedCandidatesForExtension = new HashMap<>();
@@ -112,7 +111,7 @@ public class MultipleStructureAlignment {
                 });
 
         if(selectedCandidatesForExtension.size() == 0 || selectedCandidatesForExtension.size() < numberOfContainers * MINIMAL_SUPPORT) {
-            System.out.println(selectedCandidatesForExtension);
+            System.out.println(selectedCandidatesForExtension.size());
             System.out.println(numberOfContainers);
             System.out.println(numberOfContainers * MINIMAL_SUPPORT);
             return;

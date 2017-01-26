@@ -315,6 +315,7 @@ public class LinearAlgebraAtom {
             group2.getAtoms().retainAll(sharedAtoms.getRight());
 
             logger.trace("shared atoms between {} and {}: {}", group1, group2, sharedAtoms);
+
             groups1.add(group1);
             groups2.add(group2);
         }

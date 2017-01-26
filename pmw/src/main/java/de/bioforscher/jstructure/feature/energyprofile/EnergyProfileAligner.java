@@ -78,35 +78,8 @@ public class EnergyProfileAligner extends AbstractAlignmentAlgorithm {
     private double calculateDistanceScore() {
         double sum = 0;
         for (int i = 0; i < numberOfPermutations; i++) {
-            List<Integer> permutationList = new ArrayList<>();
-            for (int permutation = 0; permutation < ej.size(); permutation++) {
-                permutationList.add(permutation);
-            }
-            int k = 0;
-            while (permutationList.size() > 0) {
-                int pos = (int) (Math.random() * permutationList.size());
-                permutationList.remove(pos);
-                int e_1 = ej.get(k);
-                int e_2 = ej.get(pos);
-                ej.set(pos, e_1);
-                ej.set(k, e_2);
-                k++;
-            }
-
-            permutationList = new ArrayList<>();
-            for (int per = 0; per < ei.size(); per++) {
-                permutationList.add(per);
-            }
-            k = 0;
-            while (permutationList.size() > 0) {
-                int pos = (int) (Math.random() * permutationList.size());
-                permutationList.remove(pos);
-                int e_1 = ei.get(k);
-                int e_2 = ei.get(pos);
-                ei.set(pos, e_1);
-                ei.set(k, e_2);
-                k++;
-            }
+            permutate(ej);
+            permutate(ei);
 
             sum += calculateAlignment();
         }
@@ -117,6 +90,23 @@ public class EnergyProfileAligner extends AbstractAlignmentAlgorithm {
             distanceScore = 5;
         }
         return distanceScore;
+    }
+
+    private void permutate(List<Integer> list) {
+        List<Integer> permutationList = new ArrayList<>();
+        for (int permutation = 0; permutation < list.size(); permutation++) {
+            permutationList.add(permutation);
+        }
+        int k = 0;
+        while (permutationList.size() > 0) {
+            int pos = (int) (Math.random() * permutationList.size());
+            permutationList.remove(pos);
+            int e_1 = list.get(k);
+            int e_2 = list.get(pos);
+            list.set(pos, e_1);
+            list.set(k, e_2);
+            k++;
+        }
     }
 
     private int calculateAlignment() {

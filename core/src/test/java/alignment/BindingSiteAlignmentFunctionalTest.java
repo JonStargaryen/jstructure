@@ -22,7 +22,8 @@ public class BindingSiteAlignmentFunctionalTest {
         int arginine1 = 884;
         int arginine2 = 1765;
 
-        String basePath = "/home/bittrich/git/aars_analysis/data/";
+        String homePath = System.getProperty("user.home");
+        String basePath = homePath + "/git/aars_analysis/data/";
         List<GroupContainer> chains = Files.lines(Paths.get(basePath + "geometry/argtweezer_geometry.tsv"))
                 .filter(line -> !line.startsWith("id"))
                 .map(line -> line.split("\t"))
@@ -39,7 +40,7 @@ public class BindingSiteAlignmentFunctionalTest {
 
         List<GroupContainer> alignedFragments = new MultipleStructureAlignment().align(chains, arginine1, arginine2);
         for(GroupContainer container : alignedFragments) {
-            Files.write(Paths.get("/home/bittrich/bindingsite-alignment/" + container.getIdentifier() + ".pdb"), container.composePDBRecord().getBytes());
+            Files.write(Paths.get(homePath + "/bindingsite-alignment/" + container.getIdentifier() + ".pdb"), container.composePDBRecord().getBytes());
         }
     }
 }
