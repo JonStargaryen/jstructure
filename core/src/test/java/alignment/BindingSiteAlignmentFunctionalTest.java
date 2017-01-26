@@ -1,6 +1,6 @@
 package alignment;
 
-import de.bioforscher.jstructure.alignment.bindingsite.MultipleStructureAlignment;
+import de.bioforscher.jstructure.alignment.multiple.MultipleStructureAlignment;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -40,7 +40,7 @@ public class BindingSiteAlignmentFunctionalTest {
 
         List<GroupContainer> alignedFragments = new MultipleStructureAlignment().align(chains, arginine1, arginine2);
         for(GroupContainer container : alignedFragments) {
-            Files.write(Paths.get(homePath + "/bindingsite-alignment/" + container.getIdentifier() + ".pdb"), container.composePDBRecord().getBytes());
+            Files.write(Paths.get(homePath + "/multiple-alignment/" + container.getIdentifier() + ".pdb"), container.composePDBRecord().getBytes());
         }
     }
 }

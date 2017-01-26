@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 public class StructureCollectors {
     private static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
 
+    @Deprecated
     public static Collector<AtomContainer, ?, List<StructureCluster>> toAlignedEnsembleByStructuralClustering() {
         return Collector.of(SuperimpositionByFragmentClustering::new,
                 SuperimpositionByFragmentClustering::accept,
