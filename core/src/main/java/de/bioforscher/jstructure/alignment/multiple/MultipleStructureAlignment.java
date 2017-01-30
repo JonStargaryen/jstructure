@@ -2,23 +2,20 @@ package de.bioforscher.jstructure.alignment.multiple;
 
 import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.consensus.AbstractConsensusComposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
-import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Performs a multiple structure alignment.
@@ -27,33 +24,31 @@ import java.util.stream.Collectors;
 public class MultipleStructureAlignment {
     private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignment.class);
     private final SVDSuperimposer svdSuperimposer;
-    private final ClusteringStrategy clusteringStrategy;
     /**
      * The cutoff when a binding site is considered to not be able to extend any further.
      */
-    private static final double RMSD_CUTOFF = 1.0;
-    private static final double RMSD_CUTOFF_SQUARED = RMSD_CUTOFF * RMSD_CUTOFF;
+    private static final double RMSD_CUTOFF = 2.0;
     private static final int NUMBER_OF_GROUPS_AS_CANDIDATES_FOR_EXTENSION = 10;
     /**
      * The minimal support for a voted originalCentroid which should occur in at least this many containers, otherwise the
      * extension of the alignment ceases.
      */
-    private static final double MINIMAL_SUPPORT = 0.8;
+    private static final double MINIMAL_SUPPORT = 0.2;
+    private int iteration = 0;
     private int numberOfContainers;
     /**
      * Mapping between original container and their already extracted and mapped groups.
      */
-    private Map<GroupContainer, GroupContainer> alignedContainers;
-    private int maximalAlignmentSize;
+    private List<Map<GroupContainer, GroupContainer>> alignedClusters;
 
     public MultipleStructureAlignment() {
         this.svdSuperimposer = new SVDSuperimposer();
-        this.clusteringStrategy = new NaiveClusteringStrategy();
     }
 
-    public List<GroupContainer> align(List<GroupContainer> containers, int... residueNumbers) {
+    public void align(List<GroupContainer> containers, int... residueNumbers) {
+        this.alignedClusters = new ArrayList<>();
         this.numberOfContainers = containers.size();
-        this.maximalAlignmentSize = residueNumbers.length;
+
         logger.info("creating alignment of {} containers", containers.size());
         logger.info("reference residues {}", Arrays.toString(residueNumbers));
 
@@ -70,123 +65,138 @@ public class MultipleStructureAlignment {
                     // remove from parent container
                     container.getGroups().removeAll(extractedGroups);
 
-                    logger.trace("extracted groups for {}: {}", container.getIdentifier(), extractedGroups.stream()
-                            .map(Group::getIdentifier)
-                            .collect(Collectors.joining(", ", "[", "]")));
-
+                    // move to separate container
                     Chain chain = new Chain(extractedGroups);
                     chain.setIdentifier(container.getIdentifier());
                     return chain;
                 }));
 
-        GroupContainer reference = clusteringStrategy.composeConsensus(extractedAlignmentSeeds.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList()));
+        GroupContainer consensus = composeConsensus(extractedAlignmentSeeds);
 
         // align containers with respect to extract groups
-        alignedContainers = extractedAlignmentSeeds.entrySet().parallelStream()
-                .map(entry -> {
-                    GroupContainer candidate = entry.getValue();
+        alignWithRespectToConsensus(consensus, extractedAlignmentSeeds);
 
-                    logger.trace("pairing {} and {}", reference.getGroups().stream()
-                            .map(Group::getIdentifier)
-                            .collect(Collectors.joining(", ", "[", "]")),
-                            candidate.getGroups().stream()
-                            .map(Group::getIdentifier)
-                            .collect(Collectors.joining(", ", "[", "]")));
+        alignedClusters.add(extractedAlignmentSeeds);
 
-                    AlignmentResult alignmentResult = svdSuperimposer.align(reference, candidate);
-                    alignmentResult.transform(candidate);
-                    alignmentResult.transform(entry.getKey());
-                    return entry;
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        extendFragments();
+    }
 
-        extendFragments(1);
+    private GroupContainer composeConsensus(Map<GroupContainer, GroupContainer> containers) {
+        // trivial: choose the first entry
+//        return containers.entrySet().stream().findFirst().get().getValue();
 
-        return alignedContainers.entrySet().stream()
+        logger.debug("composing consensus of {} containers", containers.size());
+
+        // build average coordinate container of everything
+        GroupContainer reference = containers.entrySet().stream().findFirst().get().getValue();
+        containers.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .forEach(toMerge -> AbstractConsensusComposer.mergeContainersByCentroid(reference, toMerge));
+        return reference;
+    }
+
+    public List<GroupContainer> getAlignedContainers() {
+        return alignedClusters.stream()
+                .map(Map::entrySet)
+                .flatMap(Collection::stream)
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
     }
 
-    private void extendFragments(int iteration) {
-        // determine set of closest groups
-        Map<GroupContainer, List<Group>> closestGroups = alignedContainers.entrySet().parallelStream()
-                .collect(Collectors.toMap(Map.Entry::getKey, this::findClosestGroups));
+    private void alignWithRespectToConsensus(GroupContainer consensus, Map<GroupContainer, GroupContainer> containers) {
+        containers.entrySet().parallelStream().forEach(entry -> {
+            GroupContainer candidate = entry.getValue();
+            AlignmentResult alignmentResult = svdSuperimposer.align(consensus, candidate);
+            alignmentResult.transform(candidate);
+            alignmentResult.transform(entry.getKey());
+        });
+    }
 
-        closestGroups.entrySet().forEach(entry -> logger.trace("closest groups for {} are {}",
-                    entry.getKey().getIdentifier(),
-                    entry.getValue().stream()
-                            .map(Group::getIdentifier)
-                            .collect(Collectors.joining(", ", "[", "]"))
-                ));
+    public List<Map<GroupContainer, GroupContainer>> getAlignedClusters() {
+        return alignedClusters;
+    }
 
-        double[] closestCentroid = LinearAlgebra3D.divide(closestGroups.entrySet().parallelStream()
-                .map(Map.Entry::getValue)
-                .map(list -> list.get(0))
-                .map(LinearAlgebraAtom::centroid)
-                .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), closestGroups.size());
+    private void extendFragments() {
+        iteration++;
+        List<Map<GroupContainer, GroupContainer>> newAlignedClusters = new ArrayList<>();
+        Map<GroupContainer, GroupContainer> keysToMove = new HashMap<>();
+        List<Double> rmsds = new ArrayList<>();
 
-        Map<GroupContainer, Group> selectedGroup = closestGroups.entrySet().parallelStream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().sorted(Comparator.comparingDouble(group -> squaredDistance(group, closestCentroid))).findFirst().get()));
+        IntStream.range(0, alignedClusters.size())
+                .limit(1)
+                .forEach(alignedClusterIndex -> {
+            final Map<GroupContainer, GroupContainer> alignedContainers = alignedClusters.get(alignedClusterIndex);
+            // determine set of closest groups
+            Map<GroupContainer, List<Group>> closestGroups = alignedContainers.entrySet().parallelStream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, this::findClosestGroups));
 
-        selectedGroup.entrySet().forEach(entry -> {
-            logger.trace("selected and moving group {}", entry.getValue().getIdentifier());
-            GroupContainer origin = entry.getKey();
-            Group groupToMove = entry.getValue();
-            origin.getGroups().remove(groupToMove);
-            alignedContainers.get(origin).getGroups().add(groupToMove);
+            double[] closestCentroid = LinearAlgebra3D.divide(closestGroups.entrySet().parallelStream()
+                    .map(Map.Entry::getValue)
+                    .map(list -> list.get(0))
+                    .map(LinearAlgebraAtom::centroid)
+                    .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), closestGroups.size());
+
+            Map<GroupContainer, Group> selectedGroup = closestGroups.entrySet().parallelStream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().sorted(Comparator.comparingDouble(group -> squaredDistance(group, closestCentroid))).findFirst().get()));
+
+            selectedGroup.entrySet().forEach(entry -> {
+                logger.trace("selected and moving group {}", entry.getValue().getIdentifier());
+                GroupContainer origin = entry.getKey();
+                Group groupToMove = entry.getValue();
+                origin.getGroups().remove(groupToMove);
+                alignedContainers.get(origin).getGroups().add(groupToMove);
+            });
+
+            GroupContainer consensus = composeConsensus(alignedContainers);
+
+            // align containers with respect to extract groups
+            alignedContainers.entrySet().parallelStream().forEach(entry -> {
+                        GroupContainer candidate = entry.getValue();
+                        AlignmentResult alignmentResult = svdSuperimposer.align(consensus, candidate);
+                        alignmentResult.transform(candidate);
+                        alignmentResult.transform(entry.getKey());
+                        double rmsd = alignmentResult.getAlignmentScore();
+                        logger.trace("rmsd of {} and {}: {}", consensus.getIdentifier(),
+                                candidate.getIdentifier(),
+                                rmsd);
+
+                        // remember freakish occurrences
+                        if(rmsd > RMSD_CUTOFF) {
+                            keysToMove.put(entry.getKey(), entry.getValue());
+                        } else {
+                            rmsds.add(rmsd);
+                        }
+                    });
+
+            keysToMove.forEach(alignedContainers::remove);
+            newAlignedClusters.add(alignedContainers);
         });
 
-        GroupContainer reference = clusteringStrategy.composeConsensus(alignedContainers.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList()));
+        // handle freak cluster
+        if(alignedClusters.size() > 1) {
+            alignedClusters.get(1).entrySet().forEach(entry -> keysToMove.put(entry.getKey(), entry.getValue()));
+        }
+        GroupContainer freakConsensus = composeConsensus(keysToMove);
+        alignWithRespectToConsensus(freakConsensus, keysToMove);
+        newAlignedClusters.add(keysToMove);
 
-        List<Double> rmsds = new ArrayList<>();
-        // align containers with respect to extract groups
-        alignedContainers = alignedContainers.entrySet().parallelStream()
-                .map(entry -> {
-                    GroupContainer candidate = entry.getValue();
-                    AlignmentResult alignmentResult = svdSuperimposer.align(reference, candidate);
-                    alignmentResult.transform(candidate);
-                    alignmentResult.transform(entry.getKey());
-                    rmsds.add(alignmentResult.getAlignmentScore());
-                    logger.trace("rmsd of {} and {}: {}", reference.getIdentifier(),
-                            candidate.getIdentifier(),
-                            alignmentResult.getAlignmentScore());
-                    return entry;
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        alignedClusters = newAlignedClusters;
+        int maximalClusterSize = alignedClusters.get(0).size();
 
-        logger.debug("average rmsd of iteration {}: {}",
+
+        double currentSupport = maximalClusterSize / (double) numberOfContainers;
+
+        logger.debug("iteration: {}, rmsd: {}, maximal support: {}, # clusters: {}",
                 iteration,
-                rmsds.stream().mapToDouble(Double::new).average().getAsDouble());
+                rmsds.stream()
+                        .mapToDouble(Double::new)
+                        .average()
+                        .orElseThrow(IllegalArgumentException::new),
+                currentSupport,
+                alignedClusters.size());
 
-        if(iteration < 10) {
-            extendFragments(iteration + 1);
-        }
-    }
-
-    public static Collector<GroupContainer, ConsensusComposer, GroupContainer> toConsensus() {
-        return Collector.of(ConsensusComposer::new,
-                ConsensusComposer::accept,
-                ConsensusComposer::combine,
-                ConsensusComposer::getConsensus,
-                Collector.Characteristics.CONCURRENT);
-    }
-
-    static class ConsensusComposer implements Consumer<GroupContainer> {
-        @Override
-        public void accept(GroupContainer container) {
-
-        }
-
-        ConsensusComposer combine(ConsensusComposer other) {
-            return this;
-        }
-
-        GroupContainer getConsensus() {
-            return null;
+        if(currentSupport > MINIMAL_SUPPORT) {
+            extendFragments();
         }
     }
 
@@ -203,66 +213,5 @@ public class MultipleStructureAlignment {
 
     private double squaredDistance(Group group, double[] centroid) {
         return LinearAlgebra3D.distanceFast(LinearAlgebraAtom.centroid(group), centroid);
-    }
-
-    /**
-     * The specification of strategies to compose or derive one consensus representation of a collection of
-     * {@link GroupContainer} objects.
-     * Created by S on 28.01.2017.
-     */
-    interface ClusteringStrategy {
-        /**
-         * Merges a multitude of structure into one consensus structure which should reasonably well capable of representing
-         * this cluster.
-         * @param containers the ensemble to create the consensus upon
-         * @return a map containing the consensus container as keys and all associated (original) container as value
-         */
-        Map<GroupContainer, List<GroupContainer>> composeConsensus(List<GroupContainer> containers);
-    }
-
-    /**
-     * The 'strategy' of creating a consensus by randomly selecting one representative structure.
-     * Created by S on 28.01.2017.
-     */
-    class NaiveClusteringStrategy implements ClusteringStrategy {
-        @Override
-        public Map<GroupContainer, List<GroupContainer>> composeConsensus(List<GroupContainer> containers) {
-            Map<GroupContainer, List<GroupContainer>> map = new HashMap<>();
-            map.put(containers.get(0), containers);
-            return map;
-        }
-    }
-
-    class NaiveCentroidClusteringStrategy implements ClusteringStrategy {
-        @Override
-        public Map<GroupContainer, List<GroupContainer>> composeConsensus(List<GroupContainer> containers) {
-            GroupContainer reference = containers.remove(0);
-//            svdSuperimposer.align(reference, candidate);
-            return null;
-        }
-    }
-
-    private Atom mergeAtoms(Atom atom1, Atom atom2) {
-        atom1.setCoordinates(LinearAlgebra3D.divide(LinearAlgebra3D.add(atom1.getCoordinates(), atom2.getCoordinates()), 2));
-        return atom1;
-    }
-
-    private GroupContainer mergeContainers(GroupContainer reference, GroupContainer candidate) {
-        // get intersecting pairs of atoms wrapped in an atom container
-        // 12/14/16 - moved to backboneOnly flag
-        Pair<GroupContainer, GroupContainer> containerPair =
-                LinearAlgebraAtom.comparableGroupContainerPair(reference,
-                        candidate,
-                        AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
-                        AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
-
-//        return Combinatorics.sequentialPairsOf(containerPair.getLeft().getAtoms(), containerPair.getRight().getAtoms())
-//                .map(AbstractConsensusComposer::mergeAtomPair)
-//                .collect(StructureCollectors.toAtomContainer());
-        List<Atom> mergedAtoms = new ArrayList<>();
-        for(int i = 0; i < containerPair.getLeft().getAtoms().size(); i++) {
-            mergedAtoms.add(mergeAtoms(containerPair.getLeft().getAtoms().get(i), containerPair.getRight().getAtoms().get(i)));
-        }
-        return new Chain(mergedAtoms);
     }
 }

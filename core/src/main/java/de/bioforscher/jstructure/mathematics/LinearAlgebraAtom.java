@@ -55,7 +55,7 @@ public class LinearAlgebraAtom {
         // ensure both groups are consecutive
         if(!group1.getParentChain().equals(group2.getParentChain()) ||
                 group1.getResidueNumber() + 1 != group2.getResidueNumber()) {
-            throw new IllegalArgumentException("2 groups must be connected to compute torison angles" +
+            throw new IllegalArgumentException("2 groups must be connected to compute torsion angles" +
                     System.lineSeparator() + "found: " + group1.getIdentifier() + " and " + group2.getIdentifier());
         }
 
@@ -283,20 +283,20 @@ public class LinearAlgebraAtom {
      *     <li>{@link Atom}s are in identical ordering</li>
      *     <li>{@link Atom}s are wrapped in {@link Group} objects if they were initially</li>
      * </ul>
-     * @param atomContainer1 a collection of reference atoms
-     * @param atomContainer2 a collection of candidate atoms
+     * @param container1 a collection of reference atoms
+     * @param container2 a collection of candidate atoms
      * @param minimalSetOfAtomNames the lower bound of required atom names present (e.g. by setting CA, every time an
      *                              amino acid missing the alpha carbon will result in an exception thrown)
      * @param maximalSetOfAtomNames the upper bound of required atom names present (e.g. by setting CA, everything else
      *                              will be dropped, even when both amino acids would share more atoms)
      * @return a pair of both collections which can now be aligned
      */
-    public static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer atomContainer1,
-                                                                                    AtomContainer atomContainer2,
+    public static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer container1,
+                                                                                    AtomContainer container2,
                                                                                     Set<String> minimalSetOfAtomNames,
                                                                                     Set<String> maximalSetOfAtomNames) {
-        GroupContainer groupContainer1 = cloneIntoGroupContainer(atomContainer1);
-        GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
+        GroupContainer groupContainer1 = cloneIntoGroupContainer(container1);
+        GroupContainer groupContainer2 = cloneIntoGroupContainer(container2);
 
         int limitingSize = Math.min(groupContainer1.getGroups().size(), groupContainer2.getGroups().size());
 

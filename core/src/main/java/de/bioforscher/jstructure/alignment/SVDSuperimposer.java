@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -36,7 +37,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         AtomContainer originalReference = reference;
         AtomContainer originalCandidate = candidate;
 
-        Pair<AtomContainer, AtomContainer> atomContainerPair =
+        Pair<GroupContainer, GroupContainer> atomContainerPair =
                 LinearAlgebraAtom.comparableGroupContainerPair(reference,
                         candidate,
                         minimalSetOfAtomNames,

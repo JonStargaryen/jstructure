@@ -1,6 +1,8 @@
 package de.bioforscher.jstructure.alignment.consensus;
 
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,21 +17,19 @@ import java.util.stream.Collectors;
  * cluster.
  * Created by S on 05.12.2016.
  */
-@Deprecated
 public class FragmentClusteringComposer extends AbstractConsensusComposer {
+    private static final Logger logger = LoggerFactory.getLogger(FragmentClusteringComposer.class);
     private static final double DEFAULT_RMSD_THRESHOLD = 1.0;
     private final double rmsdThreshold;
-    private final boolean performCleanUp;
     private List<StructureCluster> clusters;
 
     public FragmentClusteringComposer() {
-        this(DEFAULT_RMSD_THRESHOLD, false);
+        this(DEFAULT_RMSD_THRESHOLD);
     }
 
-    public FragmentClusteringComposer(double rmsdThreshold, boolean performCleanUp) {
+    public FragmentClusteringComposer(double rmsdThreshold) {
         this.clusters = new ArrayList<>();
         this.rmsdThreshold = rmsdThreshold;
-        this.performCleanUp = performCleanUp;
     }
 
     public void composeClusterRepresentation(List<? extends AtomContainer> containers) {
@@ -69,22 +69,10 @@ public class FragmentClusteringComposer extends AbstractConsensusComposer {
             }
         }
 
-        if(performCleanUp) {
-            cleanUp();
-        }
-
         logger.info("grouped {} in {} clusters", clusters.stream()
                 .map(StructureCluster::getOriginalEntries)
                 .mapToInt(Collection::size)
                 .sum(), clusters.size());
-    }
-
-    /**
-     * The consensus gets distorted over time: remove all entries which in the end are not significantly similar to the
-     * consensus fragment and add those, which now are similar.
-     */
-    private void cleanUp() {
-        //TODO impl
     }
 
     public List<StructureCluster> getClusters() {

@@ -8,6 +8,8 @@ import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.TreeNode;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +21,8 @@ import java.util.stream.Collectors;
  * (i.e. averaging its coordinates). The process is repeated until no more merging operations can be performed.
  * Created by S on 11.11.2016.
  */
-@Deprecated
 public class ConsensusTreeComposer extends AbstractConsensusComposer {
+    private static final Logger logger = LoggerFactory.getLogger(ConsensusTreeComposer.class);
     /**
      * all known structures
      */
@@ -197,7 +199,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
 
         AtomContainer getMergedEntry() {
             if(mergedEntry == null) {
-                mergedEntry = mergeContainerPair(getLeft(), getRight());
+                mergedEntry = AbstractConsensusComposer.mergeContainersByCentroid(getLeft(), getRight());
             }
 
             return mergedEntry;

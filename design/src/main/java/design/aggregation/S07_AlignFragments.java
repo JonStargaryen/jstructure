@@ -1,6 +1,7 @@
 package design.aggregation;
 
 import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
+import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 
 /**
  * Aligns fragments of one sequence motif observation.
- * Deprecated because the consensus-by-reference approach was replaced by the {@link de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer}.
+ * Deprecated because the consensus-by-reference approach was replaced by the {@link FragmentClusteringComposer}.
  * Created by S on 07.11.2016.
  */
 @Deprecated

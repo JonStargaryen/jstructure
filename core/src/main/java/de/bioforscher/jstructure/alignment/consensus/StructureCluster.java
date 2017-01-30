@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * Represents a structure cluster created by {@link FragmentClusteringComposer}.
  * Created by S on 05.12.2016.
  */
-@Deprecated
 public class StructureCluster {
     private List<AtomContainer> entries;
     private AtomContainer consensus;
@@ -32,6 +31,21 @@ public class StructureCluster {
         this.consensus = container;
     }
 
+    public AtomContainer getConsensusRepresentation() {
+        return consensus;
+    }
+
+    public List<AtomContainer> getOriginalEntries() {
+        return entries;
+    }
+
+    @Override
+    public String toString() {
+        return entries.stream()
+                .map(AtomContainer::getIdentifier)
+                .collect(Collectors.joining(", ", "[", "]"));
+    }
+
     /**
      * Adds a new {@link AtomContainer} to the internally handled list and will update the consensus fragment.
      * @param container the atom container to add
@@ -43,31 +57,16 @@ public class StructureCluster {
         return consensus;
     }
 
-    public AtomContainer getConsensusRepresentation() {
-        return consensus;
-    }
-
-    public List<AtomContainer> getOriginalEntries() {
-        return entries;
-    }
-
     private AtomContainer updateConsensus(AtomContainer container) {
         //TODO we should store fragments aligned relatively to the consensus, so it is not aligned twice
         AlignmentResult alignment = svdSuperimposer.align(consensus, container);
         // merge new entry to existing consensus
         //TODO this may be fast, but potentially merging everything is more robust
         //TODO delegating to the abstract class is not really nice
-        return AbstractConsensusComposer.mergeContainerPair(alignment.getOriginalReference(), alignment.getAlignedQuery());
+        return AbstractConsensusComposer.mergeContainersByCentroid(alignment.getOriginalReference(), alignment.getAlignedQuery());
     }
 
     double getDistanceToConsensus(AtomContainer container) {
         return svdSuperimposer.align(consensus, container).getAlignmentScore();
-    }
-
-    @Override
-    public String toString() {
-        return entries.stream()
-                .map(AtomContainer::getIdentifier)
-                .collect(Collectors.joining(", ", "[", "]"));
     }
 }
