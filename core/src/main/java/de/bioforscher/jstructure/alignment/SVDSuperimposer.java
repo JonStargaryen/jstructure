@@ -37,7 +37,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         AtomContainer originalCandidate = candidate;
 
         Pair<AtomContainer, AtomContainer> atomContainerPair =
-                LinearAlgebraAtom.comparableAtomContainerPair(reference,
+                LinearAlgebraAtom.comparableGroupContainerPair(reference,
                         candidate,
                         minimalSetOfAtomNames,
                         maximalSetOfAtomNames);

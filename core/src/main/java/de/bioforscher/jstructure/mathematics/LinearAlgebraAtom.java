@@ -267,8 +267,8 @@ public class LinearAlgebraAtom {
      * @return the RMSD value of this alignment
      */
     public static double calculateRmsd(AtomContainer atomContainer1, AtomContainer atomContainer2) {
-        Pair<AtomContainer, AtomContainer> atomContainerPair = comparableAtomContainerPair(atomContainer1, atomContainer2);
-        double msd = Combinatorics.sequentialPairsOf(atomContainerPair.getLeft().getAtoms(), atomContainerPair.getRight().getAtoms())
+        Pair<GroupContainer, GroupContainer> groupContainerPair = comparableGroupContainerPair(atomContainer1, atomContainer2);
+        double msd = Combinatorics.sequentialPairsOf(groupContainerPair.getLeft().getAtoms(), groupContainerPair.getRight().getAtoms())
                 .mapToDouble(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(), pair.getRight().getCoordinates()))
                 .average()
                 .orElseThrow(() -> new IllegalArgumentException("cannot compute rmsd for empty or non-intersecting containers"));
@@ -291,10 +291,10 @@ public class LinearAlgebraAtom {
      *                              will be dropped, even when both amino acids would share more atoms)
      * @return a pair of both collections which can now be aligned
      */
-    public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
-                                                                                 AtomContainer atomContainer2,
-                                                                                 Set<String> minimalSetOfAtomNames,
-                                                                                 Set<String> maximalSetOfAtomNames) {
+    public static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer atomContainer1,
+                                                                                    AtomContainer atomContainer2,
+                                                                                    Set<String> minimalSetOfAtomNames,
+                                                                                    Set<String> maximalSetOfAtomNames) {
         GroupContainer groupContainer1 = cloneIntoGroupContainer(atomContainer1);
         GroupContainer groupContainer2 = cloneIntoGroupContainer(atomContainer2);
 
@@ -325,11 +325,11 @@ public class LinearAlgebraAtom {
 
     /**
      * Returns the set of atoms shared by both containers.
-     * @see LinearAlgebraAtom#comparableAtomContainerPair(AtomContainer, AtomContainer, Set, Set)
+     * @see LinearAlgebraAtom#comparableGroupContainerPair(AtomContainer, AtomContainer, Set, Set)
      */
-    public static Pair<AtomContainer, AtomContainer> comparableAtomContainerPair(AtomContainer atomContainer1,
-                                                                                 AtomContainer atomContainer2) {
-        return comparableAtomContainerPair(atomContainer1,
+    public static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer atomContainer1,
+                                                                                    AtomContainer atomContainer2) {
+        return comparableGroupContainerPair(atomContainer1,
                 atomContainer2,
                 Collections.emptySet(),
                 AminoAcidFamily.ATOM_NAMES.ALL_ATOM_NAMES);

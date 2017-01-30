@@ -29,6 +29,7 @@ public class BindingSiteAlignmentFunctionalTest {
                 .map(line -> line.split("\t"))
                 .map(split -> split[0])
                 .map(id -> {
+                    System.out.println("loading " + id);
                     //TODO selection-API should resolve/infer container name if possible
                     GroupContainer container = Selection.on(ProteinParser.parsePDBFile(basePath + "msa/C2/renumbered_structures/" + id.split("_")[0].toLowerCase() + "_renum.pdb"))
                             .chainName(id.split("_")[1])
