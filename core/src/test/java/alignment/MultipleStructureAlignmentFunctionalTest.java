@@ -15,14 +15,13 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Run the binding site alignment.
  * Created by bittrich on 1/25/17.
  */
-public class BindingSiteAlignmentFunctionalTest {
-    private static final Logger logger = LoggerFactory.getLogger(BindingSiteAlignmentFunctionalTest.class);
+public class MultipleStructureAlignmentFunctionalTest {
+    private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignmentFunctionalTest.class);
 
     @Test
     public void shouldPerformMultipleStructureAlignment() throws IOException {
@@ -48,19 +47,19 @@ public class BindingSiteAlignmentFunctionalTest {
 
         MultipleStructureAlignment multipleStructureAlignment = new MultipleStructureAlignment();
         multipleStructureAlignment.align(chains, arginine1, arginine2);
-        List<Map<GroupContainer, GroupContainer>> alignedClusters = multipleStructureAlignment.getAlignedClusters();
 
-        IntStream.range(0, alignedClusters.size()).forEach(clusterIndex -> {
-            Map<GroupContainer, GroupContainer> alignedContainers = alignedClusters.get(clusterIndex);
-            alignedContainers.entrySet().stream()
-                    .map(Map.Entry::getValue)
-                    .forEach(container -> {
-                        try {
-                            Files.write(Paths.get(homePath + "/multiple-alignment/" + clusterIndex + "-" + container.getIdentifier() + ".pdb"), container.composePDBRecord().getBytes());
-                        } catch (IOException e) {
-                            throw new UncheckedIOException(e);
-                        }
-                    });
+        Map<GroupContainer, GroupContainer> alignedContainers = multipleStructureAlignment.getAlignedContainerMap();
+
+        alignedContainers.entrySet().forEach(entry -> {
+            try {
+                GroupContainer alignedFullStructure = entry.getKey();
+                GroupContainer alignedCore = entry.getValue();
+                int numberOfAlignedGroups = alignedCore.getGroups().size();
+                Files.write(Paths.get(homePath + "/multiple-alignment/core/" + numberOfAlignedGroups + "-" + alignedCore.getIdentifier() + ".pdb"), alignedCore.composePDBRecord().getBytes());
+                Files.write(Paths.get(homePath + "/multiple-alignment/full/" + alignedFullStructure.getIdentifier() + ".pdb"), alignedFullStructure.composePDBRecord().getBytes());
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         });
     }
 }

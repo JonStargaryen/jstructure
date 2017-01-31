@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Performs a multiple structure alignment.
@@ -27,7 +26,7 @@ public class MultipleStructureAlignment {
     /**
      * The cutoff when a binding site is considered to not be able to extend any further.
      */
-    private static final double RMSD_CUTOFF = 2.0;
+    private static final double RMSD_CUTOFF = 4.0;
     private static final int NUMBER_OF_GROUPS_AS_CANDIDATES_FOR_EXTENSION = 10;
     /**
      * The minimal support for a voted originalCentroid which should occur in at least this many containers, otherwise the
@@ -36,24 +35,33 @@ public class MultipleStructureAlignment {
     private static final double MINIMAL_SUPPORT = 0.2;
     private int iteration = 0;
     private int numberOfContainers;
-    /**
-     * Mapping between original container and their already extracted and mapped groups.
+    /*
+     * Mapping between original container and their already extracted and mapped groups. Key: original container, value:
+     * extracted fragments representing the original container in the alignment. Groups present in the latter will be
+     * removed from the first.
      */
-    private List<Map<GroupContainer, GroupContainer>> alignedClusters;
+    /**
+     * The collection of containers which are still extending.
+     */
+    private Map<GroupContainer, GroupContainer> containersExtending;
+    /**
+     * The collection of containers which cannot be extended any further as their observed RMSD was above the threshold.
+     */
+    private Map<GroupContainer, GroupContainer> containersFinished;
 
     public MultipleStructureAlignment() {
-        this.svdSuperimposer = new SVDSuperimposer();
+        svdSuperimposer = new SVDSuperimposer();
+        containersFinished = new HashMap<>();
     }
 
     public void align(List<GroupContainer> containers, int... residueNumbers) {
-        this.alignedClusters = new ArrayList<>();
-        this.numberOfContainers = containers.size();
+        numberOfContainers = containers.size();
 
         logger.info("creating alignment of {} containers", containers.size());
         logger.info("reference residues {}", Arrays.toString(residueNumbers));
 
         // move containers to field and extract alignment seed
-        Map<GroupContainer, GroupContainer> extractedAlignmentSeeds = containers.parallelStream()
+        containersExtending = containers.parallelStream()
                 .collect(Collectors.toMap(Function.identity(), container -> {
                     // select seeds
                     List<Group> extractedGroups = Selection.on(container)
@@ -65,135 +73,133 @@ public class MultipleStructureAlignment {
                     // remove from parent container
                     container.getGroups().removeAll(extractedGroups);
 
-                    // move to separate container
+                    // move to separate container - 'remember name'
                     Chain chain = new Chain(extractedGroups);
                     chain.setIdentifier(container.getIdentifier());
+
                     return chain;
                 }));
 
-        GroupContainer consensus = composeConsensus(extractedAlignmentSeeds);
-
         // align containers with respect to extract groups
-        alignWithRespectToConsensus(consensus, extractedAlignmentSeeds);
+        GroupContainer consensus = composeConsensus(containersExtending);
+        alignWithRespectToConsensus(consensus, containersExtending);
 
-        alignedClusters.add(extractedAlignmentSeeds);
-
+        // start iterative loop
         extendFragments();
+
+        // align everything with respect to the smallest container
+        int minimalSize = containersFinished.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .map(GroupContainer::getGroups)
+                .mapToInt(Collection::size)
+                .min()
+                .orElseThrow(() -> new IllegalArgumentException("container list is empty"));
+
+        // extract containers of minimal size and compose consensus of them
+        Map<GroupContainer, GroupContainer> minimalSizedContainers = containersFinished.entrySet().stream()
+                .filter(entry -> entry.getValue().getGroups().size() == minimalSize)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        GroupContainer minimalConsensus = composeConsensus(minimalSizedContainers);
+
+        // align everything with respect to consensus
+        alignWithRespectToConsensus(minimalConsensus, containersFinished);
+
+        // reassign extracted residues to original containers
+        containersFinished.entrySet().parallelStream().forEach(entry -> {
+            GroupContainer originalContainer = entry.getKey();
+            GroupContainer extractedGroups = entry.getValue();
+            originalContainer.getGroups().addAll(extractedGroups.getGroups());
+        });
     }
 
     private GroupContainer composeConsensus(Map<GroupContainer, GroupContainer> containers) {
-        // trivial: choose the first entry
-//        return containers.entrySet().stream().findFirst().get().getValue();
-
-        logger.debug("composing consensus of {} containers", containers.size());
-
+        //TODO maybe there is a more robust/sophisticated/meaningful/reasonable consensus building strategy
         // build average coordinate container of everything
-        GroupContainer reference = containers.entrySet().stream().findFirst().get().getValue();
+        GroupContainer reference = containers.entrySet().stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("collection to create consensus upon is empty"))
+                .getValue();
         containers.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .forEach(toMerge -> AbstractConsensusComposer.mergeContainersByCentroid(reference, toMerge));
         return reference;
     }
 
-    public List<GroupContainer> getAlignedContainers() {
-        return alignedClusters.stream()
-                .map(Map::entrySet)
-                .flatMap(Collection::stream)
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
-    }
-
     private void alignWithRespectToConsensus(GroupContainer consensus, Map<GroupContainer, GroupContainer> containers) {
         containers.entrySet().parallelStream().forEach(entry -> {
-            GroupContainer candidate = entry.getValue();
-            AlignmentResult alignmentResult = svdSuperimposer.align(consensus, candidate);
-            alignmentResult.transform(candidate);
-            alignmentResult.transform(entry.getKey());
-        });
-    }
+            GroupContainer originalGroups = entry.getKey();
+            GroupContainer extractedGroups = entry.getValue();
+            // align extracted groups to consensus
+            AlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);
 
-    public List<Map<GroupContainer, GroupContainer>> getAlignedClusters() {
-        return alignedClusters;
+            // employ alignment - TODO this could more efficiently happen in-place
+            alignmentResult.transform(originalGroups);
+            alignmentResult.transform(extractedGroups);
+        });
     }
 
     private void extendFragments() {
         iteration++;
-        List<Map<GroupContainer, GroupContainer>> newAlignedClusters = new ArrayList<>();
-        Map<GroupContainer, GroupContainer> keysToMove = new HashMap<>();
-        List<Double> rmsds = new ArrayList<>();
 
-        IntStream.range(0, alignedClusters.size())
-                .limit(1)
-                .forEach(alignedClusterIndex -> {
-            final Map<GroupContainer, GroupContainer> alignedContainers = alignedClusters.get(alignedClusterIndex);
-            // determine set of closest groups
-            Map<GroupContainer, List<Group>> closestGroups = alignedContainers.entrySet().parallelStream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, this::findClosestGroups));
+        // determine set of closest groups
+        Map<GroupContainer, List<Group>> closestGroups = containersExtending.entrySet().parallelStream()
+                .collect(Collectors.toMap(Map.Entry::getKey, this::findClosestGroups));
 
-            double[] closestCentroid = LinearAlgebra3D.divide(closestGroups.entrySet().parallelStream()
-                    .map(Map.Entry::getValue)
-                    .map(list -> list.get(0))
-                    .map(LinearAlgebraAtom::centroid)
-                    .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), closestGroups.size());
+        double[] closestCentroid = LinearAlgebra3D.divide(closestGroups.entrySet().parallelStream()
+                .map(Map.Entry::getValue)
+                .map(list -> list.get(0))
+                .map(LinearAlgebraAtom::centroid)
+                .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), closestGroups.size());
 
-            Map<GroupContainer, Group> selectedGroup = closestGroups.entrySet().parallelStream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream().sorted(Comparator.comparingDouble(group -> squaredDistance(group, closestCentroid))).findFirst().get()));
+        Map<GroupContainer, Group> selectedGroup = closestGroups.entrySet().parallelStream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
+                        .sorted(Comparator.comparingDouble(group -> calculateSquaredDistance(group, closestCentroid)))
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalArgumentException("did not find nearby group"))));
 
-            selectedGroup.entrySet().forEach(entry -> {
-                logger.trace("selected and moving group {}", entry.getValue().getIdentifier());
-                GroupContainer origin = entry.getKey();
-                Group groupToMove = entry.getValue();
-                origin.getGroups().remove(groupToMove);
-                alignedContainers.get(origin).getGroups().add(groupToMove);
-            });
+        selectedGroup.entrySet().forEach(entry -> {
+            GroupContainer originalGroups = entry.getKey();
+            GroupContainer extractedGroups = containersExtending.get(originalGroups);
+            Group extractedGroup = entry.getValue();
 
-            GroupContainer consensus = composeConsensus(alignedContainers);
-
-            // align containers with respect to extract groups
-            alignedContainers.entrySet().parallelStream().forEach(entry -> {
-                        GroupContainer candidate = entry.getValue();
-                        AlignmentResult alignmentResult = svdSuperimposer.align(consensus, candidate);
-                        alignmentResult.transform(candidate);
-                        alignmentResult.transform(entry.getKey());
-                        double rmsd = alignmentResult.getAlignmentScore();
-                        logger.trace("rmsd of {} and {}: {}", consensus.getIdentifier(),
-                                candidate.getIdentifier(),
-                                rmsd);
-
-                        // remember freakish occurrences
-                        if(rmsd > RMSD_CUTOFF) {
-                            keysToMove.put(entry.getKey(), entry.getValue());
-                        } else {
-                            rmsds.add(rmsd);
-                        }
-                    });
-
-            keysToMove.forEach(alignedContainers::remove);
-            newAlignedClusters.add(alignedContainers);
+            // move selected group from original to extracted groups
+            logger.trace("selected and moving group {}", extractedGroup.getIdentifier());
+            Group groupToMove = entry.getValue();
+            originalGroups.getGroups().remove(groupToMove);
+            extractedGroups.getGroups().add(groupToMove);
         });
 
-        // handle freak cluster
-        if(alignedClusters.size() > 1) {
-            alignedClusters.get(1).entrySet().forEach(entry -> keysToMove.put(entry.getKey(), entry.getValue()));
-        }
-        GroupContainer freakConsensus = composeConsensus(keysToMove);
-        alignWithRespectToConsensus(freakConsensus, keysToMove);
-        newAlignedClusters.add(keysToMove);
+        GroupContainer consensus = composeConsensus(containersExtending);
+        List<GroupContainer> containersCeasedExtending = new ArrayList<>();
 
-        alignedClusters = newAlignedClusters;
-        int maximalClusterSize = alignedClusters.get(0).size();
+        // align containers with respect to extract groups
+        containersExtending.entrySet().parallelStream().forEach(entry -> {
+            GroupContainer originalGroups = entry.getKey();
+            GroupContainer extractedGroups = entry.getValue();
+            AlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);
+            alignmentResult.transform(originalGroups);
+            alignmentResult.transform(extractedGroups);
+            double rmsd = alignmentResult.getAlignmentScore();
+            logger.trace("rmsd of {} and {}: {}", consensus.getIdentifier(),
+                    extractedGroups.getIdentifier(),
+                    rmsd);
 
+            // container is dissimilar: track as 'finished', i.e. it can not be extended any further
+            if(rmsd > RMSD_CUTOFF) {
+                containersCeasedExtending.add(originalGroups);
+                containersFinished.put(originalGroups, extractedGroups);
+            }
+        });
 
+        // remove containers ceased extending from list of still considered candidates for extension
+        containersCeasedExtending.forEach(containersExtending::remove);
+
+        int maximalClusterSize = containersExtending.size();
         double currentSupport = maximalClusterSize / (double) numberOfContainers;
 
-        logger.debug("iteration: {}, rmsd: {}, maximal support: {}, # clusters: {}",
+        logger.debug("iteration: {}, current support: {}",
                 iteration,
-                rmsds.stream()
-                        .mapToDouble(Double::new)
-                        .average()
-                        .orElseThrow(IllegalArgumentException::new),
-                currentSupport,
-                alignedClusters.size());
+                currentSupport);
 
         if(currentSupport > MINIMAL_SUPPORT) {
             extendFragments();
@@ -206,12 +212,22 @@ public class MultipleStructureAlignment {
                 .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), entry.getValue().getGroups().size());
 
         return entry.getKey().aminoAcids()
-                .sorted(Comparator.comparingDouble(group -> squaredDistance(group, centroid)))
+                .sorted(Comparator.comparingDouble(group -> calculateSquaredDistance(group, centroid)))
                 .limit(NUMBER_OF_GROUPS_AS_CANDIDATES_FOR_EXTENSION)
                 .collect(Collectors.toList());
     }
 
-    private double squaredDistance(Group group, double[] centroid) {
+    private double calculateSquaredDistance(Group group, double[] centroid) {
         return LinearAlgebra3D.distanceFast(LinearAlgebraAtom.centroid(group), centroid);
+    }
+
+    public Map<GroupContainer, GroupContainer> getAlignedContainerMap() {
+        return containersFinished;
+    }
+
+    public List<GroupContainer> getAlignedFragments() {
+        return containersFinished.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
     }
 }
