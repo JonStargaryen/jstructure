@@ -32,7 +32,6 @@ public class AccessibleSurfaceAreaFunctionalTest {
         List<Double> jstructureASA = getJStructureASA(id);
         List<Double> biojavaASA = getBioJavaASA(id);
 
-        //TODO implement real test, respectively fix differences
         Combinatorics.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
             Assert.assertEquals(doublePair.getLeft(), doublePair.getRight(), 0.001)
         );
@@ -55,11 +54,13 @@ public class AccessibleSurfaceAreaFunctionalTest {
         // load structure
         Structure protein = new PDBFileReader().getStructureById(id);
 
+        AsaCalculator groupAsas = new AsaCalculator(protein,
+                AsaCalculator.DEFAULT_PROBE_SIZE,
+                AsaCalculator.DEFAULT_N_SPHERE_POINTS,
+                AsaCalculator.DEFAULT_NTHREADS, false);
+
         // assign ASA
-        return Arrays.stream(new AsaCalculator(protein,
-                     AsaCalculator.DEFAULT_PROBE_SIZE,
-                     AsaCalculator.DEFAULT_N_SPHERE_POINTS,
-                     AsaCalculator.DEFAULT_NTHREADS, false).getGroupAsas())
+        return Arrays.stream(groupAsas.getGroupAsas())
                      .map(GroupAsa::getAsaU)
                      .collect(Collectors.toList());
     }

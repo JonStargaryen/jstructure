@@ -82,7 +82,7 @@ public class GroupInformation {
     }
 
     public boolean isLigand() {
-        return !isAminoAcid() || !isNucleotide();
+        return !isAminoAcid() && !isNucleotide();
     }
 
     public boolean isModified() {

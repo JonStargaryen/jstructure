@@ -1,5 +1,7 @@
 package selection;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -76,5 +78,53 @@ public class SelectionIntegrationTest {
                 .atomName(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME, AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME)
                 .asAtomContainer();
         System.out.println(atoms.composePDBRecord());
+    }
+
+    private static final String givenName = "ThereIsAlwaysMoneyInTheBananaStand";
+
+    @Test
+    public void shouldNameContainer() {
+        GroupContainer container = Selection.on(protein)
+                .aminoAcids()
+                .nameContainer(givenName)
+                .asGroupContainer();
+
+        Assert.assertTrue(container.getIdentifier().equals(givenName));
+    }
+
+    @Test
+    public void shouldNameAfterParentContainer() {
+        GroupContainer parentContainer = Selection.on(protein)
+                .cloneElements()
+                .nameContainer(givenName)
+                .asGroupContainer();
+
+        GroupContainer container = Selection.on(parentContainer)
+                .aminoAcids()
+                .asGroupContainer();
+
+        Assert.assertTrue(container.getIdentifier().equals(givenName));
+    }
+
+    @Test
+    public void shouldFindSimilarNeighbors() {
+        Protein protein = ProteinParser.parseProteinById("1acj");
+
+        Atom firstAtom = protein.getAtoms().get(0);
+        double probeDistance = 4.4499;
+
+        int neighboringGroupCountSelectionAPI = (int) Selection.on(protein)
+                .atomSelection()
+                .distance(firstAtom, probeDistance)
+                .asFilteredAtoms()
+                .peek(System.out::println)
+                .count();
+
+        int neighboringGroupCountNaive = (int) protein.atoms()
+                .filter(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), firstAtom.getCoordinates()) < probeDistance)
+                .peek(System.out::println)
+                .count();
+
+        Assert.assertEquals(neighboringGroupCountNaive, neighboringGroupCountSelectionAPI);
     }
 }

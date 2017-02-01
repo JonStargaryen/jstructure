@@ -65,7 +65,7 @@ public class S08_BuildFragmentClusters {
         System.out.println("loaded " + proteins.size() + " atom containers");
 
         // compose clusters
-        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer(DesignConstants.IDENTICAL_CLUSTER_RMSD_THRESHOLD, false);
+        FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer(DesignConstants.IDENTICAL_CLUSTER_RMSD_THRESHOLD);
         fragmentClusteringComposer.composeClusterRepresentation(proteins);
         List<StructureCluster> clusters = fragmentClusteringComposer.getClusters();
 

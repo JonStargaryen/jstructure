@@ -41,7 +41,7 @@ public class StructureFragmentizer {
     private final String topology;
 
     public StructureFragmentizer(String topology) {
-        this.fragmentClusteringComposer = new FragmentClusteringComposer(DEFAULT_RMSD_CUTOFF, false);
+        this.fragmentClusteringComposer = new FragmentClusteringComposer(DEFAULT_RMSD_CUTOFF);
         this.topology = topology;
     }
 

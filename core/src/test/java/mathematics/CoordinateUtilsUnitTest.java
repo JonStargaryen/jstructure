@@ -1,12 +1,10 @@
 package mathematics;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -61,36 +59,6 @@ public class CoordinateUtilsUnitTest {
         transformation.transformCoordinates(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
         Assert.assertArrayEquals(expectedPoint, atom.getCoordinates(), 0.0);
-    }
-
-    @Test
-    public void testAtomPairsInContact() {
-        final double cutoff = 8.0;
-        Selection.pairsOn(protein1acj).distance(cutoff)
-                .asFilteredAtomPairs()
-                .filter(pair -> LinearAlgebra3D.distance(pair.getLeft().getCoordinates(),
-                                                            pair.getRight().getCoordinates()) > cutoff)
-                .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
-                               ", this is violated for pair: " + pair));
-    }
-
-    @Test
-    public void testResiduePairsInContact() {
-        final double cutoff = 8.0;
-        //TODO hacky
-        GroupContainer protein = Selection.on(protein1acj).aminoAcids().asGroupContainer();
-        Selection.pairsOn(protein).alphaCarbonDistance(cutoff)
-                .asFilteredGroupPairs()
-                .filter(pair -> LinearAlgebra3D.distance(Selection.on(pair.getLeft())
-                        .alphaCarbonAtoms()
-                        .asAtom()
-                        .getCoordinates(),
-                    Selection.on(pair.getRight())
-                        .alphaCarbonAtoms()
-                        .asAtom()
-                        .getCoordinates()) > cutoff)
-                .forEach(pair -> Assert.fail("pairs should be closer than " + cutoff +
-                        ", this is violated for pair: " + pair));
     }
 
     @Test

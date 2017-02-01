@@ -1,16 +1,12 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.Combinatorics;
-import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.container.StructureContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
-import de.bioforscher.jstructure.model.structure.scheme.AlphaCarbonRepresentationScheme;
-import de.bioforscher.jstructure.model.structure.scheme.BetaCarbonRepresentationScheme;
-import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -27,16 +23,8 @@ public class Selection {
         return new AtomSelection(Objects.requireNonNull(atomContainer));
     }
 
-    public static AtomPairSelection pairsOn(AtomContainer atomContainer) {
-        return new AtomPairSelection(Objects.requireNonNull(atomContainer));
-    }
-
     public static GroupSelection on(GroupContainer groupContainer) {
         return new GroupSelection(Objects.requireNonNull(groupContainer));
-    }
-
-    public static GroupPairSelection pairsOn(GroupContainer groupContainer) {
-        return new GroupPairSelection(Objects.requireNonNull(groupContainer));
     }
 
     public static ChainSelection on(ChainContainer chainContainer) {
@@ -64,17 +52,64 @@ public class Selection {
         List<Predicate<Group>> groupPredicates;
         List<Predicate<Chain>> chainPredicates;
         boolean cloneRequested;
+        String specifiedName;
+        String parentContainerName;
+        boolean negationMode;
 
         AtomSelection(AtomContainer atomContainer) {
-            this.atomContainer = atomContainer;
             this.atomPredicates = new ArrayList<>();
             this.groupPredicates = new ArrayList<>();
             this.chainPredicates = new ArrayList<>();
+            this.atomContainer = atomContainer;
+            this.parentContainerName = atomContainer.getIdentifier();
         }
 
+        /**
+         * Request this selection to clone all returned elements so they can be manipulated independently of their
+         * original reference.
+         * @return the builder
+         */
         public AtomSelection cloneElements() {
             cloneRequested = true;
             return this;
+        }
+
+        /**
+         * Request this selection to negate all coming predicates.
+         * @return the builder
+         */
+        public AtomSelection negationModeEnter() {
+            this.negationMode = true;
+            return this;
+        }
+
+        /**
+         * Request this selection to negate all coming predicates.
+         * @return the builder
+         */
+        public AtomSelection negationModeLeave() {
+            this.negationMode = false;
+            return this;
+        }
+
+        /**
+         * Allows to specifiedName the returned selection. I.e. {@link StructureContainer#getIdentifier()} will return this
+         * functions argument and will not try to infer the specifiedName itself from the given query.
+         * @param name the specifiedName this selection shall have
+         * @return the builder
+         */
+        public AtomSelection nameContainer(String name) {
+            this.specifiedName = name;
+            return this;
+        }
+
+        void inferContainerName(StructureContainer container) {
+            if(specifiedName != null) {
+                container.setIdentifier(specifiedName);
+                return;
+            }
+
+            container.setIdentifier(parentContainerName);
         }
 
         public Stream<Atom> asFilteredAtoms() {
@@ -111,12 +146,12 @@ public class Selection {
         }
 
         public AtomContainer asAtomContainer() {
-            return asFilteredAtoms()
+            AtomContainer container = asFilteredAtoms()
                     .collect(StructureCollectors.toAtomContainer());
-        }
 
-        public AtomPairSelection asAtomPairSelection() {
-            return pairsOn(asAtomContainer());
+            inferContainerName(container);
+
+            return container;
         }
 
         public Optional<Atom> asOptionalAtom() {
@@ -129,12 +164,16 @@ public class Selection {
                     .orElseThrow(NoSuchElementException::new);
         }
 
+        private void registerAtomPredicate(Predicate<Atom> atomPredicate) {
+            atomPredicates.add(negationMode ? atomPredicate.negate() : atomPredicate);
+        }
+
         public AtomSelection element(Collection<Element> elements) {
             return element(elements.toArray(new Element[elements.size()]));
         }
 
         public AtomSelection element(Element... elements) {
-            atomPredicates.add(atom -> Stream.of(elements)
+            registerAtomPredicate(atom -> Stream.of(elements)
                     .anyMatch(element -> atom.getElement().equals(element)));
             return this;
         }
@@ -144,54 +183,54 @@ public class Selection {
         }
 
         public AtomSelection atomName(String... atomNames) {
-            atomPredicates.add(atom -> Stream.of(atomNames)
+            registerAtomPredicate(atom -> Stream.of(atomNames)
                     .anyMatch(atomName -> atomName.equals(atom.getName())));
             return this;
         }
 
         public AtomSelection backboneAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.contains(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
         public AtomSelection sideChainAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.contains(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
         public AtomSelection allAtoms() {
-            atomPredicates.add(atom -> Stream.concat(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(),
+            registerAtomPredicate(atom -> Stream.concat(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.stream(),
                     AminoAcidFamily.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.stream()).collect(Collectors.toList()).contains(atom.getName()));
             return this;
         }
 
         public AtomSelection alphaCarbonAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME.equals(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection backboneCarbonAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.C_ATOM_NAME.equals(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.C_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection backboneNitrogenAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.N_ATOM_NAME.equals(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.N_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection backboneOxygenAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.O_ATOM_NAME.equals(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.O_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection betaCarbonAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME.equals(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME.equals(atom.getName()));
             return this;
         }
 
         public AtomSelection hydrogenAtoms() {
-            atomPredicates.add(atom -> AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
+            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
@@ -202,25 +241,29 @@ public class Selection {
         }
 
         public AtomSelection nonHydrogenAtoms() {
-            atomPredicates.add(atom -> !AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
+            registerAtomPredicate(atom -> !AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()));
             return this;
         }
 
         public AtomSelection pdbSerial(int... pdbSerials) {
-            atomPredicates.add(atom -> IntStream.of(pdbSerials).boxed().collect(Collectors.toList())
+            registerAtomPredicate(atom -> IntStream.of(pdbSerials).boxed().collect(Collectors.toList())
                     .contains(atom.getPdbSerial()));
             return this;
         }
 
         public AtomSelection pdbSerial(Range... pdbSerialRanges) {
-            atomPredicates.add(atom -> Stream.of(pdbSerialRanges)
+            registerAtomPredicate(atom -> Stream.of(pdbSerialRanges)
                     .anyMatch(range -> range.getLeft() >= atom.getPdbSerial() && range.getRight() <= atom.getPdbSerial()));
             return this;
         }
 
-        public AtomSelection distance(Atom referenceAtom, double cutoff) {
-            atomPredicates.add(atom -> LinearAlgebra3D.distanceFast(referenceAtom.getCoordinates(),
-                    atom.getCoordinates()) < cutoff * cutoff);
+        public AtomSelection distance(Atom referenceAtom, double distanceCutoff) {
+            return distance(referenceAtom.getCoordinates(), distanceCutoff);
+        }
+
+        public AtomSelection distance(double[] coordinates, double distanceCutoff) {
+            registerAtomPredicate(atom -> LinearAlgebra3D.distanceFast(coordinates,
+                    atom.getCoordinates()) < distanceCutoff * distanceCutoff);
             return this;
         }
     }
@@ -229,10 +272,35 @@ public class Selection {
         GroupSelection(GroupContainer groupContainer) {
             super(groupContainer);
             this.groupContainer = groupContainer;
+            this.parentContainerName = groupContainer.getIdentifier();
         }
 
+
+        public AtomSelection atomSelection() {
+            return this;
+        }
+
+        @Override
         public GroupSelection cloneElements() {
-            cloneRequested = true;
+            super.cloneElements();
+            return this;
+        }
+
+        @Override
+        public GroupSelection nameContainer(String name) {
+            super.nameContainer(name);
+            return this;
+        }
+
+        @Override
+        public GroupSelection negationModeEnter() {
+            super.negationModeEnter();
+            return this;
+        }
+
+        @Override
+        public GroupSelection negationModeLeave() {
+            super.negationModeLeave();
             return this;
         }
 
@@ -256,12 +324,12 @@ public class Selection {
         }
 
         public GroupContainer asGroupContainer() {
-            return asFilteredGroups()
+            GroupContainer container = asFilteredGroups()
                     .collect(StructureCollectors.toGroupContainer());
-        }
 
-        public GroupPairSelection asGroupPairSelection() {
-            return pairsOn(asGroupContainer());
+            inferContainerName(container);
+
+            return container;
         }
 
         public Optional<Group> asOptionalGroup() {
@@ -274,45 +342,66 @@ public class Selection {
                     .orElseThrow(NoSuchElementException::new);
         }
 
+        private void registerGroupPredicate(Predicate<Group> groupPredicate) {
+            groupPredicates.add(negationMode ? groupPredicate.negate() : groupPredicate);
+        }
+
         public GroupSelection aminoAcids() {
-            groupPredicates.add(Group::isAminoAcid);
+            registerGroupPredicate(Group::isAminoAcid);
             return this;
         }
 
         public GroupSelection aminoAcids(AminoAcidFamily... aminoAcids) {
             // pre-filter for group type amino acid
             aminoAcids();
-            groupPredicates.add(group -> Stream.of(aminoAcids)
+            registerGroupPredicate(group -> Stream.of(aminoAcids)
                     .map(AminoAcidFamily::getThreeLetterCode)
                     .anyMatch(threeLetterCode -> threeLetterCode.equals(group.getThreeLetterCode())));
             return this;
         }
 
         public GroupSelection nucleotides() {
-            groupPredicates.add(Group::isNucleotide);
+            registerGroupPredicate(Group::isNucleotide);
             return this;
         }
 
         public GroupSelection hetatms() {
-            groupPredicates.add(Group::isLigand);
+            registerGroupPredicate(Group::isLigand);
+            return this;
+        }
+
+        public GroupSelection water() {
+            registerGroupPredicate(group -> group.getThreeLetterCode().equals("HOH"));
             return this;
         }
 
         public GroupSelection groupName(String... groupNames) {
-            groupPredicates.add(group -> Stream.of(groupNames)
+            registerGroupPredicate(group -> Stream.of(groupNames)
                     .anyMatch(groupName -> groupName.equals(group.getThreeLetterCode())));
             return this;
         }
 
         public GroupSelection residueNumber(int... residueNumbers) {
-            groupPredicates.add(group -> IntStream.of(residueNumbers).boxed().collect(Collectors.toList())
+            registerGroupPredicate(group -> IntStream.of(residueNumbers).boxed().collect(Collectors.toList())
                     .contains(group.getResidueNumber()));
             return this;
         }
 
         public GroupSelection residueNumber(Range... residueNumberRanges) {
-            groupPredicates.add(group -> Stream.of(residueNumberRanges)
+            registerGroupPredicate(group -> Stream.of(residueNumberRanges)
                     .anyMatch(range -> range.getLeft() >= group.getResidueNumber() && range.getRight() <= group.getResidueNumber()));
+            return this;
+        }
+
+        @Override
+        public GroupSelection distance(Atom referenceAtom, double distanceCutoff) {
+            return distance(referenceAtom.getCoordinates(), distanceCutoff);
+        }
+
+        @Override
+        public GroupSelection distance(double[] coordinates, double distanceCutoff) {
+            registerGroupPredicate(group -> group.atoms()
+                    .anyMatch(atom -> LinearAlgebra3D.distanceFast(coordinates, atom.getCoordinates()) < distanceCutoff * distanceCutoff));
             return this;
         }
     }
@@ -321,12 +410,37 @@ public class Selection {
         ChainSelection(ChainContainer chainContainer) {
             super(chainContainer);
             this.chainContainer = chainContainer;
+            this.parentContainerName = chainContainer.getIdentifier();
         }
 
-        public ChainSelection cloneElements() {
-            cloneRequested = true;
+        public GroupSelection groupSelection() {
             return this;
         }
+
+        @Override
+        public ChainSelection cloneElements() {
+            super.cloneElements();
+            return this;
+        }
+
+        @Override
+        public ChainSelection nameContainer(String name) {
+            super.nameContainer(name);
+            return this;
+        }
+
+        @Override
+        public ChainSelection negationModeEnter() {
+            super.negationModeEnter();
+            return this;
+        }
+
+        @Override
+        public ChainSelection negationModeLeave() {
+            super.negationModeLeave();
+            return this;
+        }
+
 
         public Stream<Chain> asFilteredChains() {
             Stream<Chain> filteredChainStream = chainContainer.chains()
@@ -340,8 +454,12 @@ public class Selection {
         }
 
         public ChainContainer asChainContainer() {
-            return asFilteredChains()
+            ChainContainer container = asFilteredChains()
                     .collect(StructureCollectors.toChainContainer());
+
+            inferContainerName(container);
+
+            return container;
         }
 
         public Optional<Chain> asOptionalChain() {
@@ -354,63 +472,14 @@ public class Selection {
                     .orElseThrow(NoSuchElementException::new);
         }
 
+        private void registerChainPredicate(Predicate<Chain> chainPredicate) {
+            chainPredicates.add(negationMode ? chainPredicate.negate() : chainPredicate);
+        }
+
         public ChainSelection chainName(String... chainNames) {
-            chainPredicates.add(chain -> Stream.of(chainNames)
+            registerChainPredicate(chain -> Stream.of(chainNames)
                     .anyMatch(chainName -> chainName.equals(chain.getChainId())));
             return this;
-        }
-    }
-
-    public static class AtomPairSelection {
-        private List<Pair<Atom, Atom>> atomPairs;
-        private List<Predicate<Pair<Atom, Atom>>> atomPairPredicates;
-
-        AtomPairSelection(AtomContainer atomContainer) {
-            this.atomPairs = Combinatorics.uniquePairsOf(atomContainer.getAtoms())
-                    .collect(Collectors.toList());
-            this.atomPairPredicates = new ArrayList<>();
-        }
-
-        public AtomPairSelection distance(double distanceThreshold) {
-            atomPairPredicates.add(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(),
-                    pair.getRight().getCoordinates()) < distanceThreshold * distanceThreshold);
-            return this;
-        }
-
-        public Stream<Pair<Atom, Atom>> asFilteredAtomPairs() {
-            return atomPairs.stream()
-                    .filter(Selection.compose(atomPairPredicates));
-        }
-    }
-
-    public static class GroupPairSelection extends AtomPairSelection {
-        private List<Pair<Group, Group>> groupPairs;
-        private List<Predicate<Pair<Group, Group>>> groupPairPredicates;
-
-        GroupPairSelection(GroupContainer groupContainer) {
-            super(groupContainer);
-            this.groupPairs = Combinatorics.uniquePairsOf(groupContainer.getGroups())
-                    .collect(Collectors.toList());
-            this.groupPairPredicates = new ArrayList<>();
-        }
-
-        public GroupPairSelection alphaCarbonDistance(double distanceThreshold) {
-            return distance(distanceThreshold, new AlphaCarbonRepresentationScheme());
-        }
-
-        public GroupPairSelection betaCarbonDistance(double distanceThreshold) {
-            return distance(distanceThreshold, new BetaCarbonRepresentationScheme());
-        }
-
-        public GroupPairSelection distance(double distanceThreshold, RepresentationScheme representationScheme) {
-            groupPairPredicates.add(pair -> LinearAlgebra3D.distanceFast(representationScheme.determineRepresentingAtom(pair.getLeft()).getCoordinates(),
-                    representationScheme.determineRepresentingAtom(pair.getRight()).getCoordinates()) < distanceThreshold * distanceThreshold);
-            return this;
-        }
-
-        public Stream<Pair<Group, Group>> asFilteredGroupPairs() {
-            return groupPairs.stream()
-                    .filter(Selection.compose(groupPairPredicates));
         }
     }
 }

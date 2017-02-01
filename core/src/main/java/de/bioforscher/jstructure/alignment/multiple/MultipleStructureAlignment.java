@@ -32,7 +32,7 @@ public class MultipleStructureAlignment {
      * The minimal support for a voted originalCentroid which should occur in at least this many containers, otherwise the
      * extension of the alignment ceases.
      */
-    private static final double MINIMAL_SUPPORT = 0.2;
+    private static final double MINIMAL_SUPPORT = 0.8;
     private int iteration = 0;
     private int numberOfContainers;
     /*
@@ -86,6 +86,9 @@ public class MultipleStructureAlignment {
 
         // start iterative loop
         extendFragments();
+
+        // move previously extending containers to finished category
+        containersExtending.entrySet().forEach(entry -> containersFinished.put(entry.getKey(), entry.getValue()));
 
         // align everything with respect to the smallest container
         int minimalSize = containersFinished.entrySet().stream()
@@ -197,9 +200,12 @@ public class MultipleStructureAlignment {
         int maximalClusterSize = containersExtending.size();
         double currentSupport = maximalClusterSize / (double) numberOfContainers;
 
-        logger.debug("iteration: {}, current support: {}",
+        logger.debug("iteration: {}, current support: {}, containers: {} + {} = {}",
                 iteration,
-                currentSupport);
+                currentSupport,
+                containersExtending.size(),
+                containersFinished.size(),
+                containersExtending.size() + containersFinished.size());
 
         if(currentSupport > MINIMAL_SUPPORT) {
             extendFragments();

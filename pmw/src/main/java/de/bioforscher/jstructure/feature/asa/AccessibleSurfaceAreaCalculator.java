@@ -40,16 +40,16 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
-    public static final int DEFAULT_N_SPHERE_POINTS = 960;
-    public static final double DEFAULT_PROBE_SIZE = 1.4;
+    private static final int DEFAULT_N_SPHERE_POINTS = 960;
+    private static final double DEFAULT_PROBE_SIZE = 1.4;
     // Chothia's amino acid atoms vdw radii
-    public static final double TRIGONAL_CARBON_VDW = 1.76;
-    public static final double TETRAHEDRAL_CARBON_VDW = 1.87;
-    public static final double TRIGONAL_NITROGEN_VDW = 1.65;
-    public static final double TETRAHEDRAL_NITROGEN_VDW = 1.50;
+    private static final double TRIGONAL_CARBON_VDW = 1.76;
+    private static final double TETRAHEDRAL_CARBON_VDW = 1.87;
+    private static final double TRIGONAL_NITROGEN_VDW = 1.65;
+    private static final double TETRAHEDRAL_NITROGEN_VDW = 1.50;
     // values diverge from the vdw in enum Element
-    public static final double SULFUR_VDW = 1.85;
-    public static final double OXYGEN_VDW = 1.40;
+    private static final double SULFUR_VDW = 1.85;
+    private static final double OXYGEN_VDW = 1.40;
 
     public static final String ATOM_RADIUS = "ATOM_RADIUS";
     public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
@@ -108,7 +108,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         cons = 4.0 * Math.PI / numberOfSpherePoints;
 
         residueContainer.groups()
-                .parallel()
+//                .parallel()
                 .forEach(this::assignSingleAsa);
     }
 
@@ -181,14 +181,15 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
 
     /**
      * Returns list of atoms within probe distance to a given atom.
-     * @param atom the atom whose neighbor shall be assessed
+     * @param referenceAtom the atom whose neighbor shall be assessed
      * @return all neighbored atoms
      */
-    private List<Atom> findNeighbors(Atom atom) {
-        final double cutoff = probeSize + probeSize + atom.getFeatureAsDouble(ATOM_RADIUS);
-        return Selection.on(nonHydrogenAtoms)
-                .distance(atom, cutoff)
-                .asFilteredAtoms()
+    private List<Atom> findNeighbors(Atom referenceAtom) {
+        final double cutoff = probeSize + probeSize + referenceAtom.getFeatureAsDouble(ATOM_RADIUS);
+
+        return nonHydrogenAtoms.atoms()
+                .filter(atom -> !atom.equals(referenceAtom))
+                .filter(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), referenceAtom.getCoordinates()) < cutoff + atom.getFeatureAsDouble(ATOM_RADIUS))
                 .collect(Collectors.toList());
     }
 
