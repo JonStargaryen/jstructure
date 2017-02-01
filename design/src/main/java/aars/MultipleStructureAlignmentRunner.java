@@ -1,14 +1,18 @@
-package alignment;
+package aars;
 
 import de.bioforscher.jstructure.alignment.multiple.MultipleStructureAlignment;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,34 +26,47 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Run the binding site alignment.
- * Created by bittrich on 1/25/17.
+ * Run MSA on aars data set.
+ * Created by bittrich on 2/1/17.
  */
-public class MultipleStructureAlignmentFunctionalTest {
-    private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignmentFunctionalTest.class);
+public class MultipleStructureAlignmentRunner {
+    public static void main(String[] args) throws IOException {
+        new MultipleStructureAlignmentRunner().performMultipleStructureAlignment();
+    }
+
+    private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignmentRunner.class);
 
     private static final String homePath = System.getProperty("user.home");
     private static final String basePath = homePath + "/git/aars_analysis/data/";
+    private static final AbstractFeatureProvider asaCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA);
+    private static final double ASA_CUTOFF = 0.16; // 10.1002/prot.340200303/epdf
 
-    @Test
-    public void shouldPerformMultipleStructureAlignment() throws IOException {
+    private void performMultipleStructureAlignment() throws IOException {
         int arginine1 = 884;
         int arginine2 = 1765;
 
         logger.info("loading structures...");
         List<GroupContainer> chains = Files.lines(Paths.get(basePath + "geometry/argtweezer_geometry.tsv"))
+                .parallel()
                 .filter(line -> !line.startsWith("id"))
                 .map(line -> line.split("\t"))
                 .map(split -> split[0])
                 .map(id -> {
-                    GroupContainer container = Selection.on(ProteinParser.parsePDBFile(basePath + "msa/C2/renumbered_structures/" + id.split("_")[0].toLowerCase() + "_renum.pdb"))
+                    logger.info("loading, parsing and computing asa for {}", id);
+
+                    Protein protein = ProteinParser.parsePDBFile(basePath + "msa/C2/renumbered_structures/" + id.split("_")[0].toLowerCase() + "_renum.pdb");
+
+                    Protein container = (Protein) Selection.on(protein)
                             .chainName(id.split("_")[1])
-                            .asGroupContainer();
+                            .asChainContainer();
                     container.setIdentifier(id);
+
+                    asaCalculator.process(container);
+
                     return container;
                 })
                 .collect(Collectors.toList());
-        
+
         MultipleStructureAlignment multipleStructureAlignment = new MultipleStructureAlignment();
         multipleStructureAlignment.align(chains, arginine1, arginine2);
         Map<GroupContainer, GroupContainer> alignedContainers = multipleStructureAlignment.getAlignedContainerMap();
@@ -121,6 +138,8 @@ public class MultipleStructureAlignmentFunctionalTest {
                     .aminoAcids()
                     .distance(centroid, bindingSiteExtension)
                     .asGroupContainer();
+
+            surroundingGroups.getGroups().removeIf(group -> group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea() < ASA_CUTOFF);
 
             try {
                 String id = chain.getIdentifier();

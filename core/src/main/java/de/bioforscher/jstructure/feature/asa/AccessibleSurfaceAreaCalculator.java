@@ -108,7 +108,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         cons = 4.0 * Math.PI / numberOfSpherePoints;
 
         residueContainer.groups()
-//                .parallel()
+                .parallel()
                 .forEach(this::assignSingleAsa);
     }
 
@@ -170,12 +170,11 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
                         return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
                     default:
                         //TODO this is not optimal
-                        logger.warn("unknown radius for atom of residue  {}", atom.getParentGroup());
                         //TODO what value to return?
                         return TETRAHEDRAL_CARBON_VDW;
                 }
             default:
-                throw new IllegalArgumentException("unknown case for atom: " + atom);
+                return atom.getElement().getVDWRadius();
         }
     }
 

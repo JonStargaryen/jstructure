@@ -66,6 +66,5 @@
     <modules>
         <module>../core</module>
         <module>../design</module>
-        <module>../pmw</module>
     </modules>
 </project>

@@ -12,35 +12,40 @@ import java.util.stream.Stream;
 
 /**
  * Enumerates all 20 canonical amino acids and keeps track of the present atom names for each amino acid.
+ * max-ASA values from: http://dx.doi.org/10.1371/journal.pone.0080635
  * Created by S on 05.01.2017.
  */
 public enum AminoAcidFamily implements AtomicFamily {
-    ALANINE("ALA", "A", new String[] { "CB" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    ARGININE("ARG", "R", new String[] { "CB", "CG", "CD", "NE", "CZ", "NH1", "NH2" }, AminoAcidFamily.GutteridgeGrouping.GUANIDINIUM, AminoAcidFamily.ANVILGrouping.POLAR),
-    ASPARAGINE("ASN", "N", new String[] { "CB", "CG", "OD1", "ND2" }, AminoAcidFamily.GutteridgeGrouping.AMIDE, AminoAcidFamily.ANVILGrouping.POLAR),
-    ASPARTIC_ACID("ASP", "D", new String[] { "CB", "CG", "OD1", "OD2" }, AminoAcidFamily.GutteridgeGrouping.CARBOXYLATE, AminoAcidFamily.ANVILGrouping.POLAR),
-    CYSTEINE("CYS", "C", new String[] { "CB", "SG" }, AminoAcidFamily.GutteridgeGrouping.THIOL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    GLUTAMINE("GLN", "Q", new String[] { "CB", "CG", "CD", "OE1", "NE2" }, AminoAcidFamily.GutteridgeGrouping.AMIDE, AminoAcidFamily.ANVILGrouping.POLAR),
-    GLUTAMIC_ACID("GLU", "E", new String[] { "CB", "CG", "CD", "OE1", "OE2" }, AminoAcidFamily.GutteridgeGrouping.CARBOXYLATE, AminoAcidFamily.ANVILGrouping.POLAR),
-    GLYCINE("GLY", "G", new String[] {}, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    HISTIDINE("HIS", "H", new String[] { "CB", "CG", "ND1", "CD2", "CE1", "NE2" }, AminoAcidFamily.GutteridgeGrouping.IMIDAZOLE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    ISOLEUCINE("ILE", "I", new String[] { "CB", "CG1", "CG2", "CD1" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    LEUCINE("LEU", "L", new String[] { "CB", "CG", "CD1", "CD2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    LYSINE("LYS", "K", new String[] { "CB", "CG", "CD", "CE", "NZ" }, AminoAcidFamily.GutteridgeGrouping.AMINO, AminoAcidFamily.ANVILGrouping.POLAR),
-    METHIONINE("MET", "M", new String[] { "CB", "CG", "SD", "CE" }, AminoAcidFamily.GutteridgeGrouping.THIOL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    PHENYLALANINE("PHE", "F", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    PROLINE("PRO", "P", new String[] { "CB", "CG", "CD" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.POLAR),
-    SERINE("SER", "S", new String[] { "CB", "OG" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.POLAR),
-    TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.POLAR),
-    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE),
-    UNKNOWN("UNK", "X", new String[] {}, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.UNKNOWN);
+    ALANINE("ALA", "A", new String[] { "CB" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 121.0),
+    ARGININE("ARG", "R", new String[] { "CB", "CG", "CD", "NE", "CZ", "NH1", "NH2" }, AminoAcidFamily.GutteridgeGrouping.GUANIDINIUM, AminoAcidFamily.ANVILGrouping.POLAR, 265.0),
+    ASPARAGINE("ASN", "N", new String[] { "CB", "CG", "OD1", "ND2" }, AminoAcidFamily.GutteridgeGrouping.AMIDE, AminoAcidFamily.ANVILGrouping.POLAR, 187.0),
+    ASPARTIC_ACID("ASP", "D", new String[] { "CB", "CG", "OD1", "OD2" }, AminoAcidFamily.GutteridgeGrouping.CARBOXYLATE, AminoAcidFamily.ANVILGrouping.POLAR, 187.0),
+    CYSTEINE("CYS", "C", new String[] { "CB", "SG" }, AminoAcidFamily.GutteridgeGrouping.THIOL, AminoAcidFamily.ANVILGrouping.MEMBRANE, 148.0),
+    GLUTAMINE("GLN", "Q", new String[] { "CB", "CG", "CD", "OE1", "NE2" }, AminoAcidFamily.GutteridgeGrouping.AMIDE, AminoAcidFamily.ANVILGrouping.POLAR, 214.0),
+    GLUTAMIC_ACID("GLU", "E", new String[] { "CB", "CG", "CD", "OE1", "OE2" }, AminoAcidFamily.GutteridgeGrouping.CARBOXYLATE, AminoAcidFamily.ANVILGrouping.POLAR, 214.0),
+    GLYCINE("GLY", "G", new String[] {}, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 97.0),
+    HISTIDINE("HIS", "H", new String[] { "CB", "CG", "ND1", "CD2", "CE1", "NE2" }, AminoAcidFamily.GutteridgeGrouping.IMIDAZOLE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 216.0),
+    ISOLEUCINE("ILE", "I", new String[] { "CB", "CG1", "CG2", "CD1" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 195.0),
+    LEUCINE("LEU", "L", new String[] { "CB", "CG", "CD1", "CD2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 191.0),
+    LYSINE("LYS", "K", new String[] { "CB", "CG", "CD", "CE", "NZ" }, AminoAcidFamily.GutteridgeGrouping.AMINO, AminoAcidFamily.ANVILGrouping.POLAR, 230.0),
+    METHIONINE("MET", "M", new String[] { "CB", "CG", "SD", "CE" }, AminoAcidFamily.GutteridgeGrouping.THIOL, AminoAcidFamily.ANVILGrouping.MEMBRANE, 203.0),
+    PHENYLALANINE("PHE", "F", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 228.0),
+    PROLINE("PRO", "P", new String[] { "CB", "CG", "CD" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.POLAR, 154.0),
+    SERINE("SER", "S", new String[] { "CB", "OG" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.MEMBRANE, 143.0),
+    THREONINE("THR", "T", new String[] { "CB", "OG1", "CG2" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.MEMBRANE, 163.0),
+    TRYPTOPHAN("TRP", "W", new String[] { "CB", "CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.POLAR, 264.0),
+    TYROSINE("TYR", "Y", new String[] { "CB", "CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH" }, AminoAcidFamily.GutteridgeGrouping.HYDROXYL, AminoAcidFamily.ANVILGrouping.POLAR, 255.0),
+    VALINE("VAL", "V", new String[] { "CB", "CG1", "CG2" }, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.MEMBRANE, 165.0),
+    UNKNOWN("UNK", "X", new String[] {}, AminoAcidFamily.GutteridgeGrouping.NONE, AminoAcidFamily.ANVILGrouping.UNKNOWN, 121.0);
 
     static Logger logger = LoggerFactory.getLogger(AminoAcidFamily.class);
 
     public boolean isStandardAminoAcid() {
         return !oneLetterCode.equals(UNKNOWN.getOneLetterCode());
+    }
+
+    public double getMaximalAccessibleSurfaceArea() {
+        return maximalAccessibleSurfaceArea;
     }
 
     /**
@@ -126,15 +131,17 @@ public enum AminoAcidFamily implements AtomicFamily {
     private final AminoAcidFamily.GutteridgeGrouping gutteridgeGrouping;
     private final AminoAcidFamily.ANVILGrouping anvilGrouping;
     private final AminoAcidFamily.AtomNameComparator atomNameComparator;
+    private final double maximalAccessibleSurfaceArea;
 
     AminoAcidFamily(String threeLetterCode, String oneLetterCode, String[] sideChainAtomNames,
-              AminoAcidFamily.GutteridgeGrouping gutteridgeGrouping, AminoAcidFamily.ANVILGrouping anvilGrouping) {
+              AminoAcidFamily.GutteridgeGrouping gutteridgeGrouping, AminoAcidFamily.ANVILGrouping anvilGrouping, double maximalAccessibleSurfaceArea) {
         this.oneLetterCode = oneLetterCode;
         this.threeLetterCode = threeLetterCode;
         this.sideChainAtomNames = Arrays.asList(sideChainAtomNames);
         this.atomNameComparator = new AminoAcidFamily.AtomNameComparator(allAtomNames().collect(Collectors.toList()));
         this.gutteridgeGrouping = gutteridgeGrouping;
         this.anvilGrouping = anvilGrouping;
+        this.maximalAccessibleSurfaceArea = maximalAccessibleSurfaceArea;
     }
 
     /**

@@ -28,18 +28,6 @@ a stream-based API to work with protein structures in *PDB* format.
  
  Each of these classes implements `FeatureContainer`, so arbitrary data can be
  attached to any one of them.
- 
-### The pmw Module
-
-Examples of extending the core API are given in the `pmw` (previously protein modeling 
-workbench, no a collection of classes extending the core-functionality of the library) module 
-which contains algorithms to predict or annotate certain features of a `Protein` such as 
-the accessible surface area, sequence motifs, secondary structure elements, the 
-of membrane proteins. Basically, any information that can be computed based on 
-a protein sequence or structure. Furthermore, structure reconstruction algorithms
-are provided which can generate an all-atom representation of a `Protein` merely 
-by providing distance and constraints between particular amino acid positions in
-a sequence.
 
 ### Feature Providers
 
@@ -77,7 +65,7 @@ them by the features they require and provide.
         
         
         // compute the ASA by a suitable provider
-        FeatureProviderRegistry.getInstance().resolve("ACCESSIBLE_SURFACE_AREA").process(protein);
+        FeatureProviderRegistry.resolve("ACCESSIBLE_SURFACE_AREA").process(protein);
         
         // print values
         protein.aminoAcids()
