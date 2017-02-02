@@ -12,6 +12,10 @@ import java.util.stream.Stream;
  * Created by S on 28.09.2016.
  */
 public interface AtomContainer extends StructureContainer {
+    /**
+     * Never manipulate the returned collection as it is not guaranteed the actually modify the internal list(s).
+     * @return all associated atoms
+     */
     List<Atom> getAtoms();
 
     /**

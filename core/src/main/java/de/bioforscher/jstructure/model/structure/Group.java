@@ -54,6 +54,8 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
         // reference parent
         this.parentChain = group.parentChain;
         this.groupInformation = group.groupInformation;
+        // set reference to feature map
+        setFeatureMap(group.getFeatureMap());
     }
 
     public GroupInformation getGroupInformation() {

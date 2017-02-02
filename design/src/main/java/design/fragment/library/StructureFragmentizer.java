@@ -59,7 +59,7 @@ public class StructureFragmentizer {
     }
 
     private List<GroupContainer> fragmentize(Protein protein) {
-        return protein.getChains().stream()
+        return protein.chains()
                 .flatMap(this::fragmentize)
                 .filter(container -> ProteinSource.determineTopologyGroup(container).equals(topology))
                 .collect(Collectors.toList());

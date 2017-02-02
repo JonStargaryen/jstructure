@@ -212,6 +212,10 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
         this.coordinates = coordinates;
     }
 
+    public void setBfactor(float bfactor) {
+        this.bfactor = bfactor;
+    }
+
     public boolean isVirtual() {
         return virtual;
     }

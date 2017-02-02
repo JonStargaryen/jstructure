@@ -168,9 +168,11 @@ public class ProteinParser {
 
         if(line.startsWith(TER_PREFIX)) {
             // mark chain as terminated - everything parsed from now on, associated to this chain will be an HETATM
-            terminatedChains.add(Selection.on(protein)
-                    .chainName(line.substring(21, 22))
-                    .asChain());
+            Chain chainToTerminate = Selection.on(protein)
+                    .chainName(line.length() > 22 ? line.substring(21, 22) : "?")
+                    .asOptionalChain()
+                    .orElse(currentChain);
+            terminatedChains.add(chainToTerminate);
         }
 
         // parsing atom record - information we need is marked with an '*' - indirectly needed information (chain/residue) marked with an '#'

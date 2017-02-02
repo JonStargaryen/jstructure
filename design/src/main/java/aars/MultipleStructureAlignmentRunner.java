@@ -7,7 +7,6 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
@@ -39,7 +38,8 @@ public class MultipleStructureAlignmentRunner {
     private static final String homePath = System.getProperty("user.home");
     private static final String basePath = homePath + "/git/aars_analysis/data/";
     private static final AbstractFeatureProvider asaCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA);
-    private static final double ASA_CUTOFF = 0.16; // 10.1002/prot.340200303/epdf
+//    private static final double ASA_CUTOFF = 0.16; // 10.1002/prot.340200303/epdf
+    private static final String RELATIVE_ACCESSIBLE_SURFACE_AREA = "RELATIVE_ACCESSIBLE_SURFACE_AREA";
 
     private void performMultipleStructureAlignment() throws IOException {
         int arginine1 = 884;
@@ -47,7 +47,6 @@ public class MultipleStructureAlignmentRunner {
 
         logger.info("loading structures...");
         List<GroupContainer> chains = Files.lines(Paths.get(basePath + "geometry/argtweezer_geometry.tsv"))
-                .limit(10)
                 .filter(line -> !line.startsWith("id"))
                 .map(line -> line.split("\t"))
                 .map(split -> split[0])
@@ -62,6 +61,13 @@ public class MultipleStructureAlignmentRunner {
                     container.setIdentifier(id);
 
                     asaCalculator.process(container);
+
+                    // assign each rasa value as bfactor
+                    container.aminoAcids().forEach(group -> {
+                        double rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
+                        group.setFeature(RELATIVE_ACCESSIBLE_SURFACE_AREA, rasa);
+                        group.atoms().forEach(atom -> atom.setBfactor((float) rasa));
+                    });
 
                     return container;
                 })
@@ -79,8 +85,10 @@ public class MultipleStructureAlignmentRunner {
 
                 String aa = determineType(alignedFullStructure);
 
-                Files.write(Paths.get(homePath + "/multiple-alignment/core/" + aa + "-" + numberOfAlignedGroups + "-" + alignedCore.getIdentifier() + ".pdb"), alignedCore.composePDBRecord().getBytes());
-                Files.write(Paths.get(homePath + "/multiple-alignment/full/" + aa + "-" + alignedFullStructure.getIdentifier() + ".pdb"), alignedFullStructure.composePDBRecord().getBytes());
+                Files.createDirectories(Paths.get(homePath + "/multiple-alignment/core/"));
+                Files.write(Paths.get(homePath + "/multiple-alignment/core/" + aa + "_" + numberOfAlignedGroups + "-" + alignedCore.getIdentifier() + ".pdb"), alignedCore.composePDBRecord().getBytes());
+                Files.createDirectories(Paths.get(homePath + "/multiple-alignment/full/"));
+                Files.write(Paths.get(homePath + "/multiple-alignment/full/" + aa + "_" + alignedFullStructure.getIdentifier() + ".pdb"), alignedFullStructure.composePDBRecord().getBytes());
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
@@ -96,6 +104,7 @@ public class MultipleStructureAlignmentRunner {
                         .negationModeEnter()
                         .water()
                         .pdbSerial(6373, 6375, 6378, 6379, 6381)
+                        .negationModeLeave()
                         .element(Element.N)
                         .asFilteredAtoms())
                 .map(Atom::getCoordinates)
@@ -117,9 +126,17 @@ public class MultipleStructureAlignmentRunner {
         logger.info("AA-centroid: " + Arrays.toString(aaCentroid));
 
         System.out.println("around AMP");
-        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp/");
+        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp/", 0);
+        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-16/",  0.16);
+//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-36/", 0.36);
+//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-56/", 0.56);
+//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-76/", 0.76);
         System.out.println("around AA");
-        groupsAround(chains, aaCentroid, homePath + "/multiple-alignment/aa/");
+        groupsAround(chains, aaCentroid, homePath + "/multiple-alignment/aa/",  0);
+        groupsAround(chains, aaCentroid, homePath + "/multiple-alignment/aa-rasa-16/", 0.16);
+//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/aa-rasa-36/", 0.36);
+//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/aa-rasa-56/", 0.56);
+//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/aa-rasa-76/", 0.76);
     }
 
     private String determineType(GroupContainer container) throws IOException {
@@ -130,26 +147,25 @@ public class MultipleStructureAlignmentRunner {
                 .split(",")[1];
     }
 
-    private void groupsAround(List<GroupContainer> chains, double[] centroid, String path) {
+    private void groupsAround(List<GroupContainer> chains, double[] centroid, String path, double minimalRasa) {
         final double bindingSiteExtension = 10.0;
 
         chains.forEach(chain -> {
             GroupContainer surroundingGroups = Selection.on(chain)
                     .aminoAcids()
                     .distance(centroid, bindingSiteExtension)
+                    .cloneElements()
                     .asGroupContainer();
 
-            surroundingGroups.getGroups().removeIf(group -> group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea() < ASA_CUTOFF);
+            if(minimalRasa > 0.0) {
+                surroundingGroups.getGroups().removeIf(group -> group.getFeatureAsDouble(RELATIVE_ACCESSIBLE_SURFACE_AREA) < minimalRasa);
+            }
 
             try {
                 String id = chain.getIdentifier();
                 String aa = determineType(surroundingGroups);
-
-                System.out.println(id + " : " + aa + " : " + surroundingGroups.groups()
-                        .map(Group::getIdentifier)
-                        .collect(Collectors.joining(", ")));
-
-                Files.write(Paths.get(path + aa + "-" + id + ".pdb"), surroundingGroups.composePDBRecord().getBytes());
+                Files.createDirectories(Paths.get(path));
+                Files.write(Paths.get(path + aa + "_" + id + ".pdb"), surroundingGroups.composePDBRecord().getBytes());
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }

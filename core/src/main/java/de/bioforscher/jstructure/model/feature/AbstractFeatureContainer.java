@@ -23,4 +23,9 @@ public abstract class AbstractFeatureContainer implements StructureContainer {
     public Map<String, Object> getFeatureMap() {
         return featureMap;
     }
+
+    @Override
+    public void setFeatureMap(Map<String, Object> map) {
+        this.featureMap = map;
+    }
 }

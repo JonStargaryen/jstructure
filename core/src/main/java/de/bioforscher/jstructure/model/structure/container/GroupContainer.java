@@ -14,6 +14,10 @@ import java.util.stream.Stream;
  * Created by S on 30.09.2016.
  */
 public interface GroupContainer extends AtomContainer {
+    /**
+     * Never manipulate the returned collection as it is not guaranteed the actually modify the internal list(s).
+     * @return all associated groups
+     */
     List<Group> getGroups();
 
     /**
@@ -33,12 +37,6 @@ public interface GroupContainer extends AtomContainer {
     }
 
     default String getAminoAcidSequence() {
-        //TODO standardize access to amino acids
-//        return groups()
-//                .filter(Group::isAminoAcid)
-//                .map(Group::getGroupInformation)
-//                .map(GroupInformation::getOneLetterCode)
-//                .collect(Collectors.joining());
         return aminoAcids()
                 .map(Group::getGroupInformation)
                 .map(GroupInformation::getOneLetterCode)

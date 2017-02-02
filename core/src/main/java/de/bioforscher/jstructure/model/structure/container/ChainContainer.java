@@ -11,6 +11,10 @@ import java.util.stream.Stream;
  * Created by S on 30.09.2016.
  */
 public interface ChainContainer extends GroupContainer {
+    /**
+     * Never manipulate the returned collection as it is not guaranteed the actually modify the internal list(s).
+     * @return all associated chains
+     */
     List<Chain> getChains();
 
     /**

@@ -17,6 +17,8 @@ public interface FeatureContainer {
      */
     Map<String, Object> getFeatureMap();
 
+    void setFeatureMap(Map<String, Object> map);
+
     /**
      * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
      * element can be casted.

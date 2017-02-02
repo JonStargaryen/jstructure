@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 /**
  * Performs a multiple structure alignment.
+ * TODO parallelisms
  * Created by bittrich on 1/25/17.
  */
 public class MultipleStructureAlignment {
@@ -61,7 +62,7 @@ public class MultipleStructureAlignment {
         logger.info("reference residues {}", Arrays.toString(residueNumbers));
 
         // move containers to field and extract alignment seed
-        containersExtending = containers.parallelStream()
+        containersExtending = containers.stream()
                 .collect(Collectors.toMap(Function.identity(), container -> {
                     // select seeds
                     List<Group> extractedGroups = Selection.on(container)
@@ -77,7 +78,6 @@ public class MultipleStructureAlignment {
                     // move to separate container - 'remember name'
                     Chain chain = new Chain(extractedGroups);
                     chain.setIdentifier(container.getIdentifier());
-
                     return chain;
                 }));
 
@@ -109,7 +109,7 @@ public class MultipleStructureAlignment {
         alignWithRespectToConsensus(minimalConsensus, containersFinished);
 
         // reassign extracted residues to original containers
-        containersFinished.entrySet().parallelStream().forEach(entry -> {
+        containersFinished.entrySet().stream().forEach(entry -> {
             GroupContainer originalContainer = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             originalContainer.getGroups().addAll(extractedGroups.getGroups());
@@ -130,7 +130,7 @@ public class MultipleStructureAlignment {
     }
 
     private void alignWithRespectToConsensus(GroupContainer consensus, Map<GroupContainer, GroupContainer> containers) {
-        containers.entrySet().parallelStream().forEach(entry -> {
+        containers.entrySet().stream().forEach(entry -> {
             GroupContainer originalGroups = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             // align extracted groups to consensus
@@ -146,16 +146,17 @@ public class MultipleStructureAlignment {
         iteration++;
 
         // determine set of closest groups
-        Map<GroupContainer, List<Group>> closestGroups = containersExtending.entrySet().parallelStream()
+        Map<GroupContainer, List<Group>> closestGroups = containersExtending.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, this::findClosestGroups));
 
-        double[] closestCentroid = LinearAlgebra3D.divide(closestGroups.entrySet().parallelStream()
+        double[] closestCentroid = LinearAlgebra3D.divide(closestGroups.entrySet().stream()
                 .map(Map.Entry::getValue)
                 .map(list -> list.get(0))
                 .map(LinearAlgebraAtom::centroid)
                 .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add), closestGroups.size());
 
-        Map<GroupContainer, Group> selectedGroup = closestGroups.entrySet().parallelStream()
+        // select group closest to centroid
+        Map<GroupContainer, Group> selectedGroup = closestGroups.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
                         .sorted(Comparator.comparingDouble(group -> calculateSquaredDistance(group, closestCentroid)))
                         .findFirst()
@@ -168,16 +169,19 @@ public class MultipleStructureAlignment {
 
             // move selected group from original to extracted groups
             logger.trace("selected and moving group {}", extractedGroup.getIdentifier());
-            Group groupToMove = entry.getValue();
-            originalGroups.getGroups().remove(groupToMove);
-            extractedGroups.getGroups().add(groupToMove);
+            // fix 2/2/17 - .getGroups() points to
+//            originalGroups.getGroups().remove(extractedGroup);
+            //TODO generic removeFromParent-function?
+            extractedGroup.getParentChain().getGroups().remove(extractedGroup);
+            extractedGroups.getGroups().add(extractedGroup);
         });
 
         GroupContainer consensus = composeConsensus(containersExtending);
+        logger.trace("current consensus\n{}", consensus.composePDBRecord());
         List<GroupContainer> containersCeasedExtending = new ArrayList<>();
 
         // align containers with respect to extract groups
-        containersExtending.entrySet().parallelStream().forEach(entry -> {
+        containersExtending.entrySet().stream().forEach(entry -> {
             GroupContainer originalGroups = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             AlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);

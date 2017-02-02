@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
  * Lysozyme and Insulin." JMB (1973) 79:351-371.
  * Lee, B., and Richards, F.M. "The interpretation of Protein Structures: Estimation of
  * Static Accessibility" JMB (1971) 55:379-400</pre>
+ * TODO calculator is a pseudo-service but not stateless
  * @author duarte_j
  */
 @FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ATOM_RADIUS, AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
