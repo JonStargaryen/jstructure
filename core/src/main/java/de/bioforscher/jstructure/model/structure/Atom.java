@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.parser.ProteinParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -245,8 +246,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
             Chain parentChain = parentGroup.getParentChain();
             //TODO check - needed?
             String chainId = parentChain.getChainId() != null ? parentChain.getChainId() : Chain.UNKNOWN_CHAIN.getChainId();
-            //TODO bugged!
-            String record = parentGroup.isLigand() ? "ATOM  " : "ATOM  ";
+            String record = parentGroup.isInTerminatedParentChain() ? ProteinParser.HETATM_PREFIX : ProteinParser.ATOM_PREFIX;
             // format output ...
             String resName = parentGroup.getThreeLetterCode();
             String pdbcode = String.valueOf(parentGroup.getResidueNumber());

@@ -1,6 +1,9 @@
 package parser;
 
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.ParsingException;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.startsWith;
 
 /**
@@ -40,6 +44,7 @@ public class ProteinParserFunctionalTest {
     public void shouldHandleProteinWithNonStandardAminoAcids() {
         Protein protein = ProteinParser.parseProteinById(NON_STANDARD_PDB_ID);
         // ensure that the initial selenomethionine stored as HETATM is correctly parsed
+        System.out.println(protein.getAminoAcidSequence());
         Assert.assertThat(protein.getAminoAcidSequence(), startsWith("M"));
     }
 
@@ -54,6 +59,52 @@ public class ProteinParserFunctionalTest {
     @Test
     public void shouldFetchPdbStructureFromPDB() {
         PDB_IDS.forEach(ProteinParser::parseProteinById);
+    }
+
+    @Test(expected = ParsingException.class)
+    public void shouldFailForInvalidStructure() {
+        parseFilepath("pdb/invalid.pdb");
+    }
+
+    @Test
+    public void shouldAnnotateHetAtmsCorrectlyFor1bs2() {
+        /*
+         * 1bs2 is an aars structure with the amino acid arginine in the binding site (annotated as ATOM record), some
+         * water (annotated as HETATM)
+         */
+        Protein protein1bs2 = ProteinParser.parseProteinById("1bs2");
+
+        List<Group> waters = Selection.on(protein1bs2)
+                .water()
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+
+        waters.forEach(group -> {
+            Assert.assertTrue(group.isLigand());
+            Assert.assertTrue(group.composePDBRecord().startsWith(ProteinParser.HETATM_PREFIX));
+        });
+
+        Group arginineAsLigand = Selection.on(protein1bs2)
+                // in chain A at resNum 900 there is the ARG ligand
+                .residueNumber(900)
+                .asGroup();
+
+        // assert that selection does not return ARG ligand as normal amino acid
+        boolean arginineLigandIsNoAminoAcid = Selection.on(protein1bs2)
+                .aminoAcids()
+                .asFilteredGroups()
+                .noneMatch(group -> group.equals(arginineAsLigand));
+        Assert.assertTrue(arginineLigandIsNoAminoAcid);
+
+        // ensure last amino acid is MET and not the ARG ligand
+        Assert.assertThat(protein1bs2.getAminoAcidSequence(), endsWith("M"));
+
+        List<Group> hetatm1bs2 = Selection.on(protein1bs2)
+                .hetatms()
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+
+        Assert.assertTrue(hetatm1bs2.containsAll(waters) && hetatm1bs2.contains(arginineAsLigand));
     }
 
     /**

@@ -7,8 +7,15 @@ import java.util.stream.Stream;
  * Created by S on 06.01.2017.
  */
 public class GroupInformation {
-    public static final GroupInformation UNKNOWN_AMINO_ACID = builder()
+    public static final GroupInformation UNKNOWN_GROUP = builder()
             .name("UNKNOWN GROUP")
+            .oneLetterCode("X")
+            .threeLetterCode("UNK")
+            .type("NON-POLYMER")
+            .build();
+
+    public static final GroupInformation UNKNOWN_AMINO_ACID = builder()
+            .name("UNKNOWN AMINO ACID")
             .oneLetterCode("X")
             .threeLetterCode("UNK")
             .type("PEPTIDE LINKING")
@@ -69,20 +76,6 @@ public class GroupInformation {
 
     public NucleotideFamily getNucleotideFamily() {
         return NucleotideFamily.valueOfIgnoreCase(threeLetterCode).orElse(NucleotideFamily.UNKNOWN);
-    }
-
-    public boolean isAminoAcid() {
-        //TODO this could fail for single amino acids in a structure which are actually ligands
-        return type.contains("PEPTIDE LINKING") && (!getAminoAcidFamily().equals(AminoAcidFamily.UNKNOWN) || isModified());
-    }
-
-    public boolean isNucleotide() {
-        //TODO this could fail for single nucleotides in a structure which are actually ligands
-        return type.contains("NA LINKING");
-    }
-
-    public boolean isLigand() {
-        return !isAminoAcid() && !isNucleotide();
     }
 
     public boolean isModified() {

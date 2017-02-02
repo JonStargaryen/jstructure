@@ -10,6 +10,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,10 +22,11 @@ public class ProteinParser {
     private final Logger logger = LoggerFactory.getLogger(ProteinParser.class);
     private static final String HEADER_PREFIX = "HEADER";
     private static final String TITLE_PREFIX = "TITLE";
-    private static final String ATOM_PREFIX = "ATOM";
-    private static final String HETATM_PREFIX = "HETATM";
+    public static final String ATOM_PREFIX = "ATOM  ";
+    public static final String HETATM_PREFIX = "HETATM";
     private static final String DEFAULT_PROTEIN_TITLE = "NO DESCRIPTION";
     private static final String END_MODEL_PREFIX = "ENDMDL";
+    private static final String TER_PREFIX = "TER";
     /**
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
@@ -33,8 +36,9 @@ public class ProteinParser {
     private Chain currentChain;
     private Group currentGroup;
     private boolean passedFirstModel;
+    private List<Chain> terminatedChains;
     //TODO move to more mature options
-    public static boolean skipHydrogens = true;
+    private static boolean skipHydrogens = true;
 
     /**
      * Fetches a <tt>PDB</tt> file from the <tt>PDB</tt> based on a <tt>PDB</tt> id.
@@ -109,6 +113,9 @@ public class ProteinParser {
         currentChain = null;
         currentGroup = null;
 
+        // keep track of processed TER records
+        terminatedChains = new ArrayList<>();
+
         // parse file
         try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream)) {
             try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
@@ -159,8 +166,15 @@ public class ProteinParser {
                        .append(line.substring(10, line.length() < 80 ? line.length() : 80).trim());
         }
 
-        // parsing atom record - information we need is marked with an '*' - indirectly needed information (getChain/getResidue) marked with an '#'
-        // some information will inform us about changing getChain/getResidue
+        if(line.startsWith(TER_PREFIX)) {
+            // mark chain as terminated - everything parsed from now on, associated to this chain will be an HETATM
+            terminatedChains.add(Selection.on(protein)
+                    .chainName(line.substring(21, 22))
+                    .asChain());
+        }
+
+        // parsing atom record - information we need is marked with an '*' - indirectly needed information (chain/residue) marked with an '#'
+        // some information will inform us about changing chain/residue
 		/*	COLUMNS        DATA TYPE     FIELD        DEFINITION
 			-------------------------------------------------------------------------------------
 			1 - 6          Record name   "ATOM  "
@@ -183,6 +197,7 @@ public class ProteinParser {
             if(elementString.isEmpty()) {
                 throw new ParsingException("parsing failed for line:" + System.lineSeparator() + line );
             }
+
             Element element = Element.valueOfIgnoreCase(elementString);
             if(skipHydrogens && element.isHydrogen()) {
                 return;
@@ -200,18 +215,18 @@ public class ProteinParser {
                     // chain already present - just an het-group not directly connected
                     currentChain = selectedChain.get();
                 } else {
-                    // getChain changed - create new getChain object and set reference
+                    // chain changed - create new chain object and set reference
                     currentChain = new Chain(chainId);
                     protein.addChain(currentChain);
                 }
             }
 
             if(currentGroup == null || currentGroup.getResidueNumber() != resNum) {
-                // getResidue changed - create new getResidue object and set reference
-
-                // we provide an additional flag on whether this is an ATOM or HETATM record to assist the assignment of
-                // the correct group type
-                currentGroup = new Group(pdbName, resNum);
+                // residue changed - create new group object and set reference
+                currentGroup = new Group(pdbName,
+                        resNum,
+                        CIFParser.parseLigandInformation(pdbName),
+                        terminatedChains.contains(currentChain));
                 currentChain.addGroup(currentGroup);
             }
 
@@ -229,14 +244,14 @@ public class ProteinParser {
                 currentGroup.addAtom(atom);
             } else {
                 //TODO find solution for this - maybe only the atom with the highest occupancy should be kept
-//                logger.info("skipping atoms for {}", atom);
+                logger.debug("skipping atoms for {}", atom);
             }
         }
 
         if(line.startsWith(END_MODEL_PREFIX)) {
             //TODO handling of multiple models
             passedFirstModel = true;
-//            logger.info("skipping models for {}", protein.getName());
+            logger.debug("skipping models for {}", protein.getName());
         }
     }
 }

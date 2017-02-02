@@ -2,8 +2,8 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.parser.CIFParser;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.parser.CIFParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group("UNK", 0);
+    static final Group UNKNOWN_GROUP = new Group("UNK", 0, GroupInformation.UNKNOWN_GROUP, false);
 
     private int residueNumber;
     private List<Atom> atoms;
@@ -27,7 +27,16 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     private Chain parentChain;
     private String identifier;
     private GroupInformation groupInformation;
+    private boolean parentChainIsTermianted;
 
+    public Group(String pdbName, int residueNumber, GroupInformation groupInformation, boolean parentChainIsTerminated) {
+        this.residueNumber = residueNumber;
+        this.atoms = new ArrayList<>();
+        this.groupInformation = groupInformation;
+        this.parentChainIsTermianted = parentChainIsTerminated;
+    }
+
+    @Deprecated
     public Group(String pdbName, int residueNumber) {
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
@@ -61,15 +70,15 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     }
 
     public boolean isAminoAcid() {
-        return groupInformation.isAminoAcid();
+        return !parentChainIsTermianted && groupInformation.getType().contains("PEPTIDE LINKING");
     }
 
     public boolean isNucleotide() {
-        return groupInformation.isNucleotide();
+        return !parentChainIsTermianted && groupInformation.getType().contains("NA LINKING");
     }
 
     public boolean isLigand() {
-        return groupInformation.isLigand();
+        return !isAminoAcid() && !isNucleotide();
     }
 
     public List<Atom> getAtoms() {
@@ -125,5 +134,9 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     @Override
     public String getIdentifier() {
         return identifier == null ? getThreeLetterCode() + "-" + residueNumber : identifier;
+    }
+
+    public boolean isInTerminatedParentChain() {
+        return parentChainIsTermianted;
     }
 }
