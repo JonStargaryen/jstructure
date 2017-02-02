@@ -47,7 +47,7 @@ public class MultipleStructureAlignmentRunner {
 
         logger.info("loading structures...");
         List<GroupContainer> chains = Files.lines(Paths.get(basePath + "geometry/argtweezer_geometry.tsv"))
-                .parallel()
+                .limit(10)
                 .filter(line -> !line.startsWith("id"))
                 .map(line -> line.split("\t"))
                 .map(split -> split[0])

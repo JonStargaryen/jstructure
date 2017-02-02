@@ -67,6 +67,7 @@ public class MultipleStructureAlignment {
                     List<Group> extractedGroups = Selection.on(container)
                             .aminoAcids()
                             .residueNumber(residueNumbers)
+                            .cloneElements()
                             .asFilteredGroups()
                             .collect(Collectors.toList());
 
