@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -17,7 +15,7 @@ import java.util.stream.Collectors;
  * Created by S on 20.01.2017.
  * @author originally written by Florian Heinke
  */
-public class EnergyProfileAligner extends AbstractAlignmentAlgorithm {
+public class EnergyProfileAligner {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileAligner.class);
     private static final int DEFAULT_GAP_COST = -40;
     private final int gapCost;
@@ -50,11 +48,15 @@ public class EnergyProfileAligner extends AbstractAlignmentAlgorithm {
         this.isSemiGlobal = false;
     }
 
-    @Override
-    public AlignmentResult align(AtomContainer reference, AtomContainer query) {
-        List<Integer> referenceEnergyProfile = extractDiscreteEnergyProfile(reference);
-        List<Integer> queryEnergyProfile = extractDiscreteEnergyProfile(query);
+    public double align(AtomContainer reference, AtomContainer query) {
+        return alignInternally(extractDiscreteEnergyProfile(reference), extractDiscreteEnergyProfile(query));
+    }
 
+    public double align(List<Double> reference, List<Double> query) {
+        return alignInternally(extractDiscreteEnergyProfile(reference), extractDiscreteEnergyProfile(query));
+    }
+
+    private double alignInternally(List<Integer> referenceEnergyProfile, List<Integer> queryEnergyProfile) {
         if(referenceEnergyProfile.size() > queryEnergyProfile.size()) {
             ei = referenceEnergyProfile;
             ej = queryEnergyProfile;
@@ -70,9 +72,7 @@ public class EnergyProfileAligner extends AbstractAlignmentAlgorithm {
         scoreReal = calculateAlignment();
 
         // permutate alignment to obtain significance score
-        double distanceScore = calculateDistanceScore();
-
-        return new AlignmentResult(reference, query, null, distanceScore, null, null);
+        return calculateDistanceScore();
     }
 
     private double calculateDistanceScore() {
@@ -210,16 +210,19 @@ public class EnergyProfileAligner extends AbstractAlignmentAlgorithm {
      * @return a list of all discretized energy values
      */
     private List<Integer> extractDiscreteEnergyProfile(AtomContainer container) {
-        return container.atoms()
+        return extractDiscreteEnergyProfile(container.atoms()
                 // map to group level - will still collect 'dangling' atoms into a group
                 .map(Atom::getParentGroup)
                 .distinct()
                 // ensure we are only dealing with amino acids
                 .filter(Group::isAminoAcid)
-                .mapToDouble(this::getSolvationEnergy)
-                .mapToInt(this::discretize)
-                //TODO is this really faster than working on POJO-stream all the way?
-                .boxed()
+                .map(this::getSolvationEnergy)
+                .collect(Collectors.toList()));
+    }
+
+    private List<Integer> extractDiscreteEnergyProfile(List<Double> energyProfile) {
+        return energyProfile.stream()
+                .map(this::discretize)
                 .collect(Collectors.toList());
     }
 

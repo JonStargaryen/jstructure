@@ -1,36 +1,35 @@
 package feature.energyprofile;
 
-import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculatorRunner;
+import de.bioforscher.jstructure.feature.energyprofile.SimpleEnergyProfileRunner;
 import de.bioforscher.jstructure.parser.ParsingException;
 import org.junit.Test;
+import util.TestUtils;
 
 import java.io.UncheckedIOException;
-import java.net.URL;
-import java.util.Objects;
 
 /**
  * The test for the energy profile command line wrapper.
  * Created by bittrich on 1/19/17.
  */
-public class EnergyProfileCalculatorRunnerTest {
+public class SimpleEnergyProfileRunnerTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailDueToNoArguments() {
-        EnergyProfileCalculatorRunner.main();
+        SimpleEnergyProfileRunner.main();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailDueToTooManyArguments() {
-        EnergyProfileCalculatorRunner.main(new String[3]);
+        SimpleEnergyProfileRunner.main(new String[3]);
     }
 
     @Test(expected = UncheckedIOException.class)
     public void shouldFailDueToInvalidFilepath() {
-        EnergyProfileCalculatorRunner.main("/invalid/filepath");
+        SimpleEnergyProfileRunner.main("/invalid/filepath");
     }
 
     @Test(expected = ParsingException.class)
     public void shouldFailDueToInvalidFile() {
-        EnergyProfileCalculatorRunner.main(getResourceAsFilepath("pdb/invalid.pdb"));
+        SimpleEnergyProfileRunner.main(TestUtils.getResourceAsFilepath("pdb/invalid.pdb"));
     }
 
     @Test
@@ -46,19 +45,10 @@ public class EnergyProfileCalculatorRunnerTest {
 //                String basePath = "/home/bittrich/energyprofiles/";
 //                Path pdbFile = Paths.get(basePath + id + ".pdb");
 //                Files.write(pdbFile, protein.composePDBRecord().getBytes());
-//                EnergyProfileCalculatorRunner.main(pdbFile.toFile().getAbsolutePath(), basePath + id + ".ep");
+//                SimpleEnergyProfileRunner.main(pdbFile.toFile().getAbsolutePath(), basePath + id + ".ep");
 //            } catch (IOException e) {
 //                throw new UncheckedIOException(e);
 //            }
 //        });
-    }
-
-    private static String getResourceAsFilepath(String filename) {
-        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
-        Objects.requireNonNull(ccl);
-        URL resource = ccl.getResource(filename);
-        Objects.requireNonNull(resource);
-        // some a bit hacky way to ensure correct paths on windows (as some / will be added as prefix)
-        return resource.getPath().replaceFirst("^/(.:/)", "$1");
     }
 }

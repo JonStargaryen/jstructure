@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.slf4j.Logger;
@@ -34,7 +33,6 @@ public class MultipleStructureAlignmentRunner {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignmentRunner.class);
-
     private static final String homePath = System.getProperty("user.home");
     private static final String basePath = homePath + "/git/aars_analysis/data/";
     private static final AbstractFeatureProvider asaCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA);
@@ -60,14 +58,14 @@ public class MultipleStructureAlignmentRunner {
                             .asChainContainer();
                     container.setIdentifier(id);
 
-                    asaCalculator.process(container);
-
-                    // assign each rasa value as bfactor
-                    container.aminoAcids().forEach(group -> {
-                        double rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
-                        group.setFeature(RELATIVE_ACCESSIBLE_SURFACE_AREA, rasa);
-                        group.atoms().forEach(atom -> atom.setBfactor((float) rasa));
-                    });
+//                    asaCalculator.process(container);
+//
+//                    // assign each rasa value as bfactor
+//                    container.aminoAcids().forEach(group -> {
+//                        double rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
+//                        group.setFeature(RELATIVE_ACCESSIBLE_SURFACE_AREA, rasa);
+//                        group.atoms().forEach(atom -> atom.setBfactor((float) rasa));
+//                    });
 
                     return container;
                 })
@@ -76,6 +74,82 @@ public class MultipleStructureAlignmentRunner {
         MultipleStructureAlignment multipleStructureAlignment = new MultipleStructureAlignment();
         multipleStructureAlignment.align(chains, arginine1, arginine2);
         Map<GroupContainer, GroupContainer> alignedContainers = multipleStructureAlignment.getAlignedContainerMap();
+
+        // compute distance matrix for MDS visualization
+//        List<String> identifiers = alignedContainers.entrySet().stream()
+//                .map(Map.Entry::getKey)
+//                .map(GroupContainer::getIdentifier)
+//                .filter(identifier -> {
+//                    try {
+//                        return Files.lines(Paths.get("/home/bittrich/git/aars_analysis/data/aars_main_table_catalytic.csv"))
+//                                .filter(line -> line.contains(identifier.split("_")[0].toLowerCase()))
+//                                .anyMatch(line -> line.endsWith("1"));
+//                    } catch (IOException e) {
+//                        throw new UncheckedIOException(e);
+//                    }
+//                })
+//                .collect(Collectors.toList());
+//        List<String> outputLines = new ArrayList<>();
+//        for(int rowIndex = 0; rowIndex < identifiers.size(); rowIndex++) {
+//            List<String> rmsds = new ArrayList<>();
+//            for (String identifier : identifiers) {
+//                double rmsd;
+//                Pair<String, String> key = new Pair<>(identifiers.get(rowIndex), identifier);
+//                if (identifiers.get(rowIndex).equals(identifier)) {
+//                    rmsd = 0;
+//                } else {
+//                    rmsd = LinearAlgebraAtom.calculateRmsd(alignedContainers.entrySet().stream()
+//                                    .filter(pair -> pair.getKey().getIdentifier().equals(key.getLeft()))
+//                                    .findFirst()
+//                                    .get()
+//                                    .getValue(),
+//                            alignedContainers.entrySet().stream()
+//                                    .filter(pair -> pair.getKey().getIdentifier().equals(key.getRight()))
+//                                    .findFirst()
+//                                    .get()
+//                                    .getValue());
+//                }
+//                rmsds.add(String.valueOf(rmsd));
+//            }
+//            String outputLine = rmsds.stream().collect(Collectors.joining(",", identifiers.get(rowIndex) + ",", ""));
+//            outputLines.add(outputLine);
+//        }
+//        String output = outputLines.stream()
+//                .collect(Collectors.joining(System.lineSeparator(), identifiers.stream()
+//                        .collect(Collectors.joining(",", ",", System.lineSeparator())), System.lineSeparator()));
+//        Files.write(Paths.get("/home/bittrich/bindingsite-rmsd.csv"), output.getBytes());
+//        // update labels.txt
+//        String newLabels = Files.lines(Paths.get("/home/bittrich/bindingsite-rmsd.csv"))
+//                .filter(line -> !line.startsWith(","))
+//                .map(line -> line.split(",")[0])
+//                .map(id -> id.split("_")[0])
+//                .map(String::toLowerCase)
+//                .map(id -> {
+//                    try {
+//                        return Files.lines(Paths.get("/home/bittrich/git/aars_analysis/data/aars_main_table_catalytic.csv"))
+//                                .filter(line -> line.contains(id))
+//                                .findFirst()
+//                                .get()
+//                                .split(",")[1];
+//                    } catch (IOException e) {
+//                        throw new UncheckedIOException(e);
+//                    }
+//                })
+//                .map(aa -> {
+//                    System.out.println(aa);
+//                    try {
+//                        return Files.lines(Paths.get("/home/bittrich/git/aars_analysis/data/pocket_align/labels.txt"))
+//                                .filter(line -> line.startsWith(aa))
+//                                .findFirst()
+//                                .get();
+//                    } catch (IOException e) {
+//                        throw new UncheckedIOException(e);
+//                    }
+//                })
+//                .collect(Collectors.joining(System.lineSeparator(), "label,color", System.lineSeparator()));
+//        Files.write(Paths.get("/home/bittrich/git/aars_analysis/data/pocket_align/labels_binding_site.txt"), newLabels.getBytes());
+//        System.exit(0);
+        // end: compute distance matrix for MDS visualization
 
         alignedContainers.entrySet().forEach(entry -> {
             try {

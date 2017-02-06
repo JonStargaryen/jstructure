@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.feature.energyprofile;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.apache.log4j.BasicConfigurator;
@@ -13,19 +12,13 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
-import java.util.stream.Collectors;
 
 /**
  * A wrapper for the energy profile calculation so it can be accessed as CLI.
  * Created by S on 16.01.2017.
  */
-public class EnergyProfileCalculatorRunner {
-    private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculatorRunner.class);
-    private static final String DELIMITER = "\t";
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000",DecimalFormatSymbols.getInstance(Locale.US));
+public class SimpleEnergyProfileRunner {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleEnergyProfileRunner.class);
     private static final AbstractFeatureProvider featureProvider = FeatureProviderRegistry.resolve(EnergyProfileCalculator.SOLVATION_ENERGY);
 
     static {
@@ -59,12 +52,7 @@ public class EnergyProfileCalculatorRunner {
             featureProvider.process(protein);
 
             // compose output
-            String output = protein.aminoAcids()
-                    .map(EnergyProfileCalculatorRunner::composeOutputLine)
-                    .collect(Collectors.joining(System.lineSeparator(),
-                            "ID" + DELIMITER + protein.getIdentifier() + System.lineSeparator() +
-                            "chain" + DELIMITER + "resNum" + DELIMITER + "resName" + DELIMITER + "energy" + System.lineSeparator(),
-                            ""));
+            String output = AdvancedEnergyProfileRunner.composeOutput(protein);
 
             if(outputRequested) {
                 Files.write(Paths.get(outputPath), output.getBytes());
@@ -78,10 +66,5 @@ public class EnergyProfileCalculatorRunner {
             System.err.println("writing the output file failed - destination " + outputPath);
             throw new UncheckedIOException(e);
         }
-    }
-
-    private static String composeOutputLine(Group group) {
-        return group.getParentChain().getIdentifier() + DELIMITER + group.getResidueNumber() + DELIMITER +
-                group.getThreeLetterCode() + DELIMITER + DECIMAL_FORMAT.format(group.getFeatureAsDouble(EnergyProfileCalculator.SOLVATION_ENERGY));
     }
 }

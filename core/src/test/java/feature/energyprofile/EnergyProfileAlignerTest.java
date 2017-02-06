@@ -31,13 +31,13 @@ public class EnergyProfileAlignerTest {
 
     @Test
     public void shouldResultInOptimalAlignment() {
-        double distanceScore = energyProfileAligner.align(protein1acj, protein1acj).getAlignmentScore();
+        double distanceScore = energyProfileAligner.align(protein1acj, protein1acj);
         Assert.assertEquals(0.0, distanceScore, 0.0);
     }
 
     @Test
     public void shouldResultInWorstAlignment() {
-        double distanceScore = energyProfileAligner.align(protein1acj, protein1brr).getAlignmentScore();
+        double distanceScore = energyProfileAligner.align(protein1acj, protein1brr);
         Assert.assertTrue(distanceScore > 0.0 && distanceScore < 5.0);
     }
 }
