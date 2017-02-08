@@ -1,5 +1,7 @@
-package de.bioforscher.jstructure.feature.energyprofile;
+package energyprofile;
 
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileAligner;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;

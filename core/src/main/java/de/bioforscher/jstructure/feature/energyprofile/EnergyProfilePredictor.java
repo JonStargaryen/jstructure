@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * An adapation of the GOR-algorithm to predict energy profiles from a protein sequence.
+ * An adaptation of the GOR-algorithm to predict energy profiles from a protein sequence.
  * Created by S on 20.01.2017.
  * @author originally written by Florian Heinke
  */

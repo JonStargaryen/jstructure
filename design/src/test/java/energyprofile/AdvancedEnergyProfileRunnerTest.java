@@ -1,12 +1,11 @@
-package feature.energyprofile;
+package energyprofile;
 
-import de.bioforscher.jstructure.feature.energyprofile.AdvancedEnergyProfileRunner;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ParsingException;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Before;
 import org.junit.Test;
-import util.TestUtils;
+
+import java.net.URL;
 
 /**
  * Test the capabilities of the advanced CLI.
@@ -59,8 +58,9 @@ public class AdvancedEnergyProfileRunnerTest {
         AdvancedEnergyProfileRunner.main("/invalid/filepath");
     }
 
-    @Test(expected = ParsingException.class)
-    public void shouldFailDueToInvalidFile() {
-        AdvancedEnergyProfileRunner.main(TestUtils.getResourceAsFilepath("pdb/invalid.pdb"));
+    static String getResourceAsFilepath(String filename) {
+        URL resource = Thread.currentThread().getContextClassLoader().getResource(filename);
+        // some a bit hacky way to ensure correct paths on windows (as some / will be added as prefix)
+        return resource.getPath().replaceFirst("^/(.:/)", "$1");
     }
 }

@@ -1,9 +1,7 @@
-package feature.energyprofile;
+package energyprofile;
 
-import de.bioforscher.jstructure.feature.energyprofile.SimpleEnergyProfileRunner;
 import de.bioforscher.jstructure.parser.ParsingException;
 import org.junit.Test;
-import util.TestUtils;
 
 import java.io.UncheckedIOException;
 
@@ -29,7 +27,7 @@ public class SimpleEnergyProfileRunnerTest {
 
     @Test(expected = ParsingException.class)
     public void shouldFailDueToInvalidFile() {
-        SimpleEnergyProfileRunner.main(TestUtils.getResourceAsFilepath("pdb/invalid.pdb"));
+        SimpleEnergyProfileRunner.main(AdvancedEnergyProfileRunnerTest.getResourceAsFilepath("pdb/invalid.pdb"));
     }
 
     @Test

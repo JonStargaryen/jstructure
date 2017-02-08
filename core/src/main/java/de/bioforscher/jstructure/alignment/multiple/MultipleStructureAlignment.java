@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * TODO parallelisms
  * Created by bittrich on 1/25/17.
  */
+@Deprecated
 public class MultipleStructureAlignment {
     private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignment.class);
     private final SVDSuperimposer svdSuperimposer;
@@ -109,7 +110,7 @@ public class MultipleStructureAlignment {
         alignWithRespectToConsensus(minimalConsensus, containersFinished);
 
         // reassign extracted residues to original containers
-        containersFinished.entrySet().stream().forEach(entry -> {
+        containersFinished.entrySet().parallelStream().forEach(entry -> {
             GroupContainer originalContainer = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             originalContainer.getGroups().addAll(extractedGroups.getGroups());
@@ -130,7 +131,7 @@ public class MultipleStructureAlignment {
     }
 
     private void alignWithRespectToConsensus(GroupContainer consensus, Map<GroupContainer, GroupContainer> containers) {
-        containers.entrySet().stream().forEach(entry -> {
+        containers.entrySet().parallelStream().forEach(entry -> {
             GroupContainer originalGroups = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             // align extracted groups to consensus
@@ -181,7 +182,7 @@ public class MultipleStructureAlignment {
         List<GroupContainer> containersCeasedExtending = new ArrayList<>();
 
         // align containers with respect to extract groups
-        containersExtending.entrySet().stream().forEach(entry -> {
+        containersExtending.entrySet().parallelStream().forEach(entry -> {
             GroupContainer originalGroups = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             AlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);

@@ -55,20 +55,22 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     public static final String ATOM_RADIUS = "ATOM_RADIUS";
     public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
 
-    private int numberOfSpherePoints;
-    private double probeSize;
-    private double cons;
-    private AtomContainer nonHydrogenAtoms;
-    private List<double[]> spherePoints;
+    private final int numberOfSpherePoints;
+    private final double probeSize;
+    private final List<double[]> spherePoints;
+    private final double cons;
 
     /**
      * The fine-grained constructor.
      * @param numberOfSpherePoints how many points to use
      * @param probeSize sphere size to probe for ASA
      */
-    public AccessibleSurfaceAreaCalculator(int numberOfSpherePoints, double probeSize) {
+    private AccessibleSurfaceAreaCalculator(int numberOfSpherePoints, double probeSize) {
         this.numberOfSpherePoints = numberOfSpherePoints;
         this.probeSize = probeSize;
+        // initialising the sphere points to sample
+        this.spherePoints = generateSpherePoints(numberOfSpherePoints);
+        this.cons = 4.0 * Math.PI / numberOfSpherePoints;
     }
 
     /**
@@ -82,12 +84,12 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         atom.setFeature(ATOM_RADIUS, determineRadius(atom));
     }
 
-    private void assignSingleAsa(Group group) {
+    private void assignSingleAsa(Group group, AtomContainer nonHydrogenAtoms) {
         group.setFeature(ACCESSIBLE_SURFACE_AREA,
                 Selection.on(group)
                         .nonHydrogenAtoms()
                         .asFilteredAtoms()
-                        .mapToDouble(this::calcSingleAsa)
+                        .mapToDouble(atom -> calcSingleAsa(atom, nonHydrogenAtoms))
                         .sum());
     }
 
@@ -97,20 +99,17 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         GroupContainer residueContainer = Selection.on(protein)
                 .aminoAcids()
                 .asGroupContainer();
-        nonHydrogenAtoms = Selection.on(residueContainer)
+
+        AtomContainer nonHydrogenAtoms = Selection.on(residueContainer)
                 .nonHydrogenAtoms()
                 .asAtomContainer();
         nonHydrogenAtoms.atoms()
                 .parallel()
                 .forEach(this::assignRadius);
 
-        // initialising the sphere points to sample
-        spherePoints = generateSpherePoints(numberOfSpherePoints);
-        cons = 4.0 * Math.PI / numberOfSpherePoints;
-
         residueContainer.groups()
                 .parallel()
-                .forEach(this::assignSingleAsa);
+                .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
     }
 
     /**
@@ -184,7 +183,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
      * @param referenceAtom the atom whose neighbor shall be assessed
      * @return all neighbored atoms
      */
-    private List<Atom> findNeighbors(Atom referenceAtom) {
+    private List<Atom> findNeighbors(Atom referenceAtom, AtomContainer nonHydrogenAtoms) {
         final double cutoff = probeSize + probeSize + referenceAtom.getFeatureAsDouble(ATOM_RADIUS);
 
         return nonHydrogenAtoms.atoms()
@@ -198,8 +197,8 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
      * @param atom the atom to process
      * @return this atom's ASA
      */
-    private double calcSingleAsa(Atom atom) {
-        List<Atom> neighborAtoms = findNeighbors(atom);
+    private double calcSingleAsa(Atom atom, AtomContainer nonHydrogenAtoms) {
+        List<Atom> neighborAtoms = findNeighbors(atom, nonHydrogenAtoms);
         double radius = probeSize + atom.getFeatureAsDouble(ATOM_RADIUS);
         int accessiblePoints = 0;
 

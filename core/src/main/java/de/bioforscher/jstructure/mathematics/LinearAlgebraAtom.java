@@ -8,7 +8,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -332,7 +331,7 @@ public class LinearAlgebraAtom {
         return comparableGroupContainerPair(atomContainer1,
                 atomContainer2,
                 Collections.emptySet(),
-                AminoAcidFamily.ATOM_NAMES.ALL_ATOM_NAMES);
+                Collections.emptySet());
     }
 
     private static Pair<List<Atom>, List<Atom>> selectSharedAtoms(Group group1,
@@ -372,7 +371,9 @@ public class LinearAlgebraAtom {
         }
 
         // ignore all atoms not explicitly wanted in the alignment
-        sharedAtomNames.retainAll(maximalSetOfAtomNames);
+        if(!maximalSetOfAtomNames.isEmpty()) {
+            sharedAtomNames.retainAll(maximalSetOfAtomNames);
+        }
 
         return sharedAtomNames;
     }

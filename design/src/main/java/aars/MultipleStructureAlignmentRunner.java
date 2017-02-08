@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static aars.AARSConstants.*;
+
 /**
  * Run MSA on aars data set.
  * Created by bittrich on 2/1/17.
@@ -33,8 +35,6 @@ public class MultipleStructureAlignmentRunner {
     }
 
     private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignmentRunner.class);
-    private static final String homePath = System.getProperty("user.home");
-    private static final String basePath = homePath + "/git/aars_analysis/data/";
     private static final AbstractFeatureProvider asaCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA);
 //    private static final double ASA_CUTOFF = 0.16; // 10.1002/prot.340200303/epdf
     private static final String RELATIVE_ACCESSIBLE_SURFACE_AREA = "RELATIVE_ACCESSIBLE_SURFACE_AREA";
@@ -44,14 +44,14 @@ public class MultipleStructureAlignmentRunner {
         int arginine2 = 1765;
 
         logger.info("loading structures...");
-        List<GroupContainer> chains = Files.lines(Paths.get(basePath + "geometry/argtweezer_geometry.tsv"))
+        List<GroupContainer> chains = Files.lines(Paths.get(ARGTWEEZER_GEOMETRY_PATH))
                 .filter(line -> !line.startsWith("id"))
                 .map(line -> line.split("\t"))
                 .map(split -> split[0])
                 .map(id -> {
                     logger.info("loading, parsing and computing asa for {}", id);
 
-                    Protein protein = ProteinParser.parsePDBFile(basePath + "msa/C2/renumbered_structures/" + id.split("_")[0].toLowerCase() + "_renum.pdb");
+                    Protein protein = ProteinParser.parsePDBFile(RENUMBERED_STRUCTURES_PATH + id.split("_")[0].toLowerCase() + "_renum.pdb");
 
                     Protein container = (Protein) Selection.on(protein)
                             .chainName(id.split("_")[1])
@@ -159,10 +159,10 @@ public class MultipleStructureAlignmentRunner {
 
                 String aa = determineType(alignedFullStructure);
 
-                Files.createDirectories(Paths.get(homePath + "/multiple-alignment/core/"));
-                Files.write(Paths.get(homePath + "/multiple-alignment/core/" + aa + "_" + numberOfAlignedGroups + "-" + alignedCore.getIdentifier() + ".pdb"), alignedCore.composePDBRecord().getBytes());
-                Files.createDirectories(Paths.get(homePath + "/multiple-alignment/full/"));
-                Files.write(Paths.get(homePath + "/multiple-alignment/full/" + aa + "_" + alignedFullStructure.getIdentifier() + ".pdb"), alignedFullStructure.composePDBRecord().getBytes());
+                Files.createDirectories(Paths.get(HOME_PATH + "/multiple-alignment/core/"));
+                Files.write(Paths.get(HOME_PATH + "/multiple-alignment/core/" + aa + "_" + numberOfAlignedGroups + "-" + alignedCore.getIdentifier() + ".pdb"), alignedCore.composePDBRecord().getBytes());
+                Files.createDirectories(Paths.get(HOME_PATH + "/multiple-alignment/full/"));
+                Files.write(Paths.get(HOME_PATH + "/multiple-alignment/full/" + aa + "_" + alignedFullStructure.getIdentifier() + ".pdb"), alignedFullStructure.composePDBRecord().getBytes());
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
@@ -200,21 +200,21 @@ public class MultipleStructureAlignmentRunner {
         logger.info("AA-centroid: " + Arrays.toString(aaCentroid));
 
         System.out.println("around AMP");
-        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp/", 0);
-        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-16/",  0.16);
-//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-36/", 0.36);
-//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-56/", 0.56);
-//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/amp-rasa-76/", 0.76);
+        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/amp/", 0);
+        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/amp-rasa-16/",  0.16);
+//        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/amp-rasa-36/", 0.36);
+//        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/amp-rasa-56/", 0.56);
+//        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/amp-rasa-76/", 0.76);
         System.out.println("around AA");
-        groupsAround(chains, aaCentroid, homePath + "/multiple-alignment/aa/",  0);
-        groupsAround(chains, aaCentroid, homePath + "/multiple-alignment/aa-rasa-16/", 0.16);
-//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/aa-rasa-36/", 0.36);
-//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/aa-rasa-56/", 0.56);
-//        groupsAround(chains, ampCentroid, homePath + "/multiple-alignment/aa-rasa-76/", 0.76);
+        groupsAround(chains, aaCentroid, HOME_PATH + "/multiple-alignment/aa/",  0);
+        groupsAround(chains, aaCentroid, HOME_PATH + "/multiple-alignment/aa-rasa-16/", 0.16);
+//        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/aa-rasa-36/", 0.36);
+//        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/aa-rasa-56/", 0.56);
+//        groupsAround(chains, ampCentroid, HOME_PATH + "/multiple-alignment/aa-rasa-76/", 0.76);
     }
 
     private String determineType(GroupContainer container) throws IOException {
-        return Files.lines(Paths.get(basePath + "aars_main_table_catalytic.csv"))
+        return Files.lines(Paths.get(MAIN_TABLE_CATALYTIC_PATH))
                 .filter(line -> line.contains(container.getIdentifier().toLowerCase().split("_")[0]))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("no value present for '" + container.getIdentifier() + "'"))

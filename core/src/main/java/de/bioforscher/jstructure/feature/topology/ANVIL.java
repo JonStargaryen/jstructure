@@ -56,6 +56,7 @@ import java.util.function.Predicate;
  same conditions as regards security.
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.</pre>
+ TODO this is a service-like class, but it is not stateless
  */
 @FeatureProvider(provides = { ANVIL.MEMBRANE, ANVIL.TOPOLOGY }, requires = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
 public class ANVIL extends AbstractFeatureProvider {
