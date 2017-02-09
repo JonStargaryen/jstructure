@@ -1,6 +1,6 @@
 package design.fragment.library;
 
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -75,7 +75,7 @@ public class S01_BuildLibrary {
             for(AtomContainer fragment : structureCluster.getOriginalEntries()) {
                 // align fragment relative to consensus
                 SVDSuperimposer svdSuperimposer = new SVDSuperimposer();
-                AlignmentResult alignmentResult = svdSuperimposer.align(consensus, fragment);
+                StructureAlignmentResult alignmentResult = svdSuperimposer.align(consensus, fragment);
                 String rmsd = DesignConstants.DECIMAL_FORMAT.format(alignmentResult.getAlignmentScore());
 
                 // add to summary file

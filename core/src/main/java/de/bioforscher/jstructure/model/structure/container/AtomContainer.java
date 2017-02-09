@@ -49,7 +49,6 @@ public interface AtomContainer extends StructureContainer {
         try {
             return getClass().getConstructor(getClass()).newInstance(this);
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            //TODO error-handling and proper exception
             throw new UnsupportedOperationException(e);
         }
     }

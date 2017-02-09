@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
@@ -100,7 +100,7 @@ public class StructureCollectors {
                                 alignmentResult.getAlignmentScore());
                         return alignmentResult;
                     })
-                    .map(AlignmentResult::getOriginalQuery)
+                    .map(StructureAlignmentResult::getOriginalQuery)
                     .collect(Collectors.toList());
         }
 

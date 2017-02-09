@@ -51,7 +51,7 @@ public class MultipleStructureAlignmentRunner {
                 .map(id -> {
                     logger.info("loading, parsing and computing asa for {}", id);
 
-                    Protein protein = ProteinParser.parsePDBFile(RENUMBERED_STRUCTURES_PATH + id.split("_")[0].toLowerCase() + "_renum.pdb");
+                    Protein protein = ProteinParser.parsePDBFile(RENUMBERED_STRUCTURES_C2_PATH + id.split("_")[0].toLowerCase() + "_renum.pdb");
 
                     Protein container = (Protein) Selection.on(protein)
                             .chainName(id.split("_")[1])

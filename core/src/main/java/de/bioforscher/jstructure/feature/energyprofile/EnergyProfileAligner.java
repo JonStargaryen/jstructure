@@ -65,8 +65,6 @@ public class EnergyProfileAligner {
             ej = referenceEnergyProfile;
         }
 
-        //TODO need clone?
-
         createFMatrix(ei.size(), ej.size());
 
         scoreReal = calculateAlignment();

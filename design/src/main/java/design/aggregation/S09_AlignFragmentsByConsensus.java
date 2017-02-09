@@ -1,6 +1,6 @@
 package design.aggregation;
 
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -46,7 +46,7 @@ public class S09_AlignFragmentsByConsensus {
                         }
 
                         // align fragment to the best fitting consensus
-                        List<AlignmentResult> alignedProteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
+                        List<StructureAlignmentResult> alignedProteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
                                 topology + "/"))
                                 .filter(path -> path.getFileName().toString().startsWith(motif))
                                 .map(ProteinParser::parsePDBFile)
@@ -85,7 +85,7 @@ public class S09_AlignFragmentsByConsensus {
         AtomContainer reference = fragments.get(0);
         return fragments.stream()
                 .map(fragment -> SVD_SUPERIMPOSER.align(reference, fragment))
-                .map(AlignmentResult::getAlignedQuery)
+                .map(StructureAlignmentResult::getAlignedQuery)
                 .collect(Collectors.toList());
     }
 }

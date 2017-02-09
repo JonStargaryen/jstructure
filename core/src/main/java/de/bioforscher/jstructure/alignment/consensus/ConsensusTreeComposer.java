@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment.consensus;
 
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.BinaryTree;
 import de.bioforscher.jstructure.model.Combinatorics;
@@ -156,7 +156,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
         return originalContainers.stream()
                 // align container relative to consensus
                 .map(container -> svdSuperimposer.align(consensus, container))
-                .map(AlignmentResult::getOriginalQuery)
+                .map(StructureAlignmentResult::getOriginalQuery)
                 .collect(Collectors.toList());
     }
 
@@ -173,7 +173,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
      */
     class AlignmentPair extends Pair<AtomContainer, AtomContainer> {
         private AtomContainer mergedEntry;
-        private AlignmentResult alignmentResult;
+        private StructureAlignmentResult alignmentResult;
 
         AlignmentPair(Pair<? extends AtomContainer, ? extends AtomContainer> alignmentPair) {
             this(alignmentPair.getLeft(), alignmentPair.getRight());
@@ -184,7 +184,7 @@ public class ConsensusTreeComposer extends AbstractConsensusComposer {
             this.alignmentResult = svdSuperimposer.align(atomContainer1, atomContainer2);
         }
 
-        AlignmentResult getAlignmentResult() {
+        StructureAlignmentResult getAlignmentResult() {
             return alignmentResult;
         }
 

@@ -46,9 +46,20 @@ public abstract class AbstractFeatureProvider {
             }
         }
 
+        // delegate to concrete implementation
         processInternally(protein);
 
-        //TODO define some clean-up routine?
+        // 'hook' to postprocessing routine, empty by default but can be overridden by implementations if needed
+        postprocessInternally(protein);
+    }
+
+    /**
+     * Some postprocess method with will be executed on the container after the computation has finished. Override when
+     * there is a need to clean-up some variables etc in the container.
+     * @param protein the container to clean
+     */
+    protected void postprocessInternally(Protein protein) {
+
     }
 
     protected InputStream getResourceAsStream(String filepath) {

@@ -5,7 +5,7 @@ import org.apache.commons.math3.linear.MatrixUtils;
 
 /**
  * Defines the capabilities of an implementing algorithm to align two atom collections. The alignment is reported as
- * {@link AlignmentResult} object which can be used to recreate the alignment - even though the coordinates of the 2nd
+ * {@link StructureAlignmentResult} object which can be used to recreate the alignment - even though the coordinates of the 2nd
  * atom set handed to the {@link AlignmentAlgorithm#align(AtomContainer, AtomContainer)} method are by contract modified
  * to match the reference atom set in the best possible way.
  * TODO maybe the algorithms need some abstracted way to report whether container have to match in size - the current way does not seem to convincing
@@ -29,5 +29,5 @@ public interface AlignmentAlgorithm {
      *               optimally superimposed
      * @return statistics on the alignment
      */
-    AlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2);
+    StructureAlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2);
 }

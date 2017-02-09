@@ -25,12 +25,5 @@ public class BetaCarbonRepresentationScheme implements RepresentationScheme {
                         .alphaCarbonAtoms()
                         .asOptionalAtom()
                         .orElse(new Atom(LinearAlgebraAtom.centroid(group))));
-                // use virtual cb as fallback
-//                .orElse(new Atom(virtualBetaCarbon(group)));
     }
-
-//    private double[] virtualBetaCarbon(Group group) {
-//        //TODO move around - adapt concept of standard/prototype amino acids?
-//        CIFParser.parseLigandInformation("ALA");
-//    }
 }

@@ -1,6 +1,6 @@
 package alignment;
 
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -40,7 +40,7 @@ public class FragmentClusteringComposerTest {
         // which should be similar to each initial fragment
         double maxRmsd = fragments.stream()
                 .map(fragment -> svdSuperimposer.align(fragment, consensus))
-                .mapToDouble(AlignmentResult::getAlignmentScore)
+                .mapToDouble(StructureAlignmentResult::getAlignmentScore)
                 .peek(rmsd -> System.out.println("rmsd of fragment to consensus: " + rmsd))
                 .max()
                 .orElseThrow(IllegalArgumentException::new);

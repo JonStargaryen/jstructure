@@ -3,10 +3,10 @@ package design.fragment.library;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.selection.Range;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import design.ProteinSource;
 
@@ -66,17 +66,23 @@ public class StructureFragmentizer {
     }
 
     private Stream<GroupContainer> fragmentize(Chain chain) {
-        List<Group> aminoAcids = Selection.on(chain)
-                .aminoAcids()
-                .asGroupContainer()
-                .getGroups();
-        return IntStream.range(0, aminoAcids.size() - DEFAULT_FRAGMENT_SIZE + 1)
-                .mapToObj(i -> {
-                    Chain container = new Chain(aminoAcids.subList(i, i + DEFAULT_FRAGMENT_SIZE));
-                    // need to set identifier of fragments
-                    //TODO move to Selection-API?
-                    container.setIdentifier(chain.getParentProtein().getIdentifier() + "-" + chain.getChainId() + "-" + i + "-" + (i + DEFAULT_FRAGMENT_SIZE));
-                    return container;
-                });
+        return IntStream.range(0, (int) chain.aminoAcids().count() - DEFAULT_FRAGMENT_SIZE + 1)
+                .mapToObj(index -> new Range(index, index + DEFAULT_FRAGMENT_SIZE))
+                .map(range -> Selection.on(chain)
+                        .residueNumber(range)
+                        .nameContainer(chain.getParentProtein().getIdentifier() + "-" + chain.getChainId() + "-" + range.getLeft() + "-" + (range.getLeft() + DEFAULT_FRAGMENT_SIZE))
+                        .asGroupContainer());
+
+//        List<Group> aminoAcids = Selection.on(chain)
+//                .aminoAcids()
+//                .asGroupContainer()
+//                .getGroups();
+//        return IntStream.range(0, aminoAcids.size() - DEFAULT_FRAGMENT_SIZE + 1)
+//                .mapToObj(i -> {
+//                    Chain container = new Chain(aminoAcids.subList(i, i + DEFAULT_FRAGMENT_SIZE));
+//                    // need to set identifier of fragments
+//                    container.setIdentifier(chain.getParentProtein().getIdentifier() + "-" + chain.getChainId() + "-" + i + "-" + (i + DEFAULT_FRAGMENT_SIZE));
+//                    return container;
+//                });
     }
 }

@@ -9,7 +9,7 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
  * Created by S on 30.09.2016.
  */
 //TODO redesign - a container also handling aligned energy profiles would be nicer
-public class AlignmentResult {
+public class StructureAlignmentResult {
     private final AtomContainer originalReference;
     private final AtomContainer originalQuery;
     private final AtomContainer alignedQuery;
@@ -24,8 +24,8 @@ public class AlignmentResult {
      * @param translation the translation vector needed to recreate this alignment
      * @param rotation the rotation matrix needed to recreate this alignment
      */
-    public AlignmentResult(AtomContainer originalReference, AtomContainer originalQuery, AtomContainer alignedQuery,
-                           double alignmentScore, double[] translation, double[][] rotation) {
+    public StructureAlignmentResult(AtomContainer originalReference, AtomContainer originalQuery, AtomContainer alignedQuery,
+                                    double alignmentScore, double[] translation, double[][] rotation) {
         this.originalReference = originalReference;
         this.originalQuery = originalQuery;
         this.alignedQuery = alignedQuery;

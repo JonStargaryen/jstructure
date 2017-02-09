@@ -202,8 +202,6 @@ public class PULCHRA implements ReconstructionAlgorithm {
             "").split(",");
 
     private synchronized void initializeLibrary() {
-        //TODO this could use some sophisticated parser - further versions of the data could easily break the code
-
         // parse sidechain indices
         InputStream idxIs = getResourceAsStream(ROT_STAT_IDX_LIBRARY);
         rotStatIdx = new BufferedReader(new InputStreamReader(idxIs)).lines()

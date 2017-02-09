@@ -129,7 +129,6 @@ public class MultiDimensionalScaling {
         return embedding;
     }
 
-    // TODO: maybe move to some Utils class
     private static <K, V extends Comparable<? super V>> List<Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
         List<Entry<K, V>> sortedEntries = new ArrayList<>(map.entrySet());
         sortedEntries.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));

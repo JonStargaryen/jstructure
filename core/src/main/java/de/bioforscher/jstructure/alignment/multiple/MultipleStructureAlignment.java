@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment.multiple;
 
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.consensus.AbstractConsensusComposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * TODO parallelisms
  * Created by bittrich on 1/25/17.
  */
-@Deprecated
 public class MultipleStructureAlignment {
     private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignment.class);
     private final SVDSuperimposer svdSuperimposer;
@@ -135,7 +134,7 @@ public class MultipleStructureAlignment {
             GroupContainer originalGroups = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
             // align extracted groups to consensus
-            AlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);
+            StructureAlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);
 
             // employ alignment - TODO this could more efficiently happen in-place
             alignmentResult.transform(originalGroups);
@@ -172,7 +171,7 @@ public class MultipleStructureAlignment {
             logger.trace("selected and moving group {}", extractedGroup.getIdentifier());
             // fix 2/2/17 - .getGroups() points to
 //            originalGroups.getGroups().remove(extractedGroup);
-            //TODO generic removeFromParent-function?
+            //TODO generic removeFromParent-function? - this is really fragile and can break easily
             extractedGroup.getParentChain().getGroups().remove(extractedGroup);
             extractedGroups.getGroups().add(extractedGroup);
         });
@@ -185,7 +184,7 @@ public class MultipleStructureAlignment {
         containersExtending.entrySet().parallelStream().forEach(entry -> {
             GroupContainer originalGroups = entry.getKey();
             GroupContainer extractedGroups = entry.getValue();
-            AlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);
+            StructureAlignmentResult alignmentResult = svdSuperimposer.align(consensus, extractedGroups);
             alignmentResult.transform(originalGroups);
             alignmentResult.transform(extractedGroups);
             double rmsd = alignmentResult.getAlignmentScore();

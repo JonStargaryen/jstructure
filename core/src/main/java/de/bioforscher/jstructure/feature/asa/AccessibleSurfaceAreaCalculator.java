@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
  * Lysozyme and Insulin." JMB (1973) 79:351-371.
  * Lee, B., and Richards, F.M. "The interpretation of Protein Structures: Estimation of
  * Static Accessibility" JMB (1971) 55:379-400</pre>
- * TODO calculator is a pseudo-service but not stateless
  * @author duarte_j
  */
 @FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ATOM_RADIUS, AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
@@ -55,7 +54,6 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     public static final String ATOM_RADIUS = "ATOM_RADIUS";
     public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
 
-    private final int numberOfSpherePoints;
     private final double probeSize;
     private final List<double[]> spherePoints;
     private final double cons;
@@ -66,7 +64,6 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
      * @param probeSize sphere size to probe for ASA
      */
     private AccessibleSurfaceAreaCalculator(int numberOfSpherePoints, double probeSize) {
-        this.numberOfSpherePoints = numberOfSpherePoints;
         this.probeSize = probeSize;
         // initialising the sphere points to sample
         this.spherePoints = generateSpherePoints(numberOfSpherePoints);
@@ -169,8 +166,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
                     case GLUTAMIC_ACID: case GLUTAMINE:
                         return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
                     default:
-                        //TODO this is not optimal
-                        //TODO what value to return?
+                        //TODO this is not optimal - what value to return?
                         return TETRAHEDRAL_CARBON_VDW;
                 }
             default:

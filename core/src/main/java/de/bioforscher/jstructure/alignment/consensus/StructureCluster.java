@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.alignment.consensus;
 
-import de.bioforscher.jstructure.alignment.AlignmentResult;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
@@ -59,7 +59,7 @@ public class StructureCluster {
 
     private AtomContainer updateConsensus(AtomContainer container) {
         //TODO we should store fragments aligned relatively to the consensus, so it is not aligned twice
-        AlignmentResult alignment = svdSuperimposer.align(consensus, container);
+        StructureAlignmentResult alignment = svdSuperimposer.align(consensus, container);
         // merge new entry to existing consensus
         //TODO this may be fast, but potentially merging everything is more robust
         //TODO delegating to the abstract class is not really nice

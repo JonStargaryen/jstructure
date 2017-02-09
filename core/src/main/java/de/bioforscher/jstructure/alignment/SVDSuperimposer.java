@@ -33,7 +33,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
     }
 
     @Override
-    public AlignmentResult align(AtomContainer reference, AtomContainer candidate) {
+    public StructureAlignmentResult align(AtomContainer reference, AtomContainer candidate) {
         AtomContainer originalReference = reference;
         AtomContainer originalCandidate = candidate;
 
@@ -83,6 +83,6 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
         double rmsd = LinearAlgebraAtom.calculateRmsd(reference, candidate);
 
         // return alignment
-        return new AlignmentResult(originalReference, originalCandidate, candidate, rmsd, translation, rotation);
+        return new StructureAlignmentResult(originalReference, originalCandidate, candidate, rmsd, translation, rotation);
     }
 }

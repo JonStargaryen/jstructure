@@ -1,6 +1,5 @@
 package feature.topology;
 
-import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
@@ -22,9 +21,7 @@ public class MembranePotentialIntegrationTest {
 
     @Before
     public void setup() {
-        //TODO algorithms should compute needed features automatically
         protein1brr = ProteinParser.parseProteinById("1brr");
-        new AccessibleSurfaceAreaCalculator().process(protein1brr);
         new ANVIL().process(protein1brr);
         new SequenceMotifAnnotator().process(protein1brr);
     }

@@ -310,8 +310,10 @@ public class LinearAlgebraAtom {
                     maximalSetOfAtomNames);
 
             // remove additional/not-shared atoms
-            group1.getAtoms().retainAll(sharedAtoms.getLeft());
-            group2.getAtoms().retainAll(sharedAtoms.getRight());
+            group1.getAtoms().clear();
+            group1.getAtoms().addAll(sharedAtoms.getLeft());
+            group2.getAtoms().clear();
+            group2.getAtoms().addAll(sharedAtoms.getRight());
 
             logger.trace("shared atoms between {} and {}: {}", group1, group2, sharedAtoms);
 
@@ -343,12 +345,16 @@ public class LinearAlgebraAtom {
                 group2,
                 minimalSetOfAtomNames,
                 maximalSetOfAtomNames);
-        return new Pair<>(group1.atoms()
-                .filter(atom -> sharedAtomNames.contains(atom.getName()))
-                .collect(Collectors.toList()),
-                group2.atoms()
-                .filter(atom -> sharedAtomNames.contains(atom.getName()))
-                .collect(Collectors.toList()));
+
+        return new Pair<>(selectAtoms(group1, sharedAtomNames), selectAtoms(group2, sharedAtomNames));
+    }
+
+    private static List<Atom> selectAtoms(Group group, Set<String> atomNamesToSelect) {
+        // fix 02/08/17 - mere retaining does not ensure correct ordering
+        return atomNamesToSelect.stream()
+                .flatMap(name -> group.atoms()
+                        .filter(atom -> atom.getName().equals(name)))
+                .collect(Collectors.toList());
     }
 
     private static Set<String> determineSharedAtomNames(Group group1,
@@ -366,6 +372,8 @@ public class LinearAlgebraAtom {
         // fail if the minimal set of atoms is not fulfilled
         if(!sharedAtomNames.containsAll(minimalSetOfAtomNames)) {
             throw new IllegalArgumentException("alignment could not fulfill minimal required atom names" +
+                    System.lineSeparator() + group1.getIdentifier() + " atoms: " + group1.atoms().map(Atom::getName).collect(Collectors.joining(", ")) +
+                    System.lineSeparator() + group2.getIdentifier() + " atoms: " + group2.atoms().map(Atom::getName).collect(Collectors.joining(", ")) +
                     System.lineSeparator() + "shared: " + sharedAtomNames.stream().collect(Collectors.joining(", ")) +
                     System.lineSeparator() + "required: " + minimalSetOfAtomNames.stream().collect(Collectors.joining(", ")));
         }

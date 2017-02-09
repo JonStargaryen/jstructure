@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * </ul>
  *
  * TODO implement routine for trans-membrane proteins
- * TODO implement interaction energy term
  * Created by bittrich on 12/15/16.
  */
 @FeatureProvider(provides = EnergyProfileCalculator.SOLVATION_ENERGY)
