@@ -134,7 +134,7 @@ public class ProteinParser {
         try {
             parseLine(line);
         } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
-            throw new ParsingException("parsing failed for line:" + System.lineSeparator() + line, e);
+            throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + line, e);
         }
     }
 
@@ -197,7 +197,7 @@ public class ProteinParser {
         if(line.startsWith(ATOM_PREFIX) || line.startsWith(HETATM_PREFIX)) {
             String elementString = line.substring(76, 78).trim();
             if(elementString.isEmpty()) {
-                throw new ParsingException("parsing failed for line:" + System.lineSeparator() + line );
+                throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + line );
             }
 
             Element element = Element.valueOfIgnoreCase(elementString);
