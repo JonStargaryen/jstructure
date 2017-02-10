@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
-import de.bioforscher.jstructure.parser.ParsingException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,15 +35,17 @@ class PLIPParser {
                 Optional<Group> currentGroup = interactionElement.getElementsByTag(RESNR_TAG)
                         .stream()
                         .map(Element::text)
+                        // a safety net for exceedingly big numbers outputted by PLIP
+                        .filter(string -> string.length() < 10)
                         .map(Integer::valueOf)
                         .map(residueNumber -> Selection.on(chain)
                                 .residueNumber(residueNumber)
                                 .asOptionalGroup())
                         .findFirst()
-                        .orElseThrow(() -> new ParsingException("PLIP failed to parse line:" + System.lineSeparator() + interactionElement.text()));
+                        .orElse(Optional.empty());
 
                 if(!currentGroup.isPresent()) {
-                    logger.trace("reference to group in different chain:" + System.lineSeparator() + interactionElement.text());
+                    logger.trace("reference to group in different chain or failed to parse line:" + System.lineSeparator() + interactionElement.text());
                     continue;
                 }
 

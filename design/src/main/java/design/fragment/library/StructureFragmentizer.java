@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.selection.Range;
+import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import design.ProteinSource;
 
@@ -67,7 +67,7 @@ public class StructureFragmentizer {
 
     private Stream<GroupContainer> fragmentize(Chain chain) {
         return IntStream.range(0, (int) chain.aminoAcids().count() - DEFAULT_FRAGMENT_SIZE + 1)
-                .mapToObj(index -> new Range(index, index + DEFAULT_FRAGMENT_SIZE))
+                .mapToObj(index -> new IntegerRange(index, index + DEFAULT_FRAGMENT_SIZE))
                 .map(range -> Selection.on(chain)
                         .residueNumber(range)
                         .nameContainer(chain.getParentProtein().getIdentifier() + "-" + chain.getChainId() + "-" + range.getLeft() + "-" + (range.getLeft() + DEFAULT_FRAGMENT_SIZE))

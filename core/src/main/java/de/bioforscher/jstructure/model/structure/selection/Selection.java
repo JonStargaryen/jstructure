@@ -251,7 +251,7 @@ public class Selection {
             return this;
         }
 
-        public AtomSelection pdbSerial(Range... pdbSerialRanges) {
+        public AtomSelection pdbSerial(IntegerRange... pdbSerialRanges) {
             registerAtomPredicate(atom -> Stream.of(pdbSerialRanges)
                     .anyMatch(range -> range.getLeft() >= atom.getPdbSerial() && range.getRight() <= atom.getPdbSerial()));
             return this;
@@ -387,7 +387,7 @@ public class Selection {
             return this;
         }
 
-        public GroupSelection residueNumber(Range... residueNumberRanges) {
+        public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
                     .anyMatch(range -> range.getLeft() >= group.getResidueNumber() && range.getRight() <= group.getResidueNumber()));
             return this;

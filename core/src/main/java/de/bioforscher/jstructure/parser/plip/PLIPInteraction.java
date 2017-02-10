@@ -22,6 +22,10 @@ public class PLIPInteraction {
         return plipInteractionType;
     }
 
+    public String getPlipInteractionShortName() {
+        return plipInteractionType.getShortName();
+    }
+
     public Group getPartner1() {
         return partner1;
     }
