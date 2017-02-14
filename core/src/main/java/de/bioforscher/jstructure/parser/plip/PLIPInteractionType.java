@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 /**
  * Enumerates all types of PLIP interactions.
+ * TODO energies could be inferred from PLIP literature or http://protein.bio.unipd.it/ring/help
  * Created by bittrich on 2/9/17.
  */
 public enum PLIPInteractionType {

@@ -389,7 +389,7 @@ public class Selection {
 
         public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
-                    .anyMatch(range -> range.getLeft() >= group.getResidueNumber() && range.getRight() <= group.getResidueNumber()));
+                    .anyMatch(range -> group.getResidueNumber() >= range.getLeft() && group.getResidueNumber() <= range.getRight()));
             return this;
         }
 

@@ -14,6 +14,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.fail;
+
 /**
  * Validates the behaviour of the selection API.
  * Created by S on 21.11.2016.
@@ -24,6 +26,12 @@ public class SelectionIntegrationTest {
     @Before
     public void setup() {
         protein = ProteinParser.parseProteinById("1brr");
+    }
+
+    @Test
+    public void shouldSelectBasedOnRange() {
+        //TODO impl - range was inversed and thus return no elements
+        fail("impl");
     }
 
     @Test

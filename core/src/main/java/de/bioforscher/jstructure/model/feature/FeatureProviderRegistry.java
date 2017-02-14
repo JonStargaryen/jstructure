@@ -29,7 +29,7 @@ public class FeatureProviderRegistry {
     }
 
     private void scanForFeatureProviders() {
-        Reflections reflections = new Reflections("de.bioforscher");
+        Reflections reflections = new Reflections("de.de.bioforscher.bioforscher");
         Set<Class<?>> annotatedFeatureProviders = reflections.getTypesAnnotatedWith(FeatureProvider.class);
 
         for(Class<?> annotatedFeatureProvider : annotatedFeatureProviders) {

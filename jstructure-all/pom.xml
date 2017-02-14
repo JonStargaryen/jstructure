@@ -26,7 +26,7 @@
             <name>Sebastian Bittrich</name>
             <email>bittrich@hs-mittweida.de</email>
             <organization>bigM</organization>
-            <organizationUrl>http://www.bioforscher.de/bigM</organizationUrl>
+            <organizationUrl>http://www.de.bioforscher.bioforscher.de/bigM</organizationUrl>
         </developer>
     </developers>
 
@@ -66,5 +66,6 @@
     <modules>
         <module>../core</module>
         <module>../design</module>
+        <module>../membrane</module>
     </modules>
 </project>

@@ -85,11 +85,6 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      */
     public static final double Q = -27888.0;
 
-//    private List<BetaBridge> bridges;
-//    private List<Ladder> ladders;
-//
-//    private GroupContainer residues;
-
     @Override
     protected void processInternally(Protein protein) {
         GroupContainer residues = Selection.on(protein)

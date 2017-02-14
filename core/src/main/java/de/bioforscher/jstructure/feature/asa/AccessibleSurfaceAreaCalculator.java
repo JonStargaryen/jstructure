@@ -9,6 +9,7 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +36,12 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pre>
  * @author duarte_j
  */
-@FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ATOM_RADIUS, AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
+@FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA, AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA })
 public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
+    public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
+    public static final String RELATIVE_ACCESSIBLE_SURFACE_AREA = "RELATIVE_ACCESSIBLE_SURFACE_AREA";
+    private static final String ATOM_RADIUS = "ATOM_RADIUS";
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
     private static final int DEFAULT_N_SPHERE_POINTS = 960;
@@ -50,9 +54,6 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     // values diverge from the vdw in enum Element
     private static final double SULFUR_VDW = 1.85;
     private static final double OXYGEN_VDW = 1.40;
-
-    public static final String ATOM_RADIUS = "ATOM_RADIUS";
-    public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
 
     private final double probeSize;
     private final List<double[]> spherePoints;
@@ -107,6 +108,14 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         residueContainer.groups()
                 .parallel()
                 .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
+
+        // assign RASA of all groups
+        residueContainer.groups()
+                .forEach(group -> {
+                    double rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) /
+                            AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
+                    group.setFeature(RELATIVE_ACCESSIBLE_SURFACE_AREA, rasa);
+                });
     }
 
     /**

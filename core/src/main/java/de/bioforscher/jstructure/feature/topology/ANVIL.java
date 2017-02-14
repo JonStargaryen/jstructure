@@ -77,12 +77,16 @@ public class ANVIL extends AbstractFeatureProvider {
     /*
      * parameters
      */
-    private double step;
     private double minthick;
     private double maxthick;
     private int numberOfSpherePoints;
     private double density;
     private Predicate<Group> asaFilter;
+
+    /*
+     * variables
+     */
+    private double step;
     private double maximalExtent;
     private double[] centerOfMass;
     private Protein protein;
