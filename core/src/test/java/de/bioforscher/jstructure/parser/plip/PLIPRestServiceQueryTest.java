@@ -28,13 +28,9 @@ public class PLIPRestServiceQueryTest {
 
     @Test
     public void shouldTestCoverageForDataSet() throws IOException {
-        System.err.println("skipping PLIP-rest-service coverage test for data set - coverage is 100%");
-//        private static final String listPath = "/home/bittrich/git/phd_sb_repo/data/dataset/nrpdbtm/pdbtm_alpha_nr.list.txt";
-//        Files.lines(Paths.get(listPath))
-//                .map(line -> Selection.on(ProteinParser.parseProteinById(line.substring(0, 4)))
-//                        .chainName(line.substring(5))
-//                        .asChainContainer())
-//                .map(Protein.class::cast)
+        System.err.println("skipping PLIP-rest-service coverage test for data set");
+//        Files.lines(Paths.get("/home/bittrich/git/phd_sb_repo/data/dataset/nrpdbtm/pdbtm_alpha_nr.list.txt"))
+//                .map(line -> ProteinParser.parseProteinById(line.substring(0, 4)))
 //                .forEach(PLIPRestServiceQuery::process);
     }
 }

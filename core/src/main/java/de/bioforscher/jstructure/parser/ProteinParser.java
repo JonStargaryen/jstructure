@@ -223,7 +223,7 @@ public class ProteinParser {
                 }
             }
 
-            if(currentGroup == null || currentGroup.getResidueNumber() != resNum) {
+            if(currentGroup == null || currentGroup.getResidueNumber() != resNum || !currentGroup.getParentChain().getChainId().equals(chainId)) {
                 // residue changed - create new group object and set reference
                 currentGroup = new Group(pdbName,
                         resNum,

@@ -1,20 +1,18 @@
 package de.bioforscher.kinks;
 
-import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
+import de.bioforscher.Constants;
 
+import java.nio.file.Paths;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Compute several features and compose arff.
  * Created by bittrich on 2/14/17.
  */
+@Deprecated
 public class S02_ComposeKinkFinderArff {
-    //TODO resolve in other packages
-    private static final AbstractFeatureProvider asaCalculator = new AccessibleSurfaceAreaCalculator();
-    private static final AbstractFeatureProvider plipAnnotator = new PLIPAnnotator();
-
     public static void main(String[] args) {
         StringJoiner header = new StringJoiner(System.lineSeparator());
         /*
@@ -25,9 +23,9 @@ public class S02_ComposeKinkFinderArff {
          * @ATTRIBUTE petalwidth   NUMERIC
          * @ATTRIBUTE class        {Iris-setosa,Iris-versicolor,Iris-virginica}
          */
-        header.add("@RELATION kinks      NUMERIC");
-        header.add("@ATTRIBUTE pdbId     NUMERIC");
-        header.add("@ATTRIBUTE chainId   NUMERIC");
+        header.add("@RELATION kinks");
+        header.add("@ATTRIBUTE pdbId     STRING");
+        header.add("@ATTRIBUTE chainId   STRING");
         header.add("@ATTRIBUTE start     NUMERIC");
         header.add("@ATTRIBUTE end       NUMERIC");
         header.add("@ATTRIBUTE kink      NUMERIC");
@@ -51,6 +49,25 @@ public class S02_ComposeKinkFinderArff {
         header.add("@ATTRIBUTE plipR2    NUMERIC");
         header.add("@ATTRIBUTE plipR3    NUMERIC");
         header.add("@ATTRIBUTE plipR4    NUMERIC");
+        header.add("@ATTRIBUTE hbondL4    NUMERIC");
+        header.add("@ATTRIBUTE hbondL3    NUMERIC");
+        header.add("@ATTRIBUTE hbondL2    NUMERIC");
+        header.add("@ATTRIBUTE hbondL1    NUMERIC");
+        header.add("@ATTRIBUTE hbond      NUMERIC");
+        header.add("@ATTRIBUTE hbondR1    NUMERIC");
+        header.add("@ATTRIBUTE hbondR2    NUMERIC");
+        header.add("@ATTRIBUTE hbondR3    NUMERIC");
+        header.add("@ATTRIBUTE hbondR4    NUMERIC");
+        header.add("@ATTRIBUTE sideL4    NUMERIC");
+        header.add("@ATTRIBUTE sideL3    NUMERIC");
+        header.add("@ATTRIBUTE sideL2    NUMERIC");
+        header.add("@ATTRIBUTE sideL1    NUMERIC");
+        header.add("@ATTRIBUTE side      NUMERIC");
+        header.add("@ATTRIBUTE sideR1    NUMERIC");
+        header.add("@ATTRIBUTE sideR2    NUMERIC");
+        header.add("@ATTRIBUTE sideR3    NUMERIC");
+        header.add("@ATTRIBUTE sideR4    NUMERIC");
+        header.add("@ATTRIBUTE motifs    STRING");
         header.add("@ATTRIBUTE error     NUMERIC");
         header.add("@ATTRIBUTE angle     NUMERIC");
 
@@ -68,5 +85,14 @@ public class S02_ComposeKinkFinderArff {
          * 4.9,3.1,1.5,0.1,Iris-setosa
          */
         header.add("@DATA");
+        String output = Constants.lines(Paths.get(Constants.STATISTICS_PATH + "kink_finder_results_all.csv"))
+                .filter(line -> !line.startsWith("pdbId"))
+                .map(line -> line.replace(",", "|"))
+                .map(line -> line.split("\t"))
+                .map(split -> Stream.of(split).collect(Collectors.joining(",")))
+                .peek(System.out::println)
+                .collect(Collectors.joining(System.lineSeparator(), header.toString() + System.lineSeparator(), ""));
+
+        Constants.write(Paths.get(Constants.STATISTICS_PATH + "kink_finder_results_all.arff"), output.getBytes());
     }
 }

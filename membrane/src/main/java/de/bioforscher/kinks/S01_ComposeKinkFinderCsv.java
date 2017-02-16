@@ -12,8 +12,8 @@ import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
-import de.bioforscher.jstructure.parser.plip.PLIPInteraction;
-import de.bioforscher.jstructure.parser.plip.PLIPInteractionType;
+import de.bioforscher.jstructure.parser.plip.interaction.HydrogenBond;
+import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 
 import java.nio.file.Paths;
 import java.util.*;
@@ -25,6 +25,7 @@ import java.util.stream.Stream;
  * Compose all results into one csv.
  * Created by bittrich on 2/14/17.
  */
+@Deprecated
 public class S01_ComposeKinkFinderCsv {
     private static final AbstractFeatureProvider asaCalculator = new AccessibleSurfaceAreaCalculator();
     private static final AbstractFeatureProvider plipAnnotator = new PLIPAnnotator();
@@ -73,7 +74,7 @@ public class S01_ComposeKinkFinderCsv {
     }
 
     private static String composeCsvLine(KinkFinderHelix kinkFinderHelix, Protein protein) {
-        Map<String, Long> occurences = Arrays.stream(kinkFinderHelix.getSequence().split(""))
+        Map<String, Long> occurrences = Arrays.stream(kinkFinderHelix.getSequence().split(""))
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         String pdbId = kinkFinderHelix.getPdbCode().substring(0, 4);
@@ -83,13 +84,13 @@ public class S01_ComposeKinkFinderCsv {
         int helixEnd = kinkFinderHelix.getHelixEnd();
         long glycineCount;
         try {
-            glycineCount = occurences.get("G");
+            glycineCount = occurrences.get("G");
         } catch (NullPointerException e) {
             glycineCount = 0;
         }
         long prolineCount;
         try {
-            prolineCount = occurences.get("P");
+            prolineCount = occurrences.get("P");
         } catch (NullPointerException e) {
             prolineCount = 0;
         }
@@ -132,7 +133,7 @@ public class S01_ComposeKinkFinderCsv {
                 groupContainer.groups()
                         .map(group -> group.getFeatureAsList(PLIPInteraction.class, PLIPAnnotator.PLIP_INTERACTIONS)
                                 .stream()
-                                .filter(plipInteraction -> plipInteraction.getPlipInteractionType().equals(PLIPInteractionType.HYDROGEN_BOND))
+                                .filter(plipInteraction -> plipInteraction instanceof HydrogenBond)
                                 // ensure that interactions describe backbone interactions TODO decide actually on annotated, interacting atoms
                                 .filter(plipInteraction -> Math.abs(plipInteraction.getPartner1().getResidueNumber() - plipInteraction.getPartner2().getResidueNumber()) < 7)
                                 .count()
@@ -143,7 +144,7 @@ public class S01_ComposeKinkFinderCsv {
                 groupContainer.groups()
                         .map(group -> group.getFeatureAsList(PLIPInteraction.class, PLIPAnnotator.PLIP_INTERACTIONS)
                                 .stream()
-                                // ensure that interactions describe backbone interactions TODO decide actually on annotated, interacting atoms
+                                // ensure that interactions describe backbone interactions
                                 .filter(plipInteraction -> Math.abs(plipInteraction.getPartner1().getResidueNumber() - plipInteraction.getPartner2().getResidueNumber()) > 7)
                                 .count()
                         )
