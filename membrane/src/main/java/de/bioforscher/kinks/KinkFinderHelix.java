@@ -92,4 +92,18 @@ public class KinkFinderHelix {
     public String getPdbCode() {
         return pdbCode;
     }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() +
+                " sequence='" + sequence + '\'' +
+                " helixStart=" + helixStart +
+                " helixEnd=" + helixEnd +
+                " kinkPosition=" + kinkPosition +
+                " kinkAngle=" + kinkAngle;
+    }
+
+    public boolean isSignificantKink() {
+        return kinkAngle > 20.0;
+    }
 }

@@ -91,6 +91,14 @@ public abstract class PLIPInteraction {
         return partner1.equals(partner2);
     }
 
+    /**
+     * True iff this is an interaction to another amino acid.
+     * @return true when <code>partner2.isAminoAcid()</code> evaluates to <code>true</code>
+     */
+    public boolean partnerIsAminoAcid() {
+        return partner2.isAminoAcid();
+    }
+
     String toString(Atom atom) {
         return "'" + atom.getParentGroup().getIdentifier() + "-" + atom.getIdentifier() + "'";
     }

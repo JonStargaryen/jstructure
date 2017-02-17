@@ -25,6 +25,7 @@ public class Constants {
     public static final String SCRIPTS_PATH = DATA_PATH + "scripts/";
     public static final String KINK_FINDER_SCRIPT_PATH = SCRIPTS_PATH + "kink_finder/Kink_Finder.py";
     public static final String KINK_FINDER_RESULT_PATH = DATA_PATH + "kink_finder/";
+    public static final String OPM_PATH = DATA_PATH + "opm/";
     public static final String KINK_FINDER_TMP_PATH = KINK_FINDER_RESULT_PATH + "tmp/";
     public static final String STATISTICS_PATH = DATA_PATH + "statistics/";
 

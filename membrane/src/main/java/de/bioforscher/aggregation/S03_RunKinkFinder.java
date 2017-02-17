@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 public class S03_RunKinkFinder {
     public static void main(String[] args) {
         runKinkFinder();
-        cleanDirectory();
+//        cleanDirectory();
     }
 
     /**
@@ -32,6 +32,7 @@ public class S03_RunKinkFinder {
         Path kinkFinderTmpPath = Paths.get(Constants.KINK_FINDER_TMP_PATH);
         Path kinkFinderResultPath = Paths.get(Constants.KINK_FINDER_RESULT_PATH);
         Constants.list(Paths.get(Constants.STRUCTURE_PATH))
+                .filter(path -> !kinkFinderResultPath.resolve(path.toFile().getName().split("\\.")[0] + ".kinks").toFile().exists())
                 .map(Path::toFile)
                 .forEach(pdbPath -> {
                     try {
