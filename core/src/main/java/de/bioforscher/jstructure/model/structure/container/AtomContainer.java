@@ -45,7 +45,7 @@ public interface AtomContainer extends StructureContainer {
         getAtoms().removeIf(Atom::isVirtual);
     }
 
-    default AtomContainer getCopy() {
+    default AtomContainer createCopy() {
         try {
             return getClass().getConstructor(getClass()).newInstance(this);
         } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {

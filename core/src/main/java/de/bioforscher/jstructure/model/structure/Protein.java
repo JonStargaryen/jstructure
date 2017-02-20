@@ -29,7 +29,7 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
      */
     private String title;
     private List<Chain> chains;
-    private String identifier;
+    private transient String identifier;
 
     public Protein() {
         this.chains = new ArrayList<>();

@@ -24,10 +24,10 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
     /**
      * Handle to the container element.
      */
-    private Chain parentChain;
-    private String identifier;
-    private GroupInformation groupInformation;
-    private boolean parentChainIsTermianted;
+    private transient Chain parentChain;
+    private transient String identifier;
+    private transient GroupInformation groupInformation;
+    private transient boolean parentChainIsTermianted;
 
     public Group(String pdbName, int residueNumber, GroupInformation groupInformation, boolean parentChainIsTerminated) {
         this.residueNumber = residueNumber;

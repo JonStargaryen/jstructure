@@ -24,11 +24,11 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
     private String name;
     private int pdbSerial;
     private double[] coordinates;
-    private Group parentGroup;
+    private transient Group parentGroup;
     private float occupancy;
     private float bfactor;
-    private boolean virtual;
-    private String identifier;
+    private transient boolean virtual;
+    private transient String identifier;
 
     /**
      * Copy constructor.

@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Checks especially the getCopy() methods of the data model
+ * Checks especially the createCopy() methods of the data model
  * Created by S on 23.11.2016.
  */
 public class ModelIntegrityTest {
@@ -30,7 +30,7 @@ public class ModelIntegrityTest {
                 .chainName("A", "C")
                 .aminoAcids(AminoAcidFamily.ASPARAGINE)
                 .asGroupContainer()
-                .getCopy();
+                .createCopy();
         Assert.assertTrue(copiedGroups instanceof Chain);
         System.out.println(copiedGroups.composePDBRecord());
     }
@@ -43,13 +43,13 @@ public class ModelIntegrityTest {
                 .aminoAcids(AminoAcidFamily.HISTIDINE)
                 .atomName(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME)
                 .asAtomContainer()
-                .getCopy();
+                .createCopy();
         System.out.println(clonedSelectedAtoms.composePDBRecord());
     }
 
     @Test
     public void shouldGetProteinCopy() {
-        ChainContainer copiedProtein = protein.getCopy();
+        ChainContainer copiedProtein = protein.createCopy();
         Assert.assertTrue(copiedProtein instanceof Protein);
     }
 }

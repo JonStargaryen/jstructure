@@ -44,7 +44,7 @@ public interface GroupContainer extends AtomContainer {
     }
 
     @Override
-    default GroupContainer getCopy() {
-        return (GroupContainer) AtomContainer.super.getCopy();
+    default GroupContainer createCopy() {
+        return (GroupContainer) AtomContainer.super.createCopy();
     }
 }

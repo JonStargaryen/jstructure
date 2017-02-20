@@ -42,11 +42,10 @@
             <artifactId>commons-math3</artifactId>
             <version>3.6.1</version>
         </dependency>
-        <!-- TODO replace concrete dependency -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.21</version>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.23</version>
         </dependency>
     </dependencies>
 
@@ -66,5 +65,6 @@
     <modules>
         <module>../core</module>
         <module>../design</module>
+        <module>../explorer</module>
     </modules>
 </project>

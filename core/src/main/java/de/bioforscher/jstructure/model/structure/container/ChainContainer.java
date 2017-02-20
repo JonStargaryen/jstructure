@@ -25,7 +25,7 @@ public interface ChainContainer extends GroupContainer {
         return getChains().stream();
     }
 
-    default ChainContainer getCopy() {
-        return (ChainContainer) GroupContainer.super.getCopy();
+    default ChainContainer createCopy() {
+        return (ChainContainer) GroupContainer.super.createCopy();
     }
 }

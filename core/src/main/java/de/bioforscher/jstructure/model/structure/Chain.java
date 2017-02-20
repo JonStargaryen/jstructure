@@ -25,8 +25,8 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
     /**
      * Handle to the containing element.
      */
-    private Protein parentProtein;
-    private String identifier;
+    private transient Protein parentProtein;
+    private transient String identifier;
 
     /**
      * Constructor for getChain objects.
