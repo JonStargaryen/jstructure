@@ -1,4 +1,4 @@
-package de.bioforscher.opm;
+package bioforscher.opm;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;

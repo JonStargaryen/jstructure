@@ -70,13 +70,8 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
                     List<Group> residueList = residueInChain.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate, startResidue, endResidue);
                     residueList.forEach(residue -> {
-                        List<SequenceMotif> value = residue.getFeature(List.class, SEQUENCE_MOTIF);
-                        // entry will be null at first - create list and assign reference
-                        if(value == null) {
-                            value = new ArrayList<>();
-                            residue.setFeature(SEQUENCE_MOTIF, value);
-                        }
-                        value.add(sequenceMotif);
+                        residue.addFeatureToList(SEQUENCE_MOTIF, sequenceMotif);
+
                         if(!globalListOfSequenceMotifs.contains(sequenceMotif)) {
                             globalListOfSequenceMotifs.add(sequenceMotif);
                         }

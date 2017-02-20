@@ -8,6 +8,8 @@ import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.fail;
+
 /**
  * Tests the ANVIL algorithm which screens for the most suitable membrane orientation for a given protein.
  * Created by S on 03.11.2016.
@@ -25,5 +27,6 @@ public class ANVILFunctionalTest {
         //TODO test
         FeatureProviderRegistry.resolve(ANVIL.MEMBRANE).process(protein1brr);
         System.out.println("membrane quality is " + protein1brr.getFeature(Membrane.class, ANVIL.MEMBRANE).getQmax());
+        fail("implement me!");
     }
 }

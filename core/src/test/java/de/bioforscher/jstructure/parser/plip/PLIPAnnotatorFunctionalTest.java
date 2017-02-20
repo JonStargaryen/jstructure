@@ -7,8 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * Test the PLIP annotator.
@@ -32,11 +30,12 @@ public class PLIPAnnotatorFunctionalTest {
 
     @Test
     public void shouldAnnotateDataSet() throws IOException {
-        final String listPath = "/home/bittrich/git/phd_sb_repo/data/pdbtm_alpha_nr.list.txt";
-        Files.lines(Paths.get(listPath))
-                .map(line -> line.substring(0, 4))
-                .map(ProteinParser::parseProteinById)
-                .forEach(plipAnnotator::process);
+        System.err.println("skipping PLIP computation for data set");
+//        final String listPath = "/home/bittrich/git/phd_sb_repo/data/pdbtm_alpha_nr.list.txt";
+//        Files.lines(Paths.get(listPath))
+//                .map(line -> line.substring(0, 4))
+//                .map(ProteinParser::parseProteinById)
+//                .forEach(plipAnnotator::process);
     }
 
     @Test

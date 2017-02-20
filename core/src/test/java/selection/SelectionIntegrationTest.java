@@ -3,18 +3,21 @@ package selection;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Validates the behaviour of the selection API.
@@ -30,8 +33,15 @@ public class SelectionIntegrationTest {
 
     @Test
     public void shouldSelectBasedOnRange() {
-        //TODO impl - range was inversed and thus return no elements
-        fail("impl");
+        List<Group> selection = Selection.on(protein)
+                .chainName("A")
+                .residueNumber(new IntegerRange(100, 105))
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+
+        selection.forEach(group -> Assert.assertTrue(group.getResidueNumber() >= 100 && group.getResidueNumber() <= 105));
+        System.out.println(selection);
+        Assert.assertTrue(selection.size() == 6);
     }
 
     @Test

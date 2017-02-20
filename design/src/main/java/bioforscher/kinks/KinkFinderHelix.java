@@ -1,4 +1,4 @@
-package de.bioforscher.kinks;
+package bioforscher.kinks;
 
 /**
  * Representation of KinkFinder.

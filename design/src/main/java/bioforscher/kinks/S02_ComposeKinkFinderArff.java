@@ -1,6 +1,6 @@
-package de.bioforscher.kinks;
+package bioforscher.kinks;
 
-import de.bioforscher.Constants;
+import bioforscher.Constants;
 
 import java.nio.file.Paths;
 import java.util.StringJoiner;

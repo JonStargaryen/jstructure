@@ -1,6 +1,6 @@
-package de.bioforscher.aggregation;
+package bioforscher.aggregation;
 
-import de.bioforscher.Constants;
+import bioforscher.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,6 +1,8 @@
-package de.bioforscher.kinks;
+package bioforscher.kinks;
 
-import de.bioforscher.Constants;
+import bioforscher.opm.OPMParser;
+import bioforscher.opm.TMHelix;
+import bioforscher.Constants;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
@@ -15,8 +17,6 @@ import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
 import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
-import de.bioforscher.opm.OPMParser;
-import de.bioforscher.opm.TMHelix;
 
 import java.nio.file.Paths;
 import java.util.*;

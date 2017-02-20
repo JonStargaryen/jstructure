@@ -1,6 +1,6 @@
-package de.bioforscher.kinks;
+package bioforscher.kinks;
 
-import de.bioforscher.Constants;
+import bioforscher.Constants;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 import de.bioforscher.jstructure.model.structure.selection.Selection;

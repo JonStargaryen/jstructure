@@ -66,6 +66,5 @@
     <modules>
         <module>../core</module>
         <module>../design</module>
-        <module>../membrane</module>
     </modules>
 </project>

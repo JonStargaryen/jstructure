@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.feature;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,17 @@ public interface FeatureContainer {
             expectedListContentType.cast(entry.get(0));
         }
         return (List<ContentType>) entry;
+    }
+
+    @SuppressWarnings("unchecked")
+    default <Content> void addFeatureToList(String key, Content featureValue) {
+        List<Content> list = (List<Content>) getFeatureMap().get(key);
+        // entry will be null at first - create list and assign reference
+        if(list == null) {
+            list = new ArrayList<>();
+            getFeatureMap().put(key, list);
+        }
+        list.add(featureValue);
     }
 
     /**

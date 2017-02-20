@@ -1,4 +1,4 @@
-package de.bioforscher;
+package bioforscher;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;

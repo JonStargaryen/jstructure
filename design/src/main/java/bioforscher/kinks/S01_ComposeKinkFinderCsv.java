@@ -1,6 +1,6 @@
-package de.bioforscher.kinks;
+package bioforscher.kinks;
 
-import de.bioforscher.Constants;
+import bioforscher.Constants;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;

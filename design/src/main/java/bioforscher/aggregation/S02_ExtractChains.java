@@ -1,6 +1,6 @@
-package de.bioforscher.aggregation;
+package bioforscher.aggregation;
 
-import de.bioforscher.Constants;
+import bioforscher.Constants;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
