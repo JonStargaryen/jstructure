@@ -1,7 +1,17 @@
 package de.bioforscher.explorer;
 
+import de.bioforscher.explorer.model.ExplorerProtein;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
+import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
+import de.bioforscher.jstructure.feature.topology.ANVIL;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +21,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Access to the database service.
@@ -20,9 +34,14 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ProteinService {
+    private static final Logger logger = LoggerFactory.getLogger(ProteinService.class);
     private final ProteinRepository repository;
-    private List<String> allProteinIds;
     private List<String> nonRedundantAlphaHelicalProteinIds;
+    private List<String> features = Stream.of(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA,
+            SequenceMotifAnnotator.SEQUENCE_MOTIF,
+            ANVIL.MEMBRANE,
+            SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES,
+            PLIPAnnotator.PLIP_INTERACTIONS).collect(Collectors.toList());
 
     @Autowired
     public ProteinService(ProteinRepository repository) throws IOException {
@@ -31,10 +50,12 @@ public class ProteinService {
 
     @PostConstruct
     public void activate() throws IOException {
-        repository.deleteAll();
+        // clear database
+//        repository.deleteAll();
 
         // load protein lists
-        this.allProteinIds = Files.lines(getResource("pdbtm_all.list")) //http://pdbtm.enzim.hu/data/pdbtm_all.list
+        List<String> allProteinIds = Files.lines(getResource("pdbtm_all.list")) //http://pdbtm.enzim.hu/data/pdbtm_all.list
+                .distinct()
                 .limit(1)
                 .map(line -> line.substring(0, 4))
                 .map(String::toUpperCase)
@@ -43,23 +64,48 @@ public class ProteinService {
                 .map(String::toUpperCase)
                 .collect(Collectors.toList());
 
+        // resolve all feature providers
+        List<AbstractFeatureProvider> featureProviders = features.stream()
+                .map(FeatureProviderRegistry::resolve)
+                .collect(Collectors.toList());
+
+        List<String> knownProteins = repository.findAll().stream()
+                .map(ExplorerProtein::getName)
+                .collect(Collectors.toList());
+
         // parse protein data
-        allProteinIds.forEach(pdbid -> {
+        List<String> proteinsToProcess = allProteinIds.stream()
+                .filter(id -> !knownProteins.contains(id))
+                .collect(Collectors.toList());
+
+        proteinsToProcess.stream()
+                .map(pdbid -> (Callable) () -> {
                     Protein protein = ProteinParser.parseProteinById(pdbid);
-                    repository.save(protein);
-                });
+                    featureProviders.forEach(abstractFeatureProvider ->abstractFeatureProvider.process(protein));
+                    repository.save(new ExplorerProtein(protein));
+                    logger.info("gathered all information for entry {}",pdbid);
+                    return null;
+                })
+                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
     }
 
     public List<String> getAllProteins() {
-        return allProteinIds;
+        return repository.findAll().stream()
+                .map(ExplorerProtein::getName)
+                .collect(Collectors.toList());
     }
 
     public List<String> getNonRedundantAlphaHelicalProteins() {
         return nonRedundantAlphaHelicalProteinIds;
     }
 
-    public Protein getProtein(String pdbid) {
-        return repository.findByTheProteinsName(pdbid.toUpperCase()).get(0);
+    public ExplorerProtein getProtein(String pdbid) {
+        List<ExplorerProtein> result = repository.findByTheProteinsName(pdbid.toUpperCase());
+        if(result.size() > 0) {
+            return result.get(0);
+        }
+
+        throw new NoSuchElementException("could not retrieve entry for " + pdbid);
     }
 
     private Path getResource(String filename) {

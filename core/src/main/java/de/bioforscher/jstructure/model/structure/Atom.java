@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
-import org.springframework.data.annotation.Transient;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -18,16 +17,15 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
     private static final float DEFAULT_BFACTOR = 1.0f;
     private static final float DEFAULT_OCCUPANCY = 1.0f;
 
-    private transient Element element;
+    private Element element;
     private String name;
     private int pdbSerial;
     private double[] coordinates;
-    @Transient
-    private transient Group parentGroup;
+    private Group parentGroup;
     private float occupancy;
     private float bfactor;
-    private transient boolean virtual;
-    private transient String identifier;
+    private boolean virtual;
+    private String identifier;
 
     /**
      * Copy constructor.

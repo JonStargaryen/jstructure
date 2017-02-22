@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import org.springframework.data.annotation.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +22,11 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
      * The unique getChain name. Usually one character, e.g. 'A'.
      */
     private String chainId;
-    @Transient
     /**
      * Handle to the containing element.
      */
-    private transient Protein parentProtein;
-    private transient String identifier;
+    private Protein parentProtein;
+    private String identifier;
 
     /**
      * Constructor for getChain objects.

@@ -97,6 +97,10 @@ public class Membrane {
         return qmax;
     }
 
+    public List<double[]> getMembraneAtoms() {
+        return membraneAtoms;
+    }
+
     /**
      * Assigns a statically derived energy term to each amino acid based on its distance to the center of the membrane.
      *

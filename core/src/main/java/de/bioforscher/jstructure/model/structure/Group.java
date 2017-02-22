@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import de.bioforscher.jstructure.parser.CIFParser;
-import org.springframework.data.annotation.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +21,13 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     private int residueNumber;
     private List<Atom> atoms;
-    @Transient
     /**
      * Handle to the container element.
      */
-    private transient Chain parentChain;
-    private transient String identifier;
-    private transient GroupInformation groupInformation;
-    private transient boolean parentChainIsTermianted;
+    private Chain parentChain;
+    private String identifier;
+    private GroupInformation groupInformation;
+    private boolean parentChainIsTermianted;
 
     public Group(String pdbName, int residueNumber, GroupInformation groupInformation, boolean parentChainIsTerminated) {
         this.residueNumber = residueNumber;

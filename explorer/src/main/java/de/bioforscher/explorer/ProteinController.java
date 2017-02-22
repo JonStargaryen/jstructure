@@ -1,6 +1,6 @@
 package de.bioforscher.explorer;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.explorer.model.ExplorerProtein;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +35,7 @@ public class ProteinController {
     }
 
     @RequestMapping(value = "/pdbid/{pdbid}", method = RequestMethod.GET)
-    public Protein getProteinByID(@PathVariable("pdbid") String pdbid) {
+    public ExplorerProtein getProteinByID(@PathVariable("pdbid") String pdbid) {
         return proteinService.getProtein(pdbid);
     }
 }
