@@ -5,21 +5,28 @@
 
     MODULE.constant('design', {
         defaultColor : '#454b52',
-        darkenedColor : '#a9bcc1'
+        lighterColor : '#d1e2e6'
     });
 
-    MODULE.constant('coloringFeatures', [
-
+    MODULE.constant('features', [
+        { name : 'no coloring', tag : 'none' },
+        { name : 'relative accessible surface area', tag : 'rasa' },
+        { name : 'secondary structure element', tag: 'sse' }
     ]);
 
     MODULE.constant('renderModes',  [
-        'cartoon', 'sline', 'lines', 'trace', 'lineTrace', 'tube', 'spheres', 'ballsAndSticks'
+        'ballsAndSticks', 'cartoon', 'sline', 'lines', 'trace', 'lineTrace', 'tube', 'spheres'
     ]);
 
-    MODULE.constant('interactions', [
-       'halogenBonds', 'hydrogenBonds', 'hydrophobicInteractions', 'metalComplexes', 'piCationInteractions',
-       'piStackings', 'saltBridges', 'waterBridges'
-    ]);
+    MODULE.constant('interactions', {
+        'halogenBonds' : '#3FFFBF',
+        'hydrogenBonds' : '#0000FF',
+        'hydrophobicInteractions' : '#7F7F7F',
+        'metalComplexes' : '#8C3F99',
+        'piCationInteractions' : '#FF7F00',
+        'piStackings' : '#8CB266',
+        'saltBridges' : '#FFFF00',
+        'waterBridges' : '#BFBFFF' });
 
     /**
      * navigation
@@ -51,8 +58,8 @@
     /**
      * on app start
      */
-    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', '$filter',
-        function ($rootScope, $http, $location, renderModes, $filter) {
+    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', 'features', '$filter',
+        function ($rootScope, $http, $location, renderModes, features, $filter) {
         $rootScope.alerts = [];
 
         // message/alert container
@@ -62,11 +69,18 @@
 
         $rootScope.page = function () {
             return $location.path();
-        }
+        };
 
         $rootScope.renderModes = [];
         renderModes.forEach(function(entry) {
-            $rootScope.renderModes.push({ text: $filter('splitAtUppercase')(entry), index: $rootScope.renderModes.length, raw: entry });
+            $rootScope.renderModes.push({ text: $filter('splitAtUppercase')(entry),
+                index: $rootScope.renderModes.length, raw: entry });
+        });
+
+        $rootScope.features = [];
+        features.forEach(function (entry) {
+            $rootScope.features.push({ text: entry.name,
+                index: $rootScope.features.length, raw: entry.tag });
         });
     }]);
 
@@ -85,14 +99,15 @@
         };
     });
 
-    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design',
-        function($scope, $rootScope, $routeParams, $http, design) {
+    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions',
+        function($scope, $rootScope, $routeParams, $http, design, interactions) {
         $scope.loading = true;
         $scope.protein = {};
         $scope.options = {
             renderMembrane : false,
             renderHydrogenBonds : false,
-            renderMode : $scope.renderModes[7]
+            renderMode : $scope.renderModes[0],
+            coloringFeature : $scope.features[0]
         };
         var membraneInitialized = false;
         var initializedInteractions = [];
@@ -147,7 +162,7 @@
         /* render plain PDB structure with chosen style */
         var renderStructure = function() {
             $scope.viewer.renderAs('protein', $scope.structure, $scope.options.renderMode.raw,
-                { color: pv.color.uniform(design.darkenedColor) });
+                { color: pv.color.uniform(design.lighterColor) });
         };
 
         /* render ANVIL membrane layer */
@@ -161,12 +176,12 @@
 
         /* render PLIP interactions */
         var createInteractions = function (type) {
-            console.log('creating interactions for ' + type)
+            console.log('creating interactions for ' + type);
             $scope.protein[type].forEach(function(entry) {
                 var atom1 = $scope.structure.atom(entry.a1);
                 var atom2 = $scope.structure.atom(entry.a2);
                 var g = $scope.viewer.customMesh(type);
-                g.addTube(atom1.pos(), atom2.pos(), 0.2, { cap : false, color : 'red' });
+                g.addTube(atom1.pos(), atom2.pos(), 0.3, { cap : false, color : interactions[type] });
             });
             initializedInteractions.push(type);
         };
@@ -282,7 +297,7 @@
         return function(input) {
             if(input) {
                 return input
-                // insert a space before all caps
+                    // insert a space before all caps
                     .replace(/([A-Z])/g, ' $1')
                     .toLowerCase();
             }
