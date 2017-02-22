@@ -1,0 +1,248 @@
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: white;
+    background-color: #454b52;
+    position: relative;
+    line-height: 1;
+    min-height: 100%;
+}
+
+div[data-ng-view] {
+    min-height: calc(100% - 48px);
+    position: absolute;
+    width: 100%;
+}
+
+.wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(17, 17, 17, 0.85);
+    z-index: 10000;
+}
+
+.right {
+    float: right !important;
+}
+
+/* header/navigation */
+
+header {
+    position: relative;
+    height: 48px;
+    z-index: 101;
+    background-color: #22272c;
+}
+
+header .logo {
+    float: left;
+    font-variant: small-caps;
+    padding: 13px 17px;
+    color: #51b2e9;
+    font-size: 22px;
+    font-weight: lighter;
+    text-decoration: none;
+    border-right: 1px solid #323a41;
+}
+
+header .menu {
+    float: right;
+    height: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header .menu li {
+    position: relative;
+    float: left;
+    vertical-align: top;
+    height: 100%;
+}
+
+header .menu li a {
+    display: block;
+    height: 100%;
+    padding: 15px 20px;
+    color: #cbddf2;
+    font-size: 13px;
+    line-height: 19px;
+}
+
+header .menu li a:hover, header .menu li a:active, header .menu li a:focus, header .menu li.active a {
+    text-decoration: none;
+    background-color: black;
+}
+
+/* main page */
+
+.option {
+    border-left: 1px solid #415060;
+    float: left;
+    color: #52b1e9;
+    line-height: 16px;
+    font-size: 14px;
+    min-width: 35px;
+    height: 35px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: ease-in-out 0.35s;
+}
+
+.option.active {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #51b2e9;
+}
+
+/* visualizer part */
+
+.visualization {
+    background-color: #313a41;
+    position: relative;
+    float: left;
+    width: 400px;
+    height: 100%;
+    color: #96a3b3;
+    font-size: 14px;
+}
+
+.visualization .visualization-body > div {
+    border-bottom: 1px solid #415060;
+}
+
+.visualization #protein-visualizer {
+    height: 401px;
+}
+
+.visualization-header, .sequence-header {
+    height: 35px;
+}
+
+/* the general/edit/compute part */
+
+.sequence {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    min-width: 400px;
+}
+
+.sequence-header {
+    border-bottom: 1px solid #52585f;
+    width: 100%;
+    overflow: hidden;
+}
+
+.sequence-header > div {
+    float: left;
+    color: #778796;
+    line-height: 16px;
+    font-size: 14px;
+    min-width: 35px;
+    height: 35px;
+    padding: 10px;
+    border-right: 1px solid #52585f;
+    /* limit the width of the element containing the protein title */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 400px;
+    overflow: hidden;
+}
+
+/* sequence representation - the sequenceCerosene-like sequence depiction */
+
+.sequence-representation .chain {
+    padding: 10px 10px 10px 55px;
+}
+
+.sequence-representation .chainId {
+    position: absolute;
+    left: 10px;
+}
+
+.sequence-representation .group {
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    margin: 0 0 3px 0;
+    padding: 9px 0 10px;
+    text-align: center;
+    border: solid 1px;
+    background: #313a41;
+    font-weight: bold;
+    color: rgb(127, 138, 134);
+}
+
+.legend {
+    padding: 10px 10px 10px 42px;
+    display: none;
+}
+
+.legend.show {
+    display: block;
+}
+
+.legend > div {
+    display: inline-block;
+    border: solid 1px;
+    height: 25px;
+    margin-right: 10px;
+    padding: 5px 10px;
+    vertical-align: top;
+    text-align: center;
+    border: solid 1px;
+    background: #313a41;
+    font-weight: bold;
+}
+
+/* pdb representation - the view with all coordinates */
+
+.tse-scrollable, .pdb-representation, .sequence-representation {
+    height: calc(100% - 35px);
+}
+
+.protein-list > a {
+    display: inline-block;
+    cursor: pointer;
+    padding-right: 0.5em;
+    color: white;
+}
+
+/*.protein .chain {
+    padding: 10px 10px 10px 42px;
+}
+
+.protein .chainId {
+    position: absolute;
+    left: 10px;
+}
+
+.protein .group {
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    margin: 0 0 3px 0;
+    padding: 5px 0 10px;
+    vertical-align: top;
+    text-align: center;
+    border: solid 1px;
+    background: #313a41;
+    font-weight: bold;
+    color: rgb(127, 138, 134);
+    font-family: monospace;
+}*/

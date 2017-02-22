@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
+import org.springframework.data.annotation.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +56,14 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
     }
 
     @Override
+    @Transient
+    //TODO ignore groups and atoms by JSON/mongoDB
     public List<Group> getGroups() {
         return chains().flatMap(Chain::groups).collect(Collectors.toList());
     }
 
     @Override
+    @Transient
     public List<Atom> getAtoms() {
         return chains().flatMap(Chain::atoms).collect(Collectors.toList());
     }

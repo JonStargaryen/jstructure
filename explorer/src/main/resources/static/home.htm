@@ -1,15 +1,11 @@
-<div data-ng-controller="HomeController as home">
-    <div>
+<div>
+    <div class="protein-list">
         <h3>non-redundant alpha helical membrane proteins</h3>
-        <div data-ng-repeat="protein in nonRedundantAlphaHelicalProteins">
-            {{protein}}
-        </div>
+        <a href="protein/{{protein.substring(0, 4)}}#{{protein.substring(5)}}" ng-repeat="protein in nonRedundantAlphaHelicalProteins">{{protein.substring(0, 4)}}-{{protein.substring(5)}}</a>
     </div>
 
-    <div>
+    <div class="protein-list">
         <h3>all membrane proteins</h3>
-        <div data-ng-repeat="protein in allProteins">
-            {{protein}}
-        </div>
+        <a href="protein/{{protein.substring(0, 4)}}" ng-repeat="protein in allProteins">{{protein}}</a>
     </div>
 </div>

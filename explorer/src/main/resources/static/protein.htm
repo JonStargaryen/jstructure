@@ -1,1 +1,59 @@
-protein
+<section data-ng-cloak class="text-left wrapper">
+    <div data-ng-show="loading" class="overlay"></div>
+
+    <!-- the visualizer part on the left -->
+    <div class="visualization">
+        <div class="wrapper">
+            <div class="dropdown-select" title="select feature to color visualization" dropdown-select="features"
+                 dropdown-model="options.coloringFeature"
+                 dropdown-item-label="text">
+            </div>
+
+            <div class="visualization-body">
+                <div id="protein-visualizer" class="visualizer-tab"></div>
+                <div class="visualization-options clearfix">
+                    <div class="option fa fa-link right" data-ng-click="options.renderContacts = !options.renderContacts" data-ng-class="{active: options.renderContacts}" title="render residue-residue contacts"></div>
+                    <div class="option fa fa-minus right" data-ng-click="options.renderMembrane = !options.renderMembrane" data-ng-class="{active: options.renderMembrane}" title="render membrane layer"></div>
+                </div>
+                <div class="dropdown-select" title="select PV's render mode" dropdown-select="renderModes"
+                     dropdown-model="options.renderMode"
+                     dropdown-item-label="text">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- the edit/data part on the right -->
+    <div class="sequence">
+        <div class="wrapper">
+            <!-- general project information -->
+            <div class="sequence-header clearfix">
+                <div data-ng-click="options.renderPDB = !options.renderPDB" data-ng-class="{'fa-minus' : options.renderPDB, 'fa-plus' : !options.renderPDB}" class="option fa"></div>
+                <div title="{{protein.title}}">{{protein.name}}</div>
+                <div class="title">{{protein.title}}</div>
+                <div class="right"></div>
+            </div>
+
+            <div class="tse-scrollable">
+                <div class="tse-content">
+                    <!-- the sequence part -->
+                    <div data-ng-hide="options.renderPDB" class="sequence-representation">
+                        <div class="chain" data-ng-repeat="chain in protein.chains">
+                            <div class="chainId group" title="chain '{{chain.chainId}}'">{{chain.chainId}}</div>
+                            <div class="group" data-ng-repeat="group in chain.groups | filter: { aminoAcid : true }">{{group.threeLetterCode}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //TODO this is ugly
+        $(this).delay(1000).queue(function() {
+            $('.tse-scrollable').TrackpadScrollEmulator();
+
+            $(this).dequeue();
+        });
+    </script>
+</section>

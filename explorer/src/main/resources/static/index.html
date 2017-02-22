@@ -11,28 +11,21 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="thirdparty/angular-dropdowns.css">
+    <link rel="stylesheet" href="thirdparty/nv.d3.css">
+    <link rel="stylesheet" href="thirdparty/trackpad-scroll-emulator.css">
 </head>
 <body data-ng-app="mpe">
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">membrane protein explorer</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li data-ng-class="{ active: page() == '/home' }"><a href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-                    <li data-ng-class="{ active: page() == '/protein' }" data-ng-show="page() == '/protein'"><a href="#"><i class="fa fa-cubes" aria-hidden="true"></i> Protein</a></li>
-                    <li data-ng-class="{ active: page() == '/about' }"><a href="about"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <header class="clearfix">
+        <a href="home" class="logo">
+            membrane protein explorer
+        </a>
+        <ul class="menu">
+            <li data-ng-class="{ active: page() == '/home' }"><a href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+            <li data-ng-class="{ active: page().startsWith('/protein/') }" data-ng-show="page().startsWith('/protein/')"><a href="#"><i class="fa fa-cubes" aria-hidden="true"></i> Protein</a></li>
+            <li data-ng-class="{ active: page() == '/about' }"><a href="about"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
+        </ul>
+    </header>
 
     <div data-ng-repeat="alert in alerts" class="alert alert-{{alert.type || 'alert'}} alert-dismissible">
         {{alert.msg}}
@@ -46,6 +39,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-route.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="thirdparty/angular-dropdowns.js"></script>
+    <script src="thirdparty/angular-nvd3.js"></script>
+    <script src="thirdparty/d3.js"></script>
+    <script src="thirdparty/jquery.trackpad-scroll-emulator.min.js"></script>
+    <script src="thirdparty/nv.d3.js"></script>
+    <script src="thirdparty/pv.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

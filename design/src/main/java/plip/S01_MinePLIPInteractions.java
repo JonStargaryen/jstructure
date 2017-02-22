@@ -75,7 +75,7 @@ public class S01_MinePLIPInteractions {
 //                            return;
 //                        }
 //
-//                        String pdbId = plipInteractions.get(0).getPartner1().getParentChain().getParentProtein().getName();
+//                        String pdbId = plipInteractions.get(0).getPartner1().getParentGroup().getParentGroup().getName();
 //                        Path proteinPath = Paths.get(PROJECT_PATH + "interactions/" + pdbId.toLowerCase() + "/");
 //                        DesignConstants.makeDirectoryIfAbsent(proteinPath);
 //
@@ -84,7 +84,7 @@ public class S01_MinePLIPInteractions {
 //                        plipInteractions.forEach(plipInteraction -> {
 //                            Group partner1 = plipInteraction.getPartner1();
 //                            Group partner2 = plipInteraction.getPartner2();
-//                            String chainId = partner1.getParentChain().getChainId();
+//                            String chainId = partner1.getParentGroup().getChainId();
 //                            DesignConstants.write(proteinPath.resolve(plipInteraction.getPlipInteractionShortName() + "-" + chainId + "-" + partner1.getThreeLetterCode() + partner1.getResidueNumber() + "-" + partner2.getThreeLetterCode() + partner2.getResidueNumber() + ".pdb"),
 //                                    plipInteraction.getPartner1().composePDBRecord().concat(plipInteraction.getPartner2().composePDBRecord()).getBytes());
 //                        });

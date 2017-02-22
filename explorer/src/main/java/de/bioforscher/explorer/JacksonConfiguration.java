@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfiguration {
     @Bean
     public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
+        return new ObjectMapper()
         // ensure transient fields are not serialized
-        mapper.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
+        .configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true)
+        // do not infer fields by getters
+//        .configure(MapperFeature.AUTO_DETECT_GETTERS, false)
+//        .configure(MapperFeature.AUTO_DETECT_IS_GETTERS, false)
         // TODO for development: prettify json
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        return mapper;
+        .enable(SerializationFeature.INDENT_OUTPUT);
     }
 }

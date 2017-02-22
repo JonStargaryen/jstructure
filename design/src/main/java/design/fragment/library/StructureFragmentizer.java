@@ -81,7 +81,7 @@ public class StructureFragmentizer {
 //                .mapToObj(i -> {
 //                    Chain container = new Chain(aminoAcids.subList(i, i + DEFAULT_FRAGMENT_SIZE));
 //                    // need to set identifier of fragments
-//                    container.setIdentifier(chain.getParentProtein().getIdentifier() + "-" + chain.getChainId() + "-" + i + "-" + (i + DEFAULT_FRAGMENT_SIZE));
+//                    container.setIdentifier(chain.getParentGroup().getIdentifier() + "-" + chain.getChainId() + "-" + i + "-" + (i + DEFAULT_FRAGMENT_SIZE));
 //                    return container;
 //                });
     }

@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import org.springframework.data.annotation.Transient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
      * The unique getChain name. Usually one character, e.g. 'A'.
      */
     private String chainId;
+    @Transient
     /**
      * Handle to the containing element.
      */
@@ -50,6 +52,10 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
 
     public Chain(List<Group> groups) {
         this.groups = groups;
+    }
+
+    Chain() {
+
     }
 
     /**

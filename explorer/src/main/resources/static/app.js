@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource']);
+    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'nvd3', 'ngDropdowns']);
 
     /**
      * navigation
@@ -14,15 +14,17 @@
 
         // navigation rules
         $routeProvider.when('/home', {
-            templateUrl: '/home.htm'
+            templateUrl: '/home.htm',
+            controller: 'HomeController'
         });
 
         $routeProvider.when('/about', {
             templateUrl: '/about.htm'
         });
 
-        $routeProvider.when('/protein', {
-            templateUrl: '/protein.htm'
+        $routeProvider.when('/protein/:pdbid', {
+            templateUrl: '/protein.htm',
+            controller: 'ProteinController'
         });
 
         $routeProvider.otherwise('/home');
@@ -59,15 +61,25 @@
         };
     });
 
+    MODULE.controller('ProteinController', ['$scope', '$routeParams', '$http', '$timeout', 'ProteinService', function($scope, $routeParams, $http, $timeout, ProteinService) {
+        $scope.protein = {};
+
+        $http.get('/api/proteins/pdbid/' + $routeParams.pdbid).then(function(data) {
+            $scope.protein = data.data;
+        }, function (d) {
+            $rootScope.alerts.push({ type: 'danger', msg: 'loading protein ' + pdbid + ' from server failed with ['+ d.status + '] '+ d.statusText });
+        });
+    }]);
+
     /**
-     * fetch all available data
+     * fetch all available data for the home view
      */
-    MODULE.controller('HomeController', ['$scope', 'ProteinService', function($scope, ProteinService) {
+    MODULE.controller('HomeController', ['$scope', '$location', 'ProteinService', function($scope, $location, ProteinService) {
         $scope.allProteins = ProteinService.allProteins;
         $scope.nonRedundantAlphaHelicalProteins = ProteinService.nonRedundantAlphaHelicalProteins;
     }]);
 
-    MODULE.factory('ProteinService', ['$rootScope', '$http', function($rootScope, $http) {
+    MODULE.factory('ProteinService', ['$rootScope', '$http','$q', function($rootScope, $http, $q) {
         /* fetch all known protein ids */
         var allProteins = [];
         var nonRedundantAlphaHelicalProteins = [];
@@ -88,6 +100,7 @@
             $rootScope.alerts.push({ type: 'danger', msg: 'loading non-redundant alpha helical proteins from server failed with ['+ d.status + '] '+ d.statusText });
         });
 
-        return { "allProteins" : allProteins, "nonRedundantAlphaHelicalProteins" : nonRedundantAlphaHelicalProteins };
+        return { "allProteins" : allProteins,
+            "nonRedundantAlphaHelicalProteins" : nonRedundantAlphaHelicalProteins };
     }]);
 })();

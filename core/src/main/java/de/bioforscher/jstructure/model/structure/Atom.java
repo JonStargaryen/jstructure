@@ -3,8 +3,7 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.Transient;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -16,14 +15,14 @@ import java.util.Locale;
  * Created by S on 27.09.2016.
  */
 public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
-    private final Logger logger = LoggerFactory.getLogger(Atom.class);
     private static final float DEFAULT_BFACTOR = 1.0f;
     private static final float DEFAULT_OCCUPANCY = 1.0f;
 
-    private Element element;
+    private transient Element element;
     private String name;
     private int pdbSerial;
     private double[] coordinates;
+    @Transient
     private transient Group parentGroup;
     private float occupancy;
     private float bfactor;
@@ -110,6 +109,10 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
         this.virtual = true;
     }
 
+    Atom() {
+
+    }
+
     @Override
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
@@ -173,7 +176,8 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
         try {
             String pdbRecord = AtomRecordProvider.toPDBString(this);
             if (pdbRecord.length() == 0) {
-                logger.warn("peculiar ATOM record {}", toString());
+                //TODO error handling
+//                logger.warn("peculiar ATOM record {}", toString());
             }
             return pdbRecord;
         } catch (NullPointerException e) {
@@ -184,8 +188,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' coords='" +
-                Arrays.toString(coordinates);
+        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' coords='" + Arrays.toString(coordinates);
     }
 
     /**

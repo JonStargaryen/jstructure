@@ -50,6 +50,10 @@ public class GroupInformation {
         this.parentCompound = builder.parentCompound;
     }
 
+    GroupInformation() {
+
+    }
+
     public String getName() {
         return name;
     }
