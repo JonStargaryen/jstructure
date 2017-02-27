@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
  * The reduced representation of {@link Chain} objects.
  * Created by bittrich on 2/22/17.
  */
+@SuppressWarnings("unused")
 public class ExplorerChain {
     private String id;
     private List<ExplorerGroup> groups;
@@ -17,7 +18,7 @@ public class ExplorerChain {
 
     }
 
-    public ExplorerChain(Chain chain) {
+    ExplorerChain(Chain chain) {
         this.id = chain.getChainId();
         this.groups = chain.groups()
                 .map(ExplorerGroup::new)

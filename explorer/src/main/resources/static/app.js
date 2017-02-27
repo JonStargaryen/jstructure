@@ -9,13 +9,17 @@
     });
 
     MODULE.constant('features', [
-        { name : 'no coloring', tag : 'none' },
-        { name : 'relative accessible surface area', tag : 'rasa' },
-        { name : 'secondary structure element', tag: 'sse' }
+        { name : 'no coloring', tag : 'none', discrete : true },
+        { name : 'relative accessible surface area', tag : 'rasa', discrete : false },
+        { name : 'secondary structure element', tag: 'sse', discrete : true }
     ]);
 
     MODULE.constant('renderModes',  [
         'ballsAndSticks', 'cartoon', 'sline', 'lines', 'trace', 'lineTrace', 'tube', 'spheres'
+    ]);
+
+    MODULE.constant('secondaryStructures', [
+        'coil', 'bend', 'turn', 'pi-helix', '3-10-helix', 'bridge', 'extended', 'alpha-helix'
     ]);
 
     MODULE.constant('interactions', {
@@ -58,8 +62,8 @@
     /**
      * on app start
      */
-    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', 'features', '$filter',
-        function ($rootScope, $http, $location, renderModes, features, $filter) {
+    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', 'features', '$filter', 'secondaryStructures',
+        function ($rootScope, $http, $location, renderModes, features, $filter, secondaryStructures) {
         $rootScope.alerts = [];
 
         // message/alert container
@@ -77,11 +81,8 @@
                 index: $rootScope.renderModes.length, raw: entry });
         });
 
-        $rootScope.features = [];
-        features.forEach(function (entry) {
-            $rootScope.features.push({ text: entry.name,
-                index: $rootScope.features.length, raw: entry.tag });
-        });
+        $rootScope.features = features;
+        $rootScope.secondaryStructures = secondaryStructures;
     }]);
 
     /**
@@ -99,8 +100,8 @@
         };
     });
 
-    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions',
-        function($scope, $rootScope, $routeParams, $http, design, interactions) {
+    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions', 'features',
+        function($scope, $rootScope, $routeParams, $http, design, interactions, features) {
         $scope.loading = true;
         $scope.protein = {};
         $scope.options = {
@@ -128,6 +129,7 @@
 
             console.log($scope.protein);
             visualizeProteinStructure($scope.protein);
+
             $scope.loading = false;
         }, function (d) {
             $rootScope.alerts.push({ type: 'danger', msg: 'loading protein ' + $routeParams.pdbid +
@@ -159,11 +161,44 @@
             $scope.viewer.autoZoom();
         };
 
+        var findGroup = function(protein, chainId, num) {
+            var residue = {};
+            protein.chains.forEach(function(chain) {
+                if(chain.id != chainId)
+                    return;
+                chain.groups.forEach(function(group) {
+                    if(group.resn != num)
+                        return;
+                    residue = group;
+                });
+            });
+            return residue;
+        };
+
         /* render plain PDB structure with chosen style */
         var renderStructure = function() {
-            $scope.viewer.renderAs('protein', $scope.structure, $scope.options.renderMode.raw,
-                { color: pv.color.uniform(design.lighterColor) });
+            $scope.geom = $scope.viewer.renderAs('protein', $scope.structure, $scope.options.renderMode.raw,
+                { color: colorOp });
         };
+
+        var colorOp = new pv.color.ColorOp(function(atom, out, index) {
+            var rgb;
+
+            if($scope.options.coloringFeature.tag === "none") {
+                // no coloring requested
+                rgb = pv.color.hex2rgb(design.lighterColor);
+            } else {
+                // read property and transform to rgb
+                var residue = atom.residue();
+                var group = findGroup($scope.protein, residue.chain().name(), residue.num());
+                rgb = hsl2rgb(group[$scope.options.coloringFeature.tag] / 3);
+            }
+
+            out[index] = rgb[0];
+            out[index + 1] = rgb[1];
+            out[index + 2] = rgb[2];
+            out[index + 3] = 1.0;
+        });
 
         /* render ANVIL membrane layer */
         var createMembrane = function() {
@@ -181,7 +216,7 @@
                 var atom1 = $scope.structure.atom(entry.a1);
                 var atom2 = $scope.structure.atom(entry.a2);
                 var g = $scope.viewer.customMesh(type);
-                g.addTube(atom1.pos(), atom2.pos(), 0.3, { cap : false, color : interactions[type] });
+                g.addTube(atom1.pos(), atom2.pos(), 0.15, { cap : false, color : interactions[type] });
             });
             initializedInteractions.push(type);
         };
@@ -190,15 +225,45 @@
         $scope.$watch('options.renderMode', function(newVal, oldVal){
             if(newVal === oldVal)
                 return;
-            console.log('render mode changed from ' + oldVal + ' to ' + newVal);
+            console.log("render mode changed from '" + oldVal.name + "' to '" + newVal.name + "'");
             $scope.viewer.rm('protein');
             renderStructure();
         });
 
+        $scope.$watch('options.coloringFeature', function(newVal, oldVal){
+            if(newVal === oldVal)
+                return;
+            console.log("coloring feature changed from '" + oldVal.name + "' to '" + newVal.name + "'");
+            $scope.geom.colorBy(colorOp);
+            $scope.viewer.requestRedraw();
+        });
+
+        // http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
+        var hsl2rgb = function(h){
+            var r, g, b;
+
+            var hue2rgb = function hue2rgb(p, q, t){
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+
+            var q = 0.7 + 0.6 - 0.7 * 0.6;
+            var p = 2 * 0.7 - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+
+            return [r, g, b];
+        };
+
         $scope.$watch('options.renderMembrane', function(newVal, oldVal){
             if(newVal === oldVal)
                 return;
-            console.log('render membrane changed from ' + oldVal + ' to ' + newVal);
+            console.log("render membrane changed from '" + oldVal.name + "' to '" + newVal.name + "'");
             if(newVal) {
                 if(!membraneInitialized)
                     createMembrane();

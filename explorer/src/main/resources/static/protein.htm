@@ -8,29 +8,34 @@
                  title="select feature to color visualization"
                  dropdown-select="features"
                  dropdown-model="options.coloringFeature"
-                 dropdown-item-label="text">
+                 dropdown-item-label="name">
             </div>
 
             <div class="visualization-body">
+                <!-- PV instance -->
                 <div id="protein-visualizer" class="visualizer-tab"></div>
+
+                <!-- membrane render options -->
                 <div class="visualization-options clearfix">
-                    <div class="option fa fa-minus right"
+                    <div class="option fa fa-ellipsis-h right"
                          data-ng-click="options.renderMembrane = !options.renderMembrane"
                          data-ng-class="{active: options.renderMembrane}"
                          title="render membrane layer"></div>
                 </div>
+
+                <!-- PLIP options -->
                 <div class="visualization-options clearfix">
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-exchange right"
                          data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
                          data-ng-class="{active: options.renderWaterBridges}"
                          title="render water bridges"
                          ng-show="protein.waterBridges.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-exchange right"
                          data-ng-click="options.renderSaltBridges = !options.renderSaltBridges"
                          data-ng-class="{active: options.renderSaltBridges}"
                          title="render salt bridges"
                          ng-show="protein.saltBridges.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-database right"
                          data-ng-click="options.renderPiStackings = !options.renderPiStackings"
                          data-ng-class="{active: options.renderPiStackings}"
                          title="render pi-stackings"
@@ -40,32 +45,45 @@
                          data-ng-class="{active: options.renderPiCationInteractions}"
                          title="render pi-cation interactions"
                          ng-show="protein.piCationInteractions.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-arrows right"
                          data-ng-click="options.renderMetalComplexes = !options.renderMetalComplexes"
                          data-ng-class="{active: options.renderMetalComplexes}"
                          title="render metal complexes"
                          ng-show="protein.metalComplexes.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-chain-broken right"
                          data-ng-click="options.renderHydrophobicInteractions = !options.renderHydrophobicInteractions"
                          data-ng-class="{active: options.renderHydrophobicInteractions}"
                          title="render hydrophobic interactions"
                          ng-show="protein.hydrophobicInteractions.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-exchange right"
                          data-ng-click="options.renderHydrogenBonds = !options.renderHydrogenBonds"
                          data-ng-class="{active: options.renderHydrogenBonds}"
                          title="render hydrogen bonds"
                          ng-show="protein.hydrogenBonds.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-exchange right"
                          data-ng-click="options.renderHalogenBonds = !options.renderHalogenBonds"
                          data-ng-class="{active: options.renderHalogenBonds}"
                          title="render halogen bonds"
                          ng-show="protein.halogenBonds.length > 0"></div>
                 </div>
+
+                <!-- PV render mode selection -->
                 <div class="dropdown-select"
                      title="select PV's render mode"
                      dropdown-select="renderModes"
                      dropdown-model="options.renderMode"
                      dropdown-item-label="text">
+                </div>
+
+                <!-- legends of coloring features -->
+                <div class="legend" data-ng-hide="options.coloringFeature.tag != 'sse'">
+                    <div style="color: hsl({{($index / (secondaryStructures.length - 1)) * 120}}, 60%, 70%);"
+                         data-ng-repeat="secondaryStructure in secondaryStructures">{{secondaryStructure}}</div>
+                </div>
+                <div class="legend" data-ng-hide="options.coloringFeature.discrete">
+                    <div style="color: hsl(0, 60%, 70%);">min</div>
+                    <div style="color: hsl(60, 60%, 70%);">average</div>
+                    <div style="color: hsl(120, 60%, 70%);">max</div>
                 </div>
             </div>
         </div>
@@ -91,7 +109,7 @@
                         <div class="chain" data-ng-repeat="chain in protein.chains">
                             <div class="chainId group" title="chain '{{chain.id}}'">{{::chain.id}}</div>
                             <div class="group"
-                                 style="color: hsl({{group[options.coloringFeature.raw] * 120}}, 60%, 70%);"
+                                 style="color: hsl({{group[options.coloringFeature.tag] * 120}}, 60%, 70%);"
                                  data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true">{{::group.olc}}</div>
                         </div>
                     </div>

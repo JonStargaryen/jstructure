@@ -8,6 +8,7 @@ import de.bioforscher.jstructure.parser.plip.interaction.*;
  * The reduced representation of a PLIP interaction.
  * Created by bittrich on 2/22/17.
  */
+@SuppressWarnings("unused")
 public class ExplorerInteraction {
     private String a1, a2;
 
@@ -15,32 +16,32 @@ public class ExplorerInteraction {
 
     }
 
-    public ExplorerInteraction(HalogenBond halogenBond) {
+    ExplorerInteraction(HalogenBond halogenBond) {
         this.a1 = convertAtomToPVSelection(halogenBond.getAcceptor());
         this.a2 = convertAtomToPVSelection(halogenBond.getDonor());
     }
 
-    public ExplorerInteraction(HydrogenBond hydrogenBond) {
+    ExplorerInteraction(HydrogenBond hydrogenBond) {
         this.a1 = convertAtomToPVSelection(hydrogenBond.getAcceptor());
         this.a2 = convertAtomToPVSelection(hydrogenBond.getDonor());
     }
 
-    public ExplorerInteraction(HydrophobicInteraction hydrophobicInteraction) {
+    ExplorerInteraction(HydrophobicInteraction hydrophobicInteraction) {
         this.a1 = convertAtomToPVSelection(hydrophobicInteraction.getAtom1());
         this.a2 = convertAtomToPVSelection(hydrophobicInteraction.getAtom2());
     }
 
-    public ExplorerInteraction(MetalComplex metalComplex) {
+    ExplorerInteraction(MetalComplex metalComplex) {
         this.a1 = convertAtomToPVSelection(metalComplex.getAtom1());
         this.a2 = convertAtomToPVSelection(metalComplex.getAtom2());
     }
 
-    public ExplorerInteraction(Pair<Atom, Atom> atoms) {
+    ExplorerInteraction(Pair<Atom, Atom> atoms) {
         this.a1 = convertAtomToPVSelection(atoms.getLeft());
         this.a2 = convertAtomToPVSelection(atoms.getRight());
     }
 
-    public ExplorerInteraction(WaterBridge waterBridge) {
+    ExplorerInteraction(WaterBridge waterBridge) {
         this.a1 = convertAtomToPVSelection(waterBridge.getAtom1());
         this.a2 = convertAtomToPVSelection(waterBridge.getAtom2());
     }

@@ -168,6 +168,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 .sequence-representation .chain {
     padding: 10px 10px 10px 55px;
+    position: relative;
 }
 
 .sequence-representation .chainId {
@@ -190,11 +191,6 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 .legend {
     padding: 10px 10px 10px 42px;
-    display: none;
-}
-
-.legend.show {
-    display: block;
 }
 
 .legend > div {
@@ -205,7 +201,6 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     padding: 5px 10px;
     vertical-align: top;
     text-align: center;
-    border: solid 1px;
     background: #313a41;
     font-weight: bold;
 }
@@ -222,27 +217,3 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     padding-right: 0.5em;
     color: white;
 }
-
-/*.protein .chain {
-    padding: 10px 10px 10px 42px;
-}
-
-.protein .chainId {
-    position: absolute;
-    left: 10px;
-}
-
-.protein .group {
-    display: inline-block;
-    height: 35px;
-    width: 35px;
-    margin: 0 0 3px 0;
-    padding: 5px 0 10px;
-    vertical-align: top;
-    text-align: center;
-    border: solid 1px;
-    background: #313a41;
-    font-weight: bold;
-    color: rgb(127, 138, 134);
-    font-family: monospace;
-}*/

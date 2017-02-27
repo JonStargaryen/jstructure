@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
  * The reduced representation of {@link SequenceMotif} objects.
  * Created by bittrich on 2/22/17.
  */
+@SuppressWarnings("unused")
 public class ExplorerMotif {
     private String chain, type;
     private int start, end;

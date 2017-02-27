@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
  * The reduced representation of {@link Protein} objects
  * Created by bittrich on 2/22/17.
  */
+@SuppressWarnings("unused")
 public class ExplorerProtein {
     private String name, title;
     private List<ExplorerChain> chains;
