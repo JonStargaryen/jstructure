@@ -19,7 +19,7 @@
     ]);
 
     MODULE.constant('secondaryStructures', [
-        'coil', 'bend', 'turn', 'pi-helix', '3-10-helix', 'bridge', 'extended', 'alpha-helix'
+        'coil', 'bend', 'turn', '\u03C0-helix', '3-10-helix', 'bridge', 'extended', '\u03B1-helix'
     ]);
 
     MODULE.constant('interactions', {
@@ -100,15 +100,16 @@
         };
     });
 
-    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions', 'features',
-        function($scope, $rootScope, $routeParams, $http, design, interactions, features) {
+    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions',
+        function($scope, $rootScope, $routeParams, $http, design, interactions) {
         $scope.loading = true;
         $scope.protein = {};
         $scope.options = {
             renderMembrane : false,
-            renderHydrogenBonds : false,
+            // renderHydrogenBonds : false,
             renderMode : $scope.renderModes[0],
-            coloringFeature : $scope.features[0]
+            coloringFeature : $scope.features[0],
+            showSequence : true
         };
         var membraneInitialized = false;
         var initializedInteractions = [];

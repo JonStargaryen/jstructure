@@ -94,8 +94,8 @@
         <div class="wrapper">
             <!-- general project information -->
             <div class="sequence-header clearfix">
-                <div data-ng-click="options.renderPDB = !options.renderPDB"
-                     data-ng-class="{'fa-minus' : options.renderPDB, 'fa-plus' : !options.renderPDB}"
+                <div data-ng-click="options.showSequence = !options.showSequence"
+                     data-ng-class="{'fa-minus' : options.showSequence, 'fa-plus' : !options.showSequence}"
                      class="option fa"></div>
                 <div title="{{protein.title}}">{{::protein.name}}</div>
                 <div class="title">{{::protein.title}}</div>
@@ -105,13 +105,18 @@
             <div class="tse-scrollable">
                 <div class="tse-content">
                     <!-- the sequence part -->
-                    <div data-ng-hide="options.renderPDB" class="sequence-representation">
+                    <div data-ng-show="options.showSequence" class="sequence-representation">
                         <div class="chain" data-ng-repeat="chain in protein.chains">
                             <div class="chainId group" title="chain '{{chain.id}}'">{{::chain.id}}</div>
                             <div class="group"
                                  style="color: hsl({{group[options.coloringFeature.tag] * 120}}, 60%, 70%);"
                                  data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true">{{::group.olc}}</div>
                         </div>
+                    </div>
+
+                    <!-- the elements part -->
+                    <div data-ng-hide="options.showSequence" class="sequence-representation">
+                        <div data-ng-repeat="motif in protein.sequenceMotifs">{{motif}}</div>
                     </div>
                 </div>
             </div>

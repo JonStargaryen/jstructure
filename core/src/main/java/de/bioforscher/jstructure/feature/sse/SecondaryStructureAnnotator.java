@@ -56,21 +56,22 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private static final boolean DSSP_HELICES = true;
 
     /** min distance between two residues */
-    public static final double MINDIST = 0.5;
+    private static final double MINDIST = 0.5;
 
     /** min distance of two CA atoms if H-bonds are allowed to form */
-    public static final double CA_MIN_DIST = 9.0;
+    private static final double CA_MIN_DIST = 9.0;
+    private static final double CA_MIN_DIST_SQUARED = CA_MIN_DIST * CA_MIN_DIST;
 
     /** max distance CA atoms in peptide bond (backbone discontinuity) */
-    public static final double MAX_PEPTIDE_BOND_LENGTH = 2.5;
+    private static final double MAX_PEPTIDE_BOND_LENGTH = 2.5;
     /** squared value for faster computations */
-    public static final double MAX_PEPTIDE_BOND_LENGTH_SQUARED = MAX_PEPTIDE_BOND_LENGTH * MAX_PEPTIDE_BOND_LENGTH;
+    private static final double MAX_PEPTIDE_BOND_LENGTH_SQUARED = MAX_PEPTIDE_BOND_LENGTH * MAX_PEPTIDE_BOND_LENGTH;
 
     /** Minimal H-bond energy in cal/mol */
-    public static final int HBONDLOWENERGY = -9900;
+    private static final int HBONDLOWENERGY = -9900;
 
     /** higher limit for H-bond energy */
-    public static final double HBONDHIGHENERGY = -500.0;
+    private static final double HBONDHIGHENERGY = -500.0;
 
     /**
      * constant for electrostatic energy
@@ -180,10 +181,9 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             for(int j = i; j < ladders.size(); j++) {
                 Ladder l1 = ladders.get(i);
                 Ladder l2 = ladders.get(j);
-                System.out.println(l1 + " : " + l2);
                 if (hasBulge(l1, l2)) {
-                    l1.setConnectedTo(i);
-                    l2.setConnectedFrom(j);
+                    l1.setConnectedTo(j);
+                    l2.setConnectedFrom(i);
                     logger.debug("Bulge for: ({}, {})", i, j);
                 }
             }
@@ -325,7 +325,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates());
-                if (distance > CA_MIN_DIST) {
+                if (distance > CA_MIN_DIST_SQUARED) {
                     continue;
                 }
                 // If i>j switch them over
@@ -417,7 +417,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                         .backboneCarbonAtoms()
                         .asAtom();
                 Atom n = Selection.on(residues.getGroups().get(index + 1))
-                        .backboneCarbonAtoms()
+                        .backboneNitrogenAtoms()
                         .asAtom();
                 // Peptide bond C-N
                 if (LinearAlgebra3D.distanceFast(c.getCoordinates(), n.getCoordinates()) >
@@ -663,7 +663,6 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      */
     private void calculateHBonds(GroupContainer residues) {
 //        residues.
-        double squaredDistanceCutoff = CA_MIN_DIST * CA_MIN_DIST;
         for (int i = 0; i < residues.getGroups().size() - 1; i++) {
             for (int j = i + 1; j < residues.getGroups().size(); j++) {
                 Group res1 = residues.getGroups().get(i);
@@ -677,7 +676,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates());
-                if (squaredDistance > squaredDistanceCutoff) {
+                if (squaredDistance > CA_MIN_DIST_SQUARED) {
                     continue;
                 }
                 checkAddHBond(res1, res2);

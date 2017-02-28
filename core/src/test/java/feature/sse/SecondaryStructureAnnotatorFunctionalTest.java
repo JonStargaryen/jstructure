@@ -36,7 +36,7 @@ public class SecondaryStructureAnnotatorFunctionalTest {
 
     @Test
     public void checkAgreement() throws IOException, StructureException {
-        String id = ID;
+        String id = /*ID*/"1A0S";
 
         String jstructureAnnotation = getSecondaryStructureAnnotation(id);
         String biojavaAnnotation = getDSSPAnnotatedStructure(id);
@@ -47,7 +47,7 @@ public class SecondaryStructureAnnotatorFunctionalTest {
 
     private String getSecondaryStructureAnnotation(String id) {
         // load structure
-        Protein protein = ProteinParser.parseProteinById(ID);
+        Protein protein = ProteinParser.parseProteinById(id);
         // assign states
         featureProvider.process(protein);
 
