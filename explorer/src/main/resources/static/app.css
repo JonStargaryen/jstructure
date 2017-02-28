@@ -90,23 +90,31 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 /* main page */
 
-.option {
-    border-left: 1px solid #415060;
-    float: left;
-    color: #52b1e9;
+.option, .sequence-header > div {
     line-height: 16px;
     font-size: 14px;
     min-width: 35px;
-    height: 35px;
     padding: 10px;
     text-align: center;
     cursor: pointer;
     transition: ease-in-out 0.35s;
 }
 
-.option.active {
+.option {
+    border-left: 1px solid #415060;
+    color: #52b1e9;
+    height: 35px;
+}
+
+.option.active, .sequence-header > div.active {
     background-color: rgba(255, 255, 255, 0.05);
     color: #51b2e9;
+}
+
+.sequence-header > div {
+    float: left;
+    color: #9fb4c7;
+    border-right: 1px solid #52585f;
 }
 
 /* visualizer part */
@@ -123,70 +131,14 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 .visualization .visualization-body > div {
     border-bottom: 1px solid #415060;
+    line-height: 16px;
+    font-size: 14px;
+    min-width: 35px;
+    min-height: 35px;
 }
 
 .visualization #protein-visualizer {
     height: 401px;
-}
-
-.visualization-header, .sequence-header {
-    height: 35px;
-}
-
-/* the general/edit/compute part */
-
-.sequence {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-    min-width: 400px;
-}
-
-.sequence-header {
-    border-bottom: 1px solid #52585f;
-    width: 100%;
-    overflow: hidden;
-}
-
-.sequence-header > div {
-    float: left;
-    color: #778796;
-    line-height: 16px;
-    font-size: 14px;
-    min-width: 35px;
-    height: 35px;
-    padding: 10px;
-    border-right: 1px solid #52585f;
-    /* limit the width of the element containing the protein title */
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    max-width: 400px;
-    overflow: hidden;
-}
-
-/* sequence representation - the sequenceCerosene-like sequence depiction */
-
-.sequence-representation .chain {
-    padding: 10px 10px 10px 55px;
-    position: relative;
-}
-
-.sequence-representation .chainId {
-    position: absolute;
-    left: 10px;
-}
-
-.sequence-representation .group {
-    display: inline-block;
-    height: 35px;
-    width: 35px;
-    margin: 0 0 3px 0;
-    padding: 9px 0 10px;
-    text-align: center;
-    border: solid 1px;
-    background: #313a41;
-    font-weight: bold;
-    color: rgb(127, 138, 134);
 }
 
 .legend {
@@ -205,9 +157,62 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     font-weight: bold;
 }
 
-/* pdb representation - the view with all coordinates */
+/* the general/edit/compute part */
 
-.tse-scrollable, .pdb-representation, .sequence-representation {
+.sequence {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    min-width: 400px;
+}
+
+.sequence-header {
+    border-bottom: 1px solid #52585f;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* sequence representation - the sequenceCerosene-like sequence depiction */
+
+.representation .chain {
+    padding: 10px;
+    display: flex;
+}
+
+.representation .chainId {
+    flex: 0 0 14px;
+    color: #9fb4c7;
+    position: relative;
+    white-space: nowrap;
+}
+
+.representation .chainId > div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:  translateX(-50%) translateY(-50%) rotate(-90deg);
+}
+
+.representation .groups {
+    flex: 1;
+}
+
+.representation .group {
+    display: inline-block;
+    height: 35px;
+    min-width: 35px;
+    text-align: center;
+    border: solid 1px;
+    background: #313a41;
+    font-weight: bold;
+    padding: 10px 5px;
+    color: rgb(127, 138, 134);
+}
+
+
+
+
+.tse-scrollable, .representation {
     height: calc(100% - 35px);
 }
 

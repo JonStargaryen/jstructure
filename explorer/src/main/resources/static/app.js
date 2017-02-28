@@ -103,7 +103,6 @@
     MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions',
         function($scope, $rootScope, $routeParams, $http, design, interactions) {
         $scope.loading = true;
-        $scope.protein = {};
         $scope.options = {
             renderMembrane : false,
             // renderHydrogenBonds : false,
@@ -145,7 +144,9 @@
                 height: 400,
                 antialias: true,
                 quality : 'high',
-                background:'#313a41'
+                background:'#313a41',
+                animateTime : 500,
+                selectionColor : '#f00'
             };
 
             // ensure container is empty
@@ -156,7 +157,8 @@
             mol.assignHelixSheet($scope.structure);
             $scope.viewer.options('fog', false);
 
-            renderStructure();
+            renderProtein();
+            // renderLigands();
 
             $scope.viewer.centerOn($scope.structure);
             $scope.viewer.autoZoom();
@@ -177,10 +179,14 @@
         };
 
         /* render plain PDB structure with chosen style */
-        var renderStructure = function() {
+        var renderProtein = function() {
             $scope.geom = $scope.viewer.renderAs('protein', $scope.structure, $scope.options.renderMode.raw,
                 { color: colorOp });
         };
+
+        // var renderLigands = function() {
+        //     $scope.viewer.ballsAndSticks('ligand', , { color: pv.color.uniform(design.lighterColor) });
+        // };
 
         var colorOp = new pv.color.ColorOp(function(atom, out, index) {
             var rgb;
@@ -228,7 +234,7 @@
                 return;
             console.log("render mode changed from '" + oldVal.name + "' to '" + newVal.name + "'");
             $scope.viewer.rm('protein');
-            renderStructure();
+            renderProtein();
         });
 
         $scope.$watch('options.coloringFeature', function(newVal, oldVal){
@@ -318,6 +324,25 @@
             } else {
                 $scope.viewer.hide(type);
             }
+            $scope.viewer.requestRedraw();
+        };
+
+        $scope.highlight = function(chain, resn, endResn) {
+            var selection = { cname : chain };
+            if(resn) {
+                if (endResn) {
+                    selection.rnumRange = [resn, endResn];
+                } else {
+                    // cast to int, JavaScript top kek
+                    selection.rnum = resn;
+                }
+            }
+            $scope.viewer.get('protein').setSelection($scope.viewer.get('protein').select(selection));
+            $scope.viewer.requestRedraw();
+        };
+
+        $scope.deselect = function() {
+            $scope.viewer.get('protein').setSelection($scope.structure.full().createEmptyView());
             $scope.viewer.requestRedraw();
         }
     }]);

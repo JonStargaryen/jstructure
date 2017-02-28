@@ -6,7 +6,6 @@ import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,14 +39,15 @@ public class KinkFinderParser {
                 .residueNumber(range)
                 .asFilteredGroups()
                 .forEach(group -> {
-                    //TODO standardize
-                    List<KinkFinderHelix> value = group.getFeature(List.class, KINK_FINDER_ANNOTATION);
-                    // entry will be null at first - create list and assign reference
-                    if(value == null) {
-                        value = new ArrayList<>();
-                        group.setFeature(KINK_FINDER_ANNOTATION, value);
-                    }
-                    value.add(kinkFinderHelix);
+                    //TODO check
+//                    List<KinkFinderHelix> value = group.getFeature(List.class, KINK_FINDER_ANNOTATION);
+//                    // entry will be null at first - create list and assign reference
+//                    if(value == null) {
+//                        value = new ArrayList<>();
+//                        group.setFeature(KINK_FINDER_ANNOTATION, value);
+//                    }
+//                    value.add(kinkFinderHelix);
+                    group.addFeatureToList(KINK_FINDER_ANNOTATION, kinkFinderHelix);
                 });
     }
 }

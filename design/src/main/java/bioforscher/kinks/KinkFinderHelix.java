@@ -1,7 +1,7 @@
 package bioforscher.kinks;
 
 /**
- * Representation of KinkFinder.
+ * Representation of KinkFinder helices.
  * Created by bittrich on 2/14/17.
  */
 public class KinkFinderHelix {

@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
 
@@ -20,8 +21,11 @@ import java.util.stream.Collectors;
 public class ExplorerProtein {
     private String name, title;
     private List<ExplorerChain> chains;
+    /* sequence motifs */
     private List<ExplorerMotif> sequenceMotifs;
+    /* topology information */
     private List<double[]> membrane;
+    /* interactions */
     private List<ExplorerInteraction> halogenBonds;
     private List<ExplorerInteraction> hydrogenBonds;
     private List<ExplorerInteraction> hydrophobicInteractions;
@@ -30,6 +34,10 @@ public class ExplorerProtein {
     private List<ExplorerInteraction> piStackings;
     private List<ExplorerInteraction> saltBridges;
     private List<ExplorerInteraction> waterBridges;
+    /* ligands */
+    private List<ExplorerLigand> ligands;
+    /* helices & kinks */
+    private List<ExplorerHelix> helices;
 
     public ExplorerProtein() {
 
@@ -78,6 +86,16 @@ public class ExplorerProtein {
                 .collect(Collectors.toList());
         this.waterBridges = interactions.getWaterBridges().stream()
                 .map(ExplorerInteraction::new)
+                .collect(Collectors.toList());
+
+        this.ligands = Selection.on(protein)
+                .hetatms()
+                .asFilteredGroups()
+                .map(ExplorerLigand::new)
+                .collect(Collectors.toList());
+
+        this.helices = protein.chains()
+                .flatMap(ExplorerHelix::extract)
                 .collect(Collectors.toList());
     }
 
@@ -131,5 +149,13 @@ public class ExplorerProtein {
 
     public List<ExplorerInteraction> getWaterBridges() {
         return waterBridges;
+    }
+
+    public List<ExplorerLigand> getLigands() {
+        return ligands;
+    }
+
+    public List<ExplorerHelix> getHelices() {
+        return helices;
     }
 }

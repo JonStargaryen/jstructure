@@ -23,8 +23,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,15 +76,23 @@ public class ProteinService {
                 .filter(id -> !knownProteins.contains(id))
                 .collect(Collectors.toList());
 
-        proteinsToProcess.stream()
-                .map(pdbid -> (Callable) () -> {
-                    Protein protein = ProteinParser.parseProteinById(pdbid);
-                    featureProviders.forEach(abstractFeatureProvider ->abstractFeatureProvider.process(protein));
-                    repository.save(new ExplorerProtein(protein));
-                    logger.info("gathered all information for entry {}",pdbid);
-                    return null;
-                })
-                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
+//        proteinsToProcess.stream()
+//                .map(pdbid -> (Callable) () -> {
+//                    Protein protein = ProteinParser.parseProteinById(pdbid);
+//                    featureProviders.forEach(abstractFeatureProvider ->abstractFeatureProvider.process(protein));
+//                    repository.save(new ExplorerProtein(protein));
+//                    logger.info("gathered all information for entry {}",pdbid);
+//                    return null;
+//                })
+//                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
+
+//        List<String> proteinsToProcess = Stream.of("1a0s", "1brr").collect(Collectors.toList());
+
+        proteinsToProcess.forEach(pdbid -> {
+            Protein protein = ProteinParser.parseProteinById(pdbid);
+            featureProviders.forEach(abstractFeatureProvider ->abstractFeatureProvider.process(protein));
+            repository.save(new ExplorerProtein(protein));
+        });
     }
 
     public List<String> getAllProteins() {

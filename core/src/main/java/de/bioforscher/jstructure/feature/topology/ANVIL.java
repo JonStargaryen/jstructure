@@ -56,7 +56,6 @@ import java.util.function.Predicate;
  same conditions as regards security.
  The fact that you are presently reading this means that you have had
  knowledge of the CeCILL license and that you accept its terms.</pre>
- TODO this is a service-like class, but it is not stateless
  */
 @FeatureProvider(provides = { ANVIL.MEMBRANE, ANVIL.TOPOLOGY }, requires = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA })
 public class ANVIL extends AbstractFeatureProvider {
@@ -69,6 +68,7 @@ public class ANVIL extends AbstractFeatureProvider {
      */
     private static final int DEFAULT_NUMBER_OF_SPHERE_POINTS = 350;
     private static final double DEFAULT_STEP = 1.0;
+    private static final double ALTERNATIVE_STEP = 0.3;
     private static final double DEFAULT_MINTHICK = 20.0;
     private static final double DEFAULT_MAXTHICK = 40.0;
     private static final double DEFAULT_AFILTER = 40.0;
@@ -83,31 +83,18 @@ public class ANVIL extends AbstractFeatureProvider {
     private double density;
     private Predicate<Group> asaFilter;
 
-    /*
-     * variables
-     */
-    private double step;
-    private double maximalExtent;
-    private double[] centerOfMass;
-    private Protein protein;
-    private int[] initialHphobHphil;
-    private Membrane membrane;
-
     /**
      * The fine-grained constructor.
      * @param numberOfSpherePoints how many points to generate initially
      * @param afilter the maximal accessible surface area value of a getResidue to still be considered
      * @param minthick the minimum thickness of the membrane
      * @param maxthick the maximum thickness of the membrane
-     * @param step the step size when adjusting the thickness of the membrane
      * @param density how dense pseudo atoms representing the membrane layers are placed
      */
-    public ANVIL(int numberOfSpherePoints, double afilter, double minthick, double maxthick, double step,
-                 double density) {
+    public ANVIL(int numberOfSpherePoints, double afilter, double minthick, double maxthick, double density) {
         this.numberOfSpherePoints = numberOfSpherePoints;
         this.minthick = minthick;
         this.maxthick = maxthick;
-        this.step = step;
         this.density = density;
         this.asaFilter = residue -> residue.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) > afilter;
     }
@@ -120,42 +107,49 @@ public class ANVIL extends AbstractFeatureProvider {
                 DEFAULT_AFILTER,
                 DEFAULT_MINTHICK,
                 DEFAULT_MAXTHICK,
-                DEFAULT_STEP,
                 DEFAULT_DENSITY_OF_MEMBRANE_POINTS);
     }
 
     @Override
     protected void processInternally(Protein protein) {
         //TODO generally bugged
-        this.protein = protein;
+
         AtomContainer alphaCarbons = Selection.on(protein)
                 .alphaCarbonAtoms()
                 .asAtomContainer();
         // compute center of mass based on alpha carbons which equals centroid() since every atoms weights the same
-        this.centerOfMass = LinearAlgebraAtom.centroid(alphaCarbons);
-        this.maximalExtent = 1.2 * LinearAlgebraAtom.maximalExtent(alphaCarbons, centerOfMass);
-        
-        this.initialHphobHphil = hphobHphil();
-        Membrane initialMembrane = processSpherePoints(generateSpherePoints(numberOfSpherePoints));
+        double[] centerOfMass = LinearAlgebraAtom.centroid(alphaCarbons);
+        double maximalExtent = 1.2 * LinearAlgebraAtom.maximalExtent(alphaCarbons, centerOfMass);
+
+        int[] initialHphobHphil = hphobHphil(protein);
+        Membrane initialMembrane = processSpherePoints(protein,
+                generateSpherePoints(numberOfSpherePoints, centerOfMass, maximalExtent),
+                centerOfMass,
+                DEFAULT_STEP,
+                initialHphobHphil);
         logger.debug("initial membrane quality: {}", initialMembrane.qmax);
 
-        Membrane alternativeMembrane = processSpherePoints(findProximateAxes(initialMembrane));
+        Membrane alternativeMembrane = processSpherePoints(protein,
+                findProximateAxes(initialMembrane, centerOfMass, maximalExtent),
+                centerOfMass,
+                DEFAULT_STEP,
+                initialHphobHphil);
         logger.debug("alternative membrane quality: {}", alternativeMembrane.qmax);
 
-        membrane = initialMembrane.qmax > alternativeMembrane.qmax ? initialMembrane : alternativeMembrane;
+        Membrane membrane = initialMembrane.qmax > alternativeMembrane.qmax ? initialMembrane : alternativeMembrane;
 
-        step = 0.3;
         logger.debug("membrane thickness is {} A", LinearAlgebra3D.distance(membrane.planePoint1, membrane.planePoint2));
+        //TODO adjustment of thickness
         logger.debug("embedding quality is {}", membrane.qmax);
 
-        assignTopology();
-        placeMembraneMolecules();
+        assignTopology(protein, membrane);
+        placeMembraneMolecules(protein, membrane, maximalExtent);
     }
 
     /**
      * Places evenly distributed pseudo-atoms for sake of membrane visualization.
      */
-    private void placeMembraneMolecules() {
+    private void placeMembraneMolecules(Protein protein, Membrane membrane, double maximalExtent) {
         // square maximal extent to speed up computations later on
         double radius = maximalExtent * maximalExtent;
         double[] normalVector = membrane.normalVector;
@@ -172,7 +166,7 @@ public class ANVIL extends AbstractFeatureProvider {
 
                     // distance cutoff is also squared
                     if(LinearAlgebra3D.distanceFast(atom, layer) <= radius &&
-                            minimalSquaredDistanceToProteinCAAtom(atom) > 12.0) {
+                            minimalSquaredDistanceToProteinCAAtom(protein, atom) > 12.0) {
                         membrane.membraneAtoms.add(atom);
                     }
                 }
@@ -185,7 +179,7 @@ public class ANVIL extends AbstractFeatureProvider {
      * @param membranePseudoAtom the point to check
      * @return the closest distance to any alpha carbon of the protein
      */
-    private double minimalSquaredDistanceToProteinCAAtom(final double[] membranePseudoAtom) {
+    private double minimalSquaredDistanceToProteinCAAtom(Protein protein, final double[] membranePseudoAtom) {
         return Selection.on(protein)
                     .aminoAcids()
                     .alphaCarbonAtoms()
@@ -199,7 +193,7 @@ public class ANVIL extends AbstractFeatureProvider {
     /**
      * Assign the topology to each getResidue which is embedded in the membrane.
      */
-    private void assignTopology() {
+    private void assignTopology(Protein protein, Membrane membrane) {
         protein.setFeature(MEMBRANE, membrane);
         Selection.on(protein)
                 .aminoAcids()
@@ -220,7 +214,7 @@ public class ANVIL extends AbstractFeatureProvider {
      * @param spherePoints a collection of sphere points to evaluate
      * @return the most promising membrane for the given set of points
      */
-    private Membrane processSpherePoints(List<double[]> spherePoints) {
+    private Membrane processSpherePoints(Protein protein, List<double[]> spherePoints, double[] centerOfMass, double step, int[] initialHphobHphil) {
         // best performing membrane
         Membrane membrane = null;
         // best performing membrane's score
@@ -241,7 +235,7 @@ public class ANVIL extends AbstractFeatureProvider {
                 double[] c2 = thales(diam, dPointC2, spherePoint);
 
                 // evaluate how well this membrane slice embedded the peculiar residues
-                int[] hphobHphil = hphobHphil(true, diam, c1, c2);
+                int[] hphobHphil = hphobHphil(protein, true, diam, c1, c2);
 
                 qvartemp.add(new Membrane(c1, c2, hphobHphil[0], hphobHphil[1]));
             }
@@ -291,8 +285,8 @@ public class ANVIL extends AbstractFeatureProvider {
      * @param membrane a well-positioned, but potentially not optimal, membrane
      * @return 30000 axes close to that of the membrane
      */
-    private List<double[]> findProximateAxes(Membrane membrane) {
-        List<double[]> points = generateSpherePoints(30000);
+    private List<double[]> findProximateAxes(Membrane membrane, double[] centerOfMass, double maximalExtent) {
+        List<double[]> points = generateSpherePoints(30000, centerOfMass, maximalExtent);
         points.sort(new Comparator<double[]>() {
             @Override
             public int compare(double[] d1, double[] d2) {
@@ -310,10 +304,10 @@ public class ANVIL extends AbstractFeatureProvider {
      * Counts the total number of exposed hydrophobic respectively hydrophilic residues.
      * @return an <code>int[]</code>: the first index is the count of hydrophobic, the second that of hydrophilic
      */
-    private int[] hphobHphil() {
+    private int[] hphobHphil(Protein protein) {
         // delegate the more fine-grained impl when not interested in the placement of a getResidue relative
         // to the potential membrane plane
-        return hphobHphil(false, null, null, null);
+        return hphobHphil(protein, false, null, null, null);
     }
 
     /**
@@ -324,7 +318,7 @@ public class ANVIL extends AbstractFeatureProvider {
      * @param c2 parameters describing the membrane placement
      * @return [countOfHydrophobicResidues, countOfHydrophilicResidues]
      */
-    private int[] hphobHphil(final boolean checkMembranePlane, final double[] diam, final double[] c1, final double[] c2) {
+    private int[] hphobHphil(Protein protein, final boolean checkMembranePlane, final double[] diam, final double[] c1, final double[] c2) {
         return Selection.on(protein)
                 .aminoAcids()
                 .asFilteredGroups()
@@ -414,7 +408,7 @@ public class ANVIL extends AbstractFeatureProvider {
      * <code>centerOfMass</code>
      * @return a collection of sphere points
      */
-    private List<double[]> generateSpherePoints(int numberOfSpherePoints) {
+    private List<double[]> generateSpherePoints(int numberOfSpherePoints, double[] centerOfMass, double maximalExtent) {
         List<double[]> points = new ArrayList<>();
 
         double oldPhi = 0;

@@ -36,12 +36,11 @@ public class SecondaryStructureAnnotatorFunctionalTest {
 
     @Test
     public void checkAgreement() throws IOException, StructureException {
-        String id = /*ID*/"1A0S";
+        String id = ID;
 
         String jstructureAnnotation = getSecondaryStructureAnnotation(id);
         String biojavaAnnotation = getDSSPAnnotatedStructure(id);
 
-        //TODO all sheets/bridges are skipped by jstructure - otherwise these are in agreement even though the test validly fails at the moment
         Assert.assertEquals(biojavaAnnotation, jstructureAnnotation);
     }
 

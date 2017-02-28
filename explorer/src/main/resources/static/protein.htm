@@ -4,16 +4,20 @@
     <!-- the visualizer part on the left -->
     <div class="visualization">
         <div class="wrapper">
-            <div class="dropdown-select"
-                 title="select feature to color visualization"
-                 dropdown-select="features"
-                 dropdown-model="options.coloringFeature"
-                 dropdown-item-label="name">
-            </div>
-
             <div class="visualization-body">
+                <!-- general information TODO breadcrumb-esque navigation of currently selected elements -->
+                <div style="padding: 10px;">{{::protein.name}}</div>
+                <div style="padding: 10px;">{{::protein.title}}</div>
+
                 <!-- PV instance -->
                 <div id="protein-visualizer" class="visualizer-tab"></div>
+
+                <div class="dropdown-select"
+                     title="select feature to color visualization"
+                     dropdown-select="features"
+                     dropdown-model="options.coloringFeature"
+                     dropdown-item-label="name">
+                </div>
 
                 <!-- membrane render options -->
                 <div class="visualization-options clearfix">
@@ -90,33 +94,79 @@
     </div>
 
     <!-- the edit/data part on the right -->
-    <div class="sequence">
+    <div class="sequence" data-ng-controller="TabController as tab">
         <div class="wrapper">
             <!-- general project information -->
             <div class="sequence-header clearfix">
-                <div data-ng-click="options.showSequence = !options.showSequence"
-                     data-ng-class="{'fa-minus' : options.showSequence, 'fa-plus' : !options.showSequence}"
-                     class="option fa"></div>
-                <div title="{{protein.title}}">{{::protein.name}}</div>
-                <div class="title">{{::protein.title}}</div>
-                <div class="right"></div>
+                <div data-ng-class="{ active: tab.isSelected(1) }" data-ng-click="tab.selectTab(1)">sequence</div>
+                <div data-ng-class="{ active: tab.isSelected(2) }" data-ng-click="tab.selectTab(2)">ligands</div>
+                <div data-ng-class="{ active: tab.isSelected(3) }" data-ng-click="tab.selectTab(3)">sequence motifs</div>
+                <div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div>
             </div>
 
             <div class="tse-scrollable">
                 <div class="tse-content">
-                    <!-- the sequence part -->
-                    <div data-ng-show="options.showSequence" class="sequence-representation">
+                    <!-- chains -->
+                    <div data-ng-show="tab.isSelected(1)" class="representation">
                         <div class="chain" data-ng-repeat="chain in protein.chains">
-                            <div class="chainId group" title="chain '{{chain.id}}'">{{::chain.id}}</div>
-                            <div class="group"
+                            <div class="chainId"
+                                 data-ng-mouseover="highlight(chain.id)"
+                                 data-ng-mouseleave="deselect()">
+                                <div data-ng-mouseover="highlight(chain.id)" data-ng-mouseleave="deselect()">chain {{::chain.id}}</div>
+                            </div>
+                            <div class="groups">
+                                <div class="group"
                                  style="color: hsl({{group[options.coloringFeature.tag] * 120}}, 60%, 70%);"
-                                 data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true">{{::group.olc}}</div>
+                                 data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true"
+                                 data-ng-mouseover="highlight(chain.id, group.resn)"
+                                 data-ng-mouseleave="deselect()">{{::group.olc}}</div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- the elements part -->
-                    <div data-ng-hide="options.showSequence" class="sequence-representation">
-                        <div data-ng-repeat="motif in protein.sequenceMotifs">{{motif}}</div>
+                    <!-- ligands -->
+                    <div data-ng-show="tab.isSelected(2)" class="representation">
+                        <div class="chain" data-ng-repeat="ligand in protein.ligands | filter: { type : '!water' } | orderBy: 'tlc'">
+                            <div class="chainId"
+                                 data-ng-mouseover="highlight(ligand.chain, ligand.resn)"
+                                 data-ng-mouseleave="deselect()">
+                                <div data-ng-mouseover="highlight(ligand.chain, ligand.resn)" data-ng-mouseleave="deselect()">{{::ligand.tlc}}</div>
+                            </div>
+                            <div class="groups">
+                                <div class="group" data-ng-mouseover="highlight(ligand.chain, ligand.resn)"
+                                     data-ng-mouseleave="deselect()">{{::ligand.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sequence motifs -->
+                    <div data-ng-show="tab.isSelected(3)" class="representation">
+                        <div class="chain" data-ng-repeat="motif in protein.sequenceMotifs | orderBy: 'type'">
+                            <div class="chainId"
+                                 data-ng-mouseover="highlight(motif.chain, motif.start, motif.end)"
+                                 data-ng-mouseleave="deselect()">
+                                <div data-ng-mouseover="highlight(motif.chain, motif.start, motif.end)" data-ng-mouseleave="deselect()">{{::motif.type}}</div>
+                            </div>
+                            <div class="groups">
+                                <div class="group" data-ng-mouseover="highlight(motif.chain, motif.start, motif.end)"
+                                     data-ng-mouseleave="deselect()">{{::motif.chain}}-{{::motif.start}}-{{::motif.end}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- helices & kinks -->
+                    <div data-ng-show="tab.isSelected(4)" class="representation">
+                        <div class="chain" data-ng-repeat="helix in protein.helices">
+                            <div class="chainId"
+                                 data-ng-mouseover="highlight(helix.chain, helix.start, helix.end)"
+                                 data-ng-mouseleave="deselect()">
+                                <div data-ng-mouseover="highlight(helix.chain, helix.start, helix.end)" data-ng-mouseleave="deselect()">H{{$index + 1}}</div>
+                            </div>
+                            <div class="groups">
+                                <div class="group" data-ng-mouseover="highlight(helix.chain, helix.start, helix.end)"
+                                     data-ng-mouseleave="deselect()">{{::helix.chain}}-{{::helix.start}}-{{::helix.end}}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
