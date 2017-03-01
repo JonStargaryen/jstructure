@@ -111,6 +111,10 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     color: #51b2e9;
 }
 
+.link a {
+    color: #96a3b3 !important;
+}
+
 .sequence-header > div {
     float: left;
     color: #9fb4c7;
@@ -123,7 +127,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     background-color: #313a41;
     position: relative;
     float: left;
-    width: 400px;
+    width: 500px;
     height: 100%;
     color: #96a3b3;
     font-size: 14px;
@@ -138,7 +142,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 .visualization #protein-visualizer {
-    height: 401px;
+    height: 501px;
 }
 
 .legend {
@@ -163,7 +167,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     position: relative;
     height: 100%;
     overflow: hidden;
-    min-width: 400px;
+    min-width: 500px;
 }
 
 .sequence-header {
@@ -208,9 +212,6 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     padding: 10px 5px;
     color: rgb(127, 138, 134);
 }
-
-
-
 
 .tse-scrollable, .representation {
     height: calc(100% - 35px);

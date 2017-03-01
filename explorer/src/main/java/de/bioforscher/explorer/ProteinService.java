@@ -9,6 +9,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,6 @@ public class ProteinService {
         // load protein lists
         List<String> allProteinIds = Files.lines(getResource("pdbtm_all.list")) //http://pdbtm.enzim.hu/data/pdbtm_all.list
                 .distinct()
-                .limit(1)
                 .map(line -> line.substring(0, 4))
                 .map(String::toUpperCase)
                 .collect(Collectors.toList());
@@ -72,9 +72,24 @@ public class ProteinService {
                 .collect(Collectors.toList());
 
         // parse protein data
-        List<String> proteinsToProcess = allProteinIds.stream()
+        List<String> proteinsToProcess = this.nonRedundantAlphaHelicalProteinIds.stream()
+                .map(line -> line.substring(0, 4))
+                .distinct()
+                .skip(1)
+                .limit(2)
                 .filter(id -> !knownProteins.contains(id))
                 .collect(Collectors.toList());
+
+        for(String pdbid : proteinsToProcess) {
+                Protein protein = ProteinParser.parseProteinById(pdbid);
+                featureProviders.forEach(abstractFeatureProvider -> {
+                    System.out.println(abstractFeatureProvider.getClass().getSimpleName());
+                    abstractFeatureProvider.process(protein);
+                });
+                KinkFinderParser.parseKinkFinderFile(protein, Paths.get("/home/bittrich/git/phd_sb_repo/data/kink_finder/" + protein.getName().toLowerCase() + ".kinks"));
+                logger.info("gathered information for {}", pdbid);
+                repository.save(new ExplorerProtein(protein));
+        }
 
 //        proteinsToProcess.stream()
 //                .map(pdbid -> (Callable) () -> {
@@ -85,14 +100,6 @@ public class ProteinService {
 //                    return null;
 //                })
 //                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
-
-//        List<String> proteinsToProcess = Stream.of("1a0s", "1brr").collect(Collectors.toList());
-
-        proteinsToProcess.forEach(pdbid -> {
-            Protein protein = ProteinParser.parseProteinById(pdbid);
-            featureProviders.forEach(abstractFeatureProvider ->abstractFeatureProvider.process(protein));
-            repository.save(new ExplorerProtein(protein));
-        });
     }
 
     public List<String> getAllProteins() {

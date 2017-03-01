@@ -15,7 +15,7 @@
     ]);
 
     MODULE.constant('renderModes',  [
-        'ballsAndSticks', 'cartoon', 'sline', 'lines', 'trace', 'lineTrace', 'tube', 'spheres'
+        'cartoon', 'ballsAndSticks', 'sline', 'lines', 'trace', 'lineTrace', 'tube', 'spheres'
     ]);
 
     MODULE.constant('secondaryStructures', [
@@ -104,14 +104,14 @@
         function($scope, $rootScope, $routeParams, $http, design, interactions) {
         $scope.loading = true;
         $scope.options = {
-            renderMembrane : false,
-            // renderHydrogenBonds : false,
             renderMode : $scope.renderModes[0],
             coloringFeature : $scope.features[0],
-            showSequence : true
+            renderLigands : true,
+            renderKinks : false,
+            renderMembrane : false
         };
-        var membraneInitialized = false;
         var initializedInteractions = [];
+        var viewer, structure, aminoAcids, ligands, kinks;
 
         $http.get('/api/proteins/pdbid/' + $routeParams.pdbid).then(function(data) {
             $scope.protein = data.data;
@@ -128,7 +128,7 @@
             $scope.protein.pdb = rep;
 
             console.log($scope.protein);
-            visualizeProteinStructure($scope.protein);
+            visualizeProteinStructure();
 
             $scope.loading = false;
         }, function (d) {
@@ -137,11 +137,11 @@
         });
 
         /* PV related functions */
-        var visualizeProteinStructure = function (protein) {
+        function visualizeProteinStructure() {
             var options = {
                 // div to be selected is not visible at that time
-                width: 400,
-                height: 400,
+                width: 500,
+                height: 500,
                 antialias: true,
                 quality : 'high',
                 background:'#313a41',
@@ -152,19 +152,27 @@
             // ensure container is empty
             document.getElementById('protein-visualizer').innerHTML = '';
 
-            $scope.viewer = pv.Viewer(document.getElementById('protein-visualizer'), options);
-            $scope.structure = io.pdb($scope.protein.pdb);
-            mol.assignHelixSheet($scope.structure);
-            $scope.viewer.options('fog', false);
+            viewer = pv.Viewer(document.getElementById('protein-visualizer'), options);
+            structure = io.pdb($scope.protein.pdb);
+            mol.assignHelixSheet(structure);
+            viewer.options('fog', false);
 
-            renderProtein();
-            // renderLigands();
+            initProtein();
+            initLigands();
+            if(!$scope.options.renderLigands)
+                toggle('ligands', false, true);
+            initKinks();
+            if(!$scope.options.renderKinks)
+                toggle('kinks', false, true);
+            initMembrane();
+            if(!$scope.options.renderMembrane)
+                toggle('membrane', false, true);
 
-            $scope.viewer.centerOn($scope.structure);
-            $scope.viewer.autoZoom();
-        };
+            viewer.centerOn(structure);
+            viewer.autoZoom();
+        }
 
-        var findGroup = function(protein, chainId, num) {
+        function findGroup(protein, chainId, num) {
             var residue = {};
             protein.chains.forEach(function(chain) {
                 if(chain.id != chainId)
@@ -176,17 +184,43 @@
                 });
             });
             return residue;
-        };
+        }
 
         /* render plain PDB structure with chosen style */
-        var renderProtein = function() {
-            $scope.geom = $scope.viewer.renderAs('protein', $scope.structure, $scope.options.renderMode.raw,
-                { color: colorOp });
-        };
+        function initProtein() {
+            // $scope.geom = $scope.viewer.renderAs('protein', $scope.structure.select('protein'), $scope.options.renderMode.raw,
+            //     { color: colorOp });
+            // $scope.viewer.ballsAndSticks('ligands', $scope.structure.select('ligand'),
+            //     { color: pv.color.uniform(design.lighterColor) });
 
-        // var renderLigands = function() {
-        //     $scope.viewer.ballsAndSticks('ligand', , { color: pv.color.uniform(design.lighterColor) });
-        // };
+            aminoAcids = viewer.cartoon('protein', structure.select('protein'), { color: colorOp });
+        }
+
+        function initLigands() {
+            ligands = viewer.ballsAndSticks('ligands', structure.select('ligand'),
+                { color: pv.color.uniform(design.lighterColor) });
+        }
+
+        function initMembrane() {
+            $scope.protein.membrane.forEach(function(entry) {
+                viewer.customMesh('membrane').addSphere([entry[0], entry[1], entry[2]], 0.75,
+                    { color : [1, 1, 1, 0.9] });
+            });
+        }
+
+        function initKinks() {
+            var kinkIds = [];
+            $scope.protein.kinks.forEach(function(entry) {
+                kinkIds.push({ chain: entry.chain, rnum: +entry.kinkPosition});
+            });
+            kinks = viewer.ballsAndSticks('kinks', structure.residueSelect(function(res) {
+                for(var i = 0; i < kinkIds.length; i++) {
+                    if(kinkIds[i].chain == res.chain().name() && kinkIds[i].rnum == res.num())
+                        return true;
+                }
+                return false;
+            }), { color: pv.color.uniform(design.lighterColor) });
+        }
 
         var colorOp = new pv.color.ColorOp(function(atom, out, index) {
             var rgb;
@@ -207,46 +241,129 @@
             out[index + 3] = 1.0;
         });
 
-        /* render ANVIL membrane layer */
-        var createMembrane = function() {
-            $scope.protein.membrane.forEach(function(entry) {
-                $scope.viewer.customMesh('membrane').addSphere([entry[0], entry[1], entry[2]], 0.75,
-                    { color : [1, 1, 1, 0.5] });
-            });
-            membraneInitialized = true;
-        };
-
         /* render PLIP interactions */
-        var createInteractions = function (type) {
+        function createInteractions(type) {
             console.log('creating interactions for ' + type);
             $scope.protein[type].forEach(function(entry) {
-                var atom1 = $scope.structure.atom(entry.a1);
-                var atom2 = $scope.structure.atom(entry.a2);
-                var g = $scope.viewer.customMesh(type);
+                var atom1 = structure.atom(entry.a1);
+                var atom2 = structure.atom(entry.a2);
+                var g = viewer.customMesh(type);
                 g.addTube(atom1.pos(), atom2.pos(), 0.15, { cap : false, color : interactions[type] });
             });
             initializedInteractions.push(type);
-        };
+        }
 
         /* watchers for front-end options */
-        $scope.$watch('options.renderMode', function(newVal, oldVal){
+        /*$scope.$watch('options.renderMode', function(newVal, oldVal){
             if(newVal === oldVal)
                 return;
             console.log("render mode changed from '" + oldVal.name + "' to '" + newVal.name + "'");
-            $scope.viewer.rm('protein');
-            renderProtein();
-        });
+            viewer.rm('protein');
+            initProtein();
+        });*/
 
         $scope.$watch('options.coloringFeature', function(newVal, oldVal){
             if(newVal === oldVal)
                 return;
             console.log("coloring feature changed from '" + oldVal.name + "' to '" + newVal.name + "'");
-            $scope.geom.colorBy(colorOp);
-            $scope.viewer.requestRedraw();
+            aminoAcids.colorBy(colorOp);
+            viewer.requestRedraw();
         });
 
+        function toggle(context, newVal, oldVal) {
+            if(newVal === oldVal)
+                return;
+            console.log("render '" + context + "' changed from '" + oldVal + "' to '" + newVal + "'");
+
+            if(newVal)
+                viewer.show(context);
+            else
+                viewer.hide(context);
+            viewer.requestRedraw();
+        }
+
+        $scope.$watch('options.renderLigands', function(newVal, oldVal) {
+            toggle('ligands', newVal, oldVal);
+        });
+
+        $scope.$watch('options.renderKinks', function(newVal, oldVal) {
+            toggle('kinks', newVal, oldVal);
+        });
+
+        $scope.$watch('options.renderMembrane', function(newVal, oldVal) {
+            toggle('membrane', newVal, oldVal);
+        });
+
+        $scope.$watch('options.renderHalogenBonds', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'halogenBonds');
+        });
+
+        $scope.$watch('options.renderHydrogenBonds', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'hydrogenBonds');
+        });
+
+        $scope.$watch('options.renderHydrophobicInteractions', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'hydrophobicInteractions');
+        });
+
+        $scope.$watch('options.renderMetalComplexes', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'metalComplexes');
+        });
+
+        $scope.$watch('options.renderPiCationInteractions', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'piCationInteractions');
+        });
+
+        $scope.$watch('options.renderPiStackings', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'piStackings');
+        });
+
+        $scope.$watch('options.renderSaltBridges', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'saltBridges');
+        });
+
+        $scope.$watch('options.renderWaterBridges', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'waterBridges');
+        });
+
+        function toggleInteractions(newVal, oldVal, type) {
+            if(newVal === oldVal)
+                return;
+            console.log('render ' + type + ' changed from ' + oldVal + ' to ' + newVal);
+            if(newVal) {
+                if(initializedInteractions.indexOf(type) < 0)
+                    createInteractions(type);
+                viewer.show(type);
+            } else {
+                viewer.hide(type);
+            }
+            viewer.requestRedraw();
+        }
+
+        $scope.highlight = function(chain, resn, endResn) {
+            var selection = { cname : chain };
+            if(resn) {
+                if (endResn)
+                    selection.rnumRange = [resn, endResn];
+                else
+                    selection.rnum = resn;
+            }
+            aminoAcids.setSelection(aminoAcids.select(selection));
+            ligands.setSelection(ligands.select(selection));
+            kinks.setSelection(kinks.select(selection));
+            viewer.requestRedraw();
+        };
+
+        $scope.deselect = function() {
+            var ev = structure.full().createEmptyView();
+            aminoAcids.setSelection(ev);
+            ligands.setSelection(ev);
+            kinks.setSelection(ev);
+            viewer.requestRedraw();
+        };
+
         // http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-        var hsl2rgb = function(h){
+        function hsl2rgb(h){
             var r, g, b;
 
             var hue2rgb = function hue2rgb(p, q, t){
@@ -265,85 +382,6 @@
             b = hue2rgb(p, q, h - 1/3);
 
             return [r, g, b];
-        };
-
-        $scope.$watch('options.renderMembrane', function(newVal, oldVal){
-            if(newVal === oldVal)
-                return;
-            console.log("render membrane changed from '" + oldVal.name + "' to '" + newVal.name + "'");
-            if(newVal) {
-                if(!membraneInitialized)
-                    createMembrane();
-                $scope.viewer.show('membrane');
-            } else {
-                $scope.viewer.hide('membrane');
-            }
-            $scope.viewer.requestRedraw();
-        });
-
-        $scope.$watch('options.renderHalogenBonds', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'halogenBonds');
-        });
-
-        $scope.$watch('options.renderHydrogenBonds', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'hydrogenBonds');
-        });
-
-        $scope.$watch('options.renderHydrophobicInteractions', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'hydrophobicInteractions');
-        });
-
-        $scope.$watch('options.renderMetalComplexes', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'metalComplexes');
-        });
-
-        $scope.$watch('options.renderPiCationInteractions', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'piCationInteractions');
-        });
-
-        $scope.$watch('options.renderPiStackings', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'piStackings');
-        });
-
-        $scope.$watch('options.renderSaltBridges', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'saltBridges');
-        });
-
-        $scope.$watch('options.renderWaterBridges', function(newVal, oldVal){
-            toggleInteractions(newVal, oldVal, 'waterBridges');
-        });
-
-        var toggleInteractions = function(newVal, oldVal, type) {
-            if(newVal === oldVal)
-                return;
-            console.log('render ' + type + ' changed from ' + oldVal + ' to ' + newVal);
-            if(newVal) {
-                if(initializedInteractions.indexOf(type) < 0)
-                    createInteractions(type);
-                $scope.viewer.show(type);
-            } else {
-                $scope.viewer.hide(type);
-            }
-            $scope.viewer.requestRedraw();
-        };
-
-        $scope.highlight = function(chain, resn, endResn) {
-            var selection = { cname : chain };
-            if(resn) {
-                if (endResn) {
-                    selection.rnumRange = [resn, endResn];
-                } else {
-                    // cast to int, JavaScript top kek
-                    selection.rnum = resn;
-                }
-            }
-            $scope.viewer.get('protein').setSelection($scope.viewer.get('protein').select(selection));
-            $scope.viewer.requestRedraw();
-        };
-
-        $scope.deselect = function() {
-            $scope.viewer.get('protein').setSelection($scope.structure.full().createEmptyView());
-            $scope.viewer.requestRedraw();
         }
     }]);
 

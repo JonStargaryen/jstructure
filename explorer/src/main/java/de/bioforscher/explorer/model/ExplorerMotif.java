@@ -8,7 +8,7 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
  */
 @SuppressWarnings("unused")
 public class ExplorerMotif {
-    private String chain, type;
+    private String chain, type, sequence;
     private int start, end;
 
     public ExplorerMotif() {
@@ -20,6 +20,7 @@ public class ExplorerMotif {
         this.type = sequenceMotif.getMotifDefinition().name();
         this.start = sequenceMotif.getStartGroup().getResidueNumber();
         this.end = sequenceMotif.getEndGroup().getResidueNumber();
+        this.sequence = sequenceMotif.getGroupContainer().getAminoAcidSequence();
     }
 
     public String getChain() {
@@ -36,5 +37,9 @@ public class ExplorerMotif {
 
     public int getEnd() {
         return end;
+    }
+
+    public String getSequence() {
+        return sequence;
     }
 }

@@ -14,6 +14,7 @@ import java.util.stream.Stream;
  * Created by bittrich on 2/28/17.
  */
 public class ExplorerHelix {
+    private static final int GRACE_INTERVAL = 1;
     private String chain;
     private int start, end;
 
@@ -71,7 +72,8 @@ public class ExplorerHelix {
             if(helixStart != -1 && !isHelix) {
                 // helix end?
 
-                if(grace < 2) {
+                //TODO detect actually turning helices and separate them
+                if(grace < GRACE_INTERVAL) {
                     // 1 non-helix residue grace to connect helices
                     grace++;
                     continue;

@@ -7,6 +7,8 @@ import de.bioforscher.jstructure.feature.topology.Membrane;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
+import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
 
@@ -38,6 +40,7 @@ public class ExplorerProtein {
     private List<ExplorerLigand> ligands;
     /* helices & kinks */
     private List<ExplorerHelix> helices;
+    private List<ExplorerKink> kinks;
 
     public ExplorerProtein() {
 
@@ -96,6 +99,10 @@ public class ExplorerProtein {
 
         this.helices = protein.chains()
                 .flatMap(ExplorerHelix::extract)
+                .collect(Collectors.toList());
+
+        this.kinks = protein.getFeatureAsList(KinkFinderHelix.class, KinkFinderParser.KINK_FINDER_ANNOTATION).stream()
+                .map(ExplorerKink::new)
                 .collect(Collectors.toList());
     }
 
@@ -157,5 +164,9 @@ public class ExplorerProtein {
 
     public List<ExplorerHelix> getHelices() {
         return helices;
+    }
+
+    public List<ExplorerKink> getKinks() {
+        return kinks;
     }
 }

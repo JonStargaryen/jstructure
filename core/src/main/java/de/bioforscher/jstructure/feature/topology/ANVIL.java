@@ -166,7 +166,7 @@ public class ANVIL extends AbstractFeatureProvider {
 
                     // distance cutoff is also squared
                     if(LinearAlgebra3D.distanceFast(atom, layer) <= radius &&
-                            minimalSquaredDistanceToProteinCAAtom(protein, atom) > 12.0) {
+                            minimalSquaredDistanceToProteinAtom(protein, atom) > 12.0) {
                         membrane.membraneAtoms.add(atom);
                     }
                 }
@@ -179,15 +179,12 @@ public class ANVIL extends AbstractFeatureProvider {
      * @param membranePseudoAtom the point to check
      * @return the closest distance to any alpha carbon of the protein
      */
-    private double minimalSquaredDistanceToProteinCAAtom(Protein protein, final double[] membranePseudoAtom) {
-        return Selection.on(protein)
-                    .aminoAcids()
-                    .alphaCarbonAtoms()
-                    .asFilteredAtoms()
-                    .map(Atom::getCoordinates)
-                    .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
-                    .min()
-                    .orElse(Double.MAX_VALUE);
+    private double minimalSquaredDistanceToProteinAtom(Protein protein, final double[] membranePseudoAtom) {
+        return protein.atoms()
+                .map(Atom::getCoordinates)
+                .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(coordinates, membranePseudoAtom))
+                .min()
+                .orElse(Double.MAX_VALUE);
     }
 
     /**
