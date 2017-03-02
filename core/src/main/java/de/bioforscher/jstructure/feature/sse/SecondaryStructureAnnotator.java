@@ -890,7 +890,9 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             // pdbSerial of minimal int value flags them as pseudo-hydrogen
             fragmentOfSize2.getElement(1).addAtom(new Atom("H", Element.H, xyz));
         } catch (NoSuchElementException e) {
-            logger.warn(e.getLocalizedMessage());
+            logger.warn("missing backbone atoms for peptide bond between {} and {} - cannot approximate hydrogen atom position",
+                    fragmentOfSize2.getElement(0).getIdentifier(),
+                    fragmentOfSize2.getElement(1).getIdentifier());
         }
     }
 }

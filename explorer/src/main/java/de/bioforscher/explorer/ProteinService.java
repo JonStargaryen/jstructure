@@ -79,7 +79,7 @@ public class ProteinService {
         List<String> proteinsToProcess = this.nonRedundantAlphaHelicalProteinIds.stream()
                 .map(line -> line.substring(0, 4))
                 .distinct()
-                .limit(10)
+                .limit(50)
                 .filter(id -> !knownProteins.contains(id))
                 .collect(Collectors.toList());
 
@@ -96,7 +96,7 @@ public class ProteinService {
                     }
                     return null;
                 })
-                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
+                .forEach(task -> Executors.newWorkStealingPool().submit(task));
     }
 
     public List<String> getAllProteins() {

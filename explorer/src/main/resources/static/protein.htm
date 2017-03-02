@@ -135,6 +135,7 @@
                 <div data-ng-class="{ active: tab.isSelected(3) }" data-ng-click="tab.selectTab(3)">sequence motifs</div>
                 <div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div>
                 <div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div>
+                <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div>
             </div>
 
             <div class="tse-scrollable">
@@ -220,6 +221,30 @@
                                 <div class="group">angle: {{::kink.angle}}</div>
                                 <div class="group">error: {{::kink.error}}</div>
                                 <div class="group">sequence: {{::kink.sequence}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- mutations -->
+                    <div data-ng-show="tab.isSelected(6)" class="representation">
+                        <div class="chain" data-ng-repeat="chain in protein.chains">
+                            <div class="chainId"
+                                 data-ng-mouseover="highlight(chain.id)"
+                                 data-ng-mouseleave="deselect()">
+                                <div>chain {{::chain.id}}</div>
+                            </div>
+                            <div class="groups">
+                                <div class="group" data-ng-repeat="mutation in chain.mutations">
+                                    {{mutation.description}}
+                                    {{mutation.original}} -> {{mutation.variation}}
+                                </div>
+                                <div class="group" data-ng-repeat="reference in chain.references">
+                                    {{reference.authors}}
+                                    {{reference.citation}}
+                                    {{reference.title}}
+                                    {{reference.doi}}
+                                    {{reference.pubmed}}
+                                </div>
                             </div>
                         </div>
                     </div>

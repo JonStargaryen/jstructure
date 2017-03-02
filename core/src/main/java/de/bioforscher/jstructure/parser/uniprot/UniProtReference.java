@@ -20,8 +20,8 @@ public class UniProtReference {
 
     UniProtReference(Element describingElement) {
         this(describingElement.getElementsByTag("title").text(),
-                describingElement.getElementsByAttributeValue("type", "PubMed").text(),
-                describingElement.getElementsByAttributeValue("type", "DOI").text(),
+                describingElement.getElementsByAttributeValue("type", "PubMed").attr("id"),
+                describingElement.getElementsByAttributeValue("type", "DOI").attr("id"),
                 describingElement.getElementsByTag("person").stream()
                         .map(element -> element.attr("name"))
                         .collect(Collectors.toList()),

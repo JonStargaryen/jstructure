@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.parser.uniprot;
 
 import org.jsoup.nodes.Element;
 
+import java.util.stream.Collectors;
+
 /**
  * Describes a UniProt natural variant.
  * Created by bittrich on 3/2/17.
@@ -18,7 +20,9 @@ public class UniProtNaturalVariant {
                 describingElement.getElementsByTag("original").text(),
                 describingElement.getElementsByTag("variation").text(),
                 describingElement.attr("description"),
-                describingElement.getElementsByTag("position").text());
+                describingElement.getElementsByTag("position").stream()
+                        .map(element -> element.attr("position"))
+                        .collect(Collectors.joining(", ")));
     }
 
     public UniProtNaturalVariant(String id, String original, String variation, String description, String position) {

@@ -22,7 +22,9 @@ public class UniProtMutagenesisSite {
         this(describingElement.getElementsByTag("original").text(),
                 describingElement.getElementsByTag("variation").text(),
                 describingElement.attr("description"),
-                describingElement.getElementsByTag("position").text(),
+                describingElement.getElementsByTag("position").stream()
+                        .map(element -> element.attr("position"))
+                        .collect(Collectors.joining(", ")),
                 Pattern.compile("\\s").splitAsStream(describingElement.attr("evidence")).collect(Collectors.toList()));
     }
 
