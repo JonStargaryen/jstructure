@@ -11,6 +11,7 @@ import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
+import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 public class ExplorerProtein {
-    private String name, title;
+    private String name, uniprot, title;
     private List<ExplorerChain> chains;
     /* sequence motifs */
     private List<ExplorerMotif> sequenceMotifs;
@@ -41,6 +42,7 @@ public class ExplorerProtein {
     /* helices & kinks */
     private List<ExplorerHelix> helices;
     private List<ExplorerKink> kinks;
+    /* UniProt annotations are chain-specific and stored there */
 
     public ExplorerProtein() {
 
@@ -48,6 +50,11 @@ public class ExplorerProtein {
 
     public ExplorerProtein(Protein protein) {
         this.name = protein.getName();
+        //TODO handle how uniprot ids are linked to chains
+        this.uniprot = protein.chains()
+                .map(chain -> chain.getFeature(String.class, UniProtAnnotator.UNIPROT_ID))
+                .distinct()
+                .collect(Collectors.joining(", "));
         this.title = protein.getTitle();
         this.chains = protein.chains()
                 .map(ExplorerChain::new)
@@ -108,6 +115,10 @@ public class ExplorerProtein {
 
     public String getName() {
         return name;
+    }
+
+    public String getUniprot() {
+        return uniprot;
     }
 
     public String getTitle() {

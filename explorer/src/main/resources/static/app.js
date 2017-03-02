@@ -5,7 +5,8 @@
 
     MODULE.constant('design', {
         defaultColor : '#454b52',
-        lighterColor : '#d1e2e6'
+        lighterColor : '#d1e2e6',
+        highlightColor : '#52b1e9'
     });
 
     MODULE.constant('features', [
@@ -203,8 +204,8 @@
 
         function initMembrane() {
             $scope.protein.membrane.forEach(function(entry) {
-                viewer.customMesh('membrane').addSphere([entry[0], entry[1], entry[2]], 0.75,
-                    { color : [1, 1, 1, 0.9] });
+                viewer.customMesh('membrane').addSphere([entry[0], entry[1], entry[2]], 0.5,
+                    { color : [0.8, 0.8, 0.8, 1] });
             });
         }
 
@@ -219,7 +220,7 @@
                         return true;
                 }
                 return false;
-            }), { color: pv.color.uniform(design.lighterColor) });
+            }), { color: pv.color.uniform(design.highlightColor) });
         }
 
         var colorOp = new pv.color.ColorOp(function(atom, out, index) {

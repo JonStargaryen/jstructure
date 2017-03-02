@@ -35,10 +35,6 @@ div[data-ng-view] {
     z-index: 10000;
 }
 
-.right {
-    float: right !important;
-}
-
 /* header/navigation */
 
 header {
@@ -104,6 +100,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     border-left: 1px solid #415060;
     color: #52b1e9;
     height: 35px;
+    margin: 0 !important;
 }
 
 .option.active, .sequence-header > div.active {

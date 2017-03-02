@@ -19,9 +19,8 @@ class PLIPRestServiceQuery {
     static final String BASE_URL = "http://141.55.231.200:8731/plip/";
     private static final String REST_USER_PASSWORD_PATH = "/home/bittrich/git/phd_sb_repo/data/.plip-rest-auth";
     static String secret;
-    private static final PLIPRestServiceQuery INSTANCE = new PLIPRestServiceQuery();
 
-    private PLIPRestServiceQuery() {
+    static {
         try {
             String line = Files.readAllLines(Paths.get(REST_USER_PASSWORD_PATH)).get(0);
             secret = new sun.misc.BASE64Encoder().encode(line.getBytes());
@@ -30,6 +29,7 @@ class PLIPRestServiceQuery {
         }
     }
 
+    @SuppressWarnings("unused")
     static String getPlipResults(String pdbId, String chainId, int residueNumber) {
         try {
             return getPlipResults(new URL(BASE_URL + pdbId + "/" + chainId + "/" + residueNumber));
@@ -59,8 +59,8 @@ class PLIPRestServiceQuery {
         connection.connect();
 
         try (InputStream inputStream = connection.getInputStream()) {
-            try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream))) {
-                return buffer.lines().collect(Collectors.joining(System.lineSeparator()));
+            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+                return bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
             }
         }
     }

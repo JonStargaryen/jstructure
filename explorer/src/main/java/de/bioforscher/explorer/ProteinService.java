@@ -11,6 +11,7 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
+import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,16 +37,17 @@ import java.util.stream.Stream;
 @Service
 public class ProteinService {
     private static final Logger logger = LoggerFactory.getLogger(ProteinService.class);
-    private final ProteinRepository repository;
+    private ProteinRepository repository;
     private List<String> nonRedundantAlphaHelicalProteinIds;
-    private List<String> features = Stream.of(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA,
+    private List<String> features = Stream.of(UniProtAnnotator.UNIPROT_ANNOTATION,
+            AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA,
             SequenceMotifAnnotator.SEQUENCE_MOTIF,
-            ANVIL.MEMBRANE,
             SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES,
+            ANVIL.MEMBRANE,
             PLIPAnnotator.PLIP_INTERACTIONS).collect(Collectors.toList());
 
     @Autowired
-    public ProteinService(ProteinRepository repository) throws IOException {
+    public ProteinService(ProteinRepository repository) {
         this.repository = repository;
     }
 
@@ -75,31 +79,24 @@ public class ProteinService {
         List<String> proteinsToProcess = this.nonRedundantAlphaHelicalProteinIds.stream()
                 .map(line -> line.substring(0, 4))
                 .distinct()
-                .skip(1)
-                .limit(2)
+                .limit(10)
                 .filter(id -> !knownProteins.contains(id))
                 .collect(Collectors.toList());
 
-        for(String pdbid : proteinsToProcess) {
-                Protein protein = ProteinParser.parseProteinById(pdbid);
-                featureProviders.forEach(abstractFeatureProvider -> {
-                    System.out.println(abstractFeatureProvider.getClass().getSimpleName());
-                    abstractFeatureProvider.process(protein);
-                });
-                KinkFinderParser.parseKinkFinderFile(protein, Paths.get("/home/bittrich/git/phd_sb_repo/data/kink_finder/" + protein.getName().toLowerCase() + ".kinks"));
-                logger.info("gathered information for {}", pdbid);
-                repository.save(new ExplorerProtein(protein));
-        }
-
-//        proteinsToProcess.stream()
-//                .map(pdbid -> (Callable) () -> {
-//                    Protein protein = ProteinParser.parseProteinById(pdbid);
-//                    featureProviders.forEach(abstractFeatureProvider ->abstractFeatureProvider.process(protein));
-//                    repository.save(new ExplorerProtein(protein));
-//                    logger.info("gathered all information for entry {}",pdbid);
-//                    return null;
-//                })
-//                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
+        proteinsToProcess.stream()
+                .map(pdbid -> (Callable) () -> {
+                    try{
+                        logger.info("fetching information for {}", pdbid);
+                        Protein protein = ProteinParser.parseProteinById(pdbid);
+                        featureProviders.forEach(abstractFeatureProvider -> abstractFeatureProvider.process(protein));
+                        KinkFinderParser.parseKinkFinderFile(protein, Paths.get("/home/bittrich/git/phd_sb_repo/data/kink_finder/" + protein.getName().toLowerCase() + ".kinks"));
+                        repository.save(new ExplorerProtein(protein));
+                    } catch (Exception e) {
+                        logger.error("gathering information for {} failed: {}", pdbid, e.getLocalizedMessage());
+                    }
+                    return null;
+                })
+                .forEach(task -> Executors.newFixedThreadPool(1).submit(task));
     }
 
     public List<String> getAllProteins() {

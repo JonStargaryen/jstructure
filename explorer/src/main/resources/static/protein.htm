@@ -7,6 +7,7 @@
             <div class="visualization-body">
                 <!-- general information TODO breadcrumb-esque navigation of currently selected elements -->
                 <div style="padding: 10px;">{{::protein.name}}</div>
+                <div style="padding: 10px;">{{::protein.uniprot}}</div>
                 <div style="padding: 10px;">{{::protein.title}}</div>
 
                 <!-- PV instance -->
@@ -20,62 +21,62 @@
                 </div>
 
                 <!-- general render options -->
-                <div class="visualization-options clearfix">
+                <div class="visualization-options">
                     <!-- membrane -->
-                    <div class="option fa fa-ellipsis-h right"
+                    <div class="option fa fa-ellipsis-h pull-right"
                          data-ng-click="options.renderMembrane = !options.renderMembrane"
                          data-ng-class="{active: options.renderMembrane}"
                          title="render membrane layer"></div>
                     <!-- kinks -->
-                    <div class="option fa fa-angle-right right"
+                    <div class="option fa fa-angle-right pull-right"
                          data-ng-click="options.renderKinks = !options.renderKinks"
                          data-ng-class="{active: options.renderKinks}"
                          title="render helix kinks"></div>
                     <!-- ligands -->
-                    <div class="option fa fa-angle-right right"
+                    <div class="option fa fa-angle-right pull-right"
                          data-ng-click="options.renderLigands = !options.renderLigands"
                          data-ng-class="{active: options.renderLigands}"
                          title="render ligands"></div>
                 </div>
 
                 <!-- PLIP options -->
-                <div class="visualization-options clearfix">
-                    <div class="option fa fa-exchange right"
+                <div class="visualization-options">
+                    <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
                          data-ng-class="{active: options.renderWaterBridges}"
                          title="render water bridges"
                          data-ng-show="protein.waterBridges.length > 0"></div>
-                    <div class="option fa fa-exchange right"
+                    <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderSaltBridges = !options.renderSaltBridges"
                          data-ng-class="{active: options.renderSaltBridges}"
                          title="render salt bridges"
                          data-ng-show="protein.saltBridges.length > 0"></div>
-                    <div class="option fa fa-database right"
+                    <div class="option fa fa-database pull-right"
                          data-ng-click="options.renderPiStackings = !options.renderPiStackings"
                          data-ng-class="{active: options.renderPiStackings}"
                          title="render pi-stackings"
                          data-ng-show="protein.piStackings.length > 0"></div>
-                    <div class="option fa fa-link right"
+                    <div class="option fa fa-link pull-right"
                          data-ng-click="options.renderPiCationInteractions = !options.renderPiCationInteractions"
                          data-ng-class="{active: options.renderPiCationInteractions}"
                          title="render pi-cation interactions"
                          data-ng-show="protein.piCationInteractions.length > 0"></div>
-                    <div class="option fa fa-arrows right"
+                    <div class="option fa fa-arrows pull-right"
                          data-ng-click="options.renderMetalComplexes = !options.renderMetalComplexes"
                          data-ng-class="{active: options.renderMetalComplexes}"
                          title="render metal complexes"
                          data-ng-show="protein.metalComplexes.length > 0"></div>
-                    <div class="option fa fa-chain-broken right"
+                    <div class="option fa fa-chain-broken pull-right"
                          data-ng-click="options.renderHydrophobicInteractions = !options.renderHydrophobicInteractions"
                          data-ng-class="{active: options.renderHydrophobicInteractions}"
                          title="render hydrophobic interactions"
                          data-ng-show="protein.hydrophobicInteractions.length > 0"></div>
-                    <div class="option fa fa-exchange right"
+                    <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderHydrogenBonds = !options.renderHydrogenBonds"
                          data-ng-class="{active: options.renderHydrogenBonds}"
                          title="render hydrogen bonds"
                          data-ng-show="protein.hydrogenBonds.length > 0"></div>
-                    <div class="option fa fa-exchange right"
+                    <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderHalogenBonds = !options.renderHalogenBonds"
                          data-ng-class="{active: options.renderHalogenBonds}"
                          title="render halogen bonds"
@@ -102,15 +103,22 @@
                 </div>
 
                 <!-- external resources -->
-                <div class="visualization-options clearfix">
-                    <div class="option link fa fa-external-link right" title="show in PDB">
-                        <a target="_blank" data-ng-href="http://www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
-                    </div>
-                    <div class="option link fa fa-external-link right" title="show in OPM">
-                        <a target="_blank" data-ng-href="http://opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
-                    </div>
-                    <div class="option link fa fa-external-link right" title="show in MMDB">
+                <div class="visualization-options">
+                    <div class="option link pull-right" title="show in MMDB">
                         <a target="_blank" data-ng-href="https://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
+                        <span class="fa fa-external-link"></span>
+                    </div>
+                    <div class="option link pull-right" title="show in OPM">
+                        <a target="_blank" data-ng-href="http://opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
+                        <span class="fa fa-external-link"></span>
+                    </div>
+                    <div class="option link pull-right" title="show in UniProt">
+                        <a target="_blank" data-ng-href="http://www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
+                        <span class="fa fa-external-link"></span>
+                    </div>
+                    <div class="option link pull-right" title="show in PDB">
+                        <a target="_blank" data-ng-href="http://www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
+                        <span class="fa fa-external-link"></span>
                     </div>
                 </div>
             </div>

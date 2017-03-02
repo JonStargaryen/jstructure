@@ -1,6 +1,7 @@
 package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.parser.uniprot.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +12,9 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 public class ExplorerChain {
+    private List<UniProtReference> references;
+    private List<UniProtNaturalVariant> variants;
+    private List<UniProtMutagenesisSite> mutations;
     private String id;
     private List<ExplorerGroup> groups;
 
@@ -23,6 +27,11 @@ public class ExplorerChain {
         this.groups = chain.groups()
                 .map(ExplorerGroup::new)
                 .collect(Collectors.toList());
+
+        UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
+        this.mutations = uniProtAnnotationContainer.getMutagenesisSites();
+        this.variants = uniProtAnnotationContainer.getNaturalVariants();
+        this.references = uniProtAnnotationContainer.getReferences();
     }
 
     public String getId() {
@@ -31,5 +40,17 @@ public class ExplorerChain {
 
     public List<ExplorerGroup> getGroups() {
         return groups;
+    }
+
+    public List<UniProtReference> getReferences() {
+        return references;
+    }
+
+    public List<UniProtNaturalVariant> getVariants() {
+        return variants;
+    }
+
+    public List<UniProtMutagenesisSite> getMutations() {
+        return mutations;
     }
 }
