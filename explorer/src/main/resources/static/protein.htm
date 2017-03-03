@@ -105,19 +105,19 @@
                 <!-- external resources -->
                 <div class="visualization-options">
                     <div class="option link pull-right" title="show in MMDB">
-                        <a target="_blank" data-ng-href="https://www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
+                        <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
                         <span class="fa fa-external-link"></span>
                     </div>
                     <div class="option link pull-right" title="show in OPM">
-                        <a target="_blank" data-ng-href="http://opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
+                        <a target="_blank" data-ng-href="//opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
                         <span class="fa fa-external-link"></span>
                     </div>
                     <div class="option link pull-right" title="show in UniProt">
-                        <a target="_blank" data-ng-href="http://www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
+                        <a target="_blank" data-ng-href="//www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
                         <span class="fa fa-external-link"></span>
                     </div>
                     <div class="option link pull-right" title="show in PDB">
-                        <a target="_blank" data-ng-href="http://www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
+                        <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
                         <span class="fa fa-external-link"></span>
                     </div>
                 </div>
@@ -143,12 +143,12 @@
                     <!-- chains -->
                     <div data-ng-show="tab.isSelected(1)" class="representation">
                         <div class="chain" data-ng-repeat="chain in protein.chains">
-                            <div class="chainId"
+                            <div class="elementId"
                                  data-ng-mouseover="highlight(chain.id)"
                                  data-ng-mouseleave="deselect()">
                                 <div>chain {{::chain.id}}</div>
                             </div>
-                            <div class="groups">
+                            <div class="elements">
                                 <div class="group"
                                  style="color: hsl({{group[options.coloringFeature.tag] * 120}}, 60%, 70%);"
                                  data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true"
@@ -164,11 +164,11 @@
                              data-ng-mouseover="highlight(ligand.chain, ligand.resn)"
                              data-ng-mouseleave="deselect()"
                              data-ng-repeat="ligand in protein.ligands | filter: { type : '!water' } | orderBy: 'tlc'">
-                            <div class="chainId">
+                            <div class="elementId">
                                 <div>{{::ligand.tlc}}</div>
                             </div>
-                            <div class="groups">
-                                <div class="group">{{::ligand.name}}</div>
+                            <div class="elements">
+                                <div class="element">{{::ligand.name}}</div>
                             </div>
                         </div>
                     </div>
@@ -179,13 +179,13 @@
                              data-ng-mouseover="highlight(motif.chain, motif.start, motif.end)"
                              data-ng-mouseleave="deselect()"
                              data-ng-repeat="motif in protein.sequenceMotifs | orderBy: 'type'">
-                            <div class="chainId">
+                            <div class="elementId">
                                 <div>{{::motif.type}}</div>
                             </div>
-                            <div class="groups">
-                                <div class="group">chain: {{::motif.chain}}</div>
-                                <div class="group">range: {{::motif.start}}-{{::motif.end}}</div>
-                                <div class="group">sequence: {{::motif.sequence}}</div>
+                            <div class="elements">
+                                <div class="element">chain: {{::motif.chain}}<br />
+                                    range: {{::motif.start}}-{{::motif.end}}<br />
+                                    sequence: {{::motif.sequence}}</div>
                             </div>
                         </div>
                     </div>
@@ -196,12 +196,12 @@
                              data-ng-mouseover="highlight(helix.chain, helix.start, helix.end)"
                              data-ng-mouseleave="deselect()"
                              data-ng-repeat="helix in protein.helices">
-                            <div class="chainId">
+                            <div class="elementId">
                                 <div>H{{::$index + 1}}</div>
                             </div>
-                            <div class="groups">
-                                <div class="group">chain: {{::helix.chain}}</div>
-                                <div class="group">range: {{::helix.start}}-{{::helix.end}}</div>
+                            <div class="elements">
+                                <div class="element">chain: {{::helix.chain}}<br />
+                                    range: {{::helix.start}}-{{::helix.end}}</div>
                             </div>
                         </div>
                     </div>
@@ -212,15 +212,15 @@
                              data-ng-mouseover="highlight(kink.chain, kink.kinkPosition)"
                              data-ng-mouseleave="deselect()"
                              data-ng-repeat="kink in protein.kinks">
-                            <div class="chainId">
+                            <div class="elementId">
                                 <div>{{::kink.chain}}-{{::kink.kinkPosition}}</div>
                             </div>
-                            <div class="groups">
-                                <div class="group">chain: {{::kink.chain}}</div>
-                                <div class="group">kink position: {{::kink.kinkPosition}}</div>
-                                <div class="group">angle: {{::kink.angle}}</div>
-                                <div class="group">error: {{::kink.error}}</div>
-                                <div class="group">sequence: {{::kink.sequence}}</div>
+                            <div class="elements">
+                                <div class="element">chain: {{::kink.chain}}<br />
+                                    kink position: {{::kink.kinkPosition}}<br />
+                                    angle: {{::kink.angle}}<br />
+                                    error: {{::kink.error}}<br />
+                                    sequence: {{::kink.sequence}}</div>
                             </div>
                         </div>
                     </div>
@@ -228,22 +228,39 @@
                     <!-- mutations -->
                     <div data-ng-show="tab.isSelected(6)" class="representation">
                         <div class="chain" data-ng-repeat="chain in protein.chains">
-                            <div class="chainId"
+                            <div class="elementId"
                                  data-ng-mouseover="highlight(chain.id)"
                                  data-ng-mouseleave="deselect()">
                                 <div>chain {{::chain.id}}</div>
                             </div>
-                            <div class="groups">
-                                <div class="group" data-ng-repeat="mutation in chain.mutations">
-                                    {{mutation.description}}
-                                    {{mutation.original}} -> {{mutation.variation}}
-                                </div>
-                                <div class="group" data-ng-repeat="reference in chain.references">
-                                    {{reference.authors}}
-                                    {{reference.citation}}
-                                    {{reference.title}}
-                                    {{reference.doi}}
-                                    {{reference.pubmed}}
+                            <div class="elements">
+                                <div class="element"
+                                     data-ng-mouseover="highlight(chain.id, mutation.position[0], mutation.position[1])"
+                                     data-ng-mouseleave="deselect()"
+                                     data-ng-repeat="mutation in chain.mutations">
+                                    mutation: {{mutation.original}} &rarr; {{mutation.variation}}<br />
+                                    {{mutation.description}}<br />
+                                    position: {{mutation.position}}<br />
+                                    <div data-ng-show="mutation.evidence.length > 0">
+                                        evidence: <span data-ng-repeat="evidence in mutation.evidence"><a href="#ref-{{chain.id}}-{{evidence}}">{{evidence}}</a> </span>
+                                    </div>
+                                </div><br />
+                                <div class="element"
+                                     data-ng-mouseover="highlight(chain.id, variant.position[0], variant.position[1])"
+                                     data-ng-mouseleave="deselect()"
+                                     data-ng-repeat="variant in chain.variants">
+                                    {{variant.id}}<br />
+                                    variation: {{variant.original}} &rarr; {{variant.variation}}<br />
+                                    {{variant.description}}<br />
+                                    position: {{variant.position}}<br />
+                                    <div data-ng-show="variant.evidence.length > 0">
+                                        evidence: <span data-ng-repeat="evidence in variant.evidence"><a href="#ref-{{chain.id}}-{{evidence}}">{{evidence}}</a> </span>
+                                    </div>
+                                </div><br />
+                                <div class="element" data-ng-repeat="reference in chain.references">
+                                    [<a name="ref-{{chain.id}}-{{$index + 1}}">{{$index + 1}}</a>] {{reference.authors | formatAuthors}} {{reference.title}} {{reference.citation.name}} {{reference.citation.date}}; {{reference.citation.volume}}:{{reference.citation.first}}-{{reference.citation.last}}.<br />
+                                    doi: <a target="_blank" data-ng-href="//dx.doi.org/{{::reference.doi}}">{{::reference.doi}}</a><br />
+                                    PubMed: <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/pubmed/{{::reference.pubmed}}">{{::reference.pubmed}}</a>
                                 </div>
                             </div>
                         </div>

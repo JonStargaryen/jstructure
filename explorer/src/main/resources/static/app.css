@@ -27,10 +27,10 @@ div[data-ng-view] {
 
 .overlay {
     position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-color: rgba(17, 17, 17, 0.85);
     z-index: 10000;
 }
@@ -180,27 +180,27 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     display: flex;
 }
 
-.representation .chainId {
+.representation .elementId {
     flex: 0 0 14px;
     color: #9fb4c7;
     position: relative;
     white-space: nowrap;
 }
 
-.representation .chainId > div {
+.representation .elementId > div {
     position: absolute;
     top: 50%;
     left: 50%;
     transform:  translateX(-50%) translateY(-50%) rotate(-90deg);
 }
 
-.representation .groups {
+.representation .elements {
     flex: 1;
+    padding-right: 10px;
 }
 
 .representation .group {
     display: inline-block;
-    height: 35px;
     min-width: 35px;
     text-align: center;
     border: solid 1px;

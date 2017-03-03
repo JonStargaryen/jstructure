@@ -38,6 +38,7 @@ import java.util.stream.Stream;
 public class ProteinService {
     private static final Logger logger = LoggerFactory.getLogger(ProteinService.class);
     private ProteinRepository repository;
+    private List<String> allProteins;
     private List<String> nonRedundantAlphaHelicalProteinIds;
     private List<String> features = Stream.of(UniProtAnnotator.UNIPROT_ANNOTATION,
             AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA,
@@ -54,7 +55,7 @@ public class ProteinService {
     @PostConstruct
     public void activate() throws IOException {
         // clear database
-//        repository.deleteAll();
+        repository.deleteAll();
 
         // load protein lists
         List<String> allProteinIds = Files.lines(getResource("pdbtm_all.list")) //http://pdbtm.enzim.hu/data/pdbtm_all.list
@@ -76,12 +77,15 @@ public class ProteinService {
                 .collect(Collectors.toList());
 
         // parse protein data
-        List<String> proteinsToProcess = this.nonRedundantAlphaHelicalProteinIds.stream()
-                .map(line -> line.substring(0, 4))
-                .distinct()
-                .limit(50)
-                .filter(id -> !knownProteins.contains(id))
-                .collect(Collectors.toList());
+//        List<String> proteinsToProcess = this.nonRedundantAlphaHelicalProteinIds.stream()
+//                .map(line -> line.substring(0, 4))
+//                .distinct()
+//                .limit(0)
+//                .filter(id -> !knownProteins.contains(id))
+//                .collect(Collectors.toList());
+
+        List<String> proteinsToProcess = Stream.of("5A63").collect(Collectors.toList());
+        this.allProteins = proteinsToProcess;
 
         proteinsToProcess.stream()
                 .map(pdbid -> (Callable) () -> {
@@ -97,12 +101,14 @@ public class ProteinService {
                     return null;
                 })
                 .forEach(task -> Executors.newWorkStealingPool().submit(task));
+
+//        this.allProteins = repository.findAll().stream()
+//                .map(ExplorerProtein::getName)
+//                .collect(Collectors.toList());
     }
 
     public List<String> getAllProteins() {
-        return repository.findAll().stream()
-                .map(ExplorerProtein::getName)
-                .collect(Collectors.toList());
+        return allProteins;
     }
 
     public List<String> getNonRedundantAlphaHelicalProteins() {

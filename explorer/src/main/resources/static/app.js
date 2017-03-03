@@ -342,6 +342,7 @@
         }
 
         $scope.highlight = function(chain, resn, endResn) {
+            console.log(chain + " " + resn + " " + endResn);
             var selection = { cname : chain };
             if(resn) {
                 if (endResn)
@@ -431,6 +432,22 @@
                     .replace(/([A-Z])/g, ' $1')
                     .toLowerCase();
             }
+        }
+    });
+
+    MODULE.filter('formatAuthors', function() {
+        return function(input) {
+            if(input) {
+                if(input.length == 0)
+                    return '';
+                if(input.length < 2)
+                    return omitFullStops(input) + '.';
+                return omitFullStops(input[0]) + ' et al.';
+            }
+        };
+
+        function omitFullStops(input) {
+            return input.split('.').join('');
         }
     });
 })();

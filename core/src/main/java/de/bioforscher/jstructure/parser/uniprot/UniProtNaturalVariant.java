@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.parser.uniprot;
 
 import org.jsoup.nodes.Element;
 
+import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -9,7 +11,8 @@ import java.util.stream.Collectors;
  * Created by bittrich on 3/2/17.
  */
 public class UniProtNaturalVariant {
-    private String id, original, variation, description, position;
+    private String id, original, variation, description;
+    private List<String> evidence, position;
 
     UniProtNaturalVariant() {
 
@@ -20,17 +23,19 @@ public class UniProtNaturalVariant {
                 describingElement.getElementsByTag("original").text(),
                 describingElement.getElementsByTag("variation").text(),
                 describingElement.attr("description"),
-                describingElement.getElementsByTag("position").stream()
+                describingElement.getElementsByTag("location").first().children().stream()
                         .map(element -> element.attr("position"))
-                        .collect(Collectors.joining(", ")));
+                        .collect(Collectors.toList()),
+                Pattern.compile("\\s").splitAsStream(describingElement.attr("evidence")).collect(Collectors.toList()));
     }
 
-    public UniProtNaturalVariant(String id, String original, String variation, String description, String position) {
+    public UniProtNaturalVariant(String id, String original, String variation, String description, List<String> position, List<String> evidence) {
         this.id = id;
         this.original = original;
         this.variation = variation;
         this.description = description;
         this.position = position;
+        this.evidence = evidence;
     }
 
     public String getId() {
@@ -49,7 +54,11 @@ public class UniProtNaturalVariant {
         return description;
     }
 
-    public String getPosition() {
+    public List<String> getPosition() {
         return position;
+    }
+
+    public List<String> getEvidence() {
+        return evidence;
     }
 }

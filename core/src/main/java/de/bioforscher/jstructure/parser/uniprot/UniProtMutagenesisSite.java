@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
  * Created by bittrich on 3/2/17.
  */
 public class UniProtMutagenesisSite {
-    private String original, variation, description, position;
-    private List<String> evidence;
+    private String original, variation, description;
+    private List<String> evidence, position;
 
     UniProtMutagenesisSite() {
 
@@ -22,13 +22,13 @@ public class UniProtMutagenesisSite {
         this(describingElement.getElementsByTag("original").text(),
                 describingElement.getElementsByTag("variation").text(),
                 describingElement.attr("description"),
-                describingElement.getElementsByTag("position").stream()
+                describingElement.getElementsByTag("location").first().children().stream()
                         .map(element -> element.attr("position"))
-                        .collect(Collectors.joining(", ")),
+                        .collect(Collectors.toList()),
                 Pattern.compile("\\s").splitAsStream(describingElement.attr("evidence")).collect(Collectors.toList()));
     }
 
-    public UniProtMutagenesisSite(String original, String variation, String description, String position, List<String> evidence) {
+    public UniProtMutagenesisSite(String original, String variation, String description, List<String> position, List<String> evidence) {
         this.original = original;
         this.variation = variation;
         this.description = description;
@@ -48,7 +48,7 @@ public class UniProtMutagenesisSite {
         return description;
     }
 
-    public String getPosition() {
+    public List<String> getPosition() {
         return position;
     }
 
