@@ -116,6 +116,9 @@
 
         $http.get('/api/proteins/pdbid/' + $routeParams.pdbid).then(function(data) {
             $scope.protein = data.data;
+            $rootScope.context = {};
+            $rootScope.context.name = $routeParams.pdbid;
+            $rootScope.context.title = $scope.protein.title;
 
             /* compose PDB representation of the protein */
             var rep = "";
@@ -189,11 +192,6 @@
 
         /* render plain PDB structure with chosen style */
         function initProtein() {
-            // $scope.geom = $scope.viewer.renderAs('protein', $scope.structure.select('protein'), $scope.options.renderMode.raw,
-            //     { color: colorOp });
-            // $scope.viewer.ballsAndSticks('ligands', $scope.structure.select('ligand'),
-            //     { color: pv.color.uniform(design.lighterColor) });
-
             aminoAcids = viewer.cartoon('protein', structure.select('protein'), { color: colorOp });
         }
 
@@ -239,7 +237,7 @@
             out[index] = rgb[0];
             out[index + 1] = rgb[1];
             out[index + 2] = rgb[2];
-            // out[index + 3] = 1.0;
+            out[index + 3] = 1.0;
         });
 
         /* render PLIP interactions */
@@ -342,13 +340,13 @@
         }
 
         $scope.highlight = function(chain, resn, endResn) {
-            console.log(chain + " " + resn + " " + endResn);
+            // console.log(chain + " " + resn + " " + endResn);
             var selection = { cname : chain };
             if(resn) {
                 if (endResn)
-                    selection.rnumRange = [resn, endResn];
+                    selection.rnumRange = [+resn, +endResn];
                 else
-                    selection.rnum = resn;
+                    selection.rnum = +resn;
             }
             aminoAcids.setSelection(aminoAcids.select(selection));
             ligands.setSelection(ligands.select(selection));
@@ -449,5 +447,14 @@
         function omitFullStops(input) {
             return input.split('.').join('');
         }
+    });
+
+    MODULE.filter('formatPositions', function() {
+        return function (input) {
+            if (input.length == 1)
+                return input[0];
+            if (input.length == 2)
+                return input[0] + '-' + input[1];
+        };
     });
 })();

@@ -1,7 +1,6 @@
 /****** dropdown-select *******/
 .dropdown-select {
     border-bottom: 1px solid #415060;
-    height: 35px;
     position: relative;
     cursor: pointer;
 }

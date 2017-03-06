@@ -5,20 +5,15 @@
     <div class="visualization">
         <div class="wrapper">
             <div class="visualization-body">
-                <!-- general information TODO breadcrumb-esque navigation of currently selected elements -->
-                <div style="padding: 10px;">{{::protein.name}}</div>
-                <div style="padding: 10px;">{{::protein.uniprot}}</div>
-                <div style="padding: 10px;">{{::protein.title}}</div>
-
-                <!-- PV instance -->
-                <div id="protein-visualizer" class="visualizer-tab"></div>
-
                 <div class="dropdown-select"
                      title="select feature to color visualization"
                      data-dropdown-select="features"
                      data-dropdown-model="options.coloringFeature"
                      data-dropdown-item-label="name">
                 </div>
+
+                <!-- PV instance -->
+                <div id="protein-visualizer" class="visualizer-tab"></div>
 
                 <!-- general render options -->
                 <div class="visualization-options">
@@ -101,26 +96,6 @@
                     <div style="color: hsl(60, 60%, 70%);">average</div>
                     <div style="color: hsl(120, 60%, 70%);">max</div>
                 </div>
-
-                <!-- external resources -->
-                <div class="visualization-options">
-                    <div class="option link pull-right" title="show in MMDB">
-                        <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
-                        <span class="fa fa-external-link"></span>
-                    </div>
-                    <div class="option link pull-right" title="show in OPM">
-                        <a target="_blank" data-ng-href="//opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
-                        <span class="fa fa-external-link"></span>
-                    </div>
-                    <div class="option link pull-right" title="show in UniProt">
-                        <a target="_blank" data-ng-href="//www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
-                        <span class="fa fa-external-link"></span>
-                    </div>
-                    <div class="option link pull-right" title="show in PDB">
-                        <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
-                        <span class="fa fa-external-link"></span>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -128,7 +103,7 @@
     <!-- the edit/data part on the right -->
     <div class="sequence" data-ng-controller="TabController as tab">
         <div class="wrapper">
-            <!-- general project information -->
+            <!-- general project navigation -->
             <div class="sequence-header clearfix">
                 <div data-ng-class="{ active: tab.isSelected(1) }" data-ng-click="tab.selectTab(1)">sequence</div>
                 <div data-ng-class="{ active: tab.isSelected(2) }" data-ng-click="tab.selectTab(2)">ligands</div>
@@ -136,6 +111,23 @@
                 <div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div>
                 <div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div>
                 <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div>
+
+                <div class="option link pull-right" title="show in MMDB">
+                    <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+                <div class="option link pull-right" title="show in OPM">
+                    <a target="_blank" data-ng-href="//opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+                <div class="option link pull-right" title="show in UniProt">
+                    <a target="_blank" data-ng-href="//www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+                <div class="option link pull-right" title="show in PDB">
+                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
             </div>
 
             <div class="tse-scrollable">
@@ -238,27 +230,31 @@
                                      data-ng-mouseover="highlight(chain.id, mutation.position[0], mutation.position[1])"
                                      data-ng-mouseleave="deselect()"
                                      data-ng-repeat="mutation in chain.mutations">
-                                    mutation: {{mutation.original}} &rarr; {{mutation.variation}}<br />
-                                    {{mutation.description}}<br />
-                                    position: {{mutation.position}}<br />
+                                    <h3>mutation</h3>
+                                    {{::mutation.original}} &rarr; {{::mutation.variation}}<br />
+                                    {{::mutation.description}}<br />
+                                    position: {{::mutation.position | formatPositions}}<br />
                                     <div data-ng-show="mutation.evidence.length > 0">
-                                        evidence: <span data-ng-repeat="evidence in mutation.evidence"><a href="#ref-{{chain.id}}-{{evidence}}">{{evidence}}</a> </span>
+                                        evidence: <span data-ng-repeat="evidence in mutation.evidence"><a href="#ref:{{::chain.id}}:{{::evidence}}">{{::evidence}}</a> </span>
                                     </div>
-                                </div><br />
+                                    <br />
+                                </div>
                                 <div class="element"
                                      data-ng-mouseover="highlight(chain.id, variant.position[0], variant.position[1])"
                                      data-ng-mouseleave="deselect()"
                                      data-ng-repeat="variant in chain.variants">
-                                    {{variant.id}}<br />
-                                    variation: {{variant.original}} &rarr; {{variant.variation}}<br />
-                                    {{variant.description}}<br />
-                                    position: {{variant.position}}<br />
+                                    <h3>variant</h3>
+                                    {{::variant.id}}<br />
+                                    variation: {{::variant.original}} &rarr; {{::variant.variation}}<br />
+                                    {{::variant.description}}<br />
+                                    position: {{::variant.position | formatPositions}}<br />
                                     <div data-ng-show="variant.evidence.length > 0">
-                                        evidence: <span data-ng-repeat="evidence in variant.evidence"><a href="#ref-{{chain.id}}-{{evidence}}">{{evidence}}</a> </span>
+                                        evidence: <span data-ng-repeat="evidence in variant.evidence"><a href="#ref:{{::chain.id}}:{{::evidence}}">{{::evidence}}</a> </span>
                                     </div>
-                                </div><br />
+                                    <br />
+                                </div>
                                 <div class="element" data-ng-repeat="reference in chain.references">
-                                    [<a name="ref-{{chain.id}}-{{$index + 1}}">{{$index + 1}}</a>] {{reference.authors | formatAuthors}} {{reference.title}} {{reference.citation.name}} {{reference.citation.date}}; {{reference.citation.volume}}:{{reference.citation.first}}-{{reference.citation.last}}.<br />
+                                    [<a name="ref:{{chain.id}}:{{$index + 1}}">{{$index + 1}}</a>] {{::reference.authors | formatAuthors}} {{::reference.title}} {{::reference.citation.name}} {{::reference.citation.date}}; {{::reference.citation.volume}}:{{::reference.citation.first}}-{{::reference.citation.last}}.<br />
                                     doi: <a target="_blank" data-ng-href="//dx.doi.org/{{::reference.doi}}">{{::reference.doi}}</a><br />
                                     PubMed: <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/pubmed/{{::reference.pubmed}}">{{::reference.pubmed}}</a>
                                 </div>

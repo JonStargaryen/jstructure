@@ -20,6 +20,8 @@
         <a href="home" class="logo">
             membrane protein explorer
         </a>
+        <!-- TODO breadcrumb-esque navigation of currently selected elements -->
+        <div class="context" data-ng-show="context">{{context.name}} | {{context.title}}</div>
         <ul class="menu">
             <li data-ng-class="{ active: page() == '/home' }"><a href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
             <li data-ng-class="{ active: page().startsWith('/protein/') }" data-ng-show="page().startsWith('/protein/')"><a href="#"><i class="fa fa-cubes" aria-hidden="true"></i> Protein</a></li>

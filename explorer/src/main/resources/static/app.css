@@ -48,11 +48,21 @@ header .logo {
     float: left;
     font-variant: small-caps;
     padding: 13px 17px;
-    color: #51b2e9;
     font-size: 22px;
     font-weight: lighter;
     text-decoration: none;
     border-right: 1px solid #323a41;
+    color: #51b2e9;
+}
+
+header .context {
+    padding: 15px 20px;
+    color: #cbddf2;
+    font-size: 13px;
+    border-right: 1px solid #323a41;
+    float: left;
+    line-height: 19px;
+    /* TODO limit length of title */
 }
 
 header .menu {
