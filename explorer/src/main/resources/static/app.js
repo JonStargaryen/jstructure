@@ -143,13 +143,12 @@
         /* PV related functions */
         function visualizeProteinStructure() {
             var options = {
-                // div to be selected is not visible at that time
-                width: 400,
-                height: 400,
-                antialias: true,
+                width: 'auto',
+                height : 400,
+                // antialias: true,
                 quality : 'high',
                 background:'#313a41',
-                // animateTime : 500,
+                animateTime : 500,
                 selectionColor : '#f00',
                 fog : false
             };

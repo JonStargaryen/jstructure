@@ -1,12 +1,15 @@
 package de.bioforscher.explorer;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 /**
  * Allows to 'mock' the persistence layer when none is available.
  * TODO find better pattern to switch
  * Created by S on 04.03.2017.
  */
 //@RestController
-//@RequestMapping(value = "/api/proteins/", method = RequestMethod.GET)
+@RequestMapping(value = "/api/proteins/", method = RequestMethod.GET)
 public class MockController {
 //    @RequestMapping(value = "/all", method = RequestMethod.GET)
 //    public List<String> getAllProteins() throws IOException {
