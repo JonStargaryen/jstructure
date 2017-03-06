@@ -124,7 +124,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     background-color: #313a41;
     position: relative;
     float: left;
-    width: 500px;
+    width: 400px;
     height: 100%;
     color: #96a3b3;
     font-size: 14px;
@@ -139,7 +139,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 .visualization #protein-visualizer {
-    height: 501px;
+    height: 401px;
 }
 
 .legend {
@@ -164,7 +164,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     position: relative;
     height: 100%;
     overflow: hidden;
-    min-width: 500px;
+    min-width: 400px;
 }
 
 .sequence-header {

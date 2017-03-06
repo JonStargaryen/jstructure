@@ -55,7 +55,7 @@ public class ProteinService {
     @PostConstruct
     public void activate() throws IOException {
         // clear database
-        repository.deleteAll();
+//        repository.deleteAll();
 
         // load protein lists
         List<String> allProteinIds = Files.lines(getResource("pdbtm_all.list")) //http://pdbtm.enzim.hu/data/pdbtm_all.list

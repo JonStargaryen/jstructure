@@ -141,13 +141,14 @@
         function visualizeProteinStructure() {
             var options = {
                 // div to be selected is not visible at that time
-                width: 500,
-                height: 500,
+                width: 400,
+                height: 400,
                 antialias: true,
                 quality : 'high',
                 background:'#313a41',
-                animateTime : 500,
-                selectionColor : '#f00'
+                // animateTime : 500,
+                selectionColor : '#f00',
+                fog : false
             };
 
             // ensure container is empty
@@ -156,7 +157,6 @@
             viewer = pv.Viewer(document.getElementById('protein-visualizer'), options);
             structure = io.pdb($scope.protein.pdb);
             mol.assignHelixSheet(structure);
-            viewer.options('fog', false);
 
             initProtein();
             initLigands();
@@ -205,7 +205,7 @@
         function initMembrane() {
             $scope.protein.membrane.forEach(function(entry) {
                 viewer.customMesh('membrane').addSphere([entry[0], entry[1], entry[2]], 0.5,
-                    { color : [0.8, 0.8, 0.8, 1] });
+                    { color : [0.8, 0.8, 0.8] });
             });
         }
 
@@ -239,7 +239,7 @@
             out[index] = rgb[0];
             out[index + 1] = rgb[1];
             out[index + 2] = rgb[2];
-            out[index + 3] = 1.0;
+            // out[index + 3] = 1.0;
         });
 
         /* render PLIP interactions */

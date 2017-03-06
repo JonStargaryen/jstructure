@@ -160,7 +160,8 @@ public class MultipleStructureAlignment {
                 .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().stream()
                         .sorted(Comparator.comparingDouble(group -> calculateSquaredDistance(group, closestCentroid)))
                         .findFirst()
-                        .orElseThrow(() -> new IllegalArgumentException("did not find nearby group"))));
+//                        .orElseThrow(() -> new IllegalArgumentException("did not find nearby group"))));
+                        .get()));
 
         selectedGroup.entrySet().forEach(entry -> {
             GroupContainer originalGroups = entry.getKey();
