@@ -143,11 +143,11 @@
         /* PV related functions */
         function visualizeProteinStructure() {
             var options = {
-                width: 'auto',
+                width : 400,
                 height : 400,
-                // antialias: true,
+                // antialias : true,
                 quality : 'high',
-                background:'#313a41',
+                background : '#313a41',
                 animateTime : 500,
                 selectionColor : '#f00',
                 fog : false

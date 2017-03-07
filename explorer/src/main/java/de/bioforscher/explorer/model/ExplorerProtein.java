@@ -5,8 +5,11 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;
 import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
@@ -49,6 +52,7 @@ public class ExplorerProtein {
     }
 
     public ExplorerProtein(Protein protein) {
+        //TODO standardize to helix explorer
         this.name = protein.getName();
         //TODO handle how uniprot ids are linked to chains
         this.uniprot = protein.chains()
@@ -111,6 +115,62 @@ public class ExplorerProtein {
         this.kinks = protein.getFeatureAsList(KinkFinderHelix.class, KinkFinderParser.KINK_FINDER_ANNOTATION).stream()
                 .map(ExplorerKink::new)
                 .collect(Collectors.toList());
+    }
+
+    private static ExplorerProtein createExplorerProteinFromScaffold(Protein protein) {
+        ExplorerProtein explorerProtein = new ExplorerProtein();
+
+        explorerProtein.name = protein.getName();
+        explorerProtein.title = protein.getTitle();
+        explorerProtein.chains = protein.chains()
+                .map(ExplorerChain::new)
+                .collect(Collectors.toList());
+
+        explorerProtein.ligands = Selection.on(protein)
+                .hetatms()
+                .asFilteredGroups()
+                .map(ExplorerLigand::new)
+                .collect(Collectors.toList());
+
+        return explorerProtein;
+    }
+
+    public static ExplorerProtein createForHelixExplorer(String pdbId) {
+        Protein protein = ProteinParser.parseProteinById(pdbId);
+        AbstractFeatureProvider plipAnnotator = FeatureProviderRegistry.resolveAnnotator(PLIPAnnotator.PLIP_INTERACTIONS);
+        plipAnnotator.process(protein);
+
+        ExplorerProtein explorerProtein = createExplorerProteinFromScaffold(protein);
+        PLIPInteractionContainer interactions = protein.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
+        explorerProtein.halogenBonds = interactions.getHalogenBonds().stream()
+                .map(ExplorerInteraction::new)
+                .collect(Collectors.toList());
+        explorerProtein.hydrogenBonds = interactions.getHydrogenBonds().stream()
+                .map(ExplorerInteraction::new)
+                .collect(Collectors.toList());
+        explorerProtein.metalComplexes = interactions.getMetalComplexes().stream()
+                .map(ExplorerInteraction::new)
+                .collect(Collectors.toList());
+        explorerProtein.piCationInteractions = interactions.getPiCationInteractions().stream()
+                .filter(interaction -> !interaction.getAtoms1().isEmpty())
+                .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+                        .map(ExplorerInteraction::new))
+                .collect(Collectors.toList());
+        explorerProtein.piStackings = interactions.getPiStackings().stream()
+                .filter(interaction -> !interaction.getAtoms1().isEmpty())
+                .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+                        .map(ExplorerInteraction::new))
+                .collect(Collectors.toList());
+        explorerProtein.saltBridges = interactions.getSaltBridges().stream()
+                .filter(interaction -> !interaction.getAtoms1().isEmpty())
+                .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+                        .map(ExplorerInteraction::new))
+                .collect(Collectors.toList());
+        explorerProtein.waterBridges = interactions.getWaterBridges().stream()
+                .map(ExplorerInteraction::new)
+                .collect(Collectors.toList());
+
+        return explorerProtein;
     }
 
     public String getName() {

@@ -7,6 +7,9 @@ import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 import org.slf4j.Logger;
@@ -22,6 +25,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,7 +55,7 @@ public class ProteinService {
     @PostConstruct
     public void activate() throws IOException {
         // clear database
-//        repository.deleteAll();
+        repository.deleteAll();
 
         // load protein lists
         List<String> allProteinIds = Files.lines(getResource("pdbtm_all.list")) //http://pdbtm.enzim.hu/data/pdbtm_all.list
@@ -79,23 +84,23 @@ public class ProteinService {
 //                .filter(id -> !knownProteins.contains(id))
 //                .collect(Collectors.toList());
 
-        List<String> proteinsToProcess = Stream.of("5A63").collect(Collectors.toList());
+        List<String> proteinsToProcess = Stream.of("5A63", "1BRR", "4NEF").collect(Collectors.toList());
         this.allProteins = proteinsToProcess;
 
-//        proteinsToProcess.stream()
-//                .map(pdbid -> (Callable) () -> {
-//                    try{
-//                        logger.info("fetching information for {}", pdbid);
-//                        Protein protein = ProteinParser.parseProteinById(pdbid);
-//                        featureProviders.forEach(abstractFeatureProvider -> abstractFeatureProvider.process(protein));
-//                        KinkFinderParser.parseKinkFinderFile(protein, Paths.get("/home/bittrich/git/phd_sb_repo/data/kink_finder/" + protein.getName().toLowerCase() + ".kinks"));
-//                        repository.save(new ExplorerProtein(protein));
-//                    } catch (Exception e) {
-//                        logger.error("gathering information for {} failed: {}", pdbid, e.getLocalizedMessage());
-//                    }
-//                    return null;
-//                })
-//                .forEach(task -> Executors.newWorkStealingPool().submit(task));
+        proteinsToProcess.stream()
+                .map(pdbid -> (Callable) () -> {
+                    try{
+                        logger.info("fetching information for {}", pdbid);
+                        Protein protein = ProteinParser.parseProteinById(pdbid);
+                        featureProviders.forEach(abstractFeatureProvider -> abstractFeatureProvider.process(protein));
+                        KinkFinderParser.parseKinkFinderFile(protein, Paths.get("/home/bittrich/git/phd_sb_repo/data/kink_finder/" + protein.getName().toLowerCase() + ".kinks"));
+                        repository.save(new ExplorerProtein(protein));
+                    } catch (Exception e) {
+                        logger.error("gathering information for {} failed: {}", pdbid, e.getLocalizedMessage());
+                    }
+                    return null;
+                })
+                .forEach(task -> Executors.newWorkStealingPool().submit(task));
 
 //        this.allProteins = repository.findAll().stream()
 //                .map(ExplorerProtein::getName)

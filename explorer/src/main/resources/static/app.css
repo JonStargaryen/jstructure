@@ -35,6 +35,11 @@ div[data-ng-view] {
     z-index: 10000;
 }
 
+.alert {
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+}
+
 /* header/navigation */
 
 header {

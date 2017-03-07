@@ -21,6 +21,7 @@ public class Constants {
     public static final String DATA_PATH = PROJECT_PATH + "data/";
     public static final String STRUCTURE_PATH = DATA_PATH + "structures/";
     public static final String CHAIN_PATH = DATA_PATH + "chains/";
+    public static final String PDBTM_ALL_LIST = DATA_PATH + "pdbtm_all.list.txt";
     public static final String PDBTM_ALPHA_NR_LIST =  DATA_PATH + "pdbtm_alpha_nr.list.txt";
     public static final String SCRIPTS_PATH = DATA_PATH + "scripts/";
     public static final String KINK_FINDER_SCRIPT_PATH = SCRIPTS_PATH + "kink_finder/Kink_Finder.py";
