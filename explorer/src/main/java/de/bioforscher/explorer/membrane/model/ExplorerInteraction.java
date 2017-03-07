@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.model;
+package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -16,32 +16,32 @@ public class ExplorerInteraction {
 
     }
 
-    ExplorerInteraction(HalogenBond halogenBond) {
+    public ExplorerInteraction(HalogenBond halogenBond) {
         this.a1 = convertAtomToPVSelection(halogenBond.getAcceptor());
         this.a2 = convertAtomToPVSelection(halogenBond.getDonor());
     }
 
-    ExplorerInteraction(HydrogenBond hydrogenBond) {
+    public ExplorerInteraction(HydrogenBond hydrogenBond) {
         this.a1 = convertAtomToPVSelection(hydrogenBond.getAcceptor());
         this.a2 = convertAtomToPVSelection(hydrogenBond.getDonor());
     }
 
-    ExplorerInteraction(HydrophobicInteraction hydrophobicInteraction) {
+    public ExplorerInteraction(HydrophobicInteraction hydrophobicInteraction) {
         this.a1 = convertAtomToPVSelection(hydrophobicInteraction.getAtom1());
         this.a2 = convertAtomToPVSelection(hydrophobicInteraction.getAtom2());
     }
 
-    ExplorerInteraction(MetalComplex metalComplex) {
+    public ExplorerInteraction(MetalComplex metalComplex) {
         this.a1 = convertAtomToPVSelection(metalComplex.getAtom1());
         this.a2 = convertAtomToPVSelection(metalComplex.getAtom2());
     }
 
-    ExplorerInteraction(Pair<Atom, Atom> atoms) {
+    public ExplorerInteraction(Pair<Atom, Atom> atoms) {
         this.a1 = convertAtomToPVSelection(atoms.getLeft());
         this.a2 = convertAtomToPVSelection(atoms.getRight());
     }
 
-    ExplorerInteraction(WaterBridge waterBridge) {
+    public ExplorerInteraction(WaterBridge waterBridge) {
         this.a1 = convertAtomToPVSelection(waterBridge.getAtom1());
         this.a2 = convertAtomToPVSelection(waterBridge.getAtom2());
     }

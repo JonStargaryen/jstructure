@@ -128,9 +128,9 @@
 
      nv.addGraph(<generate Function>, <callback Function>)
 
-     The generate function should contain code that creates the NVD3 model, sets options
-     on it, adds data to an SVG element, and invokes the chart model. The generate function
-     should return the chart model.  See examples/lineChart.html for a usage example.
+     The generate function should contain code that creates the NVD3 de.bioforscher.explorer.helices.model, sets options
+     on it, adds data to an SVG element, and invokes the chart de.bioforscher.explorer.helices.model. The generate function
+     should return the chart de.bioforscher.explorer.helices.model.  See examples/lineChart.html for a usage example.
 
      The callback function is optional, and it is called when the generate function completes.
      */
@@ -583,7 +583,7 @@
             return d;
         };
 
-        // By default, the tooltip model renders a beautiful table inside a DIV.
+        // By default, the tooltip de.bioforscher.explorer.helices.model renders a beautiful table inside a DIV.
         // You can override this function if a custom tooltip is desired.
         var contentGenerator = function(d) {
             if (d === null) {
@@ -1091,7 +1091,7 @@
                 (function(m){
                     m.dispatch.on('renderEnd', function(arg){
                         m.__rendered = true;
-                        self.renderEnd('model');
+                        self.renderEnd('de.bioforscher.explorer.helices.model');
                     });
                 })(model);
 
@@ -1971,7 +1971,7 @@
             id = Math.floor(Math.random() * 10000), // Create semi-unique ID in case user doesn't select one
             xScale = d3.scale.ordinal(),
             yScale = d3.scale.linear(),
-            getX  = function(d) { return d.label }, // Default data model selectors.
+            getX  = function(d) { return d.label }, // Default data de.bioforscher.explorer.helices.model selectors.
             getQ1 = function(d) { return d.values.Q1 },
             getQ2 = function(d) { return d.values.Q2 },
             getQ3 = function(d) { return d.values.Q3 },
@@ -2256,11 +2256,11 @@
             // rectClass: {get: function(){return rectClass;}, set: function(_){rectClass=_;}},
             y: {
                 get: function() {
-                    console.warn('BoxPlot \'y\' chart option is deprecated. Please use model overrides instead.');
+                    console.warn('BoxPlot \'y\' chart option is deprecated. Please use de.bioforscher.explorer.helices.model overrides instead.');
                     return {};
                 },
                 set: function(_) {
-                    console.warn('BoxPlot \'y\' chart option is deprecated. Please use model overrides instead.');
+                    console.warn('BoxPlot \'y\' chart option is deprecated. Please use de.bioforscher.explorer.helices.model overrides instead.');
                 }
             },
             // options that require extra logic in the setter
@@ -3857,7 +3857,7 @@
 
         return chart;
     };
-//TODO: consider deprecating by adding necessary features to multiBar model
+//TODO: consider deprecating by adding necessary features to multiBar de.bioforscher.explorer.helices.model
     nv.models.discreteBar = function() {
         "use strict";
 
@@ -12863,7 +12863,7 @@
                 data = d3.layout.stack()
                     .order(order)
                     .offset(offset)
-                    .values(function(d) { return d.values })  //TODO: make values customizeable in EVERY model in this fashion
+                    .values(function(d) { return d.values })  //TODO: make values customizeable in EVERY de.bioforscher.explorer.helices.model in this fashion
                     .x(getX)
                     .y(getY)
                     .out(function(d, y0, y) {

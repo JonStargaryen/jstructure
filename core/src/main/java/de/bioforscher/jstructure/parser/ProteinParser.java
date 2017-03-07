@@ -143,7 +143,7 @@ public class ProteinParser {
      * @param line the line to process
      */
     private void parseLine(String line) {
-        //TODO this is kinda hacky, however that way only the first model is parsed in any case
+        //TODO this is kinda hacky, however that way only the first de.bioforscher.explorer.helices.model is parsed in any case
         if(passedFirstModel) {
             return;
         }

@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.model;
+package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.model.structure.Group;
 
@@ -14,7 +14,7 @@ public class ExplorerLigand {
 
     }
 
-    ExplorerLigand(Group group) {
+    public ExplorerLigand(Group group) {
         this.resn = group.getResidueNumber();
         this.chain = group.getParentChain().getChainId();
         this.tlc = group.getThreeLetterCode();

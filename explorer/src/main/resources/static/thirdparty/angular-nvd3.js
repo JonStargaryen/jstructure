@@ -268,7 +268,7 @@
                         getElement: function(){ return element; }
                     };
 
-                    // Configure the chart model with the passed options
+                    // Configure the chart de.bioforscher.explorer.helices.model with the passed options
                     function configure(chart, options, chartType){
                         if (chart && options){
                             angular.forEach(chart, function(value, key){

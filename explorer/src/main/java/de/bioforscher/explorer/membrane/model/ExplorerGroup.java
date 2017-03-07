@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.model;
+package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.sse.DSSPSecondaryStructureElement;

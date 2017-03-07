@@ -1,6 +1,4 @@
-package de.bioforscher.helices.model;
-
-import de.bioforscher.explorer.model.ExplorerProtein;
+package de.bioforscher.explorer.helices.model;
 
 /**
  * Represent one helix from the AHAH data set.
@@ -11,9 +9,9 @@ public class AnnotatedHelix {
     private double kinked, curved, straight;
     private int start, end, total;
     private HelixClassification classification;
-    private ExplorerProtein protein;
+    private HelixProtein protein;
 
-    public AnnotatedHelix(String helixId, String pdbId, String chainId, int start, int end, double kinked, double curved, double straight, int total, HelixClassification classification, ExplorerProtein protein) {
+    public AnnotatedHelix(String helixId, String pdbId, String chainId, int start, int end, double kinked, double curved, double straight, int total, HelixClassification classification, HelixProtein protein) {
         this.helixId = helixId;
         this.pdbId = pdbId;
         this.chainId = chainId;
@@ -71,7 +69,7 @@ public class AnnotatedHelix {
         return classification;
     }
 
-    public ExplorerProtein getProtein() {
+    public HelixProtein getProtein() {
         return protein;
     }
 }

@@ -1,8 +1,8 @@
-package de.bioforscher.helices;
+package de.bioforscher.explorer.helices;
 
-import de.bioforscher.explorer.model.ExplorerProtein;
-import de.bioforscher.helices.model.AnnotatedHelix;
-import de.bioforscher.helices.model.HelixClassification;
+import de.bioforscher.explorer.helices.model.AnnotatedHelix;
+import de.bioforscher.explorer.helices.model.HelixClassification;
+import de.bioforscher.explorer.helices.model.HelixProtein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.concurrent.Executors;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -28,7 +25,7 @@ public class HelixService {
     private static final Logger logger = LoggerFactory.getLogger(HelixService.class);
     private HelixRepository repository;
     private List<String> helixLines;
-    private List<ExplorerProtein> proteins;
+    private Map<String, HelixProtein> proteins;
 
     @Autowired
     public HelixService(HelixRepository repository) {
@@ -38,29 +35,22 @@ public class HelixService {
     @PostConstruct
     public void activate() throws IOException {
         // clear database
-        repository.deleteAll();
+//        repository.deleteAll();
 
         // load protein lists
         helixLines = Files.lines(getResource("ahah_gold_standard.csv")) //http://opig.stats.ox.ac.uk/webapps/ahah/php/experiment_results.php
                 .filter(line -> !line.startsWith(">") && !line.startsWith("helix_id"))
                 .collect(Collectors.toList());
 
-        proteins = helixLines.stream()
-                .map(line -> line.substring(0, 4))
-                .distinct()
-                .map(ExplorerProtein::createForHelixExplorer)
-                .collect(Collectors.toList());
+        Map<String, HelixProtein> proteins = new HashMap<>();
 
-        helixLines.forEach(helixLine -> Executors.newWorkStealingPool().submit(() -> {
+        helixLines.forEach(helixLine -> {
             String[] helixLineSplit = helixLine.split(",");
             String helixId = helixLineSplit[0];
             String[] idSplit = helixId.split("_");
 
             logger.info("composing information for {}", helixId);
-            ExplorerProtein protein = proteins.stream()
-                    .filter(candidate -> candidate.getName().equalsIgnoreCase(helixLine.split("_")[0]))
-                    .findFirst()
-                    .get();
+            HelixProtein protein = proteins.computeIfAbsent(idSplit[0], HelixProtein::createForHelixExplorer);
 
             AnnotatedHelix annotatedHelix = new AnnotatedHelix(helixId,
                     idSplit[0],
@@ -75,7 +65,7 @@ public class HelixService {
                     protein);
 
             repository.save(annotatedHelix);
-        }));
+        });
     }
 
     private HelixClassification mapToClassification(String string) {

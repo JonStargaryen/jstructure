@@ -66,5 +66,6 @@
         <module>../core</module>
         <module>../design</module>
         <module>../explorer</module>
+        <module>../helix-explorer</module>
     </modules>
 </project>

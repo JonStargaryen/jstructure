@@ -1,6 +1,6 @@
-package de.bioforscher.helices;
+package de.bioforscher.explorer.helices;
 
-import de.bioforscher.helices.model.AnnotatedHelix;
+import de.bioforscher.explorer.helices.model.AnnotatedHelix;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +15,7 @@ import java.util.List;
  * Created by bittrich on 3/7/17.
  */
 @RestController
-@RequestMapping(value = "/api/proteins/", method = RequestMethod.GET)
+@RequestMapping(value = "/api/helices/", method = RequestMethod.GET)
 public class HelixController {
     private final HelixService helixService;
 

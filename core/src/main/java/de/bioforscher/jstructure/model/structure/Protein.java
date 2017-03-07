@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The root element of protein structures. A really simplified model, reduced to our particularized needs. Consists of
+ * The root element of protein structures. A really simplified de.bioforscher.explorer.helices.model, reduced to our particularized needs. Consists of
  * {@link Chain} objects.<br />
  * Created by S on 27.09.2016.
  */

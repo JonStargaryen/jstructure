@@ -15,7 +15,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>
-        The core-package of jstructure which provides the data model and generic implementations of tools to manipulate molecular structures.
+        The core-package of jstructure which provides the data de.bioforscher.explorer.helices.model and generic implementations of tools to manipulate molecular structures.
     </description>
 
     <dependencies>

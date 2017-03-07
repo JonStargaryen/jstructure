@@ -1,6 +1,6 @@
-package de.bioforscher.helices;
+package de.bioforscher.explorer.helices;
 
-import de.bioforscher.helices.model.AnnotatedHelix;
+import de.bioforscher.explorer.helices.model.AnnotatedHelix;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

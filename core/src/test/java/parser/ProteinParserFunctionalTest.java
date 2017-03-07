@@ -20,7 +20,7 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.startsWith;
 
 /**
- * Checks functions of the PDB parser and its integrity with the data model.
+ * Checks functions of the PDB parser and its integrity with the data de.bioforscher.explorer.helices.model.
  * Created by S on 29.09.2016.
  */
 public class ProteinParserFunctionalTest {

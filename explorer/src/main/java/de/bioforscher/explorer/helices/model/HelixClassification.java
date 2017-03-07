@@ -1,4 +1,4 @@
-package de.bioforscher.helices.model;
+package de.bioforscher.explorer.helices.model;
 
 /**
  * The categories of AHAH helices.

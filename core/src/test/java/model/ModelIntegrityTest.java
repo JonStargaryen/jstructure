@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Checks especially the createCopy() methods of the data model
+ * Checks especially the createCopy() methods of the data de.bioforscher.explorer.helices.model
  * Created by S on 23.11.2016.
  */
 public class ModelIntegrityTest {

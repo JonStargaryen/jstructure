@@ -1,6 +1,6 @@
-package de.bioforscher.explorer;
+package de.bioforscher.explorer.membrane;
 
-import de.bioforscher.explorer.model.ExplorerProtein;
+import de.bioforscher.explorer.membrane.model.ExplorerProtein;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
