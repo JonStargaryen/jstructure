@@ -5,8 +5,8 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -29,7 +29,7 @@ public class Z02_MaskNonSequenceMotifResiduesByChain {
                 .forEach(line -> {
                     System.out.println(line);
                     String[] splitLine = line.split("_");
-                    Protein protein = ProteinParser.parseProteinById(splitLine[0]);
+                    Protein protein = ProteinParser.source(splitLine[0]).parse();
                     // annotate sequence motifs in proteins
                     new SequenceMotifAnnotator().process(protein);
 

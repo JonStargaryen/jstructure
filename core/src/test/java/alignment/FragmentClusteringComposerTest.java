@@ -1,8 +1,8 @@
 package alignment;
 
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -25,7 +25,7 @@ public class FragmentClusteringComposerTest {
     @Test
     public void shouldBuildClusters() throws IOException {
         List<Protein> fragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath(FRAGMENT_DIR)))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
 
         FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();

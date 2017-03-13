@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class S02_AlignConsensusFragments {
     public static void main(String[] args) throws IOException {
         List<Protein> proteins = Files.list(Paths.get(DesignConstants.FRAGMENT_CONSENSUS_CLUSTERS))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
 
         //TODO manually move first structure

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Provides REST access to the stored protein data.
@@ -25,17 +26,12 @@ public class ProteinController {
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<String> getAllProteins() throws IOException {
+    public List<String> getAllProteins() {
         return proteinService.getAllProteins();
     }
 
-    @RequestMapping(value = "/alpha_nr", method = RequestMethod.GET)
-    public List<String> getNonRedundantAlphaHelicalProteins() throws IOException {
-        return proteinService.getNonRedundantAlphaHelicalProteins();
-    }
-
     @RequestMapping(value = "/pdbid/{pdbid}", method = RequestMethod.GET)
-    public ExplorerProtein getProteinByID(@PathVariable("pdbid") String pdbid) {
-        return proteinService.getProtein(pdbid);
+    public ExplorerProtein getProteinByID(@PathVariable("pdbid") String pdbId) throws NoSuchElementException {
+        return proteinService.getProtein(pdbId);
     }
 }

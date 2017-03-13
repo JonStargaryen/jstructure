@@ -15,12 +15,10 @@ public class UniProtAnnotatorTest {
     private AbstractFeatureProvider uniProtAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotator.UNIPROT_ANNOTATION);
     @Test
     public void shouldAnnotate4LG6() {
-        Protein protein = ProteinParser.parseProteinById("4LG6");
+        Protein protein = ProteinParser.source("4LG6").parse();
         uniProtAnnotator.process(protein);
 
         protein.chains().forEach(chain -> {
-            String uniProtId = chain.getFeature(String.class, UniProtAnnotator.UNIPROT_ID);
-            Assert.assertEquals(uniProtId, "Q9H0W5");
             UniProtAnnotationContainer container = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
             Assert.assertTrue(container.getReferences().size() == 6);
             Assert.assertTrue(container.getMutagenesisSites().size() == 3);

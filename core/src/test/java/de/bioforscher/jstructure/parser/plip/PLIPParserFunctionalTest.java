@@ -14,7 +14,7 @@ public class PLIPParserFunctionalTest {
     public void shouldAnnotateProtein() {
         String pdbId = "1brr";
         String chainId = "A";
-        Chain chain = Selection.on(ProteinParser.parseProteinById(pdbId))
+        Chain chain = Selection.on(ProteinParser.source(pdbId).parse())
                 .chainName(chainId)
                 .asChain();
         PLIPParser.parse(chain, PLIPRestServiceQuery.getPlipResults(pdbId, chainId));

@@ -24,7 +24,7 @@ public class ConsensusTreeComposerFunctionalTest {
     @Test
     public void shouldBuildConsensusTree() throws IOException {
         List<Protein> fragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath(FRAGMENT_DIR)))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
 
         ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
@@ -42,7 +42,7 @@ public class ConsensusTreeComposerFunctionalTest {
         List<Protein> fragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath(FRAGMENT_DIR)))
                 // skip 10 entries, last two are most dissimilar
                 .skip(10)
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
 
         ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();
@@ -58,7 +58,7 @@ public class ConsensusTreeComposerFunctionalTest {
     @Test
     public void shouldBuildConsensusTreeLikeSinga() throws IOException {
         List<Protein> fragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath("alignment/consensus/")))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
 
         ConsensusTreeComposer consensusTreeComposer = new ConsensusTreeComposer();

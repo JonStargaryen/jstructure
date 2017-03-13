@@ -1,5 +1,6 @@
 package parser;
 
+import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -12,6 +13,7 @@ import util.TestUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +44,7 @@ public class ProteinParserFunctionalTest {
 
     @Test
     public void shouldHandleProteinWithNonStandardAminoAcids() {
-        Protein protein = ProteinParser.parseProteinById(NON_STANDARD_PDB_ID);
+        Protein protein = ProteinParser.source(NON_STANDARD_PDB_ID).parse();
         // ensure that the initial selenomethionine stored as HETATM is correctly parsed
         System.out.println(protein.getAminoAcidSequence());
         Assert.assertThat(protein.getAminoAcidSequence(), startsWith("M"));
@@ -58,12 +60,12 @@ public class ProteinParserFunctionalTest {
 
     @Test
     public void shouldFetchPdbStructureFromPDB() {
-        PDB_IDS.forEach(ProteinParser::parseProteinById);
+        PDB_IDS.forEach(id -> ProteinParser.source(id).parse());
     }
 
     @Test(expected = ParsingException.class)
     public void shouldFailForInvalidStructure() {
-        parseFilepath("pdb/invalid.pdb");
+        ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath("pdb/invalid.pdb"))).strictMode(true).parse();
     }
 
     @Test
@@ -72,7 +74,7 @@ public class ProteinParserFunctionalTest {
          * 1bs2 is an aars structure with the amino acid arginine in the binding site (annotated as ATOM record), some
          * water (annotated as HETATM)
          */
-        Protein protein1bs2 = ProteinParser.parseProteinById("1bs2");
+        Protein protein1bs2 = ProteinParser.source("1bs2").parse();
 
         List<Group> waters = Selection.on(protein1bs2)
                 .water()
@@ -81,7 +83,7 @@ public class ProteinParserFunctionalTest {
 
         waters.forEach(group -> {
             Assert.assertTrue(group.isLigand());
-            Assert.assertTrue(group.composePDBRecord().startsWith(ProteinParser.HETATM_PREFIX));
+            Assert.assertTrue(group.composePDBRecord().startsWith(Atom.HETATM_PREFIX));
         });
 
         Group arginineAsLigand = Selection.on(protein1bs2)
@@ -144,6 +146,6 @@ public class ProteinParserFunctionalTest {
 
     public static Protein parseFilepath(String filepath) {
         System.out.println("parsing PDB file " + filepath);
-        return ProteinParser.parsePDBFile(TestUtils.getResourceAsFilepath(filepath));
+        return ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath(filepath))).parse();
     }
 }

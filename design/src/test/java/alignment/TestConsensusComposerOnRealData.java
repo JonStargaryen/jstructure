@@ -81,7 +81,7 @@ public class TestConsensusComposerOnRealData {
         return Files.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/"))
                 .filter(path -> path.toFile().getName().startsWith(motif.name()))
                 .limit(100)
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(StructureCollectors.toAlignedEnsembleByConsensus());
     }
 }

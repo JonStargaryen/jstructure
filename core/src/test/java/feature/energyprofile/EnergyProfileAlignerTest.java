@@ -21,8 +21,8 @@ public class EnergyProfileAlignerTest {
 
     @Before
     public void setup() {
-        protein1acj = ProteinParser.parseProteinById("1acj");
-        protein1brr = ProteinParser.parseProteinById("1brr");
+        protein1acj = ProteinParser.source("1acj").parse();
+        protein1brr = ProteinParser.source("1brr").parse();
         AbstractFeatureProvider energyProfileCalculator = FeatureProviderRegistry.resolve(EnergyProfileCalculator.SOLVATION_ENERGY);
         energyProfileCalculator.process(protein1acj);
         energyProfileCalculator.process(protein1brr);

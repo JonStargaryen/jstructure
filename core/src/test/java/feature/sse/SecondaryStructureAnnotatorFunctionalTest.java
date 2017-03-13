@@ -46,7 +46,7 @@ public class SecondaryStructureAnnotatorFunctionalTest {
 
     private String getSecondaryStructureAnnotation(String id) {
         // load structure
-        Protein protein = ProteinParser.parseProteinById(id);
+        Protein protein = ProteinParser.source(id).parse();
         // assign states
         featureProvider.process(protein);
 

@@ -19,8 +19,8 @@ public class AdvancedEnergyProfileRunnerTest {
     @Before
     public void setup() {
         basepath = "/home/bittrich/playground/";
-        protein1a8h = ProteinParser.parseProteinById("1a8h");
-        protein1asy = ProteinParser.parseProteinById("1asy");
+        protein1a8h = ProteinParser.source("1a8h").parse();
+        protein1asy = ProteinParser.source("1asy").parse();
     }
 
     @Test

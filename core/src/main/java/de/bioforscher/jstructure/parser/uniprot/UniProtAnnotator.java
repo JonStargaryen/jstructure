@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.parser.sifts.SiftsParser;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,17 +13,15 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 
 import static de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator.UNIPROT_ANNOTATION;
-import static de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator.UNIPROT_ID;
 
 /**
  * Queries the UniProt db and annotates available information to each protein chain.
  * Created by bittrich on 3/2/17.
  */
-@FeatureProvider(provides = { UNIPROT_ANNOTATION, UNIPROT_ID })
+@FeatureProvider(provides = { UNIPROT_ANNOTATION }, requires = {SiftsParser.UNIPROT_ID })
 public class UniProtAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(UniProtAnnotator.class);
     public static final String UNIPROT_ANNOTATION = "UNIPROT_ANNOTATION";
-    public static final String UNIPROT_ID = "UNIPROT_ID";
     private static final String UNIPROT_FETCH_URL = "http://www.uniprot.org/uniprot/%s.xml";
 
     @Override
@@ -34,16 +33,12 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
     }
 
     private void processInternally(Chain chain) {
-        // map pdbid to UniProt
-        try {
-            UniProtMapper.process(chain);
-        } catch (Exception e) {
-            logger.warn("could not map to UniProt for {}-{}", chain.getParentProtein().getName(), chain.getChainId());
-            chain.setFeature(UNIPROT_ID, "?");
+        String uniprotId = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
+
+        if(uniprotId.equals(SiftsParser.UNKNOWN_MAPPING)) {
             chain.setFeature(UNIPROT_ANNOTATION, new UniProtAnnotationContainer());
             return;
         }
-        String uniprotId = chain.getFeature(String.class, UNIPROT_ID);
 
         try {
             logger.debug("fetching UniProt information for {}", uniprotId);

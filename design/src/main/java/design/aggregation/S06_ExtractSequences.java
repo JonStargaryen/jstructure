@@ -53,7 +53,7 @@ public class S06_ExtractSequences {
                 // skip files of false motif defintion
                 .filter(path -> path.getFileName().toString().startsWith(definition.name()))
                 // parse fragment
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 // extract sequence
                 .map(Protein::getAminoAcidSequence)
                 .collect(Collectors.joining(System.lineSeparator()));

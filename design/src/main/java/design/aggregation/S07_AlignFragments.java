@@ -37,7 +37,7 @@ public class S07_AlignFragments {
                             List<AtomContainer> alignedProteins = Files.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
                                             topology + "/"))
                                     .filter(path -> path.getFileName().toString().startsWith(motif))
-                                    .map(ProteinParser::parsePDBFile)
+                                    .map(path -> ProteinParser.source(path).parse())
                                     .collect(StructureCollectors.toAlignedEnsembleByConsensus());
 
                             System.out.println("writing aligned files");

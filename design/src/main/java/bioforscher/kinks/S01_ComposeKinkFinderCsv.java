@@ -154,7 +154,7 @@ public class S01_ComposeKinkFinderCsv {
     }
 
     private static Protein parseProtein(String pdbId) {
-        Protein protein = ProteinParser.parsePDBFile(Constants.STRUCTURE_PATH + pdbId + Constants.PDB_SUFFIX);
+        Protein protein = ProteinParser.source(Constants.STRUCTURE_PATH + pdbId + Constants.PDB_SUFFIX).parse();
 
         KinkFinderParser.parseKinkFinderFile(protein, Paths.get(Constants.KINK_FINDER_RESULT_PATH + pdbId + ".kinks"));
         // assign additional features

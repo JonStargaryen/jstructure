@@ -1,6 +1,7 @@
 package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.uniprot.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ExplorerChain {
     private List<UniProtMutagenesisSite> mutations;
     private String id;
     private List<ExplorerGroup> groups;
+    private boolean hasAminoAcids;
 
     public ExplorerChain() {
 
@@ -28,10 +30,19 @@ public class ExplorerChain {
                 .map(ExplorerGroup::new)
                 .collect(Collectors.toList());
 
-        UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
-        this.mutations = uniProtAnnotationContainer.getMutagenesisSites();
-        this.variants = uniProtAnnotationContainer.getNaturalVariants();
-        this.references = uniProtAnnotationContainer.getReferences();
+        try {
+            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
+            this.mutations = uniProtAnnotationContainer.getMutagenesisSites();
+            this.variants = uniProtAnnotationContainer.getNaturalVariants();
+            this.references = uniProtAnnotationContainer.getReferences();
+        } catch (NullPointerException e) {
+            //TODO unify this pattern - featureMap returning optionals?
+        }
+
+        this.hasAminoAcids = Selection.on(chain)
+                .aminoAcids()
+                .asFilteredGroups()
+                .count() > 0;
     }
 
     public String getId() {
@@ -52,5 +63,9 @@ public class ExplorerChain {
 
     public List<UniProtMutagenesisSite> getMutations() {
         return mutations;
+    }
+
+    public boolean isHasAminoAcids() {
+        return hasAminoAcids;
     }
 }

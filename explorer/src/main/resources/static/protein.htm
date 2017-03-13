@@ -134,7 +134,7 @@
                 <div class="tse-content">
                     <!-- chains -->
                     <div data-ng-show="tab.isSelected(1)" class="representation">
-                        <div class="chain" data-ng-repeat="chain in protein.chains">
+                        <div class="chain" data-ng-repeat="chain in protein.chains | filter: { hasAminoAcids : true }">
                             <div class="elementId"
                                  data-ng-mouseover="highlight(chain.id)"
                                  data-ng-mouseleave="deselect()">
@@ -156,7 +156,7 @@
                         <div class="chain"
                              data-ng-mouseover="highlight(ligand.chain, ligand.resn)"
                              data-ng-mouseleave="deselect()"
-                             data-ng-repeat="ligand in protein.ligands | filter: { type : '!water' } | orderBy: 'tlc'">
+                             data-ng-repeat="ligand in protein.ligands | filter: { type : '!water' } | filter: { tlc : '!DUM' } | orderBy: 'tlc'">
                             <div class="elementId">
                                 <div>{{::ligand.tlc}}</div>
                             </div>

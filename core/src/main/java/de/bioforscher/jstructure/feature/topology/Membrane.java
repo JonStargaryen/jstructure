@@ -58,6 +58,10 @@ public class Membrane {
      */
     double[] normalVector;
 
+    public Membrane(List<double[]> membraneAtoms) {
+        this.membraneAtoms = membraneAtoms;
+    }
+
     public Membrane(double[] c1, double[] c2, double hphob, double hphil) {
         this.planePoint1 = c1;
         this.planePoint2 = c2;

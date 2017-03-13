@@ -39,7 +39,7 @@ public class ProteinSource {
                                                                        SequenceMotifDefinition sequenceMotifDefinition) {
         return DesignConstants.list(Paths.get(DesignConstants.ALIGNED_MOTIF_FRAGMENT_BY_TOPOLOGY_DIR + topology + "/"))
                 .filter(path -> path.toFile().getName().startsWith(sequenceMotifDefinition.name()))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.groupingBy(protein -> protein.getIdentifier().split("-")[5]));
     }
 
@@ -81,8 +81,8 @@ public class ProteinSource {
      */
     public static List<Protein> loadProteins() {
         return DesignConstants.list(Paths.get(DesignConstants.OPM_RAW_DIR))
-                                      .map(path -> ProteinParser.parsePDBFile(DesignConstants.PDB_DIR +
-                                              path.toFile().getName().split("\\.")[0] + DesignConstants.PDB_SUFFIX))
+                                      .map(path -> ProteinParser.source(DesignConstants.PDB_DIR +
+                                              path.toFile().getName().split("\\.")[0] + DesignConstants.PDB_SUFFIX).parse())
                                       .collect(Collectors.toList());
     }
 

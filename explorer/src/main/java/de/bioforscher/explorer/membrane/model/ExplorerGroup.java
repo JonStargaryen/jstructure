@@ -35,8 +35,16 @@ public class ExplorerGroup {
         if(group.isAminoAcid()) {
             this.type = "aa";
             // assign features - they are supposed to be normalized to the interval [0,1]
-            this.rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA);
-            this.sse = group.getFeature(SecStrucState.class, SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES).getSecondaryStructure().ordinal() / (double) DSSPSecondaryStructureElement.values().length;
+            try {
+                this.rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA);
+            } catch (NullPointerException e) {
+                this.rasa = 0.0;
+            }
+            try {
+                this.sse = group.getFeature(SecStrucState.class, SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES).getSecondaryStructure().ordinal() / (double) DSSPSecondaryStructureElement.values().length;
+            } catch (NullPointerException e) {
+                this.sse = 0.0;
+            }
         } else if(group.isNucleotide()) {
             this.type = "nucl";
         } else {

@@ -38,7 +38,7 @@ public class SimpleEnergyProfileRunnerTest {
 //
 //        ids.forEach(id -> {
 //            System.out.println(id);
-//            Protein protein = ProteinParser.parseProteinById(id);
+//            Protein protein = ProteinParser.source(id).parse();
 //            try {
 //                String basePath = "/home/bittrich/energyprofiles/";
 //                Path pdbFile = Paths.get(basePath + id + ".pdb");

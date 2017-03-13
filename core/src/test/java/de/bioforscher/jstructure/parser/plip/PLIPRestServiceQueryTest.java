@@ -30,7 +30,7 @@ public class PLIPRestServiceQueryTest {
     public void shouldTestCoverageForDataSet() throws IOException {
         System.err.println("skipping PLIP-rest-service coverage test for data set");
 //        Files.lines(Paths.get("/home/bittrich/git/phd_sb_repo/data/dataset/nrpdbtm/pdbtm_alpha_nr.list.txt"))
-//                .map(line -> ProteinParser.parseProteinById(line.substring(0, 4)))
+//                .map(line -> ProteinParser.source(line.substring(0, 4)).parse())
 //                .forEach(PLIPRestServiceQuery::process);
     }
 }

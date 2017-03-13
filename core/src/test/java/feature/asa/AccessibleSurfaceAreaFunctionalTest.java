@@ -39,7 +39,7 @@ public class AccessibleSurfaceAreaFunctionalTest {
 
     private static List<Double> getJStructureASA(String id) {
         // load structure
-        Protein protein = ProteinParser.parseProteinById(id);
+        Protein protein = ProteinParser.source(id).parse();
         // assign states
         FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA).process(protein);
 

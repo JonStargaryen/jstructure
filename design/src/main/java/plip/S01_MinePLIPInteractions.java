@@ -33,7 +33,7 @@ public class S01_MinePLIPInteractions {
                 .peek(System.out::println)
                 .map(line -> line.substring(0, 4))
                 .distinct()
-                .map(ProteinParser::parseProteinById)
+                .map(id -> ProteinParser.source(id).parse())
                 .map(protein -> {
                     plipAnnotator.process(protein);
                     return protein.getFeatureAsList(PLIPInteraction.class, PLIPAnnotator.PLIP_INTERACTIONS);

@@ -25,8 +25,8 @@ public class PULCHRAFunctionalTest {
     @Before
     public void setup() {
         // for sake of simplicity a structure with a single getChain
-        protein = ProteinParser.parseProteinById("1acj");
-        proteinCopy = ProteinParser.parseProteinById("1acj");
+        protein = ProteinParser.source("1acj").parse();
+        proteinCopy = ProteinParser.source("1acj").parse();
     }
 
     @Test

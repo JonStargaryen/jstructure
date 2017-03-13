@@ -42,7 +42,7 @@ public class S01_AlignedFragmentStatistics {
                             // align ensemble
 //                                List<AtomContainer> alignedEnsemble = Files.list(topologyDir)
 //                                        .filter(path -> path.toFile().getName().startsWith(definition.name()))
-//                                        .map(ProteinParser::parsePDBFile)
+//                                        .map(path -> ProteinParser.source(path).parse())
 //                                        .collect(StructureCollectors.toAlignedEnsembleByConsensus());
 //
 //                                // create consensus
@@ -66,7 +66,7 @@ public class S01_AlignedFragmentStatistics {
                             // align ensemble
                             List<StructureCluster> clusters = DesignConstants.list(topologyDir)
                                     .filter(path -> path.toFile().getName().startsWith(definition.name()))
-                                    .map(ProteinParser::parsePDBFile)
+                                    .map(path -> ProteinParser.source(path).parse())
                                     .collect(StructureCollectors.toAlignedEnsembleByStructuralClustering());
 
                             for(int clusterIndex = 0; clusterIndex < clusters.size(); clusterIndex++) {

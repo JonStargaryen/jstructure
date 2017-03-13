@@ -1,9 +1,9 @@
 package design.aggregation;
 
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
 import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
@@ -60,7 +60,7 @@ public class S08_BuildFragmentClusters {
                 topology + "/"))
                 .parallel()
                 .filter(path -> path.getFileName().toString().startsWith(motif))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
         System.out.println("loaded " + proteins.size() + " atom containers");
 

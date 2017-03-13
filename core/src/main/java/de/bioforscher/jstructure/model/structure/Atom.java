@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -14,8 +13,10 @@ import java.util.Locale;
  * Created by S on 27.09.2016.
  */
 public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
-    private static final float DEFAULT_BFACTOR = 1.0f;
-    private static final float DEFAULT_OCCUPANCY = 1.0f;
+    public static final float DEFAULT_BFACTOR = 100.0f;
+    public static final float DEFAULT_OCCUPANCY = 1.0f;
+    public static final String ATOM_PREFIX = "ATOM  ";
+    public static final String HETATM_PREFIX = "HETATM";
 
     private Element element;
     private String name;
@@ -251,7 +252,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
             Chain parentChain = parentGroup.getParentChain();
             //TODO check - needed?
             String chainId = parentChain.getChainId() != null ? parentChain.getChainId() : Chain.UNKNOWN_CHAIN.getChainId();
-            String record = parentGroup.isInTerminatedParentChain() ? ProteinParser.HETATM_PREFIX : ProteinParser.ATOM_PREFIX;
+            String record = parentGroup.isInTerminatedParentChain() ? HETATM_PREFIX : ATOM_PREFIX;
             // format output ...
             String resName = parentGroup.getThreeLetterCode();
             String pdbcode = String.valueOf(parentGroup.getResidueNumber());

@@ -11,8 +11,7 @@ import java.util.List;
  * Interface to mongoDB.
  * Created by bittrich on 2/20/17.
  */
-public interface ProteinRepository extends MongoRepository<ExplorerProtein, Serializable>
-{
+public interface ProteinRepository extends MongoRepository<ExplorerProtein, Serializable> {
     @Query("{ 'name' : ?0 }")
     List<ExplorerProtein> findByTheProteinsName(String name);
 }

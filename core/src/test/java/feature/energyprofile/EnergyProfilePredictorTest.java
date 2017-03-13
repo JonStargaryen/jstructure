@@ -19,7 +19,7 @@ public class EnergyProfilePredictorTest {
 
     @Before
     public void setup() {
-        protein = ProteinParser.parseProteinById("1brr");
+        protein = ProteinParser.source("1brr").parse();
         energyProfilePredictor = FeatureProviderRegistry.resolvePredictor(EnergyProfileCalculator.SOLVATION_ENERGY);
     }
 

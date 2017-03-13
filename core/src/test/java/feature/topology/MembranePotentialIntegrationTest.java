@@ -21,7 +21,7 @@ public class MembranePotentialIntegrationTest {
 
     @Before
     public void setup() {
-        protein1brr = ProteinParser.parseProteinById("1brr");
+        protein1brr = ProteinParser.source("1brr").parse();
         new ANVIL().process(protein1brr);
         new SequenceMotifAnnotator().process(protein1brr);
     }

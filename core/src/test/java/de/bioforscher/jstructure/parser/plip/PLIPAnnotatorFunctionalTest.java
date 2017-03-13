@@ -22,7 +22,7 @@ public class PLIPAnnotatorFunctionalTest {
 
     @Test
     public void shouldAnnotateSingleProtein() throws IOException {
-        Protein protein = ProteinParser.parseProteinById("4BPM");
+        Protein protein = ProteinParser.source("4BPM").parse();
         plipAnnotator.process(protein);
         PLIPInteractionContainer plipInteractionContainer = protein.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
         plipInteractionContainer.getInteractions().forEach(System.out::println);
@@ -34,25 +34,25 @@ public class PLIPAnnotatorFunctionalTest {
 //        final String listPath = "/home/bittrich/git/phd_sb_repo/data/pdbtm_alpha_nr.list.txt";
 //        Files.lines(Paths.get(listPath))
 //                .map(line -> line.substring(0, 4))
-//                .map(ProteinParser::parseProteinById)
+//                .map(id -> ProteinParser.source(id).parse())
 //                .forEach(plipAnnotator::process);
     }
 
     @Test
     public void shouldAnnotateProteinWithWaterBridges() {
-        Protein protein = ProteinParser.parseProteinById("5A1S");
+        Protein protein = ProteinParser.source("5A1S").parse();
         plipAnnotator.process(protein);
     }
 
     @Test
     public void shouldProteinWithIllReference() {
-        Protein protein = ProteinParser.parseProteinById("3AOU");
+        Protein protein = ProteinParser.source("3AOU").parse();
         plipAnnotator.process(protein);
     }
 
     @Test
     public void shouldAnnotateProteinWithHalogenBond() {
-        Protein protein = ProteinParser.parseProteinById("4BPM");
+        Protein protein = ProteinParser.source("4BPM").parse();
         plipAnnotator.process(protein);
     }
 }

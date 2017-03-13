@@ -22,7 +22,7 @@ public class LoopFractionCalculatorTest {
 
     @Before
     public void setup() {
-        protein = ProteinParser.parseProteinById("1acj");
+        protein = ProteinParser.source("1acj").parse();
         featureProvider = FeatureProviderRegistry.resolve(LoopFractionCalculator.LOOP_FRACTION);
     }
 

@@ -9,7 +9,6 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,11 +18,9 @@ import java.util.Optional;
  * Created by S on 29.09.2016.
  */
 public class ProteinParser {
-    private final Logger logger = LoggerFactory.getLogger(ProteinParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProteinParser.class);
     private static final String HEADER_PREFIX = "HEADER";
     private static final String TITLE_PREFIX = "TITLE";
-    public static final String ATOM_PREFIX = "ATOM  ";
-    public static final String HETATM_PREFIX = "HETATM";
     private static final String DEFAULT_PROTEIN_TITLE = "NO DESCRIPTION";
     private static final String END_MODEL_PREFIX = "ENDMDL";
     private static final String TER_PREFIX = "TER";
@@ -31,80 +28,23 @@ public class ProteinParser {
      * The PDB URL which can be used to fetch structures by ID (format this using the id and you are good to go).
      */
     private static final String PDB_FETCH_URL = "https://files.rcsb.org/download/%s.pdb";
+
+    private boolean skipModels;
+    private boolean strictMode;
+    private boolean skipHydrogens;
+
     private Protein protein;
     private StringBuilder titleString;
     private Chain currentChain;
     private Group currentGroup;
-    private boolean passedFirstModel;
     private List<Chain> terminatedChains;
-    //TODO move to more mature options
-    private static boolean skipHydrogens = true;
+    private boolean passedFirstModel;
 
-    /**
-     * Fetches a <tt>PDB</tt> file from the <tt>PDB</tt> based on a <tt>PDB</tt> id.
-     * @param pdbId the 4 digit pdb code to fetch
-     * @return the parsed protein
-     * @see ProteinParser#PDB_FETCH_URL
-     * @see ProteinParser#parsePDBFile(InputStream, String)
-     */
-    public static Protein parseProteinById(String pdbId) {
-        try {
-            return new ProteinParser().parsePDBFile(new URL(String.format(PDB_FETCH_URL, pdbId)).openStream(), pdbId);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
+    private ProteinParser(OptionalSteps builder) {
+        skipModels = builder.skipModels;
+        strictMode = builder.strictMode;
+        skipHydrogens = builder.skipHydrogens;
 
-    /**
-     * Parses a local file based on a filepath.
-     * @param path path of the file to parse
-     * @return the parsed protein
-     * @see ProteinParser#parsePDBFile(InputStream, String)
-     */
-    public static Protein parsePDBFile(Path path) {
-        try {
-            return new ProteinParser().parsePDBFile(path.toFile());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    /**
-     * Parses a local file based on a filepath.
-     * @param filepath filepath of the file to parse
-     * @return the parsed protein
-     * @see ProteinParser#parsePDBFile(InputStream, String)
-     */
-    public static Protein parsePDBFile(String filepath) {
-        return parsePDBFile(Paths.get(filepath));
-    }
-
-    /**
-     * Parses a local file based on a file object.
-     * @param pdbFile reference of the file to parse
-     * @return the parsed protein
-     * @see ProteinParser#parsePDBFile(InputStream, String)
-     * @throws IOException when IO fails at some point
-     */
-    private Protein parsePDBFile(File pdbFile) throws IOException {
-        try(InputStream inputStream = Files.newInputStream(pdbFile.toPath())) {
-            String fileName = pdbFile.getName();
-            return parsePDBFile(inputStream,
-                    // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
-                    fileName.substring(0, fileName.lastIndexOf("."))
-            );
-        }
-    }
-
-    /**
-     * Parses an {@link InputStream} of a <tt>PDB</tt> file. All other functions delegate to this method.
-     * @param inputStream an input select of <tt>PDB</tt> content
-     * @param proteinName the desired name - will only be assigned, when the parsed lines do not contain a valid
-     *                    <tt>HEADER</tt> record
-     * @return a {@link Protein} instance wrapping all (relevant) parsed information
-     * @throws IOException when IO fails at some point
-     */
-    private Protein parsePDBFile(InputStream inputStream, String proteinName) throws IOException {
         protein = new Protein();
         // 'initialize' title field as it tends to be split over multiple lines - thus, we have to append previous results when we find further entries
         titleString = new StringBuilder();
@@ -117,16 +57,23 @@ public class ProteinParser {
         terminatedChains = new ArrayList<>();
 
         // parse file
-        try(InputStreamReader inputStreamReader = new InputStreamReader(inputStream)) {
-            try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                bufferedReader.lines().forEach(this::parseLineChecked);
+        try {
+            try(InputStreamReader inputStreamReader = new InputStreamReader(builder.inputStream)) {
+                try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    bufferedReader.lines().forEach(this::parseLineChecked);
 
-                if(protein.getName() == null || protein.getName().isEmpty()) {
-                    protein.setName(proteinName);
+                    if(protein.getName() == null || protein.getName().isEmpty()) {
+                        protein.setName(builder.hintProteinName);
+                    }
+                    protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
                 }
-                protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
-                return protein;
             }
+
+            if(builder.forceProteinName != null) {
+                protein.setName(builder.forceProteinName);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -134,7 +81,11 @@ public class ProteinParser {
         try {
             parseLine(line);
         } catch (StringIndexOutOfBoundsException | NumberFormatException e) {
-            throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + line, e);
+            if(strictMode) {
+                throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + "'" + line + "'", e);
+            } else {
+                logger.debug("PDB parsing failed for line:{}'{}'{}cause: {}", System.lineSeparator(), line, System.lineSeparator(), e);
+            }
         }
     }
 
@@ -143,7 +94,7 @@ public class ProteinParser {
      * @param line the line to process
      */
     private void parseLine(String line) {
-        //TODO this is kinda hacky, however that way only the first de.bioforscher.explorer.helices.model is parsed in any case
+        //TODO this is kinda hacky, however that way only the first model is parsed in any case
         if(passedFirstModel) {
             return;
         }
@@ -163,7 +114,7 @@ public class ProteinParser {
             // extra whitespace to ensure that words are separated
             // maybe some StringJoiner is the way to go
             titleString.append(titleString.length() == 0 ? "" : " ")
-                       .append(line.substring(10, line.length() < 80 ? line.length() : 80).trim());
+                    .append(line.substring(10, line.length() < 80 ? line.length() : 80).trim());
         }
 
         if(line.startsWith(TER_PREFIX)) {
@@ -194,10 +145,15 @@ public class ProteinParser {
 			61 - 66        Real(6.2)    tempFactor    Temperature factor.
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
-        if(line.startsWith(ATOM_PREFIX) || line.startsWith(HETATM_PREFIX)) {
+        if(line.startsWith(Atom.ATOM_PREFIX) || line.startsWith(Atom.HETATM_PREFIX)) {
             String elementString = line.substring(76, 78).trim();
             if(elementString.isEmpty()) {
-                throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + line );
+                if(strictMode) {
+                    throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + "'" + line + "'");
+                } else {
+                    logger.debug("PDB parsing failed for line:{}'{}'", System.lineSeparator(), line);
+                    elementString = Element.X.name();
+                }
             }
 
             Element element = Element.valueOfIgnoreCase(elementString);
@@ -232,6 +188,30 @@ public class ProteinParser {
                 currentChain.addGroup(currentGroup);
             }
 
+            float occupancy;
+            try {
+                occupancy = Float.valueOf(line.substring(54, 60).trim());
+            } catch (NumberFormatException e) {
+                if(strictMode) {
+                    throw new ParsingException(e);
+                } else {
+                    logger.debug("missing occupancy in line{}'{}'", System.lineSeparator(), line);
+                    occupancy = Atom.DEFAULT_OCCUPANCY;
+                }
+            }
+
+            float bfactor;
+            try {
+                bfactor = Float.valueOf(line.substring(60, 66).trim());
+            } catch (NumberFormatException e) {
+                if(strictMode) {
+                    throw new ParsingException(e);
+                } else {
+                    logger.debug("missing bfactor in line{}'{}'", System.lineSeparator(), line);
+                    bfactor = Atom.DEFAULT_BFACTOR;
+                }
+            }
+
             // we append the current getResidue container with additional atoms
             Atom atom = new Atom(line.substring(12, 16).trim(),
                     Integer.valueOf(line.substring(6, 11).trim()),
@@ -240,8 +220,8 @@ public class ProteinParser {
                             Double.valueOf(line.substring(38, 46).trim()),
                             Double.valueOf(line.substring(46, 54).trim())
                     },
-                    Float.valueOf(line.substring(54, 60).trim()),
-                    Float.valueOf(line.substring(60, 66).trim()));
+                    occupancy,
+                    bfactor);
             if(currentGroup.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
                 currentGroup.addAtom(atom);
             } else {
@@ -254,6 +234,92 @@ public class ProteinParser {
             //TODO handling of multiple models
             passedFirstModel = true;
             logger.debug("skipping models for {}", protein.getName());
+        }
+    }
+
+    Protein getProtein() {
+        return protein;
+    }
+
+    public static OptionalSteps source(InputStream inputStream) {
+        return new OptionalSteps(inputStream);
+    }
+
+    public static OptionalSteps source(String pdbId) {
+        return new OptionalSteps(pdbId).hintProteinName(pdbId);
+    }
+
+    public static OptionalSteps source(Path path) {
+        return new OptionalSteps(path).hintProteinName(path.toFile().getName());
+    }
+
+    public static class OptionalSteps {
+        InputStream inputStream;
+        private String pdbId;
+        private Path path;
+        boolean skipModels = true;
+        boolean strictMode = false;
+        boolean skipHydrogens = true;
+        String forceProteinName;
+        String hintProteinName;
+
+        OptionalSteps(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
+
+        OptionalSteps(String pdbId) {
+            this.pdbId = pdbId;
+        }
+
+        OptionalSteps(Path path) {
+            this.path = path;
+        }
+
+        public OptionalSteps skipModels(boolean skipModels) {
+            this.skipModels = skipModels;
+            return this;
+        }
+
+        public OptionalSteps strictMode(boolean strictMode) {
+            this.strictMode = strictMode;
+            return this;
+        }
+
+        public OptionalSteps skipHydrogens(boolean skipHydrogens) {
+            this.skipHydrogens = skipHydrogens;
+            return this;
+        }
+
+        public OptionalSteps forceProteinName(String proteinName) {
+            this.forceProteinName = proteinName;
+            return this;
+        }
+
+        public OptionalSteps hintProteinName(String proteinName) {
+            this.hintProteinName = proteinName;
+            return this;
+        }
+
+        public Protein parse() {
+            try {
+                if (pdbId != null) {
+                    this.inputStream = new URL(String.format(PDB_FETCH_URL, pdbId)).openStream();
+                }
+
+                if (path != null) {
+                    this.inputStream = Files.newInputStream(path);
+
+                    if(forceProteinName == null) {
+                        String fileName = path.toFile().getName();
+                        // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
+                        forceProteinName = fileName.substring(0, fileName.lastIndexOf("."));
+                    }
+                }
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+
+            return new ProteinParser(this).getProtein();
         }
     }
 }

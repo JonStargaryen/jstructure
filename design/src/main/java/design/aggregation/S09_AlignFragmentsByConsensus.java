@@ -1,7 +1,7 @@
 package design.aggregation;
 
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -49,7 +49,7 @@ public class S09_AlignFragmentsByConsensus {
                         List<StructureAlignmentResult> alignedProteins = DesignConstants.list(Paths.get(DesignConstants.MOTIF_FRAGMENT_BY_TOPOLOGY_DIR +
                                 topology + "/"))
                                 .filter(path -> path.getFileName().toString().startsWith(motif))
-                                .map(ProteinParser::parsePDBFile)
+                                .map(path -> ProteinParser.source(path).parse())
                                 .filter(protein -> protein.getSize() != 0)
                                 // align each to its most similar consensus fragment
                                 .map(protein -> consensusFragments.stream()
@@ -75,7 +75,7 @@ public class S09_AlignFragmentsByConsensus {
                 .filter(path -> path.toFile().getName().startsWith(motif))
                 .filter(path -> !path.toFile().getName().split("-")[1].equals("0"))
                 .filter(path -> Integer.valueOf(path.toFile().getName().split("-")[2].split("\\.")[0]) >= DesignConstants.RARE_CLUSTER_THRESHOLD)
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .collect(Collectors.toList());
 
         if(fragments.size() < 2) {

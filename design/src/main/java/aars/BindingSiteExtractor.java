@@ -56,7 +56,7 @@ public class BindingSiteExtractor {
                     String[] split = mainTableLine.split(",");
                     String pdbId = split[2];
                     String chainId = split[13];
-                    Protein protein = ProteinParser.parsePDBFile(AARSConstants.RENUMBERED_STRUCTURES_PATH + className + "/renumbered_structures/" + pdbId + "_renum.pdb");
+                    Protein protein = ProteinParser.source(AARSConstants.RENUMBERED_STRUCTURES_PATH + className + "/renumbered_structures/" + pdbId + "_renum.pdb").parse();
 
                     String output = "HEADER    LIGASE/RNA                              15-JUL-99   " + pdbId.toUpperCase() + "              " + System.lineSeparator() + Selection.on(protein)
                             .chainName(chainId)

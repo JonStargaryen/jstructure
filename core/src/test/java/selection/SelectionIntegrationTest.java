@@ -28,7 +28,7 @@ public class SelectionIntegrationTest {
 
     @Before
     public void setup() {
-        protein = ProteinParser.parseProteinById("1brr");
+        protein = ProteinParser.source("1brr").parse();
     }
 
     @Test
@@ -126,7 +126,7 @@ public class SelectionIntegrationTest {
 
     @Test
     public void shouldFindSimilarNeighbors() {
-        Protein protein = ProteinParser.parseProteinById("1acj");
+        Protein protein = ProteinParser.source("1acj").parse();
 
         Atom firstAtom = protein.getAtoms().get(0);
         double probeDistance = 4.4499;

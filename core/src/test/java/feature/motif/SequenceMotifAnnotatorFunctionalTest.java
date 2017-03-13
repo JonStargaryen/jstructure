@@ -21,8 +21,8 @@ public class SequenceMotifAnnotatorFunctionalTest {
 
     @Before
     public void setup() throws IOException {
-        protein1acj = ProteinParser.parseProteinById("1acj");
-        protein1brr = ProteinParser.parseProteinById("1brr");
+        protein1acj = ProteinParser.source("1acj").parse();
+        protein1brr = ProteinParser.source("1brr").parse();
     }
 
     @Test

@@ -251,15 +251,6 @@
             initializedInteractions.push(type);
         }
 
-        /* watchers for front-end options */
-        /*$scope.$watch('options.renderMode', function(newVal, oldVal){
-            if(newVal === oldVal)
-                return;
-            console.log("render mode changed from '" + oldVal.name + "' to '" + newVal.name + "'");
-            viewer.rm('protein');
-            initProtein();
-        });*/
-
         $scope.$watch('options.coloringFeature', function(newVal, oldVal){
             if(newVal === oldVal)
                 return;
@@ -390,13 +381,11 @@
     MODULE.controller('HomeController', ['$scope', '$location', 'ProteinService',
         function($scope, $location, ProteinService) {
         $scope.allProteins = ProteinService.allProteins;
-        $scope.nonRedundantAlphaHelicalProteins = ProteinService.nonRedundantAlphaHelicalProteins;
     }]);
 
     MODULE.factory('ProteinService', ['$rootScope', '$http', function($rootScope, $http) {
         /* fetch all known protein ids */
         var allProteins = [];
-        var nonRedundantAlphaHelicalProteins = [];
 
         $http.get('/api/proteins/all').then(function(d) {
             d.data.forEach(function (p) {
@@ -407,17 +396,7 @@
             '] ' + d.statusText });
         });
 
-        $http.get('/api/proteins/alpha_nr').then(function(d) {
-            d.data.forEach(function (p) {
-                nonRedundantAlphaHelicalProteins.push(p);
-            });
-        }, function (d) {
-            $rootScope.alerts.push({ type: 'danger', msg:
-            'loading non-redundant alpha helical proteins from server failed with [' + d.status + '] ' + d.statusText });
-        });
-
-        return { "allProteins" : allProteins,
-            "nonRedundantAlphaHelicalProteins" : nonRedundantAlphaHelicalProteins };
+        return { 'allProteins' : allProteins };
     }]);
 
     /* format PV render modes to something nice */

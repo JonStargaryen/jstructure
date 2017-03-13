@@ -44,7 +44,7 @@ public class EnergyProfileCalculatorTest {
         System.err.println("skipping energy profile calculation on aaRS data set");
         // this takes ages - uncomment if needed
 //        ids.stream()
-//                .map(ProteinParser::parseProteinById)
+//                .map(path -> ProteinParser.source(path).parse())
 //                .peek(System.out::println)
 //                .forEach(protein -> {
 //                    featureProvider.process(protein);
@@ -58,25 +58,25 @@ public class EnergyProfileCalculatorTest {
 
     @Test
     public void shouldProcessStructureWithSelenomethionine() {
-        Protein protein = ProteinParser.parseProteinById("3TQO");
+        Protein protein = ProteinParser.source("3TQO").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldProcessStructureWithMPH() {
-        Protein protein = ProteinParser.parseProteinById("1P7P");
+        Protein protein = ProteinParser.source("1P7P").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldProcessStructure() {
-        Protein protein = ProteinParser.parseProteinById("1ATI");
+        Protein protein = ProteinParser.source("1ATI").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldAgreeRegardingEnergyTerms() throws IOException {
-        Protein protein = ProteinParser.parseProteinById("1BS2");
+        Protein protein = ProteinParser.source("1BS2").parse();
         featureProvider.process(protein);
 
         Files.lines(Paths.get(TestUtils.getResourceAsFilepath("energy/1bs2.ep2")))

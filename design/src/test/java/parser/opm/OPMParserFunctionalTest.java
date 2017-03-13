@@ -22,7 +22,7 @@ public class OPMParserFunctionalTest {
     @Before
     public void setup() {
         pdbId = "1xio";
-        protein1xio = ProteinParser.parseProteinById(pdbId);
+        protein1xio = ProteinParser.source(pdbId).parse();
     }
 
     @Test

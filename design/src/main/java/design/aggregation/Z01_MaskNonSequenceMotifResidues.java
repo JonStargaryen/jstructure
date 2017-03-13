@@ -3,8 +3,8 @@ package design.aggregation;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -23,7 +23,7 @@ public class Z01_MaskNonSequenceMotifResidues {
     public static void main(String[] args) throws IOException {
         Files.list(Paths.get(DesignConstants.PDB_DIR))
              // parse file
-             .map(ProteinParser::parsePDBFile)
+             .map(path -> ProteinParser.source(path).parse())
              //
              .forEach(protein -> {
                  // annotate sequence motifs in proteins

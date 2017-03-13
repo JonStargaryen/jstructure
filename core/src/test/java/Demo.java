@@ -14,7 +14,7 @@ public class Demo {
     @Test
     public void demo() {
         // fetch/parse structure by id
-        Protein protein = ProteinParser.parseProteinById("1brr");
+        Protein protein = ProteinParser.source("1brr").parse();
 
         // print coordinates of all alanines
         Selection.on(protein)

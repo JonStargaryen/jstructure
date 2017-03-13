@@ -19,9 +19,11 @@ import java.nio.file.Paths;
  *     nice as we then have a data set to test resulting methods which is by no mean part of the training data set.
  *
  *     - 12/14/16 - 5A1S misses a ( which is crucial for parsing - add it when recreating the data
+ *     - 03/13/17 - TODO fetch URL is flawed as some structures point to representative structure to avoid redundancy
  * </pre>
  * Created by S on 29.10.2016.
  */
+@Deprecated
 public class S02_DownloadOPMInformation {
     public static void main(String[] args) throws IOException {
         Files.list(Paths.get(DesignConstants.PDB_DIR))

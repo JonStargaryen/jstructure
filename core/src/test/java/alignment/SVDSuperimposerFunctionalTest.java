@@ -1,8 +1,8 @@
 package alignment;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.*;
@@ -86,7 +86,7 @@ public class SVDSuperimposerFunctionalTest {
     public void shouldAlignFragments() throws IOException {
         // identical fragments with different orientation in the 3D space
         List<AtomContainer> alignedFragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath(FRAGMENT_DIR)))
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .limit(10)
                 .collect(StructureCollectors.toAlignedEnsembleByConsensus());
 
@@ -148,7 +148,7 @@ public class SVDSuperimposerFunctionalTest {
 
     @Test
     public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
-        Protein protein1acjCopy = ProteinParser.parseProteinById("1acj");
+        Protein protein1acjCopy = ProteinParser.source("1acj").parse();
         double[] translation = new double[] { 10, 20, 30 };
         LinearAlgebraAtom.transform(protein1acjCopy,
                 translation,

@@ -1,8 +1,8 @@
 package bioforscher.kinks;
 
+import bioforscher.Constants;
 import bioforscher.opm.OPMParser;
 import bioforscher.opm.TMHelix;
-import bioforscher.Constants;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
@@ -54,7 +54,7 @@ public class S01_ComposeKinkFinderData {
                 .map(pdbId -> Constants.STRUCTURE_PATH + pdbId + Constants.PDB_SUFFIX)
                 .distinct()
                 .map(Paths::get)
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .peek(plipAnnotator::process)
                 .peek(sequenceMotifAnnotator::process)
                 .collect(Collectors.toList());

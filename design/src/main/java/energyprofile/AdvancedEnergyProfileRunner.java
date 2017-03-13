@@ -136,7 +136,7 @@ public class AdvancedEnergyProfileRunner {
 
         ProteinContainer(Path pathToPdbFile) {
             this.pathToPdbFile = pathToPdbFile;
-            this.protein = ProteinParser.parsePDBFile(pathToPdbFile);
+            this.protein = ProteinParser.source(pathToPdbFile).parse();
             Builder.energyProfileCalculator.process(protein);
         }
 

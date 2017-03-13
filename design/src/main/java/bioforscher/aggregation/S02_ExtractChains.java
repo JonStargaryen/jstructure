@@ -26,7 +26,7 @@ public class S02_ExtractChains {
                     System.out.println(String.format("processing '%s'", line));
                     String pdbId = line.split("_")[0];
                     String chainId = line.split("_")[1];
-                    Protein protein = ProteinParser.parsePDBFile(Paths.get(Constants.STRUCTURE_PATH + pdbId + Constants.PDB_SUFFIX));
+                    Protein protein = ProteinParser.source(Paths.get(Constants.STRUCTURE_PATH + pdbId + Constants.PDB_SUFFIX)).parse();
                     byte[] output = Selection.on(protein)
                             .chainName(chainId)
                             .asChainContainer()

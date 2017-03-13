@@ -42,11 +42,6 @@ public class ExplorerHelix {
     }
 
     static Stream<ExplorerHelix> extract(Chain chain) {
-//        List<Integer> helixPositions = chain.groups()
-//                .filter(group -> group.getFeature(SecStrucState.class, SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES).getSecondaryStructure().isHelixType())
-//                .map(Group::getResidueNumber)
-//                .collect(Collectors.toList());
-
         List<ExplorerHelix> helices = new ArrayList<>();
 
         int helixStart = -1;

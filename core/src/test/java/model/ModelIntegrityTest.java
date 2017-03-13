@@ -21,7 +21,7 @@ public class ModelIntegrityTest {
 
     @Before
     public void setup() {
-        this.protein = ProteinParser.parseProteinById("1brr");
+        this.protein = ProteinParser.source("1brr").parse();
     }
 
     @Test

@@ -3,7 +3,10 @@ package aars;
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -44,7 +47,7 @@ public class BindingSiteAligner {
                         )
                 .map(line -> line.split(","))
                 .peek(split -> logger.info("fetching and parsing {}", split[2]))
-                .collect(Collectors.toMap(split -> split[2] + "_" + split[13], split -> ProteinParser.parseProteinById(split[2])));
+                .collect(Collectors.toMap(split -> split[2] + "_" + split[13], split -> ProteinParser.source(split[2]).parse()));
 
         // extract key list
         List<String> ids = proteinMap.entrySet().stream()

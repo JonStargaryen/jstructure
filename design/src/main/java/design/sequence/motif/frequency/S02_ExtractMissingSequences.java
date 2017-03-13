@@ -32,7 +32,7 @@ public class S02_ExtractMissingSequences {
                             .map(File::getName)
                             .noneMatch(fileName -> fileName.startsWith(fileNameToFind));
                 })
-                .map(ProteinParser::parsePDBFile)
+                .map(path -> ProteinParser.source(path).parse())
                 .map(Protein::getAminoAcidSequence)
                 .collect(Collectors.joining(System.lineSeparator()));
     }

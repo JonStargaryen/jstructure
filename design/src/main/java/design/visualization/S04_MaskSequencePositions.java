@@ -4,8 +4,8 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import design.DesignConstants;
 
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class S04_MaskSequencePositions {
     public static void main(String[] args) {
-        Protein protein = ProteinParser.parsePDBFile("/home/bittrich/Downloads/1m0l.pdb");
+        Protein protein = ProteinParser.source("/home/bittrich/Downloads/1m0l.pdb").parse();
 
         // annotate sequence motifs in proteins
         new SequenceMotifAnnotator().process(protein);

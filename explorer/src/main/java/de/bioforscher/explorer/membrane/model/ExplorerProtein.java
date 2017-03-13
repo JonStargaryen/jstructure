@@ -11,8 +11,9 @@ import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
-import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
+import de.bioforscher.jstructure.parser.sifts.SiftsParser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,7 @@ public class ExplorerProtein {
         this.name = protein.getName();
         //TODO handle how uniprot ids are linked to chains
         this.uniprot = protein.chains()
-                .map(chain -> chain.getFeature(String.class, UniProtAnnotator.UNIPROT_ID))
+                .map(chain -> chain.getFeature(String.class, SiftsParser.UNIPROT_ID))
                 .distinct()
                 .collect(Collectors.joining(", "));
         this.title = protein.getTitle();
@@ -60,43 +61,62 @@ public class ExplorerProtein {
                 .map(ExplorerChain::new)
                 .collect(Collectors.toList());
 
-        this.sequenceMotifs = protein.getFeatureAsList(SequenceMotif.class, SequenceMotifAnnotator.SEQUENCE_MOTIF).stream()
-                .map(ExplorerMotif::new)
-                .collect(Collectors.toList());
+        try {
+            this.sequenceMotifs = protein.getFeatureAsList(SequenceMotif.class, SequenceMotifAnnotator.SEQUENCE_MOTIF).stream()
+                    .map(ExplorerMotif::new)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+            this.sequenceMotifs = new ArrayList<>();
+        }
 
-        this.membrane = protein.getFeature(Membrane.class, ANVIL.MEMBRANE).getMembraneAtoms();
+        try {
+            this.membrane = protein.getFeature(Membrane.class, ANVIL.MEMBRANE).getMembraneAtoms();
+        } catch (NullPointerException e) {
+            this.membrane = new ArrayList<>();
+        }
 
-        PLIPInteractionContainer interactions = protein.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
-        this.halogenBonds = interactions.getHalogenBonds().stream()
-                .map(ExplorerInteraction::new)
-                .collect(Collectors.toList());
-        this.hydrogenBonds = interactions.getHydrogenBonds().stream()
-                .map(ExplorerInteraction::new)
-                .collect(Collectors.toList());
-        this.hydrophobicInteractions = interactions.getHydrophobicInteractions().stream()
-                .map(ExplorerInteraction::new)
-                .collect(Collectors.toList());
-        this.metalComplexes = interactions.getMetalComplexes().stream()
-                .map(ExplorerInteraction::new)
-                .collect(Collectors.toList());
-        this.piCationInteractions = interactions.getPiCationInteractions().stream()
-                .filter(interaction -> !interaction.getAtoms1().isEmpty())
-                .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+        try {
+            PLIPInteractionContainer interactions = protein.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
+            this.halogenBonds = interactions.getHalogenBonds().stream()
+                    .map(ExplorerInteraction::new)
+                    .collect(Collectors.toList());
+            this.hydrogenBonds = interactions.getHydrogenBonds().stream()
+                    .map(ExplorerInteraction::new)
+                    .collect(Collectors.toList());
+            this.hydrophobicInteractions = interactions.getHydrophobicInteractions().stream()
+                    .map(ExplorerInteraction::new)
+                    .collect(Collectors.toList());
+            this.metalComplexes = interactions.getMetalComplexes().stream()
+                    .map(ExplorerInteraction::new)
+                    .collect(Collectors.toList());
+            this.piCationInteractions = interactions.getPiCationInteractions().stream()
+                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
+                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
                             .map(ExplorerInteraction::new))
-                .collect(Collectors.toList());
-        this.piStackings = interactions.getPiStackings().stream()
-                .filter(interaction -> !interaction.getAtoms1().isEmpty())
-                .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
-                        .map(ExplorerInteraction::new))
-                .collect(Collectors.toList());
-        this.saltBridges = interactions.getSaltBridges().stream()
-                .filter(interaction -> !interaction.getAtoms1().isEmpty())
-                .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
-                        .map(ExplorerInteraction::new))
-                .collect(Collectors.toList());
-        this.waterBridges = interactions.getWaterBridges().stream()
-                .map(ExplorerInteraction::new)
-                .collect(Collectors.toList());
+                    .collect(Collectors.toList());
+            this.piStackings = interactions.getPiStackings().stream()
+                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
+                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+                            .map(ExplorerInteraction::new))
+                    .collect(Collectors.toList());
+            this.saltBridges = interactions.getSaltBridges().stream()
+                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
+                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+                            .map(ExplorerInteraction::new))
+                    .collect(Collectors.toList());
+            this.waterBridges = interactions.getWaterBridges().stream()
+                    .map(ExplorerInteraction::new)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+            this.halogenBonds = new ArrayList<>();
+            this.hydrogenBonds = new ArrayList<>();
+            this.hydrophobicInteractions = new ArrayList<>();
+            this.metalComplexes = new ArrayList<>();
+            this.piCationInteractions = new ArrayList<>();
+            this.piStackings = new ArrayList<>();
+            this.saltBridges = new ArrayList<>();
+            this.waterBridges = new ArrayList<>();
+        }
 
         this.ligands = Selection.on(protein)
                 .hetatms()
@@ -104,13 +124,21 @@ public class ExplorerProtein {
                 .map(ExplorerLigand::new)
                 .collect(Collectors.toList());
 
-        this.helices = protein.chains()
-                .flatMap(ExplorerHelix::extract)
-                .collect(Collectors.toList());
+        try {
+            this.helices = protein.chains()
+                    .flatMap(ExplorerHelix::extract)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+            this.helices = new ArrayList<>();
+        }
 
-        this.kinks = protein.getFeatureAsList(KinkFinderHelix.class, KinkFinderParser.KINK_FINDER_ANNOTATION).stream()
-                .map(ExplorerKink::new)
-                .collect(Collectors.toList());
+        try {
+            this.kinks = protein.getFeatureAsList(KinkFinderHelix.class, KinkFinderParser.KINK_FINDER_ANNOTATION).stream()
+                    .map(ExplorerKink::new)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException e) {
+            this.kinks = new ArrayList<>();
+        }
     }
 
     public String getName() {
