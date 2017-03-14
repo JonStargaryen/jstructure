@@ -1,4 +1,4 @@
-package feature.topology;
+package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;

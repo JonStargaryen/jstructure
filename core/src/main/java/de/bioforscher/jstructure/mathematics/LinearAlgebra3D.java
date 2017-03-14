@@ -13,6 +13,8 @@ public class LinearAlgebra3D {
         // deny instantiation
     }
 
+    //TODO builder pattern for computations
+
     /**
      * Add 2 3D vectors and returns their sum.
      * @param v1 the first 3D vector

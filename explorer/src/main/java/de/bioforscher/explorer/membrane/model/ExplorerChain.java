@@ -2,6 +2,7 @@ package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.sifts.SiftsParser;
 import de.bioforscher.jstructure.parser.uniprot.*;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class ExplorerChain {
     private List<UniProtReference> references;
     private List<UniProtNaturalVariant> variants;
     private List<UniProtMutagenesisSite> mutations;
-    private String id;
+    private String id, uniprot, pfam, ec;
     private List<ExplorerGroup> groups;
     private boolean hasAminoAcids;
 
@@ -29,6 +30,10 @@ public class ExplorerChain {
         this.groups = chain.groups()
                 .map(ExplorerGroup::new)
                 .collect(Collectors.toList());
+
+        this.uniprot = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
+        this.pfam = chain.getFeature(String.class, SiftsParser.PFAM_ID);
+        this.ec = chain.getFeature(String.class, SiftsParser.EC_NUMBER);
 
         try {
             UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
@@ -47,6 +52,18 @@ public class ExplorerChain {
 
     public String getId() {
         return id;
+    }
+
+    public String getUniprot() {
+        return uniprot;
+    }
+
+    public String getPfam() {
+        return pfam;
+    }
+
+    public String getEc() {
+        return ec;
     }
 
     public List<ExplorerGroup> getGroups() {

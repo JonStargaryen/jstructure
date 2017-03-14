@@ -18,6 +18,8 @@ public interface FeatureContainer {
      */
     Map<String, Object> getFeatureMap();
 
+    //TODO delegate the internal class to keep API clean and provide more options
+
     void setFeatureMap(Map<String, Object> map);
 
     /**

@@ -1,4 +1,4 @@
-package feature;
+package de.bioforscher.jstructure.feature;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static feature.FeatureContainerIntegrationTest.FeatureNames.*;
+import static de.bioforscher.jstructure.feature.FeatureContainerIntegrationTest.FeatureNames.*;
 
 /**
  * Checks whether feature container capabilities are working.

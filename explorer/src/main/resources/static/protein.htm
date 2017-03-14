@@ -8,7 +8,7 @@
                 <div class="dropdown-select"
                      title="select feature to color visualization"
                      data-dropdown-select="features"
-                     data-dropdown-de.bioforscher.explorer.helices.model="options.coloringFeature"
+                     data-dropdown-model="options.coloringFeature"
                      data-dropdown-item-label="name">
                 </div>
 
@@ -82,7 +82,7 @@
                 <!--<div class="dropdown-select"
                      title="select PV's render mode"
                      dropdown-select="renderModes"
-                     dropdown-de.bioforscher.explorer.helices.model="options.renderMode"
+                     dropdown-model="options.renderMode"
                      dropdown-item-label="text">
                 </div>-->
 
@@ -112,19 +112,19 @@
                 <div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div>
                 <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div>
 
-                <div class="option link pull-right" title="show in MMDB">
+                <div class="link pull-right" title="show in MMDB">
                     <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
                     <span class="fa fa-external-link"></span>
                 </div>
-                <div class="option link pull-right" title="show in OPM">
+                <div class="link pull-right" title="show in OPM">
                     <a target="_blank" data-ng-href="//opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
                     <span class="fa fa-external-link"></span>
                 </div>
-                <div class="option link pull-right" title="show in UniProt">
+                <div class="link pull-right" title="show in UniProt">
                     <a target="_blank" data-ng-href="//www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
                     <span class="fa fa-external-link"></span>
                 </div>
-                <div class="option link pull-right" title="show in PDB">
+                <div class="link pull-right" title="show in PDB">
                     <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
                     <span class="fa fa-external-link"></span>
                 </div>
@@ -142,7 +142,9 @@
                             </div>
                             <div class="elements">
                                 <div class="group"
-                                 style="color: hsl({{group[options.coloringFeature.tag] * 120}}, 60%, 70%);"
+                                 style="color: hsl({{group[options.coloringFeature.tag][0]}},
+                                    {{group[options.coloringFeature.tag][1]}}%,
+                                    {{group[options.coloringFeature.tag][2]}}%);"
                                  title="{{::group.olc}}-{{::group.resn}}"
                                  data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true"
                                  data-ng-mouseover="highlight(chain.id, group.resn)"
@@ -220,7 +222,7 @@
 
                     <!-- mutations -->
                     <div data-ng-show="tab.isSelected(6)" class="representation">
-                        <div class="chain" data-ng-repeat="chain in protein.chains">
+                        <div class="chain" data-ng-repeat="chain in protein.chains | filter: { hasAminoAcids : true }">
                             <div class="elementId"
                                  data-ng-mouseover="highlight(chain.id)"
                                  data-ng-mouseleave="deselect()">

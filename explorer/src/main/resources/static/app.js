@@ -12,7 +12,8 @@
     MODULE.constant('features', [
         { name : 'no coloring', tag : 'none', discrete : true },
         { name : 'relative accessible surface area', tag : 'rasa', discrete : false },
-        { name : 'secondary structure element', tag: 'sse', discrete : true }
+        { name : 'secondary structure element', tag : 'sse', discrete : true },
+        { name : 'spatial proximity', tag : 'cerosene', discrete : false }
     ]);
 
     MODULE.constant('renderModes',  [
@@ -230,7 +231,8 @@
                 // read property and transform to rgb
                 var residue = atom.residue();
                 var group = findGroup($scope.protein, residue.chain().name(), residue.num());
-                rgb = hsl2rgb(group[$scope.options.coloringFeature.tag] / 3);
+                var hsv = group[$scope.options.coloringFeature.tag];
+                rgb = hsl2rgb(hsv[0] / 360, hsv[1] / 100, hsv[2] / 100);
             }
 
             out[index] = rgb[0];
@@ -353,23 +355,27 @@
         };
 
         // http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-        function hsl2rgb(h){
+        function hsl2rgb(h, s, v){
             var r, g, b;
 
-            var hue2rgb = function hue2rgb(p, q, t){
-                if(t < 0) t += 1;
-                if(t > 1) t -= 1;
-                if(t < 1/6) return p + (q - p) * 6 * t;
-                if(t < 1/2) return q;
-                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                return p;
-            };
+            if(s == 0) {
+                r = g = b = l; // achromatic
+            } else {
+                var hue2rgb = function hue2rgb(p, q, t) {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
 
-            var q = 0.7 + 0.6 - 0.7 * 0.6;
-            var p = 2 * 0.7 - q;
-            r = hue2rgb(p, q, h + 1/3);
-            g = hue2rgb(p, q, h);
-            b = hue2rgb(p, q, h - 1/3);
+                var q = v < 0.5 ? v * (1 + s) : v + s - v * s;
+                var p = 2 * v - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
 
             return [r, g, b];
         }

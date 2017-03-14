@@ -1,6 +1,7 @@
 package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
+import de.bioforscher.jstructure.feature.cerosene.SequenceCerosene;
 import de.bioforscher.jstructure.feature.sse.DSSPSecondaryStructureElement;
 import de.bioforscher.jstructure.feature.sse.SecStrucState;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
@@ -8,6 +9,8 @@ import de.bioforscher.jstructure.model.structure.Group;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static de.bioforscher.explorer.membrane.ColorMapping.*;
 
 /**
  * The reduced representation of {@link Group} objects.
@@ -18,7 +21,10 @@ public class ExplorerGroup {
     private int resn;
     private List<ExplorerAtom> atoms;
     private String olc, tlc, type;
-    private double rasa, sse;
+    /*
+     * features to visualize are represented by double[] (i.e. hsv values)
+     */
+    private double[] rasa, sse, cerosene;
 
     public ExplorerGroup() {
 
@@ -36,19 +42,24 @@ public class ExplorerGroup {
             this.type = "aa";
             // assign features - they are supposed to be normalized to the interval [0,1]
             try {
-                this.rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA);
+                this.rasa = continuousToHsv(group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA));
             } catch (NullPointerException e) {
-                this.rasa = 0.0;
+                this.rasa = HSV_MISSING_VALUE;
             }
             try {
-                this.sse = group.getFeature(SecStrucState.class, SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES).getSecondaryStructure().ordinal() / (double) DSSPSecondaryStructureElement.values().length;
+                this.sse = discreteToHsv(group.getFeature(SecStrucState.class, SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES).getSecondaryStructure().ordinal(), DSSPSecondaryStructureElement.values().length);
             } catch (NullPointerException e) {
-                this.sse = 0.0;
+                this.sse = HSV_MISSING_VALUE;
             }
         } else if(group.isNucleotide()) {
             this.type = "nucl";
         } else {
             this.type = "het";
+        }
+
+        if(!this.type.equals("het")) {
+            double[] hsv = group.getFeature(double[].class, SequenceCerosene.SEQUENCE_CEROSENE_REPRESENTATION);
+            this.cerosene = new double[]{ hsv[0] * 360, hsv[1] * 100, hsv[2] * 100 };
         }
     }
 
@@ -72,11 +83,15 @@ public class ExplorerGroup {
         return type;
     }
 
-    public double getSse() {
+    public double[] getSse() {
         return sse;
     }
 
-    public double getRasa() {
+    public double[] getRasa() {
         return rasa;
+    }
+
+    public double[] getCerosene() {
+        return cerosene;
     }
 }

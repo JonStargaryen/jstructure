@@ -1,4 +1,4 @@
-package feature.topology;
+package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;

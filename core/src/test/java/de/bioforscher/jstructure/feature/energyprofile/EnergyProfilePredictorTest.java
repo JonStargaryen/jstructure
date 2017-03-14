@@ -1,4 +1,4 @@
-package feature.energyprofile;
+package de.bioforscher.jstructure.feature.energyprofile;
 
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;

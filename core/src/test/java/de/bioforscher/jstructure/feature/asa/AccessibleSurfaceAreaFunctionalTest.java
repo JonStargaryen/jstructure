@@ -1,4 +1,4 @@
-package feature.asa;
+package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.model.Combinatorics;

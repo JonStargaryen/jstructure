@@ -1,4 +1,4 @@
-package feature.loopfraction;
+package de.bioforscher.jstructure.feature.loopfraction;
 
 import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
 import de.bioforscher.jstructure.feature.sse.DSSPSecondaryStructureElement;

@@ -1,4 +1,4 @@
-package feature.sse;
+package de.bioforscher.jstructure.feature.sse;
 
 import de.bioforscher.jstructure.feature.sse.DSSPSecondaryStructureElement;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
