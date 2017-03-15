@@ -11,9 +11,11 @@
 
     MODULE.constant('features', [
         { name : 'no coloring', tag : 'none', discrete : true },
+        { name : 'amino acid', tag : 'aa', discrete : true },
         { name : 'relative accessible surface area', tag : 'rasa', discrete : false },
         { name : 'secondary structure element', tag : 'sse', discrete : true },
         { name : 'spatial proximity', tag : 'cerosene', discrete : false }
+
     ]);
 
     MODULE.constant('renderModes',  [
@@ -22,6 +24,29 @@
 
     MODULE.constant('secondaryStructures', [
         'coil', 'bend', 'turn', '\u03C0-helix', '3-10-helix', 'bridge', 'extended', '\u03B1-helix'
+    ]);
+
+    MODULE.constant('aminoAcids', [
+        { name : 'alanine', olc : 'A', tlc : 'Ala' },
+        { name : 'arginine', olc : 'R', tlc : 'Arg' },
+        { name : 'asparagine', olc : 'N', tlc : 'Asn' },
+        { name : 'aspartic acid', olc : 'D', tlc : 'Asp' },
+        { name : 'cysteine', olc : 'C', tlc : 'Cys' },
+        { name : 'glutamic acid', olc : 'E', tlc : 'Glu' },
+        { name : 'glutamine', olc : 'Q', tlc : 'Gln' },
+        { name : 'glycine', olc : 'G', tlc : 'Gly' },
+        { name : 'histidine', olc : 'H', tlc : 'His' },
+        { name : 'isoleucine', olc : 'I', tlc : 'Ile' },
+        { name : 'leucine', olc : 'L', tlc : 'Leu' },
+        { name : 'lysine', olc : 'K', tlc : 'Lys' },
+        { name : 'methionine', olc : 'M', tlc : 'Met' },
+        { name : 'phenylalanine', olc : 'F', tlc : 'Phe' },
+        { name : 'proline', olc : 'P', tlc : 'Pro' },
+        { name : 'serine', olc : 'S', tlc : 'Ser' },
+        { name : 'threonine', olc : 'T', tlc : 'Thr' },
+        { name : 'tryptophan', olc : 'W', tlc : 'Trp' },
+        { name : 'tyrosine', olc : 'Y', tlc : 'Tyr' },
+        { name : 'valine', olc : 'V', tlc : 'Val' }
     ]);
 
     MODULE.constant('interactions', {
@@ -58,14 +83,18 @@
             controller: 'ProteinController'
         });
 
+        $routeProvider.when('/literature', {
+            templateUrl: '/literature.htm'
+        });
+
         $routeProvider.otherwise('/home');
     }]);
 
     /**
      * on app start
      */
-    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', 'features', '$filter', 'secondaryStructures',
-        function ($rootScope, $http, $location, renderModes, features, $filter, secondaryStructures) {
+    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', 'features', '$filter', 'secondaryStructures', 'aminoAcids',
+        function ($rootScope, $http, $location, renderModes, features, $filter, secondaryStructures, aminoAcids) {
         $rootScope.alerts = [];
 
         // message/alert container
@@ -85,13 +114,14 @@
 
         $rootScope.features = features;
         $rootScope.secondaryStructures = secondaryStructures;
+        $rootScope.aminoAcids = aminoAcids;
     }]);
 
     /**
      * handles multiple tabs in the UI
      */
     MODULE.controller('TabController', function () {
-        this.tab = 1;
+        this.tab = 0;
 
         this.selectTab = function (setTab){
             this.tab = setTab;
@@ -113,15 +143,16 @@
             renderMembrane : false
         };
         var initializedInteractions = [];
-        var viewer, structure, aminoAcids, ligands, kinks;
+        var viewer, structure, protein, ligands, kinks;
 
         $http.get('/api/proteins/pdbid/' + $routeParams.pdbid).then(function(data) {
             $scope.protein = data.data;
-            $rootScope.context = {};
-            $rootScope.context.name = $routeParams.pdbid;
-            $rootScope.context.title = $scope.protein.title;
 
-            /* compose PDB representation of the protein */
+            // the context navigation in the header - push entries for additional levels
+            $rootScope.context = [];
+            $rootScope.context.push($routeParams.pdbid);
+
+            // compose PDB representation of the protein
             var rep = "";
             $scope.protein.chains.forEach(function(chain) {
                 chain.groups.forEach(function(group) {
@@ -192,7 +223,7 @@
 
         /* render plain PDB structure with chosen style */
         function initProtein() {
-            aminoAcids = viewer.cartoon('protein', structure.select('protein'), { color: colorOp });
+            protein = viewer.cartoon('protein', structure.select('protein'), { color: colorOp });
         }
 
         function initLigands() {
@@ -257,7 +288,7 @@
             if(newVal === oldVal)
                 return;
             console.log("coloring feature changed from '" + oldVal.name + "' to '" + newVal.name + "'");
-            aminoAcids.colorBy(colorOp);
+            protein.colorBy(colorOp);
             viewer.requestRedraw();
         });
 
@@ -340,7 +371,7 @@
                 else
                     selection.rnum = +resn;
             }
-            aminoAcids.setSelection(aminoAcids.select(selection));
+            protein.setSelection(protein.select(selection));
             ligands.setSelection(ligands.select(selection));
             kinks.setSelection(kinks.select(selection));
             viewer.requestRedraw();
@@ -348,7 +379,7 @@
 
         $scope.deselect = function() {
             var ev = structure.full().createEmptyView();
-            aminoAcids.setSelection(ev);
+            protein.setSelection(ev);
             ligands.setSelection(ev);
             kinks.setSelection(ev);
             viewer.requestRedraw();
@@ -359,7 +390,7 @@
             var r, g, b;
 
             if(s == 0) {
-                r = g = b = l; // achromatic
+                r = g = b = v; // achromatic
             } else {
                 var hue2rgb = function hue2rgb(p, q, t) {
                     if (t < 0) t += 1;

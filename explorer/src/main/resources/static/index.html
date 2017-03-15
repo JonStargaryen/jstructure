@@ -21,11 +21,12 @@
             membrane protein explorer
         </a>
         <!-- TODO breadcrumb-esque navigation of currently selected elements -->
-        <div class="context" data-ng-show="context">{{context.name}} | {{context.title}}</div>
+        <div class="context" data-ng-show="context" data-ng-repeat="level in context">{{level}}</div>
         <ul class="menu">
-            <li data-ng-class="{ active: page() == '/home' }"><a href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
-            <li data-ng-class="{ active: page().startsWith('/protein/') }" data-ng-show="page().startsWith('/protein/')"><a href="#"><i class="fa fa-cubes" aria-hidden="true"></i> Protein</a></li>
-            <li data-ng-class="{ active: page() == '/about' }"><a href="about"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
+            <li data-ng-class="{ active: page() == '/home' }"><a data-ng-href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+            <li data-ng-class="{ active: page().startsWith('/protein/') }" data-ng-show="page().startsWith('/protein/')"><a data-ng-href="#"><i class="fa fa-cubes" aria-hidden="true"></i> Protein</a></li>
+            <li data-ng-class="{ active: page() == '/about' }"><a data-ng-href="about"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
+            <li data-ng-class="{ active: page() == '/literature' }"><a data-ng-href="literature"><i class="fa fa-file-text" aria-hidden="true"></i> Literature</a></li>
         </ul>
     </header>
 

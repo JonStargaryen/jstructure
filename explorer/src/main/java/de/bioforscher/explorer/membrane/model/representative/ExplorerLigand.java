@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.membrane.model.representative;
 
 import de.bioforscher.jstructure.model.structure.Group;
 

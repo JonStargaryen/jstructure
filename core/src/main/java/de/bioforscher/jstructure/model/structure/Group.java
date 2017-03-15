@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.CIFParser;
 
 import java.util.ArrayList;
@@ -60,6 +61,10 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
         this.groupInformation = group.groupInformation;
         // set reference to feature map
         setFeatureMap(group.getFeatureMap());
+    }
+
+    public Selection.AtomSelection select() {
+        return Selection.on(this);
     }
 
     public GroupInformation getGroupInformation() {

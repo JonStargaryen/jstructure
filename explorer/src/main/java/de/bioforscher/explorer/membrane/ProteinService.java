@@ -1,13 +1,16 @@
 package de.bioforscher.explorer.membrane;
 
-import de.bioforscher.explorer.membrane.model.ExplorerProtein;
+import de.bioforscher.explorer.membrane.model.representative.ExplorerProtein;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.cerosene.SequenceCerosene;
+import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.opm.OPMDatabaseQuery;
+import de.bioforscher.jstructure.parser.sifts.SiftsParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +37,9 @@ public class ProteinService {
     private List<String> allProteins;
     private List<AbstractFeatureProvider> featureProviders = Stream.of(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA,
             SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES,
-            SequenceCerosene.SEQUENCE_CEROSENE_REPRESENTATION)
+            SequenceCerosene.SEQUENCE_CEROSENE_REPRESENTATION,
+            SequenceMotifAnnotator.SEQUENCE_MOTIF,
+            SiftsParser.UNIPROT_ID)
             .map(FeatureProviderRegistry::resolve)
             .collect(Collectors.toList());
 
@@ -48,17 +53,19 @@ public class ProteinService {
         allProteins = Stream.of("1m0l").collect(Collectors.toList());
 
         // clear database
-        repository.deleteAll();
-
-        allProteins.forEach(pdbId -> java.util.concurrent.Executors.newWorkStealingPool().submit(() -> process(pdbId)));
+//        repository.deleteAll();
+//
+//        allProteins.forEach(pdbId -> java.util.concurrent.Executors.newWorkStealingPool().submit(() -> process(pdbId)));
     }
 
     private void process(String pdbId) {
         try {
             logger.info("fetching information for {}", pdbId);
             Protein protein = OPMDatabaseQuery.parseAnnotatedProteinById(pdbId);
+            protein.setTitle(ProteinParser.source(pdbId).parse().getTitle());
             computeFeatures(protein);
             repository.save(new ExplorerProtein(protein));
+            logger.info("persisted {}", protein.getName());
         } catch (Exception e) {
             logger.error("gathering information for {} failed: {}", pdbId, e.getLocalizedMessage());
         }
@@ -69,7 +76,6 @@ public class ProteinService {
             logger.info("processing {} by {}", protein.getName(), featureProvider.getClass().getSimpleName());
             featureProvider.process(protein);
         });
-        logger.info("persisting {}", protein.getName());
     }
 
     public List<String> getAllProteins() {

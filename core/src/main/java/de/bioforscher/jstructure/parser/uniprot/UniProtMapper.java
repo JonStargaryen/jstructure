@@ -22,7 +22,7 @@ import java.util.Optional;
  * Created by bittrich on 3/1/17.
  */
 
-@FeatureProvider(provides = { SiftsParser.UNIPROT_ID }, priority = 50)
+@FeatureProvider(provides = { SiftsParser.UNIPROT_ID }, priority = 200)
 public class UniProtMapper extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(UniProtMapper.class);
     private static final String MAPPING_REST_URL = "http://www.bioinf.org.uk/cgi-bin/pdbsws/query.pl?plain=1&qtype=pdb&&id=%s&chain=%s";

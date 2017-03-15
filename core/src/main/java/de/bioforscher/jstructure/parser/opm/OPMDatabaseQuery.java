@@ -10,6 +10,7 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,28 +28,44 @@ public class OPMDatabaseQuery {
     private static final Logger logger = LoggerFactory.getLogger(OPMDatabaseQuery.class);
     private static final String BASE_URL = "http://opm.phar.umich.edu/";
     private static final String SEARCH_URL = BASE_URL + "protein.php?search=";
+    public static final String HOMOLOGOUS_PROTEINS = "HOMOLOGOUS_PROTEINS";
 
     public static Protein parseAnnotatedProteinById(String pdbId) {
         try {
             Document document = getDocument(SEARCH_URL + pdbId);
             // 3rd link points to download
-            String href = document.getElementById("caption").getElementsByTag("a").get(2).attr("href");
+            String downloadLink = document.getElementById("caption").getElementsByTag("a").get(2).attr("href");
 
-            try(InputStreamReader inputStreamReader = new InputStreamReader(new URL(BASE_URL + href).openStream())) {
+            try(InputStreamReader inputStreamReader = new InputStreamReader(new URL(BASE_URL + downloadLink).openStream())) {
                 try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                     byte[] bytes = bufferedReader.lines()
                             .collect(Collectors.joining(System.lineSeparator()))
                             .getBytes();
 
-                    Protein protein = ProteinParser.source(new ByteArrayInputStream(bytes)).forceProteinName(href.split("=")[0].split("/")[1].substring(0, 4)).parse();
+                    // parse protein
+                    Protein protein = ProteinParser.source(new ByteArrayInputStream(bytes))
+                            .forceProteinName(downloadLink.split("=")[0].split("/")[1].substring(0, 4))
+                            .parse();
 
+                    // retrieve homologous protein ids (if any)
+                    List<String> homologous = document.getElementsByClass("data")
+                            .first()
+                            .getElementsByClass("row1")
+                            .get(3)
+                            .getElementsByTag("a")
+                            .stream()
+                            .map(Element::text)
+                            .distinct()
+                            .collect(Collectors.toList());
+                    protein.setFeature(HOMOLOGOUS_PROTEINS, homologous);
+
+                    // parse dummy membrane proteins and assign them in standardized format
                     List<Group> membraneGroups = protein.chains()
                             .flatMap(Chain::groups)
                             .filter(group -> group.getThreeLetterCode().equals("DUM"))
                             .collect(Collectors.toList());
                     protein.chains().forEach(chain -> chain.getGroups().removeIf(membraneGroups::contains));
 
-                    //TODO are membrane molecules defined by OPM? if so, separate them from the actual protein data
                     Membrane membrane = new Membrane(membraneGroups.stream()
                             .map(Group::getAtoms)
                             .flatMap(Collection::stream)

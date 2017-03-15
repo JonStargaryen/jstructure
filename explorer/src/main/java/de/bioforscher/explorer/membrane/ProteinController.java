@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.membrane;
 
-import de.bioforscher.explorer.membrane.model.ExplorerProtein;
+import de.bioforscher.explorer.membrane.model.representative.ExplorerProtein;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

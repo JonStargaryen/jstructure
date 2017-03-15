@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.selection.Selectable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
  * Defines the capability to convert itself to <tt>ATOM</tt> records according to <tt>PDB</tt> format.
  * Created by S on 28.09.2016.
  */
-public interface AtomContainer extends StructureContainer {
+public interface AtomContainer extends StructureContainer, Selectable {
     /**
      * Never manipulate the returned collection as it is not guaranteed the actually modify the internal list(s).
      * @return all associated atoms

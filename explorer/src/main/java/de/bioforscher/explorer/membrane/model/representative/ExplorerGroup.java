@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.membrane.model.representative;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.cerosene.SequenceCerosene;
@@ -24,7 +24,7 @@ public class ExplorerGroup {
     /*
      * features to visualize are represented by double[] (i.e. hsv values)
      */
-    private double[] rasa, sse, cerosene;
+    private double[] rasa, sse, cerosene, aa;
 
     public ExplorerGroup() {
 
@@ -37,6 +37,8 @@ public class ExplorerGroup {
                 .collect(Collectors.toList());
         this.olc = group.getGroupInformation().getOneLetterCode();
         this.tlc = group.getGroupInformation().getThreeLetterCode();
+//        this.aa = discreteToHsv(AminoAcidFamily.valueOfIgnoreCase(olc).orElse(AminoAcidFamily.UNKNOWN).ordinal(), AminoAcidFamily.values().length);
+        this.aa = mapAminoAcidToHsv(olc);
 
         if(group.isAminoAcid()) {
             this.type = "aa";
@@ -60,6 +62,29 @@ public class ExplorerGroup {
         if(!this.type.equals("het")) {
             double[] hsv = group.getFeature(double[].class, SequenceCerosene.SEQUENCE_CEROSENE_REPRESENTATION);
             this.cerosene = new double[]{ hsv[0] * 360, hsv[1] * 100, hsv[2] * 100 };
+        }
+    }
+
+    private double[] mapAminoAcidToHsv(String olc) {
+        switch(olc) {
+            case "H":
+                return new double[] { 240, 100, 67 };
+            case "R":
+                return new double[] { 240, 100, 80 };
+            case "N":case "Q":
+                return new double[] { 105, 57, 47 };
+            case "D":case "E":
+                return new double[] { 98, 80, 67 };
+            case "M":case "C":
+                return new double[] { 60, 80, 50 };
+            case "K":
+                return new double[] { 207, 100, 70 };
+            case "S":case "T":case "Y":
+                return new double[] { 39, 100, 50 };
+            case "A":case "I":case "L":case "F":case "P":case"V":case "W":case "G":
+                return new double[] { 0, 0, 75 };
+            default:
+                return new double[]{ 206, 14, 22 };
         }
     }
 
@@ -93,5 +118,9 @@ public class ExplorerGroup {
 
     public double[] getCerosene() {
         return cerosene;
+    }
+
+    public double[] getAa() {
+        return aa;
     }
 }

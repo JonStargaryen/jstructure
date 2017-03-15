@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,10 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
 
     Chain() {
 
+    }
+
+    public Selection.GroupSelection select() {
+        return Selection.on(this);
     }
 
     /**

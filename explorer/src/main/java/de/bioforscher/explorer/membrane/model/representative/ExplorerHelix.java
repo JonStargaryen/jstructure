@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.membrane.model.representative;
 
 import de.bioforscher.jstructure.feature.sse.SecStrucState;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;

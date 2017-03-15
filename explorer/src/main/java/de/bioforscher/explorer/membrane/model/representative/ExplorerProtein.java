@@ -1,5 +1,6 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.membrane.model.representative;
 
+import de.bioforscher.explorer.membrane.model.homologous.HomologousProteinContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
@@ -9,6 +10,7 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
+import de.bioforscher.jstructure.parser.opm.OPMDatabaseQuery;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
 
@@ -42,6 +44,9 @@ public class ExplorerProtein {
     /* helices & kinks */
     private List<ExplorerHelix> helices;
     private List<ExplorerKink> kinks;
+    /* homologous protein ids for this structure */
+    private HomologousProteinContainer homologous;
+    private boolean noPlipData;
     /* UniProt annotations are chain-specific and stored there */
 
     public ExplorerProtein() {
@@ -110,6 +115,7 @@ public class ExplorerProtein {
             this.piStackings = new ArrayList<>();
             this.saltBridges = new ArrayList<>();
             this.waterBridges = new ArrayList<>();
+            this.noPlipData = true;
         }
 
         this.ligands = Selection.on(protein)
@@ -133,6 +139,8 @@ public class ExplorerProtein {
         } catch (NullPointerException e) {
             this.kinks = new ArrayList<>();
         }
+
+        this.homologous = new HomologousProteinContainer(protein.getFeatureAsList(String.class, OPMDatabaseQuery.HOMOLOGOUS_PROTEINS));
     }
 
     public String getName() {
@@ -197,5 +205,13 @@ public class ExplorerProtein {
 
     public List<ExplorerKink> getKinks() {
         return kinks;
+    }
+
+    public HomologousProteinContainer getHomologous() {
+        return homologous;
+    }
+
+    public boolean isNoPlipData() {
+        return noPlipData;
     }
 }

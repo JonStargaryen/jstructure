@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,10 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
 
     public Protein(List<Chain> chains) {
         this.chains = chains;
+    }
+
+    public Selection.ChainSelection select() {
+        return Selection.on(this);
     }
 
     @Override
