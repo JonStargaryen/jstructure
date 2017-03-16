@@ -1,28 +1,18 @@
 package de.bioforscher.explorer.membrane.model.homologous;
 
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.family.GroupInformation;
-
-import java.util.stream.Collectors;
-
 /**
- * Neutered chain.
- * Created by bittrich on 3/15/17.
+ * Represents an aligned chain's sequence.
+ * Created by bittrich on 3/16/17.
  */
 public class HomologousChain {
-    private String id;
-    private String sequence;
+    private String id, sequence, comp;
 
     public HomologousChain() {
     }
 
-    public HomologousChain(Chain chain) {
-        this.id = chain.getChainId();
-        this.sequence = chain.aminoAcids()
-                .map(Group::getGroupInformation)
-                .map(GroupInformation::getOneLetterCode)
-                .collect(Collectors.joining());
+    public HomologousChain(String id, String sequence) {
+        this.id = id;
+        this.sequence = sequence;
     }
 
     public String getId() {
@@ -31,5 +21,10 @@ public class HomologousChain {
 
     public String getSequence() {
         return sequence;
+    }
+
+    @Override
+    public String toString() {
+        return id + System.lineSeparator() + sequence;
     }
 }

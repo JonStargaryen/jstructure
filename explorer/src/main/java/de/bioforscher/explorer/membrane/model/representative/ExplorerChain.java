@@ -20,6 +20,7 @@ public class ExplorerChain {
     private String id, uniprot, pfam, ec;
     private List<ExplorerGroup> groups;
     private boolean hasAminoAcids;
+    private boolean mutationDataPresent;
 
     public ExplorerChain() {
 
@@ -40,6 +41,7 @@ public class ExplorerChain {
             this.mutations = uniProtAnnotationContainer.getMutagenesisSites();
             this.variants = uniProtAnnotationContainer.getNaturalVariants();
             this.references = uniProtAnnotationContainer.getReferences();
+            this.mutationDataPresent = mutations.size() + variants.size() + references.size() > 0;
         } catch (NullPointerException e) {
             //TODO unify this pattern - featureMap returning optionals?
         }
@@ -84,5 +86,9 @@ public class ExplorerChain {
 
     public boolean isHasAminoAcids() {
         return hasAminoAcids;
+    }
+
+    public boolean isMutationDataPresent() {
+        return mutationDataPresent;
     }
 }

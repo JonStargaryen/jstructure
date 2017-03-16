@@ -29,7 +29,7 @@ public class Membrane {
     /**
      * the collection of points representing the membrane layers
      */
-    final List<double[]> membraneAtoms;
+    List<double[]> membraneAtoms;
     /**
      * the map of functions assigning a potential to each amino acid observation
      */
@@ -99,6 +99,10 @@ public class Membrane {
 
     public double getQmax() {
         return qmax;
+    }
+
+    public void setMembraneAtoms(List<double[]> membraneAtoms) {
+        this.membraneAtoms = membraneAtoms;
     }
 
     public List<double[]> getMembraneAtoms() {

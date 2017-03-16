@@ -1,18 +1,17 @@
 package de.bioforscher.explorer.membrane.model.representative;
 
-import de.bioforscher.explorer.membrane.model.homologous.HomologousProteinContainer;
+import de.bioforscher.explorer.membrane.model.homologous.HomologousChainContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;
 import de.bioforscher.jstructure.feature.topology.Membrane;
-import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderParser;
-import de.bioforscher.jstructure.parser.opm.OPMDatabaseQuery;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
+import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +44,8 @@ public class ExplorerProtein {
     private List<ExplorerHelix> helices;
     private List<ExplorerKink> kinks;
     /* homologous protein ids for this structure */
-    private HomologousProteinContainer homologous;
-    private boolean noPlipData;
+    private HomologousChainContainer homologous;
+    private boolean plipDataPresent;
     /* UniProt annotations are chain-specific and stored there */
 
     public ExplorerProtein() {
@@ -76,36 +75,45 @@ public class ExplorerProtein {
 
         try {
             PLIPInteractionContainer interactions = protein.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
-            this.halogenBonds = interactions.getHalogenBonds().stream()
-                    .map(ExplorerInteraction::new)
-                    .collect(Collectors.toList());
-            this.hydrogenBonds = interactions.getHydrogenBonds().stream()
-                    .map(ExplorerInteraction::new)
-                    .collect(Collectors.toList());
-            this.hydrophobicInteractions = interactions.getHydrophobicInteractions().stream()
-                    .map(ExplorerInteraction::new)
-                    .collect(Collectors.toList());
-            this.metalComplexes = interactions.getMetalComplexes().stream()
-                    .map(ExplorerInteraction::new)
-                    .collect(Collectors.toList());
-            this.piCationInteractions = interactions.getPiCationInteractions().stream()
-                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
-                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
-                            .map(ExplorerInteraction::new))
-                    .collect(Collectors.toList());
-            this.piStackings = interactions.getPiStackings().stream()
-                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
-                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
-                            .map(ExplorerInteraction::new))
-                    .collect(Collectors.toList());
-            this.saltBridges = interactions.getSaltBridges().stream()
-                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
-                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
-                            .map(ExplorerInteraction::new))
-                    .collect(Collectors.toList());
-            this.waterBridges = interactions.getWaterBridges().stream()
-                    .map(ExplorerInteraction::new)
-                    .collect(Collectors.toList());
+//            this.halogenBonds = interactions.getHalogenBonds().stream()
+//                    .map(ExplorerInteraction::new)
+//                    .collect(Collectors.toList());
+//            this.hydrogenBonds = interactions.getHydrogenBonds().stream()
+//                    .map(ExplorerInteraction::new)
+//                    .collect(Collectors.toList());
+//            this.hydrophobicInteractions = interactions.getHydrophobicInteractions().stream()
+//                    .map(ExplorerInteraction::new)
+//                    .collect(Collectors.toList());
+//            this.metalComplexes = interactions.getMetalComplexes().stream()
+//                    .map(ExplorerInteraction::new)
+//                    .collect(Collectors.toList());
+//            this.piCationInteractions = interactions.getPiCationInteractions().stream()
+//                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
+//                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+//                            .map(ExplorerInteraction::new))
+//                    .collect(Collectors.toList());
+//            this.piStackings = interactions.getPiStackings().stream()
+//                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
+//                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+//                            .map(ExplorerInteraction::new))
+//                    .collect(Collectors.toList());
+//            this.saltBridges = interactions.getSaltBridges().stream()
+//                    .filter(interaction -> !interaction.getAtoms1().isEmpty())
+//                    .flatMap(interaction -> Combinatorics.cartesianProductOf(interaction.getAtoms1(), interaction.getAtoms2())
+//                            .map(ExplorerInteraction::new))
+//                    .collect(Collectors.toList());
+//            this.waterBridges = interactions.getWaterBridges().stream()
+//                    .map(ExplorerInteraction::new)
+//                    .collect(Collectors.toList());
+            this.halogenBonds = convert(interactions.getHalogenBonds());
+            this.hydrogenBonds = convert(interactions.getHydrogenBonds());
+//            this.hydrophobicInteractions = convert(interactions.getHydrophobicInteractions());
+            this.metalComplexes = convert(interactions.getMetalComplexes());
+            this.piCationInteractions = convert(interactions.getPiCationInteractions());
+            this.piStackings = convert(interactions.getPiStackings());
+            this.saltBridges = convert(interactions.getSaltBridges());
+            this.waterBridges = convert(interactions.getWaterBridges());
+            this.plipDataPresent = true;
         } catch (NullPointerException e) {
             this.halogenBonds = new ArrayList<>();
             this.hydrogenBonds = new ArrayList<>();
@@ -115,7 +123,7 @@ public class ExplorerProtein {
             this.piStackings = new ArrayList<>();
             this.saltBridges = new ArrayList<>();
             this.waterBridges = new ArrayList<>();
-            this.noPlipData = true;
+            this.plipDataPresent = false;
         }
 
         this.ligands = Selection.on(protein)
@@ -140,7 +148,13 @@ public class ExplorerProtein {
             this.kinks = new ArrayList<>();
         }
 
-        this.homologous = new HomologousProteinContainer(protein.getFeatureAsList(String.class, OPMDatabaseQuery.HOMOLOGOUS_PROTEINS));
+        this.homologous = new HomologousChainContainer(protein);
+    }
+
+    private List<ExplorerInteraction> convert(List<? extends PLIPInteraction> interactions) {
+        return interactions.stream()
+                .map(ExplorerInteraction::new)
+                .collect(Collectors.toList());
     }
 
     public String getName() {
@@ -207,11 +221,11 @@ public class ExplorerProtein {
         return kinks;
     }
 
-    public HomologousProteinContainer getHomologous() {
+    public HomologousChainContainer getHomologous() {
         return homologous;
     }
 
-    public boolean isNoPlipData() {
-        return noPlipData;
+    public boolean isPlipDataPresent() {
+        return plipDataPresent;
     }
 }

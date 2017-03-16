@@ -1,0 +1,345 @@
+/***********************************************************************
+   Program:    JSAV
+   File:       JSAV.css
+
+   Version:    V1.7
+   Date:       23.09.15
+   Function:   JavaScript Sequence Alignment Viewier
+
+   Copyright:  (c) Dr. Andrew C.R. Martin, UCL, 2014-2015
+   Author:     Dr. Andrew C.R. Martin
+   Address:    Institute of Structural and Molecular Biology
+               Division of Biosciences
+               University College
+               Gower Street
+               London
+               WC1E 6BT
+   EMail:      andrew@bioinf.org.uk
+
+**************************************************************************
+   This program is distributed under the Gnu Public licence (GPLv2 or
+   above)
+
+   Alternative licences for commercial use are available on request.
+**************************************************************************
+   Description:
+   ============
+   JSAV is a simple JavaScript protein sequence alignment viewer. It
+   allows you to select a region of the alignment and sort on that
+   region.
+**************************************************************************
+   Revision History:
+   =================
+   V1.0    06.06.14   Original  By: ACRM
+   V1.1    10.06.14   Code cleanup
+                      Changed options to a hash
+                      Further code cleanup - some code was assuming
+                      sequences were stored in an array called 'sequences'
+                      Added 'selectable' option
+           12.06.14   Added 'deletable' and 'border' options
+                      Implemented sequence deletion
+           13.06.14   Checks that some sequences are selected before
+                      deletion
+                      Cleaned up comments/documentation
+                      Cleaned up defaults in printJSAV
+                      Changed some routine names
+   V1.2    13.06.14   Added highlight option
+                      Added submit/submitLabel options
+                      Added action/actionLabel options
+   V1.2.1  15.06.14   Added height option
+                      Changed to use ACRM_alert()
+   V1.2.2  16.06.14   Changed to use ACRM_confirm()
+   V1.3    16.06.14   Added dotify/nocolour/toggleDotify/toggleNocolour
+   V1.4    17.06.14   Added fasta/fastaLabel export options
+                      Added consensus sequence display and colourScheme
+                      Added selectColour/selectColor and
+                      colourChoices/colorChoices
+                      Added refresh of options on reload
+   V1.5    18.06.14   Added tooltips
+   V1.5.1  19.06.14   Added callback option
+   V1.6    17.09.14   Changed to manipulate the DOM rather than writing
+                      to the document  By: JHN
+   V1.7    23.09.15   Added options.toggleDotifyLabel
+                      Added options.toggleNocolourLabel and options.toggleNocolorLabel
+                      Added options.deleteLabel
+                      Added options.idSubmit
+                      Various CSS improvements  By: ACRM
+   V1.8    24.09.15   Added options.scrollX and options.scrollY
+*/
+
+/***********************************************************************/
+/*** Things the user is LIKELY to want to change                     ***/
+/***********************************************************************/
+/* Text colour for the sequence ID labels                              */
+/* .JSAV .idCell, .JSAV .idCell a:link, .JSAV .idCell a:visited {color: #333399; } */
+/* Text colour for other text                                          */
+/* .JSAV p, .JSAV label {color: #333399; }                             */
+
+/* Colour for the region marked for sorting                            */
+.JSAV .marked {background-color: #AAAAAA;}
+/* Colour for regions marked as highlighted with options.highlight     */
+.JSAV .highlighted {background-color: #00FF00;}
+/* Size of the highlighting row                                        */
+.JSAV .highlightrow {height: 5px;}
+/* Padding and border around the JSAV sequence display                 */
+/* .JSAV {padding: 2ex 1in; border: 2px solid green;}                  */
+
+/* Size and space of checkboxes for sequence selection                 */
+.JSAV input[type=checkbox]   /* Mini Checkboxes */
+{
+    -ms-transform:     scale(0.8); /* IE                */
+    -moz-transform:    scale(0.8); /* FF                */
+    -webkit-transform: scale(0.8); /* Safari and Chrome */
+    -o-transform:      scale(0.8); /* Opera             */
+    margin: -3px 5px -3px -3px;
+}
+
+/* Spacing of controls from the sequence display                       */
+.JSAVControls {margin: 1em 0 0 0;}
+/* Spacing around the buttons in the controls section                  */
+.JSAVControls button {margin: 1px 4px 1px 0px;}
+/* Background colour for the residue range slider                      */
+.JSAVControls .ui-slider-range { background: #AAAAAA; }
+/* Handle colour for the residue range slider                          */
+.JSAVControls .ui-slider-handle { background: #FFFFFF;
+    border-color: #AAAAAA;}
+/*** Note that to get true JQueryUI-like styling you need to generate
+     a new theme with the alternate colour and use the image from that
+     for your buttons.
+     See http://stackoverflow.com/questions/4391588/changing-color-of-jquery-ui-buttons
+***/
+/* Any styling to apply to the sort button                             */
+.JSAVControls .sortbutton { }
+/* Any styling to apply to the export button                           */
+.JSAVControls .exportbutton { }
+/* Any styling to apply to the delete button                           */
+.JSAVControls .deletebutton { }
+/* Any styling to apply to the submit button                           */
+.JSAVControls .submitbutton { }
+/* Any styling to apply to the action button                           */
+.JSAVControls .actionbutton { }
+/* For example:
+.JSAVControls .actionbutton { background: #FF4444;
+                              border-color: #666666;
+                              border-radius: 4px; }
+*/
+
+/***********************************************************************/
+/*** Things the user is NOT likely to want to change                 ***/
+/***********************************************************************/
+.JSAV table {border-collapse: collapse;}
+.JSAV tr    {padding: 0;
+    margin: 0}
+.JSAV td    {padding: 1px;
+    margin: 0;
+    font: 10pt courier,monospaced;}
+.JSAV th    {padding: 1px;
+    margin: 0;
+    text-align: left;
+    font: bold 10pt courier,monospaced;}
+.JSAV .toprow td {border-bottom: 1px solid #AAAAAA;
+    margin: 0 0 1px 0;}
+.JSAV .bottomrow td {border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin: 0 0 1px 0;}
+.JSAV .markerrow {border-right: 1px solid black; height:10px}
+.JSAV .selectCell {border-right: 1px solid black;}
+.JSAV .consensusSelectCell {border-right: 1px solid black;
+    border-top: 2px solid black}
+.JSAV .consensusCell {border-top: 2px solid black; }
+
+.JSAV .unmarked {background-color: #FFFFFF;}
+.JSAV .unhighlighted {background-color: #FFFFFF;}
+
+.JSAV a:link {color:#000000; text-decoration:none;}
+.JSAV a:visited {color:#000000; text-decoration:none;}
+.JSAV a:hover {color:#FF0000; text-decoration:none;}
+.JSAV a:active {color:#000000; text-decoration:none;}
+
+/* Delete and dot colours */
+.JSAV .aaDel {background-color: #000000; color: #FFFFFF}
+.JSAV .aaDot {background-color: #FFFFFF; color: #000000}
+
+/* Willie Taylor scheme */
+.JSAV .clustalA {background-color: #80a0f0; color: #000000;}
+.JSAV .clustalR {background-color: #f01505; color: #000000;}
+.JSAV .clustalN {background-color: #00ff00; color: #000000;}
+.JSAV .clustalD {background-color: #c048c0; color: #000000;}
+.JSAV .clustalC {background-color: #f08080; color: #000000;}
+.JSAV .clustalQ {background-color: #00ff00; color: #000000;}
+.JSAV .clustalE {background-color: #c048c0; color: #000000;}
+.JSAV .clustalG {background-color: #f09048; color: #000000;}
+.JSAV .clustalH {background-color: #15a4a4; color: #000000;}
+.JSAV .clustalI {background-color: #80a0f0; color: #000000;}
+.JSAV .clustalL {background-color: #80a0f0; color: #000000;}
+.JSAV .clustalK {background-color: #f01505; color: #000000;}
+.JSAV .clustalM {background-color: #80a0f0; color: #000000;}
+.JSAV .clustalF {background-color: #80a0f0; color: #000000;}
+.JSAV .clustalP {background-color: #ffff00; color: #000000;}
+.JSAV .clustalS {background-color: #00ff00; color: #000000;}
+.JSAV .clustalT {background-color: #00ff00; color: #000000;}
+.JSAV .clustalW {background-color: #80a0f0; color: #000000;}
+.JSAV .clustalY {background-color: #15a4a4; color: #000000;}
+.JSAV .clustalV {background-color: #80a0f0; color: #000000;}
+
+.JSAV .zappoA {background-color: #ffafaf; color: #000000;}
+.JSAV .zappoR {background-color: #6464ff; color: #000000;}
+.JSAV .zappoN {background-color: #00ff00; color: #000000;}
+.JSAV .zappoD {background-color: #ff0000; color: #000000;}
+.JSAV .zappoC {background-color: #ffff00; color: #000000;}
+.JSAV .zappoQ {background-color: #00ff00; color: #000000;}
+.JSAV .zappoE {background-color: #ff0000; color: #000000;}
+.JSAV .zappoG {background-color: #ff00ff; color: #000000;}
+.JSAV .zappoH {background-color: #6464ff; color: #000000;}
+.JSAV .zappoI {background-color: #ffafaf; color: #000000;}
+.JSAV .zappoL {background-color: #ffafaf; color: #000000;}
+.JSAV .zappoK {background-color: #6464ff; color: #000000;}
+.JSAV .zappoM {background-color: #ffafaf; color: #000000;}
+.JSAV .zappoF {background-color: #ffc800; color: #000000;}
+.JSAV .zappoP {background-color: #ff00ff; color: #000000;}
+.JSAV .zappoS {background-color: #00ff00; color: #000000;}
+.JSAV .zappoT {background-color: #00ff00; color: #000000;}
+.JSAV .zappoW {background-color: #ffc800; color: #000000;}
+.JSAV .zappoY {background-color: #ffc800; color: #000000;}
+.JSAV .zappoV {background-color: #ffafaf; color: #000000;}
+
+.JSAV .taylorA {background-color: #ccff00; color: #000000;}
+.JSAV .taylorR {background-color: #0000ff; color: #000000;}
+.JSAV .taylorN {background-color: #cc00ff; color: #000000;}
+.JSAV .taylorD {background-color: #ff0000; color: #000000;}
+.JSAV .taylorC {background-color: #ffff00; color: #000000;}
+.JSAV .taylorQ {background-color: #ff00cc; color: #000000;}
+.JSAV .taylorE {background-color: #ff0066; color: #000000;}
+.JSAV .taylorG {background-color: #ff9900; color: #000000;}
+.JSAV .taylorH {background-color: #0066ff; color: #000000;}
+.JSAV .taylorI {background-color: #66ff00; color: #000000;}
+.JSAV .taylorL {background-color: #33ff00; color: #000000;}
+.JSAV .taylorK {background-color: #6600ff; color: #000000;}
+.JSAV .taylorM {background-color: #00ff00; color: #000000;}
+.JSAV .taylorF {background-color: #00ff66; color: #000000;}
+.JSAV .taylorP {background-color: #ffcc00; color: #000000;}
+.JSAV .taylorS {background-color: #ff3300; color: #000000;}
+.JSAV .taylorT {background-color: #ff6600; color: #000000;}
+.JSAV .taylorW {background-color: #00ccff; color: #000000;}
+.JSAV .taylorY {background-color: #00ffcc; color: #000000;}
+.JSAV .taylorV {background-color: #99ff00; color: #000000;}
+
+.JSAV .hphobA {background-color: #ad0052; color: #000000;}
+.JSAV .hphobR {background-color: #0000ff; color: #000000;}
+.JSAV .hphobN {background-color: #0c00f3; color: #000000;}
+.JSAV .hphobD {background-color: #0c00f3; color: #000000;}
+.JSAV .hphobC {background-color: #c2003d; color: #000000;}
+.JSAV .hphobQ {background-color: #0c00f3; color: #000000;}
+.JSAV .hphobE {background-color: #0c00f3; color: #000000;}
+.JSAV .hphobG {background-color: #6a0095; color: #000000;}
+.JSAV .hphobH {background-color: #1500ea; color: #000000;}
+.JSAV .hphobI {background-color: #ff0000; color: #000000;}
+.JSAV .hphobL {background-color: #ea0015; color: #000000;}
+.JSAV .hphobK {background-color: #0000ff; color: #000000;}
+.JSAV .hphobM {background-color: #b0004f; color: #000000;}
+.JSAV .hphobF {background-color: #cb0034; color: #000000;}
+.JSAV .hphobP {background-color: #4600b9; color: #000000;}
+.JSAV .hphobS {background-color: #5e00a1; color: #000000;}
+.JSAV .hphobT {background-color: #61009e; color: #000000;}
+.JSAV .hphobW {background-color: #5b00a4; color: #000000;}
+.JSAV .hphobY {background-color: #4f00b0; color: #000000;}
+.JSAV .hphobV {background-color: #f60009; color: #000000;}
+.JSAV .hphobB {background-color: #0c00f3; color: #000000;}
+.JSAV .hphobX {background-color: #680097; color: #000000;}
+.JSAV .hphobZ {background-color: #0c00f3; color: #000000;}
+
+.JSAV .helixA {background-color: #e718e7; color: #000000;}
+.JSAV .helixR {background-color: #6f906f; color: #000000;}
+.JSAV .helixN {background-color: #1be41b; color: #000000;}
+.JSAV .helixD {background-color: #778877; color: #000000;}
+.JSAV .helixC {background-color: #23dc23; color: #000000;}
+.JSAV .helixQ {background-color: #926d92; color: #000000;}
+.JSAV .helixE {background-color: #ff00ff; color: #000000;}
+.JSAV .helixG {background-color: #00ff00; color: #000000;}
+.JSAV .helixH {background-color: #758a75; color: #000000;}
+.JSAV .helixI {background-color: #8a758a; color: #000000;}
+.JSAV .helixL {background-color: #ae51ae; color: #000000;}
+.JSAV .helixK {background-color: #a05fa0; color: #000000;}
+.JSAV .helixM {background-color: #ef10ef; color: #000000;}
+.JSAV .helixF {background-color: #986798; color: #000000;}
+.JSAV .helixP {background-color: #00ff00; color: #000000;}
+.JSAV .helixS {background-color: #36c936; color: #000000;}
+.JSAV .helixT {background-color: #47b847; color: #000000;}
+.JSAV .helixW {background-color: #8a758a; color: #000000;}
+.JSAV .helixY {background-color: #21de21; color: #000000;}
+.JSAV .helixV {background-color: #857a85; color: #000000;}
+.JSAV .helixB {background-color: #49b649; color: #000000;}
+.JSAV .helixX {background-color: #758a75; color: #000000;}
+.JSAV .helixZ {background-color: #c936c9; color: #000000;}
+
+.JSAV .strandA {background-color: #5858a7; color: #000000;}
+.JSAV .strandR {background-color: #6b6b94; color: #000000;}
+.JSAV .strandN {background-color: #64649b; color: #000000;}
+.JSAV .strandD {background-color: #2121de; color: #000000;}
+.JSAV .strandC {background-color: #9d9d62; color: #000000;}
+.JSAV .strandQ {background-color: #8c8c73; color: #000000;}
+.JSAV .strandE {background-color: #0000ff; color: #000000;}
+.JSAV .strandG {background-color: #4949b6; color: #000000;}
+.JSAV .strandH {background-color: #60609f; color: #000000;}
+.JSAV .strandI {background-color: #ecec13; color: #000000;}
+.JSAV .strandL {background-color: #b2b24d; color: #000000;}
+.JSAV .strandK {background-color: #4747b8; color: #000000;}
+.JSAV .strandM {background-color: #82827d; color: #000000;}
+.JSAV .strandF {background-color: #c2c23d; color: #000000;}
+.JSAV .strandP {background-color: #2323dc; color: #000000;}
+.JSAV .strandS {background-color: #4949b6; color: #000000;}
+.JSAV .strandT {background-color: #9d9d62; color: #000000;}
+.JSAV .strandW {background-color: #c0c03f; color: #000000;}
+.JSAV .strandY {background-color: #d3d32c; color: #000000;}
+.JSAV .strandV {background-color: #ffff00; color: #000000;}
+.JSAV .strandB {background-color: #4343bc; color: #000000;}
+.JSAV .strandX {background-color: #797986; color: #000000;}
+.JSAV .strandZ {background-color: #4747b8; color: #000000;}
+
+.JSAV .turnA {background-color: #2cd3d3; color: #000000;}
+.JSAV .turnR {background-color: #708f8f; color: #000000;}
+.JSAV .turnN {background-color: #ff0000; color: #000000;}
+.JSAV .turnD {background-color: #e81717; color: #000000;}
+.JSAV .turnC {background-color: #a85757; color: #000000;}
+.JSAV .turnQ {background-color: #3fc0c0; color: #000000;}
+.JSAV .turnE {background-color: #778888; color: #000000;}
+.JSAV .turnG {background-color: #ff0000; color: #000000;}
+.JSAV .turnH {background-color: #708f8f; color: #000000;}
+.JSAV .turnI {background-color: #00ffff; color: #000000;}
+.JSAV .turnL {background-color: #1ce3e3; color: #000000;}
+.JSAV .turnK {background-color: #7e8181; color: #000000;}
+.JSAV .turnM {background-color: #1ee1e1; color: #000000;}
+.JSAV .turnF {background-color: #1ee1e1; color: #000000;}
+.JSAV .turnP {background-color: #f60909; color: #000000;}
+.JSAV .turnS {background-color: #e11e1e; color: #000000;}
+.JSAV .turnT {background-color: #738c8c; color: #000000;}
+.JSAV .turnW {background-color: #738c8c; color: #000000;}
+.JSAV .turnY {background-color: #9d6262; color: #000000;}
+.JSAV .turnV {background-color: #07f8f8; color: #000000;}
+.JSAV .turnB {background-color: #f30c0c; color: #000000;}
+.JSAV .turnX {background-color: #7c8383; color: #000000;}
+.JSAV .turnZ {background-color: #5ba4a4; color: #000000;}
+
+.JSAV .buriedA {background-color: #00a35c; color: #000000;}
+.JSAV .buriedR {background-color: #00fc03; color: #000000;}
+.JSAV .buriedN {background-color: #00eb14; color: #000000;}
+.JSAV .buriedD {background-color: #00eb14; color: #000000;}
+.JSAV .buriedC {background-color: #0000ff; color: #000000;}
+.JSAV .buriedQ {background-color: #00f10e; color: #000000;}
+.JSAV .buriedE {background-color: #00f10e; color: #000000;}
+.JSAV .buriedG {background-color: #009d62; color: #000000;}
+.JSAV .buriedH {background-color: #00d52a; color: #000000;}
+.JSAV .buriedI {background-color: #0054ab; color: #000000;}
+.JSAV .buriedL {background-color: #007b84; color: #000000;}
+.JSAV .buriedK {background-color: #00ff00; color: #000000;}
+.JSAV .buriedM {background-color: #009768; color: #000000;}
+.JSAV .buriedF {background-color: #008778; color: #000000;}
+.JSAV .buriedP {background-color: #00e01f; color: #000000;}
+.JSAV .buriedS {background-color: #00d52a; color: #000000;}
+.JSAV .buriedT {background-color: #00db24; color: #000000;}
+.JSAV .buriedW {background-color: #00a857; color: #000000;}
+.JSAV .buriedY {background-color: #00e619; color: #000000;}
+.JSAV .buriedV {background-color: #005fa0; color: #000000;}
+.JSAV .buriedB {background-color: #00eb14; color: #000000;}
+.JSAV .buriedX {background-color: #00b649; color: #000000;}
+.JSAV .buriedZ {background-color: #00f10e; color: #000000;}

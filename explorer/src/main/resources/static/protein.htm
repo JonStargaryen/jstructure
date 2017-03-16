@@ -37,7 +37,7 @@
                 <!-- PLIP options -->
                 <div class="visualization-options">
                     <div class="alert alert-danger"
-                         data-ng-show="protein.noPlipData">no plip data <span class="fa fa-exclamation"></span></div>
+                         data-ng-hide="protein.plipDataPresent">no plip data <span class="fa fa-exclamation"></span></div>
                     <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
                          data-ng-class="{active: options.renderWaterBridges}"
@@ -129,8 +129,8 @@
                 <div data-ng-class="{ active: tab.isSelected(3) }" data-ng-click="tab.selectTab(3)">sequence motifs</div>
                 <div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div>
                 <!--div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div-->
-                <!--div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div-->
-                <div data-ng-class="{ active: tab.isSelected(7) }" data-ng-click="tab.selectTab(7)" data-ng-show="protein.homologous.ids">mutations</div>
+                <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div>
+                <div data-ng-class="{ active: tab.isSelected(7) }" data-ng-click="tab.selectTab(7)">homologous</div>
 
                 <div class="link pull-right" title="show in MMDB">
                     <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
@@ -174,10 +174,10 @@
                                          'other': '{} sequence motifs'}">
                         </ng-pluralize></div>
                         <div>
-                            homologous proteins:
-                            <span data-ng-repeat="homolog in protein.homologous.ids">
-                                <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::homolog}}">
-                                    {{::homolog}}
+                            homologous protein chains:
+                            <span data-ng-repeat="homolog in protein.homologous.chains">
+                                <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::homolog.id}}">
+                                    {{::homolog.id}}
                                 </a>
                             </span>
                         </div>
@@ -285,9 +285,9 @@
                         </div>
                     </div-->
 
-                    <!-- old uniprot mutations -->
-                    <!--div data-ng-show="tab.isSelected(6)" class="representation">
-                        <div class="chain" data-ng-repeat="chain in protein.chains | filter: { hasAminoAcids : true }">
+                    <!-- uniprot mutations & diseases -->
+                    <div data-ng-show="tab.isSelected(6)" class="representation">
+                        <div class="chain" data-ng-repeat="chain in protein.chains | filter: { hasAminoAcids : true } | filter: { mutationDataPresent : true }">
                             <h3>uniprot mutations</h3>
                             <div class="elementId"
                                  data-ng-mouseover="highlight(chain.id)"
@@ -329,21 +329,21 @@
                                 </div>
                             </div>
                         </div>
-                    </div-->
+                    </div>
+
+                    <!-- homologous sequences -->
                     <div data-ng-show="tab.isSelected(7)" class="representation">
                         <h3>homologous sequences</h3>
-
-                        {{::protein.homologous.representativeSequence}}
-
-                        <div class="chain"
-                             data-ng-repeat="homolog in protein.homologous.proteins">
+                        <!--div class="chain"
+                             data-ng-repeat="chain in protein.homologous.chains">
                             <div class="elementId">
-                                <div>{{::homolog.name}}</div>
+                                <div>{{::chain.id}}</div>
                             </div>
-                            <div class="elements" data-ng-repeat="chain in homolog.chains">
-                                <div>{{::chain.sequence}}</div>
+                            <div class="elements">
+                                <div class="element">{{::chain.sequence}}</div>
                             </div>
-                        </div>
+                        </div-->
+                        <div class="sequenceDisplay" id="sequenceDisplay"></div>
                     </div>
                 </div>
             </div>

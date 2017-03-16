@@ -70,7 +70,7 @@ public class OPMDatabaseQuery {
                             .map(Group::getAtoms)
                             .flatMap(Collection::stream)
                             .map(Atom::getCoordinates)
-                            .filter(atom -> minimalSquaredDistanceToProteinAtom(protein, atom) > 12.0)
+//                            .filter(atom -> minimalSquaredDistanceToProteinAtom(protein, atom) > 12.0)
                             .collect(Collectors.toList()));
                     protein.setFeature(ANVIL.MEMBRANE, membrane);
 

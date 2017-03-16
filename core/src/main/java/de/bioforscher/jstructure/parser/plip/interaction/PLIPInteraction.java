@@ -20,6 +20,7 @@ public abstract class PLIPInteraction {
     private Protein protein;
     Group partner1, partner2;
     private Element describingElement;
+    private double[] coords1, coords2;
 
     /**
      * Enforce the signature of the constructor of all subclasses.
@@ -32,7 +33,16 @@ public abstract class PLIPInteraction {
         this.partner1 = group;
         this.describingElement = describingElement;
         this.protein = partner1.getParentChain().getParentProtein();
+        Element ligcoo = describingElement.getElementsByTag("ligcoo").first();
+        this.coords1 = extractCoordinateArray(ligcoo);
+        Element protcoo = describingElement.getElementsByTag("protcoo").first();
+        this.coords2 = extractCoordinateArray(protcoo);
     }
+
+    private double[] extractCoordinateArray(Element coo) {
+        return new double[] { Double.valueOf(coo.child(0).text()), Double.valueOf(coo.child(1).text()), Double.valueOf(coo.child(2).text()) };
+    }
+
 
     String getStringValueOfTag(String tagName) {
         return describingElement.getElementsByTag(tagName).first().text();
@@ -107,5 +117,13 @@ public abstract class PLIPInteraction {
         return "'" + atoms.stream()
                 .map(atom -> atom.getParentGroup().getIdentifier() + "-" + atom.getIdentifier())
                 .collect(Collectors.joining(", ")) + "'";
+    }
+
+    public double[] getCoords1() {
+        return coords1;
+    }
+
+    public double[] getCoords2() {
+        return coords2;
     }
 }

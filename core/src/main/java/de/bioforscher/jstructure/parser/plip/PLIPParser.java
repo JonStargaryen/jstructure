@@ -61,12 +61,13 @@ class PLIPParser {
 
                     // some interactions are symmetric, i.e. they will be created twice and contain the same information
                     // so: filter for them and only keep one
-                    if(plipInteractionType.equals(PLIPInteractionType.HYDROPHOBIC_INTERACTION)) {
-                        HydrophobicInteraction hydrophobicInteraction = (HydrophobicInteraction) plipInteraction;
-                        if(hydrophobicInteraction.getAtom1().getPdbSerial() > hydrophobicInteraction.getAtom2().getPdbSerial()) {
-                            continue;
-                        }
-                    }
+                    //TODO uncomment when hydrophobic interactions become a thing again
+//                    if(plipInteractionType.equals(PLIPInteractionType.HYDROPHOBIC_INTERACTION)) {
+//                        HydrophobicInteraction hydrophobicInteraction = (HydrophobicInteraction) plipInteraction;
+//                        if(hydrophobicInteraction.getAtom1().getPdbSerial() > hydrophobicInteraction.getAtom2().getPdbSerial()) {
+//                            continue;
+//                        }
+//                    }
 
                     plipInteractions.add(plipInteraction);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {

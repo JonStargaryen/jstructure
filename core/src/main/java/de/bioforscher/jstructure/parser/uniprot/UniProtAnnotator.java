@@ -41,7 +41,7 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
         }
 
         try {
-            logger.debug("fetching UniProt information for {}", uniprotId);
+            logger.info("fetching UniProt information for {}", uniprotId);
             //TODO somehow this call is extremely fragile
             UniProtAnnotationContainer uniProtAnnotationContainer = new UniProtAnnotationContainer(Jsoup.connect(String.format(UNIPROT_FETCH_URL, uniprotId)).get());
             chain.setFeature(UNIPROT_ANNOTATION, uniProtAnnotationContainer);

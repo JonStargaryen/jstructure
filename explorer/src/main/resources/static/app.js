@@ -166,6 +166,26 @@
             console.log($scope.protein);
             visualizeProteinStructure();
 
+            var MyOptions = Array();
+            MyOptions.sortable = true;
+            MyOptions.selectable = true;
+            MyOptions.deletable = true;
+            MyOptions.border = false;
+            MyOptions.highlight = [3,5,10,14];
+            MyOptions.submit = "http://www.bioinf.org.uk/cgi-bin/echo.pl";
+            MyOptions.action = "myAction";
+            MyOptions.actionLabel = "My Action";
+            MyOptions.toggleDotify = true;
+            MyOptions.toggleNocolour = true;
+            MyOptions.fasta = true;
+            MyOptions.consensus = true;
+            MyOptions.colourScheme = "zappo";
+            MyOptions.plainTooltips = true;
+            MyOptions.selectColour = true;
+            MyOptions.idSubmit = "http://www.bioinf.org.uk/cgi-bin/echo.pl?seq=";
+            MyOptions.idSubmitClean = true;
+            printJSAV('sequenceDisplay', $scope.protein.homologous.chains, MyOptions);
+
             $scope.loading = false;
         }, function (d) {
             $rootScope.alerts.push({ type: 'danger', msg: 'loading protein ' + $routeParams.pdbid +
@@ -276,10 +296,15 @@
         function createInteractions(type) {
             console.log('creating interactions for ' + type);
             $scope.protein[type].forEach(function(entry) {
-                var atom1 = structure.atom(entry.a1);
-                var atom2 = structure.atom(entry.a2);
+                /* the old approach using names */
+                // var atom1 = structure.atom(entry.a1);
+                // var atom2 = structure.atom(entry.a2);
+                // var g = viewer.customMesh(type);
+                // g.addTube(atom1.pos(), atom2.pos(), 0.15, { cap : false, color : interactions[type] });
+
+                /* the new approach using coordinates directly */
                 var g = viewer.customMesh(type);
-                g.addTube(atom1.pos(), atom2.pos(), 0.15, { cap : false, color : interactions[type] });
+                g.addTube(entry.coords1, entry.coords2, 0.15, { cap : false, color : interactions[type] });
             });
             initializedInteractions.push(type);
         }

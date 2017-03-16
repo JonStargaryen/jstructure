@@ -7,7 +7,8 @@ package de.bioforscher.jstructure.parser.plip.interaction;
 public enum PLIPInteractionType {
     HALOGEN_BOND("halogen_bond", HalogenBond.class),
     HYDROGEN_BOND("hydrogen_bond", HydrogenBond.class),
-    HYDROPHOBIC_INTERACTION("hydrophobic_interaction", HydrophobicInteraction.class),
+    // ignore hydrophobic interactions for the moment
+//    HYDROPHOBIC_INTERACTION("hydrophobic_interaction", HydrophobicInteraction.class),
     METAL_COMPLEX("metal_complex", MetalComplex.class),
     PI_CATION_INTERACTION("pi_cation_interaction", PiCationInteraction.class),
     PI_STACKING("pi_stack", PiStacking.class),
