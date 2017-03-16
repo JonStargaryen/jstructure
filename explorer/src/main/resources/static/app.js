@@ -167,23 +167,12 @@
             visualizeProteinStructure();
 
             var MyOptions = Array();
-            MyOptions.sortable = true;
-            MyOptions.selectable = true;
-            MyOptions.deletable = true;
             MyOptions.border = false;
             MyOptions.highlight = [3,5,10,14];
-            MyOptions.submit = "http://www.bioinf.org.uk/cgi-bin/echo.pl";
-            MyOptions.action = "myAction";
-            MyOptions.actionLabel = "My Action";
-            MyOptions.toggleDotify = true;
-            MyOptions.toggleNocolour = true;
             MyOptions.fasta = true;
             MyOptions.consensus = true;
             MyOptions.colourScheme = "zappo";
             MyOptions.plainTooltips = true;
-            MyOptions.selectColour = true;
-            MyOptions.idSubmit = "http://www.bioinf.org.uk/cgi-bin/echo.pl?seq=";
-            MyOptions.idSubmitClean = true;
             printJSAV('sequenceDisplay', $scope.protein.homologous.chains, MyOptions);
 
             $scope.loading = false;
