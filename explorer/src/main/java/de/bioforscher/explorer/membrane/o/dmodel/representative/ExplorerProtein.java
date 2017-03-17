@@ -1,6 +1,6 @@
-package de.bioforscher.explorer.membrane.model.representative;
+package de.bioforscher.explorer.membrane.o.dmodel.representative;
 
-import de.bioforscher.explorer.membrane.model.homologous.HomologousChainContainer;
+import de.bioforscher.explorer.membrane.o.dmodel.homologous.HomologousChainContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.topology.ANVIL;

@@ -33,31 +33,35 @@ public class ClustalOmegaQuery {
     public String process(List<String> sequences) {
         logger.info("creating multi-sequence alignment by clustal omega for {} proteins", sequences.size());
 
-        try(final WebClient webClient = new WebClient()) {
-            try {
-                final HtmlPage form = webClient.getPage(BASE_URL);
-                ((HtmlTextArea) form.getElementById("sequence")).setText(composeSequenceString(sequences));
+        final WebClient webClient = new WebClient();
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setAppletEnabled(false);
+//        webClient.getOptions().setJavaScriptEnabled(false);
 
-                HtmlSelect select = (HtmlSelect) form.getElementById("outfmt");
-                HtmlOption option = select.getOptionByValue("fa");
-                select.setSelectedAttribute(option, true);
+        try {
+            final HtmlPage form = webClient.getPage(BASE_URL);
+            ((HtmlTextArea) form.getElementById("sequence")).setText(composeSequenceString(sequences));
 
-                final HtmlPage queue = form.getElementById("jd_submitButtonPanel").getFirstElementChild().click();
-                String jobId = queue.asText().split("Job ID: ")[1].split("[\\r\\n]+")[0];
-                logger.debug("jobid is {}", jobId);
+            HtmlSelect select = (HtmlSelect) form.getElementById("outfmt");
+            HtmlOption option = select.getOptionByValue("fa");
+            select.setSelectedAttribute(option, true);
 
-                URL resultUrl = new URL(String.format(RESULT_URL, jobId));
-                waitForResults(resultUrl);
+            final HtmlPage queue = form.getElementById("jd_submitButtonPanel").getFirstElementChild().click();
+            System.out.println(queue);
+            String jobId = queue.asText().split("Job ID: ")[1].split("[\\r\\n]+")[0];
+            logger.info("jobid is {}", jobId);
 
-                URLConnection conn = resultUrl.openConnection();
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-                    String resultText = reader.lines().collect(Collectors.joining(System.lineSeparator()));
-                    logger.debug("alignment result:{}{}", System.lineSeparator(), resultText);
-                    return resultText;
-                }
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
+            URL resultUrl = new URL(String.format(RESULT_URL, jobId));
+            waitForResults(resultUrl);
+
+            URLConnection conn = resultUrl.openConnection();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                String resultText = reader.lines().collect(Collectors.joining(System.lineSeparator()));
+                logger.info("alignment result:{}{}", System.lineSeparator(), resultText);
+                return resultText;
             }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -65,7 +69,7 @@ public class ClustalOmegaQuery {
         try {
             url.getContent();
         } catch (IOException e) {
-            logger.trace("results not available yet");
+            logger.info("results not available yet");
             try {
                 TimeUnit.SECONDS.sleep(WAIT_SECONDS);
             } catch (InterruptedException e1) {
@@ -75,17 +79,8 @@ public class ClustalOmegaQuery {
         }
     }
 
-    String composeSequenceString(List<String> sequences) {
+    private String composeSequenceString(List<String> sequences) {
         return sequences.stream()
                 .collect(Collectors.joining(System.lineSeparator()));
     }
-
-//    String composeSequenceString(List<Protein> proteins) {
-//        return proteins.stream()
-//                .flatMap(Protein::chains)
-//                // keep only chains with amino acids
-//                .filter(chain -> chain.aminoAcids().count() > 0)
-//                .map(chain -> ">" + chain.getParentProtein().getName() + "." + chain.getChainId() + System.lineSeparator() + chain.getAminoAcidSequence())
-//                .collect(Collectors.joining(System.lineSeparator()));
-//    }
 }

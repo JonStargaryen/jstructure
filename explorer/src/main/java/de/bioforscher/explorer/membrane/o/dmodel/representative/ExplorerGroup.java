@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model.representative;
+package de.bioforscher.explorer.membrane.o.dmodel.representative;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.cerosene.SequenceCerosene;
@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.structure.Group;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static de.bioforscher.explorer.membrane.ColorMapping.*;
+import static de.bioforscher.explorer.membrane.o.dmodel.ColorMapping.*;
 
 /**
  * The reduced representation of {@link Group} objects.

@@ -1,6 +1,11 @@
 <div>
     <div class="protein-list">
-        <h3>all membrane proteins</h3>
-        <a href="protein/{{protein}}" ng-repeat="protein in allProteins">{{protein}}</a>
+        <h3>all representative chains</h3>
+        <a data-ng-href="chain/{{chain}}" data-ng-repeat="chain in representativeChains">{{chain}}</a>
+    </div>
+
+    <div class="protein-list">
+        <h3>all chains</h3>
+        <a data-ng-href="chain/{{chain}}" data-ng-repeat="chain in allChains">{{chain}}</a>
     </div>
 </div>

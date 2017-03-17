@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model.representative;
+package de.bioforscher.explorer.membrane.o.dmodel.representative;
 
 import de.bioforscher.jstructure.parser.kinkfinder.KinkFinderHelix;
 

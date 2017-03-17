@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane;
+package de.bioforscher.explorer.membrane.o.dmodel;
 
 /**
  * Conversions between raw continuous and discrete values and the RGB/HSV color space for front-end visualization.

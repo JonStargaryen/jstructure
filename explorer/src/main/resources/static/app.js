@@ -11,10 +11,10 @@
 
     MODULE.constant('features', [
         { name : 'no coloring', tag : 'none', discrete : true },
-        { name : 'amino acid', tag : 'aa', discrete : true },
-        { name : 'relative accessible surface area', tag : 'rasa', discrete : false },
-        { name : 'secondary structure element', tag : 'sse', discrete : true },
-        { name : 'spatial proximity', tag : 'cerosene', discrete : false }
+        // { name : 'amino acid', tag : 'aa', discrete : true },
+        // { name : 'relative accessible surface area', tag : 'rasa', discrete : false },
+        // { name : 'secondary structure element', tag : 'sse', discrete : true },
+        // { name : 'spatial proximity', tag : 'cerosene', discrete : false }
 
     ]);
 
@@ -78,7 +78,7 @@
             templateUrl: '/about.htm'
         });
 
-        $routeProvider.when('/protein/:pdbid', {
+        $routeProvider.when('/chain/:chainid', {
             templateUrl: '/protein.htm',
             controller: 'ProteinController'
         });
@@ -145,12 +145,12 @@
         var initializedInteractions = [];
         var viewer, structure, protein, ligands, kinks;
 
-        $http.get('/api/proteins/pdbid/' + $routeParams.pdbid).then(function(data) {
+        $http.get('/api/chains/json/' + $routeParams.chainid).then(function(data) {
             $scope.protein = data.data;
 
             // the context navigation in the header - push entries for additional levels
             $rootScope.context = [];
-            $rootScope.context.push($routeParams.pdbid);
+            $rootScope.context.push($routeParams.chainid);
 
             // compose PDB representation of the protein
             var rep = "";
@@ -431,23 +431,33 @@
      */
     MODULE.controller('HomeController', ['$scope', '$location', 'ProteinService',
         function($scope, $location, ProteinService) {
-        $scope.allProteins = ProteinService.allProteins;
+        $scope.allChains = ProteinService.allChains;
+        $scope.representativeChains = ProteinService.representativeChains;
     }]);
 
     MODULE.factory('ProteinService', ['$rootScope', '$http', function($rootScope, $http) {
         /* fetch all known protein ids */
-        var allProteins = [];
+        var ids = { 'representativeChains' : [], 'allChains' : [] };
 
-        $http.get('/api/proteins/all').then(function(d) {
+        $http.get('/api/chains/reps').then(function(d) {
             d.data.forEach(function (p) {
-                allProteins.push(p);
+                ids.representativeChains.push(p);
             });
         }, function (d) {
-            $rootScope.alerts.push({ type: 'danger', msg: 'loading all proteins from server failed with [' + d.status +
+            $rootScope.alerts.push({ type: 'danger', msg: 'loading proteins from server failed with [' + d.status +
             '] ' + d.statusText });
         });
 
-        return { 'allProteins' : allProteins };
+        $http.get('/api/chains/all').then(function(d) {
+            d.data.forEach(function (p) {
+                ids.allChains.push(p);
+            });
+        }, function (d) {
+            $rootScope.alerts.push({ type: 'danger', msg: 'loading proteins from server failed with [' + d.status +
+            '] ' + d.statusText });
+        });
+
+        return ids;
     }]);
 
     /* format PV render modes to something nice */

@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model.homologous;
+package de.bioforscher.explorer.membrane.o.dmodel.homologous;
 
 /**
  * Represents an aligned chain's sequence.

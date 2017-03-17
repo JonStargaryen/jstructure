@@ -124,13 +124,13 @@
             <!-- general project navigation -->
             <div class="sequence-header clearfix">
                 <div data-ng-class="{ active: tab.isSelected(0) }" data-ng-click="tab.selectTab(0)">general</div>
-                <div data-ng-class="{ active: tab.isSelected(1) }" data-ng-click="tab.selectTab(1)">sequence</div>
-                <div data-ng-class="{ active: tab.isSelected(2) }" data-ng-click="tab.selectTab(2)" data-ng-show="protein.ligands">ligands</div>
-                <div data-ng-class="{ active: tab.isSelected(3) }" data-ng-click="tab.selectTab(3)">sequence motifs</div>
-                <div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div>
-                <!--div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div-->
-                <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div>
                 <div data-ng-class="{ active: tab.isSelected(7) }" data-ng-click="tab.selectTab(7)">homologous</div>
+                <div data-ng-class="{ active: tab.isSelected(1) }" data-ng-click="tab.selectTab(1)">sequence</div>
+                <!--div data-ng-class="{ active: tab.isSelected(2) }" data-ng-click="tab.selectTab(2)" data-ng-show="protein.ligands">ligands</div-->
+                <!--div data-ng-class="{ active: tab.isSelected(3) }" data-ng-click="tab.selectTab(3)">sequence motifs</div-->
+                <!--div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div-->
+                <!--div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div-->
+                <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">references</div>
 
                 <div class="link pull-right" title="show in MMDB">
                     <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
@@ -183,6 +183,21 @@
                         </div>
                     </div>
 
+                    <!-- homologous sequences -->
+                    <div data-ng-show="tab.isSelected(7)" class="representation">
+                        <h3>homologous sequences</h3>
+                        <!--div class="chain"
+                             data-ng-repeat="chain in protein.homologous.chains">
+                            <div class="elementId">
+                                <div>{{::chain.id}}</div>
+                            </div>
+                            <div class="elements">
+                                <div class="element">{{::chain.sequence}}</div>
+                            </div>
+                        </div-->
+                        <div class="sequenceDisplay" id="sequenceDisplay"></div>
+                    </div>
+
                     <!-- chains -->
                     <div data-ng-show="tab.isSelected(1)" class="representation">
                         <h3>sequence representation</h3>
@@ -215,7 +230,7 @@
                     </div>
 
                     <!-- ligands -->
-                    <div data-ng-show="tab.isSelected(2)" class="representation">
+                    <!--div data-ng-show="tab.isSelected(2)" class="representation">
                         <h3>ligands</h3>
                         <div class="chain"
                              data-ng-mouseover="highlight(ligand.chain, ligand.resn)"
@@ -228,10 +243,10 @@
                                 <div class="element">{{::ligand.name}}</div>
                             </div>
                         </div>
-                    </div>
+                    </div-->
 
                     <!-- sequence motifs -->
-                    <div data-ng-show="tab.isSelected(3)" class="representation">
+                    <!--div data-ng-show="tab.isSelected(3)" class="representation">
                         <h3>sequence motifs</h3>
                         <div class="chain"
                              data-ng-mouseover="highlight(motif.chain, motif.start, motif.end)"
@@ -246,10 +261,10 @@
                                     sequence: {{::motif.sequence}}</div>
                             </div>
                         </div>
-                    </div>
+                    </div-->
 
                     <!-- helices -->
-                    <div data-ng-show="tab.isSelected(4)" class="representation">
+                    <!--div data-ng-show="tab.isSelected(4)" class="representation">
                         <h3>helices</h3>
                         <div class="chain"
                              data-ng-mouseover="highlight(helix.chain, helix.start, helix.end)"
@@ -263,7 +278,7 @@
                                     range: {{::helix.start}}-{{::helix.end}}</div>
                             </div>
                         </div>
-                    </div>
+                    </div-->
 
                     <!-- kinks -->
                     <!--div data-ng-show="tab.isSelected(5)" class="representation">
@@ -329,21 +344,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- homologous sequences -->
-                    <div data-ng-show="tab.isSelected(7)" class="representation">
-                        <h3>homologous sequences</h3>
-                        <!--div class="chain"
-                             data-ng-repeat="chain in protein.homologous.chains">
-                            <div class="elementId">
-                                <div>{{::chain.id}}</div>
-                            </div>
-                            <div class="elements">
-                                <div class="element">{{::chain.sequence}}</div>
-                            </div>
-                        </div-->
-                        <div class="sequenceDisplay" id="sequenceDisplay"></div>
                     </div>
                 </div>
             </div>

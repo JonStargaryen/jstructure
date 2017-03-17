@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model.homologous;
+package de.bioforscher.explorer.membrane.o.dmodel.homologous;
 
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Protein;
