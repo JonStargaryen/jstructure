@@ -40,28 +40,33 @@ public class ChainService {
     @PostConstruct
     public void activate() throws IOException {
         logger.info("starting protein service");
-        allRepresentativeChainIds = Stream.of("1M0L.A").collect(Collectors.toList());
+        allRepresentativeChainIds = Stream.of("1m0l/A").collect(Collectors.toList());
 
         // clear database
         logger.info("dropping database");
         chainRepository.deleteAll();
 
         logger.info("initializing database of {} representative protein chains", allRepresentativeChainIds.size());
-        allRepresentativeChainIds.forEach(pdbId -> java.util.concurrent.Executors.newWorkStealingPool().submit(() -> processSequenceCluster(pdbId)));
+        allRepresentativeChainIds.forEach(pdbId ->
+//                java.util.concurrent.Executors.newWorkStealingPool().submit(() ->
+                        processSequenceCluster(pdbId)
+//                )
+        );
     }
 
     private void processSequenceCluster(String clusterRepresentativeChainId) {
         logger.info("[{}] spawned thread on representative chain id", clusterRepresentativeChainId);
-        String split[] = clusterRepresentativeChainId.split("\\.");
+        String split[] = clusterRepresentativeChainId.split("/");
         List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1]);
         logger.info("[{}] mapped homologous {}", clusterRepresentativeChainId, clusterChainIds);
 
         List<ExplorerChain> explorerChains = ModelFactory.createChains(clusterRepresentativeChainId, clusterChainIds);
 
         logger.info("[{}] creating multi-sequence alignment by clustal omega", clusterRepresentativeChainId);
+        //TODO case of no homologous
         MultiSequenceAlignment multiSequenceAlignment = ModelFactory.createMultiSequenceAlignment(clusterRepresentativeChainId, explorerChains);
 
-        logger.info("[{}] persisting chains and alignment");
+        logger.info("[{}] persisting chains and alignment", clusterRepresentativeChainId);
         chainRepository.save(explorerChains);
         alignmentRepository.save(multiSequenceAlignment);
     }

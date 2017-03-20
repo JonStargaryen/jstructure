@@ -10,14 +10,15 @@ import java.io.UncheckedIOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Test functionality of the clustal omega query.
- * Created by bittrich on 3/16/17.
+ * Test the clustal omega REST interface.
+ * Created by S on 17.03.2017.
  */
-public class ClustalOmegaQueryTest {
+public class ClustalOmegaRestQueryTest {
     private List<String> sequences;
 
     @Before
@@ -37,8 +38,8 @@ public class ClustalOmegaQueryTest {
     }
 
     @Test
-    public void shouldPostClustalOmegaQuery() {
+    public void shouldPostClustalOmegaQuery() throws ExecutionException {
         //TODO test
-        System.out.println(new ClustalOmegaQuery().process(sequences));
+        System.out.println(new ClustalOmegaRestQuery().process(sequences));
     }
 }
