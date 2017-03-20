@@ -190,6 +190,10 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 /* sequence representation - the sequenceCerosene-like sequence depiction */
 
+.representation {
+    padding: 0 10px;
+}
+
 .representation .chain {
     padding: 10px;
     display: flex;

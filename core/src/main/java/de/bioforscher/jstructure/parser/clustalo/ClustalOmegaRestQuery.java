@@ -35,6 +35,7 @@ public class ClustalOmegaRestQuery {
                     .post();
 
             String jobId = answer.text();
+            logger.info("job id is {}", jobId);
             waitForResults(jobId);
 
             return Jsoup.connect(String.format(RESULT_URL, jobId))

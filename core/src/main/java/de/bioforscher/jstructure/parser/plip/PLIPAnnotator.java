@@ -16,7 +16,7 @@ import static de.bioforscher.jstructure.parser.plip.PLIPAnnotator.PLIP_INTERACTI
 
 /**
  * Annotates residue-residue interactions within a protein.
- * TODO this implementation is really ugly :x
+ * TODO the internals of this implementation are really ugly :x
  * Created by bittrich on 2/9/17.
  */
 @FeatureProvider(provides = { PLIP_INTERACTIONS })

@@ -117,68 +117,97 @@
         $rootScope.aminoAcids = aminoAcids;
     }]);
 
-    /**
-     * handles multiple tabs in the UI
-     */
-    MODULE.controller('TabController', function () {
-        this.tab = 0;
+    MODULE.controller('MultiSequenceController', ['$scope', 'ProteinService',
+        function($scope, ProteinService) {
+        var initialized = false;
+        $scope.sequences = [];
 
-        this.selectTab = function (setTab){
-            this.tab = setTab;
-        };
+        $scope.$watch('tab', function(newVal) {
+            // tab got id 1
+            if(!initialized &&newVal === 1) {
+                initialize();
+                initialized = true;
+                console.log($scope.sequences);
+            }
+        });
 
-        this.isSelected = function (checkTab){
-            return this.tab === checkTab;
-        };
-    });
+        function initialize() {
+            /* load associated sequences from server */
+            ProteinService.loadSequences($scope.protein.rep).then(function(response) {
+                $scope.sequences = response.data.sequences;
 
-    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', '$http', 'design', 'interactions',
-        function($scope, $rootScope, $routeParams, $http, design, interactions) {
+                var MyOptions = Array();
+                MyOptions.border = false;
+                MyOptions.nocolor = true;
+                MyOptions.scrollX = "100%";
+                MyOptions.colourScheme = "zappo";
+                MyOptions.selectable = false;
+                MyOptions.plainTooltips = true;
+                printJSAV('sequenceDisplay', $scope.sequences, MyOptions);
+                console.log($scope.sequences);
+            }).catch(function(response) {
+                console.log('impl error handling at multi-sequence view:');
+                console.log(response);
+            });
+        }
+    }]);
+
+    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', 'design', 'interactions', 'ProteinService',
+        function($scope, $rootScope, $routeParams, design, interactions, ProteinService) {
         $scope.loading = true;
         $scope.options = {
             renderMode : $scope.renderModes[0],
             coloringFeature : $scope.features[0],
-            renderLigands : true,
-            renderKinks : false,
-            renderMembrane : false
+            renderLigands : true
         };
         var initializedInteractions = [];
-        var viewer, structure, protein, ligands, kinks;
+        var viewer, structure, protein, ligands;
 
-        $http.get('/api/chains/json/' + $routeParams.chainid).then(function(data) {
-            $scope.protein = data.data;
+        $scope.tab = 0;
+        $scope.selectTab = function (setTab){
+            $scope.tab = setTab;
+        };
+        $scope.isSelected = function (checkTab){
+            return $scope.tab === checkTab;
+        };
+
+        ProteinService.loadModel($routeParams.chainid).then(function(response) {
+            $scope.protein = response.data;
+            console.log($scope.protein);
 
             // the context navigation in the header - push entries for additional levels
             $rootScope.context = [];
-            $rootScope.context.push($routeParams.chainid);
+            var split = $routeParams.chainid.split("_");
+            $scope.protein.pdbId = split[0];
+            $scope.protein.chainId = split[1];
+            $rootScope.context.push('pdb: ' + $scope.protein.pdbId);
+            $rootScope.context.push('chain: ' + $scope.protein.chainId);
 
-            // compose PDB representation of the protein
-            var rep = "";
-            $scope.protein.chains.forEach(function(chain) {
-                chain.groups.forEach(function(group) {
-                    group.atoms.forEach(function(atom) {
-                        rep += atom.pdb + "\n";
-                    });
-                });
-            });
-            $scope.protein.pdb = rep;
-
-            console.log($scope.protein);
             visualizeProteinStructure();
 
-            var MyOptions = Array();
-            MyOptions.border = false;
-            MyOptions.highlight = [3,5,10,14];
-            MyOptions.fasta = true;
-            MyOptions.consensus = true;
-            MyOptions.colourScheme = "zappo";
-            MyOptions.plainTooltips = true;
-            printJSAV('sequenceDisplay', $scope.protein.homologous.chains, MyOptions);
+            // $scope.protein.sequences = [];
+            // $scope.protein.homologous.forEach(function(homolog) {
+            //     ProteinService.loadSequence(homolog).then(function(response) {
+            //         $scope.protein.sequences.push(response.data);
+            //     }).catch(function(response) {
+            //         alert('sequences down with ' + response);
+            //     });
+            // });
+            //
+            // console.log($scope.protein.sequences);
+
+            // var MyOptions = Array();
+            // MyOptions.border = false;
+            // MyOptions.highlight = [3,5,10,14];
+            // MyOptions.fasta = true;
+            // MyOptions.consensus = true;
+            // MyOptions.colourScheme = "zappo";
+            // MyOptions.plainTooltips = true;
+            // printJSAV('sequenceDisplay', $scope.protein.sequences, MyOptions);
 
             $scope.loading = false;
-        }, function (d) {
-            $rootScope.alerts.push({ type: 'danger', msg: 'loading protein ' + $routeParams.pdbid +
-            ' from server failed with [' + d.status + '] ' + d.statusText });
+        }).catch(function(response) {
+            alert('down');
         });
 
         /* PV related functions */
@@ -205,12 +234,6 @@
             initLigands();
             if(!$scope.options.renderLigands)
                 toggle('ligands', false, true);
-            initKinks();
-            if(!$scope.options.renderKinks)
-                toggle('kinks', false, true);
-            initMembrane();
-            if(!$scope.options.renderMembrane)
-                toggle('membrane', false, true);
 
             viewer.centerOn(structure);
             viewer.autoZoom();
@@ -240,27 +263,6 @@
                 { color: pv.color.uniform(design.lighterColor) });
         }
 
-        function initMembrane() {
-            $scope.protein.membrane.forEach(function(entry) {
-                viewer.customMesh('membrane').addSphere([entry[0], entry[1], entry[2]], 0.5,
-                    { color : [0.8, 0.8, 0.8] });
-            });
-        }
-
-        function initKinks() {
-            var kinkIds = [];
-            $scope.protein.kinks.forEach(function(entry) {
-                kinkIds.push({ chain: entry.chain, rnum: +entry.kinkPosition});
-            });
-            kinks = viewer.ballsAndSticks('kinks', structure.residueSelect(function(res) {
-                for(var i = 0; i < kinkIds.length; i++) {
-                    if(kinkIds[i].chain == res.chain().name() && kinkIds[i].rnum == res.num())
-                        return true;
-                }
-                return false;
-            }), { color: pv.color.uniform(design.highlightColor) });
-        }
-
         var colorOp = new pv.color.ColorOp(function(atom, out, index) {
             var rgb;
 
@@ -285,13 +287,6 @@
         function createInteractions(type) {
             console.log('creating interactions for ' + type);
             $scope.protein[type].forEach(function(entry) {
-                /* the old approach using names */
-                // var atom1 = structure.atom(entry.a1);
-                // var atom2 = structure.atom(entry.a2);
-                // var g = viewer.customMesh(type);
-                // g.addTube(atom1.pos(), atom2.pos(), 0.15, { cap : false, color : interactions[type] });
-
-                /* the new approach using coordinates directly */
                 var g = viewer.customMesh(type);
                 g.addTube(entry.coords1, entry.coords2, 0.15, { cap : false, color : interactions[type] });
             });
@@ -387,7 +382,6 @@
             }
             protein.setSelection(protein.select(selection));
             ligands.setSelection(ligands.select(selection));
-            kinks.setSelection(kinks.select(selection));
             viewer.requestRedraw();
         };
 
@@ -395,7 +389,6 @@
             var ev = structure.full().createEmptyView();
             protein.setSelection(ev);
             ligands.setSelection(ev);
-            kinks.setSelection(ev);
             viewer.requestRedraw();
         };
 
@@ -436,28 +429,45 @@
     }]);
 
     MODULE.factory('ProteinService', ['$rootScope', '$http', function($rootScope, $http) {
-        /* fetch all known protein ids */
-        var ids = { 'representativeChains' : [], 'allChains' : [] };
+        var apiUrl = '/api/chains/';
 
-        $http.get('/api/chains/reps').then(function(d) {
-            d.data.forEach(function (p) {
-                ids.representativeChains.push(p);
+        var reps = [];
+        var all = [];
+
+        function logError(context, error) {
+            $rootScope.alerts.push({ type: 'danger',
+                msg: 'loading ' + context + ' from server failed with [' + error.status + '] ' + error.statusText
             });
-        }, function (d) {
-            $rootScope.alerts.push({ type: 'danger', msg: 'loading proteins from server failed with [' + d.status +
-            '] ' + d.statusText });
+        }
+
+        $http.get(apiUrl + 'reps').then(function(response) {
+            response.data.forEach(function(id) {
+                reps.push(id);
+            });
+        }, function(response) {
+            logError('representative chain ids', response)
+        });
+        $http.get(apiUrl + 'all').then(function(response) {
+            response.data.forEach(function(id) {
+                all.push(id);
+            });
+        }, function(response) {
+            logError('all chain ids', response)
         });
 
-        $http.get('/api/chains/all').then(function(d) {
-            d.data.forEach(function (p) {
-                ids.allChains.push(p);
-            });
-        }, function (d) {
-            $rootScope.alerts.push({ type: 'danger', msg: 'loading proteins from server failed with [' + d.status +
-            '] ' + d.statusText });
-        });
-
-        return ids;
+        return {
+            allChains : all,
+            representativeChains : reps,
+            loadSequences : function(chainId) {
+                return $http({ url : apiUrl + 'alignment/' + chainId, method : 'GET', responseType: 'text' });
+            },
+            loadStructure : function(chainId) {
+                return $http({ url : apiUrl + 'structure/' + chainId, method : 'GET', responseType: 'text' });
+            },
+            loadModel : function(chainId) {
+                return $http.get(apiUrl + 'json/' + chainId);
+            }
+        }
     }]);
 
     /* format PV render modes to something nice */

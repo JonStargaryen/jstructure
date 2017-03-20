@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -40,24 +41,33 @@ public class ChainService {
     @PostConstruct
     public void activate() throws IOException {
         logger.info("starting protein service");
-        allRepresentativeChainIds = Stream.of("1m0l/A").collect(Collectors.toList());
+        allRepresentativeChainIds = Stream.of("1m0l_A").collect(Collectors.toList());
 
+//        reinitialize(false);
+    }
+
+    private void reinitialize(boolean parallel) {
         // clear database
         logger.info("dropping database");
         chainRepository.deleteAll();
+        alignmentRepository.deleteAll();
 
         logger.info("initializing database of {} representative protein chains", allRepresentativeChainIds.size());
-        allRepresentativeChainIds.forEach(pdbId ->
-//                java.util.concurrent.Executors.newWorkStealingPool().submit(() ->
-                        processSequenceCluster(pdbId)
-//                )
-        );
+
+        if(parallel) {
+            allRepresentativeChainIds.forEach(pdbId ->
+                    Executors.newWorkStealingPool().submit(() -> processSequenceCluster(pdbId))
+            );
+        } else {
+            allRepresentativeChainIds.forEach(this::processSequenceCluster);
+        }
     }
 
     private void processSequenceCluster(String clusterRepresentativeChainId) {
         logger.info("[{}] spawned thread on representative chain id", clusterRepresentativeChainId);
-        String split[] = clusterRepresentativeChainId.split("/");
-        List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1]);
+        String split[] = clusterRepresentativeChainId.split("_");
+        //TODO remove subList call
+        List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1]).subList(0, 10);
         logger.info("[{}] mapped homologous {}", clusterRepresentativeChainId, clusterChainIds);
 
         List<ExplorerChain> explorerChains = ModelFactory.createChains(clusterRepresentativeChainId, clusterChainIds);
@@ -76,15 +86,24 @@ public class ChainService {
     }
 
     public ExplorerChain getChain(String rawId) {
-        System.out.println(rawId);
+        String[] split = rawId.split("_");
         // ensure pdbId is always in upper case
-        String id = rawId.split("\\.")[0].toUpperCase() + "." + rawId.split("\\.")[1];
+        String id = split[0].toLowerCase() + "_" + split[1];
         List<ExplorerChain> result = chainRepository.findChainById(id);
         if(result.size() > 0) {
             return result.get(0);
         }
 
         throw new NoSuchElementException("could not retrieve entry for " + rawId);
+    }
+
+    public MultiSequenceAlignment getAlignment(String representativeChainId) {
+        List<MultiSequenceAlignment> result = alignmentRepository.findAlignmentByRepresentativeChainId(representativeChainId);
+        if(result.size() > 0) {
+            return result.get(0);
+        }
+
+        throw new NoSuchElementException("could not retrieve multi-sequence alignment for representative " + representativeChainId);
     }
 
     public List<String> getAllChainIds() {

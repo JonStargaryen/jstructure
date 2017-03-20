@@ -39,7 +39,7 @@ public class PDBDatabaseQuery {
             return document.getElementsByTag("pdbChain").stream()
                     .map(pdbChain -> pdbChain.attr("name"))
                     .map(pdbChain -> pdbChain.split("\\."))
-                    .map(split -> split[0].toLowerCase() + "/" + split[1])
+                    .map(split -> split[0].toLowerCase() + "_" + split[1])
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
