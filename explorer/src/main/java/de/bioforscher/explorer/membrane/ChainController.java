@@ -46,12 +46,12 @@ public class ChainController {
 
     @RequestMapping(value = "/alignment/{id}", method = RequestMethod.GET)
     public MultiSequenceAlignment getAlignmentById(@PathVariable("id") String id) throws NoSuchElementException {
-        MultiSequenceAlignment alignment = chainService.getAlignment(id);
-        alignment.getSequences().forEach(explorerSequence -> {
-            explorerSequence.setSequence(explorerSequence.getSequence().replaceAll("\\s", ""));
-        });
-
-        return alignment;
+//        MultiSequenceAlignment alignment = chainService.getAlignment(id);
+//        alignment.getChains().forEach(explorerSequence -> {
+//            explorerSequence.setSequence(explorerSequence.getSequence().replaceAll("\\s", ""));
+//        });
+//        return alignment;
+        return chainService.getAlignment(id);
     }
 
     @RequestMapping(value = "/pdb/{id}", method = RequestMethod.GET, produces = "text/plain")

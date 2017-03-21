@@ -1,5 +1,7 @@
 package de.bioforscher.explorer.membrane.model;
 
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -36,8 +38,33 @@ public class ModelFactory {
 
 //        proteins.values().parallelStream().forEach(plipAnnotator::process);
 
-        return chainIds.stream()
-                .map(chainId -> mapToExplorerChain(chainId, proteins, representativeChainId, chainIds))
+        //TODO plip interactions assignment and rotating according to alignment
+
+        // the reference of the structure alignment
+        Chain referenceChain = proteins.get(representativeChainId.split("_")[0])
+                .select()
+                .chainName(representativeChainId.split("_")[1])
+                .nameContainer(representativeChainId)
+                .asChain();
+
+        // extract wanted chains
+        List<Chain> chains = chainIds.stream()
+                .map(chainId -> proteins.get(chainId.split("_")[0])
+                        .select()
+                        .chainName(chainId.split("_")[1])
+                        .nameContainer(chainId)
+                        .asChain())
+                .collect(Collectors.toList());
+
+        // align chains to reference
+        chains.forEach(chain -> {
+            StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(referenceChain, chain);
+            logger.info("[{}] rmsd of {} to reference is {}", representativeChainId, chain.getParentProtein().getName() + "_" + chain.getChainId(), alignmentResult.getAlignmentScore());
+            alignmentResult.transform(chain);
+        });
+
+        return chains.stream()
+                .map(chain -> new ExplorerChain(chain, chainIds, representativeChainId))
                 .collect(Collectors.toList());
     }
 
@@ -47,23 +74,10 @@ public class ModelFactory {
             String alignment = new ClustalOmegaRestQuery().process(explorerChains.stream()
                     .map(explorerChain -> ">" + explorerChain.getId() + "|PDBID|CHAIN|SEQUENCE" + System.lineSeparator() + explorerChain.getSequence())
                     .collect(Collectors.toList()));
-            return new MultiSequenceAlignment(representativeChainId, alignment);
+            return new MultiSequenceAlignment(representativeChainId, explorerChains, alignment);
         } catch (ExecutionException e) {
             //TODO error-handling
             throw new RuntimeException(e);
         }
-    }
-
-    private static ExplorerChain mapToExplorerChain(String chainId,
-                                                    Map<String, Protein> proteins,
-                                                    String representativeChainId,
-                                                    List<String> homologous) {
-        String[] split = chainId.split("_");
-        Protein protein = proteins.get(split[0]);
-        Chain chain = protein.select().chainName(split[1]).nameContainer(chainId).asChain();
-
-        //TODO plip interactions assignment
-
-        return new ExplorerChain(chain, homologous, representativeChainId);
     }
 }

@@ -139,11 +139,23 @@
                     </div>
 
                     <!-- homologous sequences -->
-                    <div data-ng-show="isSelected(1)" class="representation" data-ng-controller="MultiSequenceController as multiSequenceController">
-                        <div style="overflow-x : scroll; white-space : nowrap; overflow-y: hidden; font-family: monospace;">
-                            <div data-ng-repeat="sequence in sequences">
-                                <div>{{sequence.id}}</div>
-                                <div>{{sequence.sequence}}</div>
+                    <div data-ng-show="isSelected(1)" class="representation homologous" data-ng-controller="MultiSequenceController as multiSequenceController">
+                        <!-- navigation/editing/control over sequence objects -->
+                        <div class="ids">
+                            <div data-ng-repeat="chain in chains">
+                                <input type="checkbox"
+                                       data-ng-model="selectedChains[chain.id]"
+                                       data-ng-click="toggleChain($index)"
+                                       title="{{::chain.id}}">
+                                {{::chain.id}}
+                            </div>
+                        </div>
+
+                        <!-- the sequence view -->
+                        <div class="sequences">
+                            <div data-ng-repeat="chain in chains">
+                                <span data-ng-repeat="aa in chain.sequence"
+                                      data-ng-class="{ active: isVariant($index) }">{{::aa.olc}}</span>
                             </div>
                         </div>
                     </div>

@@ -10,43 +10,7 @@
     });
 
     MODULE.constant('features', [
-        { name : 'no coloring', tag : 'none', discrete : true },
-        // { name : 'amino acid', tag : 'aa', discrete : true },
-        // { name : 'relative accessible surface area', tag : 'rasa', discrete : false },
-        // { name : 'secondary structure element', tag : 'sse', discrete : true },
-        // { name : 'spatial proximity', tag : 'cerosene', discrete : false }
-
-    ]);
-
-    MODULE.constant('renderModes',  [
-        'cartoon', 'ballsAndSticks', 'sline', 'lines', 'trace', 'lineTrace', 'tube', 'spheres'
-    ]);
-
-    MODULE.constant('secondaryStructures', [
-        'coil', 'bend', 'turn', '\u03C0-helix', '3-10-helix', 'bridge', 'extended', '\u03B1-helix'
-    ]);
-
-    MODULE.constant('aminoAcids', [
-        { name : 'alanine', olc : 'A', tlc : 'Ala' },
-        { name : 'arginine', olc : 'R', tlc : 'Arg' },
-        { name : 'asparagine', olc : 'N', tlc : 'Asn' },
-        { name : 'aspartic acid', olc : 'D', tlc : 'Asp' },
-        { name : 'cysteine', olc : 'C', tlc : 'Cys' },
-        { name : 'glutamic acid', olc : 'E', tlc : 'Glu' },
-        { name : 'glutamine', olc : 'Q', tlc : 'Gln' },
-        { name : 'glycine', olc : 'G', tlc : 'Gly' },
-        { name : 'histidine', olc : 'H', tlc : 'His' },
-        { name : 'isoleucine', olc : 'I', tlc : 'Ile' },
-        { name : 'leucine', olc : 'L', tlc : 'Leu' },
-        { name : 'lysine', olc : 'K', tlc : 'Lys' },
-        { name : 'methionine', olc : 'M', tlc : 'Met' },
-        { name : 'phenylalanine', olc : 'F', tlc : 'Phe' },
-        { name : 'proline', olc : 'P', tlc : 'Pro' },
-        { name : 'serine', olc : 'S', tlc : 'Ser' },
-        { name : 'threonine', olc : 'T', tlc : 'Thr' },
-        { name : 'tryptophan', olc : 'W', tlc : 'Trp' },
-        { name : 'tyrosine', olc : 'Y', tlc : 'Tyr' },
-        { name : 'valine', olc : 'V', tlc : 'Val' }
+        { name : 'no coloring', tag : 'none', discrete : true }
     ]);
 
     MODULE.constant('interactions', {
@@ -93,8 +57,8 @@
     /**
      * on app start
      */
-    MODULE.run(['$rootScope', '$http', '$location', 'renderModes', 'features', '$filter', 'secondaryStructures', 'aminoAcids',
-        function ($rootScope, $http, $location, renderModes, features, $filter, secondaryStructures, aminoAcids) {
+    MODULE.run(['$rootScope', '$http', '$location',
+        function ($rootScope, $http, $location) {
         $rootScope.alerts = [];
 
         // message/alert container
@@ -105,55 +69,91 @@
         $rootScope.page = function () {
             return $location.path();
         };
-
-        $rootScope.renderModes = [];
-        renderModes.forEach(function(entry) {
-            $rootScope.renderModes.push({ text: $filter('splitAtUppercase')(entry),
-                index: $rootScope.renderModes.length, raw: entry });
-        });
-
-        $rootScope.features = features;
-        $rootScope.secondaryStructures = secondaryStructures;
-        $rootScope.aminoAcids = aminoAcids;
     }]);
 
     MODULE.controller('MultiSequenceController', ['$scope', 'ProteinService',
         function($scope, ProteinService) {
-        var initialized = false;
-        $scope.sequences = [];
+        var dataInitialized = false;
+        // positions with variants
+        var variants = [];
+        // collection of already initialized (i.e. PDB fetched from server) chains
+        var initializedChains = [];
+        // collection of currently selected chains
+        $scope.selectedChains = {};
 
         $scope.$watch('tab', function(newVal) {
-            // tab got id 1
-            if(!initialized &&newVal === 1) {
+            // tab got id 1 TODO this is ugly
+            if(!dataInitialized &&newVal === 1) {
                 initialize();
-                initialized = true;
-                console.log($scope.sequences);
+                dataInitialized = true;
             }
         });
 
         function initialize() {
-            /* load associated sequences from server */
+            // load associated sequences from server
             ProteinService.loadSequences($scope.protein.rep).then(function(response) {
-                /* expose sequences */
-                $scope.sequences = response.data.sequences;
+                var alignment = response.data;
+                console.log(alignment);
 
-                var sequenceLength = $scope.sequences[0].length;
-                for(var pos = 0; pos < sequenceLength; pos++) {
+                // expose sequences
+                $scope.chains = alignment.chains;
 
+                var sequenceLength = $scope.chains[0].sequence.length;
+                var numberOfSequences = $scope.chains.length;
+                // determine positions with variants
+                outer : for(var pos = 0; pos < sequenceLength; pos++) {
+                    var char = $scope.chains[0].sequence[pos].olc;
+                    for(var seq = 1; seq < numberOfSequences; seq++) {
+                        if(char != $scope.chains[seq].sequence[pos].olc) {
+                            //TODO some entropy value here?
+                            variants.push(pos);
+                            continue outer;
+                        }
+                    }
                 }
+
+                // mark representative as selected
+                initializedChains.push(alignment.representativeChainId);
+                $scope.selectedChains[alignment.representativeChainId] = true;
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');
                 console.log(response);
             });
         }
+
+        $scope.isVariant = function(index) {
+            return variants.indexOf(index) != -1;
+        };
+
+        $scope.toggleChain = function(index) {
+            var chainId = $scope.chains[index].id;
+            // ensure chain is loaded
+            if(initializedChains.indexOf(chainId) == -1) {
+                initializeChain(chainId);
+            }
+
+            //TODO impl add/remove, show/hide in pv
+        };
+
+        function initializeChain(chainId) {
+            console.log("loading " + chainId);
+
+            ProteinService.loadStructure(chainId).then(function(response) {
+                console.log(response.data);
+            }).catch(function(response) {
+                console.log("TODO error handling:");
+                console.log(response);
+            });
+
+            initializedChains.push(chainId);
+        }
     }]);
 
-    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', 'design', 'interactions', 'ProteinService',
-        function($scope, $rootScope, $routeParams, design, interactions, ProteinService) {
+    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', 'design', 'interactions', 'ProteinService', 'features',
+        function($scope, $rootScope, $routeParams, design, interactions, ProteinService, features) {
         $scope.loading = true;
         $scope.options = {
-            renderMode : $scope.renderModes[0],
-            coloringFeature : $scope.features[0],
+            coloringFeature : features[0],
             renderLigands : true
         };
         var initializedInteractions = [];
@@ -180,26 +180,6 @@
             $rootScope.context.push('chain: ' + $scope.protein.chainId);
 
             visualizeProteinStructure();
-
-            // $scope.protein.sequences = [];
-            // $scope.protein.homologous.forEach(function(homolog) {
-            //     ProteinService.loadSequence(homolog).then(function(response) {
-            //         $scope.protein.sequences.push(response.data);
-            //     }).catch(function(response) {
-            //         alert('sequences down with ' + response);
-            //     });
-            // });
-            //
-            // console.log($scope.protein.sequences);
-
-            // var MyOptions = Array();
-            // MyOptions.border = false;
-            // MyOptions.highlight = [3,5,10,14];
-            // MyOptions.fasta = true;
-            // MyOptions.consensus = true;
-            // MyOptions.colourScheme = "zappo";
-            // MyOptions.plainTooltips = true;
-            // printJSAV('sequenceDisplay', $scope.protein.sequences, MyOptions);
 
             $scope.loading = false;
         }).catch(function(response) {
@@ -368,7 +348,7 @@
         }
 
         $scope.highlight = function(chain, resn, endResn) {
-            // console.log(chain + " " + resn + " " + endResn);
+            console.log("highlighting: " + chain + " " + resn + " " + endResn);
             var selection = { cname : chain };
             if(resn) {
                 if (endResn)
@@ -424,6 +404,9 @@
         $scope.representativeChains = ProteinService.representativeChains;
     }]);
 
+    /**
+     * access to the back-end
+     */
     MODULE.factory('ProteinService', ['$rootScope', '$http', function($rootScope, $http) {
         var apiUrl = '/api/chains/';
 
@@ -458,48 +441,11 @@
                 return $http({ url : apiUrl + 'alignment/' + chainId, method : 'GET', responseType: 'text' });
             },
             loadStructure : function(chainId) {
-                return $http({ url : apiUrl + 'structure/' + chainId, method : 'GET', responseType: 'text' });
+                return $http({ url : apiUrl + 'pdb/' + chainId, method : 'GET', responseType: 'text' });
             },
             loadModel : function(chainId) {
                 return $http.get(apiUrl + 'json/' + chainId);
             }
         }
     }]);
-
-    /* format PV render modes to something nice */
-    MODULE.filter('splitAtUppercase', function() {
-        return function(input) {
-            if(input) {
-                return input
-                    // insert a space before all caps
-                    .replace(/([A-Z])/g, ' $1')
-                    .toLowerCase();
-            }
-        }
-    });
-
-    MODULE.filter('formatAuthors', function() {
-        return function(input) {
-            if(input) {
-                if(input.length == 0)
-                    return '';
-                if(input.length < 2)
-                    return omitFullStops(input) + '.';
-                return omitFullStops(input[0]) + ' et al.';
-            }
-        };
-
-        function omitFullStops(input) {
-            return input.split('.').join('');
-        }
-    });
-
-    MODULE.filter('formatPositions', function() {
-        return function (input) {
-            if (input.length == 1)
-                return input[0];
-            if (input.length == 2)
-                return input[0] + '-' + input[1];
-        };
-    });
 })();

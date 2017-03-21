@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
  */
 public class MultiSequenceAlignment {
     private String representativeChainId;
-    private List<ExplorerSequence> sequences;
+    private List<ExplorerSequence> chains;
 
     public MultiSequenceAlignment() {
     }
 
-    public MultiSequenceAlignment(String representativeChainId, String alignment) {
+    public MultiSequenceAlignment(String representativeChainId, List<ExplorerChain> explorerChains, String alignment) {
         this.representativeChainId = representativeChainId;
 
         List<String> split = Pattern.compile(">")
@@ -25,19 +25,29 @@ public class MultiSequenceAlignment {
                 .skip(1)
                 .collect(Collectors.toList());
 
-        this.sequences = split.stream()
+        this.chains = split.stream()
                 .map(s -> s.split("SEQUENCE"))
                 // substring for pdbId:chainId
-                .map(s -> new Pair<>(s[0].substring(0, 6), Pattern.compile("[\\r\\n]+").splitAsStream(s[1]).collect(Collectors.joining())))
-                .map(pair -> new ExplorerSequence(pair.getLeft(), pair.getRight()))
+//                .map(s -> new Pair<>(s[0].substring(0, 6), Pattern.compile("[\\r\\n]+")
+//                        .splitAsStream(s[1])
+//                        .collect(Collectors.joining())))
+                .map(s ->  new Pair<>(s[0].substring(0, 6), s[1].replaceAll("\\s", "")))
+                .map(pair -> new ExplorerSequence(resolveChain(explorerChains, pair.getLeft()), pair.getLeft(), pair.getRight()))
                 .collect(Collectors.toList());
+    }
+
+    private ExplorerChain resolveChain(List<ExplorerChain> explorerChains, String id) {
+        return explorerChains.stream()
+                .filter(chain -> chain.getId().equals(id))
+                .findFirst()
+                .get();
     }
 
     public String getRepresentativeChainId() {
         return representativeChainId;
     }
 
-    public List<ExplorerSequence> getSequences() {
-        return sequences;
+    public List<ExplorerSequence> getChains() {
+        return chains;
     }
 }

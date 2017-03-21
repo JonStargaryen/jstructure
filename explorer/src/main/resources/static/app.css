@@ -99,6 +99,39 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     background-color: black;
 }
 
+/* the multi-sequence alignment view */
+
+.homologous .ids, .homologous .sequences {
+    font-family: monospace;
+    color: #9fb4c7;
+}
+
+.homologous .ids {
+    float: left;
+    padding-right: 10px;
+}
+
+.homologous .ids input {
+    margin: 0 !important;
+}
+
+.homologous .sequences {
+    overflow-x: scroll;
+    white-space: nowrap;
+    overflow-y: hidden;
+}
+
+.homologous .sequences span {
+    opacity: 0.4;
+}
+
+.homologous .sequences span.active {
+    color: #d62728 !important;
+    opacity: 1.0 !important;
+}
+
+/* TODO cleanup */
+
 /* main page */
 
 .option, .sequence-header > div {
@@ -188,10 +221,8 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     overflow: hidden;
 }
 
-/* sequence representation - the sequenceCerosene-like sequence depiction */
-
 .representation {
-    padding: 0 10px;
+    padding: 10px;
 }
 
 .representation .chain {
