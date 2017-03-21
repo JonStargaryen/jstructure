@@ -34,7 +34,7 @@ public class ModelFactory {
                 .collect(Collectors.toMap(Function.identity(),
                         pdbId -> ProteinParser.source(pdbId).forceProteinName(pdbId).parse()));
 
-        proteins.values().parallelStream().forEach(plipAnnotator::process);
+//        proteins.values().parallelStream().forEach(plipAnnotator::process);
 
         return chainIds.stream()
                 .map(chainId -> mapToExplorerChain(chainId, proteins, representativeChainId, chainIds))

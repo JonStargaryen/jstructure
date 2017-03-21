@@ -134,17 +134,13 @@
         function initialize() {
             /* load associated sequences from server */
             ProteinService.loadSequences($scope.protein.rep).then(function(response) {
+                /* expose sequences */
                 $scope.sequences = response.data.sequences;
 
-                var MyOptions = Array();
-                MyOptions.border = false;
-                MyOptions.nocolor = true;
-                MyOptions.scrollX = "100%";
-                MyOptions.colourScheme = "zappo";
-                MyOptions.selectable = false;
-                MyOptions.plainTooltips = true;
-                printJSAV('sequenceDisplay', $scope.sequences, MyOptions);
-                console.log($scope.sequences);
+                var sequenceLength = $scope.sequences[0].length;
+                for(var pos = 0; pos < sequenceLength; pos++) {
+
+                }
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');
                 console.log(response);

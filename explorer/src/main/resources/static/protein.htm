@@ -104,7 +104,7 @@
                 <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)">homologous</div>
 
                 <div class="link pull-right" title="show in PDB">
-                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
+                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.pdbId}}">PDB</a>
                     <span class="fa fa-external-link"></span>
                 </div>
             </div>
@@ -113,7 +113,6 @@
                 <div class="tse-content">
                     <!-- general information -->
                     <div data-ng-show="isSelected(0)" class="representation">
-                        <h3>general information</h3>
                         <div>pdbId: {{::protein.pdbId}}</div>
                         <div>chainId: {{::protein.chainId}}</div>
                         <div>title: {{::protein.title}}</div>
@@ -141,12 +140,6 @@
 
                     <!-- homologous sequences -->
                     <div data-ng-show="isSelected(1)" class="representation" data-ng-controller="MultiSequenceController as multiSequenceController">
-                        <h3>homologous sequences</h3>
-                        <div class="sequenceDisplay" id="sequenceDisplay"></div>
-
-                        <br /><br />
-                        other:
-
                         <div style="overflow-x : scroll; white-space : nowrap; overflow-y: hidden; font-family: monospace;">
                             <div data-ng-repeat="sequence in sequences">
                                 <div>{{sequence.id}}</div>
@@ -154,28 +147,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- chains -->
-                    <!--div data-ng-show="isSelected(1)" class="representation">
-                        <h3>sequence representation</h3>
-                        <div class="chain">
-                            <div class="elementId"
-                                 data-ng-mouseover="highlight(protein.chainId)"
-                                 data-ng-mouseleave="deselect()">
-                                <div>chain {{::protein.chainId}}</div>
-                            </div>
-                            <div class="elements">
-                                <div class="group"
-                                     style="color: hsl({{group[options.coloringFeature.tag][0]}},
-                                        {{group[options.coloringFeature.tag][1]}}%,
-                                        {{group[options.coloringFeature.tag][2]}}%);"
-                                     title="{{::aminoAcid.olc}}-{{::aminoAcid.resn}}"
-                                     data-ng-repeat="aminoAcid in protein.aminoAcids"
-                                     data-ng-mouseover="highlight(protein.chainId, aminoAcid.resn)"
-                                     data-ng-mouseleave="deselect()">{{::aminoAcid.olc}}</div>
-                            </div>
-                        </div>
-                    </div-->
 
                     <!-- uniprot mutations & diseases -->
                     <!--div data-ng-show="isSelected(6)" class="representation">
