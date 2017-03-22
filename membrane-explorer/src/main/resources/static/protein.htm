@@ -8,7 +8,7 @@
                 <div class="dropdown-select"
                      title="select feature to color visualization"
                      data-dropdown-select="features"
-                     data-dropdown-model="options.coloringFeature"
+                     data-dropdown-de.bioforscher.explorer.helices.model="options.coloringFeature"
                      data-dropdown-item-label="name">
                 </div>
 
@@ -17,6 +17,16 @@
 
                 <!-- general render options -->
                 <div class="visualization-options">
+                    <!-- membrane -->
+                    <div class="option fa fa-ellipsis-h pull-right"
+                         data-ng-click="options.renderMembrane = !options.renderMembrane"
+                         data-ng-class="{active: options.renderMembrane}"
+                         title="render membrane layer"></div>
+                    <!-- kinks -->
+                    <div class="option fa fa-angle-right pull-right"
+                         data-ng-click="options.renderKinks = !options.renderKinks"
+                         data-ng-class="{active: options.renderKinks}"
+                         title="render helix kinks"></div>
                     <!-- ligands -->
                     <div class="option fa fa-angle-right pull-right"
                          data-ng-click="options.renderLigands = !options.renderLigands"
@@ -26,8 +36,6 @@
 
                 <!-- PLIP options -->
                 <div class="visualization-options">
-                    <div class="alert alert-danger"
-                         data-ng-hide="protein.plipDataPresent">no plip data <span class="fa fa-exclamation"></span></div>
                     <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
                          data-ng-class="{active: options.renderWaterBridges}"
@@ -53,6 +61,11 @@
                          data-ng-class="{active: options.renderMetalComplexes}"
                          title="render metal complexes"
                          data-ng-show="protein.metalComplexes.length > 0"></div>
+                    <!--div class="option fa fa-chain-broken pull-right"
+                         data-ng-click="options.renderHydrophobicInteractions = !options.renderHydrophobicInteractions"
+                         data-ng-class="{active: options.renderHydrophobicInteractions}"
+                         title="render hydrophobic interactions"
+                         data-ng-show="protein.hydrophobicInteractions.length > 0"></div-->
                     <div class="option fa fa-exchange pull-right"
                          data-ng-click="options.renderHydrogenBonds = !options.renderHydrogenBonds"
                          data-ng-class="{active: options.renderHydrogenBonds}"
@@ -65,105 +78,149 @@
                          data-ng-show="protein.halogenBonds.length > 0"></div>
                 </div>
 
-                <!-- legends and description of coloring features -->
+                <!-- PV render mode selection -->
+                <!--<div class="dropdown-select"
+                     title="select PV's render mode"
+                     dropdown-select="renderModes"
+                     dropdown-de.bioforscher.explorer.helices.model="options.renderMode"
+                     dropdown-item-label="text">
+                </div>-->
+
+                <!-- legends of coloring features -->
                 <div class="legend" data-ng-hide="options.coloringFeature.tag != 'sse'">
                     <div style="color: hsl({{($index / (secondaryStructures.length - 1)) * 120}}, 60%, 70%);"
                          data-ng-repeat="secondaryStructure in secondaryStructures">{{secondaryStructure}}</div>
                 </div>
-                <div class="legend" data-ng-hide="options.coloringFeature.tag != 'sse'">
-                    secondary structure annotation is performed by DSSP [kabsch, biojava]
-                </div>
-                <div class="legend" data-ng-hide="options.coloringFeature.tag != 'aa'">
-                    <div style="color: hsl({{($index / (aminoAcids.length - 1)) * 120}}, 60%, 70%);"
-                         data-ng-repeat="aminoAcid in aminoAcids">{{aminoAcid.tlc}}</div>
-                </div>
-                <div class="legend" data-ng-hide="options.coloringFeature.tag != 'aa'">
-                    coloring is motivated by the amino acid's functional groups [gutteridge]
-                </div>
-                <div class="legend" data-ng-hide="options.coloringFeature.discrete || options.coloringFeature.tag == 'aa' || options.coloringFeature.tag == 'cerosene'">
+                <div class="legend" data-ng-hide="options.coloringFeature.discrete">
                     <div style="color: hsl(0, 60%, 70%);">min</div>
                     <div style="color: hsl(60, 60%, 70%);">average</div>
                     <div style="color: hsl(120, 60%, 70%);">max</div>
-                </div>
-                <div class="legend" data-ng-hide="options.coloringFeature.tag != 'rasa'">
-                    accessible surface area values are computed by biojava's ASA calculator [biojava] and normalized by the values of [matthew]
-                </div>
-                <div class="legend" data-ng-hide="options.coloringFeature.tag != 'cerosene'">
-                    embedding in the RGB color space, similar color values indicate similar coordinates [heinke]
                 </div>
             </div>
         </div>
     </div>
 
     <!-- the edit/data part on the right -->
-    <div class="sequence">
-        <div-- class="wrapper">
+    <div class="sequence" data-ng-controller="TabController as tab">
+        <div class="wrapper">
             <!-- general project navigation -->
             <div class="sequence-header clearfix">
-                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)">general</div>
-                <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)">homologous</div>
+                <div data-ng-class="{ active: tab.isSelected(1) }" data-ng-click="tab.selectTab(1)">sequence</div>
+                <div data-ng-class="{ active: tab.isSelected(2) }" data-ng-click="tab.selectTab(2)">ligands</div>
+                <div data-ng-class="{ active: tab.isSelected(3) }" data-ng-click="tab.selectTab(3)">sequence motifs</div>
+                <div data-ng-class="{ active: tab.isSelected(4) }" data-ng-click="tab.selectTab(4)">helices</div>
+                <div data-ng-class="{ active: tab.isSelected(5) }" data-ng-click="tab.selectTab(5)">kinks</div>
+                <div data-ng-class="{ active: tab.isSelected(6) }" data-ng-click="tab.selectTab(6)">mutations</div>
 
-                <div class="link pull-right" title="show in PDB">
-                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.pdbId}}">PDB</a>
+                <div class="option link pull-right" title="show in MMDB">
+                    <a target="_blank" data-ng-href="//www.ncbi.nlm.nih.gov/Structure/mmdb/mmdbsrv.cgi?uid={{::protein.name}}">MMDB</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+                <div class="option link pull-right" title="show in OPM">
+                    <a target="_blank" data-ng-href="//opm.phar.umich.edu/protein.php?search={{::protein.name}}">OPM</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+                <div class="option link pull-right" title="show in UniProt">
+                    <a target="_blank" data-ng-href="//www.uniprot.org/uniprot/{{::protein.uniprot}}">UniProt</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+                <div class="option link pull-right" title="show in PDB">
+                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::protein.name}}">PDB</a>
                     <span class="fa fa-external-link"></span>
                 </div>
             </div>
 
             <div class="tse-scrollable">
                 <div class="tse-content">
-                    <!-- general information -->
-                    <div data-ng-show="isSelected(0)" class="representation">
-                        <div>pdbId: {{::protein.pdbId}}</div>
-                        <div>chainId: {{::protein.chainId}}</div>
-                        <div>title: {{::protein.title}}</div>
-                        <div>
-                            <ng-pluralize count="::protein.ligands.length"
-                                      when="{'0': 'no ligands',
-                                         'one': '1 ligand',
-                                         'other': '{} ligands'}">
-                            </ng-pluralize>
-                            <ng-pluralize count="::(protein.ligands | filter: { type : 'water' }).length"
-                                      when="{'0': '(none being water)',
-                                     'one': '(1 being water)',
-                                     'other': '({} being water)'}">
-                            </ng-pluralize>
-                        </div>
-                        <div>
-                            homologous protein chains:
-                            <span data-ng-repeat="homolog in protein.homologous">
-                                <a data-ng-href="chain/{{homolog}}">
-                                    {{::homolog}}
-                                </a>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- homologous sequences -->
-                    <div data-ng-show="isSelected(1)" class="representation homologous" data-ng-controller="MultiSequenceController as multiSequenceController">
-                        <!-- navigation/editing/control over sequence objects -->
-                        <div class="ids">
-                            <div data-ng-repeat="chain in chains">
-                                <input type="checkbox"
-                                       data-ng-model="selectedChains[chain.id]"
-                                       data-ng-click="toggleChain($index)"
-                                       title="{{::chain.id}}">
-                                {{::chain.id}}
+                    <!-- chains -->
+                    <div data-ng-show="tab.isSelected(1)" class="representation">
+                        <div class="chain" data-ng-repeat="chain in protein.chains">
+                            <div class="elementId"
+                                 data-ng-mouseover="highlight(chain.id)"
+                                 data-ng-mouseleave="deselect()">
+                                <div>chain {{::chain.id}}</div>
                             </div>
-                        </div>
-
-                        <!-- the sequence view -->
-                        <div class="sequences">
-                            <div data-ng-repeat="chain in chains">
-                                <span data-ng-repeat="aa in chain.sequence"
-                                      data-ng-class="{ active: isVariant($index) }">{{::aa.olc}}</span>
+                            <div class="elements">
+                                <div class="group"
+                                 style="color: hsl({{group[options.coloringFeature.tag] * 120}}, 60%, 70%);"
+                                 title="{{::group.olc}}-{{::group.resn}}"
+                                 data-ng-repeat="group in chain.groups | filter: { type : 'aa' } : true"
+                                 data-ng-mouseover="highlight(chain.id, group.resn)"
+                                 data-ng-mouseleave="deselect()">{{::group.olc}}</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- uniprot mutations & diseases -->
-                    <!--div data-ng-show="isSelected(6)" class="representation">
-                        <div class="chain" data-ng-repeat="chain in protein.chains | filter: { hasAminoAcids : true } | filter: { mutationDataPresent : true }">
-                            <h3>uniprot mutations</h3>
+                    <!-- ligands -->
+                    <div data-ng-show="tab.isSelected(2)" class="representation">
+                        <div class="chain"
+                             data-ng-mouseover="highlight(ligand.chain, ligand.resn)"
+                             data-ng-mouseleave="deselect()"
+                             data-ng-repeat="ligand in protein.ligands | filter: { type : '!water' } | orderBy: 'tlc'">
+                            <div class="elementId">
+                                <div>{{::ligand.tlc}}</div>
+                            </div>
+                            <div class="elements">
+                                <div class="element">{{::ligand.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sequence motifs -->
+                    <div data-ng-show="tab.isSelected(3)" class="representation">
+                        <div class="chain"
+                             data-ng-mouseover="highlight(motif.chain, motif.start, motif.end)"
+                             data-ng-mouseleave="deselect()"
+                             data-ng-repeat="motif in protein.sequenceMotifs | orderBy: 'type'">
+                            <div class="elementId">
+                                <div>{{::motif.type}}</div>
+                            </div>
+                            <div class="elements">
+                                <div class="element">chain: {{::motif.chain}}<br />
+                                    range: {{::motif.start}}-{{::motif.end}}<br />
+                                    sequence: {{::motif.sequence}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- helices -->
+                    <div data-ng-show="tab.isSelected(4)" class="representation">
+                        <div class="chain"
+                             data-ng-mouseover="highlight(helix.chain, helix.start, helix.end)"
+                             data-ng-mouseleave="deselect()"
+                             data-ng-repeat="helix in protein.helices">
+                            <div class="elementId">
+                                <div>H{{::$index + 1}}</div>
+                            </div>
+                            <div class="elements">
+                                <div class="element">chain: {{::helix.chain}}<br />
+                                    range: {{::helix.start}}-{{::helix.end}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- kinks -->
+                    <div data-ng-show="tab.isSelected(5)" class="representation">
+                        <div class="chain"
+                             data-ng-mouseover="highlight(kink.chain, kink.kinkPosition)"
+                             data-ng-mouseleave="deselect()"
+                             data-ng-repeat="kink in protein.kinks">
+                            <div class="elementId">
+                                <div>{{::kink.chain}}-{{::kink.kinkPosition}}</div>
+                            </div>
+                            <div class="elements">
+                                <div class="element">chain: {{::kink.chain}}<br />
+                                    kink position: {{::kink.kinkPosition}}<br />
+                                    angle: {{::kink.angle}}<br />
+                                    error: {{::kink.error}}<br />
+                                    sequence: {{::kink.sequence}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- mutations -->
+                    <div data-ng-show="tab.isSelected(6)" class="representation">
+                        <div class="chain" data-ng-repeat="chain in protein.chains">
                             <div class="elementId"
                                  data-ng-mouseover="highlight(chain.id)"
                                  data-ng-mouseleave="deselect()">
@@ -204,7 +261,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div-->
+                    </div>
                 </div>
             </div>
         </div>

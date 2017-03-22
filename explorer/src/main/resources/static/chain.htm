@@ -1,0 +1,163 @@
+<section data-ng-cloak class="text-left wrapper" xmlns="http://www.w3.org/1999/html">
+    <div data-ng-show="loadingModel" class="overlay"></div>
+
+    <!-- the visualizer part on the left -->
+    <div class="visualization">
+        <div class="wrapper">
+            <div class="dropdown-select visualization-options"
+                 title="select feature to color visualization"
+                 data-dropdown-select="features"
+                 data-dropdown-model="options.coloringFeature"
+                 data-dropdown-item-label="name">
+            </div>
+
+            <!-- PV instance -->
+            <div id="protein-visualizer" class="visualization-options"></div>
+
+            <!-- general render options -->
+            <div class="visualization-options">
+                <!-- ligands -->
+                <div class="option fa fa-angle-right pull-right"
+                     data-ng-click="viewerOptions.renderLigands = !viewerOptions.renderLigands"
+                     data-ng-class="{ active: viewerOptions.renderLigands }"
+                     title="render ligands"></div>
+            </div>
+
+            <!-- PLIP options -->
+            <div class="visualization-options" data-ng-show="protein.plipDataPresent">
+                <div class="option fa fa-exchange pull-right"
+                     data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
+                     data-ng-class="{ active: options.renderWaterBridges }"
+                     title="render water bridges"
+                     data-ng-show="protein.waterBridges.length > 0"></div>
+                <div class="option fa fa-exchange pull-right"
+                     data-ng-click="options.renderSaltBridges = !options.renderSaltBridges"
+                     data-ng-class="{ active: options.renderSaltBridges }"
+                     title="render salt bridges"
+                     data-ng-show="protein.saltBridges.length > 0"></div>
+                <div class="option fa fa-database pull-right"
+                     data-ng-click="options.renderPiStackings = !options.renderPiStackings"
+                     data-ng-class="{ active: options.renderPiStackings }"
+                     title="render pi-stackings"
+                     data-ng-show="protein.piStackings.length > 0"></div>
+                <div class="option fa fa-link pull-right"
+                     data-ng-click="options.renderPiCationInteractions = !options.renderPiCationInteractions"
+                     data-ng-class="{ active: options.renderPiCationInteractions }"
+                     title="render pi-cation interactions"
+                     data-ng-show="protein.piCationInteractions.length > 0"></div>
+                <div class="option fa fa-arrows pull-right"
+                     data-ng-click="options.renderMetalComplexes = !options.renderMetalComplexes"
+                     data-ng-class="{ active: options.renderMetalComplexes }"
+                     title="render metal complexes"
+                     data-ng-show="protein.metalComplexes.length > 0"></div>
+                <div class="option fa fa-exchange pull-right"
+                     data-ng-click="options.renderHydrogenBonds = !options.renderHydrogenBonds"
+                     data-ng-class="{ active: options.renderHydrogenBonds }"
+                     title="render hydrogen bonds"
+                     data-ng-show="protein.hydrogenBonds.length > 0"></div>
+                <div class="option fa fa-exchange pull-right"
+                     data-ng-click="options.renderHalogenBonds = !options.renderHalogenBonds"
+                     data-ng-class="{ active: options.renderHalogenBonds }"
+                     title="render halogen bonds"
+                     data-ng-show="protein.halogenBonds.length > 0"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- the edit/data part on the right -->
+    <div class="chain-view">
+        <div-- class="wrapper">
+            <!-- general project navigation -->
+            <div class="chain-view-header clearfix">
+                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)">general</div>
+                <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)">homologous</div>
+
+                <div class="link pull-right" title="show in PDB">
+                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::reference.pdbId}}">PDB</a>
+                    <span class="fa fa-external-link"></span>
+                </div>
+            </div>
+
+            <div class="tse-scrollable">
+                <div class="tse-content">
+                    <!-- general information -->
+                    <div data-ng-show="isSelected(0)" class="view-tab">
+                        <div>pdbId: {{::reference.pdbId}}</div>
+                        <div>chainId: {{::reference.chainId}}</div>
+                        <div>title: {{::reference.title}}</div>
+                        <div>
+                            <ng-pluralize count="::reference.ligands.length"
+                                      when="{'0': 'no ligands',
+                                         'one': '1 ligand',
+                                         'other': '{} ligands'}">
+                            </ng-pluralize>
+                            <ng-pluralize count="::(reference.ligands | filter: { type : 'water' }).length"
+                                      when="{'0': '(none being water)',
+                                     'one': '(1 being water)',
+                                     'other': '({} being water)'}">
+                            </ng-pluralize>
+                        </div>
+                        <div>
+                            homologous protein chains:
+                            <span data-ng-repeat="homolog in reference.homologous">
+                                <a data-ng-href="chain/{{homolog}}">
+                                    {{::homolog}}
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- homologous sequences -->
+                    <div data-ng-show="isSelected(1)" class="view-tab homologous">
+                        <!-- navigation/editing/control over sequence objects -->
+                        <div class="ids">
+                            <div data-ng-repeat="chain in alignment.chains"
+                                 data-ng-click="toggleChain($index)"
+                                 data-ng-mouseover="hoverChain($index)"
+                                 data-ng-mouseleave="dehoverChain()">
+                                <input type="checkbox"
+                                       data-ng-disabled="true"
+                                       data-ng-model="chains[chain.id].selected"
+                                       title="{{::chain.id}}">
+                                {{::chain.id}}
+                            </div>
+                        </div>
+
+                        <!-- the alignment view -->
+                        <div class="alignment">
+                            <div data-ng-repeat="chain in alignment.chains" class="sequence">
+                                <span data-ng-repeat="aa in chain.sequence"
+                                      data-ng-mouseover="hoverPosition($index)"
+                                      data-ng-mouseleave="dehoverPosition()"
+                                      data-ng-click="selectPosition($index)"
+                                      data-ng-class="{ variant : variants.indexOf($index) != -1,
+                                         annotated : annotations.indexOf($index) != -1,
+                                         focus : isFocusPosition($index),
+                                         hover : isHoverPosition($index) }">{{::aa.olc}}</span>
+                            </div>
+                        </div>
+
+                        <input type="number"
+                               title="window size"
+                               data-ng-model="windowSize"
+                               style="color: black"
+                               min="0"
+                               max="10" />
+
+                        <div data-ng-click="leaveSelectionMode()"
+                             data-ng-show="selectionMode">leave selection mode</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //TODO this is ugly
+        $(this).delay(1000).queue(function() {
+            $('.tse-scrollable').TrackpadScrollEmulator();
+
+            $(this).dequeue();
+        });
+    </script>
+</section>

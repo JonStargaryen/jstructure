@@ -43,8 +43,8 @@
         });
 
         $routeProvider.when('/chain/:chainid', {
-            templateUrl: '/protein.htm',
-            controller: 'ProteinController'
+            templateUrl: '/chain.htm',
+            controller: 'ChainController'
         });
 
         $routeProvider.when('/literature', {
@@ -69,330 +69,10 @@
         $rootScope.page = function () {
             return $location.path();
         };
-    }]);
 
-    MODULE.controller('MultiSequenceController', ['$scope', 'ProteinService',
-        function($scope, ProteinService) {
-        var dataInitialized = false;
-        // positions with variants
-        var variants = [];
-        // collection of already initialized (i.e. PDB fetched from server) chains
-        var initializedChains = [];
-        // collection of currently selected chains
-        $scope.selectedChains = {};
-
-        $scope.$watch('tab', function(newVal) {
-            // tab got id 1 TODO this is ugly
-            if(!dataInitialized &&newVal === 1) {
-                initialize();
-                dataInitialized = true;
-            }
+        $rootScope.$on("$locationChangeStart", function() {
+           $rootScope.context = [];
         });
-
-        function initialize() {
-            // load associated sequences from server
-            ProteinService.loadSequences($scope.protein.rep).then(function(response) {
-                var alignment = response.data;
-                console.log(alignment);
-
-                // expose sequences
-                $scope.chains = alignment.chains;
-
-                var sequenceLength = $scope.chains[0].sequence.length;
-                var numberOfSequences = $scope.chains.length;
-                // determine positions with variants
-                outer : for(var pos = 0; pos < sequenceLength; pos++) {
-                    var char = $scope.chains[0].sequence[pos].olc;
-                    for(var seq = 1; seq < numberOfSequences; seq++) {
-                        if(char != $scope.chains[seq].sequence[pos].olc) {
-                            //TODO some entropy value here?
-                            variants.push(pos);
-                            continue outer;
-                        }
-                    }
-                }
-
-                // mark representative as selected
-                initializedChains.push(alignment.representativeChainId);
-                $scope.selectedChains[alignment.representativeChainId] = true;
-            }).catch(function(response) {
-                console.log('impl error handling at multi-sequence view:');
-                console.log(response);
-            });
-        }
-
-        $scope.isVariant = function(index) {
-            return variants.indexOf(index) != -1;
-        };
-
-        $scope.toggleChain = function(index) {
-            var chainId = $scope.chains[index].id;
-            // ensure chain is loaded
-            if(initializedChains.indexOf(chainId) == -1) {
-                initializeChain(chainId);
-            }
-
-            //TODO impl add/remove, show/hide in pv
-        };
-
-        function initializeChain(chainId) {
-            console.log("loading " + chainId);
-
-            ProteinService.loadStructure(chainId).then(function(response) {
-                console.log(response.data);
-            }).catch(function(response) {
-                console.log("TODO error handling:");
-                console.log(response);
-            });
-
-            initializedChains.push(chainId);
-        }
-    }]);
-
-    MODULE.controller('ProteinController', ['$scope', '$rootScope', '$routeParams', 'design', 'interactions', 'ProteinService', 'features',
-        function($scope, $rootScope, $routeParams, design, interactions, ProteinService, features) {
-        $scope.loading = true;
-        $scope.options = {
-            coloringFeature : features[0],
-            renderLigands : true
-        };
-        var initializedInteractions = [];
-        var viewer, structure, protein, ligands;
-
-        $scope.tab = 0;
-        $scope.selectTab = function (setTab){
-            $scope.tab = setTab;
-        };
-        $scope.isSelected = function (checkTab){
-            return $scope.tab === checkTab;
-        };
-
-        ProteinService.loadModel($routeParams.chainid).then(function(response) {
-            $scope.protein = response.data;
-            console.log($scope.protein);
-
-            // the context navigation in the header - push entries for additional levels
-            $rootScope.context = [];
-            var split = $routeParams.chainid.split("_");
-            $scope.protein.pdbId = split[0];
-            $scope.protein.chainId = split[1];
-            $rootScope.context.push('pdb: ' + $scope.protein.pdbId);
-            $rootScope.context.push('chain: ' + $scope.protein.chainId);
-
-            visualizeProteinStructure();
-
-            $scope.loading = false;
-        }).catch(function(response) {
-            alert('down');
-        });
-
-        /* PV related functions */
-        function visualizeProteinStructure() {
-            var options = {
-                width : 400,
-                height : 400,
-                // antialias : true,
-                quality : 'high',
-                background : '#313a41',
-                animateTime : 500,
-                selectionColor : '#f00',
-                fog : false
-            };
-
-            // ensure container is empty
-            document.getElementById('protein-visualizer').innerHTML = '';
-
-            viewer = pv.Viewer(document.getElementById('protein-visualizer'), options);
-            structure = io.pdb($scope.protein.pdb);
-            mol.assignHelixSheet(structure);
-
-            initProtein();
-            initLigands();
-            if(!$scope.options.renderLigands)
-                toggle('ligands', false, true);
-
-            viewer.centerOn(structure);
-            viewer.autoZoom();
-        }
-
-        function findGroup(protein, chainId, num) {
-            var residue = {};
-            protein.chains.forEach(function(chain) {
-                if(chain.id != chainId)
-                    return;
-                chain.groups.forEach(function(group) {
-                    if(group.resn != num)
-                        return;
-                    residue = group;
-                });
-            });
-            return residue;
-        }
-
-        /* render plain PDB structure with chosen style */
-        function initProtein() {
-            protein = viewer.cartoon('protein', structure.select('protein'), { color: colorOp });
-        }
-
-        function initLigands() {
-            ligands = viewer.ballsAndSticks('ligands', structure.select('ligand'),
-                { color: pv.color.uniform(design.lighterColor) });
-        }
-
-        var colorOp = new pv.color.ColorOp(function(atom, out, index) {
-            var rgb;
-
-            if($scope.options.coloringFeature.tag === "none") {
-                // no coloring requested
-                rgb = pv.color.hex2rgb(design.lighterColor);
-            } else {
-                // read property and transform to rgb
-                var residue = atom.residue();
-                var group = findGroup($scope.protein, residue.chain().name(), residue.num());
-                var hsv = group[$scope.options.coloringFeature.tag];
-                rgb = hsl2rgb(hsv[0] / 360, hsv[1] / 100, hsv[2] / 100);
-            }
-
-            out[index] = rgb[0];
-            out[index + 1] = rgb[1];
-            out[index + 2] = rgb[2];
-            out[index + 3] = 1.0;
-        });
-
-        /* render PLIP interactions */
-        function createInteractions(type) {
-            console.log('creating interactions for ' + type);
-            $scope.protein[type].forEach(function(entry) {
-                var g = viewer.customMesh(type);
-                g.addTube(entry.coords1, entry.coords2, 0.15, { cap : false, color : interactions[type] });
-            });
-            initializedInteractions.push(type);
-        }
-
-        $scope.$watch('options.coloringFeature', function(newVal, oldVal){
-            if(newVal === oldVal)
-                return;
-            console.log("coloring feature changed from '" + oldVal.name + "' to '" + newVal.name + "'");
-            protein.colorBy(colorOp);
-            viewer.requestRedraw();
-        });
-
-        function toggle(context, newVal, oldVal) {
-            if(newVal === oldVal)
-                return;
-            console.log("render '" + context + "' changed from '" + oldVal + "' to '" + newVal + "'");
-
-            if(newVal)
-                viewer.show(context);
-            else
-                viewer.hide(context);
-            viewer.requestRedraw();
-        }
-
-        $scope.$watch('options.renderLigands', function(newVal, oldVal) {
-            toggle('ligands', newVal, oldVal);
-        });
-
-        $scope.$watch('options.renderKinks', function(newVal, oldVal) {
-            toggle('kinks', newVal, oldVal);
-        });
-
-        $scope.$watch('options.renderMembrane', function(newVal, oldVal) {
-            toggle('membrane', newVal, oldVal);
-        });
-
-        $scope.$watch('options.renderHalogenBonds', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'halogenBonds');
-        });
-
-        $scope.$watch('options.renderHydrogenBonds', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'hydrogenBonds');
-        });
-
-        $scope.$watch('options.renderHydrophobicInteractions', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'hydrophobicInteractions');
-        });
-
-        $scope.$watch('options.renderMetalComplexes', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'metalComplexes');
-        });
-
-        $scope.$watch('options.renderPiCationInteractions', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'piCationInteractions');
-        });
-
-        $scope.$watch('options.renderPiStackings', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'piStackings');
-        });
-
-        $scope.$watch('options.renderSaltBridges', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'saltBridges');
-        });
-
-        $scope.$watch('options.renderWaterBridges', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'waterBridges');
-        });
-
-        function toggleInteractions(newVal, oldVal, type) {
-            if(newVal === oldVal)
-                return;
-            console.log('render ' + type + ' changed from ' + oldVal + ' to ' + newVal);
-            if(newVal) {
-                if(initializedInteractions.indexOf(type) < 0)
-                    createInteractions(type);
-                viewer.show(type);
-            } else {
-                viewer.hide(type);
-            }
-            viewer.requestRedraw();
-        }
-
-        $scope.highlight = function(chain, resn, endResn) {
-            console.log("highlighting: " + chain + " " + resn + " " + endResn);
-            var selection = { cname : chain };
-            if(resn) {
-                if (endResn)
-                    selection.rnumRange = [+resn, +endResn];
-                else
-                    selection.rnum = +resn;
-            }
-            protein.setSelection(protein.select(selection));
-            ligands.setSelection(ligands.select(selection));
-            viewer.requestRedraw();
-        };
-
-        $scope.deselect = function() {
-            var ev = structure.full().createEmptyView();
-            protein.setSelection(ev);
-            ligands.setSelection(ev);
-            viewer.requestRedraw();
-        };
-
-        // http://stackoverflow.com/questions/2353211/hsl-to-rgb-color-conversion
-        function hsl2rgb(h, s, v){
-            var r, g, b;
-
-            if(s == 0) {
-                r = g = b = v; // achromatic
-            } else {
-                var hue2rgb = function hue2rgb(p, q, t) {
-                    if (t < 0) t += 1;
-                    if (t > 1) t -= 1;
-                    if (t < 1 / 6) return p + (q - p) * 6 * t;
-                    if (t < 1 / 2) return q;
-                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-                    return p;
-                };
-
-                var q = v < 0.5 ? v * (1 + s) : v + s - v * s;
-                var p = 2 * v - q;
-                r = hue2rgb(p, q, h + 1 / 3);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h - 1 / 3);
-            }
-
-            return [r, g, b];
-        }
     }]);
 
     /**
@@ -402,6 +82,319 @@
         function($scope, $location, ProteinService) {
         $scope.allChains = ProteinService.allChains;
         $scope.representativeChains = ProteinService.representativeChains;
+    }]);
+
+    /**
+     * the controller for the chain-view
+     */
+    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design',
+        function($scope, $rootScope, $routeParams, ProteinService, design) {
+        // loading flags
+        $scope.loadingModel = true;
+        $scope.loadingAlignment = true;
+        $scope.loadingStructure = true;
+
+        // the full-fledged model instance
+        $scope.reference = {};
+
+        // map of pdb structures: id -> pdb-record
+        $scope.chains = {};
+
+        // the sequence alignment and variant positions therein
+        $scope.alignment = {};
+        $scope.variants = [];
+        //TODO impl
+        $scope.annotations = [0, 20, 30];
+        var sequenceLength = 0;
+        var focusPosition = -1000;
+        var hoverRange = { start : -1000, end : -1000 };
+        $scope.selectionMode = false;
+        $scope.windowSize = 3;
+
+        // instance and control over pv
+        var viewerDefaultOptions = {
+            width : 400,
+            height : 400,
+            antialias : true,
+            quality : 'high',
+            background : '#313a41',
+            selectionColor : '#f00',
+            fog : false
+        };
+        var viewer = pv.Viewer(document.getElementById('protein-visualizer'), viewerDefaultOptions);
+        $scope.viewerOptions = {
+            renderLigands : false
+        };
+
+        // control over the protein-view navigation tab
+        $scope.tab = 0;
+        $scope.selectTab = function (setTab) {
+            $scope.tab = setTab;
+        };
+        $scope.isSelected = function (checkTab) {
+            return $scope.tab === checkTab;
+        };
+
+        // init model for reference chain
+        console.log('fetching model for ' + $routeParams.chainid);
+        ProteinService.loadModel($routeParams.chainid).then(function (response) {
+            var chainId = $routeParams.chainid;
+            $scope.reference = response.data;
+            console.log($scope.reference);
+
+            // the context navigation in the header - push entries for additional levels
+            var split = chainId.split("_");
+            $scope.reference.pdbId = split[0];
+            $scope.reference.chainId = split[1];
+
+            // register in model map
+            $scope.chains[chainId] = $scope.reference;
+            $scope.chains[chainId].selected = true;
+
+            registerInViewer(chainId, true);
+            initializeAlignment();
+        }).catch(function (response) {
+            console.log('model: impl error handling!');
+            console.log(response);
+        }).finally(function () {
+            $scope.loadingModel = false;
+        });
+
+        function registerInViewer(chainId, center) {
+            var chain = $scope.chains[chainId];
+            chain.structure = io.pdb(chain.pdb);
+            mol.assignHelixSheet(chain.structure);
+
+            chain.pv_protein = viewer.cartoon('protein_' + chainId, chain.structure.select('protein'), { color: pv.color.uniform(design.lighterColor) });
+            chain.pv_ligands = viewer.ballsAndSticks('ligands_' + chainId, chain.structure.select('ligand'), { color: pv.color.uniform(design.lighterColor) });
+            if(!$scope.viewerOptions.renderLigands) {
+                viewer.hide('ligands_' + chainId);
+            }
+
+            if(center) {
+                viewer.centerOn(chain.structure);
+                viewer.autoZoom();
+            }
+        }
+
+        // fetch additional model instance from the server
+        function initalizeStructure(chainId) {
+            $scope.loadingStructure = true;
+            // load pdb structure
+            console.log('fetching additional model for ' + chainId);
+            ProteinService.loadModel(chainId).then(function(response) {
+                $scope.chains[chainId] = response.data;
+                var chain = $scope.chains[chainId];
+                chain.selected = true;
+                registerInViewer(chainId);
+                // duplicated as newly fetched chains are always highlighted
+                chain.pv_protein.setSelection(chain.pv_protein.select({ cname : chain.chainId }));
+                chain.pv_ligands.setSelection(chain.pv_ligands.select({ cname : chain.chainId }));
+            }).catch(function(response) {
+                console.log('pdb: impl error handling!');
+                console.log(response);
+            }).finally(function() {
+                $scope.loadingStructure = false;
+            });
+        }
+
+        function initializeAlignment() {
+            // load associated sequences from server
+            ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
+                $scope.alignment = response.data;
+
+                sequenceLength = $scope.alignment.chains[0].sequence.length;
+                var numberOfSequences = $scope.alignment.chains.length;
+                // determine positions with variants
+                outer : for(var pos = 0; pos < sequenceLength; pos++) {
+                    var char = $scope.alignment.chains[0].sequence[pos].olc;
+                    for(var seq = 1; seq < numberOfSequences; seq++) {
+                        if(char != $scope.alignment.chains[seq].sequence[pos].olc) {
+                            $scope.variants.push(pos);
+                            continue outer;
+                        }
+                    }
+                }
+            }).catch(function(response) {
+                console.log('impl error handling at multi-sequence view:');
+                console.log(response);
+            }).finally(function() {
+                $scope.loadingAlignment = false;
+            });
+        }
+
+        /* pv controls */
+        $scope.$watch('viewerOptions.renderLigands', function(newVal, oldVal) {
+            if(newVal === oldVal)
+                return;
+
+            forAllChains(function(chain) {
+                var id = 'ligands_' + chain.id;
+                if(newVal && chain.selected) {
+                    viewer.show(id);
+                } else {
+                    viewer.hide(id);
+                }
+            });
+            viewer.requestRedraw();
+        });
+
+        /* interactivity functions from the msa-view */
+
+        $scope.selectPosition = function(index) {
+            $scope.selectionMode = true;
+            // we update potentially once again, to ensure correct ranges in all cases
+            focusPosition = index;
+            determineHoverRange(index);
+            $rootScope.context = ['selection mode', 'range: [' + hoverRange.start + ', ' + hoverRange.end + ']'];
+            viewer.hide('*');
+
+            var selection = null;
+            forAllChains(function(chain) {
+                if(!chain.selected) {
+                    return;
+                }
+                selection = viewer.ballsAndSticks('selection',
+                    chain.pv_protein.select({ rnumRange : [ +chain.aminoAcids[hoverRange.start].resn,
+                            +chain.aminoAcids[hoverRange.end].resn ] }),
+                    { color: pv.color.uniform(design.lighterColor) });
+            });
+
+            //TODO bugged! is null
+            viewer.centerOn(selection);
+            viewer.autoZoom();
+            viewer.requestRedraw();
+        };
+
+        $scope.leaveSelectionMode = function() {
+            $scope.selectionMode = false;
+            $rootScope.context = [];
+            viewer.rm('selection');
+            forAllChains(function(chain) {
+                if(!chain.selected) {
+                    return;
+                }
+                viewer.show('protein_' + chain.id);
+                if($scope.viewerOptions.renderLigands) {
+                    viewer.show('ligands_' + chain.id);
+                }
+            });
+            viewer.requestRedraw();
+        };
+
+        /* hover selection of 1 residue, to be rendered as balls-and-sticks */
+        $scope.hoverPosition = function(index) {
+            // do not visualize anything in selection mode
+            if($scope.selectionMode) {
+                return;
+            }
+
+            focusPosition = index;
+            determineHoverRange(index);
+
+            forAllChains(function(chain) {
+                if(chain.selected == false) {
+                    return;
+                }
+
+                //TODO there is a offset for gaps
+                //TODO performance: faster when rendering selecting as selected style, then creating new objects?
+                // console.log(chain.id + ' index: ' + index + ' is rnum: ' + chain.aminoAcids[index].resn);
+                viewer.ballsAndSticks('hover',
+                    chain.pv_protein.select({ rnumRange : [ +chain.aminoAcids[hoverRange.start].resn,
+                        +chain.aminoAcids[hoverRange.end].resn ] }),
+                    { color: pv.color.uniform(design.lighterColor) }
+                );
+            });
+        };
+
+        function determineHoverRange(index) {
+            hoverRange.start = index - $scope.windowSize;
+            if(hoverRange.start < 0) {
+                hoverRange.start = 0;
+            }
+            hoverRange.end = index + $scope.windowSize;
+            if(hoverRange.end > sequenceLength) {
+                hoverRange.end = sequenceLength;
+            }
+        }
+
+        $scope.isFocusPosition = function(index) {
+            return focusPosition == index;
+        };
+
+        $scope.isHoverPosition = function(index) {
+            return index >= hoverRange.start && index <= hoverRange.end;
+        };
+
+        $scope.dehoverPosition = function() {
+            // ignore when in selection mode
+            if($scope.selectionMode) {
+                return;
+            }
+            focusPosition = -1;
+            hoverRange.start = -1000;
+            hoverRange.end = -1000;
+            viewer.rm('hover');
+            viewer.requestRedraw();
+        };
+
+        // toggle chain in pv, potentially fetch it first
+        $scope.toggleChain = function(index) {
+            var chainId = $scope.alignment.chains[index].id;
+            var chain = $scope.chains[chainId];
+            // ensure chain is loaded
+            if(!chain || !chain.hasOwnProperty('pdb')) {
+                initalizeStructure(chainId);
+                return;
+            }
+            chain.selected = !chain.selected;
+
+            if(chain.selected) {
+                viewer.show('protein_' + chainId);
+                if($scope.viewerOptions.renderLigands) {
+                    viewer.show('ligands_' + chainId);
+                }
+            } else {
+                viewer.hide('protein_' + chainId);
+                viewer.hide('ligands_' + chainId);
+            }
+            viewer.requestRedraw();
+        };
+
+        $scope.hoverChain = function(index) {
+            var chainId = $scope.alignment.chains[index].id;
+            var chain = $scope.chains[chainId];
+            if(!chain || !chain.selected) {
+                return;
+            }
+            chain.pv_protein.setSelection(chain.pv_protein.select({ cname : chain.chainId }));
+            chain.pv_ligands.setSelection(chain.pv_ligands.select({ cname : chain.chainId }));
+            viewer.requestRedraw();
+        };
+
+        $scope.dehoverChain = function() {
+            forAllChains(function(chain) {
+                if(!chain.selected) {
+                    return;
+                }
+                var ev = chain.structure.full().createEmptyView();
+                chain.pv_protein.setSelection(ev);
+                chain.pv_ligands.setSelection(ev);
+            });
+            viewer.requestRedraw();
+        };
+
+        // convenience for-all-chains function
+        function forAllChains(func) {
+            for(var chainEntry in $scope.chains) {
+                if(!$scope.chains.hasOwnProperty(chainEntry)) {
+                    return;
+                }
+                var chain = $scope.chains[chainEntry];
+                func(chain);
+            }
+        }
     }]);
 
     /**
@@ -437,7 +430,7 @@
         return {
             allChains : all,
             representativeChains : reps,
-            loadSequences : function(chainId) {
+            loadAlignment : function(chainId) {
                 return $http({ url : apiUrl + 'alignment/' + chainId, method : 'GET', responseType: 'text' });
             },
             loadStructure : function(chainId) {

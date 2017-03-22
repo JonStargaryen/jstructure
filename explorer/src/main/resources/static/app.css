@@ -67,7 +67,6 @@ header .context {
     border-right: 1px solid #323a41;
     float: left;
     line-height: 19px;
-    /* TODO limit length of title */
 }
 
 header .menu {
@@ -99,42 +98,37 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     background-color: black;
 }
 
-/* the multi-sequence alignment view */
-
-.homologous .ids, .homologous .sequences {
-    font-family: monospace;
-    color: #9fb4c7;
+/* the home view */
+.protein-list > a {
+    display: inline-block;
+    cursor: pointer;
+    padding-right: 0.5em;
+    color: white;
 }
 
-.homologous .ids {
-    float: left;
-    padding-right: 10px;
+/* the chain view */
+.tse-scrollable, .representation {
+    height: calc(100% - 35px);
 }
 
-.homologous .ids input {
-    margin: 0 !important;
+.view-tab {
+    padding: 10px;
 }
 
-.homologous .sequences {
-    overflow-x: scroll;
-    white-space: nowrap;
-    overflow-y: hidden;
+.chain-view {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    min-width: 400px;
 }
 
-.homologous .sequences span {
-    opacity: 0.4;
+.chain-view-header {
+    border-bottom: 1px solid #52585f;
+    width: 100%;
+    overflow: hidden;
 }
 
-.homologous .sequences span.active {
-    color: #d62728 !important;
-    opacity: 1.0 !important;
-}
-
-/* TODO cleanup */
-
-/* main page */
-
-.option, .sequence-header > div {
+.option, .chain-view-header > div {
     line-height: 16px;
     font-size: 14px;
     min-width: 35px;
@@ -151,7 +145,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     margin: 0 !important;
 }
 
-.option.active, .sequence-header > div.active {
+.option.active, .chain-view-header > div.active {
     background-color: rgba(255, 255, 255, 0.05);
     color: #51b2e9;
 }
@@ -160,14 +154,13 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     color: #96a3b3 !important;
 }
 
-.sequence-header > div {
+.chain-view-header > div {
     float: left;
     color: #9fb4c7;
     border-right: 1px solid #52585f;
 }
 
-/* visualizer part */
-
+/* the protein viewer + controls */
 .visualization {
     background-color: #313a41;
     position: relative;
@@ -178,7 +171,11 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     font-size: 14px;
 }
 
-.visualization .visualization-body > div {
+#protein-visualizer {
+    height: 401px;
+}
+
+.visualization-options {
     border-bottom: 1px solid #415060;
     line-height: 16px;
     font-size: 14px;
@@ -186,87 +183,51 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     min-height: 35px;
 }
 
-.visualization #protein-visualizer {
-    height: 401px;
-}
-
-.legend {
-    padding: 10px 10px 10px 42px;
-}
-
-.legend > div {
-    display: inline-block;
-    border: solid 1px;
-    height: 25px;
-    margin-right: 10px;
-    padding: 5px 10px;
-    vertical-align: top;
-    text-align: center;
-    background: #313a41;
-    font-weight: bold;
-}
-
-/* the general/edit/compute part */
-
-.sequence {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-    min-width: 400px;
-}
-
-.sequence-header {
-    border-bottom: 1px solid #52585f;
-    width: 100%;
-    overflow: hidden;
-}
-
-.representation {
-    padding: 10px;
-}
-
-.representation .chain {
-    padding: 10px;
-    display: flex;
-}
-
-.representation .elementId {
-    flex: 0 0 14px;
+/* the multi-sequence alignment view */
+.homologous .ids, .homologous .alignment {
+    font-family: monospace;
     color: #9fb4c7;
-    position: relative;
-    white-space: nowrap;
 }
 
-.representation .elementId > div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform:  translateX(-50%) translateY(-50%) rotate(-90deg);
-}
-
-.representation .elements {
-    flex: 1;
+.homologous .ids {
+    float: left;
     padding-right: 10px;
 }
 
-.representation .group {
-    display: inline-block;
-    min-width: 35px;
-    text-align: center;
-    border: solid 1px;
-    background: #313a41;
-    font-weight: bold;
-    padding: 10px 5px;
-    color: rgb(127, 138, 134);
+.homologous .ids input {
+    margin: 0 !important;
 }
 
-.tse-scrollable, .representation {
-    height: calc(100% - 35px);
-}
-
-.protein-list > a {
-    display: inline-block;
+.homologous .alignment {
+    overflow-x: scroll;
+    white-space: nowrap;
+    overflow-y: hidden;
     cursor: pointer;
-    padding-right: 0.5em;
-    color: white;
+}
+
+.homologous .alignment .sequence {
+    height: 15px;
+}
+
+.homologous .alignment span {
+    opacity: 0.4;
+}
+
+.homologous .alignment span.variant {
+    color: #d62728;
+    opacity: 1.0;
+}
+
+.homologous .alignment span.focus {
+    color: #d6d100;
+    opacity: 1.0;
+}
+
+.homologous .alignment span.hover {
+    opacity: 0.9;
+}
+
+.homologous .alignment span.annotated {
+    border: 1px solid white;
+    opacity: 1.0;
 }
