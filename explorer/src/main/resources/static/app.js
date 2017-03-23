@@ -162,25 +162,33 @@
 
         function registerInViewer(chainId, center) {
             var chain = $scope.chains[chainId];
-            chain.structure = io.pdb(chain.pdb);
-            mol.assignHelixSheet(chain.structure);
+            chain.pv_structure = io.pdb(chain.pdb);
+            mol.assignHelixSheet(chain.pv_structure);
 
-            chain.pv_protein = viewer.cartoon('protein_' + chainId, chain.structure.select('protein'), { color: pv.color.uniform(design.lighterColor) });
-            chain.pv_ligands = viewer.ballsAndSticks('ligands_' + chainId, chain.structure.select('ligand'), { color: pv.color.uniform(design.lighterColor) });
-            if(!$scope.viewerOptions.renderLigands) {
+            chain.pv_protein = viewer.cartoon('protein_' + chainId, chain.pv_structure.select('protein'), { color: pv.color.uniform(design.lighterColor) });
+            chain.pv_ligands = viewer.ballsAndSticks('ligands_' + chainId, chain.pv_structure.select('ligand'), { color: pv.color.uniform(design.lighterColor) });
+            if(!$scope.viewerOptions.renderLigands || $scope.selectionMode) {
                 viewer.hide('ligands_' + chainId);
+            }
+            if($scope.selectionMode) {
+                viewer.hide('protein_' + chainId);
+                viewer.show('selection_' + chainId);
+                // new structure registered while in selection mode: assign pv_selection property
+                chain.pv_selection = viewer.ballsAndSticks('selection_' + chain.id,
+                    chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
+                    { color: pv.color.uniform(design.lighterColor) });
             }
 
             if(center) {
-                viewer.centerOn(chain.structure);
+                viewer.centerOn(chain.pv_structure);
                 viewer.autoZoom();
             }
         }
 
         // fetch additional model instance from the server
-        function initalizeStructure(chainId) {
+        function initializeStructure(chainId) {
             $scope.loadingStructure = true;
-            // load pdb structure
+            // load pdb pv_structure
             console.log('fetching additional model for ' + chainId);
             ProteinService.loadModel(chainId).then(function(response) {
                 $scope.chains[chainId] = response.data;
@@ -190,6 +198,7 @@
                 // duplicated as newly fetched chains are always highlighted
                 chain.pv_protein.setSelection(chain.pv_protein.select({ cname : chain.chainId }));
                 chain.pv_ligands.setSelection(chain.pv_ligands.select({ cname : chain.chainId }));
+
             }).catch(function(response) {
                 console.log('pdb: impl error handling!');
                 console.log(response);
@@ -203,13 +212,14 @@
             ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
                 $scope.alignment = response.data;
 
-                sequenceLength = $scope.alignment.chains[0].sequence.length;
-                var numberOfSequences = $scope.alignment.chains.length;
+                //TODO probably move to back-end
+                sequenceLength = $scope.alignment.sequences[0].sequence.length;
+                var numberOfSequences = $scope.alignment.sequences.length;
                 // determine positions with variants
                 outer : for(var pos = 0; pos < sequenceLength; pos++) {
-                    var char = $scope.alignment.chains[0].sequence[pos].olc;
+                    var char = $scope.alignment.sequences[0].sequence[pos].olc;
                     for(var seq = 1; seq < numberOfSequences; seq++) {
-                        if(char != $scope.alignment.chains[seq].sequence[pos].olc) {
+                        if(char != $scope.alignment.sequences[seq].sequence[pos].olc) {
                             $scope.variants.push(pos);
                             continue outer;
                         }
@@ -241,7 +251,7 @@
 
         /* interactivity functions from the msa-view */
 
-        $scope.selectPosition = function(index) {
+        $scope.enterSelectionMode = function(index) {
             $scope.selectionMode = true;
             // we update potentially once again, to ensure correct ranges in all cases
             focusPosition = index;
@@ -249,19 +259,17 @@
             $rootScope.context = ['selection mode', 'range: [' + hoverRange.start + ', ' + hoverRange.end + ']'];
             viewer.hide('*');
 
-            var selection = null;
             forAllChains(function(chain) {
-                if(!chain.selected) {
-                    return;
-                }
-                selection = viewer.ballsAndSticks('selection',
-                    chain.pv_protein.select({ rnumRange : [ +chain.aminoAcids[hoverRange.start].resn,
-                            +chain.aminoAcids[hoverRange.end].resn ] }),
+                viewer.rm('selection_' + chain.id);
+                chain.pv_selection = viewer.ballsAndSticks('selection_' + chain.id,
+                    chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
                     { color: pv.color.uniform(design.lighterColor) });
+                if(!chain.selected) {
+                    viewer.hide('selection_' + chain.id);
+                }
             });
 
-            //TODO bugged! is null
-            viewer.centerOn(selection);
+            viewer.centerOn($scope.reference.pv_selection.select({ cname : $scope.reference.chainId }));
             viewer.autoZoom();
             viewer.requestRedraw();
         };
@@ -269,8 +277,8 @@
         $scope.leaveSelectionMode = function() {
             $scope.selectionMode = false;
             $rootScope.context = [];
-            viewer.rm('selection');
             forAllChains(function(chain) {
+                viewer.rm('selection_' + chain.id);
                 if(!chain.selected) {
                     return;
                 }
@@ -279,6 +287,10 @@
                     viewer.show('ligands_' + chain.id);
                 }
             });
+            viewer.centerOn($scope.reference.pv_structure.select({ cname: $scope.reference.chainId }));
+            viewer.autoZoom();
+            // some safety net as sometimes the highlight effect lingers after this call returns
+            $scope.dehoverChain();
             viewer.requestRedraw();
         };
 
@@ -297,12 +309,9 @@
                     return;
                 }
 
-                //TODO there is a offset for gaps
                 //TODO performance: faster when rendering selecting as selected style, then creating new objects?
-                // console.log(chain.id + ' index: ' + index + ' is rnum: ' + chain.aminoAcids[index].resn);
                 viewer.ballsAndSticks('hover',
-                    chain.pv_protein.select({ rnumRange : [ +chain.aminoAcids[hoverRange.start].resn,
-                        +chain.aminoAcids[hoverRange.end].resn ] }),
+                    chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
                     { color: pv.color.uniform(design.lighterColor) }
                 );
             });
@@ -341,35 +350,41 @@
 
         // toggle chain in pv, potentially fetch it first
         $scope.toggleChain = function(index) {
-            var chainId = $scope.alignment.chains[index].id;
+            var chainId = $scope.alignment.sequences[index].id;
             var chain = $scope.chains[chainId];
             // ensure chain is loaded
             if(!chain || !chain.hasOwnProperty('pdb')) {
-                initalizeStructure(chainId);
+                initializeStructure(chainId);
                 return;
             }
             chain.selected = !chain.selected;
 
             if(chain.selected) {
-                viewer.show('protein_' + chainId);
+                // either show full protein or selected fragment
+                viewer.show(($scope.selectionMode ? 'selection_' : 'protein_') + chainId);
                 if($scope.viewerOptions.renderLigands) {
                     viewer.show('ligands_' + chainId);
                 }
             } else {
                 viewer.hide('protein_' + chainId);
                 viewer.hide('ligands_' + chainId);
+                viewer.hide('selection_' + chainId);
             }
             viewer.requestRedraw();
         };
 
         $scope.hoverChain = function(index) {
-            var chainId = $scope.alignment.chains[index].id;
+            var chainId = $scope.alignment.sequences[index].id;
             var chain = $scope.chains[chainId];
             if(!chain || !chain.selected) {
                 return;
             }
-            chain.pv_protein.setSelection(chain.pv_protein.select({ cname : chain.chainId }));
-            chain.pv_ligands.setSelection(chain.pv_ligands.select({ cname : chain.chainId }));
+            if($scope.selectionMode) {
+                chain.pv_selection.setSelection(chain.pv_selection.select({ cname : chain.chainId }));
+            } else {
+                chain.pv_protein.setSelection(chain.pv_protein.select({ cname : chain.chainId }));
+                chain.pv_ligands.setSelection(chain.pv_ligands.select({ cname : chain.chainId }));
+            }
             viewer.requestRedraw();
         };
 
@@ -378,9 +393,12 @@
                 if(!chain.selected) {
                     return;
                 }
-                var ev = chain.structure.full().createEmptyView();
+                var ev = chain.pv_structure.full().createEmptyView();
                 chain.pv_protein.setSelection(ev);
                 chain.pv_ligands.setSelection(ev);
+                if(chain.pv_selection != undefined) {
+                    chain.pv_selection.setSelection(ev);
+                }
             });
             viewer.requestRedraw();
         };
@@ -391,8 +409,7 @@
                 if(!$scope.chains.hasOwnProperty(chainEntry)) {
                     return;
                 }
-                var chain = $scope.chains[chainEntry];
-                func(chain);
+                func($scope.chains[chainEntry]);
             }
         }
     }]);
@@ -432,9 +449,6 @@
             representativeChains : reps,
             loadAlignment : function(chainId) {
                 return $http({ url : apiUrl + 'alignment/' + chainId, method : 'GET', responseType: 'text' });
-            },
-            loadStructure : function(chainId) {
-                return $http({ url : apiUrl + 'pdb/' + chainId, method : 'GET', responseType: 'text' });
             },
             loadModel : function(chainId) {
                 return $http.get(apiUrl + 'json/' + chainId);

@@ -10,9 +10,7 @@ import java.util.stream.Collectors;
  * Created by bittrich on 3/17/17.
  */
 public class ExplorerChain {
-    private String id, sequence, pdb, rep, title;
-    private List<String> homologous;
-    private List<ExplorerGroup> aminoAcids;
+    private String id, pdb, rep, title;
     private List<ExplorerLigand> ligands;
     private boolean isRep;
     /* interactions */
@@ -28,18 +26,12 @@ public class ExplorerChain {
     public ExplorerChain() {
     }
 
-    public ExplorerChain(Chain chain, List<String> homologous, String representativeChainId) {
+    public ExplorerChain(Chain chain, String representativeChainId) {
         this.id = chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId();
-        this.sequence = chain.getAminoAcidSequence();
         this.pdb = chain.composePDBRecord();
         this.rep = representativeChainId;
-        this.homologous = homologous;
         this.isRep = representativeChainId.equals(this.id);
         this.title = chain.getParentProtein().getTitle();
-
-        this.aminoAcids = chain.aminoAcids()
-                .map(ExplorerGroup::new)
-                .collect(Collectors.toList());
 
         this.ligands = chain.select()
                 .hetatms()
@@ -52,16 +44,8 @@ public class ExplorerChain {
         return id;
     }
 
-    public String getSequence() {
-        return sequence;
-    }
-
     public String getPdb() {
         return pdb;
-    }
-
-    public List<String> getHomologous() {
-        return homologous;
     }
 
     public String getRep() {
@@ -74,10 +58,6 @@ public class ExplorerChain {
 
     public String getTitle() {
         return title;
-    }
-
-    public List<ExplorerGroup> getAminoAcids() {
-        return aminoAcids;
     }
 
     public List<ExplorerLigand> getLigands() {

@@ -192,14 +192,19 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 .homologous .ids {
     float: left;
     padding-right: 10px;
+    cursor: pointer;
 }
 
-.homologous .ids input {
-    margin: 0 !important;
+.homologous .ids div {
+    height: 15px;
+}
+
+.homologous .ids .selected {
+    color: #52b1e9;
 }
 
 .homologous .alignment {
-    overflow-x: scroll;
+    overflow-x: auto;
     white-space: nowrap;
     overflow-y: hidden;
     cursor: pointer;

@@ -99,7 +99,7 @@
                         </div>
                         <div>
                             homologous protein chains:
-                            <span data-ng-repeat="homolog in reference.homologous">
+                            <span data-ng-repeat="homolog in alignment.homologous">
                                 <a data-ng-href="chain/{{homolog}}">
                                     {{::homolog}}
                                 </a>
@@ -111,25 +111,22 @@
                     <div data-ng-show="isSelected(1)" class="view-tab homologous">
                         <!-- navigation/editing/control over sequence objects -->
                         <div class="ids">
-                            <div data-ng-repeat="chain in alignment.chains"
+                            <div data-ng-repeat="chain in alignment.sequences"
                                  data-ng-click="toggleChain($index)"
                                  data-ng-mouseover="hoverChain($index)"
-                                 data-ng-mouseleave="dehoverChain()">
-                                <input type="checkbox"
-                                       data-ng-disabled="true"
-                                       data-ng-model="chains[chain.id].selected"
-                                       title="{{::chain.id}}">
+                                 data-ng-mouseleave="dehoverChain()"
+                                 data-ng-class="{ selected : chains[chain.id].selected }">
                                 {{::chain.id}}
                             </div>
                         </div>
 
                         <!-- the alignment view -->
                         <div class="alignment">
-                            <div data-ng-repeat="chain in alignment.chains" class="sequence">
+                            <div data-ng-repeat="chain in alignment.sequences" class="sequence">
                                 <span data-ng-repeat="aa in chain.sequence"
                                       data-ng-mouseover="hoverPosition($index)"
                                       data-ng-mouseleave="dehoverPosition()"
-                                      data-ng-click="selectPosition($index)"
+                                      data-ng-click="enterSelectionMode($index)"
                                       data-ng-class="{ variant : variants.indexOf($index) != -1,
                                          annotated : annotations.indexOf($index) != -1,
                                          focus : isFocusPosition($index),
@@ -142,7 +139,8 @@
                                data-ng-model="windowSize"
                                style="color: black"
                                min="0"
-                               max="10" />
+                               max="10"
+                               data-ng-hide="selectionMode" />
 
                         <div data-ng-click="leaveSelectionMode()"
                              data-ng-show="selectionMode">leave selection mode</div>

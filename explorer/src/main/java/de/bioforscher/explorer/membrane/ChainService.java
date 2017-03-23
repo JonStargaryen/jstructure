@@ -1,8 +1,9 @@
 package de.bioforscher.explorer.membrane;
 
+import de.bioforscher.explorer.membrane.model.ExplorerAlignment;
 import de.bioforscher.explorer.membrane.model.ExplorerChain;
-import de.bioforscher.explorer.membrane.model.ModelFactory;
-import de.bioforscher.explorer.membrane.model.MultiSequenceAlignment;
+import de.bioforscher.explorer.membrane.model.ExplorerCluster;
+import de.bioforscher.explorer.membrane.model.ExplorerModelFactory;
 import de.bioforscher.explorer.membrane.repository.AlignmentRepository;
 import de.bioforscher.explorer.membrane.repository.ChainRepository;
 import de.bioforscher.jstructure.parser.pdb.PDBDatabaseQuery;
@@ -70,15 +71,14 @@ public class ChainService {
         List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1]).subList(0, 10);
         logger.info("[{}] mapped homologous {}", clusterRepresentativeChainId, clusterChainIds);
 
-        List<ExplorerChain> explorerChains = ModelFactory.createChains(clusterRepresentativeChainId, clusterChainIds);
+//        List<ExplorerChain> explorerChains = ExplorerModelFactory.createCluster(clusterRepresentativeChainId, clusterChainIds);
+//        ExplorerAlignment multiSequenceAlignment = ExplorerModelFactory.createMultiSequenceAlignment(clusterRepresentativeChainId, explorerChains);
 
-        logger.info("[{}] creating multi-sequence alignment by clustal omega", clusterRepresentativeChainId);
-        //TODO case of no homologous
-        MultiSequenceAlignment multiSequenceAlignment = ModelFactory.createMultiSequenceAlignment(clusterRepresentativeChainId, explorerChains);
+        ExplorerCluster explorerCluster = ExplorerModelFactory.createCluster(clusterRepresentativeChainId, clusterChainIds);
 
         logger.info("[{}] persisting chains and alignment", clusterRepresentativeChainId);
-        chainRepository.save(explorerChains);
-        alignmentRepository.save(multiSequenceAlignment);
+        chainRepository.save(explorerCluster.getChains());
+        alignmentRepository.save(explorerCluster.getAlignment());
     }
 
     public List<String> getAllRepresentativeChainIds() {
@@ -97,8 +97,8 @@ public class ChainService {
         throw new NoSuchElementException("could not retrieve entry for " + rawId);
     }
 
-    public MultiSequenceAlignment getAlignment(String representativeChainId) {
-        List<MultiSequenceAlignment> result = alignmentRepository.findAlignmentByRepresentativeChainId(representativeChainId);
+    public ExplorerAlignment getAlignment(String representativeChainId) {
+        List<ExplorerAlignment> result = alignmentRepository.findAlignmentByRepresentativeChainId(representativeChainId);
         if(result.size() > 0) {
             return result.get(0);
         }

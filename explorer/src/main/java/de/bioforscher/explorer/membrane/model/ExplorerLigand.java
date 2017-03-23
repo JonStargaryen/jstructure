@@ -8,7 +8,7 @@ import de.bioforscher.jstructure.model.structure.Group;
  */
 public class ExplorerLigand {
     private int resn;
-    private String tlc, type, name, pdb;
+    private String tlc, type, name;
 
     public ExplorerLigand() {
     }
@@ -18,7 +18,6 @@ public class ExplorerLigand {
         this.tlc = ligand.getThreeLetterCode();
         this.type = tlc.equals("HOH") ? "water" : "ligand";
         this.name = ligand.getGroupInformation().getName().replace("\"", "");
-        this.pdb = ligand.composePDBRecord();
     }
 
     public int getResn() {
@@ -35,9 +34,5 @@ public class ExplorerLigand {
 
     public String getName() {
         return name;
-    }
-
-    public String getPdb() {
-        return pdb;
     }
 }

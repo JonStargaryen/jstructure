@@ -1,7 +1,7 @@
 package de.bioforscher.explorer.membrane;
 
+import de.bioforscher.explorer.membrane.model.ExplorerAlignment;
 import de.bioforscher.explorer.membrane.model.ExplorerChain;
-import de.bioforscher.explorer.membrane.model.MultiSequenceAlignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class ChainController {
     }
 
     @RequestMapping(value = "/alignment/{id}", method = RequestMethod.GET)
-    public MultiSequenceAlignment getAlignmentById(@PathVariable("id") String id) throws NoSuchElementException {
+    public ExplorerAlignment getAlignmentById(@PathVariable("id") String id) throws NoSuchElementException {
         return chainService.getAlignment(id);
     }
 
