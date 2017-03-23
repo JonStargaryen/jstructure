@@ -41,10 +41,11 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
         }
 
         try {
-            logger.info("fetching UniProt information for {}", uniprotId);
-            //TODO somehow this call is extremely fragile
+            logger.debug("fetching UniProt information for {}", uniprotId);
+            //TODO error-handling for connectivity issues and downtime
             UniProtAnnotationContainer uniProtAnnotationContainer = new UniProtAnnotationContainer(Jsoup.connect(String.format(UNIPROT_FETCH_URL, uniprotId)).get());
             chain.setFeature(UNIPROT_ANNOTATION, uniProtAnnotationContainer);
+            logger.info("{} mutations, {} variants, {} references", uniProtAnnotationContainer.getMutagenesisSites().size(), uniProtAnnotationContainer.getNaturalVariants().size(), uniProtAnnotationContainer.getReferences().size());
         } catch (IOException e) {
             throw new UncheckedIOException("could not retrieve UniProt entry " + uniprotId + ": " + e.getCause().getLocalizedMessage(), e);
         }

@@ -2,11 +2,14 @@ package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.clustalo.ClustalOmegaRestQuery;
+import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +27,9 @@ import java.util.stream.Collectors;
  */
 public class ExplorerModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ExplorerModelFactory.class);
+    //TODO some 'worker'-patterns
 //    private static final AbstractFeatureProvider plipAnnotator = FeatureProviderRegistry.resolve(PLIPAnnotator.PLIP_INTERACTIONS);
+    private static final AbstractFeatureProvider uniprotAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotator.UNIPROT_ANNOTATION);
 
     public static ExplorerCluster createCluster(String representativeChainId,
                                                   List<String> chainIds) {
@@ -38,6 +43,7 @@ public class ExplorerModelFactory {
 
 //        proteins.values().parallelStream().forEach(plipAnnotator::process);
         //TODO plip interactions assignment
+        proteins.values().parallelStream().forEach(uniprotAnnotator::process);
 
         // the reference of the pv_structure alignment
         Chain referenceChain = proteins.get(representativeChainId.split("_")[0])

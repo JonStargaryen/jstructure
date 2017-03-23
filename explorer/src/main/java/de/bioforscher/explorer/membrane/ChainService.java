@@ -27,10 +27,8 @@ import java.util.stream.Stream;
 @Service
 public class ChainService {
     private static final Logger logger = LoggerFactory.getLogger(ChainService.class);
-
     private ChainRepository chainRepository;
     private AlignmentRepository alignmentRepository;
-
     private List<String> allRepresentativeChainIds;
 
     @Autowired
@@ -68,11 +66,10 @@ public class ChainService {
         logger.info("[{}] spawned thread on representative chain id", clusterRepresentativeChainId);
         String split[] = clusterRepresentativeChainId.split("_");
         //TODO remove subList call
-        List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1]).subList(0, 10);
+        List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1])
+//                .subList(0, 10)
+                ;
         logger.info("[{}] mapped homologous {}", clusterRepresentativeChainId, clusterChainIds);
-
-//        List<ExplorerChain> explorerChains = ExplorerModelFactory.createCluster(clusterRepresentativeChainId, clusterChainIds);
-//        ExplorerAlignment multiSequenceAlignment = ExplorerModelFactory.createMultiSequenceAlignment(clusterRepresentativeChainId, explorerChains);
 
         ExplorerCluster explorerCluster = ExplorerModelFactory.createCluster(clusterRepresentativeChainId, clusterChainIds);
 

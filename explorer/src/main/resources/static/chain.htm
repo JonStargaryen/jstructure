@@ -6,7 +6,7 @@
         <div class="wrapper">
             <div class="dropdown-select visualization-options"
                  title="select feature to color visualization"
-                 data-dropdown-select="features"
+                 data-dropdown-select="::features"
                  data-dropdown-model="options.coloringFeature"
                  data-dropdown-item-label="name">
             </div>
@@ -85,6 +85,9 @@
                         <div>pdbId: {{::reference.pdbId}}</div>
                         <div>chainId: {{::reference.chainId}}</div>
                         <div>title: {{::reference.title}}</div>
+                        <div>ec: {{::reference.ec}}</div>
+                        <div>pfam: {{::reference.pfam}}</div>
+                        <div>uniprot: {{::reference.uniprot}}</div>
                         <div>
                             <ng-pluralize count="::reference.ligands.length"
                                       when="{'0': 'no ligands',
@@ -99,8 +102,8 @@
                         </div>
                         <div>
                             homologous protein chains:
-                            <span data-ng-repeat="homolog in alignment.homologous">
-                                <a data-ng-href="chain/{{homolog}}">
+                            <span data-ng-repeat="homolog in ::alignment.homologous">
+                                <a data-ng-href="chain/{{::homolog}}">
                                     {{::homolog}}
                                 </a>
                             </span>
@@ -111,7 +114,7 @@
                     <div data-ng-show="isSelected(1)" class="view-tab homologous">
                         <!-- navigation/editing/control over sequence objects -->
                         <div class="ids">
-                            <div data-ng-repeat="chain in alignment.sequences"
+                            <div data-ng-repeat="chain in ::alignment.sequences"
                                  data-ng-click="toggleChain($index)"
                                  data-ng-mouseover="hoverChain($index)"
                                  data-ng-mouseleave="dehoverChain()"
@@ -122,15 +125,16 @@
 
                         <!-- the alignment view -->
                         <div class="alignment">
-                            <div data-ng-repeat="chain in alignment.sequences" class="sequence">
-                                <span data-ng-repeat="aa in chain.sequence"
+                            <div data-ng-repeat="chain in ::alignment.sequences" class="sequence">
+                                <span data-ng-repeat="aa in ::chain.sequence"
                                       data-ng-mouseover="hoverPosition($index)"
                                       data-ng-mouseleave="dehoverPosition()"
                                       data-ng-click="enterSelectionMode($index)"
-                                      data-ng-class="{ variant : variants.indexOf($index) != -1,
+                                      data-ng-class="::{ variant : alignment.variants.indexOf($index) != -1,
                                          annotated : annotations.indexOf($index) != -1,
                                          focus : isFocusPosition($index),
                                          hover : isHoverPosition($index) }">{{::aa.olc}}</span>
+                                      <!-- TODO remove/improve performance of dynamic binding -->
                             </div>
                         </div>
 
@@ -143,7 +147,10 @@
                                data-ng-hide="selectionMode" />
 
                         <div data-ng-click="leaveSelectionMode()"
-                             data-ng-show="selectionMode">leave selection mode</div>
+                             data-ng-show="selectionMode">-> leave selection mode</div>
+
+                        <div data-ng-click="alert('impl!')"
+                             data-ng-show="selectionMode">-> align fragments locally</div>
                     </div>
                 </div>
             </div>

@@ -87,8 +87,8 @@
     /**
      * the controller for the chain-view
      */
-    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design',
-        function($scope, $rootScope, $routeParams, ProteinService, design) {
+    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features',
+        function($scope, $rootScope, $routeParams, ProteinService, design, features) {
         // loading flags
         $scope.loadingModel = true;
         $scope.loadingAlignment = true;
@@ -102,7 +102,6 @@
 
         // the sequence alignment and variant positions therein
         $scope.alignment = {};
-        $scope.variants = [];
         //TODO impl
         $scope.annotations = [0, 20, 30];
         var sequenceLength = 0;
@@ -122,6 +121,7 @@
             fog : false
         };
         var viewer = pv.Viewer(document.getElementById('protein-visualizer'), viewerDefaultOptions);
+        $scope.features = features;
         $scope.viewerOptions = {
             renderLigands : false
         };
@@ -165,7 +165,7 @@
             chain.pv_structure = io.pdb(chain.pdb);
             mol.assignHelixSheet(chain.pv_structure);
 
-            chain.pv_protein = viewer.cartoon('protein_' + chainId, chain.pv_structure.select('protein'), { color: pv.color.uniform(design.lighterColor) });
+            chain.pv_protein = viewer.cartoon('protein_' + chainId, chain.pv_structure.select('protein'), { color: pv.color.uniform(design.highlightColor) });
             chain.pv_ligands = viewer.ballsAndSticks('ligands_' + chainId, chain.pv_structure.select('ligand'), { color: pv.color.uniform(design.lighterColor) });
             if(!$scope.viewerOptions.renderLigands || $scope.selectionMode) {
                 viewer.hide('ligands_' + chainId);
@@ -176,12 +176,12 @@
                 // new structure registered while in selection mode: assign pv_selection property
                 chain.pv_selection = viewer.ballsAndSticks('selection_' + chain.id,
                     chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
-                    { color: pv.color.uniform(design.lighterColor) });
+                    { color: pv.color.uniform(design.highlightColor) });
             }
 
             if(center) {
                 viewer.centerOn(chain.pv_structure);
-                viewer.autoZoom();
+                viewer.fitTo(chain.pv_structure);
             }
         }
 
@@ -198,7 +198,6 @@
                 // duplicated as newly fetched chains are always highlighted
                 chain.pv_protein.setSelection(chain.pv_protein.select({ cname : chain.chainId }));
                 chain.pv_ligands.setSelection(chain.pv_ligands.select({ cname : chain.chainId }));
-
             }).catch(function(response) {
                 console.log('pdb: impl error handling!');
                 console.log(response);
@@ -211,20 +210,7 @@
             // load associated sequences from server
             ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
                 $scope.alignment = response.data;
-
-                //TODO probably move to back-end
                 sequenceLength = $scope.alignment.sequences[0].sequence.length;
-                var numberOfSequences = $scope.alignment.sequences.length;
-                // determine positions with variants
-                outer : for(var pos = 0; pos < sequenceLength; pos++) {
-                    var char = $scope.alignment.sequences[0].sequence[pos].olc;
-                    for(var seq = 1; seq < numberOfSequences; seq++) {
-                        if(char != $scope.alignment.sequences[seq].sequence[pos].olc) {
-                            $scope.variants.push(pos);
-                            continue outer;
-                        }
-                    }
-                }
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');
                 console.log(response);
@@ -263,14 +249,20 @@
                 viewer.rm('selection_' + chain.id);
                 chain.pv_selection = viewer.ballsAndSticks('selection_' + chain.id,
                     chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
-                    { color: pv.color.uniform(design.lighterColor) });
+                    { color: pv.color.uniform(design.highlightColor) });
                 if(!chain.selected) {
                     viewer.hide('selection_' + chain.id);
                 }
+                if($scope.viewerOptions.renderLigands) {
+                    viewer.show('ligands_' + chain.id);
+                }
             });
 
-            viewer.centerOn($scope.reference.pv_selection.select({ cname : $scope.reference.chainId }));
-            viewer.autoZoom();
+            var center = $scope.reference.pv_selection.select({ cname : $scope.reference.chainId });
+            viewer.centerOn(center);
+            viewer.fitTo(center);
+            // some safety net as sometimes the highlight effect lingers after this call returns
+            $scope.dehoverChain();
             viewer.requestRedraw();
         };
 
@@ -294,7 +286,7 @@
             viewer.requestRedraw();
         };
 
-        /* hover selection of 1 residue, to be rendered as balls-and-sticks */
+        /* hover selection of residues, to be rendered as balls-and-sticks */
         $scope.hoverPosition = function(index) {
             // do not visualize anything in selection mode
             if($scope.selectionMode) {
@@ -309,7 +301,7 @@
                     return;
                 }
 
-                //TODO performance: faster when rendering selecting as selected style, then creating new objects?
+                //TODO performance: faster when rendering selecting as selected style than creating new objects?
                 viewer.ballsAndSticks('hover',
                     chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
                     { color: pv.color.uniform(design.lighterColor) }

@@ -2,19 +2,21 @@ package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.parser.sifts.SiftsParser;
+import de.bioforscher.jstructure.parser.uniprot.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * An aligned sequence.
  * Created by bittrich on 3/20/17.
  */
 public class ExplorerSequence {
-    private String id;
+    private String id, ec, pfam, uniprot;
     private List<ExplorerAminoAcid> sequence;
+    private List<UniProtMutagenesisSite> mutations;
+    private List<UniProtNaturalVariant> variants;
+    private List<UniProtReference> references;
 
     public ExplorerSequence() {
     }
@@ -36,6 +38,30 @@ public class ExplorerSequence {
             }
             this.sequence.add(aminoAcid);
         }
+
+        this.ec = chain.getFeature(String.class, SiftsParser.EC_NUMBER);
+        this.pfam = chain.getFeature(String.class, SiftsParser.PFAM_ID);
+        this.uniprot = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
+
+        this.references = new ArrayList<>();
+        try {
+            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
+            this.mutations = uniProtAnnotationContainer.getMutagenesisSites();
+            this.variants = uniProtAnnotationContainer.getNaturalVariants();
+            mutations.stream()
+                    .map(UniProtMutagenesisSite::getEvidence)
+                    .flatMap(Collection::stream)
+                    .map(evidenceNumber -> uniProtAnnotationContainer.getReferences().get(Integer.valueOf(evidenceNumber) - 1))
+                    .forEach(references::add);
+            variants.stream()
+                    .map(UniProtNaturalVariant::getEvidence)
+                    .flatMap(Collection::stream)
+                    .map(evidenceNumber -> uniProtAnnotationContainer.getReferences().get(Integer.valueOf(evidenceNumber) - 1))
+                    .forEach(references::add);
+        } catch (NullPointerException e) {
+            this.mutations = new ArrayList<>();
+            this.variants = new ArrayList<>();
+        }
     }
 
     public String getId() {
@@ -44,5 +70,29 @@ public class ExplorerSequence {
 
     public List<ExplorerAminoAcid> getSequence() {
         return sequence;
+    }
+
+    public String getEc() {
+        return ec;
+    }
+
+    public String getPfam() {
+        return pfam;
+    }
+
+    public String getUniprot() {
+        return uniprot;
+    }
+
+    public List<UniProtMutagenesisSite> getMutations() {
+        return mutations;
+    }
+
+    public List<UniProtNaturalVariant> getVariants() {
+        return variants;
+    }
+
+    public List<UniProtReference> getReferences() {
+        return references;
     }
 }
