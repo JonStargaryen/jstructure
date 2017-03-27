@@ -212,9 +212,8 @@
             ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
                 $scope.alignment = response.data;
                 console.log($scope.alignment);
-                $scope.alignment.sequenceLength = $scope.alignment.sequences[0].sequence.length;
 
-                $scope.alignment.sequences.forEach(function(sequence) {
+                $scope.alignment.chains.forEach(function(sequence) {
                     if(sequence.id == $scope.reference.id) {
                         $scope.reference.ec = sequence.ec;
                         $scope.reference.pfam = sequence.pfam;
@@ -222,15 +221,6 @@
                         $scope.reference.title = sequence.title;
                     }
                 });
-
-                // keep track of mutated positions
-                // for(var seqIndex = 0; seqIndex < $scope.alignment.sequences.length; seqIndex++) {
-                //     $scope.alignment.sequences[seqIndex].mutations.forEach(function(mutation) {
-                //         mutation.position.forEach(function(position) {
-                //             mutations.push(seqIndex + "." + position);
-                //         });
-                //     });
-                // }
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');
                 console.log(response);
@@ -321,7 +311,6 @@
                     return;
                 }
 
-                //TODO performance: faster when rendering selecting as selected style than creating new objects?
                 viewer.ballsAndSticks('hover',
                     chain.pv_protein.select({ rnumRange : hoverRange }),
                     { color: pv.color.uniform(design.lighterColor) }
@@ -335,8 +324,8 @@
                 hoverRange[0] = 0;
             }
             hoverRange[1] = index + $scope.windowSize;
-            if(hoverRange[1] > $scope.alignment.sequenceLength) {
-                hoverRange[1] = $scope.alignment.sequenceLength;
+            if(hoverRange[1] > $scope.alignment.length) {
+                hoverRange[1] = $scope.alignment.length;
             }
         }
 
@@ -369,7 +358,7 @@
 
         // toggle chain in pv, potentially fetch it first
         $scope.toggleChain = function(index) {
-            var chainId = $scope.alignment.sequences[index].id;
+            var chainId = $scope.alignment.chains[index].id;
             var chain = $scope.chains[chainId];
             // ensure chain is loaded
             if(!chain || !chain.hasOwnProperty('pdb')) {
@@ -393,7 +382,7 @@
         };
 
         $scope.hoverChain = function(index) {
-            var chainId = $scope.alignment.sequences[index].id;
+            var chainId = $scope.alignment.chains[index].id;
             var chain = $scope.chains[chainId];
             if(!chain || !chain.selected) {
                 return;

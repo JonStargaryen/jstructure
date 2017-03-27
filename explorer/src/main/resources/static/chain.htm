@@ -128,29 +128,34 @@
 
                         <div data-ng-show="selectionMode">-> align fragments locally</div>
 
-                        <!-- navigation/editing/control over sequence objects -->
-                        <div class="ids">
-                            <div data-ng-repeat="chain in ::alignment.sequences"
-                                 data-ng-click="toggleChain($index)"
-                                 data-ng-mouseover="hoverChain($index)"
-                                 data-ng-mouseleave="dehoverChain()"
-                                 data-ng-class="{ selected : chains[chain.id].selected }">
-                                {{::chain.id}}
-                            </div>
-                        </div>
+                        <br />
 
-                        <!-- the alignment view -->
                         <div class="alignment">
-                            <div data-ng-repeat="chain in ::alignment.sequences" class="sequence">
-                                <span data-ng-repeat="aa in ::chain.sequence"
-                                      data-ng-mouseover="hoverPosition($index)"
-                                      data-ng-mouseleave="dehoverPosition()"
-                                      data-ng-click="enterSelectionMode($index)"
-                                      data-ng-class="::{ variant : isVariantPosition($index),
-                                         annotated : isAnnotatedPosition($parent.$index, $index),
+                            <!-- navigation/editing/control over sequence objects -->
+                            <div class="ids">
+                                <div data-ng-repeat="chain in ::alignment.chains track by chain.id"
+                                     data-ng-click="toggleChain($index)"
+                                     data-ng-mouseover="hoverChain($index)"
+                                     data-ng-mouseleave="dehoverChain()"
+                                     data-ng-class="{ selected : chains[chain.id].selected }">
+                                    {{::chain.id}}
+                                </div>
+                            </div>
+
+                            <!-- the alignment view -->
+                            <div class="sequences">
+                                <div data-ng-repeat="position in ::alignment.positions"
+                                     class="position"
+                                     data-ng-mouseover="hoverPosition($index)"
+                                     data-ng-mouseleave="dehoverPosition()"
+                                     data-ng-click="enterSelectionMode($index)"
+                                     data-ng-class="{ uniform : position.uniform,
+                                         mutation : position.mutant,
+                                         variation : position.variant,
                                          focus : isFocusPosition($index),
-                                         hover : isHoverPosition($index) }">{{::aa.olc}}</span>
-                                      <!-- TODO remove/improve performance of dynamic binding: this could be done by moving to 'stacked'/inlined spans which contain on binding for one position of the alignment. thus, complexity would only depend on sequence length and not number of aligned sequences * length -->
+                                         hover : isHoverPosition($index) }">
+                                    {{::position.olcs}}
+                                </div>
                             </div>
                         </div>
                     </div>

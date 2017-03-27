@@ -35,17 +35,20 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
     private void processInternally(Chain chain) {
         String uniprotId = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
 
-        if(uniprotId.equals(SiftsParser.UNKNOWN_MAPPING)) {
-            chain.setFeature(UNIPROT_ANNOTATION, new UniProtAnnotationContainer());
-            return;
-        }
+        UniProtAnnotationContainer uniProtAnnotationContainer = process(uniprotId);
+        chain.setFeature(UNIPROT_ANNOTATION, uniProtAnnotationContainer);
+        logger.info("{} mutations, {} variants, {} references", uniProtAnnotationContainer.getMutagenesisSites().size(), uniProtAnnotationContainer.getNaturalVariants().size(), uniProtAnnotationContainer.getReferences().size());
+    }
 
+    public UniProtAnnotationContainer process(String uniprotId) {
+        //TODO error-handling for connectivity issues and downtime
         try {
+            if(uniprotId.equals(SiftsParser.UNKNOWN_MAPPING)) {
+                return new UniProtAnnotationContainer();
+            }
+
             logger.debug("fetching UniProt information for {}", uniprotId);
-            //TODO error-handling for connectivity issues and downtime
-            UniProtAnnotationContainer uniProtAnnotationContainer = new UniProtAnnotationContainer(Jsoup.connect(String.format(UNIPROT_FETCH_URL, uniprotId)).get());
-            chain.setFeature(UNIPROT_ANNOTATION, uniProtAnnotationContainer);
-            logger.info("{} mutations, {} variants, {} references", uniProtAnnotationContainer.getMutagenesisSites().size(), uniProtAnnotationContainer.getNaturalVariants().size(), uniProtAnnotationContainer.getReferences().size());
+            return new UniProtAnnotationContainer(Jsoup.connect(String.format(UNIPROT_FETCH_URL, uniprotId)).get());
         } catch (IOException e) {
             throw new UncheckedIOException("could not retrieve UniProt entry " + uniprotId + ": " + e.getCause().getLocalizedMessage(), e);
         }

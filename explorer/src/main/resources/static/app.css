@@ -184,55 +184,58 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 /* the multi-sequence alignment view */
-.homologous .ids, .homologous .alignment {
+.alignment .ids, .homologous .sequences {
     font-family: monospace;
     color: #9fb4c7;
 }
 
-.homologous .ids {
+.alignment .ids {
     float: left;
     padding-right: 10px;
     cursor: pointer;
 }
 
-.homologous .ids div {
+.alignment .ids div {
     height: 15px;
 }
 
-.homologous .ids .selected {
+.alignment .ids .selected {
     color: #52b1e9;
 }
 
-.homologous .alignment {
-    overflow-x: auto;
-    white-space: nowrap;
+.alignment .sequences {
+    overflow-x: scroll;
     overflow-y: hidden;
     cursor: pointer;
 }
 
-.homologous .alignment .sequence {
-    height: 15px;
-}
-
-.homologous .alignment span {
+.alignment .position {
+    width: 1em;
+    display: table-cell;
     opacity: 0.4;
+    line-height: 15px;
 }
 
-.homologous .alignment span.variant {
+.alignment .position:not(.uniform) {
     color: #d62728;
     opacity: 1.0;
 }
 
-.homologous .alignment span.focus {
+.alignment .position.focus {
     color: #d6d100;
     opacity: 1.0;
 }
 
-.homologous .alignment span.hover {
+.alignment .position.hover {
     opacity: 0.9;
 }
 
-.homologous .alignment span.annotated {
+.alignment .position.mutant {
     border: 1px solid white;
+    opacity: 1.0;
+}
+
+.alignment .position.variant {
+    border: 1px solid purple;
     opacity: 1.0;
 }
