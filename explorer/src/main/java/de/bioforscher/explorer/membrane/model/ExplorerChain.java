@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * Created by bittrich on 3/17/17.
  */
 public class ExplorerChain {
-    private String id, pdb, rep, title;
+    private String id, pdb, rep;
     private List<ExplorerLigand> ligands;
     private boolean isRep;
     /* interactions */
@@ -31,7 +31,6 @@ public class ExplorerChain {
         this.pdb = chain.composePDBRecord();
         this.rep = representativeChainId;
         this.isRep = representativeChainId.equals(this.id);
-        this.title = chain.getParentProtein().getTitle();
 
         this.ligands = chain.select()
                 .hetatms()
@@ -54,10 +53,6 @@ public class ExplorerChain {
 
     public boolean isRep() {
         return isRep;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public List<ExplorerLigand> getLigands() {

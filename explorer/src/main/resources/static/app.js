@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'nvd3', 'ngDropdowns']);
+    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'ngDropdowns']);
 
     MODULE.constant('design', {
         defaultColor : '#454b52',
@@ -92,7 +92,7 @@
         // loading flags
         $scope.loadingModel = true;
         $scope.loadingAlignment = true;
-        $scope.loadingStructure = true;
+        $scope.loadingStructure = false;
 
         // the full-fledged model instance
         $scope.reference = {};
@@ -102,13 +102,12 @@
 
         // the sequence alignment and variant positions therein
         $scope.alignment = {};
-        //TODO impl
-        $scope.annotations = [0, 20, 30];
-        var sequenceLength = 0;
         var focusPosition = -1000;
-        var hoverRange = { start : -1000, end : -1000 };
+        var hoverRange = [ -1000, -1000 ];
         $scope.selectionMode = false;
         $scope.windowSize = 3;
+        var mutations = [];
+        var variants = [];
 
         // instance and control over pv
         var viewerDefaultOptions = {
@@ -153,6 +152,8 @@
 
             registerInViewer(chainId, true);
             initializeAlignment();
+
+            console.log($scope.chains);
         }).catch(function (response) {
             console.log('model: impl error handling!');
             console.log(response);
@@ -175,7 +176,7 @@
                 viewer.show('selection_' + chainId);
                 // new structure registered while in selection mode: assign pv_selection property
                 chain.pv_selection = viewer.ballsAndSticks('selection_' + chain.id,
-                    chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
+                    chain.pv_protein.select({ rnumRange : hoverRange }),
                     { color: pv.color.uniform(design.highlightColor) });
             }
 
@@ -210,7 +211,26 @@
             // load associated sequences from server
             ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
                 $scope.alignment = response.data;
-                sequenceLength = $scope.alignment.sequences[0].sequence.length;
+                console.log($scope.alignment);
+                $scope.alignment.sequenceLength = $scope.alignment.sequences[0].sequence.length;
+
+                $scope.alignment.sequences.forEach(function(sequence) {
+                    if(sequence.id == $scope.reference.id) {
+                        $scope.reference.ec = sequence.ec;
+                        $scope.reference.pfam = sequence.pfam;
+                        $scope.reference.uniprot = sequence.uniprot;
+                        $scope.reference.title = sequence.title;
+                    }
+                });
+
+                // keep track of mutated positions
+                // for(var seqIndex = 0; seqIndex < $scope.alignment.sequences.length; seqIndex++) {
+                //     $scope.alignment.sequences[seqIndex].mutations.forEach(function(mutation) {
+                //         mutation.position.forEach(function(position) {
+                //             mutations.push(seqIndex + "." + position);
+                //         });
+                //     });
+                // }
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');
                 console.log(response);
@@ -242,13 +262,13 @@
             // we update potentially once again, to ensure correct ranges in all cases
             focusPosition = index;
             determineHoverRange(index);
-            $rootScope.context = ['selection mode', 'range: [' + hoverRange.start + ', ' + hoverRange.end + ']'];
+            $rootScope.context = ['selection mode', 'range: ' + hoverRange];
             viewer.hide('*');
 
             forAllChains(function(chain) {
                 viewer.rm('selection_' + chain.id);
                 chain.pv_selection = viewer.ballsAndSticks('selection_' + chain.id,
-                    chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
+                    chain.pv_protein.select({ rnumRange : hoverRange }),
                     { color: pv.color.uniform(design.highlightColor) });
                 if(!chain.selected) {
                     viewer.hide('selection_' + chain.id);
@@ -303,29 +323,37 @@
 
                 //TODO performance: faster when rendering selecting as selected style than creating new objects?
                 viewer.ballsAndSticks('hover',
-                    chain.pv_protein.select({ rnumRange : [hoverRange.start, hoverRange.end] }),
+                    chain.pv_protein.select({ rnumRange : hoverRange }),
                     { color: pv.color.uniform(design.lighterColor) }
                 );
             });
         };
 
         function determineHoverRange(index) {
-            hoverRange.start = index - $scope.windowSize;
-            if(hoverRange.start < 0) {
-                hoverRange.start = 0;
+            hoverRange[0] = index - $scope.windowSize;
+            if(hoverRange[0] < 0) {
+                hoverRange[0] = 0;
             }
-            hoverRange.end = index + $scope.windowSize;
-            if(hoverRange.end > sequenceLength) {
-                hoverRange.end = sequenceLength;
+            hoverRange[1] = index + $scope.windowSize;
+            if(hoverRange[1] > $scope.alignment.sequenceLength) {
+                hoverRange[1] = $scope.alignment.sequenceLength;
             }
         }
+
+        $scope.isVariantPosition = function(index) {
+            return $scope.alignment.variants.indexOf(index) != -1;
+        };
+
+        $scope.isAnnotatedPosition = function(chainIndex, positionIndex) {
+            return mutations.indexOf(chainIndex + "." + positionIndex) != -1;
+        };
 
         $scope.isFocusPosition = function(index) {
             return focusPosition == index;
         };
 
         $scope.isHoverPosition = function(index) {
-            return index >= hoverRange.start && index <= hoverRange.end;
+            return index >= hoverRange[0] && index <= hoverRange[1];
         };
 
         $scope.dehoverPosition = function() {
@@ -334,8 +362,7 @@
                 return;
             }
             focusPosition = -1;
-            hoverRange.start = -1000;
-            hoverRange.end = -1000;
+            hoverRange = [-1000, -1000];
             viewer.rm('hover');
             viewer.requestRedraw();
         };

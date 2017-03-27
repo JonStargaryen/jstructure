@@ -1,5 +1,5 @@
 <section data-ng-cloak class="text-left wrapper" xmlns="http://www.w3.org/1999/html">
-    <div data-ng-show="loadingModel" class="overlay"></div>
+    <!--div data-ng-show="loadingModel" class="overlay"></div-->
 
     <!-- the visualizer part on the left -->
     <div class="visualization">
@@ -61,12 +61,15 @@
                      title="render halogen bonds"
                      data-ng-show="protein.halogenBonds.length > 0"></div>
             </div>
+            <div class="visualization-options" data-ng-show="loadingModel">loading model data...</div>
+            <div class="visualization-options" data-ng-show="loadingAlignment">loading alignment...</div>
+            <div class="visualization-options" data-ng-show="loadingStructure">loading structure...</div>
         </div>
     </div>
 
     <!-- the edit/data part on the right -->
     <div class="chain-view">
-        <div-- class="wrapper">
+        <div class="wrapper">
             <!-- general project navigation -->
             <div class="chain-view-header clearfix">
                 <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)">general</div>
@@ -112,6 +115,19 @@
 
                     <!-- homologous sequences -->
                     <div data-ng-show="isSelected(1)" class="view-tab homologous">
+                        <input type="number"
+                               title="window size"
+                               data-ng-model="windowSize"
+                               style="color: black"
+                               min="0"
+                               max="10"
+                               data-ng-hide="selectionMode" />
+
+                        <div data-ng-click="leaveSelectionMode()"
+                             data-ng-show="selectionMode">-> leave selection mode</div>
+
+                        <div data-ng-show="selectionMode">-> align fragments locally</div>
+
                         <!-- navigation/editing/control over sequence objects -->
                         <div class="ids">
                             <div data-ng-repeat="chain in ::alignment.sequences"
@@ -130,27 +146,13 @@
                                       data-ng-mouseover="hoverPosition($index)"
                                       data-ng-mouseleave="dehoverPosition()"
                                       data-ng-click="enterSelectionMode($index)"
-                                      data-ng-class="::{ variant : alignment.variants.indexOf($index) != -1,
-                                         annotated : annotations.indexOf($index) != -1,
+                                      data-ng-class="::{ variant : isVariantPosition($index),
+                                         annotated : isAnnotatedPosition($parent.$index, $index),
                                          focus : isFocusPosition($index),
                                          hover : isHoverPosition($index) }">{{::aa.olc}}</span>
-                                      <!-- TODO remove/improve performance of dynamic binding -->
+                                      <!-- TODO remove/improve performance of dynamic binding: this could be done by moving to 'stacked'/inlined spans which contain on binding for one position of the alignment. thus, complexity would only depend on sequence length and not number of aligned sequences * length -->
                             </div>
                         </div>
-
-                        <input type="number"
-                               title="window size"
-                               data-ng-model="windowSize"
-                               style="color: black"
-                               min="0"
-                               max="10"
-                               data-ng-hide="selectionMode" />
-
-                        <div data-ng-click="leaveSelectionMode()"
-                             data-ng-show="selectionMode">-> leave selection mode</div>
-
-                        <div data-ng-click="alert('impl!')"
-                             data-ng-show="selectionMode">-> align fragments locally</div>
                     </div>
                 </div>
             </div>

@@ -12,7 +12,7 @@ import java.util.*;
  * Created by bittrich on 3/20/17.
  */
 public class ExplorerSequence {
-    private String id, ec, pfam, uniprot;
+    private String id, title, ec, pfam, uniprot;
     private List<ExplorerAminoAcid> sequence;
     private List<UniProtMutagenesisSite> mutations;
     private List<UniProtNaturalVariant> variants;
@@ -39,6 +39,7 @@ public class ExplorerSequence {
             this.sequence.add(aminoAcid);
         }
 
+        this.title = chain.getParentProtein().getTitle();
         this.ec = chain.getFeature(String.class, SiftsParser.EC_NUMBER);
         this.pfam = chain.getFeature(String.class, SiftsParser.PFAM_ID);
         this.uniprot = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
@@ -70,6 +71,10 @@ public class ExplorerSequence {
 
     public List<ExplorerAminoAcid> getSequence() {
         return sequence;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getEc() {
