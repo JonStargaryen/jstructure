@@ -2,6 +2,7 @@ package de.bioforscher.explorer.membrane.model;
 
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -9,6 +10,7 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.parser.clustalo.ClustalOmegaRestQuery;
+import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +30,9 @@ import java.util.stream.Collectors;
 public class ExplorerModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ExplorerModelFactory.class);
     //TODO some 'worker'-patterns
-//    private static final AbstractFeatureProvider plipAnnotator = FeatureProviderRegistry.resolve(PLIPAnnotator.PLIP_INTERACTIONS);
+    private static final AbstractFeatureProvider plipAnnotator = FeatureProviderRegistry.resolve(PLIPAnnotator.PLIP_INTERACTIONS);
     private static final AbstractFeatureProvider uniprotAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotator.UNIPROT_ANNOTATION);
+    static final String TRANSFORMATION = "TRANSFORMATION";
 
     public static ExplorerCluster createCluster(String representativeChainId,
                                                   List<String> chainIds) {
@@ -41,9 +44,8 @@ public class ExplorerModelFactory {
                 .collect(Collectors.toMap(Function.identity(),
                         pdbId -> ProteinParser.source(pdbId).forceProteinName(pdbId).parse()));
 
-//        proteins.values().parallelStream().forEach(plipAnnotator::process);
-        //TODO plip interactions assignment
         proteins.values().parallelStream().forEach(uniprotAnnotator::process);
+        proteins.values().parallelStream().forEach(plipAnnotator::process);
 
         // the reference of the pv_structure alignment
         Chain referenceChain = proteins.get(representativeChainId.split("_")[0])
@@ -61,12 +63,11 @@ public class ExplorerModelFactory {
                         .asChain())
                 .collect(Collectors.toList());
 
-        // structurally align chains to reference
         chains.forEach(chain -> {
             StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(referenceChain, chain);
             logger.info("[{}] rmsd of {} to reference is {}", representativeChainId, getGlobalId(chain), alignmentResult.getAlignmentScore());
             alignmentResult.transform(chain);
-            //TODO transform PLIP data
+            chain.setFeature(TRANSFORMATION, new LinearAlgebraAtom.Transformation(alignmentResult.getTranslation(), alignmentResult.getRotation()));
         });
 
         logger.info("[{}] creating multi-sequence alignment by clustal omega", representativeChainId);

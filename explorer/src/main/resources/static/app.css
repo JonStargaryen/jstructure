@@ -212,13 +212,11 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 .alignment .position {
     width: 1em;
     display: table-cell;
-    opacity: 0.4;
     line-height: 15px;
 }
 
-.alignment .position:not(.uniform) {
-    color: #d62728;
-    opacity: 1.0;
+.alignment .position.uniform {
+    opacity: 0.1;
 }
 
 .alignment .position.focus {
@@ -230,12 +228,12 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     opacity: 0.9;
 }
 
-.alignment .position.mutant {
+.alignment .position.mutation {
     border: 1px solid white;
     opacity: 1.0;
 }
 
-.alignment .position.variant {
+.alignment .position.variation {
     border: 1px solid purple;
     opacity: 1.0;
 }

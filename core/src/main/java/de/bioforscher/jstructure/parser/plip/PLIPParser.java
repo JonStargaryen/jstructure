@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
-import de.bioforscher.jstructure.parser.ParsingException;
 import de.bioforscher.jstructure.parser.plip.interaction.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -71,7 +70,9 @@ class PLIPParser {
 
                     plipInteractions.add(plipInteraction);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-                    throw new ParsingException(e);
+                    logger.warn("encountered exception during plip parsing: {}", e.getLocalizedMessage());
+//                    throw new ParsingException(e);
+                    //TODO error-handling
                 }
             }
         }
@@ -117,7 +118,7 @@ class PLIPParser {
                         ((SaltBridge) plipInteraction).getAtoms1().addAll(otherHalfOfInteraction.getAtoms2());
                     }
                 } catch (NoSuchElementException e) {
-                    logger.warn("could not find other half of {} {} {}", plipInteraction.getClass().getSimpleName(), plipInteraction.getPartner1().getIdentifier(), plipInteraction.getPartner2().getIdentifier());
+                    logger.debug("could not find other half of {} {} {}", plipInteraction.getClass().getSimpleName(), plipInteraction.getPartner1().getIdentifier(), plipInteraction.getPartner2().getIdentifier());
                 }
             }
         }

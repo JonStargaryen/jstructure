@@ -40,7 +40,7 @@ class PLIPRestServiceQuery {
 
     static String getPlipResults(String pdbId, String chainId) {
         try {
-            return getPlipResults(new URL(BASE_URL + pdbId + "/" + chainId));
+            return getPlipResults(new URL(BASE_URL + "plain/" + pdbId + "/" + chainId));
         } catch (IOException e) {
             throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }

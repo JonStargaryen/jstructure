@@ -24,42 +24,35 @@
             </div>
 
             <!-- PLIP options -->
-            <div class="visualization-options" data-ng-show="protein.plipDataPresent">
+            <div class="visualization-options" data-ng-show="::reference.plip">
                 <div class="option fa fa-exchange pull-right"
                      data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
                      data-ng-class="{ active: options.renderWaterBridges }"
-                     title="render water bridges"
-                     data-ng-show="protein.waterBridges.length > 0"></div>
+                     title="render water bridges"></div>
                 <div class="option fa fa-exchange pull-right"
                      data-ng-click="options.renderSaltBridges = !options.renderSaltBridges"
                      data-ng-class="{ active: options.renderSaltBridges }"
-                     title="render salt bridges"
-                     data-ng-show="protein.saltBridges.length > 0"></div>
+                     title="render salt bridges"></div>
                 <div class="option fa fa-database pull-right"
                      data-ng-click="options.renderPiStackings = !options.renderPiStackings"
                      data-ng-class="{ active: options.renderPiStackings }"
-                     title="render pi-stackings"
-                     data-ng-show="protein.piStackings.length > 0"></div>
+                     title="render pi-stackings"></div>
                 <div class="option fa fa-link pull-right"
                      data-ng-click="options.renderPiCationInteractions = !options.renderPiCationInteractions"
                      data-ng-class="{ active: options.renderPiCationInteractions }"
-                     title="render pi-cation interactions"
-                     data-ng-show="protein.piCationInteractions.length > 0"></div>
+                     title="render pi-cation interactions"></div>
                 <div class="option fa fa-arrows pull-right"
                      data-ng-click="options.renderMetalComplexes = !options.renderMetalComplexes"
                      data-ng-class="{ active: options.renderMetalComplexes }"
-                     title="render metal complexes"
-                     data-ng-show="protein.metalComplexes.length > 0"></div>
+                     title="render metal complexes"></div>
                 <div class="option fa fa-exchange pull-right"
                      data-ng-click="options.renderHydrogenBonds = !options.renderHydrogenBonds"
                      data-ng-class="{ active: options.renderHydrogenBonds }"
-                     title="render hydrogen bonds"
-                     data-ng-show="protein.hydrogenBonds.length > 0"></div>
+                     title="render hydrogen bonds"></div>
                 <div class="option fa fa-exchange pull-right"
                      data-ng-click="options.renderHalogenBonds = !options.renderHalogenBonds"
                      data-ng-class="{ active: options.renderHalogenBonds }"
-                     title="render halogen bonds"
-                     data-ng-show="protein.halogenBonds.length > 0"></div>
+                     title="render halogen bonds"></div>
             </div>
             <div class="visualization-options" data-ng-show="loadingModel">loading model data...</div>
             <div class="visualization-options" data-ng-show="loadingAlignment">loading alignment...</div>

@@ -1,5 +1,7 @@
 package de.bioforscher.explorer.membrane.model;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 
 /**
@@ -12,9 +14,9 @@ public class ExplorerInteraction {
     public ExplorerInteraction() {
     }
 
-    public ExplorerInteraction(PLIPInteraction interaction) {
-        this.coords1 = interaction.getCoords1();
-        this.coords2 = interaction.getCoords2();
+    public ExplorerInteraction(PLIPInteraction interaction, LinearAlgebraAtom.Transformation transformation) {
+        this.coords1 = LinearAlgebra3D.add(LinearAlgebra3D.multiply(interaction.getCoords1(), transformation.getRotation()), transformation.getTranslation());
+        this.coords2 = LinearAlgebra3D.add(LinearAlgebra3D.multiply(interaction.getCoords2(), transformation.getRotation()), transformation.getTranslation());
     }
 
     public double[] getCoords1() {

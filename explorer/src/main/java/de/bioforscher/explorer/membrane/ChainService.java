@@ -40,7 +40,7 @@ public class ChainService {
     @PostConstruct
     public void activate() throws IOException {
         logger.info("starting protein service");
-        allRepresentativeChainIds = Stream.of("1acj_A").collect(Collectors.toList());
+        allRepresentativeChainIds = Stream.of("1ea5_A").collect(Collectors.toList());
 
 //        reinitialize(false);
     }
