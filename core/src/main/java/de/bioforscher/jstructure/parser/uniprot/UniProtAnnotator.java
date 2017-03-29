@@ -48,7 +48,7 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
             }
 
             logger.debug("fetching UniProt information for {}", uniprotId);
-            return new UniProtAnnotationContainer(Jsoup.connect(String.format(UNIPROT_FETCH_URL, uniprotId)).get());
+            return new UniProtAnnotationContainer(uniprotId, Jsoup.connect(String.format(UNIPROT_FETCH_URL, uniprotId)).get());
         } catch (IOException e) {
             throw new UncheckedIOException("could not retrieve UniProt entry " + uniprotId + ": " + e.getCause().getLocalizedMessage(), e);
         }

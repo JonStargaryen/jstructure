@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure.family;
 
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -137,26 +138,32 @@ public class GroupInformation {
         }
 
         public GroupInformation parseLines(Stream<String> lines) {
-            lines.forEach(line -> {
-                if(line.startsWith("_chem_comp.name")) {
-                    name(splitCifLine(line));
-                }
-                if(line.startsWith("_chem_comp.type")) {
-                    type(splitCifLine(line));
-                }
-                if(line.startsWith("_chem_comp.one_letter_code")) {
-                    oneLetterCode(splitCifLine(line));
-                }
-                if(line.startsWith("_chem_comp.three_letter_code")) {
-                    threeLetterCode(splitCifLine(line));
-                }
-                if(line.startsWith("_chem_comp.mon_nstd_parent_comp_id")) {
-                    parentCompound(splitCifLine(line));
-                }
-            });
+            // fix 17/03/29: names on multiple lines are not parsed - they contain lots of white-spaces and colons
+            String document = lines.collect(Collectors.joining(System.lineSeparator()));
+            if(document.contains("_chem_comp.name")) {
+                name(splitCifDocument(document, "_chem_comp.name"));
+            }
+            if(document.contains("_chem_comp.type")) {
+                type(splitCifDocument(document, "_chem_comp.type"));
+            }
+            if(document.contains("_chem_comp.one_letter_code")) {
+                oneLetterCode(splitCifDocument(document, "_chem_comp.one_letter_code"));
+            }
+            if(document.contains("_chem_comp.three_letter_code")) {
+                threeLetterCode(splitCifDocument(document, "_chem_comp.three_letter_code"));
+            }
+            if(document.contains("_chem_comp.mon_nstd_parent_comp_id")) {
+                parentCompound(splitCifDocument(document, "_chem_comp.mon_nstd_parent_comp_id"));
+            }
             return this.build();
         }
 
+        // fix 17/03/29: adds long-entry support
+        private String splitCifDocument(String document, String tag) {
+            return document.split(tag)[1].split("_")[0].replaceAll("[\\r\\n]", "").replace(";", "").trim();
+        }
+
+         @Deprecated
         private String splitCifLine(String line) {
             return line.substring(49).trim();
         }

@@ -245,6 +245,7 @@ public class ProteinParser {
         return new OptionalSteps(inputStream);
     }
 
+    //TODO users could expect this to be a filepath too - change method name? decide internally on-the-fly?
     public static OptionalSteps source(String pdbId) {
         return new OptionalSteps(pdbId).hintProteinName(pdbId);
     }
@@ -262,6 +263,7 @@ public class ProteinParser {
         boolean skipHydrogens = true;
         String forceProteinName;
         String hintProteinName;
+        private static final int DEFAULT_CACHE_SIZE = 1000;
 
         OptionalSteps(InputStream inputStream) {
             this.inputStream = inputStream;
@@ -297,6 +299,15 @@ public class ProteinParser {
 
         public OptionalSteps hintProteinName(String proteinName) {
             this.hintProteinName = proteinName;
+            return this;
+        }
+
+        public OptionalSteps cachedMode() {
+            return cachedMode(DEFAULT_CACHE_SIZE);
+        }
+
+        public OptionalSteps cachedMode(int cacheSize) {
+            //TODO impl: keep track of loaded entries, so 2nd invocation will return a map entry
             return this;
         }
 

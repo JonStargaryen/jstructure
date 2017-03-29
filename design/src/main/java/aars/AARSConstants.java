@@ -27,6 +27,14 @@ class AARSConstants {
         }
     }
 
+    static Stream<Path> list(Path path) {
+        try {
+            return Files.list(path);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     public static void write(Path path, byte[] bytes) {
         try {
             Files.createDirectories(path.getParent());

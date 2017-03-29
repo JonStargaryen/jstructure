@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -51,13 +53,22 @@ public class SiftsParser extends AbstractFeatureProvider {
         chain.setFeature(UNIPROT_ID, mappingString[2]);
         chain.setFeature(PFAM_ID, mappingString[3]);
 
-        logger.info("mapping of '{}': {}", chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId(), Arrays.toString(mappingString));
+        logger.debug("mapping of '{}': {}", chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId(), Arrays.toString(mappingString));
+    }
+
+    //TODO prettify
+    public List<String> mapToUniProt(String pdbId, String chainId) {
+       return getLines(PFAM_MAPPING, pdbId)
+                .filter(split -> split[1].equals(chainId))
+                .map(split -> split[2])
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private Stream<String[]> getLines(String path, String pdbId) {
         return getLinesFromResource(path)
                 .filter(line -> !line.startsWith("#") && !line.startsWith("PDB"))
-                .filter(line -> line.startsWith(pdbId))
+                .filter(line -> line.startsWith(pdbId.toLowerCase()))
                 .map(line -> line.split(","));
     }
 }

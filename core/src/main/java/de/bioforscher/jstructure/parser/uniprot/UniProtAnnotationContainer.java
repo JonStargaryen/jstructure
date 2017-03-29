@@ -12,18 +12,21 @@ import java.util.stream.Collectors;
  * Created by bittrich on 3/2/17.
  */
 public class UniProtAnnotationContainer {
+    private String uniProtId;
     private List<UniProtReference> references;
     private List<UniProtMutagenesisSite> mutagenesisSites;
     private List<UniProtNaturalVariant> naturalVariants;
     //TODO motifs?
 
     public UniProtAnnotationContainer() {
+        this.uniProtId = "?";
         this.references = new ArrayList<>();
         this.mutagenesisSites = new ArrayList<>();
         this.naturalVariants = new ArrayList<>();
     }
 
-    UniProtAnnotationContainer(Document describingDocument) {
+    UniProtAnnotationContainer(String uniProtId, Document describingDocument) {
+        this.uniProtId = uniProtId;
         this.references = describingDocument.getElementsByTag("reference").stream()
                 .filter(element -> !element.getElementsByTag("citation").first().attr("type").equals("submission"))
                 .map(UniProtReference::new)
@@ -34,6 +37,10 @@ public class UniProtAnnotationContainer {
         this.naturalVariants = describingDocument.getElementsByAttributeValue("type", "sequence variant").stream()
                 .map(UniProtNaturalVariant::new)
                 .collect(Collectors.toList());
+    }
+
+    public String getUniProtId() {
+        return uniProtId;
     }
 
     public List<UniProtReference> getReferences() {

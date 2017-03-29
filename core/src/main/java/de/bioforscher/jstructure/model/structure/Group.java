@@ -118,7 +118,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' size='" + getAtoms().size() + "'";
+        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "'";
     }
 
     /**
