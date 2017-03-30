@@ -7,7 +7,7 @@
             <div class="dropdown-select visualization-options"
                  title="select feature to color visualization"
                  data-dropdown-select="::features"
-                 data-dropdown-model="options.coloringFeature"
+                 data-dropdown-model="viewerOptions.coloringFeature"
                  data-dropdown-item-label="name">
             </div>
 
@@ -17,14 +17,19 @@
             <!-- general render options -->
             <div class="visualization-options">
                 <!-- ligands -->
-                <div class="option fa fa-angle-right pull-right"
+                <div class="option pull-right"
                      data-ng-click="viewerOptions.renderLigands = !viewerOptions.renderLigands"
-                     data-ng-class="{ active: viewerOptions.renderLigands }"
-                     title="render ligands"></div>
+                     data-ng-class="{ active: viewerOptions.renderLigands }">render ligands</div>
             </div>
 
             <!-- PLIP options -->
-            <div class="visualization-options" data-ng-show="::reference.plip">
+            <div class="dropdown-select visualization-options"
+                 title="select interaction type to visualize"
+                 data-dropdown-select="::interactionTypes"
+                 data-dropdown-model="viewerOptions.interactionType"
+                 data-dropdown-item-label="name">
+            </div>
+            <!--div class="visualization-options" data-ng-show="::reference.plip">
                 <div class="option fa fa-exchange pull-right"
                      data-ng-click="viewerOptions.renderWaterBridges = !viewerOptions.renderWaterBridges"
                      data-ng-class="{ active: viewerOptions.renderWaterBridges }"
@@ -53,7 +58,7 @@
                      data-ng-click="viewerOptions.renderHalogenBonds = !viewerOptions.renderHalogenBonds"
                      data-ng-class="{ active: viewerOptions.renderHalogenBonds }"
                      title="render halogen bonds"></div>
-            </div>
+            </div-->
             <div class="visualization-options" data-ng-show="loadingModel">loading model data...</div>
             <div class="visualization-options" data-ng-show="loadingAlignment">loading alignment...</div>
             <div class="visualization-options" data-ng-show="loadingStructure">loading structure...</div>
@@ -65,8 +70,8 @@
         <div class="wrapper">
             <!-- general project navigation -->
             <div class="chain-view-header clearfix">
-                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)">general</div>
-                <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)">homologous</div>
+                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)"><span class="fa fa-info"></span> general</div>
+                <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)"><span class="fa fa-bars"></span> homologous</div>
 
                 <div class="link pull-right" title="show in PDB">
                     <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::reference.pdbId}}">PDB</a>

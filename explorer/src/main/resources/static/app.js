@@ -10,7 +10,19 @@
     });
 
     MODULE.constant('features', [
-        { name : 'no coloring', tag : 'none', discrete : true }
+        { name : 'employ no coloring', tag : 'none', discrete : true }
+    ]);
+
+    MODULE.constant('interactionTypes', [
+        { name : 'visualize no interactions', tag : 'none' },
+        { name : 'halogen bonds', tag : 'hal' },
+        { name : 'hydrogen bonds', tag : 'hb' },
+        { name : 'metal complexes', tag : 'mc' },
+        { name : 'pi-cation interactions', tag : 'pc' },
+        { name : 'pi-stacking interactions', tag : 'ps' },
+        { name : 'salt bridges', tag : 'salt' },
+        { name : 'water bridges', tag : 'wb' }
+
     ]);
 
     MODULE.constant('interactions', {
@@ -87,8 +99,8 @@
     /**
      * the controller for the chain-view
      */
-    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features',
-        function($scope, $rootScope, $routeParams, ProteinService, design, features) {
+    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes',
+        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes) {
         // loading flags
         $scope.loadingModel = true;
         $scope.loadingAlignment = true;
@@ -119,8 +131,11 @@
         };
         var viewer = pv.Viewer(document.getElementById('protein-visualizer'), viewerDefaultOptions);
         $scope.features = features;
+        $scope.interactionTypes = interactionTypes;
         $scope.viewerOptions = {
-            renderLigands : false
+            renderLigands : false,
+            coloringFeature : features[0],
+            interactionType : interactionTypes[0]
         };
         var initializedInteractions = [];
 
@@ -246,38 +261,6 @@
                 }
             });
             viewer.requestRedraw();
-        });
-
-        $scope.$watch('viewerOptions.renderHalogenBonds', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'halogenBonds');
-        });
-
-        $scope.$watch('viewerOptions.renderHydrogenBonds', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'hydrogenBonds');
-        });
-
-        $scope.$watch('viewerOptions.renderHydrophobicInteractions', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'hydrophobicInteractions');
-        });
-
-        $scope.$watch('viewerOptions.renderMetalComplexes', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'metalComplexes');
-        });
-
-        $scope.$watch('viewerOptions.renderPiCationInteractions', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'piCationInteractions');
-        });
-
-        $scope.$watch('viewerOptions.renderPiStackings', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'piStackings');
-        });
-
-        $scope.$watch('viewerOptions.renderSaltBridges', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'saltBridges');
-        });
-
-        $scope.$watch('viewerOptions.renderWaterBridges', function(newVal, oldVal) {
-            toggleInteractions(newVal, oldVal, 'waterBridges');
         });
 
         function toggleInteractions(newVal, oldVal, type) {
