@@ -106,8 +106,6 @@
         var hoverRange = [ -1000, -1000 ];
         $scope.selectionMode = false;
         $scope.windowSize = 3;
-        var mutations = [];
-        var variants = [];
 
         // instance and control over pv
         var viewerDefaultOptions = {
@@ -124,6 +122,7 @@
         $scope.viewerOptions = {
             renderLigands : false
         };
+        var initializedInteractions = [];
 
         // control over the protein-view navigation tab
         $scope.tab = 0;
@@ -221,6 +220,10 @@
                         $scope.reference.title = sequence.title;
                     }
                 });
+
+                $scope.alignment.positions.forEach(function(position) {
+                    position.tooltip = position.mutant || position.variant;
+                });
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');
                 console.log(response);
@@ -244,6 +247,61 @@
             });
             viewer.requestRedraw();
         });
+
+        $scope.$watch('viewerOptions.renderHalogenBonds', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'halogenBonds');
+        });
+
+        $scope.$watch('viewerOptions.renderHydrogenBonds', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'hydrogenBonds');
+        });
+
+        $scope.$watch('viewerOptions.renderHydrophobicInteractions', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'hydrophobicInteractions');
+        });
+
+        $scope.$watch('viewerOptions.renderMetalComplexes', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'metalComplexes');
+        });
+
+        $scope.$watch('viewerOptions.renderPiCationInteractions', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'piCationInteractions');
+        });
+
+        $scope.$watch('viewerOptions.renderPiStackings', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'piStackings');
+        });
+
+        $scope.$watch('viewerOptions.renderSaltBridges', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'saltBridges');
+        });
+
+        $scope.$watch('viewerOptions.renderWaterBridges', function(newVal, oldVal) {
+            toggleInteractions(newVal, oldVal, 'waterBridges');
+        });
+
+        function toggleInteractions(newVal, oldVal, type) {
+            if(newVal === oldVal)
+                return;
+            if(newVal) {
+                forAllChains(function(chain) {
+                    if (initializedInteractions.indexOf(chain + type) < 0)
+                        createInteractions(chain, type);
+                });
+                viewer.show(type);
+            } else {
+                viewer.hide(type);
+            }
+            viewer.requestRedraw();
+        }
+
+        /* render PLIP interactions */
+        function createInteractions(chain, type) {
+            chain[type].forEach(function(entry) {
+                viewer.customMesh(type).addTube(entry.coords1, entry.coords2, 0.15, { cap : true, color : '#FF0000' });
+            });
+            initializedInteractions.push(chain + type);
+        }
 
         /* interactivity functions from the msa-view */
 
@@ -328,14 +386,6 @@
                 hoverRange[1] = $scope.alignment.length;
             }
         }
-
-        $scope.isVariantPosition = function(index) {
-            return $scope.alignment.variants.indexOf(index) != -1;
-        };
-
-        $scope.isAnnotatedPosition = function(chainIndex, positionIndex) {
-            return mutations.indexOf(chainIndex + "." + positionIndex) != -1;
-        };
 
         $scope.isFocusPosition = function(index) {
             return focusPosition == index;

@@ -26,32 +26,32 @@
             <!-- PLIP options -->
             <div class="visualization-options" data-ng-show="::reference.plip">
                 <div class="option fa fa-exchange pull-right"
-                     data-ng-click="options.renderWaterBridges = !options.renderWaterBridges"
-                     data-ng-class="{ active: options.renderWaterBridges }"
+                     data-ng-click="viewerOptions.renderWaterBridges = !viewerOptions.renderWaterBridges"
+                     data-ng-class="{ active: viewerOptions.renderWaterBridges }"
                      title="render water bridges"></div>
                 <div class="option fa fa-exchange pull-right"
-                     data-ng-click="options.renderSaltBridges = !options.renderSaltBridges"
-                     data-ng-class="{ active: options.renderSaltBridges }"
+                     data-ng-click="viewerOptions.renderSaltBridges = !viewerOptions.renderSaltBridges"
+                     data-ng-class="{ active: viewerOptions.renderSaltBridges }"
                      title="render salt bridges"></div>
                 <div class="option fa fa-database pull-right"
-                     data-ng-click="options.renderPiStackings = !options.renderPiStackings"
-                     data-ng-class="{ active: options.renderPiStackings }"
+                     data-ng-click="viewerOptions.renderPiStackings = !viewerOptions.renderPiStackings"
+                     data-ng-class="{ active: viewerOptions.renderPiStackings }"
                      title="render pi-stackings"></div>
                 <div class="option fa fa-link pull-right"
-                     data-ng-click="options.renderPiCationInteractions = !options.renderPiCationInteractions"
-                     data-ng-class="{ active: options.renderPiCationInteractions }"
+                     data-ng-click="viewerOptions.renderPiCationInteractions = !viewerOptions.renderPiCationInteractions"
+                     data-ng-class="{ active: viewerOptions.renderPiCationInteractions }"
                      title="render pi-cation interactions"></div>
                 <div class="option fa fa-arrows pull-right"
-                     data-ng-click="options.renderMetalComplexes = !options.renderMetalComplexes"
-                     data-ng-class="{ active: options.renderMetalComplexes }"
+                     data-ng-click="viewerOptions.renderMetalComplexes = !viewerOptions.renderMetalComplexes"
+                     data-ng-class="{ active: viewerOptions.renderMetalComplexes }"
                      title="render metal complexes"></div>
                 <div class="option fa fa-exchange pull-right"
-                     data-ng-click="options.renderHydrogenBonds = !options.renderHydrogenBonds"
-                     data-ng-class="{ active: options.renderHydrogenBonds }"
+                     data-ng-click="viewerOptions.renderHydrogenBonds = !viewerOptions.renderHydrogenBonds"
+                     data-ng-class="{ active: viewerOptions.renderHydrogenBonds }"
                      title="render hydrogen bonds"></div>
                 <div class="option fa fa-exchange pull-right"
-                     data-ng-click="options.renderHalogenBonds = !options.renderHalogenBonds"
-                     data-ng-class="{ active: options.renderHalogenBonds }"
+                     data-ng-click="viewerOptions.renderHalogenBonds = !viewerOptions.renderHalogenBonds"
+                     data-ng-class="{ active: viewerOptions.renderHalogenBonds }"
                      title="render halogen bonds"></div>
             </div>
             <div class="visualization-options" data-ng-show="loadingModel">loading model data...</div>
@@ -149,6 +149,20 @@
                                          hover : isHoverPosition($index) }">
                                     {{::position.olcs}}
                                 </div>
+                            </div>
+                        </div>
+
+                        TODO move into tooltips, position index falsy
+                        <div data-ng-repeat="position in ::alignment.positions | filter: { tooltip : 'true' }">
+                            <div data-ng-repeat="mutation in position.mutations">
+                                mutation @{{mutation.position}}
+                                {{mutation.original}} -> {{mutation.variation}}
+                                {{mutation.description}}
+                            </div>
+                            <div data-ng-repeat="variation in position.variants">
+                                natural variant @{{variation.position}}
+                                {{variation.original}} -> {{variation.variation}}
+                                {{variation.description}}
                             </div>
                         </div>
                     </div>

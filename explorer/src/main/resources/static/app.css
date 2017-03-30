@@ -216,24 +216,23 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 .alignment .position.uniform {
-    opacity: 0.1;
+    color: #5b6167;
 }
 
-.alignment .position.focus {
-    color: #d6d100;
-    opacity: 1.0;
+.alignment .position.hover:not(.focus) {
+    opacity: 0.6;
 }
 
 .alignment .position.hover {
-    opacity: 0.9;
+    color: #52b1e9 !important;
 }
 
 .alignment .position.mutation {
-    border: 1px solid white;
-    opacity: 1.0;
+    background-color: purple;
+    color: #9fb4c7;
 }
 
 .alignment .position.variation {
-    border: 1px solid purple;
-    opacity: 1.0;
+    background-color: deeppink;
+    color: #9fb4c7;
 }
