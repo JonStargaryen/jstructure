@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +38,7 @@ public class UniProtMutationsForBindingSite {
     private static final StringBuilder output = new StringBuilder();
     private static final StringBuilder warnings = new StringBuilder();
     private static final String DEL = "\t";
-    private static final String classToProcess = "C1";
+    private static final String classToProcess = "C2";
 
     public static void main(String[] args) throws IOException {
         output.append("pdbId" + DEL + "chainId" + DEL + "uniProtId" + DEL + "class" + DEL + "aa" + DEL + "mode" + DEL + "renumPos" + DEL + "origPos" + DEL + "type" + DEL + "uniProtPos" + DEL + "original" + DEL + "variant" + DEL + "description").append(System.lineSeparator());
@@ -123,7 +124,7 @@ public class UniProtMutationsForBindingSite {
                         .map(line -> line.split("\t"))
                         .filter(split -> split[0].equals(bindingSite.pdbId))
                         .filter(split -> split[1].equals(bindingSite.chainId))
-                        .filter(split -> split[4].contains(indexToFind))
+                        .filter(split -> refersToPosition(split, indexToFind))
                         .forEach(split -> {
                             // compose output line
                             String outputLine = bindingSite.pdbId + DEL +
@@ -147,6 +148,14 @@ public class UniProtMutationsForBindingSite {
                 warnings.append("#could not map ").append(entry.getValue().getIdentifier()).append(" in ").append(bindingSite.pdbId).append("_").append(bindingSite.chainId).append(" to UniProt sequence").append(System.lineSeparator());
             }
         });
+    }
+
+    private static final Pattern positionPattern = Pattern.compile(",");
+
+    private static boolean refersToPosition(String[] split, String indexToFind) {
+        return positionPattern.splitAsStream(split[4].replace("[", "").replace("]", ""))
+                .map(String::trim)
+                .anyMatch(position -> position.equals(indexToFind));
     }
 
     private static String loadUniProtSequence(String uniProtId) {

@@ -29,36 +29,6 @@
                  data-dropdown-model="viewerOptions.interactionType"
                  data-dropdown-item-label="name">
             </div>
-            <!--div class="visualization-options" data-ng-show="::reference.plip">
-                <div class="option fa fa-exchange pull-right"
-                     data-ng-click="viewerOptions.renderWaterBridges = !viewerOptions.renderWaterBridges"
-                     data-ng-class="{ active: viewerOptions.renderWaterBridges }"
-                     title="render water bridges"></div>
-                <div class="option fa fa-exchange pull-right"
-                     data-ng-click="viewerOptions.renderSaltBridges = !viewerOptions.renderSaltBridges"
-                     data-ng-class="{ active: viewerOptions.renderSaltBridges }"
-                     title="render salt bridges"></div>
-                <div class="option fa fa-database pull-right"
-                     data-ng-click="viewerOptions.renderPiStackings = !viewerOptions.renderPiStackings"
-                     data-ng-class="{ active: viewerOptions.renderPiStackings }"
-                     title="render pi-stackings"></div>
-                <div class="option fa fa-link pull-right"
-                     data-ng-click="viewerOptions.renderPiCationInteractions = !viewerOptions.renderPiCationInteractions"
-                     data-ng-class="{ active: viewerOptions.renderPiCationInteractions }"
-                     title="render pi-cation interactions"></div>
-                <div class="option fa fa-arrows pull-right"
-                     data-ng-click="viewerOptions.renderMetalComplexes = !viewerOptions.renderMetalComplexes"
-                     data-ng-class="{ active: viewerOptions.renderMetalComplexes }"
-                     title="render metal complexes"></div>
-                <div class="option fa fa-exchange pull-right"
-                     data-ng-click="viewerOptions.renderHydrogenBonds = !viewerOptions.renderHydrogenBonds"
-                     data-ng-class="{ active: viewerOptions.renderHydrogenBonds }"
-                     title="render hydrogen bonds"></div>
-                <div class="option fa fa-exchange pull-right"
-                     data-ng-click="viewerOptions.renderHalogenBonds = !viewerOptions.renderHalogenBonds"
-                     data-ng-class="{ active: viewerOptions.renderHalogenBonds }"
-                     title="render halogen bonds"></div>
-            </div-->
             <div class="visualization-options" data-ng-show="loadingModel">loading model data...</div>
             <div class="visualization-options" data-ng-show="loadingAlignment">loading alignment...</div>
             <div class="visualization-options" data-ng-show="loadingStructure">loading structure...</div>
@@ -72,43 +42,64 @@
             <div class="chain-view-header clearfix">
                 <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)"><span class="fa fa-info"></span> general</div>
                 <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)"><span class="fa fa-bars"></span> homologous</div>
-
-                <div class="link pull-right" title="show in PDB">
-                    <a target="_blank" data-ng-href="//www.rcsb.org/pdb/explore.do?structureId={{::reference.pdbId}}">PDB</a>
-                    <span class="fa fa-external-link"></span>
-                </div>
             </div>
 
             <div class="tse-scrollable">
                 <div class="tse-content">
                     <!-- general information -->
                     <div data-ng-show="isSelected(0)" class="view-tab">
-                        <div>pdbId: {{::reference.pdbId}}</div>
-                        <div>chainId: {{::reference.chainId}}</div>
-                        <div>title: {{::reference.title}}</div>
-                        <div>ec: {{::reference.ec}}</div>
-                        <div>pfam: {{::reference.pfam}}</div>
-                        <div>uniprot: {{::reference.uniprot}}</div>
+                        <h4>general information</h4>
+                        <div>{{::reference.title}}</div>
                         <div>
                             <ng-pluralize count="::reference.ligands.length"
-                                      when="{'0': 'no ligands',
+                                          when="{'0': 'no ligands',
                                          'one': '1 ligand',
                                          'other': '{} ligands'}">
                             </ng-pluralize>
                             <ng-pluralize count="::(reference.ligands | filter: { type : 'water' }).length"
-                                      when="{'0': '(none being water)',
+                                          when="{'0': '(none being water)',
                                      'one': '(1 being water)',
                                      'other': '({} being water)'}">
                             </ng-pluralize>
                         </div>
-                        <div>
-                            homologous protein chains:
-                            <span data-ng-repeat="homolog in ::alignment.homologous">
-                                <a data-ng-href="chain/{{::homolog}}">
-                                    {{::homolog}}
-                                </a>
-                            </span>
-                        </div>
+
+                        <h4>homologous protein chains</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>PDB</th>
+                                    <th>UniProt</th>
+                                    <th>Pfam</th>
+                                    <th>IUBMB</th>
+                                    <th>title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-ng-repeat="chain in ::alignment.chains">
+                                    <td>
+                                        <a data-ng-href="chain/{{::chain.id}}">
+                                            {{::chain.id}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" data-ng-href="http://www.rcsb.org/pdb/explore.do?structureId={{::reference.pdbId}}">{{::reference.pdbId}}</a>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" data-ng-href="http://www.uniprot.org/uniprot/{{::reference.uniprot}}">{{::reference.uniprot}}</a>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" data-ng-href="http://pfam.xfam.org/family/{{::reference.pfam}}">{{::reference.pfam}}</a>
+                                    </td>
+                                    <td>
+                                        <a target="_blank" data-ng-href="http://www.chem.qmul.ac.uk/iubmb/enzyme/EC{{::reference.ec | ec}}.html">{{::reference.ec}}</a>
+                                    </td>
+                                    <td>
+                                        ?
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <!-- homologous sequences -->

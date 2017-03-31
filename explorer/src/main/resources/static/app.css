@@ -115,11 +115,12 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     padding: 10px;
 }
 
-.chain-view {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
-    min-width: 400px;
+.view-tab a, .view-tab a:active, .view-tab a:visited {
+    color: white !important;
+}
+
+.view-tab a:hover {
+    color: #51b2e9 !important;
 }
 
 .chain-view-header {
@@ -147,10 +148,6 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 .option.active, .chain-view-header > div.active {
     background-color: rgba(255, 255, 255, 0.05);
     color: #51b2e9;
-}
-
-.link a {
-    color: #96a3b3 !important;
 }
 
 .chain-view-header > div {
@@ -181,6 +178,9 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     min-width: 35px;
     min-height: 35px;
 }
+
+/* the general info page for each protein */
+
 
 /* the multi-sequence alignment view */
 .alignment .ids, .homologous .sequences {

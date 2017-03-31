@@ -496,4 +496,12 @@
             }
         }
     }]);
+
+    MODULE.filter('ec', function() {
+        return function(input) {
+            if(input) {
+                return input.split(".").join("/");
+            }
+        }
+    });
 })();
