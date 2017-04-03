@@ -64,53 +64,34 @@
                         </div>
 
                         <h4>homologous protein chains</h4>
-                        <table class="homologous-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>PDB</th>
-                                    <th>UniProt</th>
-                                    <th>Pfam</th>
-                                    <th>IUBMB</th>
-                                    <th>title</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr data-ng-repeat="chain in ::alignment.chains">
-                                    <td>
-                                        <a data-ng-href="chain/{{::chain.id}}">
-                                            {{::chain.id}}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" data-ng-href="http://www.rcsb.org/pdb/explore.do?structureId={{::reference.pdbId}}">{{::reference.pdbId}}</a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" data-ng-href="http://www.uniprot.org/uniprot/{{::reference.uniprot}}">{{::reference.uniprot}}</a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" data-ng-href="http://pfam.xfam.org/family/{{::reference.pfam}}">{{::reference.pfam}}</a>
-                                    </td>
-                                    <td>
-                                        <a target="_blank" data-ng-href="http://www.chem.qmul.ac.uk/iubmb/enzyme/EC{{::reference.ec | ec}}.html">{{::reference.ec}}</a>
-                                    </td>
-                                    <td class="title-field">
-                                        {{::chain.title}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="homologous-table">
+                            <div class="homologous-table-head homologous-table-row">
+                                <div>ID</div>
+                                <div>PDB</div>
+                                <div>UniProt</div>
+                                <div>Pfam</div>
+                                <div>IUBMB</div>
+                                <div>title</div>
+                            </div>
+                            <div class="homologous-table-row" data-ng-repeat="chain in ::alignment.chains" data-ng-class="{ reference : chain.id == reference.id }">
+                                <div><a data-ng-href="chain/{{::chain.id}}">{{::chain.id}}</a></div>
+                                <div><a target="_blank" data-ng-href="http://www.rcsb.org/pdb/explore.do?structureId={{::chain.id | splitToPdbId}}">{{::chain.id | splitToPdbId}}</a></div>
+                                <div><a target="_blank" data-ng-href="http://www.uniprot.org/uniprot/{{::chain.uniprot}}">{{::chain.uniprot}}</a></div>
+                                <div><a target="_blank" data-ng-href="http://pfam.xfam.org/family/{{::chain.pfam}}">{{::chain.pfam}}</a></div>
+                                <div><a target="_blank" data-ng-href="http://www.chem.qmul.ac.uk/iubmb/enzyme/EC{{::chain.ec | ec}}.html">{{::chain.ec}}</a></div>
+                                <div class="title-field">{{::chain.title}}</div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- homologous sequences -->
                     <div data-ng-show="isSelected(1)" class="view-tab homologous">
-                        <input type="number"
-                               title="window size"
-                               data-ng-model="windowSize"
-                               style="color: black"
-                               min="0"
-                               max="10"
-                               data-ng-hide="selectionMode" />
+                        <div data-ng-hide="selectionMode">
+                            window size: <br />
+                            <rzslider rz-slider-model="windowSize"
+                                      rz-slider-options="sliderOptions"
+                                      data-ng-hide="selectionMode"></rzslider>
+                        </div>
 
                         <div data-ng-click="leaveSelectionMode()"
                              data-ng-show="selectionMode">-> leave selection mode</div>
@@ -143,22 +124,21 @@
                                          variation : position.variant,
                                          focus : isFocusPosition($index),
                                          hover : isHoverPosition($index) }">
+                                    <div class="position-label" data-ng-if="$index % 25 == 0">{{$index}}</div>
                                     {{::position.olcs}}
+                                    <div data-ng-if="position.tooltip" class="annotation">
+                                        <div data-ng-repeat="mutation in position.mutations">
+                                            mutation @{{mutation.position}}
+                                            {{mutation.original}} -> {{mutation.variation}}
+                                            {{mutation.description}}
+                                        </div>
+                                        <div data-ng-repeat="variation in position.variants">
+                                            natural variant @{{variation.position}}
+                                            {{variation.original}} -> {{variation.variation}}
+                                            {{variation.description}}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        TODO move into tooltips, position index falsy
-                        <div data-ng-repeat="position in ::alignment.positions | filter: { tooltip : 'true' }">
-                            <div data-ng-repeat="mutation in position.mutations">
-                                mutation @{{mutation.position}}
-                                {{mutation.original}} -> {{mutation.variation}}
-                                {{mutation.description}}
-                            </div>
-                            <div data-ng-repeat="variation in position.variants">
-                                natural variant @{{variation.position}}
-                                {{variation.original}} -> {{variation.variation}}
-                                {{variation.description}}
                             </div>
                         </div>
                     </div>

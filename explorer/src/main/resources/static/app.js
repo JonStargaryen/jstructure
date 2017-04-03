@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'ngDropdowns']);
+    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'ngDropdowns', 'rzModule']);
 
     MODULE.constant('design', {
         defaultColor : '#454b52',
@@ -99,8 +99,9 @@
     /**
      * the controller for the chain-view
      */
-    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes',
-        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes) {
+    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes', '$timeout',
+        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes, $timeout) {
+        //TODO this scope/controller is clogged, clean-up some day
         // loading flags
         $scope.loadingModel = true;
         $scope.loadingAlignment = true;
@@ -118,6 +119,11 @@
         var hoverRange = [ -1000, -1000 ];
         $scope.selectionMode = false;
         $scope.windowSize = 3;
+        $scope.sliderOptions = {
+            floor: 0,
+            ceil: 10,
+            showTicks: true
+        };
 
         // instance and control over pv
         var viewerDefaultOptions = {
@@ -143,6 +149,11 @@
         $scope.tab = 0;
         $scope.selectTab = function (setTab) {
             $scope.tab = setTab;
+            if(setTab === 1) {
+                $timeout(function () {
+                    $scope.$broadcast('rzSliderForceRender');
+                });
+            }
         };
         $scope.isSelected = function (checkTab) {
             return $scope.tab === checkTab;
@@ -497,10 +508,21 @@
         }
     }]);
 
+    /**
+     * Formats EC numbers as link to the IUBMB.
+     */
     MODULE.filter('ec', function() {
         return function(input) {
             if(input) {
                 return input.split(".").join("/");
+            }
+        }
+    });
+
+    MODULE.filter('splitToPdbId', function() {
+        return function(input) {
+            if(input) {
+                return input.split("_")[0];
             }
         }
     });

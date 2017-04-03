@@ -121,14 +121,6 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     padding: 10px;
 }
 
-.view-tab a, .view-tab a:active, .view-tab a:visited {
-    color: white !important;
-}
-
-.view-tab a:hover {
-    color: #51b2e9 !important;
-}
-
 .chain-view-header {
     border-bottom: 1px solid #52585f;
     width: 100%;
@@ -140,9 +132,9 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     font-size: 14px;
     min-width: 35px;
     padding: 10px;
+    transition: ease-in-out 0.35s;
     text-align: center;
     cursor: pointer;
-    transition: ease-in-out 0.35s;
 }
 
 .option {
@@ -186,19 +178,52 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 /* the general info page for each protein */
-table.homologous-table {
+.homologous-table {
     margin: -5px;
+    display: table;
+    width: 100%;
 }
 
-.homologous-table th, td {
+.homologous-table-row {
+    display: table-row;
+}
+
+.homologous-table-row > div {
+    display: table-cell;
+}
+
+.homologous-table-head {
+    font-weight: bold;
+}
+
+.homologous-table .homologous-table-row div {
     padding: 5px;
+}
+
+.homologous-table-head, .homologous-table-row:nth-child(odd) {
+    background-color: #4f555c;
+}
+
+.homologous-table-row.reference, .homologous-table-row.reference a, .homologous-table-row.reference a:active, .homologous-table-row.reference a:visited {
+    color: #51b2e9;
+}
+
+.homologous-table a, .homologous-table a:active, .homologous-table a:visited {
+    color: white;
+    text-decoration: none;
+    transition: ease-in-out 0.35s;
+}
+
+.homologous-table a:hover {
+    color: #51b2e9;
+    text-decoration: none;
 }
 
 .title-field {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 850px;
+    max-width: 100%;
 }
 
 /* the multi-sequence alignment view */
@@ -209,12 +234,12 @@ table.homologous-table {
 
 .alignment .ids {
     float: left;
-    padding-right: 10px;
-    cursor: pointer;
+    padding: 15px 10px 0 0;
 }
 
 .alignment .ids div {
     height: 15px;
+    cursor: pointer;
 }
 
 .alignment .ids .selected {
@@ -227,10 +252,17 @@ table.homologous-table {
     cursor: pointer;
 }
 
+.alignment .position-label {
+    position: absolute;
+    top: 0;
+}
+
 .alignment .position {
     width: 1em;
     display: table-cell;
     line-height: 15px;
+    position: relative;
+    padding-top: 15px;
 }
 
 .alignment .position.uniform {
@@ -253,4 +285,19 @@ table.homologous-table {
 .alignment .position.variation {
     background-color: deeppink;
     color: #9fb4c7;
+}
+
+.alignment .position .annotation {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: -100px;
+    border: 1px solid #ccc;
+    background-color: white;
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+.alignment .position:hover .annotation {
+    display: block;
 }
