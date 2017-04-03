@@ -64,7 +64,7 @@
                         </div>
 
                         <h4>homologous protein chains</h4>
-                        <table>
+                        <table class="homologous-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -94,8 +94,8 @@
                                     <td>
                                         <a target="_blank" data-ng-href="http://www.chem.qmul.ac.uk/iubmb/enzyme/EC{{::reference.ec | ec}}.html">{{::reference.ec}}</a>
                                     </td>
-                                    <td>
-                                        ?
+                                    <td class="title-field">
+                                        {{::chain.title}}
                                     </td>
                                 </tr>
                             </tbody>

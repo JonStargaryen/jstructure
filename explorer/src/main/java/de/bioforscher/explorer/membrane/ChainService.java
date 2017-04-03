@@ -65,8 +65,8 @@ public class ChainService {
     private void processSequenceCluster(String clusterRepresentativeChainId) {
         logger.info("[{}] spawned thread on representative chain id", clusterRepresentativeChainId);
         String split[] = clusterRepresentativeChainId.split("_");
-        //TODO remove subList call
         List<String> clusterChainIds = PDBDatabaseQuery.fetchSequenceCluster(split[0], split[1])
+        //TODO remove subList call
 //                .subList(0, 10)
                 ;
         logger.info("[{}] mapped homologous {}", clusterRepresentativeChainId, clusterChainIds);

@@ -45,7 +45,7 @@ public class ExplorerModelFactory {
                         pdbId -> ProteinParser.source(pdbId).forceProteinName(pdbId).parse()));
 
         proteins.values().parallelStream().forEach(uniprotAnnotator::process);
-        proteins.values().parallelStream().forEach(plipAnnotator::process);
+//        proteins.values().parallelStream().forEach(plipAnnotator::process);
 
         // the reference of the pv_structure alignment
         Chain referenceChain = proteins.get(representativeChainId.split("_")[0])

@@ -107,6 +107,12 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 /* the chain view */
+.chain-view {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
 .tse-scrollable, .representation {
     height: calc(100% - 35px);
 }
@@ -180,7 +186,20 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 /* the general info page for each protein */
+table.homologous-table {
+    margin: -5px;
+}
 
+.homologous-table th, td {
+    padding: 5px;
+}
+
+.title-field {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 850px;
+}
 
 /* the multi-sequence alignment view */
 .alignment .ids, .homologous .sequences {
