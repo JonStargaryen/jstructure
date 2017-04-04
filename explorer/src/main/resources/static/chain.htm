@@ -79,7 +79,13 @@
                                 <div><a target="_blank" data-ng-href="http://www.uniprot.org/uniprot/{{::chain.uniprot}}">{{::chain.uniprot}}</a></div>
                                 <div><a target="_blank" data-ng-href="http://pfam.xfam.org/family/{{::chain.pfam}}">{{::chain.pfam}}</a></div>
                                 <div><a target="_blank" data-ng-href="http://www.chem.qmul.ac.uk/iubmb/enzyme/EC{{::chain.ec | ec}}.html">{{::chain.ec}}</a></div>
-                                <div class="title-field">{{::chain.title}}</div>
+                                <div>
+                                    <div class="overflow-container">
+                                        <span class="overflow-ellipsis" title="{{::chain.title}}">
+                                            {{::chain.title}}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

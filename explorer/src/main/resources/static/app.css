@@ -190,14 +190,15 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 .homologous-table-row > div {
     display: table-cell;
+    padding: 5px;
+}
+
+.homologous-table-row > div:last-child {
+    width: 100%;
 }
 
 .homologous-table-head {
     font-weight: bold;
-}
-
-.homologous-table .homologous-table-row div {
-    padding: 5px;
 }
 
 .homologous-table-head, .homologous-table-row:nth-child(odd) {
@@ -219,11 +220,23 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     text-decoration: none;
 }
 
-.title-field {
-    overflow: hidden;
+.overflow-container {
+    position: relative;
+}
+
+.overflow-ellipsis {
+    position: absolute;
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
+    width: 100%;
+    min-width: 0;
+}
+
+.overflow-container:after, .overflow-ellipsis:after {
+    content: '-';
+    display: inline-block;
+    visibility: hidden;
 }
 
 /* the multi-sequence alignment view */
