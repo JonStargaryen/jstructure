@@ -54,9 +54,7 @@ public class ChainService {
         logger.info("initializing database of {} representative protein chains", allRepresentativeChainIds.size());
 
         if(parallel) {
-            allRepresentativeChainIds.forEach(pdbId ->
-                    Executors.newWorkStealingPool().submit(() -> processSequenceCluster(pdbId))
-            );
+            allRepresentativeChainIds.forEach(pdbId -> Executors.newWorkStealingPool().submit(() -> processSequenceCluster(pdbId)));
         } else {
             allRepresentativeChainIds.forEach(this::processSequenceCluster);
         }

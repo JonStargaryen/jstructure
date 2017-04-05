@@ -42,8 +42,11 @@ public class ExplorerAlignment {
                 .collect(Collectors.toSet());
 
         Set<UniProtAnnotationContainer> uniProtAnnotationContainers = uniprotIds.stream()
+                .distinct()
                 .map(uniProtAnnotator::process)
                 .collect(Collectors.toSet());
+
+//        uniProtAnnotationContainers.forEach(this::renumber);
 
         this.positions = IntStream.range(0, length)
                 .mapToObj(position -> new ExplorerSequencePosition(uniProtAnnotationContainers, alignedSequences, position))
@@ -69,4 +72,20 @@ public class ExplorerAlignment {
     public List<ExplorerSequence> getChains() {
         return chains;
     }
+
+//    private void renumber(UniProtAnnotationContainer container) {
+//        needle(container.getSequence(), )
+//    }
+//
+//    private SequencePair<ProteinSequence, AminoAcidCompound> needle(String sequence1, String sequence2) {
+//        try {
+//            return Alignments.getPairwiseAlignment(new ProteinSequence(sequence1),
+//                    new ProteinSequence(sequence2),
+//                    Alignments.PairwiseSequenceAlignerType.GLOBAL,
+//                    new SimpleGapPenalty(),
+//                    SubstitutionMatrixHelper.getBlosum62());
+//        } catch (CompoundNotFoundException e) {
+//            throw new IllegalArgumentException(e);
+//        }
+//    }
 }

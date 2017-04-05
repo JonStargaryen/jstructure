@@ -25,6 +25,8 @@ public class ClustalOmegaRestQuery {
     public String process(List<String> sequences) throws ExecutionException {
         logger.info("creating multi-sequence alignment by clustal omega for {} proteins", sequences.size());
         try {
+            System.out.println(composeSequenceString(sequences));
+
             Document answer = Jsoup.connect(RUN_URL)
                     .data("sequence", composeSequenceString(sequences))
                     .ignoreHttpErrors(true)

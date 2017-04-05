@@ -107,7 +107,7 @@ public class UniProtMutationsForBindingSite {
                                 LinearAlgebraAtom.centroid(renumberedGroup))))
                         .get()));
 
-        // determine sequence position in sequence alignment - this should be the same in any case, but just to be save
+        // determine sequence position in sequence alignment - rarely these indices do not match
         groupMapping.entrySet().forEach(entry -> {
             // map to index in pdb entry
             int residueIndex = originalChain.getGroups().indexOf(entry.getValue()) + 1;
