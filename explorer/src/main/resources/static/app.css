@@ -269,9 +269,9 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 .alignment .position-label {
     position: absolute;
     top: 0;
-    color: white !important;
-    opacity: 1.0 !important;
-    background-color: #454b52 !important;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
 }
 
 .alignment .position {
@@ -283,25 +283,22 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     color: #6b7480;
 }
 
-.alignment .position:not(.uniform) {
-    /*background-color: #4f555c;*/
-}
-
-.alignment .position.hover:not(.focus) {
-    /*opacity: 0.6;*/
-}
-
-.alignment .position.hover {
+.alignment .position.hover .position-char {
     color: #52b1e9 !important;
 }
 
-.alignment .position.mutation {
-    background-color: purple;
+.alignment .position.mutation .position-char {
+    border: 1px solid purple;
     color: #9fb4c7;
 }
 
-.alignment .position.variation {
-    background-color: deeppink;
+.alignment .position.variation .position-char {
+    border: 1px solid deeppink;
+    color: #9fb4c7;
+}
+
+.alignment .position.activeSite .position-char {
+    border: 1px solid rebeccapurple;
     color: #9fb4c7;
 }
 

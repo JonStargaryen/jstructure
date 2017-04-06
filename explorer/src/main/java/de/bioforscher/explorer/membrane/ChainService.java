@@ -41,7 +41,7 @@ public class ChainService {
         logger.info("starting protein service");
         allRepresentativeChainIds = Stream.of("1ea5_A").collect(Collectors.toList());
 
-        reinitialize(false);
+//        reinitialize(false);
     }
 
     private void reinitialize(boolean parallel) {

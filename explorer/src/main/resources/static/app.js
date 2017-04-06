@@ -248,7 +248,7 @@
                 });
 
                 $scope.alignment.positions.forEach(function(position) {
-                    position.tooltip = position.mutant || position.variant;
+                    position.tooltip = position.mutant || position.variant || position.activeSite;
                 });
             }).catch(function(response) {
                 console.log('impl error handling at multi-sequence view:');

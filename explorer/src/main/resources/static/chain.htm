@@ -128,20 +128,20 @@
                                      data-ng-class="{ uniform : position.uniform,
                                          mutation : position.mutant,
                                          variation : position.variant,
+                                         activeSite : position.activeSite,
                                          focus : isFocusPosition($index),
                                          hover : isHoverPosition($index) }">
                                     <div class="position-label" data-ng-if="$index % 25 == 0">{{$index}}</div>
-                                    {{::position.olcs}}
+                                    <div class="position-char">{{::position.olcs}}</div>
                                     <div data-ng-if="position.tooltip" class="annotation">
                                         <div data-ng-repeat="mutation in position.mutations">
-                                            mutation @{{mutation.position}}
-                                            {{mutation.original}} -> {{mutation.variation}}
-                                            {{mutation.description}}
+                                            mutation {{mutation.original}} &rarr; {{mutation.variation}}: {{mutation.description}}
                                         </div>
                                         <div data-ng-repeat="variation in position.variants">
-                                            natural variant @{{variation.position}}
-                                            {{variation.original}} -> {{variation.variation}}
-                                            {{variation.description}}
+                                            natural variant {{variation.original}} &rarr; {{variation.variation}}: {{variation.description}}
+                                        </div>
+                                        <div data-ng-repeat="activeSite in position.activeSites">
+                                            active site: {{activeSite.description}}
                                         </div>
                                     </div>
                                 </div>

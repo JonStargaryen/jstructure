@@ -1,6 +1,7 @@
 package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.parser.uniprot.UniProtActiveSite;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotationContainer;
 import de.bioforscher.jstructure.parser.uniprot.UniProtMutagenesisSite;
 import de.bioforscher.jstructure.parser.uniprot.UniProtNaturalVariant;
@@ -17,9 +18,10 @@ import java.util.stream.Collectors;
  */
 public class ExplorerSequencePosition {
     private String olcs;
-    private boolean uniform, mutant, variant;
+    private boolean uniform, mutant, variant, activeSite;
     private List<UniProtMutagenesisSite> mutations;
     private List<UniProtNaturalVariant> variants;
+    private List<UniProtActiveSite> activeSites;
 
     public ExplorerSequencePosition() {
     }
@@ -48,8 +50,15 @@ public class ExplorerSequencePosition {
                 .distinct()
                 .filter(naturalVariant -> naturalVariant.getPosition().contains(positionString))
                 .collect(Collectors.toList());
+        this.activeSites = containers.stream()
+                .map(UniProtAnnotationContainer::getActiveSites)
+                .flatMap(Collection::stream)
+                .distinct()
+                .filter(activeSite -> activeSite.getPosition().contains(positionString))
+                .collect(Collectors.toList());
         this.mutant = !mutations.isEmpty();
         this.variant = !variants.isEmpty();
+        this.activeSite = !activeSites.isEmpty();
     }
 
     public String getOlcs() {
@@ -68,11 +77,19 @@ public class ExplorerSequencePosition {
         return variant;
     }
 
+    public boolean isActiveSite() {
+        return activeSite;
+    }
+
     public List<UniProtMutagenesisSite> getMutations() {
         return mutations;
     }
 
     public List<UniProtNaturalVariant> getVariants() {
         return variants;
+    }
+
+    public List<UniProtActiveSite> getActiveSites() {
+        return activeSites;
     }
 }
