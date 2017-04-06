@@ -16,6 +16,7 @@ public class UniProtAnnotationContainer {
     private List<UniProtReference> references;
     private List<UniProtMutagenesisSite> mutagenesisSites;
     private List<UniProtNaturalVariant> naturalVariants;
+    private List<UniProtActiveSite> activeSites;
     //TODO motifs?
 
     public UniProtAnnotationContainer() {
@@ -24,6 +25,7 @@ public class UniProtAnnotationContainer {
         this.references = new ArrayList<>();
         this.mutagenesisSites = new ArrayList<>();
         this.naturalVariants = new ArrayList<>();
+        this.activeSites = new ArrayList<>();
     }
 
     UniProtAnnotationContainer(String uniProtId, Document describingDocument) {
@@ -38,6 +40,9 @@ public class UniProtAnnotationContainer {
                 .collect(Collectors.toList());
         this.naturalVariants = describingDocument.getElementsByAttributeValue("type", "sequence variant").stream()
                 .map(UniProtNaturalVariant::new)
+                .collect(Collectors.toList());
+        this.activeSites = describingDocument.getElementsByAttributeValue("type", "active site").stream()
+                .map(UniProtActiveSite::new)
                 .collect(Collectors.toList());
     }
 
@@ -59,5 +64,9 @@ public class UniProtAnnotationContainer {
 
     public List<UniProtNaturalVariant> getNaturalVariants() {
         return naturalVariants;
+    }
+
+    public List<UniProtActiveSite> getActiveSites() {
+        return activeSites;
     }
 }

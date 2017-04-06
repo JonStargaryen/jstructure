@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.membrane.repository;
 
-import de.bioforscher.explorer.membrane.model.ExplorerChain;
+import de.bioforscher.explorer.model.ExplorerChain;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

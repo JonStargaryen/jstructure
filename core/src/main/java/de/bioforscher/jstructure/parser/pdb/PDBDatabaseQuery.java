@@ -30,11 +30,13 @@ public class PDBDatabaseQuery {
      * Queries the PDB for all chains which share a given sequence similarity to a reference chain.
      * @param pdbId the reference pdb id
      * @param chainId the reference chain id
-     * @param sequenceSimilarityThreshold the desired sequence similary threshold
-     * @return all chain ids (in the format pdbId.chainId) which are similar to the reference
+     * @param sequenceSimilarityThreshold the desired sequence similarity threshold
+     * @return all chain ids (in the format pdbId_chainId) which are similar to the reference - they are sorted, the
+     *      first entry is the most relevant one
      */
     public static List<String> fetchSequenceCluster(String pdbId, String chainId, double sequenceSimilarityThreshold) {
         try {
+            logger.debug("fetching {}-cluster fom PDB for {}_{}", sequenceSimilarityThreshold, pdbId, chainId);
             Document document = Jsoup.connect(String.format(CLUSTER_FETCH_URL, (int) sequenceSimilarityThreshold, pdbId, chainId)).get();
             return document.getElementsByTag("pdbChain").stream()
                     .map(pdbChain -> pdbChain.attr("name"))

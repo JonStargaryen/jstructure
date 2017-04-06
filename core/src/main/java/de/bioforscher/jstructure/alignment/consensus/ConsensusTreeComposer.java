@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * (i.e. averaging its coordinates). The process is repeated until no more merging operations can be performed.
  * Created by S on 11.11.2016.
  */
+@Deprecated
 public class ConsensusTreeComposer extends AbstractConsensusComposer {
     private static final Logger logger = LoggerFactory.getLogger(ConsensusTreeComposer.class);
     /**

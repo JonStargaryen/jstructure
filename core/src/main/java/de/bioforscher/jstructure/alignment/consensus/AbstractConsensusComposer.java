@@ -14,6 +14,7 @@ import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
  * representation.
  * Created by S on 05.12.2016.
  */
+@Deprecated
 public abstract class AbstractConsensusComposer {
     /**
      * Merges two atoms by updating the coordinates of the first argument.

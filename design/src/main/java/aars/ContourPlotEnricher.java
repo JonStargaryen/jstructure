@@ -2,7 +2,6 @@ package aars;
 
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import de.bioforscher.jstructure.parser.CIFParser;
-import de.bioforscher.jstructure.parser.sifts.SiftsParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

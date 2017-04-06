@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 
 /**
  * PLIP data.
- * Created by bittrich on 3/20/17.
+ * Created by bittrich on 4/6/17.
  */
 public class ExplorerInteraction {
     private double[] coords1, coords2;

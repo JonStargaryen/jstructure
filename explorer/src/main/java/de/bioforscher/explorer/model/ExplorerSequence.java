@@ -1,11 +1,12 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.parser.sifts.SiftsParser;
+import de.bioforscher.jstructure.parser.sifts.ChainSiftsMapping;
+import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
 
 /**
  * An aligned sequence.
- * Created by bittrich on 3/20/17.
+ * Created by bittrich on 4/6/17.
  */
 public class ExplorerSequence {
     private String id, title, ec, pfam, uniprot;
@@ -14,11 +15,12 @@ public class ExplorerSequence {
     }
 
     public ExplorerSequence(Chain chain) {
-        this.id = ExplorerModelFactory.getGlobalId(chain);
+        this.id = chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId();
         this.title = chain.getParentProtein().getTitle();
-        this.ec = chain.getFeature(String.class, SiftsParser.EC_NUMBER);
-        this.pfam = chain.getFeature(String.class, SiftsParser.PFAM_ID);
-        this.uniprot = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
+        ChainSiftsMapping chainSiftsMapping = chain.getFeature(ChainSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING);
+        this.ec = chainSiftsMapping.getEcNumber();
+        this.pfam = chainSiftsMapping.getPfam();
+        this.uniprot = chainSiftsMapping.getUniProtId();
     }
 
     public String getId() {

@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * One protein chain in the explorer.
- * Created by bittrich on 3/17/17.
+ * Created by bittrich on 4/6/17.
  */
 public class ExplorerChain {
     private String id, pdb, rep;
@@ -30,11 +30,11 @@ public class ExplorerChain {
     public ExplorerChain() {
     }
 
-    public ExplorerChain(Chain chain, String representativeChainId) {
+    public ExplorerChain(Chain chain, String representativeId) {
         this.id = chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId();
         this.pdb = chain.composePDBRecord();
-        this.rep = representativeChainId;
-        this.isRep = representativeChainId.equals(this.id);
+        this.rep = representativeId;
+        this.isRep = representativeId.equals(this.id);
 
         this.ligands = chain.select()
                 .hetatms()
@@ -44,7 +44,7 @@ public class ExplorerChain {
 
         try {
             PLIPInteractionContainer interactions = chain.getParentProtein().getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
-            LinearAlgebraAtom.Transformation transformation = chain.getFeature(LinearAlgebraAtom.Transformation.class, ExplorerModelFactory.TRANSFORMATION);
+            LinearAlgebraAtom.Transformation transformation = chain.getFeature(LinearAlgebraAtom.Transformation.class, ModelFactory.TRANSFORMATION);
             this.halogenBonds = convert(interactions.getHalogenBonds(), transformation, chain);
             this.hydrogenBonds = convert(interactions.getHydrogenBonds(), transformation, chain);
             this.metalComplexes = convert(interactions.getMetalComplexes(), transformation, chain);
@@ -66,8 +66,8 @@ public class ExplorerChain {
     }
 
     private List<ExplorerInteraction> convert(List<? extends PLIPInteraction> interactions,
-                                              LinearAlgebraAtom.Transformation transformation,
-                                              Chain chain) {
+                                                                                     LinearAlgebraAtom.Transformation transformation,
+                                                                                     Chain chain) {
         return interactions.stream()
                 .filter(interaction -> interaction.getPartner1().getParentChain().getChainId().equals(chain.getChainId()) && interaction.getPartner2().getParentChain().getChainId().equals(chain.getChainId()))
                 .map(interaction -> new ExplorerInteraction(interaction, transformation))
@@ -86,12 +86,12 @@ public class ExplorerChain {
         return rep;
     }
 
-    public boolean isRep() {
-        return isRep;
-    }
-
     public List<ExplorerLigand> getLigands() {
         return ligands;
+    }
+
+    public boolean isRep() {
+        return isRep;
     }
 
     public boolean isPlip() {

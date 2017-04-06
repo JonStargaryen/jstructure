@@ -1,19 +1,19 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.model;
 
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotationContainer;
 import de.bioforscher.jstructure.parser.uniprot.UniProtMutagenesisSite;
 import de.bioforscher.jstructure.parser.uniprot.UniProtNaturalVariant;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * One position of the MSA.
- * Created by bittrich on 3/27/17.
+ * One position of the MSA-view.
+ * Created by bittrich on 4/6/17.
  */
 public class ExplorerSequencePosition {
     private String olcs;
@@ -24,10 +24,10 @@ public class ExplorerSequencePosition {
     public ExplorerSequencePosition() {
     }
 
-    public ExplorerSequencePosition(Set<UniProtAnnotationContainer> containers, Map<String, String> alignedSequences, int position) {
-        this.olcs = alignedSequences.values().stream()
-                .map(sequence -> sequence.charAt(position))
-                .map(String::valueOf)
+    public ExplorerSequencePosition(Set<UniProtAnnotationContainer> containers, List<Chain> chains, int position) {
+        this.olcs = chains.stream()
+                .map(chain -> chain.select().aminoAcids().residueNumber(position).asOptionalGroup())
+                .map(optionalGroup -> optionalGroup.map(group -> group.getGroupInformation().getOneLetterCode()).orElse("-"))
                 .collect(Collectors.joining(System.lineSeparator()));
 
         // determine if variant positions
@@ -36,7 +36,6 @@ public class ExplorerSequencePosition {
                 .count() == 1;
 
         String positionString = String.valueOf(position);
-        //TODO there is a offset between this position (renumbered) and the uniProt data
         this.mutations = containers.stream()
                 .map(UniProtAnnotationContainer::getMutagenesisSites)
                 .flatMap(Collection::stream)

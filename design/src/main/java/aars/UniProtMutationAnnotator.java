@@ -1,6 +1,5 @@
 package aars;
 
-import de.bioforscher.jstructure.parser.sifts.SiftsParser;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotationContainer;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 import de.bioforscher.jstructure.parser.uniprot.UniProtMutagenesisSite;

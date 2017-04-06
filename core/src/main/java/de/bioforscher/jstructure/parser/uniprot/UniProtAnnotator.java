@@ -4,7 +4,8 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.sifts.SiftsParser;
+import de.bioforscher.jstructure.parser.sifts.ChainSiftsMapping;
+import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ import static de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator.UNIPROT_
  * Queries the UniProt db and annotates available information to each protein chain.
  * Created by bittrich on 3/2/17.
  */
-@FeatureProvider(provides = { UNIPROT_ANNOTATION }, requires = {SiftsParser.UNIPROT_ID })
+@FeatureProvider(provides = { UNIPROT_ANNOTATION }, requires = { SiftsMappingProvider.SIFTS_MAPPING })
 public class UniProtAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(UniProtAnnotator.class);
     public static final String UNIPROT_ANNOTATION = "UNIPROT_ANNOTATION";
@@ -33,7 +34,7 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
     }
 
     private void processInternally(Chain chain) {
-        String uniprotId = chain.getFeature(String.class, SiftsParser.UNIPROT_ID);
+        String uniprotId = chain.getFeature(ChainSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING).getUniProtId();
 
         UniProtAnnotationContainer uniProtAnnotationContainer = process(uniprotId);
         chain.setFeature(UNIPROT_ANNOTATION, uniProtAnnotationContainer);
@@ -43,7 +44,7 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
     public UniProtAnnotationContainer process(String uniprotId) {
         //TODO error-handling for connectivity issues and downtime
         try {
-            if(uniprotId.equals(SiftsParser.UNKNOWN_MAPPING)) {
+            if(uniprotId.equals(SiftsMappingProvider.UNKNOWN_MAPPING)) {
                 return new UniProtAnnotationContainer();
             }
 

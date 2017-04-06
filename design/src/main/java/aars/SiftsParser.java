@@ -1,7 +1,6 @@
-package de.bioforscher.jstructure.parser.sifts;
+package aars;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import org.slf4j.Logger;
@@ -17,7 +16,7 @@ import java.util.stream.Stream;
  * @link http://www.ebi.ac.uk/pdbe/docs/sifts/quick.html
  * Created by bittrich on 3/13/17.
  */
-@FeatureProvider(provides = { SiftsParser.UNIPROT_ID, SiftsParser.PFAM_ID, SiftsParser.EC_NUMBER })
+@Deprecated
 public class SiftsParser extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SiftsParser.class);
     private static final String SIFTS_DIR = "sifts/";
@@ -58,7 +57,7 @@ public class SiftsParser extends AbstractFeatureProvider {
 
     //TODO prettify
     public List<String> mapToUniProt(String pdbId, String chainId) {
-       return getLines(PFAM_MAPPING, pdbId)
+        return getLines(PFAM_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chainId))
                 .map(split -> split[2])
                 .distinct()

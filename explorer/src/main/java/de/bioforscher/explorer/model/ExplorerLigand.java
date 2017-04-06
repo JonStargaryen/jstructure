@@ -1,10 +1,10 @@
-package de.bioforscher.explorer.membrane.model;
+package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.model.structure.Group;
 
 /**
  * Represents ligands.
- * Created by bittrich on 3/20/17.
+ * Created by bittrich on 4/6/17.
  */
 public class ExplorerLigand {
     private int resn;

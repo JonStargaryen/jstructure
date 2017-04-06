@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * TODO parallelisms
  * Created by bittrich on 1/25/17.
  */
+@Deprecated
 public class MultipleStructureAlignment {
     private static final Logger logger = LoggerFactory.getLogger(MultipleStructureAlignment.class);
     private final SVDSuperimposer svdSuperimposer;

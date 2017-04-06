@@ -1,7 +1,7 @@
 package de.bioforscher.explorer.membrane;
 
-import de.bioforscher.explorer.membrane.model.ExplorerAlignment;
-import de.bioforscher.explorer.membrane.model.ExplorerChain;
+import de.bioforscher.explorer.model.ExplorerAlignment;
+import de.bioforscher.explorer.model.ExplorerChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

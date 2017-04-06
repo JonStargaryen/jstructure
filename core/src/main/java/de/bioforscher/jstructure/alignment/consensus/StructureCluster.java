@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  * Represents a structure cluster created by {@link FragmentClusteringComposer}.
  * Created by S on 05.12.2016.
  */
+@Deprecated
 public class StructureCluster {
     private List<AtomContainer> entries;
     private AtomContainer consensus;
