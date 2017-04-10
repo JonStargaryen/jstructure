@@ -1,7 +1,7 @@
-package de.bioforscher.explorer.membrane;
+package de.bioforscher.explorer;
 
-import de.bioforscher.explorer.membrane.repository.AlignmentRepository;
-import de.bioforscher.explorer.membrane.repository.ChainRepository;
+import de.bioforscher.explorer.repository.AlignmentRepository;
+import de.bioforscher.explorer.repository.ChainRepository;
 import de.bioforscher.explorer.model.ExplorerAlignment;
 import de.bioforscher.explorer.model.ExplorerChain;
 import de.bioforscher.explorer.model.ExplorerCluster;

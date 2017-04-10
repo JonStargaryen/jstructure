@@ -1,4 +1,4 @@
-package de.bioforscher.explorer.membrane.repository;
+package de.bioforscher.explorer.repository;
 
 import de.bioforscher.explorer.model.ExplorerAlignment;
 import org.springframework.data.mongodb.repository.MongoRepository;

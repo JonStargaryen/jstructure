@@ -15,13 +15,13 @@
 
     MODULE.constant('interactionTypes', [
         { name : 'visualize no interactions', tag : 'none' },
-        { name : 'halogen bonds', tag : 'hal' },
-        { name : 'hydrogen bonds', tag : 'hb' },
-        { name : 'metal complexes', tag : 'mc' },
-        { name : 'pi-cation interactions', tag : 'pc' },
-        { name : 'pi-stacking interactions', tag : 'ps' },
-        { name : 'salt bridges', tag : 'salt' },
-        { name : 'water bridges', tag : 'wb' }
+        { name : 'halogen bonds', tag : 'halogenBonds' },
+        { name : 'hydrogen bonds', tag : 'hydrogenBonds' },
+        { name : 'metal complexes', tag : 'metalComplexes' },
+        { name : 'pi-cation interactions', tag : 'piCationInteractions' },
+        { name : 'pi-stacking interactions', tag : 'piStackings' },
+        { name : 'salt bridges', tag : 'saltBridges' },
+        { name : 'water bridges', tag : 'waterBridges' }
 
     ]);
 
@@ -138,6 +138,7 @@
         var viewer = pv.Viewer(document.getElementById('protein-visualizer'), viewerDefaultOptions);
         $scope.features = features;
         $scope.interactionTypes = interactionTypes;
+        var previousType;
         $scope.viewerOptions = {
             renderLigands : false,
             coloringFeature : features[0],
@@ -274,27 +275,33 @@
             viewer.requestRedraw();
         });
 
-        function toggleInteractions(newVal, oldVal, type) {
-            if(newVal === oldVal)
+        $scope.$watch('viewerOptions.interactionType', function(type) {
+            if(type === interactionTypes[0])
                 return;
-            if(newVal) {
-                forAllChains(function(chain) {
-                    if (initializedInteractions.indexOf(chain + type) < 0)
-                        createInteractions(chain, type);
-                });
-                viewer.show(type);
-            } else {
-                viewer.hide(type);
+
+            changeVisualizedInteractions(type.tag);
+        });
+
+        function changeVisualizedInteractions(typeTag) {
+            if(previousType) {
+                viewer.hide(previousType);
             }
+            forAllChains(function(chain) {
+                if (initializedInteractions.indexOf(chain + typeTag) < 0)
+                    createInteractions(chain, typeTag);
+            });
+            viewer.show(typeTag);
             viewer.requestRedraw();
+            previousType = typeTag;
         }
 
         /* render PLIP interactions */
-        function createInteractions(chain, type) {
-            chain[type].forEach(function(entry) {
-                viewer.customMesh(type).addTube(entry.coords1, entry.coords2, 0.15, { cap : true, color : '#FF0000' });
+        function createInteractions(chain, typeTag) {
+            console.log(chain);
+            chain[typeTag].forEach(function(entry) {
+                viewer.customMesh(typeTag).addTube(entry.coords1, entry.coords2, 0.15, { cap : true, color : '#FF0000' });
             });
-            initializedInteractions.push(chain + type);
+            initializedInteractions.push(chain + typeTag);
         }
 
         /* interactivity functions from the msa-view */
