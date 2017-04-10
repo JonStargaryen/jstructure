@@ -129,7 +129,7 @@
         var viewerDefaultOptions = {
             width : 400,
             height : 400,
-            // antialias : true,
+            antialias : true,
             quality : 'high',
             background : '#313a41',
             selectionColor : '#f00',
@@ -239,7 +239,7 @@
                 console.log($scope.alignment);
 
                 $scope.alignment.chains.forEach(function(sequence) {
-                    if(sequence.id == $scope.reference.id) {
+                    if(sequence.id === $scope.reference.id) {
                         $scope.reference.ec = sequence.ec;
                         $scope.reference.pfam = sequence.pfam;
                         $scope.reference.uniprot = sequence.uniprot;
@@ -359,7 +359,7 @@
             determineHoverRange(index);
 
             forAllChains(function(chain) {
-                if(chain.selected == false) {
+                if(chain.selected === false) {
                     return;
                 }
 
@@ -382,7 +382,7 @@
         }
 
         $scope.isFocusPosition = function(index) {
-            return focusPosition == index;
+            return focusPosition === index;
         };
 
         $scope.isHoverPosition = function(index) {
@@ -448,7 +448,7 @@
                 var ev = chain.pv_structure.full().createEmptyView();
                 chain.pv_protein.setSelection(ev);
                 chain.pv_ligands.setSelection(ev);
-                if(chain.pv_selection != undefined) {
+                if(chain.pv_selection !== undefined) {
                     chain.pv_selection.setSelection(ev);
                 }
             });

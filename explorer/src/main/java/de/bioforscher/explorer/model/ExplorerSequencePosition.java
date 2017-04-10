@@ -54,7 +54,7 @@ public class ExplorerSequencePosition {
                 .map(UniProtAnnotationContainer::getActiveSites)
                 .flatMap(Collection::stream)
                 .distinct()
-                .filter(activeSite -> activeSite.getPosition().contains(positionString))
+                .filter(activeSite -> activeSite.getPosition().equals(positionString))
                 .collect(Collectors.toList());
         this.mutant = !mutations.isEmpty();
         this.variant = !variants.isEmpty();

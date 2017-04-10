@@ -53,7 +53,7 @@ public class ModelFactory {
                         pdbId -> ProteinParser.source(pdbId).forceProteinName(pdbId).parse()));
 
         // annotate PLIP data
-        proteins.values().parallelStream().forEach(plipAnnotator::process);
+//        proteins.values().parallelStream().forEach(plipAnnotator::process);
 
         // map residues to UniProt indices - important: this has to happen after annotating any external data such as PLIP
         proteins.values().parallelStream().forEach(protein -> {
