@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -63,19 +62,24 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
      * @param protein the container to process
      */
     private void smoothLoopFraction(Protein protein) {
-        protein.chains().forEach(this::smoothLoopFraction);
+        protein.chains()
+                .filter(chain -> chain.aminoAcids().count() > WINDOW_SIZE)
+                .forEach(this::smoothLoopFraction);
     }
 
     private void smoothLoopFraction(Chain chain) {
         // smooth values for all groups with the complete set of neighbors
-        Combinatorics.fragmentsOf(chain.aminoAcids().collect(Collectors.toList()), WINDOW_SIZE).forEach(this::smoothLoopFraction);
+        Combinatorics.fragmentsOf(chain.aminoAcids()
+                        .collect(Collectors.toList()), WINDOW_SIZE)
+                .forEach(this::smoothLoopFraction);
 
         // smooth values of start and end residues of the chain
         chain.aminoAcids()
                 .filter(group -> !group.getFeatureMap().containsKey(LOOP_FRACTION))
                 .forEach(group -> {
                     int residueNumber = group.getResidueNumber();
-                    double smoothedValue = Selection.on(chain)
+                    double smoothedValue =chain.select()
+                            .aminoAcids()
                             .residueNumber(surroundingResidueNumbers(residueNumber))
                             .asFilteredGroups()
                             .mapToDouble(surroundingGroup -> surroundingGroup.getFeatureAsDouble(RAW_LOOP_FRACTION))
@@ -110,7 +114,8 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
      * @param protein the container to process
      */
     private void assignRawLoopFraction(Protein protein) {
-        protein.aminoAcids().forEach(this::assignRawLoopFraction);
+        protein.aminoAcids()
+                .forEach(this::assignRawLoopFraction);
     }
 
     private void assignRawLoopFraction(Group group) {

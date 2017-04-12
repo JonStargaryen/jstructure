@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 /**
  * The abstract implementation of each {@link FeatureProvider}. Implicitly registers each provider in a global
  * "registry" implemented by {@link FeatureProviderRegistry}.
+ * TODO a register function which fills each featureMap with the provided keys of this provider, thus multiple predictors could be employed concurrently
  * Created by S on 16.01.2017.
  */
 public abstract class AbstractFeatureProvider {

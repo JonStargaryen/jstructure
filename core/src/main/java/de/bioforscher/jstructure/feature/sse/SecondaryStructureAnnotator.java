@@ -784,7 +784,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private double calculateHBondEnergy(Pair<Group, Group> residuePair) {
         Group res1 = residuePair.getLeft();
         Group res2 = residuePair.getRight();
-        Atom nAtom = Selection.on(res1)
+        Atom nAtom = res1.select()
                 .backboneNitrogenAtoms()
                 .asAtom();
         double[] n = nAtom.getCoordinates();
@@ -793,11 +793,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 .asAtom()
                 .getCoordinates();
 
-        Atom oAtom = Selection.on(res2)
+        Atom oAtom = res2.select()
                 .backboneOxygenAtoms()
                 .asAtom();
         double[] o = oAtom.getCoordinates();
-        double[] c = Selection.on(res2)
+        double[] c = res2.select()
                 .backboneCarbonAtoms()
                 .asAtom()
                 .getCoordinates();

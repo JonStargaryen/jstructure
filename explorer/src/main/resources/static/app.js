@@ -118,7 +118,7 @@
         var focusPosition = -1000;
         var hoverRange = [ -1000, -1000 ];
         $scope.selectionMode = false;
-        $scope.windowSize = 3;
+        $scope.windowSize = 2;
         $scope.sliderOptions = {
             floor: 0,
             ceil: 10,

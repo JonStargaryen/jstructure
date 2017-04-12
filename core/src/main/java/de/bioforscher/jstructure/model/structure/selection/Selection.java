@@ -161,6 +161,7 @@ public class Selection {
 
         public Atom asAtom() {
             return asOptionalAtom()
+                    //TODO would be nice to get informed about the selection criteria on exception
                     .orElseThrow(NoSuchElementException::new);
         }
 

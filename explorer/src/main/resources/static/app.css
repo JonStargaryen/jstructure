@@ -61,6 +61,14 @@ header .logo {
     color: #51b2e9;
 }
 
+header .logo .mutation {
+    transition: ease-in-out 0.35s;
+}
+
+header .logo:hover .mutation {
+    color: #d62728;
+}
+
 header .context {
     padding: 15px 20px;
     color: #cbddf2;
@@ -179,8 +187,24 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 }
 
 /* the general info page for each protein */
+.view-tab {
+    color: #cfd8dc;
+}
+
+.caption {
+    font-size: 8pt;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #a4afbb;
+    margin-bottom: 8px;
+}
+
+.caption:not(:first-child) {
+    margin-top: 12px;
+}
+
 .homologous-table {
-    margin: -5px;
+    margin: 0 -5px;
     display: table;
     width: 100%;
 }

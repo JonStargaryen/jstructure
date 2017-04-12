@@ -9,7 +9,7 @@ import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
  * Created by bittrich on 4/6/17.
  */
 public class ExplorerSequence {
-    private String id, title, ec, pfam, uniprot;
+    private String id, title, ec, pfam, uniprot, sequence;
 
     public ExplorerSequence() {
     }
@@ -21,6 +21,7 @@ public class ExplorerSequence {
         this.ec = chainSiftsMapping.getEcNumber();
         this.pfam = chainSiftsMapping.getPfam();
         this.uniprot = chainSiftsMapping.getUniProtId();
+        this.sequence = chain.getAminoAcidSequence();
     }
 
     public String getId() {
@@ -41,5 +42,9 @@ public class ExplorerSequence {
 
     public String getUniprot() {
         return uniprot;
+    }
+
+    public String getSequence() {
+        return sequence;
     }
 }
