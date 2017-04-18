@@ -8,6 +8,7 @@ import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
  * An aligned sequence.
  * Created by bittrich on 4/6/17.
  */
+@Deprecated
 public class ExplorerSequence {
     private String id, title, ec, pfam, uniprot, sequence;
 

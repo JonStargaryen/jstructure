@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
  * One position of the MSA-view.
  * Created by bittrich on 4/6/17.
  */
+@Deprecated
 public class ExplorerSequencePosition {
     private String olcs;
     private boolean uniform, mutant, variant, activeSite;

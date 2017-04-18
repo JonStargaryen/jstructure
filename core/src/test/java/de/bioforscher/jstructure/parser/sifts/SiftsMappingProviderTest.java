@@ -21,6 +21,12 @@ public class SiftsMappingProviderTest {
     }
 
     @Test
+    public void shouldHandle5tgz() {
+        Protein protein = ProteinParser.source("5tgz").parse();
+        siftsMappingProvider.process(protein);
+    }
+
+    @Test
     public void shouldDetermineUniProtNumbering() {
         Protein protein = ProteinParser.source("1acj").parse();
         siftsMappingProvider.process(protein);

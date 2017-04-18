@@ -88,8 +88,7 @@ public class S01_ComposeKinkFinderData {
             List<TMHelix> helices = protein.getFeatureAsList(TMHelix.class, OPMParser.TM_HELIX);
 
             KinkFinderParser.parseKinkFinderFile(protein, Paths.get(Constants.KINK_FINDER_RESULT_PATH + pdbId + ".kinks"));
-            List<KinkFinderHelix> kinks = protein.getFeatureAsList(KinkFinderHelix.class, KinkFinderParser.KINK_FINDER_ANNOTATION).stream()
-                    .collect(Collectors.toList());
+            List<KinkFinderHelix> kinks = new ArrayList<>(protein.getFeatureAsList(KinkFinderHelix.class, KinkFinderParser.KINK_FINDER_ANNOTATION));
             List<KinkFinderHelix> significantKinks = kinks.stream()
                     .filter(kinkFinderHelix -> kinkFinderHelix.getKinkAngle() > 20.0)
                     .collect(Collectors.toList());

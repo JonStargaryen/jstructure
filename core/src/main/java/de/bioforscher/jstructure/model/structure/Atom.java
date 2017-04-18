@@ -227,6 +227,10 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
         return identifier == null ? name + "-" + pdbSerial : identifier;
     }
 
+    public void setPdbSerial(int pdbSerial) {
+        this.pdbSerial = pdbSerial;
+    }
+
     /**
      * Inner class to write <tt>ATOM</tt> records. BioJava-Code.
      */

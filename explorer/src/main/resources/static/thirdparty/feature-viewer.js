@@ -38,8 +38,7 @@ var FeatureViewer = (function () {
         var yData = [];
         var yAxisSVG;
         var yAxisSVGgroup;
-        // feature 04/11/17 - adds support to depict one sequence and nothing else
-        var Yposition = !options.sequenceName ? 20 : 0;
+        var Yposition = 20;
         var level = 0;
         var seqShift = 0;
         var zoom = false;
@@ -469,8 +468,8 @@ var FeatureViewer = (function () {
         }
 
         function updateSVGHeight(position) {
-            svg.attr("height", position + (!options.sequenceName ? 60 : 30) + "px");
-            svg.select("clippath rect").attr("height", position + (!options.sequenceName ? 60 : 30) + "px");
+            svg.attr("height", position + 60 + "px");
+            svg.select("clippath rect").attr("height", position + 60 + "px");
         }
 
         var yAxisScale = d3.scale.ordinal()
@@ -487,7 +486,7 @@ var FeatureViewer = (function () {
         function addYAxis() {
             yAxisSVG = svg.append("g")
                 .attr("class", "pro axis")
-                .attr("transform", "translate(0," + (!options.sequenceName ? margin.top : 15) + ")");
+                .attr("transform", "translate(0," + margin.top + ")");
             updateYaxis();
         }
 
@@ -1203,8 +1202,7 @@ var FeatureViewer = (function () {
                 .attr("class", "brush")
                 .call(brush)
                 .selectAll("rect")
-                // feature 04/11/17 - remove padding between individual feature viewer instances
-                .attr('height', Yposition + 30);
+                .attr('height', Yposition + 50);
         }
 
         this.zoom = function(start, end){
@@ -1694,11 +1692,7 @@ var FeatureViewer = (function () {
 
             svgContainer = svg
                 .append("g")
-                .attr("transform", "translate(" + margin.left + "," + (!options.sequenceName ? margin.top : -5) + ")");
-
-            if(options.sequenceName) {
-                svgContainer.attr("height", "30px");
-            }
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             //Create Clip-Path
             var defs = svgContainer.append("defs");
@@ -1752,15 +1746,13 @@ var FeatureViewer = (function () {
                 }
                 features.push({
                     data: sequence,
-                    // feature 04/11/17 - adds support for custom sequence names
-                    name: options.sequenceName ? options.sequenceName : "Sequence",
+                    name: "Sequence",
                     className: "AA",
                     color: "black",
                     type: "text"
                 });
                 yData.push({
-                    // feature 04/11/17 - adds support for custom sequence names
-                    title: options.sequenceName ? options.sequenceName : "Sequence",
+                    title: "Sequence",
                     y: Yposition - 8
                 });
             }

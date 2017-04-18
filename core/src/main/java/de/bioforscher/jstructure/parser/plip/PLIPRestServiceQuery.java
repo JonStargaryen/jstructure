@@ -29,7 +29,6 @@ class PLIPRestServiceQuery {
         }
     }
 
-    @SuppressWarnings("unused")
     static String getPlipResults(String pdbId, String chainId, int residueNumber) {
         try {
             return getPlipResults(new URL(BASE_URL + pdbId + "/" + chainId + "/" + residueNumber));

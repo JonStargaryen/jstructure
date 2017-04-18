@@ -15,6 +15,7 @@ import java.util.stream.IntStream;
  * The sequence alignment of one cluster.
  * Created by bittrich on 4/6/17.
  */
+@Deprecated
 public class ExplorerAlignment {
     private static final UniProtAnnotator uniProtAnnotator = new UniProtAnnotator();
     private String representativeId;

@@ -2,6 +2,7 @@ package reconstruction;
 
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -27,6 +28,30 @@ public class PULCHRAFunctionalTest {
         // for sake of simplicity a structure with a single getChain
         protein = ProteinParser.source("1acj").parse();
         proteinCopy = ProteinParser.source("1acj").parse();
+    }
+
+    @Test
+    public void shouldMutateGivenAminoAcidPositionToGlycine() {
+        Protein protein = ProteinParser.source("1brr").parse();
+        Group group = protein.select()
+                .chainName("A")
+                .residueNumber(100)
+                .asGroup();
+        System.out.println("original entry:" + System.lineSeparator() + group.composePDBRecord());
+        new PULCHRA().mutatePosition(group, "GLY");
+        System.out.println("mutated entry:" + System.lineSeparator() + group.composePDBRecord());
+    }
+
+    @Test
+    public void shouldMutateGivenAminoAcidPositionToTryptophane() {
+        Protein protein = ProteinParser.source("1brr").parse();
+        Group group = protein.select()
+                .chainName("A")
+                .residueNumber(100)
+                .asGroup();
+        System.out.println("original entry:" + System.lineSeparator() + group.composePDBRecord());
+        new PULCHRA().mutatePosition(group, "TRP");
+        System.out.println("mutated entry:" + System.lineSeparator() + group.composePDBRecord());
     }
 
     @Test

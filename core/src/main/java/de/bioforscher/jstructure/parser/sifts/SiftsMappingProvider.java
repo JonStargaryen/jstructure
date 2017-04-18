@@ -8,6 +8,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -24,6 +27,7 @@ import java.util.zip.GZIPInputStream;
  */
 @FeatureProvider(provides = SiftsMappingProvider.SIFTS_MAPPING)
 public class SiftsMappingProvider extends AbstractFeatureProvider {
+    private static final Logger logger = LoggerFactory.getLogger(SiftsMappingProvider.class);
     public static final String SIFTS_MAPPING = "SIFTS_MAPPING";
 
     // the SIFTS-web-resource
@@ -103,8 +107,14 @@ public class SiftsMappingProvider extends AbstractFeatureProvider {
 
     ResidueSiftsMapping mapGroup(final Document document, final String chainId, final String pdbResidueNumber) {
         Element describingElement = mapToDescribingElement(document, chainId, pdbResidueNumber);
-        Element uniProtElement = describingElement.getElementsByAttributeValue("dbSource", "UniProt").first();
-        return new ResidueSiftsMapping(uniProtElement.attr("dbAccessionId"), uniProtElement.attr("dbResNum"));
+        Elements uniProtElements = describingElement.getElementsByAttributeValue("dbSource", "UniProt");
+        if(!uniProtElements.isEmpty()) {
+            Element uniProtElement = uniProtElements.first();
+            return new ResidueSiftsMapping(uniProtElement.attr("dbAccessionId"), uniProtElement.attr("dbResNum"));
+        } else {
+            logger.warn("could not retrieve UniProt mapping for " + chainId + "-" + pdbResidueNumber);
+            return ResidueSiftsMapping.MISSING_VALUE;
+        }
     }
 
     Element mapToDescribingElement(final Document document, final String chainId, final String pdbResidueNumber) {

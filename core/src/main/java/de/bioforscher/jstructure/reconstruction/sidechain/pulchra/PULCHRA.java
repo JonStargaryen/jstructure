@@ -1,14 +1,13 @@
 package de.bioforscher.jstructure.reconstruction.sidechain.pulchra;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.Combinatorics;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.Fragment;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.CIFParser;
 import de.bioforscher.jstructure.reconstruction.ReconstructionAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,8 +82,44 @@ public class PULCHRA implements ReconstructionAlgorithm {
         reconstructSidechains(protein);
     }
 
-    private void reconstructBackbone(Protein protein) {
+    /**
+     * Mutates a given position in a protein structure to a different amino acid. The side-chain will be replaced and
+     * the optimal placement of the new atoms will be determined by PULCHRA.
+     * @param group the position to mutate
+     * @param targetAminoAcidThreeLetterCode the new amino acid to be placed at that position
+     */
+    public void mutatePosition(Group group, String targetAminoAcidThreeLetterCode) {
+        Chain chain = group.getParentChain();
+        List<Group> groups = chain.getGroups();
 
+        // determine fragment view
+        int residueIndex = groups.indexOf(group);
+        Fragment<Group> fragment = new Fragment<>(groups.subList(residueIndex - 2, residueIndex + 2));
+
+        // drop all side-chain atoms
+        List<Atom> backboneAtoms = group.select()
+                .backboneAtoms()
+                .asFilteredAtoms()
+                .collect(Collectors.toList());
+        group.getAtoms().retainAll(backboneAtoms);
+
+        // rename amino acid as this determines the newly place entity
+        group.setGroupInformation(CIFParser.parseLigandInformation(targetAminoAcidThreeLetterCode));
+
+        // reconstruct side-chain
+        reconstructFragment(fragment);
+
+        renumberAtoms(chain.getParentProtein());
+    }
+
+    private void renumberAtoms(Protein protein) {
+        for(int atomIndex = 1; atomIndex <= protein.getAtoms().size(); atomIndex++) {
+            protein.getAtoms().get(atomIndex - 1).setPdbSerial(atomIndex);
+        }
+    }
+
+    private void reconstructBackbone(Protein protein) {
+        //TODO impl
     }
 
     private void reconstructSidechains(Protein protein) {
@@ -93,74 +128,76 @@ public class PULCHRA implements ReconstructionAlgorithm {
                 .aminoAcids()
                 .asFilteredGroups()
                 .collect(Collectors.toList()), 4)
-                .forEach(fragment -> {
-                    Group residueToReconstruct = fragment.getElement(2);
-                    AminoAcidFamily aminoAcid = residueToReconstruct.getGroupInformation().getAminoAcidFamily();
-                    if (aminoAcid.equals(AminoAcidFamily.GLYCINE) || aminoAcid.equals(AminoAcidFamily.UNKNOWN)) {
-                        return;
-                    }
+                .forEach(this::reconstructFragment);
+    }
 
-                    double[] ca_p2 = Selection.on(fragment.getElement(0))
-                            .alphaCarbonAtoms()
-                            .asAtom()
-                            .getCoordinates();
-                    double[] ca_p1 = Selection.on(fragment.getElement(1))
-                            .alphaCarbonAtoms()
-                            .asAtom()
-                            .getCoordinates();
-                    double[] ca_tr = Selection.on(residueToReconstruct)
-                            .alphaCarbonAtoms()
-                            .asAtom()
-                            .getCoordinates();
-                    double[] ca_n1 = Selection.on(fragment.getElement(3))
-                            .alphaCarbonAtoms()
-                            .asAtom()
-                            .getCoordinates();
+    private void reconstructFragment(Fragment<Group> fragment) {
+        Group residueToReconstruct = fragment.getElement(2);
+        AminoAcidFamily aminoAcid = residueToReconstruct.getGroupInformation().getAminoAcidFamily();
+        if (aminoAcid.equals(AminoAcidFamily.GLYCINE) || aminoAcid.equals(AminoAcidFamily.UNKNOWN)) {
+            return;
+        }
 
-                    double d13 = LinearAlgebra3D.distance(ca_p2, ca_tr);
-                    double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
-                    double d14 = LinearAlgebra3D.distance14(ca_p2, ca_p1, ca_tr, ca_n1);
-                    int[] residueBinning = binResidues(d13, d24, d14);
-                    logger.trace("residueBinning : {}", Arrays.toString(residueBinning));
+        double[] ca_p2 = fragment.getElement(0).select()
+                .alphaCarbonAtoms()
+                .asAtom()
+                .getCoordinates();
+        double[] ca_p1 = fragment.getElement(1).select()
+                .alphaCarbonAtoms()
+                .asAtom()
+                .getCoordinates();
+        double[] ca_tr = residueToReconstruct.select()
+                .alphaCarbonAtoms()
+                .asAtom()
+                .getCoordinates();
+        double[] ca_n1 = fragment.getElement(3).select()
+                .alphaCarbonAtoms()
+                .asAtom()
+                .getCoordinates();
 
-                    // find closest rotamer conformation
-                    int[] bestMatchingRotamer = null;
-                    double bestMatchingRotamerDistance = Double.MAX_VALUE;
-                    int aminoAcidIndex = getAminoAcidIndex(residueToReconstruct);
-                    logger.trace("aminoAcidIndex : {}", aminoAcidIndex);
+        double d13 = LinearAlgebra3D.distance(ca_p2, ca_tr);
+        double d24 = LinearAlgebra3D.distance(ca_p1, ca_n1);
+        double d14 = LinearAlgebra3D.distance14(ca_p2, ca_p1, ca_tr, ca_n1);
+        int[] residueBinning = binResidues(d13, d24, d14);
+        logger.trace("residueBinning : {}", Arrays.toString(residueBinning));
 
-                    for (int[] rotamer : rotStatIdx) {
-                        logger.trace("rotamer : {}", Arrays.toString(rotamer));
-                        if (rotamer[0] != aminoAcidIndex) {
-                            continue;
-                        }
+        // find closest rotamer conformation
+        int[] bestMatchingRotamer = null;
+        double bestMatchingRotamerDistance = Double.MAX_VALUE;
+        int aminoAcidIndex = getAminoAcidIndex(residueToReconstruct);
+        logger.trace("aminoAcidIndex : {}", aminoAcidIndex);
 
-                        double rotamerDistance = difference(rotamer, residueBinning);
-                        logger.trace("distance : {}", rotamerDistance);
-                        if (rotamerDistance < bestMatchingRotamerDistance) {
-                            bestMatchingRotamerDistance = rotamerDistance;
-                            bestMatchingRotamer = rotamer;
-                        }
-                    }
+        for (int[] rotamer : rotStatIdx) {
+            logger.trace("rotamer : {}", Arrays.toString(rotamer));
+            if (rotamer[0] != aminoAcidIndex) {
+                continue;
+            }
 
-                    // new rebuild
-                    double[][] rotation = rotation(ca_p1, ca_tr, ca_n1);
+            double rotamerDistance = difference(rotamer, residueBinning);
+            logger.trace("distance : {}", rotamerDistance);
+            if (rotamerDistance < bestMatchingRotamerDistance) {
+                bestMatchingRotamerDistance = rotamerDistance;
+                bestMatchingRotamer = rotamer;
+            }
+        }
 
-                    int pos = Objects.requireNonNull(bestMatchingRotamer)[5];
-                    int nsc = (int) aminoAcid.sideChainAtomNames().count();
+        // new rebuild
+        double[][] rotation = rotation(ca_p1, ca_tr, ca_n1);
 
-                    // all atoms within the coordinate file describing this getResidue
-                    for (int i = 0; i < nsc; i++) {
-                        String atomName = aminoAcid.getSideChainAtomNames().get(i);
-                        //TODO as pdbSerial cannot be decided yet, we need to update them later or externally, boilerplately
-                        Atom reconstructedAtom = new Atom(atomName, 0,
-                                Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
-                        // transform atom
-                        reconstructedAtom = new LinearAlgebraAtom.Transformation(ca_tr,
-                                rotation).transformCoordinates(reconstructedAtom);
-                        residueToReconstruct.addAtom(reconstructedAtom);
-                    }
-                });
+        int pos = Objects.requireNonNull(bestMatchingRotamer)[5];
+        int nsc = (int) aminoAcid.sideChainAtomNames().count();
+
+        // all atoms within the coordinate file describing this getResidue
+        for (int i = 0; i < nsc; i++) {
+            String atomName = aminoAcid.getSideChainAtomNames().get(i);
+            //TODO as pdbSerial cannot be decided yet, we need to update them later or externally, boilerplately
+            Atom reconstructedAtom = new Atom(atomName, 0,
+                    Element.valueOfIgnoreCase(atomName.substring(0, 1)), rotStatCoords.get(pos + i + 1));
+            // transform atom
+            reconstructedAtom = new LinearAlgebraAtom.Transformation(ca_tr,
+                    rotation).transformCoordinates(reconstructedAtom);
+            residueToReconstruct.addAtom(reconstructedAtom);
+        }
     }
 
     private double[][] rotation(double[] ca_p1, double[] ca_tr, double[] ca_n1) {
@@ -202,6 +239,7 @@ public class PULCHRA implements ReconstructionAlgorithm {
             "").split(",");
 
     private synchronized void initializeLibrary() {
+        logger.info("starting PULCHRA side-chain reconstruction service");
         // parse sidechain indices
         InputStream idxIs = getResourceAsStream(ROT_STAT_IDX_LIBRARY);
         rotStatIdx = new BufferedReader(new InputStreamReader(idxIs)).lines()

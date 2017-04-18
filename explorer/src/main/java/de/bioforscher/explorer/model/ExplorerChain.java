@@ -1,10 +1,12 @@
 package de.bioforscher.explorer.model;
 
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
 import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
+import de.bioforscher.jstructure.parser.uniprot.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
  * Created by bittrich on 4/6/17.
  */
 public class ExplorerChain {
-    private String id, pdb, rep;
+    private String id, pdb, rep, sequence;
     private List<ExplorerLigand> ligands;
     private boolean isRep, isPlip;
+    /* 'traditional' data */
+    private List<Double> rasa;
     /* interactions */
     private List<ExplorerInteraction> halogenBonds;
     private List<ExplorerInteraction> hydrogenBonds;
@@ -26,6 +30,14 @@ public class ExplorerChain {
     private List<ExplorerInteraction> piStackings;
     private List<ExplorerInteraction> saltBridges;
     private List<ExplorerInteraction> waterBridges;
+    /* UniProt data */
+    private List<UniProtActiveSite> active;
+    private List<UniProtDisulfideBond> disulfide;
+    private List<UniProtMutagenesisSite> mutagenesis;
+    private List<UniProtAminoAcidModification> ptm;
+    private List<UniProtSecondaryStructureElement> sse;
+    private List<UniProtTransmembraneRegion> tm;
+    private List<UniProtNaturalVariant> variants;
 
     public ExplorerChain() {
     }
@@ -34,12 +46,17 @@ public class ExplorerChain {
         this.id = chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId();
         this.pdb = chain.composePDBRecord();
         this.rep = representativeId;
+        this.sequence = chain.getAminoAcidSequence();
         this.isRep = representativeId.equals(this.id);
 
         this.ligands = chain.select()
                 .hetatms()
                 .asFilteredGroups()
                 .map(ExplorerLigand::new)
+                .collect(Collectors.toList());
+
+        this.rasa = chain.aminoAcids()
+                .map(group -> group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA))
                 .collect(Collectors.toList());
 
         try {
@@ -63,11 +80,20 @@ public class ExplorerChain {
             this.waterBridges = new ArrayList<>();
             this.isPlip = false;
         }
+
+        UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
+        this.active = uniProtAnnotationContainer.getActiveSites();
+        this.disulfide = uniProtAnnotationContainer.getDisulfideBonds();
+        this.mutagenesis = uniProtAnnotationContainer.getMutagenesisSites();
+        this.ptm = uniProtAnnotationContainer.getAminoAcidModifications();
+        this.sse = uniProtAnnotationContainer.getSecondaryStructureElements();
+        this.tm = uniProtAnnotationContainer.getTransmembraneRegions();
+        this.variants = uniProtAnnotationContainer.getNaturalVariants();
     }
 
     private List<ExplorerInteraction> convert(List<? extends PLIPInteraction> interactions,
-                                                                                     LinearAlgebraAtom.Transformation transformation,
-                                                                                     Chain chain) {
+                                              LinearAlgebraAtom.Transformation transformation,
+                                              Chain chain) {
         return interactions.stream()
                 .filter(interaction -> interaction.getPartner1().getParentChain().getChainId().equals(chain.getChainId()) && interaction.getPartner2().getParentChain().getChainId().equals(chain.getChainId()))
                 .map(interaction -> new ExplorerInteraction(interaction, transformation))
@@ -84,6 +110,10 @@ public class ExplorerChain {
 
     public String getRep() {
         return rep;
+    }
+
+    public String getSequence() {
+        return sequence;
     }
 
     public List<ExplorerLigand> getLigands() {
@@ -124,5 +154,37 @@ public class ExplorerChain {
 
     public List<ExplorerInteraction> getWaterBridges() {
         return waterBridges;
+    }
+
+    public List<Double> getRasa() {
+        return rasa;
+    }
+
+    public List<UniProtActiveSite> getActive() {
+        return active;
+    }
+
+    public List<UniProtDisulfideBond> getDisulfide() {
+        return disulfide;
+    }
+
+    public List<UniProtMutagenesisSite> getMutagenesis() {
+        return mutagenesis;
+    }
+
+    public List<UniProtAminoAcidModification> getPtm() {
+        return ptm;
+    }
+
+    public List<UniProtSecondaryStructureElement> getSse() {
+        return sse;
+    }
+
+    public List<UniProtTransmembraneRegion> getTm() {
+        return tm;
+    }
+
+    public List<UniProtNaturalVariant> getVariants() {
+        return variants;
     }
 }

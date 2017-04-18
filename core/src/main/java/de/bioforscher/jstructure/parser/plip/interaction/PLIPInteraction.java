@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.ParsingException;
 import org.jsoup.nodes.Element;
 
 import java.util.List;
@@ -34,13 +35,26 @@ public abstract class PLIPInteraction {
         this.describingElement = describingElement;
         this.protein = partner1.getParentChain().getParentProtein();
         Element ligcoo = describingElement.getElementsByTag("ligcoo").first();
-        this.coords1 = extractCoordinateArray(ligcoo);
         Element protcoo = describingElement.getElementsByTag("protcoo").first();
+        // element could describe metal complex where coordinate entries are named differently
+        if(ligcoo == null && protcoo == null) {
+            ligcoo = describingElement.getElementsByTag("metalcoo").first();
+            protcoo = describingElement.getElementsByTag("targetcoo").first();
+        }
+        // something went actually wrong
+        if(ligcoo == null || protcoo == null) {
+            throw new ParsingException("missing coordinates on:" + System.lineSeparator() + describingElement.html());
+        }
+        this.coords1 = extractCoordinateArray(ligcoo);
         this.coords2 = extractCoordinateArray(protcoo);
     }
 
     private double[] extractCoordinateArray(Element coo) {
-        return new double[] { Double.valueOf(coo.child(0).text()), Double.valueOf(coo.child(1).text()), Double.valueOf(coo.child(2).text()) };
+        return new double[]{
+                Double.valueOf(coo.child(0).text()),
+                Double.valueOf(coo.child(1).text()),
+                Double.valueOf(coo.child(2).text())
+        };
     }
 
 

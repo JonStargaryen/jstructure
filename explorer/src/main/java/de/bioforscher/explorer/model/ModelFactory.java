@@ -2,6 +2,7 @@ package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
@@ -12,6 +13,7 @@ import de.bioforscher.jstructure.parser.pdb.PDBDatabaseQuery;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.sifts.ResidueSiftsMapping;
 import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
+import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,8 +29,9 @@ import java.util.stream.Collectors;
 public class ModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ModelFactory.class);
     public static final String TRANSFORMATION = "TRANSFORMATION";
+    private static final AbstractFeatureProvider asaCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA);
     private static final AbstractFeatureProvider plipAnnotator = FeatureProviderRegistry.resolve(PLIPAnnotator.PLIP_INTERACTIONS);
-    private static final AbstractFeatureProvider siftsMapper = FeatureProviderRegistry.resolve(SiftsMappingProvider.SIFTS_MAPPING);
+    private static final AbstractFeatureProvider uniProtAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotator.UNIPROT_ANNOTATION);
 
     /**
      * Gathers all information on one UniProt entry.
@@ -53,11 +56,12 @@ public class ModelFactory {
                         pdbId -> ProteinParser.source(pdbId).forceProteinName(pdbId).parse()));
 
         // annotate PLIP data
+        proteins.values().parallelStream().forEach(asaCalculator::process);
         proteins.values().parallelStream().forEach(plipAnnotator::process);
+        proteins.values().parallelStream().forEach(uniProtAnnotator::process);
 
         // map residues to UniProt indices - important: this has to happen after annotating any external data such as PLIP
         proteins.values().parallelStream().forEach(protein -> {
-            siftsMapper.process(protein);
             // renumber according to UniProt
             protein.aminoAcids().forEach(group -> {
                 ResidueSiftsMapping siftsMapping = group.getFeature(ResidueSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING);

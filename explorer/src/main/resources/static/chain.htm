@@ -40,33 +40,16 @@
         <div class="wrapper">
             <!-- general project navigation -->
             <div class="chain-view-header clearfix">
-                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)"><span class="fa fa-bars"></span> new</span></div>
+                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)"><span class="fa fa-bars"></span> general</span></div>
                 <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)"><span class="fa fa-bars"></span> homologous</div>
-                <div data-ng-class="{ active: isSelected(2) }" data-ng-click="selectTab(2)"><span class="fa fa-info"></span> general</div>
             </div>
 
             <div class="tse-scrollable">
                 <div class="tse-content">
                     <div data-ng-show="isSelected(0)" class="view-tab">
-                        <div id="" data-ng-repeat="chain in ::alignment.chains track by chain.id"></div>
-                        <script>
-                            var ft = new FeatureViewer('--MALWMRLLPLLALLALWGP---GPGAGSLQPLALEGSLQKRGIVEQCCTSICSLYQLE----',
-                                '#fv1',
-                                {
-                                    showAxis: true,
-                                    showSequence: true,
-                                    brushActive: true, //zoom
-                                    toolbar:true, //current zoom & mouse position
-                                    bubbleHelp:true,
-                                    zoomMax:50 //define the maximum range of the zoom
-                                });
-                        </script>
-                    </div>
-
-                    <!-- general information -->
-                    <div data-ng-show="isSelected(2)" class="view-tab">
                         <div class="caption">title</div>
                         {{::reference.title}}
+
                         <div class="caption">ligands</div>
                         <ng-pluralize count="::reference.ligands.length"
                                       when="{'0': 'no ligands',
@@ -78,6 +61,12 @@
                                  'one': '(1 being water)',
                                  'other': '({} being water)'}">
                         </ng-pluralize>
+
+                        <div id="feature-viewer"></div>
+                    </div>
+
+                    <!-- general information -->
+                    <div data-ng-show="isSelected(1)" class="view-tab">
                         <div class="caption">homologous protein chains</div>
                         <div class="homologous-table">
                             <div class="homologous-table-head homologous-table-row">
@@ -104,76 +93,16 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- homologous sequences -->
-                    <div data-ng-show="isSelected(1)" class="view-tab homologous">
-                        <!--div data-ng-hide="selectionMode">
-                            window size: <br />
-                            <rzslider rz-slider-model="windowSize"
-                                      rz-slider-options="sliderOptions"
-                                      data-ng-hide="selectionMode"></rzslider>
-                        </div-->
-
-                        <div data-ng-click="leaveSelectionMode()"
-                             data-ng-show="selectionMode">-> leave selection mode</div>
-
-                        <div data-ng-show="selectionMode">-> align fragments locally</div>
-
-                        <br />
-
-                        <div class="alignment">
-                            <!-- navigation/editing/control over sequence objects -->
-                            <div class="ids">
-                                <div data-ng-repeat="chain in ::alignment.chains track by chain.id"
-                                     data-ng-click="toggleChain($index)"
-                                     data-ng-mouseover="hoverChain($index)"
-                                     data-ng-mouseleave="dehoverChain()"
-                                     data-ng-class="{ selected : chains[chain.id].selected }">
-                                    {{::chain.id}}
-                                </div>
-                            </div>
-
-                            <!-- the alignment view -->
-                            <div class="sequences">
-                                <div data-ng-repeat="position in ::alignment.positions"
-                                     class="position"
-                                     data-ng-mouseover="hoverPosition($index)"
-                                     data-ng-mouseleave="dehoverPosition()"
-                                     data-ng-click="enterSelectionMode($index)"
-                                     data-ng-class="{ uniform : position.uniform,
-                                         mutation : position.mutant,
-                                         variation : position.variant,
-                                         activeSite : position.activeSite,
-                                         focus : isFocusPosition($index),
-                                         hover : isHoverPosition($index) }">
-                                    <div class="position-label" data-ng-if="$index % 25 == 0">{{$index}}</div>
-                                    <div class="position-char">{{::position.olcs}}</div>
-                                    <div data-ng-if="position.tooltip" class="annotation">
-                                        <div data-ng-repeat="mutation in position.mutations">
-                                            mutation {{mutation.original}} &rarr; {{mutation.variation}}: {{mutation.description}}
-                                        </div>
-                                        <div data-ng-repeat="variation in position.variants">
-                                            natural variant {{variation.original}} &rarr; {{variation.variation}}: {{variation.description}}
-                                        </div>
-                                        <div data-ng-repeat="activeSite in position.activeSites">
-                                            active site: {{activeSite.description}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--script>
-        //TODO this is ugly
+    <script>
         $(this).delay(1000).queue(function() {
             $('.tse-scrollable').TrackpadScrollEmulator();
 
             $(this).dequeue();
         });
-    </script-->
+    </script>
 </section>

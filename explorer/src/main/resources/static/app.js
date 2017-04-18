@@ -178,6 +178,7 @@
 
             registerInViewer(chainId, true);
             initializeAlignment();
+            initializeFeatureViewer();
 
             console.log($scope.chains);
         }).catch(function (response) {
@@ -186,6 +187,139 @@
         }).finally(function () {
             $scope.loadingModel = false;
         });
+
+        function initializeFeatureViewer() {
+            var fv = new FeatureViewer($scope.reference.sequence,
+                '#feature-viewer',
+                {
+                    showAxis: true,
+                    showSequence: true,
+                    brushActive: true,
+                    toolbar: true,
+                    bubbleHelp: true,
+                    zoomMax: 5
+                });
+
+            if($scope.reference.active.length > 0) {
+                var activeSites = [];
+                $scope.reference.active.forEach(function (go) {
+                    activeSites.push({
+                        x: go.position,
+                        y: go.position,
+                        description: go.description
+                    });
+                });
+                fv.addFeature({
+                    data: activeSites,
+                    name: 'Active Sites',
+                    className: 'tba1',
+                    type: 'rect',
+                    color: '#52b1e9'
+                });
+            }
+            if($scope.reference.disulfide.length > 0) {
+                var bonds = [];
+                $scope.reference.disulfide.forEach(function(go) {
+                    bonds.push({
+                        x : go.start,
+                        y : go.end
+                    });
+                });
+                fv.addFeature({
+                    data : bonds,
+                    name : 'Disulfide Bonds',
+                    className : 'tba2',
+                    type : 'path',
+                    color: '#52b1e9'
+                });
+            }
+            if($scope.reference.ptm.length > 0) {
+                var ptm = [];
+                $scope.reference.ptm.forEach(function (go) {
+                    ptm.push({
+                        x: go.position,
+                        y: go.position,
+                        description: go.description,
+                        // color : go.type
+                    })
+                });
+                fv.addFeature({
+                    data: ptm,
+                    name: 'Modifications',
+                    className: 'tba3',
+                    type: 'rect',
+                    color: '#52b1e9'
+                });
+            }
+            if($scope.reference.rasa.length > 0) {
+                var rasa = [];
+                $scope.reference.rasa.forEach(function (go) {
+                    rasa.push({
+                        x: rasa.length,
+                        y: go
+                    });
+                });
+                fv.addFeature({
+                    data: rasa,
+                    name: 'Accessible Surface',
+                    className: 'tba4',
+                    type: 'line',
+                    color: '#52b1e9',
+                    interpolation: 'basis'
+                });
+            }
+            if($scope.reference.sse.length > 0) {
+                var sse = [];
+                $scope.reference.sse.forEach(function (go) {
+                    sse.push({
+                        x: go.start,
+                        y: go.end,
+                        description: go.type.toLowerCase()
+                    });
+                });
+                fv.addFeature({
+                    data: sse,
+                    name: 'Secondary Structure',
+                    className: 'tba5',
+                    type: 'rect',
+                    color: '#52b1e9'
+                });
+            }
+            if($scope.reference.tm.length > 0) {
+                var tm = [];
+                $scope.reference.tm.forEach(function(go) {
+                    tm.push({
+                        x : go.start,
+                        y : go.end,
+                        description : go.type.toLowerCase()
+                    })
+                });
+                fv.addFeature({
+                    data : tm,
+                    name : 'Topology',
+                    className : 'tba6',
+                    type : 'rect',
+                    color: '#52b1e9'
+                })
+            }
+            if($scope.reference.variants.length > 0) {
+                var variants = [];
+                $scope.reference.variants.forEach(function (go) {
+                    variants.push({
+                        x: go.position,
+                        y: go.position,
+                        description: go.description
+                    });
+                });
+                fv.addFeature({
+                    data: variants,
+                    name: 'Natural Variants',
+                    className: 'tba7',
+                    type: 'rect',
+                    color: '#52b1e9'
+                });
+            }
+        }
 
         function registerInViewer(chainId, center) {
             var chain = $scope.chains[chainId];

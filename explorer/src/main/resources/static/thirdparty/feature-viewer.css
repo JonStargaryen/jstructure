@@ -11,7 +11,7 @@ a:focus {
     z-index: 1;
 }
 .brush .extent{
-    stroke: #ccc;
+    stroke: #fff;
     fill-opacity: .125;
     shape-rendering: crispEdges;
 }

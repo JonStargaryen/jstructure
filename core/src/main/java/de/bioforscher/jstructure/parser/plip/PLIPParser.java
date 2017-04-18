@@ -2,8 +2,7 @@ package de.bioforscher.jstructure.parser.plip;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.parser.ParsingException;
 import de.bioforscher.jstructure.parser.plip.interaction.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,7 +24,6 @@ import java.util.Optional;
  */
 class PLIPParser {
     private static final Logger logger = LoggerFactory.getLogger(PLIPParser.class);
-    private static final String RESNR_TAG = "resnr";
 
     static List<PLIPInteraction> parse(Chain chain, String documentDescribingChain) {
         Document document = Jsoup.parse(documentDescribingChain);
@@ -35,13 +33,13 @@ class PLIPParser {
             logger.debug("parsing interactions of type {}", plipInteractionType);
             Elements interactionElements = document.getElementsByTag(plipInteractionType.getInteractionTag());
             for(Element interactionElement : interactionElements) {
-                Optional<Group> currentGroup = interactionElement.getElementsByTag(RESNR_TAG)
+                Optional<Group> currentGroup = interactionElement.getElementsByTag("resnr")
                         .stream()
                         .map(Element::text)
                         // a safety net for exceedingly big numbers outputted by PLIP
                         .filter(string -> string.length() < 10)
                         .map(Integer::valueOf)
-                        .map(residueNumber -> Selection.on(chain)
+                        .map(residueNumber -> chain.select()
                                 .residueNumber(residueNumber)
                                 .asOptionalGroup())
                         .findFirst()
@@ -71,7 +69,7 @@ class PLIPParser {
                     plipInteractions.add(plipInteraction);
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                     logger.warn("encountered exception during plip parsing: {}", e.getLocalizedMessage());
-//                    throw new ParsingException(e);
+                    throw new ParsingException(e);
                     //TODO error-handling
                 }
             }
@@ -108,7 +106,6 @@ class PLIPParser {
                                 .orElseThrow(NoSuchElementException::new);
                         ((PiStacking) plipInteraction).getAtoms1().addAll(otherHalfOfInteraction.getAtoms2());
                     } else {
-                        Protein protein = partner1.getParentChain().getParentProtein();
                         SaltBridge otherHalfOfInteraction = plipInteractions.stream()
                                 .filter(SaltBridge.class::isInstance)
                                 .map(SaltBridge.class::cast)
