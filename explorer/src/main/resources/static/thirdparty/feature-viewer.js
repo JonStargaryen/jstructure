@@ -156,7 +156,7 @@ var FeatureViewer = (function () {
                         }
                         else {
                             var first_line = '<p style="margin:2px;color:' + tooltipColor +'">position : <span id="tLineX">' + elemHover.x + '</span></p>';
-                            var second_line = '<p style="margin:2px;color:' + tooltipColor +'">count : <span id="tLineC">' + elemHover.y + '</span></p>';
+                            var second_line = '<p style="margin:2px;color:' + tooltipColor +'">' + (elemHover.y % 1 === 0 ? 'count' : 'value') + ' : <span id="tLineC">' + elemHover.y + '</span></p>';
                         }
                     } else if (object.type === "unique" || pD.x === pD.y) {
                         var first_line = '<p style="margin:2px;font-weight:700;color:' + tooltipColor +'">' + pD.x + '</p>';
@@ -186,7 +186,7 @@ var FeatureViewer = (function () {
                             }
                             else {
                                 var first_line = '<p style="margin:2px;color:' + tooltipColor +'">position : <span id="tLineX">' + elemHover.x + '</span></p>';
-                                var second_line = '<p style="margin:2px;color:' + tooltipColor +'">count : <span id="tLineC">' + elemHover.y + '</span></p>';
+                                var second_line = '<p style="margin:2px;color:' + tooltipColor +'">' + (elemHover.y % 1 === 0 ? 'count' : 'value') + ' : <span id="tLineC">' + elemHover.y + '</span></p>';
                             }
                             tooltipDiv.html(first_line + second_line);
 //                            $('#tLineX').text(elemHover.x);

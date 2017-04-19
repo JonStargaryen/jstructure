@@ -25,16 +25,6 @@
 
     ]);
 
-    MODULE.constant('interactions', {
-        'halogenBonds' : '#3FFFBF',
-        'hydrogenBonds' : '#0000FF',
-        'hydrophobicInteractions' : '#7F7F7F',
-        'metalComplexes' : '#8C3F99',
-        'piCationInteractions' : '#FF7F00',
-        'piStackings' : '#8CB266',
-        'saltBridges' : '#FFFF00',
-        'waterBridges' : '#BFBFFF' });
-
     /**
      * navigation
      */
@@ -81,10 +71,6 @@
         $rootScope.page = function () {
             return $location.path();
         };
-
-        $rootScope.$on("$locationChangeStart", function() {
-           $rootScope.context = [];
-        });
     }]);
 
     /**
@@ -96,11 +82,36 @@
         $scope.representativeChains = ProteinService.representativeChains;
     }]);
 
+    MODULE.controller('MutationController', ['$scope',
+        function($scope) {
+        var step = 0;
+        var stepCompleted = false;
+        $scope.id = $scope.reference.id;
+        $scope.mutationResidue = {};
+
+        $scope.onStep = function(stepToEvaluate) {
+            return step === stepToEvaluate;
+        };
+
+        $scope.stepCompleted = function() {
+            return stepCompleted;
+        };
+
+        function moveStepForward() {
+            step++;
+            stepCompleted = false;
+        }
+
+        function moveStepBackward() {
+            step--;
+        }
+    }]);
+
     /**
      * the controller for the chain-view
      */
-    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes', '$timeout',
-        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes, $timeout) {
+    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes',
+        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes) {
         //TODO this scope/controller is clogged, clean-up some day
         // loading flags
         $scope.loadingModel = true;
@@ -150,11 +161,6 @@
         $scope.tab = 0;
         $scope.selectTab = function (setTab) {
             $scope.tab = setTab;
-            if(setTab === 1) {
-                $timeout(function () {
-                    $scope.$broadcast('rzSliderForceRender');
-                });
-            }
         };
         $scope.isSelected = function (checkTab) {
             return $scope.tab === checkTab;
@@ -227,7 +233,7 @@
                 });
                 fv.addFeature({
                     data : bonds,
-                    name : 'Disulfide Bonds',
+                    name : 'Disulfide Bond',
                     className : 'tba2',
                     type : 'path',
                     color: '#52b1e9'
@@ -245,8 +251,42 @@
                 });
                 fv.addFeature({
                     data: ptm,
-                    name: 'Modifications',
+                    name: 'Modification',
                     className: 'tba3',
+                    type: 'rect',
+                    color: '#52b1e9'
+                });
+            }
+            if($scope.reference.mutagenesis.length > 0) {
+                var mutations = [];
+                $scope.reference.mutagenesis.forEach(function (go) {
+                    mutations.push({
+                        x: +go.position[0],
+                        y: +go.position[0],
+                        description: go.original + ' \u2192 ' + go.variation  + '\n' + go.description
+                    });
+                });
+                fv.addFeature({
+                    data: mutations,
+                    name: 'Mutagenesis Site',
+                    className: 'tba10',
+                    type: 'rect',
+                    color: '#52b1e9'
+                });
+            }
+            if($scope.reference.variants.length > 0) {
+                var variants = [];
+                $scope.reference.variants.forEach(function (go) {
+                    variants.push({
+                        x: go.position,
+                        y: go.position,
+                        description: go.description
+                    });
+                });
+                fv.addFeature({
+                    data: variants,
+                    name: 'Natural Variants',
+                    className: 'tba8',
                     type: 'rect',
                     color: '#52b1e9'
                 });
@@ -301,23 +341,6 @@
                     type : 'rect',
                     color: '#52b1e9'
                 })
-            }
-            if($scope.reference.variants.length > 0) {
-                var variants = [];
-                $scope.reference.variants.forEach(function (go) {
-                    variants.push({
-                        x: go.position,
-                        y: go.position,
-                        description: go.description
-                    });
-                });
-                fv.addFeature({
-                    data: variants,
-                    name: 'Natural Variants',
-                    className: 'tba7',
-                    type: 'rect',
-                    color: '#52b1e9'
-                });
             }
         }
 

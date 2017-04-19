@@ -40,8 +40,9 @@
         <div class="wrapper">
             <!-- general project navigation -->
             <div class="chain-view-header clearfix">
-                <div data-ng-class="{ active: isSelected(0) }" data-ng-click="selectTab(0)"><span class="fa fa-bars"></span> general</span></div>
-                <div data-ng-class="{ active: isSelected(1) }" data-ng-click="selectTab(1)"><span class="fa fa-bars"></span> homologous</div>
+                <div data-ng-class="{ active : isSelected(0) }" data-ng-click="selectTab(0)"><span class="fa fa-info"></span> general</div>
+                <div data-ng-class="{ active : isSelected(1) }" data-ng-click="selectTab(1)"><span class="fa fa-bars"></span> homologous</div>
+                <div data-ng-class="{ active : isSelected(2) }" data-ng-click="selectTab(2)"><span class="fa fa-arrows-h"></span> mutate</div>
             </div>
 
             <div class="tse-scrollable">
@@ -91,6 +92,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div data-ng-show="isSelected(2)" class="view-tab" data-ng-controller="MutationController">
+                        <div data-ng-show="onStep(0)" class="mutation-step">
+                            step 1: select residue to mutate
+                            <select data-ng-model="mutationResidue" data-ng-options="x for x in reference.hydrogenBonds"></select>
+                        </div>
+                        <div data-ng-show="onStep(1)" class="mutation-step">
+                            step 2:
+                        </div>
+                        <div data-ng-show="onStep(2)" class="mutation-step">
+                            step 3:
                         </div>
                     </div>
                 </div>
