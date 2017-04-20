@@ -173,7 +173,7 @@
         var viewerDefaultOptions = {
             width : 400,
             height : 400,
-            antialias : false,
+            // antialias : false,
             quality : 'high',
             background : '#313a41',
             selectionColor : '#f00',
