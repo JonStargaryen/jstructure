@@ -1,6 +1,5 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
@@ -8,7 +7,6 @@ import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
 import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 import de.bioforscher.jstructure.parser.uniprot.*;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +16,11 @@ import java.util.stream.Collectors;
  * Created by bittrich on 4/6/17.
  */
 public class ExplorerChain {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
     private String id, pdb, rep, sequence;
     private List<ExplorerLigand> ligands;
     private boolean isRep, isPlip;
     /* 'traditional' data */
-    private List<String> rasa;
+    private List<ExplorerGroup> groups;
     /* interactions */
     private List<ExplorerInteraction> halogenBonds;
     private List<ExplorerInteraction> hydrogenBonds;
@@ -57,9 +54,8 @@ public class ExplorerChain {
                 .map(ExplorerLigand::new)
                 .collect(Collectors.toList());
 
-        this.rasa = chain.aminoAcids()
-                .map(group -> group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA))
-                .map(DECIMAL_FORMAT::format)
+        this.groups = chain.aminoAcids()
+                .map(ExplorerGroup::new)
                 .collect(Collectors.toList());
 
         try {
@@ -159,8 +155,8 @@ public class ExplorerChain {
         return waterBridges;
     }
 
-    public List<String> getRasa() {
-        return rasa;
+    public List<ExplorerGroup> getGroups() {
+        return groups;
     }
 
     public List<UniProtActiveSite> getActive() {

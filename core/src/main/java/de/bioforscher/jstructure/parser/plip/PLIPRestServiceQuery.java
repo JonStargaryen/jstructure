@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 class PLIPRestServiceQuery {
     private static final Logger logger = LoggerFactory.getLogger(PLIPRestServiceQuery.class);
     static final String BASE_URL = "http://141.55.231.200:8731/plip/";
-    private static final String REST_USER_PASSWORD_PATH = "/home/bittrich/git/phd_sb_repo/data/.plip-rest-auth";
+    private static final String REST_USER_PASSWORD_PATH = System.getProperty("user.home") + "/git/phd_sb_repo/data/.plip-rest-auth";
     static String secret;
 
     static {

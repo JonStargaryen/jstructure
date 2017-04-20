@@ -304,7 +304,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     line-height: 15px;
     position: relative;
     padding-top: 15px;
-    color: #6b7480;
+    color: #abafb3;
 }
 
 .alignment .position.hover .position-char {
@@ -313,17 +313,17 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 .alignment .position.mutation .position-char {
     border: 1px solid purple;
-    color: #9fb4c7;
+    color: #ffffff;
 }
 
 .alignment .position.variation .position-char {
     border: 1px solid deeppink;
-    color: #9fb4c7;
+    color: #ffffff;
 }
 
 .alignment .position.activeSite .position-char {
     border: 1px solid rebeccapurple;
-    color: #9fb4c7;
+    color: #ffffff;
 }
 
 .alignment .position .annotation {
@@ -339,4 +339,8 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 .alignment .position:hover .annotation {
     display: block;
+}
+
+option {
+    color: black;
 }

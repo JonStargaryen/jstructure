@@ -22,7 +22,29 @@
         { name : 'pi-stacking interactions', tag : 'piStackings' },
         { name : 'salt bridges', tag : 'saltBridges' },
         { name : 'water bridges', tag : 'waterBridges' }
+    ]);
 
+    MODULE.constant('aminoAcids', [
+        { olc : 'A', name : 'alanine', gutteridge : 'none' },
+        { olc : 'R', name : 'arginine', gutteridge : 'guanidinium' },
+        { olc : 'N', name : 'asparagine', gutteridge : 'amide' },
+        { olc : 'D', name : 'aspartic acid', gutteridge : 'carboxylate' },
+        { olc : 'C', name : 'cysteine', gutteridge : 'thiol' },
+        { olc : 'Q', name : 'glutamine', gutteridge : 'amide' },
+        { olc : 'E', name : 'glutamic acid', gutteridge : 'carboxylate' },
+        { olc : 'G', name : 'glycine', gutteridge : 'none' },
+        { olc : 'H', name : 'histidine', gutteridge : 'imidazole'},
+        { olc : 'I', name : 'isoleucine', gutteridge : 'none' },
+        { olc : 'L', name : 'leucine', gutteridge : 'none' },
+        { olc : 'K', name : 'lysine', gutteridge : 'amino' },
+        { olc : 'M', name : 'methionine', gutteridge : 'thiol' },
+        { olc : 'F', name : 'phenylalanine', gutteridge : 'none' },
+        { olc : 'P', name : 'proline', gutteridge : 'none' },
+        { olc : 'S', name : 'serine', gutteridge : 'hydroxyl' },
+        { olc : 'T', name : 'threonine', gutteridge : 'hydroxyl' },
+        { olc : 'W', name : 'tryptophan', gutteridge : 'none' },
+        { olc : 'Y', name : 'tyrosine', gutteridge : 'hydroxyl' },
+        { olc : 'V', name : 'valine', gutteridge : 'none' }
     ]);
 
     /**
@@ -82,37 +104,48 @@
         $scope.representativeChains = ProteinService.representativeChains;
     }]);
 
-    MODULE.controller('MutationController', ['$scope',
-        function($scope) {
+    /**
+     * the controller for the chain-view
+     */
+    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes', 'aminoAcids',
+        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes, aminoAcids) {
+        //TODO this scope/controller is clogged, clean-up some day
         var step = 0;
-        var stepCompleted = false;
-        $scope.id = $scope.reference.id;
         $scope.mutationResidue = {};
+        $scope.alternativeResidues = [];
+        $scope.alternativeResidue = {};
+        $scope.mutationDescription = '';
 
         $scope.onStep = function(stepToEvaluate) {
             return step === stepToEvaluate;
         };
 
-        $scope.stepCompleted = function() {
-            return stepCompleted;
+        $scope.moveToMutationStep = function() {
+            if(!$scope.mutationResidue)
+                return;
+
+            moveStepForward();
+            aminoAcids.forEach(function(go) {
+                if(go.olc === $scope.mutationResidue.aa)
+                    return;
+                $scope.alternativeResidues.push(go);
+            });
+        };
+
+        $scope.mutate = function() {
+            moveStepForward();
+            $scope.mutationDescription = "mutating '" + $scope.mutationResidue.aa + "-" + $scope.mutationResidue.resn +
+                "' to '" + $scope.alternativeResidue.name + "'";
         };
 
         function moveStepForward() {
             step++;
-            stepCompleted = false;
         }
 
         function moveStepBackward() {
             step--;
         }
-    }]);
 
-    /**
-     * the controller for the chain-view
-     */
-    MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes',
-        function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes) {
-        //TODO this scope/controller is clogged, clean-up some day
         // loading flags
         $scope.loadingModel = true;
         $scope.loadingAlignment = true;
@@ -140,7 +173,7 @@
         var viewerDefaultOptions = {
             width : 400,
             height : 400,
-            antialias : true,
+            antialias : false,
             quality : 'high',
             background : '#313a41',
             selectionColor : '#f00',
@@ -291,12 +324,12 @@
                     color: '#52b1e9'
                 });
             }
-            if($scope.reference.rasa.length > 0) {
+            if($scope.reference.groups.length > 0) {
                 var rasa = [];
-                $scope.reference.rasa.forEach(function (go) {
+                $scope.reference.groups.forEach(function (go) {
                     rasa.push({
                         x: rasa.length,
-                        y: go
+                        y: go.rasa
                     });
                 });
                 fv.addFeature({
