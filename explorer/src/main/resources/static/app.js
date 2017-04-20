@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'ngDropdowns', 'rzModule']);
+    var MODULE = angular.module('mpe', ['ngRoute', 'ngResource', 'ngDropdowns']);
 
     MODULE.constant('design', {
         defaultColor : '#454b52',
@@ -110,6 +110,7 @@
     MODULE.controller('ChainController', ['$scope', '$rootScope', '$routeParams', 'ProteinService', 'design', 'features', 'interactionTypes', 'aminoAcids',
         function($scope, $rootScope, $routeParams, ProteinService, design, features, interactionTypes, aminoAcids) {
         //TODO this scope/controller is clogged, clean-up some day
+        //TODO move pv to directive
         var step = 0;
         $scope.mutationResidue = {};
         $scope.alternativeResidues = [];
@@ -124,7 +125,7 @@
             if(!$scope.mutationResidue)
                 return;
 
-            moveStepForward();
+            step++;
             aminoAcids.forEach(function(go) {
                 if(go.olc === $scope.mutationResidue.aa)
                     return;
@@ -133,18 +134,20 @@
         };
 
         $scope.mutate = function() {
-            moveStepForward();
+            step++;
             $scope.mutationDescription = "mutating '" + $scope.mutationResidue.aa + "-" + $scope.mutationResidue.resn +
                 "' to '" + $scope.alternativeResidue.name + "'";
+            $scope.mutationStatus = 'in progress...';
+
+            ProteinService.mutate($scope.reference.id, $scope.mutationResidue.resn, $scope.alternativeResidue.olc).then(function(response) {
+                console.log(response.data);
+                //TODO readd d3 graph representation of interactions
+            }).catch(function(response) {
+                console.log(response);
+            }).finally(function () {
+                $scope.mutationStatus = 'donso!';
+            });
         };
-
-        function moveStepForward() {
-            step++;
-        }
-
-        function moveStepBackward() {
-            step--;
-        }
 
         // loading flags
         $scope.loadingModel = true;
@@ -375,6 +378,31 @@
                     color: '#52b1e9'
                 })
             }
+
+            fv.onFeatureSelected(function(d) {
+                console.log(d.detail);
+                //TODO we could do something with this
+            });
+            fv.onZoom(function(d) {
+                $scope.dehoverPosition();
+
+                // if zoom is reset, do not do anything more as chain is already dehovered
+                if(d.detail.zoom === 1) {
+                    return;
+                }
+
+                var range = { rnumRange : [+d.detail.start, +d.detail.end] };
+                forAllChains(function(chain) {
+                    if(chain.selected === false) {
+                        return;
+                    }
+
+                    viewer.ballsAndSticks('hover',
+                        chain.pv_protein.select(range),
+                        { color: pv.color.uniform(design.lighterColor) }
+                    );
+                });
+            });
         }
 
         function registerInViewer(chainId, center) {
@@ -701,6 +729,9 @@
             },
             loadModel : function(chainId) {
                 return $http.get(apiUrl + 'json/' + chainId);
+            },
+            mutate : function(chainId, pos, aa) {
+                return $http.get(apiUrl + 'mutate/' + chainId + '/' + pos + '/' + aa);
             }
         }
     }]);

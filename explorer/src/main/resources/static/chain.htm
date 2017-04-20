@@ -1,6 +1,4 @@
 <section data-ng-cloak class="text-left wrapper" xmlns="http://www.w3.org/1999/html">
-    <!--div data-ng-show="loadingModel" class="overlay"></div-->
-
     <!-- the visualizer part on the left -->
     <div class="visualization">
         <div class="wrapper">
@@ -112,7 +110,7 @@
                         </div>
                         <div data-ng-show="onStep(2)" class="mutation-step">
                             step 3: {{mutationDescription}}<br />
-                            results, zoom on substructure, comparison to homologous structures and 'modeled' mutation
+                            {{mutationStatus}}
                         </div>
                     </div>
 
