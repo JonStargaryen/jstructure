@@ -64,6 +64,11 @@ public class Selection {
             this.parentContainerName = atomContainer.getIdentifier();
         }
 
+        public AtomSelection customAtomPredicate(Predicate<Atom> atomPredicate) {
+            registerAtomPredicate(atomPredicate);
+            return this;
+        }
+
         /**
          * Request this selection to clone all returned elements so they can be manipulated independently of their
          * original reference.
@@ -281,6 +286,11 @@ public class Selection {
             return this;
         }
 
+        public GroupSelection customGroupPredicate(Predicate<Group> groupPredicate) {
+            registerGroupPredicate(groupPredicate);
+            return this;
+        }
+
         @Override
         public GroupSelection cloneElements() {
             super.cloneElements();
@@ -415,6 +425,11 @@ public class Selection {
         }
 
         public GroupSelection groupSelection() {
+            return this;
+        }
+
+        public ChainSelection customChainPredicate(Predicate<Chain> chainPredicate) {
+            registerChainPredicate(chainPredicate);
             return this;
         }
 

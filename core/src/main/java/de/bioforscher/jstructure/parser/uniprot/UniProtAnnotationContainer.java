@@ -42,10 +42,20 @@ public class UniProtAnnotationContainer {
         this.aminoAcidModifications = describingDocument.getElementsByTag("feature").stream()
                 //TODO register further modifications
                 .filter(element -> element.hasAttr("type"))
-                .filter(element -> element.attr("type").equals("lipid moiety-binding region") || element.attr("type").equals("glycosylation site") || element.attr("type").equals("modified residue"))
+                .filter(element -> {
+                    String type = element.attr("type");
+                    return type.equals("lipid moiety-binding region") ||
+                            type.equals("glycosylation site") ||
+                            type.equals("modified residue");
+                })
                 .map(UniProtAminoAcidModification::new)
                 .collect(Collectors.toList());
-        this.activeSites = describingDocument.getElementsByAttributeValue("type", "active site").stream()
+        this.activeSites = describingDocument.getElementsByAttribute("type").stream()
+                .filter(element -> {
+                    String type = element.attr("type");
+                    //TODO register further active sites
+                    return type.equals("active site") || type.contains("binding site");
+                })
                 .map(UniProtActiveSite::new)
                 .collect(Collectors.toList());
         this.disulfideBonds = describingDocument.getElementsByAttributeValue("type", "disulfide bond").stream()

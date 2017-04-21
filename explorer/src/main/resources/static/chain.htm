@@ -110,7 +110,11 @@
                         </div>
                         <div data-ng-show="onStep(2)" class="mutation-step">
                             step 3: {{mutationDescription}}<br />
-                            {{mutationStatus}}
+                            <div data-ng-repeat="group in mutation.mutation.groups">
+                                {{group.aa | mapToTlc}}-{{group.resn}}
+                            </div>
+                            <div id="interaction-graph-original"></div>
+                            <div id="interaction-graph-mutation"></div>
                         </div>
                     </div>
 

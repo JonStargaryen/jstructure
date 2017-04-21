@@ -25,26 +25,26 @@
     ]);
 
     MODULE.constant('aminoAcids', [
-        { olc : 'A', name : 'alanine', gutteridge : 'none' },
-        { olc : 'R', name : 'arginine', gutteridge : 'guanidinium' },
-        { olc : 'N', name : 'asparagine', gutteridge : 'amide' },
-        { olc : 'D', name : 'aspartic acid', gutteridge : 'carboxylate' },
-        { olc : 'C', name : 'cysteine', gutteridge : 'thiol' },
-        { olc : 'Q', name : 'glutamine', gutteridge : 'amide' },
-        { olc : 'E', name : 'glutamic acid', gutteridge : 'carboxylate' },
-        { olc : 'G', name : 'glycine', gutteridge : 'none' },
-        { olc : 'H', name : 'histidine', gutteridge : 'imidazole'},
-        { olc : 'I', name : 'isoleucine', gutteridge : 'none' },
-        { olc : 'L', name : 'leucine', gutteridge : 'none' },
-        { olc : 'K', name : 'lysine', gutteridge : 'amino' },
-        { olc : 'M', name : 'methionine', gutteridge : 'thiol' },
-        { olc : 'F', name : 'phenylalanine', gutteridge : 'none' },
-        { olc : 'P', name : 'proline', gutteridge : 'none' },
-        { olc : 'S', name : 'serine', gutteridge : 'hydroxyl' },
-        { olc : 'T', name : 'threonine', gutteridge : 'hydroxyl' },
-        { olc : 'W', name : 'tryptophan', gutteridge : 'none' },
-        { olc : 'Y', name : 'tyrosine', gutteridge : 'hydroxyl' },
-        { olc : 'V', name : 'valine', gutteridge : 'none' }
+        { olc : 'A', tlc : 'Ala', name : 'alanine', gutteridge : 'none' },
+        { olc : 'R', tlc : 'Arg', name : 'arginine', gutteridge : 'guanidinium' },
+        { olc : 'N', tlc : 'Asn', name : 'asparagine', gutteridge : 'amide' },
+        { olc : 'D', tlc : 'Asp', name : 'aspartic acid', gutteridge : 'carboxylate' },
+        { olc : 'C', tlc : 'Cys', name : 'cysteine', gutteridge : 'thiol' },
+        { olc : 'Q', tlc : 'Gln', name : 'glutamine', gutteridge : 'amide' },
+        { olc : 'E', tlc : 'Glu', name : 'glutamic acid', gutteridge : 'carboxylate' },
+        { olc : 'G', tlc : 'Gly', name : 'glycine', gutteridge : 'none' },
+        { olc : 'H', tlc : 'His', name : 'histidine', gutteridge : 'imidazole'},
+        { olc : 'I', tlc : 'Ile', name : 'isoleucine', gutteridge : 'none' },
+        { olc : 'L', tlc : 'Leu', name : 'leucine', gutteridge : 'none' },
+        { olc : 'K', tlc : 'Lys', name : 'lysine', gutteridge : 'amino' },
+        { olc : 'M', tlc : 'Met', name : 'methionine', gutteridge : 'thiol' },
+        { olc : 'F', tlc : 'Phe', name : 'phenylalanine', gutteridge : 'none' },
+        { olc : 'P', tlc : 'Pro', name : 'proline', gutteridge : 'none' },
+        { olc : 'S', tlc : 'Ser', name : 'serine', gutteridge : 'hydroxyl' },
+        { olc : 'T', tlc : 'Thr', name : 'threonine', gutteridge : 'hydroxyl' },
+        { olc : 'W', tlc : 'Trp', name : 'tryptophan', gutteridge : 'none' },
+        { olc : 'Y', tlc : 'Tyr', name : 'tyrosine', gutteridge : 'hydroxyl' },
+        { olc : 'V', tlc : 'Val', name : 'valine', gutteridge : 'none' }
     ]);
 
     /**
@@ -140,8 +140,94 @@
             $scope.mutationStatus = 'in progress...';
 
             ProteinService.mutate($scope.reference.id, $scope.mutationResidue.resn, $scope.alternativeResidue.olc).then(function(response) {
-                console.log(response.data);
-                //TODO readd d3 graph representation of interactions
+                var data = response.data;
+                console.log(data);
+                $scope.mutation = {
+                    original : data.original,
+                    mutation : data.mutation
+                };
+
+                // pv stuff
+                viewer.hide('*');
+                var mol = io.pdb($scope.mutation.mutation.pdb);
+                viewer.ballsAndSticks('mutation', mol, { color: pv.color.uniform(design.highlightColor) });
+                viewer.ballsAndSticks('original', io.pdb($scope.mutation.original.pdb), { color: pv.color.uniform(design.lighterColor) });
+                viewer.centerOn(mol);
+                viewer.fitTo(mol);
+
+                // build graph and d3 it
+                var residueCount = 0;
+                var hasPreviousResidueInChain = false;
+                var graph = { nodes : [], links : [] };
+                $scope.mutation.original.groups.forEach(function(group) {
+                    graph.nodes.push({ "name" : group.aa + "-" + group.resn, "group" : group.aa });
+                    // connect sequential neighbors
+                    if(hasPreviousResidueInChain) {
+                        graph.links.push({ "source" : residueCount, "target" : residueCount - 1, "value" : 3});
+                    }
+                    residueCount++;
+                    hasPreviousResidueInChain = true;
+                });
+
+                // add spatially connected residue links
+                $scope.mutation.original.hydrogenBonds.forEach(function(rri) {
+                    console.log(rri.partner1 + " -> " + rri.partner2);
+                    if(rri.partner1 > 100 || rri.partner2 > 100)
+                        return;
+                    graph.links.push({ "source" : rri.partner1, "target" : rri.partner2, "value" : 1 });
+                });
+
+                var width = 500, height = 500, radius = 2.5;
+
+                var color = d3.scale.category20();
+                var force = d3.layout.force()
+                    .gravity(.05)
+                    .charge(-5)
+                    .linkDistance(3.5)
+                    .size([width, height]);
+
+                var svg = d3.select("#interaction-graph-original")
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+                force.nodes(graph.nodes)
+                    .links(graph.links)
+                    .start();
+
+                var link = svg.selectAll(".link")
+                    .data(graph.links)
+                    .enter().append("line")
+                    .attr("class", "link")
+                    .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+                var node = svg.selectAll(".node")
+                    .data(graph.nodes)
+                    .enter().append("circle")
+                    .attr("r", radius - .75)
+                    .style("fill", function(d) { return color(d.group); })
+                    .style("stroke", function(d) { return d3.rgb(color(d.group)).darker(); })
+                    .call(force.drag);
+
+
+                node.append("title")
+                    .text(function(d) { return d.name; });
+
+                force
+                    .nodes(graph.nodes)
+                    .links(graph.links)
+                    .on("tick", tick)
+                    .start();
+
+                function tick() {
+                    node.attr("cx", function(d) { return d.x = Math.max(radius, Math.min(width - radius, d.x)); })
+                        .attr("cy", function(d) { return d.y = Math.max(radius, Math.min(height - radius, d.y)); });
+
+                    link.attr("x1", function(d) { return d.source.x; })
+                        .attr("y1", function(d) { return d.source.y; })
+                        .attr("x2", function(d) { return d.target.x; })
+                        .attr("y2", function(d) { return d.target.y; });
+                }
             }).catch(function(response) {
                 console.log(response);
             }).finally(function () {
@@ -246,8 +332,8 @@
                 var activeSites = [];
                 $scope.reference.active.forEach(function (go) {
                     activeSites.push({
-                        x: go.position,
-                        y: go.position,
+                        x: +go.position,
+                        y: +go.position,
                         description: go.description
                     });
                 });
@@ -754,4 +840,17 @@
             }
         }
     });
+
+    MODULE.filter('mapToTlc', ['aminoAcids', function(aminoAcids) {
+        return function(input) {
+            if(input) {
+                var tlc = input;
+                aminoAcids.forEach(function(go) {
+                    if(go.olc === input)
+                        tlc = go.tlc;
+                });
+                return tlc.toUpperCase();
+            }
+        }
+    }]);
 })();

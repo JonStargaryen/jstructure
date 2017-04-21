@@ -1,17 +1,20 @@
 package de.bioforscher.explorer;
 
+import de.bioforscher.explorer.model.*;
 import de.bioforscher.explorer.repository.AlignmentRepository;
 import de.bioforscher.explorer.repository.ChainRepository;
-import de.bioforscher.explorer.model.ExplorerAlignment;
-import de.bioforscher.explorer.model.ExplorerChain;
-import de.bioforscher.explorer.model.ExplorerCluster;
-import de.bioforscher.explorer.model.ModelFactory;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.reconstruction.mutation.SimpleResidueMutator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -97,5 +100,21 @@ public class ChainService {
         return chainRepository.findAll().stream()
                 .map(ExplorerChain::getId)
                 .collect(Collectors.toList());
+    }
+
+    public ExplorerMutationContainer mutateResidue(String id, int pos, String aa) {
+        // convert database entry to full-fledged model instance
+        ExplorerChain originalExplorerChain = getChain(id);
+        Protein originalProtein = ProteinParser.source(new ByteArrayInputStream(originalExplorerChain.getPdb().getBytes()))
+                .forceProteinName(id)
+                .parse();
+
+        // introduce mutation at peculiar position
+        Protein mutatedProtein = (Protein) originalProtein.createCopy();
+        mutatedProtein.setName(id + "_" + pos + "_" + originalProtein.select().residueNumber(pos).asGroup().getGroupInformation().getOneLetterCode() + "-" + aa);
+        Group mutatedGroup = mutatedProtein.select().residueNumber(pos).asGroup();
+        new SimpleResidueMutator().mutatePosition(mutatedGroup, AminoAcidFamily.valueOfIgnoreCase(aa).get());
+
+        return new ExplorerMutationContainer(originalProtein, originalExplorerChain, mutatedProtein, /*TODO*/ originalExplorerChain, pos);
     }
 }

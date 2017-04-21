@@ -33,29 +33,29 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
     }
 
     @Override
-    public StructureAlignmentResult align(AtomContainer reference, AtomContainer candidate) {
+    public StructureAlignmentResult align(AtomContainer reference, AtomContainer query) {
         AtomContainer originalReference = reference;
-        AtomContainer originalCandidate = candidate;
+        AtomContainer originalCandidate = query;
 
         Pair<GroupContainer, GroupContainer> atomContainerPair =
                 LinearAlgebraAtom.comparableGroupContainerPair(reference,
-                        candidate,
+                        query,
                         minimalSetOfAtomNames,
                         maximalSetOfAtomNames);
 
         reference = atomContainerPair.getLeft();
-        candidate = atomContainerPair.getRight();
+        query = atomContainerPair.getRight();
 
         // compute centroids
         double[] centroid1 = LinearAlgebraAtom.centroid(reference);
-        double[] centroid2 = LinearAlgebraAtom.centroid(candidate);
+        double[] centroid2 = LinearAlgebraAtom.centroid(query);
         // center atoms
         LinearAlgebraAtom.shift(reference, LinearAlgebra3D.multiply(centroid1, -1.0));
-        LinearAlgebraAtom.shift(candidate, LinearAlgebra3D.multiply(centroid2, -1.0));
+        LinearAlgebraAtom.shift(query, LinearAlgebra3D.multiply(centroid2, -1.0));
 
         // compose covariance matrix and calculate SVD
         RealMatrix matrix1 = LinearAlgebraAtom.convertToMatrix(reference);
-        RealMatrix matrix2 = LinearAlgebraAtom.convertToMatrix(candidate);
+        RealMatrix matrix2 = LinearAlgebraAtom.convertToMatrix(query);
         RealMatrix covariance = matrix2.transpose().multiply(matrix1);
         SingularValueDecomposition svd = new SingularValueDecomposition(covariance);
         // R = (V * U')'
@@ -79,10 +79,10 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
 
         /* transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */
-        LinearAlgebraAtom.transform(candidate, new LinearAlgebraAtom.Transformation(rotation));
-        double rmsd = LinearAlgebraAtom.calculateRmsd(reference, candidate);
+        LinearAlgebraAtom.transform(query, new LinearAlgebraAtom.Transformation(rotation));
+        double rmsd = LinearAlgebraAtom.calculateRmsd(reference, query);
 
         // return alignment
-        return new StructureAlignmentResult(originalReference, originalCandidate, candidate, rmsd, translation, rotation);
+        return new StructureAlignmentResult(originalReference, originalCandidate, query, rmsd, translation, rotation);
     }
 }

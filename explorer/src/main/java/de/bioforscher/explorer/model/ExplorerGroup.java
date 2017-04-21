@@ -20,8 +20,12 @@ public class ExplorerGroup {
 
     public ExplorerGroup(Group group) {
         this.resn = group.getResidueNumber();
-        this.aa = group.getGroupInformation().getOneLetterCode();
-        this.rasa = DECIMAL_FORMAT.format(group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA));
+        this.aa = group.isAminoAcid() ? group.getGroupInformation().getOneLetterCode() : group.getThreeLetterCode();
+        try {
+            this.rasa = DECIMAL_FORMAT.format(group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA));
+        } catch (NullPointerException e) {
+            // happens for mutation sites
+        }
     }
 
     public int getResn() {
