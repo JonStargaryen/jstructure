@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * A wrapper for the PLIP-rest-service which provides precomputed PLIP results.
  * Created by bittrich on 2/9/17.
  */
-class PLIPRestServiceQuery {
+public class PLIPRestServiceQuery {
     private static final Logger logger = LoggerFactory.getLogger(PLIPRestServiceQuery.class);
     static final String BASE_URL = "http://141.55.231.200:8731/plip/";
     private static final String REST_USER_PASSWORD_PATH = System.getProperty("user.home") + "/git/phd_sb_repo/data/.plip-rest-auth";
@@ -37,7 +37,7 @@ class PLIPRestServiceQuery {
         }
     }
 
-    static String getPlipResults(String pdbId, String chainId) {
+    public static String getPlipResults(String pdbId, String chainId) {
         try {
             return getPlipResults(new URL(BASE_URL + "plain/" + pdbId + "/" + chainId));
         } catch (IOException e) {

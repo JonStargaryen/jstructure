@@ -22,10 +22,10 @@ import java.util.Optional;
  * Parses PLIP files. Especially designed to annotate residue-residue interactions in protein structures.
  * Created by bittrich on 2/9/17.
  */
-class PLIPParser {
+public class PLIPParser {
     private static final Logger logger = LoggerFactory.getLogger(PLIPParser.class);
 
-    static List<PLIPInteraction> parse(Chain chain, String documentDescribingChain) {
+    public static List<PLIPInteraction> parse(Chain chain, String documentDescribingChain) {
         Document document = Jsoup.parse(documentDescribingChain);
 
         List<PLIPInteraction> plipInteractions = new ArrayList<>();

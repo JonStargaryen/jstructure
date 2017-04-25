@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class PDBDatabaseQuery {
     private static final Logger logger = LoggerFactory.getLogger(PDBDatabaseQuery.class);
     public static final String CLUSTER_FETCH_URL = "http://www.rcsb.org/pdb/rest/sequenceCluster?cluster=%d&structureId=%s.%s";
-    public static final double DEFAULT_SEQUENCE_SIMILARITY_THRESHOLD = 95;
+    public static final double DEFAULT_SEQUENCE_SIMILARITY_THRESHOLD = 90;
 
     /**
      * @see PDBDatabaseQuery#fetchSequenceCluster(String, String, double)

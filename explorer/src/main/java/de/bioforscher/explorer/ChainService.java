@@ -42,9 +42,9 @@ public class ChainService {
     @PostConstruct
     public void activate() throws IOException {
         logger.info("starting protein service");
-        allRepresentativeChainIds = Stream.of("3cap_A").collect(Collectors.toList());
+        allRepresentativeChainIds = Stream.of("1rc2_A").collect(Collectors.toList());
 
-//        reinitialize(false);
+        reinitialize(false);
     }
 
     private void reinitialize(boolean parallel) {
