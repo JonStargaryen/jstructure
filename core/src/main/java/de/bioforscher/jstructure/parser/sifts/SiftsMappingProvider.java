@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.parser.sifts;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.identifier.PdbChainId;
+import de.bioforscher.jstructure.model.identifier.PdbId;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import org.jsoup.Jsoup;
@@ -17,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
@@ -25,6 +29,7 @@ import java.util.zip.GZIPInputStream;
  * @link http://www.ebi.ac.uk/pdbe/docs/sifts/quick.html
  * Created by bittrich on 4/6/17.
  */
+@Deprecated
 @FeatureProvider(provides = SiftsMappingProvider.SIFTS_MAPPING)
 public class SiftsMappingProvider extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SiftsMappingProvider.class);
@@ -50,6 +55,19 @@ public class SiftsMappingProvider extends AbstractFeatureProvider {
                 .forEach(chain -> processInternally(document, chain));
     }
 
+    /**
+     *
+     * @param pfamId
+     * @return
+     */
+    public List<PdbChainId> mapPfamIdToPdbIds(String pfamId) {
+        return getLines(PFAM_MAPPING)
+                .filter(line -> line.endsWith(pfamId))
+                .map(line -> line.split(","))
+                .map(split -> PdbChainId.createFromChainId(PdbId.createFromPdbId(split[0]), split[1]))
+                .collect(Collectors.toList());
+    }
+
     private void processInternally(Document document, Chain chain) {
         chain.aminoAcids().forEach(group -> {
             ResidueSiftsMapping mapping = mapGroup(document, chain.getChainId(), group.getResidueNumber());
@@ -57,13 +75,13 @@ public class SiftsMappingProvider extends AbstractFeatureProvider {
         });
 
         String pdbId = chain.getParentProtein().getName().toLowerCase();
-        String ecNumber = getLines(ENZYME_MAPPING, pdbId)
+        String ecNumber = getLinesForPdbId(ENZYME_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chain.getChainId()))
                 .map(split -> split[3])
                 .findFirst()
                 .orElse(UNKNOWN_MAPPING);
 
-        String[] mappingString = getLines(PFAM_MAPPING, pdbId)
+        String[] mappingString = getLinesForPdbId(PFAM_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chain.getChainId()))
                 .findFirst()
                 .orElse(UNKNOWN_PFAM_MAPPING);
@@ -71,9 +89,13 @@ public class SiftsMappingProvider extends AbstractFeatureProvider {
         chain.setFeature(SIFTS_MAPPING, new ChainSiftsMapping(mappingString[2], ecNumber, mappingString[3]));
     }
 
-    private Stream<String[]> getLines(String path, String pdbId) {
+    private Stream<String> getLines(String path) {
         return getLinesFromResource(path)
-                .filter(line -> !line.startsWith("#") && !line.startsWith("PDB"))
+                .filter(line -> !line.startsWith("#") && !line.startsWith("PDB"));
+    }
+
+    private Stream<String[]> getLinesForPdbId(String path, String pdbId) {
+        return getLines(path)
                 .filter(line -> line.startsWith(pdbId.toLowerCase()))
                 .map(line -> line.split(","));
     }

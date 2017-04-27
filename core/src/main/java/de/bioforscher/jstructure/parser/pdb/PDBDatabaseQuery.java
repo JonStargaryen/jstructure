@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
  * Access to pdb functionality provided via REST.
  * Created by bittrich on 3/17/17.
  */
+@Deprecated
 public class PDBDatabaseQuery {
     private static final Logger logger = LoggerFactory.getLogger(PDBDatabaseQuery.class);
     public static final String CLUSTER_FETCH_URL = "http://www.rcsb.org/pdb/rest/sequenceCluster?cluster=%d&structureId=%s.%s";

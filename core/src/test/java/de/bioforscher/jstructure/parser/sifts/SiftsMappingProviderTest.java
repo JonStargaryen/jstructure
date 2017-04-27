@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.parser.sifts;
 
+import de.bioforscher.jstructure.model.identifier.PdbChainId;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.nodes.Document;
@@ -7,6 +8,8 @@ import org.jsoup.nodes.Element;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * Test the SIFTS-mapping.
@@ -18,6 +21,14 @@ public class SiftsMappingProviderTest {
     @Before
     public void setup() {
         siftsMappingProvider = new SiftsMappingProvider();
+    }
+
+    @Test
+    public void shouldMapPfamToPdb() {
+        String pfamId = "PF00230";
+        List<PdbChainId> pdbIds = siftsMappingProvider.mapPfamIdToPdbIds(pfamId);
+        // currently there are 106 structure associated to this id, however the number can of course increase
+        Assert.assertTrue(pdbIds.size() >= 106);
     }
 
     @Test
