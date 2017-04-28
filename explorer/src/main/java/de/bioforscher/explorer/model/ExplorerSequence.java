@@ -18,11 +18,15 @@ public class ExplorerSequence {
     public ExplorerSequence(Chain chain) {
         this.id = chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId();
         this.title = chain.getParentProtein().getTitle();
-        ChainSiftsMapping chainSiftsMapping = chain.getFeature(ChainSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING);
-        this.ec = chainSiftsMapping.getEcNumber();
-        this.pfam = chainSiftsMapping.getPfam();
-        this.uniprot = chainSiftsMapping.getUniProtId();
         this.sequence = chain.getAminoAcidSequence();
+        try {
+            ChainSiftsMapping chainSiftsMapping = chain.getFeature(ChainSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING);
+            this.ec = chainSiftsMapping.getEcNumber();
+            this.pfam = chainSiftsMapping.getPfam();
+            this.uniprot = chainSiftsMapping.getUniProtId();
+        } catch (NullPointerException e) {
+
+        }
     }
 
     public String getId() {

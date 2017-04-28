@@ -22,6 +22,24 @@ public class PLIPInteractionContainer {
     private final List<SaltBridge> saltBridges;
     private final List<WaterBridge> waterBridges;
 
+    public PLIPInteractionContainer(List<PLIPInteraction> plipInteractions) {
+        halogenBonds = filterInteractions(plipInteractions, HalogenBond.class);
+        hydrogenBonds = filterInteractions(plipInteractions, HydrogenBond.class);
+        hydrophobicInteractions = filterInteractions(plipInteractions, HydrophobicInteraction.class);
+        metalComplexes = filterInteractions(plipInteractions, MetalComplex.class);
+        piCationInteractions = filterInteractions(plipInteractions, PiCationInteraction.class);
+        piStackings = filterInteractions(plipInteractions, PiStacking.class);
+        saltBridges = filterInteractions(plipInteractions, SaltBridge.class);
+        waterBridges = filterInteractions(plipInteractions, WaterBridge.class);
+    }
+
+    private <I> List<I> filterInteractions(List<PLIPInteraction> globalPlipInteractions, Class<I> content) {
+        return globalPlipInteractions.stream()
+                .filter(content::isInstance)
+                .map(content::cast)
+                .collect(Collectors.toList());
+    }
+
     PLIPInteractionContainer(List<HalogenBond> halogenBonds, List<HydrogenBond> hydrogenBonds, List<HydrophobicInteraction> hydrophobicInteractions, List<MetalComplex> metalComplexes, List<PiCationInteraction> piCationInteractions, List<PiStacking> piStackings, List<SaltBridge> saltBridges, List<WaterBridge> waterBridges) {
         this.halogenBonds = halogenBonds;
         this.hydrogenBonds = hydrogenBonds;

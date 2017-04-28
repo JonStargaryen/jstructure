@@ -3,14 +3,13 @@ package de.bioforscher.jstructure.parser.plip;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.plip.interaction.*;
+import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static de.bioforscher.jstructure.parser.plip.PLIPAnnotator.PLIP_INTERACTIONS;
 
@@ -19,6 +18,7 @@ import static de.bioforscher.jstructure.parser.plip.PLIPAnnotator.PLIP_INTERACTI
  * TODO the internals of this implementation are really ugly :x
  * Created by bittrich on 2/9/17.
  */
+@Deprecated
 @FeatureProvider(provides = { PLIP_INTERACTIONS })
 public class PLIPAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(PLIPAnnotator.class);
@@ -41,23 +41,6 @@ public class PLIPAnnotator extends AbstractFeatureProvider {
                     }
         });
 
-        List<HalogenBond> halogenBonds = filterInteractions(globalPlipInteractions, HalogenBond.class);
-        List<HydrogenBond> hydrogenBonds = filterInteractions(globalPlipInteractions, HydrogenBond.class);
-        List<HydrophobicInteraction> hydrophobicInteractions = filterInteractions(globalPlipInteractions, HydrophobicInteraction.class);
-        List<MetalComplex> metalComplexes = filterInteractions(globalPlipInteractions, MetalComplex.class);
-        List<PiCationInteraction> piCationInteractions = filterInteractions(globalPlipInteractions, PiCationInteraction.class);
-        List<PiStacking> piStackings = filterInteractions(globalPlipInteractions, PiStacking.class);
-        List<SaltBridge> saltBridges = filterInteractions(globalPlipInteractions, SaltBridge.class);
-        List<WaterBridge> waterBridges = filterInteractions(globalPlipInteractions, WaterBridge.class);
-
-        protein.setFeature(PLIP_INTERACTIONS, new PLIPInteractionContainer(halogenBonds, hydrogenBonds,
-                hydrophobicInteractions, metalComplexes, piCationInteractions, piStackings, saltBridges, waterBridges));
-    }
-
-    private <I> List<I> filterInteractions(List<PLIPInteraction> globalPlipInteractions, Class<I> content) {
-        return globalPlipInteractions.stream()
-                .filter(content::isInstance)
-                .map(content::cast)
-                .collect(Collectors.toList());
+        protein.setFeature(PLIP_INTERACTIONS, new PLIPInteractionContainer(globalPlipInteractions));
     }
 }

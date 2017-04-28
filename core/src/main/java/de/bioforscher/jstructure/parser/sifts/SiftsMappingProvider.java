@@ -68,6 +68,22 @@ public class SiftsMappingProvider extends AbstractFeatureProvider {
                 .collect(Collectors.toList());
     }
 
+    public void process(Chain chain) {
+        String pdbId = chain.getParentProtein().getName().toLowerCase();
+        String ecNumber = getLinesForPdbId(ENZYME_MAPPING, pdbId)
+                .filter(split -> split[1].equals(chain.getChainId()))
+                .map(split -> split[3])
+                .findFirst()
+                .orElse(UNKNOWN_MAPPING);
+
+        String[] mappingString = getLinesForPdbId(PFAM_MAPPING, pdbId)
+                .filter(split -> split[1].equals(chain.getChainId()))
+                .findFirst()
+                .orElse(UNKNOWN_PFAM_MAPPING);
+
+        chain.setFeature(SIFTS_MAPPING, new ChainSiftsMapping(mappingString[2], ecNumber, mappingString[3]));
+    }
+
     private void processInternally(Document document, Chain chain) {
         chain.aminoAcids().forEach(group -> {
             ResidueSiftsMapping mapping = mapGroup(document, chain.getChainId(), group.getResidueNumber());
@@ -150,5 +166,12 @@ public class SiftsMappingProvider extends AbstractFeatureProvider {
                 .map(Element::parent)
                 .findFirst()
                 .orElseThrow(() -> new MappingException("could not obtain SIFTS-mapping for residue " + chainId + "-" + pdbResidueNumber));
+    }
+
+    public String mapPdbChainIdToPfam(PdbChainId pdbChainId) {
+        return getLinesForPdbId(PFAM_MAPPING, pdbChainId.getPdbId().getPdbId())
+                .filter(split -> split[1].equals(pdbChainId.getChainId()))
+                .findFirst()
+                .orElseThrow(() ->  new MappingException("could not obtain Pfam mapping for " + pdbChainId))[3];
     }
 }

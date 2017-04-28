@@ -415,20 +415,26 @@
             }
             if($scope.reference.groups.length > 0) {
                 var rasa = [];
+                var present = false;
                 $scope.reference.groups.forEach(function (go) {
+                    if(go.rasa !== 0) {
+                        present = true;
+                    }
                     rasa.push({
                         x: rasa.length,
                         y: go.rasa
                     });
                 });
-                fv.addFeature({
-                    data: rasa,
-                    name: 'Accessible Surface',
-                    className: 'tba4',
-                    type: 'line',
-                    color: '#52b1e9',
-                    interpolation: 'basis'
-                });
+                if(present) {
+                    fv.addFeature({
+                        data: rasa,
+                        name: 'Accessible Surface',
+                        className: 'tba4',
+                        type: 'line',
+                        color: '#52b1e9',
+                        interpolation: 'basis'
+                    });
+                }
             }
             if($scope.reference.sse.length > 0) {
                 var sse = [];
@@ -483,7 +489,7 @@
                         return;
                     }
 
-                    viewer.ballsAndSticks('hover',
+                    viewer.spheres('hover',
                         chain.pv_protein.select(range),
                         { color: pv.color.uniform(design.lighterColor) }
                     );

@@ -3,10 +3,7 @@ package de.bioforscher.jstructure.feature.asa;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
@@ -94,11 +91,10 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     @Override
     protected void processInternally(Protein protein) {
         // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-        GroupContainer residueContainer = Selection.on(protein)
-                .aminoAcids()
-                .asGroupContainer();
+        GroupContainer residueContainer = protein.aminoAcids()
+                .collect(StructureCollectors.toGroupContainer());
 
-        AtomContainer nonHydrogenAtoms = Selection.on(residueContainer)
+        AtomContainer nonHydrogenAtoms = residueContainer.select()
                 .nonHydrogenAtoms()
                 .asAtomContainer();
         nonHydrogenAtoms.atoms()

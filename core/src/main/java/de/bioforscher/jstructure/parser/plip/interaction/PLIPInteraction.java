@@ -1,9 +1,9 @@
 package de.bioforscher.jstructure.parser.plip.interaction;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ParsingException;
 import org.jsoup.nodes.Element;
 
@@ -21,7 +21,7 @@ public abstract class PLIPInteraction {
     private Protein protein;
     Group partner1, partner2;
     private Element describingElement;
-    private double[] coords1, coords2;
+    private double[] coords1, coords2, representation;
 
     /**
      * Enforce the signature of the constructor of all subclasses.
@@ -47,6 +47,7 @@ public abstract class PLIPInteraction {
         }
         this.coords1 = extractCoordinateArray(ligcoo);
         this.coords2 = extractCoordinateArray(protcoo);
+        this.representation = LinearAlgebra3D.divide(LinearAlgebra3D.add(coords1, coords2), 2);
     }
 
     private double[] extractCoordinateArray(Element coo) {
@@ -76,22 +77,18 @@ public abstract class PLIPInteraction {
 
     Atom resolveAtom(String tagName) {
         int pdbSerial = getIntValueOfTag(tagName);
-        Optional<Atom> atom = Selection.on(protein)
+        Optional<Atom> atom = protein.select()
                 .pdbSerial(pdbSerial)
                 .asOptionalAtom();
 
-        if(atom.isPresent()) {
-            return atom.get();
-        }
-
-        throw new NoSuchElementException("no atom found for pdbSerial '" + pdbSerial + "'");
+        return atom.orElseThrow(() -> new NoSuchElementException("no atom found for pdbSerial '" + pdbSerial + "'"));
     }
 
     List<Atom> resolveAtoms(String tagname) {
         return describingElement.getElementsByTag(tagname).stream()
                 .map(Element::text)
                 .map(Integer::valueOf)
-                .map(atomNumber -> Selection.on(protein)
+                .map(atomNumber -> protein.select()
                         .pdbSerial(atomNumber)
                         .asOptionalAtom())
                 .filter(Optional::isPresent)
@@ -139,5 +136,9 @@ public abstract class PLIPInteraction {
 
     public double[] getCoords2() {
         return coords2;
+    }
+
+    public double[] getRepresentation() {
+        return representation;
     }
 }

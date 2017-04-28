@@ -3,6 +3,8 @@ package de.bioforscher.explorer;
 import de.bioforscher.explorer.model.*;
 import de.bioforscher.explorer.repository.AlignmentRepository;
 import de.bioforscher.explorer.repository.ChainRepository;
+import de.bioforscher.jstructure.model.identifier.PdbChainId;
+import de.bioforscher.jstructure.model.identifier.PdbId;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
@@ -31,7 +33,7 @@ public class ChainService {
     private static final Logger logger = LoggerFactory.getLogger(ChainService.class);
     private ChainRepository chainRepository;
     private AlignmentRepository alignmentRepository;
-    private List<String> allRepresentativeChainIds;
+    private List<PdbChainId> allRepresentativeChainIds;
 
     @Autowired
     public ChainService(ChainRepository chainRepository, AlignmentRepository alignmentRepository) {
@@ -42,9 +44,11 @@ public class ChainService {
     @PostConstruct
     public void activate() throws IOException {
         logger.info("starting protein service");
-        allRepresentativeChainIds = Stream.of("1rc2_A").collect(Collectors.toList());
+        allRepresentativeChainIds = Stream.of("1rc2_A")
+                .map(id -> PdbChainId.createFromChainId(PdbId.createFromPdbId(id.split("_")[0]), id.split("_")[1]))
+                .collect(Collectors.toList());
 
-        reinitialize(true);
+        reinitialize(false);
     }
 
     private void reinitialize(boolean parallel) {
@@ -62,17 +66,25 @@ public class ChainService {
         }
     }
 
-    private void processSequenceCluster(String clusterEntryId) {
+    private void processSequenceCluster(PdbChainId clusterEntryId) {
         logger.info("[{}] spawned thread on representative chain id", clusterEntryId);
-        ExplorerCluster explorerCluster = ModelFactory.createCluster(clusterEntryId);
+        List<ExplorerChain> explorerChains = ModelFactory.createCluster(clusterEntryId);
 
-        logger.info("[{}] persisting chains and alignment", clusterEntryId);
-        chainRepository.save(explorerCluster.getExplorerChains());
-        alignmentRepository.save(explorerCluster.getExplorerAlignment());
+        logger.info("[{}] persisting chains", clusterEntryId);
+        chainRepository.save(explorerChains);
+
+//        logger.info("[{}] spawned thread on representative chain id", clusterEntryId);
+//        ExplorerCluster explorerCluster = ModelFactory.createCluster(clusterEntryId);
+//
+//        logger.info("[{}] persisting chains and alignment", clusterEntryId);
+//        chainRepository.save(explorerCluster.getExplorerChains());
+//        alignmentRepository.save(explorerCluster.getExplorerAlignment());
     }
 
     public List<String> getAllRepresentativeChainIds() {
-        return allRepresentativeChainIds;
+        return allRepresentativeChainIds.stream()
+                .map(PdbChainId::getFullName)
+                .collect(Collectors.toList());
     }
 
     public ExplorerChain getChain(String rawId) {

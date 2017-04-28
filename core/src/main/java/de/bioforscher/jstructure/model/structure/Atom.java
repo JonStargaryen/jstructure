@@ -12,7 +12,7 @@ import java.util.Locale;
  * The most fine-grained element describing a {@link Protein}.
  * Created by S on 27.09.2016.
  */
-public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
+public class Atom extends AbstractFeatureContainer implements AtomRecordWriter, CoordinateProvider {
     public static final float DEFAULT_BFACTOR = 100.0f;
     public static final float DEFAULT_OCCUPANCY = 1.0f;
     public static final String ATOM_PREFIX = "ATOM  ";
@@ -122,6 +122,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
      * @return a 3D double[]
      * @see de.bioforscher.jstructure.mathematics.LinearAlgebra3D
      */
+    @Override
     public double[] getCoordinates() {
         return coordinates;
     }
@@ -210,6 +211,7 @@ public class Atom extends AbstractFeatureContainer implements AtomRecordWriter {
      * Assign new coordinates to this atom.
      * @param coordinates a 3D vector with the coordinates to assign
      */
+    @Override
     public void setCoordinates(double[] coordinates) {
         this.coordinates = coordinates;
     }

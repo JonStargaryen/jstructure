@@ -60,7 +60,7 @@ public class UniProtAnnotationContainer {
                 .collect(Collectors.toList());
         this.disulfideBonds = describingDocument.getElementsByAttributeValue("type", "disulfide bond").stream()
                 // there are also interchain bonds annotated - ignoring them for now
-                .filter(element -> !element.hasAttr("description"))
+                .filter(element -> !element.hasAttr("description") && element.getElementsByTag("location").size() > 1)
                 .map(UniProtDisulfideBond::new)
                 .collect(Collectors.toList());
         this.mutagenesisSites = describingDocument.getElementsByAttributeValue("type", "mutagenesis site").stream()

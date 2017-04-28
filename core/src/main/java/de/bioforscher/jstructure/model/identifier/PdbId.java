@@ -14,6 +14,7 @@ public class PdbId {
     private String pdbId, additionalName;
     //TODO maybe some selection criteria and stuff automatically
     //TODO maybe the source / filename automatically
+    //TODO consistent naming pattern
 
     private PdbId(String pdbId, String additionalName) {
         this.pdbId = pdbId.toLowerCase();

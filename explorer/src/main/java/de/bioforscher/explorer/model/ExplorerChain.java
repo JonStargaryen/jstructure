@@ -1,5 +1,6 @@
 package de.bioforscher.explorer.model;
 
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
@@ -60,7 +61,7 @@ public class ExplorerChain {
 
         try {
             PLIPInteractionContainer interactions = chain.getParentProtein().getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
-            LinearAlgebraAtom.Transformation transformation = chain.getFeature(LinearAlgebraAtom.Transformation.class, ModelFactory.TRANSFORMATION);
+            LinearAlgebraAtom.Transformation transformation = chain.getFeature(LinearAlgebraAtom.Transformation.class, SVDSuperimposer.TRANSFORMATION);
             this.halogenBonds = convert(interactions.getHalogenBonds(), transformation, chain);
             this.hydrogenBonds = convert(interactions.getHydrogenBonds(), transformation, chain);
             this.metalComplexes = convert(interactions.getMetalComplexes(), transformation, chain);
@@ -80,14 +81,24 @@ public class ExplorerChain {
             this.isPlip = false;
         }
 
-        UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
-        this.active = uniProtAnnotationContainer.getActiveSites();
-        this.disulfide = uniProtAnnotationContainer.getDisulfideBonds();
-        this.mutagenesis = uniProtAnnotationContainer.getMutagenesisSites();
-        this.ptm = uniProtAnnotationContainer.getAminoAcidModifications();
-        this.sse = uniProtAnnotationContainer.getSecondaryStructureElements();
-        this.tm = uniProtAnnotationContainer.getTransmembraneRegions();
-        this.variants = uniProtAnnotationContainer.getNaturalVariants();
+        try {
+            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
+            this.active = uniProtAnnotationContainer.getActiveSites();
+            this.disulfide = uniProtAnnotationContainer.getDisulfideBonds();
+            this.mutagenesis = uniProtAnnotationContainer.getMutagenesisSites();
+            this.ptm = uniProtAnnotationContainer.getAminoAcidModifications();
+            this.sse = uniProtAnnotationContainer.getSecondaryStructureElements();
+            this.tm = uniProtAnnotationContainer.getTransmembraneRegions();
+            this.variants = uniProtAnnotationContainer.getNaturalVariants();
+        } catch (NullPointerException e) {
+            this.active = new ArrayList<>();
+            this.disulfide = new ArrayList<>();
+            this.mutagenesis = new ArrayList<>();
+            this.ptm = new ArrayList<>();
+            this.sse = new ArrayList<>();
+            this.tm = new ArrayList<>();
+            this.variants = new ArrayList<>();
+        }
     }
 
     private List<ExplorerInteraction> convert(List<? extends PLIPInteraction> interactions,

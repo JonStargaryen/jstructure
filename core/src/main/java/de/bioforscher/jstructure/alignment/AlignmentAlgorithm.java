@@ -12,6 +12,8 @@ import org.apache.commons.math3.linear.MatrixUtils;
  * Created by S on 30.09.2016.
  */
 public interface AlignmentAlgorithm {
+    String TRANSFORMATION = "TRANSFORMATION";
+
     /**
      * The translation vector describing no shift whatsoever. 3D vector of zeros.
      */
