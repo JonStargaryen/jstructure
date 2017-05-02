@@ -16,8 +16,7 @@ import java.util.stream.Stream;
  * @link http://www.ebi.ac.uk/pdbe/docs/sifts/quick.html
  * Created by bittrich on 3/13/17.
  */
-@Deprecated
-public class SiftsParser extends AbstractFeatureProvider {
+class SiftsParser extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SiftsParser.class);
     private static final String SIFTS_DIR = "sifts/";
     public static final String UNIPROT_ID = "UNIPROT_ID";
@@ -55,7 +54,6 @@ public class SiftsParser extends AbstractFeatureProvider {
         logger.debug("mapping of '{}': {}", chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId(), Arrays.toString(mappingString));
     }
 
-    //TODO prettify
     public List<String> mapToUniProt(String pdbId, String chainId) {
         return getLines(PFAM_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chainId))

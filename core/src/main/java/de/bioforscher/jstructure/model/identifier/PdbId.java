@@ -92,4 +92,21 @@ public class PdbId {
     public String toString() {
         return getFullName();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PdbId pdbId1 = (PdbId) o;
+
+        return (pdbId != null ? pdbId.equals(pdbId1.pdbId) : pdbId1.pdbId == null) && (additionalName != null ? additionalName.equals(pdbId1.additionalName) : pdbId1.additionalName == null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = pdbId != null ? pdbId.hashCode() : 0;
+        result = 31 * result + (additionalName != null ? additionalName.hashCode() : 0);
+        return result;
+    }
 }

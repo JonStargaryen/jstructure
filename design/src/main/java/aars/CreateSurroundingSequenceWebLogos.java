@@ -12,9 +12,10 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 /**
+ * Employ geometry tsvs to generate weblogos.
  * Created by bittrich on 4/19/17.
  */
-public class CreateSurroundingSequenceWebLogos {
+class CreateSurroundingSequenceWebLogos {
     public static void main(String[] args) throws IOException {
         handleFile("/home/bittrich/git/aars_analysis/data/geometry/bbbrackets_geometry.tsv", 1);
         handleFile("/home/bittrich/git/aars_analysis/data/geometry/argtweezer_geometry.tsv", 2);

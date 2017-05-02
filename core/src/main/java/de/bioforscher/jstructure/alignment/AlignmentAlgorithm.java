@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.alignment;
 
+import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import org.apache.commons.math3.linear.MatrixUtils;
 
@@ -11,7 +12,7 @@ import org.apache.commons.math3.linear.MatrixUtils;
  * TODO maybe the algorithms need some abstracted way to report whether container have to match in size - the current way does not seem to convincing
  * Created by S on 30.09.2016.
  */
-public interface AlignmentAlgorithm {
+public interface AlignmentAlgorithm<R extends AlignmentResult> {
     String TRANSFORMATION = "TRANSFORMATION";
 
     /**
@@ -31,5 +32,5 @@ public interface AlignmentAlgorithm {
      *               optimally superimposed
      * @return statistics on the alignment
      */
-    StructureAlignmentResult align(AtomContainer atomContainer1, AtomContainer atomContainer2);
+    R align(AtomContainer atomContainer1, AtomContainer atomContainer2);
 }

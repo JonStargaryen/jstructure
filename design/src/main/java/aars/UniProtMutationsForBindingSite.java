@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * Search for mutations for all residues in the extracted binding site.
  * Created by bittrich on 3/28/17.
  */
-public class UniProtMutationsForBindingSite {
+class UniProtMutationsForBindingSite {
     private static final Path EFFECTS_TSV = Paths.get("/home/bittrich/git/aars_analysis/data/mutations/mutation-effects.tsv");
     private static final StringBuilder output = new StringBuilder();
     private static final StringBuilder warnings = new StringBuilder();

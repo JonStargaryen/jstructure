@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.identifier.PdbChainId;
 import de.bioforscher.jstructure.model.identifier.PdbId;

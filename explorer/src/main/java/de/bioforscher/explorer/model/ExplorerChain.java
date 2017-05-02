@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;

@@ -2,7 +2,6 @@ package de.bioforscher.explorer;
 
 import de.bioforscher.explorer.model.ExplorerAlignment;
 import de.bioforscher.explorer.model.ExplorerChain;
-import de.bioforscher.explorer.model.ExplorerMutationContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +52,5 @@ public class ChainController {
     @RequestMapping(value = "/pdb/{id}", method = RequestMethod.GET, produces = "text/plain")
     public String getStructureById(@PathVariable("id") String id) throws NoSuchElementException {
         return chainService.getChain(id).getPdb();
-    }
-
-    @RequestMapping(value = "/mutate/{id}/{pos}/{aa}", method = RequestMethod.GET)
-    public ExplorerMutationContainer getMutation(@PathVariable("id") String id, @PathVariable("pos") int pos, @PathVariable("aa") String aa) {
-        return chainService.mutateResidue(id, pos, aa);
     }
 }

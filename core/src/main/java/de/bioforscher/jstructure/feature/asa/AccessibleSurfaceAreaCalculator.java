@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * Shrake, A., and J. A. Rupley. "Environment and Exposure to Solvent of Protein Atoms.
  * Lysozyme and Insulin." JMB (1973) 79:351-371.
  * Lee, B., and Richards, F.M. "The interpretation of Protein Structures: Estimation of
- * Static Accessibility" JMB (1971) 55:379-400</pre>
+ * Static Accessibility" JMB (1971) 55:379-400</pr>
  * @author duarte_j
  */
 @FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA, AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA })

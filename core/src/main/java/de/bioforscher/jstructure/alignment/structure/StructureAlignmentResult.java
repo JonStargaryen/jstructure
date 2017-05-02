@@ -1,5 +1,7 @@
-package de.bioforscher.jstructure.alignment;
+package de.bioforscher.jstructure.alignment.structure;
 
+import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
+import de.bioforscher.jstructure.alignment.AlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
@@ -8,8 +10,7 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
  * matrix necessary to recreate this particular alignment.
  * Created by S on 30.09.2016.
  */
-//TODO redesign - a container also handling aligned energy profiles would be nicer
-public class StructureAlignmentResult {
+public class StructureAlignmentResult implements AlignmentResult {
     private final AtomContainer originalReference;
     private final AtomContainer originalQuery;
     private final AtomContainer alignedQuery;

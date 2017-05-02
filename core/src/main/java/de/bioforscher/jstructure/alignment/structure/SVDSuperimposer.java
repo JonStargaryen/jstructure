@@ -1,5 +1,6 @@
-package de.bioforscher.jstructure.alignment;
+package de.bioforscher.jstructure.alignment.structure;
 
+import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.Pair;
@@ -19,7 +20,7 @@ import java.util.Set;
  * Implementation of the singular value decomposition rigid body alignment algorithm.
  * Created by S on 30.09.2016.
  */
-public class SVDSuperimposer extends AbstractAlignmentAlgorithm {
+public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignmentResult> {
     private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
     public static final SVDSuperimposer BACKBONE_SVD_INSTANCE = new SVDSuperimposer(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
             AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);

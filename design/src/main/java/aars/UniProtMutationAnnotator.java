@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  * Assign uniprot id to all entries in the main table.
  * Created by bittrich on 3/28/17.
  */
-public class UniProtMutationAnnotator {
+class UniProtMutationAnnotator {
     private static final SiftsParser siftsParser = new SiftsParser();
     private static final UniProtAnnotator uniProtAnnotator = new UniProtAnnotator();
     private static final String DEL = "\t";

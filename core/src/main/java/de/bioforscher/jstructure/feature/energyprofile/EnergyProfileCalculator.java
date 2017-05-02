@@ -1,18 +1,19 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.scheme.BetaCarbonRepresentationScheme;
-import de.bioforscher.jstructure.model.structure.scheme.RepresentationScheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -59,7 +60,6 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
     }
 
     private void processNaively(Protein protein) {
-        final RepresentationScheme representationScheme = new BetaCarbonRepresentationScheme();
         final double squaredDistanceCutoff = DEFAULT_INTERACTION_CUTOFF * DEFAULT_INTERACTION_CUTOFF;
         final List<Group> aminoAcids = protein.aminoAcids().collect(Collectors.toList());
 
@@ -68,7 +68,12 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                 continue;
             }
 
-            double[] currentGroupCoordinates = representationScheme.determineRepresentingAtom(currentGroup).getCoordinates();
+            Optional<Atom> currentGroupBetaCarbon = currentGroup.select()
+                    .betaCarbonAtoms()
+                    .asOptionalAtom();
+            double[] currentGroupCoordinates = currentGroupBetaCarbon.isPresent() ?
+                    currentGroupBetaCarbon.get().getCoordinates() :
+                    LinearAlgebraAtom.centroid(currentGroup);
             double solvation = 0;
             double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
@@ -77,7 +82,12 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                     continue;
                 }
 
-                double[] surroundingGroupCoordinates = representationScheme.determineRepresentingAtom(surroundingGroup).getCoordinates();
+                Optional<Atom> surroundingGroupBetaCarbon = surroundingGroup.select()
+                        .betaCarbonAtoms()
+                        .asOptionalAtom();
+                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.isPresent() ?
+                        surroundingGroupBetaCarbon.get().getCoordinates() :
+                        LinearAlgebraAtom.centroid(surroundingGroup);
 
                 if(LinearAlgebra3D.distanceFast(currentGroupCoordinates, surroundingGroupCoordinates) > squaredDistanceCutoff) {
                     continue;

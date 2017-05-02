@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * Extract binding sites based on Chris' data.
  * Created by bittrich on 2/8/17.
  */
-public class BindingSiteExtractor {
+class BindingSiteExtractor {
     public static void main(String[] args) {
         new BindingSiteExtractor().run();
     }

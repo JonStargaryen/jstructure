@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * CIF-file).
  * Created by bittrich on 3/29/17.
  */
-public class ContourPlotEnricher {
+class ContourPlotEnricher {
     public static void main(String[] args) throws IOException {
 //        deriveStatistics();
 

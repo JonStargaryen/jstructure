@@ -1,12 +1,11 @@
 package alignment;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.CIFParser;
@@ -18,13 +17,8 @@ import parser.ProteinParserFunctionalTest;
 import util.TestUtils;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
-
-import static util.TestUtils.FRAGMENT_DIR;
 
 /**
  * Tests the capabilities of the SVDSuperimposer.
@@ -80,27 +74,6 @@ public class SVDSuperimposerFunctionalTest {
         his4.addAtom(new Atom("CA", Element.C, new double[] { 7.321, 76.962, 20.326 }));
         cys4.addAtom(new Atom("CA", Element.C, new double[] { 6.020, 74.873, 17.386 }));
         container4 = Stream.of(ala4, his4, cys4).collect(StructureCollectors.toGroupContainer());
-    }
-
-    @Test
-    public void shouldAlignFragments() throws IOException {
-        // identical fragments with different orientation in the 3D space
-        List<AtomContainer> alignedFragments = Files.list(Paths.get(TestUtils.getResourceAsFilepath(FRAGMENT_DIR)))
-                .map(path -> ProteinParser.source(path).parse())
-                .limit(10)
-                .collect(StructureCollectors.toAlignedEnsembleByConsensus());
-
-        // use first as reference
-        AtomContainer reference = alignedFragments.get(0);
-        // all others should report a RMSD of 0.0 after alignment
-        double maxRmsd = alignedFragments.stream()
-                .skip(1)
-                .mapToDouble(protein -> LinearAlgebraAtom.calculateRmsd(reference, protein))
-                .peek(System.out::println)
-                .max()
-                .orElse(Double.MAX_VALUE);
-
-        Assert.assertEquals(0.0, maxRmsd, TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test

@@ -1,11 +1,5 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.alignment.AbstractAlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
-import de.bioforscher.jstructure.alignment.consensus.ConsensusTreeComposer;
-import de.bioforscher.jstructure.alignment.consensus.FragmentClusteringComposer;
-import de.bioforscher.jstructure.alignment.consensus.StructureCluster;
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
@@ -17,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 /**
  * A custom collection of structure collectors.
@@ -25,95 +18,6 @@ import java.util.stream.Collectors;
  */
 public class StructureCollectors {
     private static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
-
-    @Deprecated
-    public static Collector<AtomContainer, ?, List<StructureCluster>> toAlignedEnsembleByStructuralClustering() {
-        return Collector.of(SuperimpositionByFragmentClustering::new,
-                SuperimpositionByFragmentClustering::accept,
-                SuperimpositionByFragmentClustering::combine,
-                SuperimpositionByFragmentClustering::getAlignedAtomContainers,
-                Collector.Characteristics.CONCURRENT);
-    }
-
-    static class SuperimpositionByFragmentClustering implements Consumer<AtomContainer> {
-        private final List<AtomContainer> containers;
-
-        SuperimpositionByFragmentClustering() {
-            this.containers = new ArrayList<>();
-        }
-
-        @Override
-        public void accept(AtomContainer atomContainer) {
-            containers.add(atomContainer);
-        }
-
-        SuperimpositionByFragmentClustering combine(SuperimpositionByFragmentClustering other) {
-            containers.addAll(other.containers);
-            return this;
-        }
-
-        List<StructureCluster> getAlignedAtomContainers() {
-            FragmentClusteringComposer fragmentClusteringComposer = new FragmentClusteringComposer();
-            fragmentClusteringComposer.composeClusterRepresentation(containers);
-            return fragmentClusteringComposer.getClusters();
-        }
-    }
-
-
-    @Deprecated
-    public static Collector<AtomContainer, ?, List<AtomContainer>> toAlignedEnsembleByConsensus() {
-        return Collector.of(SuperimpositionByConsensus::new,
-                SuperimpositionByConsensus::accept,
-                SuperimpositionByConsensus::combine,
-                SuperimpositionByConsensus::getAlignedAtomContainers,
-                Collector.Characteristics.CONCURRENT);
-    }
-
-    @Deprecated
-    static class SuperimpositionByConsensus implements Consumer<AtomContainer> {
-        private final List<AtomContainer> containers;
-        private ConsensusTreeComposer consensusTreeComposer;
-
-        SuperimpositionByConsensus() {
-            this.containers = new ArrayList<>();
-        }
-
-        @Override
-        public void accept(AtomContainer atomContainer) {
-            this.containers.add(atomContainer);
-        }
-
-        SuperimpositionByConsensus combine(SuperimpositionByConsensus other) {
-            containers.addAll(other.containers);
-            return this;
-        }
-
-        List<AtomContainer> getAlignedAtomContainers() {
-            ensureBinaryTreeIsAvailable();
-            AtomContainer consensus = consensusTreeComposer.getConsensus();
-            SVDSuperimposer svdSuperimposer = new SVDSuperimposer();
-            return containers.stream()
-                    .map(container -> svdSuperimposer.align(consensus, container))
-                    // append the identifier by the RMSD, so we can
-                    .map(alignmentResult -> {
-                        alignmentResult.getOriginalQuery().setFeature(AbstractAlignmentAlgorithm.FRAGMENT_RMSD,
-                                alignmentResult.getAlignmentScore());
-                        return alignmentResult;
-                    })
-                    .map(StructureAlignmentResult::getOriginalQuery)
-                    .collect(Collectors.toList());
-        }
-
-        private void ensureBinaryTreeIsAvailable() {
-            // if already present, do nothing
-            if(consensusTreeComposer != null) {
-                return;
-            }
-
-            consensusTreeComposer = new ConsensusTreeComposer();
-            consensusTreeComposer.composeConsensusTree(containers);
-        }
-    }
 
     public static Collector<Atom, ?, double[]> toCentroid() {
         return Collector.of(CentroidAverager::new,

@@ -9,9 +9,9 @@ import java.util.Set;
  * The abstract implementation of alignment algorithms.
  * Created by S on 10.11.2016.
  */
-public abstract class AbstractAlignmentAlgorithm implements AlignmentAlgorithm {
-    final Set<String> minimalSetOfAtomNames;
-    final Set<String> maximalSetOfAtomNames;
+public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> implements AlignmentAlgorithm<R> {
+    protected final Set<String> minimalSetOfAtomNames;
+    protected final Set<String> maximalSetOfAtomNames;
     public static final String FRAGMENT_RMSD = "FRAGMENT_RMSD";
 
     public AbstractAlignmentAlgorithm() {

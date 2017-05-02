@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * Count inside/outside occurrences of all amino acids in aaRS structures.
  * Created by bittrich on 3/30/17.
  */
-public class CalculateInsideOutside {
+class CalculateInsideOutside {
     private static final AccessibleSurfaceAreaCalculator asa = new AccessibleSurfaceAreaCalculator();
 
     public static void main(String[] args) {

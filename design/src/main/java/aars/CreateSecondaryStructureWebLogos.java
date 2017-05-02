@@ -21,7 +21,7 @@ import java.nio.file.Paths;
  *
  * Created by bittrich on 4/19/17.
  */
-public class CreateSecondaryStructureWebLogos {
+class CreateSecondaryStructureWebLogos {
     public static void main(String[] args) throws IOException {
         handleFile("/home/bittrich/git/aars_analysis/data/geometry/argtweezer_geometry.tsv");
         handleFile("/home/bittrich/git/aars_analysis/data/geometry/bbbrackets_geometry.tsv");

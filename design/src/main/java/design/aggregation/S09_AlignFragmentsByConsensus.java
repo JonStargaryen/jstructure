@@ -1,7 +1,7 @@
 package design.aggregation;
 
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;

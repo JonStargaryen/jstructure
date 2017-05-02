@@ -1,7 +1,7 @@
 package aars;
 
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
@@ -27,7 +27,7 @@ import static aars.AARSConstants.MAIN_TABLE_CATALYTIC_PATH;
  * Aligns binding sites with respect to a present ligand.
  * Created by bittrich on 2/7/17.
  */
-public class BindingSiteAligner {
+class BindingSiteAligner {
     private static final Logger logger = LoggerFactory.getLogger(BindingSiteAligner.class);
 
     public static void main(String[] args) throws IOException {
