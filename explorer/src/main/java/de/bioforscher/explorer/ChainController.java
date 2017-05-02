@@ -2,8 +2,6 @@ package de.bioforscher.explorer;
 
 import de.bioforscher.explorer.model.ExplorerAlignment;
 import de.bioforscher.explorer.model.ExplorerChain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +19,6 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping(value = "/api/chains/", method = RequestMethod.GET)
 public class ChainController {
-    private static final Logger logger = LoggerFactory.getLogger(ChainController.class);
     private final ChainService chainService;
 
     @Autowired

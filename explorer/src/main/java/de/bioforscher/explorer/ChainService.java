@@ -44,7 +44,7 @@ public class ChainService {
                 .map(id -> PdbChainId.createFromChainId(PdbId.createFromPdbId(id.split("_")[0]), id.split("_")[1]))
                 .collect(Collectors.toList());
 
-        reinitialize(false);
+//        reinitialize(false);
     }
 
     private void reinitialize(boolean parallel) {

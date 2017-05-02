@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.parser.plip;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
 import org.slf4j.Logger;
@@ -42,5 +43,11 @@ public class PLIPAnnotator extends AbstractFeatureProvider {
         });
 
         protein.setFeature(PLIP_INTERACTIONS, new PLIPInteractionContainer(globalPlipInteractions));
+    }
+
+    public void process(Chain chain) {
+        String plipXmlContent = PLIPRestServiceQuery.getPlipResults(chain.getParentProtein().getName(), chain.getChainId());
+        List<PLIPInteraction> plipInteractions = PLIPParser.parse(chain, plipXmlContent);
+        chain.setFeature(PLIP_INTERACTIONS, new PLIPInteractionContainer(plipInteractions));
     }
 }

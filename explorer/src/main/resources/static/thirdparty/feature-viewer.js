@@ -160,7 +160,14 @@ var FeatureViewer = (function () {
                         }
                     } else if (object.type === "unique" || pD.x === pD.y) {
                         var first_line = '<p style="margin:2px;font-weight:700;color:' + tooltipColor +'">' + pD.x + '</p>';
-                        if (pD.description) var second_line = '<p style="margin:2px;color:' + tooltipColor +';font-size:9px">' + pD.description + '</p>';
+                        // 05/02/17 - adds support for multiple description lines
+                        if (pD.description) {
+                            alert('multiline: ' + pD.description);
+                            var second_line = '';
+                            pD.description.split('\n').forEach(function(line) {
+                                second_line += '<p style="margin:2px;color:' + tooltipColor +';font-size:9px">' + line + '</p>';
+                            });
+                        }
                         else var second_line = '';
                     } else {
                         var first_line = '<p style="margin:2px;font-weight:700;color:' + tooltipColor +'">' + pD.x + ' - ' + pD.y + '</p>';

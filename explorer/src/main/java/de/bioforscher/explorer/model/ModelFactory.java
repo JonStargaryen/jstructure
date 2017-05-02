@@ -22,6 +22,8 @@ public class ModelFactory {
     public static List<ExplorerChain> createCluster(PdbChainId entryId) {
         List<Chain> chains = EnsembleGenerator.createChainsFromPfamCluster(new SiftsMappingProvider().mapPdbChainIdToPfam(entryId));
 
+        chains.parallelStream().forEach(plipAnnotator::process);
+
         List<ExplorerChain> explorerChains = chains.parallelStream()
                 .map(chain -> new ExplorerChain(chain, entryId.getFullName()))
                 .collect(Collectors.toList());

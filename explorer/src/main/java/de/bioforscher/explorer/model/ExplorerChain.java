@@ -60,7 +60,7 @@ public class ExplorerChain {
                 .collect(Collectors.toList());
 
         try {
-            PLIPInteractionContainer interactions = chain.getParentProtein().getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
+            PLIPInteractionContainer interactions = chain.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
             LinearAlgebraAtom.Transformation transformation = chain.getFeature(LinearAlgebraAtom.Transformation.class, SVDSuperimposer.TRANSFORMATION);
             this.halogenBonds = convert(interactions.getHalogenBonds(), transformation, chain);
             this.hydrogenBonds = convert(interactions.getHydrogenBonds(), transformation, chain);

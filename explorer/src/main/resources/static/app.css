@@ -6,7 +6,6 @@ html {
     overflow: hidden;
 }
 
-
 body {
     color: white;
     background-color: #454b52;
@@ -64,10 +63,6 @@ header .logo {
 
 header .logo .mutation {
     transition: ease-in-out 0.35s;
-}
-
-header .logo:hover .mutation {
-    color: #d62728;
 }
 
 header .context {
@@ -175,7 +170,7 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
     font-size: 14px;
 }
 
-#protein-visualizer {
+#protein-viewer {
     height: 401px;
 }
 
@@ -344,4 +339,21 @@ header .menu li a:hover, header .menu li a:active, header .menu li a:focus, head
 
 option {
     color: black;
+}
+
+.interaction-type-legend {
+    padding: 5px 10px;
+}
+
+.interaction-type-legend > div {
+    padding: 5px 0;
+}
+
+.interaction-type {
+    border: 1px solid #000;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 5px;
 }
