@@ -18,8 +18,8 @@ var ProteinViewerComponent = (function () {
             metalComplexes : [0.031, 0.765, 0.976, sphereAlpha],
             piCationInteractions : [0.059, 0.969, 0.941, sphereAlpha],
             piStackings : [0.031, 0.796, 0.149, sphereAlpha],
-            saltBridges : [0.059, 1.0, 0.941, sphereAlpha],
-            waterBridges : [0.043, 0.984, 1.0, sphereAlpha]
+            saltBridges : [1.0, 1.0, 0.0, sphereAlpha],
+            waterBridges : [0.749, 0.749, 1.0, sphereAlpha]
         }
     };
 
@@ -74,11 +74,11 @@ var ProteinViewerComponent = (function () {
         }
 
         this.toggleInteractions = function() {
-
+            //TODO impl
         };
 
         this.toggleLigands = function() {
-
+            //TODO impl
         };
     }
 

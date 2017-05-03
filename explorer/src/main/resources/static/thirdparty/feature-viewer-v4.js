@@ -78,10 +78,10 @@ var FeatureViewer = (function () {
             },
             width = $(div).width() - margin.left - margin.right - 17,
             height = 600 - margin.top - margin.bottom;
-        var scaling = d3.scale.linear()
+        var scaling = d3.scaleLinear()
             .domain([offset.start, offset.end])
             .range([5, width-5]);
-        var scalingPosition = d3.scale.linear()
+        var scalingPosition = d3.scaleLinear()
             .domain([0, width])
             .range([offset.start, offset.end]);
 
@@ -407,15 +407,15 @@ var FeatureViewer = (function () {
             return leveling.length;
         }
 
-        var lineBond = d3.svg.line()
-            .interpolate("step-before")
+        var lineBond = d3.line()
+            .curve(d3.curveStepBefore)
             .x(function (d) {
                 return scaling(d.x);
             })
             .y(function (d) {
                 return -d.y * 10 + pathLevel;
             });
-        var lineGen = d3.svg.line()
+        var lineGen = d3.line()
 
         //          .interpolate("cardinal")
             .x(function(d) {
@@ -424,11 +424,11 @@ var FeatureViewer = (function () {
             .y(function (d) {
                 return lineYscale(-d.y) * 10 + pathLevel;
             });
-        var lineYscale = d3.scale.linear()
+        var lineYscale = d3.scaleLinear()
             .domain([0,-30])
             .range([0,-20]);
-        var line = d3.svg.line()
-            .interpolate("linear")
+        var line = d3.line()
+            .curve(d3.curveLinear)
             .x(function (d) {
                 return scaling(d.x);
             })
@@ -437,10 +437,9 @@ var FeatureViewer = (function () {
             });
 
         //Create Axis
-        var xAxis = d3.svg.axis()
+        var xAxis = d3.axisBottom()
             .scale(scaling)
-            .tickFormat(d3.format("d"))
-            .orient("bottom");
+            .tickFormat(d3.format("d"));
 
         function shadeBlendConvert(p, from, to) {
             if(typeof(p)!="number"||p<-1||p>1||typeof(from)!="string"||(from[0]!='r'&&from[0]!='#')||(typeof(to)!="string"&&typeof(to)!="undefined"))return null; //ErrorCheck
@@ -479,16 +478,17 @@ var FeatureViewer = (function () {
             svg.select("clippath rect").attr("height", position + 60 + "px");
         }
 
-        var yAxisScale = d3.scale.ordinal()
+        var yAxisScale = d3.scaleOrdinal()
             .domain([0, yData.length])
-            .rangeRoundBands([0, 500], .1);
-        var yAxis = d3.svg.axis()
+                // .rangeRound([0, 500])
+                // .padding(.1)
+            ;
+        var yAxis = d3.axisLeft()
             .scale(yAxisScale)
             .tickValues(yData) //specify an array here for values
             .tickFormat(function (d) {
                 return d
-            })
-            .orient("left");
+            });
 
         function addYAxis() {
             yAxisSVG = svg.append("g")
@@ -688,7 +688,6 @@ var FeatureViewer = (function () {
                     .data(seq)
                     .enter()
                     .append("text")
-                    .style('fill', '#cfd8dc')
                     .attr("clip-path", "url(#clip)")
                     .attr("class", "AA")
                     .attr("text-anchor", "middle")
@@ -713,8 +712,7 @@ var FeatureViewer = (function () {
                         .attr("d", line)
                         .attr("class","sequenceLine")
                         .style("z-index", "0")
-                        .style('stroke', '#cfd8dc')
-                        // .style("stroke", "black")
+                        .style("stroke", "black")
                         .style("stroke-dasharray","1,3")
                         .style("stroke-width", "1px")
                         .style("stroke-opacity",0);
@@ -1201,10 +1199,10 @@ var FeatureViewer = (function () {
             }
         };
 
-        var brush = d3.svg.brush()
-            .x(scaling)
+        var brush = d3.brushX()
+            .extent(scaling)
             //.on("brush", brushmove)
-            .on("brushend", brushend);
+            .on("brush", brushend);
 
         function addBrush() {
             svgContainer.append("g")

@@ -2,6 +2,7 @@ package de.bioforscher.explorer;
 
 import de.bioforscher.explorer.model.ExplorerAlignment;
 import de.bioforscher.explorer.model.ExplorerChain;
+import de.bioforscher.explorer.model.ExplorerCluster;
 import de.bioforscher.explorer.model.ModelFactory;
 import de.bioforscher.explorer.repository.AlignmentRepository;
 import de.bioforscher.explorer.repository.ChainRepository;
@@ -64,10 +65,11 @@ public class ChainService {
 
     private void processSequenceCluster(PdbChainId clusterEntryId) {
         logger.info("[{}] spawned thread on representative chain id", clusterEntryId);
-        List<ExplorerChain> explorerChains = ModelFactory.createCluster(clusterEntryId);
+        ExplorerCluster explorerCluster = ModelFactory.createCluster(clusterEntryId);
 
         logger.info("[{}] persisting chains", clusterEntryId);
-        chainRepository.save(explorerChains);
+        chainRepository.save(explorerCluster.getExplorerChains());
+        alignmentRepository.save(explorerCluster.getExplorerAlignment());
 
 //        logger.info("[{}] spawned thread on representative chain id", clusterEntryId);
 //        ExplorerCluster explorerCluster = ModelFactory.createCluster(clusterEntryId);

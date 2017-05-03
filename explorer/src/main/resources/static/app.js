@@ -289,9 +289,10 @@
             $scope.chains[chainId].selected = true;
 
             // registerInViewer(chainId, true);
-            // initializeAlignment();
+            initializeAlignment();
             proteinViewer = new ProteinViewerComponent('#protein-viewer');
             featureViewer = new FeatureViewerComponent('#feature-viewer', $scope.reference);
+            new D3Component('#topology-viewer').topologyGraph($scope.reference);
 
             proteinViewer.loadStructure($scope.reference);
 
@@ -349,31 +350,31 @@
         //     });
         // }
         //
-        // function initializeAlignment() {
-        //     // load associated sequences from server
-        //     ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
-        //         $scope.alignment = response.data;
-        //         console.log($scope.alignment);
-        //
-        //         $scope.alignment.chains.forEach(function(sequence) {
-        //             if(sequence.id === $scope.reference.id) {
-        //                 $scope.reference.ec = sequence.ec;
-        //                 $scope.reference.pfam = sequence.pfam;
-        //                 $scope.reference.uniprot = sequence.uniprot;
-        //                 $scope.reference.title = sequence.title;
-        //             }
-        //         });
-        //
-        //         $scope.alignment.positions.forEach(function(position) {
-        //             position.tooltip = position.mutant || position.variant || position.activeSite;
-        //         });
-        //     }).catch(function(response) {
-        //         console.log('impl error handling at multi-sequence view:');
-        //         console.log(response);
-        //     }).finally(function() {
-        //         $scope.loadingAlignment = false;
-        //     });
-        // }
+        function initializeAlignment() {
+            // load associated sequences from server
+            ProteinService.loadAlignment($scope.reference.rep).then(function(response) {
+                $scope.alignment = response.data;
+                console.log($scope.alignment);
+
+                $scope.alignment.chains.forEach(function(sequence) {
+                    if(sequence.id === $scope.reference.id) {
+                        $scope.reference.ec = sequence.ec;
+                        $scope.reference.pfam = sequence.pfam;
+                        $scope.reference.uniprot = sequence.uniprot;
+                        $scope.reference.title = sequence.title;
+                    }
+                });
+
+                $scope.alignment.positions.forEach(function(position) {
+                    position.tooltip = position.mutant || position.variant || position.activeSite;
+                });
+            }).catch(function(response) {
+                console.log('impl error handling at multi-sequence view:');
+                console.log(response);
+            }).finally(function() {
+                $scope.loadingAlignment = false;
+            });
+        }
         //
         // /* pv controls */
         // $scope.$watch('viewerOptions.renderLigands', function(newVal, oldVal) {

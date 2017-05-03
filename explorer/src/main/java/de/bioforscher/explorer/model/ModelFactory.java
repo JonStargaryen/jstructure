@@ -19,7 +19,7 @@ public class ModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ModelFactory.class);
    private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
 
-    public static List<ExplorerChain> createCluster(PdbChainId entryId) {
+    public static ExplorerCluster createCluster(PdbChainId entryId) {
         List<Chain> chains = EnsembleGenerator.createChainsFromPfamCluster(new SiftsMappingProvider().mapPdbChainIdToPfam(entryId));
 
         chains.parallelStream().forEach(plipAnnotator::process);
@@ -28,7 +28,9 @@ public class ModelFactory {
                 .map(chain -> new ExplorerChain(chain, entryId.getFullName()))
                 .collect(Collectors.toList());
 
-        return explorerChains;
+        ExplorerAlignment alignment = new ExplorerAlignment(chains, entryId.getFullName());
+
+        return new ExplorerCluster(explorerChains, alignment);
     }
 
 //    /**

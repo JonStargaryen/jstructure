@@ -27,7 +27,7 @@
             <li data-ng-class="{ active: page() == '/home' }"><a data-ng-href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
             <li data-ng-class="{ active: page().startsWith('/chain/') }" data-ng-show="page().startsWith('/chain/')"><a data-ng-href="#"><i class="fa fa-cube" aria-hidden="true"></i> Chain</a></li>
             <li data-ng-class="{ active: page() == '/about' }"><a data-ng-href="about"><i class="fa fa-question-circle" aria-hidden="true"></i> About</a></li>
-            <li data-ng-class="{ active: page() == '/literature' }"><a data-ng-href="literature"><i class="fa fa-file-text" aria-hidden="true"></i> Literature</a></li>
+            <!--li data-ng-class="{ active: page() == '/literature' }"><a data-ng-href="literature"><i class="fa fa-file-text" aria-hidden="true"></i> Literature</a></li-->
         </ul>
     </header>
 
@@ -45,10 +45,12 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="thirdparty/angular-dropdowns.js"></script>
-    <script src="thirdparty/angular-nvd3.js"></script>
-    <script src="thirdparty/d3.js"></script>
     <script src="thirdparty/jquery.trackpad-scroll-emulator.min.js"></script>
-    <script src="thirdparty/nv.d3.js"></script>
+    <!--script src="thirdparty/angular-nvd3.js"></script-->
+    <script src="thirdparty/d3.js"></script>
+    <!--script src="thirdparty/nv.d3.js"></script-->
+    <script src="//marvl.infotech.monash.edu/webcola/cola.v3.min.js"></script>
+    <script src="component/d3-bridge.js"></script>
     <script src="thirdparty/pv.min.js"></script>
     <script src="component/protein-viewer-bridge.js"></script>
     <script src="thirdparty/feature-viewer.js"></script>
