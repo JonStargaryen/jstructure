@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.stream.Collectors;
 
 /**
@@ -23,7 +24,7 @@ public class PLIPRestServiceQuery {
     static {
         try {
             String line = Files.readAllLines(Paths.get(REST_USER_PASSWORD_PATH)).get(0);
-            secret = new sun.misc.BASE64Encoder().encode(line.getBytes());
+            secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

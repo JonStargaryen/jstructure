@@ -54,6 +54,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -63,9 +64,8 @@
     </build>
 
     <modules>
-        <module>../core</module>
-        <module>../design</module>
-        <module>../explorer</module>
-        <module>../helix-explorer</module>
+        <module>../jstructure-core</module>
+        <module>../jstructure-design</module>
+        <module>../jstructure-explorer</module>
     </modules>
 </project>

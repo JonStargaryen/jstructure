@@ -3,7 +3,6 @@ package de.bioforscher.explorer.model;
 import de.bioforscher.jstructure.model.identifier.PdbChainId;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.EnsembleGenerator;
-import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +16,9 @@ import java.util.stream.Collectors;
  */
 public class ModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ModelFactory.class);
-   private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
 
     public static ExplorerCluster createCluster(PdbChainId entryId) {
         List<Chain> chains = EnsembleGenerator.createChainsFromPfamCluster(new SiftsMappingProvider().mapPdbChainIdToPfam(entryId));
-
-        chains.parallelStream().forEach(plipAnnotator::process);
 
         List<ExplorerChain> explorerChains = chains.parallelStream()
                 .map(chain -> new ExplorerChain(chain, entryId.getFullName()))

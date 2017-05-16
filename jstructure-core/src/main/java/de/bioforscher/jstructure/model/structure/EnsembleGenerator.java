@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.identifier.PdbChainId;
 import de.bioforscher.jstructure.model.identifier.PdbId;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
 import de.bioforscher.jstructure.parser.sifts.ChainSiftsMapping;
 import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
 import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotationContainer;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
  */
 public class EnsembleGenerator {
     private static final Logger logger = LoggerFactory.getLogger(EnsembleGenerator.class);
+    private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
 
     public enum PdbSequenceClusterCutoff {
         CUTOFF100(100),
@@ -76,8 +78,11 @@ public class EnsembleGenerator {
                 .map(pdbChainId -> uniqueProteins.get(pdbChainId.getPdbId()).select().chainName(pdbChainId.getChainId()).asChain())
                 .collect(Collectors.toList());
 
+        chains.parallelStream().forEach(plipAnnotator::process);
+
         // TODO builder pattern for features, alignments etc
-//        StructureAligner.align(chains);
+        StructureAligner.align(chains);
+//        SequenceAligner.align(chains);
 
         handleUniProtInformation(chains, referenceId);
 
