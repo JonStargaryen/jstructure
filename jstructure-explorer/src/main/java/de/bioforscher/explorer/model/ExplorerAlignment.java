@@ -1,10 +1,9 @@
 package de.bioforscher.explorer.model;
 
+import de.bioforscher.jstructure.feature.mapping.ChainMapping;
+import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotationContainer;
+import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotator;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.parser.sifts.ChainSiftsMapping;
-import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
-import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotationContainer;
-import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotator;
 
 import java.util.List;
 import java.util.Set;
@@ -39,16 +38,15 @@ public class ExplorerAlignment {
                 .collect(Collectors.toList());
 
         Set<String> uniProtIds = originalChains.stream()
-                .map(chain -> chain.getFeature(ChainSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING))
-                .map(ChainSiftsMapping::getUniProtId)
+                .map(chain -> chain.getFeatureContainer().getFeature(ChainMapping.class).getUniProtId())
                 .collect(Collectors.toSet());
 
         Set<UniProtAnnotationContainer> containers = uniProtIds.stream()
-                .map(uniProtAnnotator::process)
+                .map(uniProtAnnotator::processUniProtId)
                 .collect(Collectors.toSet());
 
         this.length = containers.stream()
-                .map(UniProtAnnotationContainer::getSequence)
+                .map(UniProtAnnotationContainer::getUniProtSequence)
                 .mapToInt(String::length)
                 .max()
                 .orElse(0);

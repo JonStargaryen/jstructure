@@ -1,5 +1,6 @@
 package aars;
 
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -34,13 +35,13 @@ class CalculateInsideOutside {
         Map<String, Long> exposedMap = chains.stream()
                 .flatMap(Protein::aminoAcids)
                 // exposed
-                .filter(group -> group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA) > 0.16)
+                .filter(group -> group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea() > 0.16)
                 .collect(Collectors.groupingBy(Group::getThreeLetterCode, Collectors.counting()));
 
         Map<String, Long> buriedMap = chains.stream()
                 .flatMap(Protein::aminoAcids)
                 // buried
-                .filter(group -> group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA) < 0.16)
+                .filter(group -> group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea() < 0.16)
                 .collect(Collectors.groupingBy(Group::getThreeLetterCode, Collectors.counting()));
 
         System.out.println("aa\texposed\tburied");

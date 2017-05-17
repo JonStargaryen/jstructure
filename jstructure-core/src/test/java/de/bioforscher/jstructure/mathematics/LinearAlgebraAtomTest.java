@@ -1,0 +1,105 @@
+package de.bioforscher.jstructure.mathematics;
+
+import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.parser.ProteinParser;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static util.TestUtils.TOLERANT_ERROR_MARGIN;
+
+/**
+ * Unit tests for LinearAlgebraAtom.
+ * Created by S on 24.10.2016.
+ */
+public class LinearAlgebraAtomTest {
+    private Protein protein1acj;
+
+    @Before
+    public void setup() throws IOException {
+        protein1acj = ProteinParser.source("1acj").parse();
+    }
+
+    @Test
+    public void testRotation() {
+        // example from http://stackoverflow.com/questions/34050929/3d-point-rotation-algorithm
+        double[] point = { 1, 0, 0 };
+        final double[] expectedPoint = { 0, -1, 0 };
+        System.out.printf("rotating %s by -90 degree yields ", Arrays.toString(point));
+        // describes a rotation by 90°
+        double[][] rotation = {{ 0, -1, 0 },{ 1, 0, 0 },{ 0, 0, 1 }};
+        LinearAlgebraAtom.Transformation transformation = new LinearAlgebraAtom.Transformation(rotation);
+        Atom atom = new Atom(point);
+        transformation.transformCoordinates(atom);
+        System.out.println(Arrays.toString(atom.getCoordinates()));
+        Assert.assertArrayEquals(expectedPoint, atom.getCoordinates(), 0.0);
+    }
+
+    @Test
+    public void testTransformation() {
+        double[] point = { 3, 0, 0 };
+        final double[] expectedPoint = { -2, -3, 0 };
+        double[] translation = { -2, 0, 0 };
+        System.out.printf("translating %s by 2 length units toward origin and rotating it by -90 degree yields ",
+                Arrays.toString(point));
+        // describes a rotation by 90°
+        double[][] rotation = { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
+        LinearAlgebraAtom.Transformation transformation = new LinearAlgebraAtom.Transformation(translation, rotation);
+        Atom atom = new Atom(point);
+        transformation.transformCoordinates(atom);
+        System.out.println(Arrays.toString(atom.getCoordinates()));
+        Assert.assertArrayEquals(expectedPoint, atom.getCoordinates(), 0.0);
+    }
+
+    @Test
+    public void testCenterOfMassWithProtein() {
+        double[] com1 = LinearAlgebraAtom.centerOfMass(protein1acj);
+        double[] com2 = centerOfMass(protein1acj);
+        System.out.println("api-centerOfMass: " + Arrays.toString(com1) + " test-centerOfMass: " + Arrays.toString(com2));
+
+        Assert.assertArrayEquals(com1, com2, 0.0);
+    }
+
+    /**
+     * Old school of computing the center of mass for a collection of atoms.
+     * @param protein the container
+     * @return the center of mass as double[]
+     */
+    private double[] centerOfMass(Protein protein) {
+        double[] total = new double[3];
+        double mass = 0;
+
+        for(Atom atom : protein.atoms().collect(Collectors.toList())) {
+            total = LinearAlgebra3D.add(total, LinearAlgebra3D.multiply(atom.getCoordinates(), atom.getElement().getAtomicMass()));
+            mass += atom.getElement().getAtomicMass();
+        }
+
+        return LinearAlgebra3D.divide(total, mass);
+    }
+
+    @Test
+    public void testMaximalExtentWithProtein() {
+        double maximalExtent = LinearAlgebraAtom.maximalExtent(protein1acj);
+        System.out.println(maximalExtent);
+        //TODO this needs a real test
+    }
+
+    @Test
+    public void shouldResultInCenteredStructure() {
+        LinearAlgebraAtom.center(protein1acj);
+        Assert.assertArrayEquals(LinearAlgebraAtom.centroid(protein1acj),
+                AlignmentAlgorithm.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
+    }
+
+    @Test
+    public void shouldReturnNoDifferenceInRMSDForIdenticalProtein() {
+        double rmsd = LinearAlgebraAtom.calculateRmsd(protein1acj, protein1acj);
+        Assert.assertEquals(0.0, rmsd, 0.0);
+    }
+}

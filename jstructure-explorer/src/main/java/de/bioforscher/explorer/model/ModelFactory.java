@@ -1,14 +1,8 @@
 package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.model.identifier.PdbChainId;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.EnsembleGenerator;
-import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Creates model instances.
@@ -18,15 +12,17 @@ public class ModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ModelFactory.class);
 
     public static ExplorerCluster createCluster(PdbChainId entryId) {
-        List<Chain> chains = EnsembleGenerator.createChainsFromPfamCluster(new SiftsMappingProvider().mapPdbChainIdToPfam(entryId));
-
-        List<ExplorerChain> explorerChains = chains.parallelStream()
-                .map(chain -> new ExplorerChain(chain, entryId.getFullName()))
-                .collect(Collectors.toList());
-
-        ExplorerAlignment alignment = new ExplorerAlignment(chains, entryId.getFullName());
-
-        return new ExplorerCluster(explorerChains, alignment);
+//        List<Chain> chains = EnsembleGenerator.createChainsFromPfamCluster(new SiftsMappingProvider().mapPdbChainIdToPfam(entryId));
+//
+//        List<ExplorerChain> explorerChains = chains.parallelStream()
+//                .map(chain -> new ExplorerChain(chain, entryId.getFullName()))
+//                .collect(Collectors.toList());
+//
+//        ExplorerAlignment alignment = new ExplorerAlignment(chains, entryId.getFullName());
+//
+//        return new ExplorerCluster(explorerChains, alignment);
+        //TODO reimpl
+        return null;
     }
 
 //    /**

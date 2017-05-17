@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * The container element representing a {@link Protein} getChain. Is composed of {@link Group} objects.
  * Created by S on 27.09.2016.
  */
-public class Chain extends AbstractFeatureContainer implements GroupContainer {
+public class Chain extends AbstractFeatureable implements GroupContainer {
     /**
      * reference to an undefined chain - this is used by groups without explicit parent reference
      */
@@ -47,6 +47,7 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
         this.chainId = chain.chainId;
         // reference parent
         this.parentProtein = chain.parentProtein;
+        setFeatureContainer(chain.getFeatureContainer());
     }
 
     public Chain(List<Group> groups) {
@@ -63,7 +64,7 @@ public class Chain extends AbstractFeatureContainer implements GroupContainer {
 
     /**
      * Registers a child. This object will assign a reference to itself to the getResidue.
-     * @param group the getResidue to process
+     * @param group the getResidue to processUniProtId
      */
     public void addGroup(Group group) {
         getGroups().add(group);

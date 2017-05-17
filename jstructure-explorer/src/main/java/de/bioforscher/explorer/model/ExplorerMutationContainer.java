@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 
 import java.util.List;
 import java.util.stream.Stream;

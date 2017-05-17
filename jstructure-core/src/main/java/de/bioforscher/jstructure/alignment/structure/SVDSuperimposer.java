@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implementation of the singular value decomposition rigid body alignment algorithm.
@@ -22,6 +24,8 @@ import java.util.Set;
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignmentResult> {
     private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
+    private static final Set<String> ALPHA_CARBON_NAMES = Stream.of(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME).collect(Collectors.toSet());
+    public static final SVDSuperimposer ALPHA_CARBON_SVD_INSTANCE = new SVDSuperimposer(ALPHA_CARBON_NAMES, ALPHA_CARBON_NAMES);
     public static final SVDSuperimposer BACKBONE_SVD_INSTANCE = new SVDSuperimposer(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
             AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
 

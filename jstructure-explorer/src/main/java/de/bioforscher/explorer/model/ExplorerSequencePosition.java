@@ -1,10 +1,10 @@
 package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.parser.uniprot.UniProtActiveSite;
-import de.bioforscher.jstructure.parser.uniprot.UniProtAnnotationContainer;
-import de.bioforscher.jstructure.parser.uniprot.UniProtMutagenesisSite;
-import de.bioforscher.jstructure.parser.uniprot.UniProtNaturalVariant;
+import de.bioforscher.jstructure.feature.uniprot.UniProtActiveSite;
+import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotationContainer;
+import de.bioforscher.jstructure.feature.uniprot.UniProtMutagenesisSite;
+import de.bioforscher.jstructure.feature.uniprot.UniProtNaturalVariant;
 
 import java.util.Collection;
 import java.util.List;

@@ -204,7 +204,7 @@ public class EnergyProfileAligner {
 
     /**
      * Extracts the discrete energy profile for a given collection of residues.
-     * @param container the container to process
+     * @param container the container to processUniProtId
      * @return a list of all discretized energy values
      */
     private List<Integer> extractDiscreteEnergyProfile(AtomContainer container) {
@@ -241,10 +241,10 @@ public class EnergyProfileAligner {
 
     /**
      * Merely retrieves the solvation energy value for a given group.
-     * @param group the container to process
+     * @param group the container to processUniProtId
      * @return its solvation energy value as double
      */
     private double getSolvationEnergy(Group group) {
-        return group.getFeatureAsDouble(EnergyProfileCalculator.SOLVATION_ENERGY);
+        return group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy();
     }
 }

@@ -1,8 +1,7 @@
 package de.bioforscher.explorer.model;
 
+import de.bioforscher.jstructure.feature.mapping.ChainMapping;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.parser.sifts.ChainSiftsMapping;
-import de.bioforscher.jstructure.parser.sifts.SiftsMappingProvider;
 
 /**
  * An aligned sequence.
@@ -20,9 +19,9 @@ public class ExplorerSequence {
         this.title = chain.getParentProtein().getTitle();
         this.sequence = chain.getAminoAcidSequence();
         try {
-            ChainSiftsMapping chainSiftsMapping = chain.getFeature(ChainSiftsMapping.class, SiftsMappingProvider.SIFTS_MAPPING);
+            ChainMapping chainSiftsMapping = chain.getFeatureContainer().getFeature(ChainMapping.class);
             this.ec = chainSiftsMapping.getEcNumber();
-            this.pfam = chainSiftsMapping.getPfam();
+            this.pfam = chainSiftsMapping.getPfamId();
             this.uniprot = chainSiftsMapping.getUniProtId();
         } catch (NullPointerException e) {
 

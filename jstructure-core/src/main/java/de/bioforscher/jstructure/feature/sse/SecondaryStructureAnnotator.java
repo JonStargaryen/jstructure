@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  * @author Anthony Bradley
  *
  */
-@FeatureProvider(provides = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
+@FeatureProvider(provides = SecondaryStructure.class)
 public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
     public static final String SECONDARY_STRUCTURE_STATES = "SECONDARY_STRUCTURE_STATES";
@@ -88,13 +88,13 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        GroupContainer residues = Selection.on(protein)
+        GroupContainer residues = protein.select()
                 .aminoAcids()
                 .asGroupContainer();
         List<BetaBridge> bridges = new ArrayList<>();
         List<Ladder> ladders = new ArrayList<>();
-        // init mapping
-        residues.groups().forEach(r -> r.setFeature(SECONDARY_STRUCTURE_STATES, new SecStrucState(DSSPSecondaryStructureElement.COIL)));
+        // init mapping as unassigned state (i.e. coil)
+        residues.groups().forEach(r -> r.getFeatureContainer().addFeature(new SecondaryStructure(this, SecondaryStructureElement.COIL)));
 
         calculateHAtoms(residues);
         calculateHBonds(residues);
@@ -118,31 +118,31 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         updateSheets(residues, ladders);
     }
 
-    private SecStrucState getState(Group group) {
-        return group.getFeature(SecStrucState.class, SECONDARY_STRUCTURE_STATES);
+    private SecondaryStructure getState(Group group) {
+        return group.getFeatureContainer().getFeature(SecondaryStructure.class);
     }
 
     private void updateSheets(GroupContainer residues, List<Ladder> ladders) {
         for(Ladder ladder : ladders){
             for (int lcount = ladder.getFrom(); lcount <= ladder.getTo(); lcount++) {
-                SecStrucState state = getState(residues.getGroups().get(lcount));
-                DSSPSecondaryStructureElement stype = state.getSecondaryStructure();
+                SecondaryStructure state = getState(residues.getGroups().get(lcount));
+                SecondaryStructureElement stype = state.getSecondaryStructure();
 
                 int diff = ladder.getFrom() - lcount;
                 int l2count = ladder.getLfrom() - diff ;
 
-                SecStrucState state2 = getState(residues.getGroups().get(l2count));
-                DSSPSecondaryStructureElement stype2 = state2.getSecondaryStructure();
+                SecondaryStructure state2 = getState(residues.getGroups().get(l2count));
+                SecondaryStructureElement stype2 = state2.getSecondaryStructure();
 
                 if(ladder.getFrom() != ladder.getTo()) {
-                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
-                    setSecStrucType(residues, l2count, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, l2count, SecondaryStructureElement.EXTENDED);
                 } else {
-                    if(!stype.isHelixType() && (!stype.equals(DSSPSecondaryStructureElement.EXTENDED)))
-                        setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.BRIDGE);
+                    if(!stype.isHelixType() && (!stype.equals(SecondaryStructureElement.EXTENDED)))
+                        setSecStrucType(residues, lcount, SecondaryStructureElement.BRIDGE);
 
-                    if(!stype2.isHelixType() && (!stype2.equals(DSSPSecondaryStructureElement.EXTENDED)))
-                        setSecStrucType(residues, l2count, DSSPSecondaryStructureElement.BRIDGE);
+                    if(!stype2.isHelixType() && (!stype2.equals(SecondaryStructureElement.EXTENDED)))
+                        setSecStrucType(residues, l2count, SecondaryStructureElement.BRIDGE);
                 }
             }
 
@@ -156,21 +156,21 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             if (ladder.getBtype().equals(BridgeType.ANTIPARALLEL)) {
 				/* set one side */
                 for(int lcount = ladder.getFrom(); lcount <= conladder.getTo(); lcount++) {
-                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
                 }
 				/* set other side */
                 for (int lcount = conladder.getLto(); lcount <= ladder.getLfrom(); lcount++) {
-                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
                 }
 
             } else {
 				/* set one side */
                 for(int lcount = ladder.getFrom(); lcount <= conladder.getTo(); lcount++) {
-                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
                 }
 				/* set other side */
                 for(int lcount = ladder.getLfrom(); lcount <= conladder.getLto(); lcount++) {
-                    setSecStrucType(residues, lcount, DSSPSecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
                 }
             }
         }
@@ -442,12 +442,12 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
             double angle = LinearAlgebra3D.angle(caminus2, caplus2);
 
-            SecStrucState state = getState(residues.getGroups().get(i));
+            SecondaryStructure state = getState(residues.getGroups().get(i));
             state.setKappa((float) angle);
 
             // Angles = 360 should be discarded
             if (angle > 70.0 && angle < 359.99) {
-                setSecStrucType(residues, i, DSSPSecondaryStructureElement.BEND);
+                setSecStrucType(residues, i, SecondaryStructureElement.BEND);
                 state.setBend(true);
             }
         }
@@ -455,19 +455,19 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
     private void buildHelices(GroupContainer residues) {
         // Alpha-helix (i+4), 3-10-helix (i+3), Pi-helix (i+5)
-        checkSetHelix(residues, 4, DSSPSecondaryStructureElement.ALPHA_HELIX);
-        checkSetHelix(residues, 3, DSSPSecondaryStructureElement.THREE10HELIX);
-        checkSetHelix(residues, 5, DSSPSecondaryStructureElement.PIHELIX);
+        checkSetHelix(residues, 4, SecondaryStructureElement.ALPHA_HELIX);
+        checkSetHelix(residues, 3, SecondaryStructureElement.THREE10HELIX);
+        checkSetHelix(residues, 5, SecondaryStructureElement.PIHELIX);
 
         checkSetTurns(residues);
     }
 
     private void checkSetTurns(GroupContainer residues) {
-        DSSPSecondaryStructureElement type = DSSPSecondaryStructureElement.TURN;
+        SecondaryStructureElement type = SecondaryStructureElement.TURN;
 
         for(int idx = 0; idx < 3; idx++) {
             for(int i = 0; i < residues.getGroups().size() - 1; i++) {
-                SecStrucState state = getState(residues.getGroups().get(i));
+                SecondaryStructure state = getState(residues.getGroups().get(i));
                 char[] turn = state.getTurn();
 
                 // Any turn opening matters
@@ -492,8 +492,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @param pos the getResidue index to manipulate
      * @param type the type to assign
      */
-    private void setSecStrucType(GroupContainer residues, int pos, DSSPSecondaryStructureElement type) {
-        SecStrucState ss = getState(residues.getGroups().get(pos));
+    private void setSecStrucType(GroupContainer residues, int pos, SecondaryStructureElement type) {
+        SecondaryStructure ss = getState(residues.getGroups().get(pos));
         // more favorable according to DSSP ranking
         if (type.compareTo(ss.getSecondaryStructure()) > 0) {
             ss.setSecondaryStructure(type);
@@ -513,13 +513,13 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @param n
      * @param type
      */
-    private void checkSetHelix(GroupContainer residues, int n, DSSPSecondaryStructureElement type) {
+    private void checkSetHelix(GroupContainer residues, int n, SecondaryStructureElement type) {
         int idx = n - 3;
         logger.debug("Set helix {} {} {}", type, n, idx);
 
         for (int i = 1; i < residues.getGroups().size() - n; i++) {
-            SecStrucState state = getState(residues.getGroups().get(i));
-            SecStrucState previousState = getState(residues.getGroups().get(i - 1));
+            SecondaryStructure state = getState(residues.getGroups().get(i));
+            SecondaryStructure previousState = getState(residues.getGroups().get(i - 1));
 
             // Check that no other helix was assgined to this range
             if (state.getSecondaryStructure().compareTo(type) > 0) {
@@ -589,8 +589,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private boolean isBonded(GroupContainer residues, int i, int j) {
         Group residue1 = residues.getGroups().get(i);
         Group residue2 = residues.getGroups().get(j);
-        SecStrucState state1 = getState(residue1);
-        SecStrucState state2 = getState(residue2);
+        SecondaryStructure state1 = getState(residue1);
+        SecondaryStructure state2 = getState(residue2);
 
         double don1e = state1.getDonor1().getEnergy();
         double don2e = state1.getDonor2().getEnergy();
@@ -648,8 +648,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             double psi = LinearAlgebra3D.torsionAngle(n1.getCoordinates(), ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates());
             double omega = LinearAlgebra3D.torsionAngle(ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates());
 
-            SecStrucState state1 = getState(res1);
-            SecStrucState state2 = getState(res2);
+            SecondaryStructure state1 = getState(res1);
+            SecondaryStructure state2 = getState(res2);
 
             state2.setPhi(phi);
             state1.setPsi(psi);
@@ -719,8 +719,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         }
 
         // try to findAny entries or create new ones with coil secondary structure
-        SecStrucState state1 = getState(res1);
-        SecStrucState state2 = getState(res2);
+        SecondaryStructure state1 = getState(res1);
+        SecondaryStructure state2 = getState(res2);
 
         double acc1e = state1.getAccept1().getEnergy();
         double acc2e = state1.getAccept2().getEnergy();

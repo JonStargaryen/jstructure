@@ -19,9 +19,8 @@ import java.util.stream.IntStream;
  * SequenceCEROSENE: a computational method and web server to visualize spatial residue neighborhoods at the sequence level.
  * Florian Heinke, Sebastian Bittrich, Florian Kaiser and Dirk Labudde. BioData Mining 2016 9:6. 10.1186/s13040-016-0083-7
  */
-@FeatureProvider(provides = { SequenceCerosene.SEQUENCE_CEROSENE_REPRESENTATION })
+@FeatureProvider(provides = { CeroseneEmbedding.class })
 public class SequenceCerosene extends AbstractFeatureProvider {
-    public static final String SEQUENCE_CEROSENE_REPRESENTATION = "SEQUENCE_CEROSENE_REPRESENTATION";
     private static final double[] SUMMAND = { 127, 127, 127 };
 
     @Override
@@ -34,7 +33,8 @@ public class SequenceCerosene extends AbstractFeatureProvider {
                 .forEach(group -> {
                     double[] coordinates = LinearAlgebraAtom.centroid(group);
                     double[] rgb = LinearAlgebra3D.add(LinearAlgebra3D.multiply(LinearAlgebra3D.subtract(centroid, coordinates), (double) 127 / maximalExtent), SUMMAND);
-                    group.setFeature(SEQUENCE_CEROSENE_REPRESENTATION, rgb2hsv(rgb));
+                    double[] hsv = rgb2hsv(rgb);
+                    group.getFeatureContainer().addFeature(new CeroseneEmbedding(this, rgb, hsv));
                 });
     }
 

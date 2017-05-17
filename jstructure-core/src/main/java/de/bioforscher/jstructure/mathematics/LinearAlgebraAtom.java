@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -168,7 +169,7 @@ public class LinearAlgebraAtom {
         atomContainer.atoms().forEach(transformation::transformCoordinates);
     }
 
-    public static class Transformation {
+    public static class Transformation extends FeatureContainerEntry {
         private double[] translation;
         private double[][] rotation;
 
@@ -177,6 +178,7 @@ public class LinearAlgebraAtom {
          * @param translation the translation vector
          */
         public Transformation(double[] translation) {
+            super(null);
             this.translation = translation;
         }
 
@@ -186,6 +188,7 @@ public class LinearAlgebraAtom {
          * @param rotation the rotation matrix
          */
         public Transformation(double[] translation, double[][] rotation) {
+            super(null);
             this.translation = translation;
             this.rotation = rotation;
         }
@@ -195,6 +198,7 @@ public class LinearAlgebraAtom {
          * @param rotation the rotation matrix
          */
         public Transformation(double[][] rotation) {
+            super(null);
             this.rotation = rotation;
         }
 

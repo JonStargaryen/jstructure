@@ -91,7 +91,7 @@ public class ProteinParser {
 
     /**
      * Parses a single line of a <tt>PDB</tt> file.
-     * @param line the line to process
+     * @param line the line to processUniProtId
      */
     private void parseLine(String line) {
         //TODO this is kinda hacky, however that way only the first model is parsed in any case

@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class FeatureProviderRegistry {
     private static final Logger logger = LoggerFactory.getLogger(FeatureProviderRegistry.class);
     private static final FeatureProviderRegistry INSTANCE = new FeatureProviderRegistry();
-    private Map<String, TreeMap<Integer, AbstractFeatureProvider>> registeredFeatureProviders;
+    private Map<Class<? extends FeatureContainerEntry>, TreeMap<Integer, AbstractFeatureProvider>> registeredFeatureProviders;
 
     private FeatureProviderRegistry() {
         logger.info("setting up feature provider registry");
@@ -38,7 +38,7 @@ public class FeatureProviderRegistry {
                     annotatedFeatureProvider.getSimpleName(),
                     annotation.priority());
 
-            for(String providedFeature : annotation.provides()) {
+            for(Class<? extends FeatureContainerEntry> providedFeature : annotation.provides()) {
                 TreeMap<Integer, AbstractFeatureProvider> providers = registeredFeatureProviders.getOrDefault(providedFeature, new TreeMap<>());
                 try {
                     int priority = annotation.priority();
@@ -79,7 +79,7 @@ public class FeatureProviderRegistry {
      * @return a list of all features names for which at least 1 {@link FeatureProvider} is registered which can compute
      * it
      */
-    public static List<String> getSupportedFeatures() {
+    public static List<Class<? extends FeatureContainerEntry>> getSupportedFeatures() {
         return INSTANCE.registeredFeatureProviders.entrySet().stream()
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
@@ -87,21 +87,27 @@ public class FeatureProviderRegistry {
 
     //TODO builder-esque resolving
 
-    public static AbstractFeatureProvider resolveAnnotator(String requestedFeature) {
+    public static AbstractFeatureProvider resolveAnnotator(Class<? extends FeatureContainerEntry> requestedFeature) {
         return resolveInternal(requestedFeature)
-                .filter(provider -> provider.getClass().getAnnotation(FeatureProvider.class).type().equals(FeatureType.ANNOTATION))
+                .filter(provider -> provider.getClass()
+                        .getAnnotation(FeatureProvider.class)
+                        .origin()
+                        .equals(FeatureProvider.FeatureOrigin.ANNOTATION))
                 .findFirst()
                 .orElseThrow(() -> noProvider(requestedFeature));
     }
 
-    public static AbstractFeatureProvider resolvePredictor(String requestedFeature) {
+    public static AbstractFeatureProvider resolvePredictor(Class<? extends FeatureContainerEntry> requestedFeature) {
         return resolveInternal(requestedFeature)
-                .filter(provider -> provider.getClass().getAnnotation(FeatureProvider.class).type().equals(FeatureType.PREDICTION))
+                .filter(provider -> provider.getClass()
+                        .getAnnotation(FeatureProvider.class)
+                        .origin()
+                        .equals(FeatureProvider.FeatureOrigin.PREDICTION))
                 .findFirst()
                 .orElseThrow(() -> noProvider(requestedFeature));
     }
 
-    private static Stream<AbstractFeatureProvider> resolveInternal(String requestedFeature) {
+    private static Stream<AbstractFeatureProvider> resolveInternal(Class<? extends FeatureContainerEntry> requestedFeature) {
         try {
             return INSTANCE.registeredFeatureProviders.get(requestedFeature).entrySet().stream().map(Map.Entry::getValue);
         } catch (NullPointerException e) {
@@ -117,11 +123,11 @@ public class FeatureProviderRegistry {
      * @throws java.util.NoSuchElementException if no {@link FeatureProvider} is registered which can compute the
      * requested feature
      */
-    public static AbstractFeatureProvider resolve(String requestedFeature) {
+    public static AbstractFeatureProvider resolve(Class<? extends FeatureContainerEntry> requestedFeature) {
         return resolveInternal(requestedFeature).findFirst().orElseThrow(() -> noProvider(requestedFeature));
     }
 
-    private static NoSuchElementException noProvider(String requestedFeature) {
-        throw new NoSuchElementException("no provider is registered for '" + requestedFeature + "'");
+    private static NoSuchElementException noProvider(Class<? extends FeatureContainerEntry> requestedFeature) {
+        throw new NoSuchElementException("no provider is registered for '" + requestedFeature.getSimpleName() + "'");
     }
 }

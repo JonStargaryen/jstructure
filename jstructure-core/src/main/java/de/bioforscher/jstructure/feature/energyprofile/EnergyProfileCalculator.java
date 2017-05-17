@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
  *
  * References:<br />
  * <ul>
- *     <li>F. Heinke and D. Labudde. Membrane protein stability analyses by means of protein energy profiles in case of nephrogenic diabetes insipidus. Comput Math Methods Med, 2012:790281, February 2012.</li>
- *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of Membrane Protein Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
+ *     <li>F. Heinke and D. Labudde. GenericMembrane protein stability analyses by means of protein energy profiles in case of nephrogenic diabetes insipidus. Comput Math Methods Med, 2012:790281, February 2012.</li>
+ *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of GenericMembrane Protein Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
  *     <li>F. Heinke and D. Labudde. Predicting functionality of the non-expressed putative human OHCU decarboxylase by means of novel protein energy profile-based methods. Conference proceedings of 13. Nachwuchswissenschaftlerkonferenz, April 2012.</li>
  *     <li>F. Heinke, D. Stockmann, S. Schildbach, M. Langer and D. Labudde. eProS - A Bioinformatics Knowledgebase, Toolbox and Database for Characterizing Protein Function. BDAS 2015.</li>
  * </ul>
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  * TODO implement routine for trans-membrane proteins
  * Created by bittrich on 12/15/16.
  */
-@FeatureProvider(provides = EnergyProfileCalculator.SOLVATION_ENERGY)
+@FeatureProvider(provides = EnergyProfile.class)
 public class EnergyProfileCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculator.class);
     /**
@@ -46,8 +46,6 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
     private static final String GLOBULAR_SOLVATION_PATH = BASE_PATH + "ep-solvation-globular.dat";
     private static Map<String, Double> globularSolvationData;
 
-    public static final String SOLVATION_ENERGY = "SOLVATION_ENERGY";
-
     public EnergyProfileCalculator() {
         if(globularSolvationData == null) {
             initializeLibrary();
@@ -56,10 +54,6 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        processNaively(protein);
-    }
-
-    private void processNaively(Protein protein) {
         final double squaredDistanceCutoff = DEFAULT_INTERACTION_CUTOFF * DEFAULT_INTERACTION_CUTOFF;
         final List<Group> aminoAcids = protein.aminoAcids().collect(Collectors.toList());
 
@@ -71,9 +65,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
             Optional<Atom> currentGroupBetaCarbon = currentGroup.select()
                     .betaCarbonAtoms()
                     .asOptionalAtom();
-            double[] currentGroupCoordinates = currentGroupBetaCarbon.isPresent() ?
-                    currentGroupBetaCarbon.get().getCoordinates() :
-                    LinearAlgebraAtom.centroid(currentGroup);
+            double[] currentGroupCoordinates = currentGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() -> LinearAlgebraAtom.centroid(currentGroup));
             double solvation = 0;
             double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
@@ -85,9 +77,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                 Optional<Atom> surroundingGroupBetaCarbon = surroundingGroup.select()
                         .betaCarbonAtoms()
                         .asOptionalAtom();
-                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.isPresent() ?
-                        surroundingGroupBetaCarbon.get().getCoordinates() :
-                        LinearAlgebraAtom.centroid(surroundingGroup);
+                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() -> LinearAlgebraAtom.centroid(surroundingGroup));
 
                 if(LinearAlgebra3D.distanceFast(currentGroupCoordinates, surroundingGroupCoordinates) > squaredDistanceCutoff) {
                     continue;
@@ -96,7 +86,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                 solvation += currentGroupSolvationValue + resolve(globularSolvationData, surroundingGroup);
             }
 
-            currentGroup.setFeature(SOLVATION_ENERGY, solvation);
+            currentGroup.getFeatureContainer().addFeature(new EnergyProfile(this, solvation));
         }
     }
 

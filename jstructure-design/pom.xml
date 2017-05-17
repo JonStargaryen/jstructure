@@ -98,7 +98,7 @@
                     <!-- MainClass in mainfest make a executable jar -->
                     <archive>
                         <manifest>
-                            <mainClass>energyprofile.AdvancedEnergyProfileRunner</mainClass>
+                            <mainClass>studies.poznan.AdvancedEnergyProfileRunner</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>.</Class-Path>

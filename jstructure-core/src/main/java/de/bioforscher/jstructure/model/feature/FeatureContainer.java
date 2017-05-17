@@ -2,95 +2,79 @@ package de.bioforscher.jstructure.model.feature;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Specifies the capabilities to store arbitrary information linked to an implementing container. Map entries are
- * identified by enums.
- * Created by S on 02.10.2016.
+ * The internal feature map class associated to instances implementing {@link Featureable}.
+ * Created by S on 28.04.2017.
  */
-public interface FeatureContainer {
-    /**
-     * Handle to the internal feature map of the container. Access should be realized using the high-level functions.
-     * @return the map storing all additional data attached to this element
-     * @see FeatureContainer#getFeature(Class, String)
-     * @see FeatureContainer#setFeature(String, Object)
-     */
-    Map<String, Object> getFeatureMap();
+public class FeatureContainer {
+    private List<FeatureContainerEntry> features;
 
-    //TODO delegate the internal class to keep API clean and provide more options
+    public FeatureContainer() {
+        this.features = new ArrayList<>();
+    }
 
-    void setFeatureMap(Map<String, Object> map);
-
-    /**
-     * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
-     * element can be casted.
-     * @param expectedContentType the class of the retrieved element
-     * @param key the unique identifier of the map entry
-     * @param <ContentType> the class the entry will be cast to
-     * @return the retrieved, casted entry
-     */
-    default <ContentType> ContentType getFeature(Class<ContentType> expectedContentType, String key) {
-        return expectedContentType.cast(getFeatureMap().get(key));
+    public void addFeature(FeatureContainerEntry entry) {
+        features.add(entry);
     }
 
     /**
-     * Retrieves an arbitrary object from the container. The expected content type has to be provided, so the returned
-     * element can be casted.
-     * @param expectedListContentType the class of the retrieved collection
-     * @param key the unique identifier of the map entry
-     * @param <ContentType> the class the entries of this list will be cast to
-     * @return a collection of retrieved entries
-     * @see FeatureContainer#getFeature(Class, String)
+     * Access particular features, identified by its content type.
+     * @param contentClass the class of the content of interest
+     * @param <C>
+     * @throws NoSuchElementException occurs when no entry is present
+     * @return the <b>first</b> relevant
      */
-    @SuppressWarnings("unchecked")
-    default <ContentType> List<ContentType> getFeatureAsList(Class<ContentType> expectedListContentType, String key) {
-        List entry = (List) getFeatureMap().get(key);
-        if(!entry.isEmpty()) {
-            // some fail-fast safety net, as the correct cast completely depends on the way how and when this method is
-            // invoked, so ClassCastExceptions could arise later on
-            expectedListContentType.cast(entry.get(0));
-        }
-        return (List<ContentType>) entry;
-    }
-
-    @SuppressWarnings("unchecked")
-    default <Content> void addFeatureToList(String key, Content featureValue) {
-        List<Content> list = (List<Content>) getFeatureMap().get(key);
-        // entry will be null at first - create list and assign reference
-        if(list == null) {
-            list = new ArrayList<>();
-            getFeatureMap().put(key, list);
-        }
-        list.add(featureValue);
+    public <C extends FeatureContainerEntry> C getFeature(Class<C> contentClass) {
+        return getFeatureOptional(contentClass)
+                .orElseThrow(() -> new NoSuchElementException("no feature entry for content class '" +
+                        contentClass.getSimpleName() + "' found for " + this));
     }
 
     /**
-     * Convenience function to retrieve int features.
-     * @param key the unique identifier of the entry
-     * @return the value as primitive int
-     * @see FeatureContainer#getFeature(Class, String)
+     * The safe way to access particular features, identified by its entry type.
+     * @param contentClass the class of the content of interest
+     * @param <C>
+     * @return the <b>first</b> relevant, wrapped as {@link Optional}
      */
-    default int getFeatureAsInt(String key) {
-        return getFeature(Integer.class, key);
+    public <C extends FeatureContainerEntry> Optional<C> getFeatureOptional(Class<C> contentClass) {
+        return filterByContent(contentClass)
+                .findFirst();
     }
 
     /**
-     * Convenience function to retrieve double features.
-     * @param key the unique identifier of the entry
-     * @return the value as primitive double
-     * @see FeatureContainer#getFeature(Class, String)
+     * Returns all associated entries of a given type.
+     * @param contentClass the class of the content of interest
+     * @return a collection of relevant entries
      */
-    default double getFeatureAsDouble(String key) {
-        return getFeature(Double.class, key);
+    public <C extends FeatureContainerEntry> List<C> getFeatures(Class<C> contentClass) {
+        return filterByContent(contentClass)
+                .collect(Collectors.toList());
+    }
+
+    private <C extends FeatureContainerEntry> Stream<C> filterByContent(Class<C> contentClass) {
+        return features.stream()
+                .filter(contentClass::isInstance)
+                .map(contentClass::cast);
     }
 
     /**
-     * Stores one object in the feature container.
-     * @param key the enum representing this feature, old entries will be replaced
-     * @param featureValue the actual content
+     * Low-level access to the entries.
+     * @return the delegated list
      */
-    default void setFeature(String key, Object featureValue) {
-        getFeatureMap().put(key, featureValue);
+    public List<FeatureContainerEntry> getFeatures() {
+        return features;
+    }
+
+    /**
+     * Set the internal list to a specific value. Used after cloning of model instances.
+     * @param features the new value of the feature container
+     */
+    public void setFeatures(List<FeatureContainerEntry> features) {
+        this.features = features;
     }
 }

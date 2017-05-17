@@ -2,7 +2,7 @@ package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
-import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 
 /**
  * PLIP data.

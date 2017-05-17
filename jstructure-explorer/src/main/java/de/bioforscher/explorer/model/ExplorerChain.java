@@ -1,12 +1,10 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.uniprot.*;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.parser.plip.PLIPAnnotator;
-import de.bioforscher.jstructure.parser.plip.PLIPInteractionContainer;
-import de.bioforscher.jstructure.parser.plip.interaction.PLIPInteraction;
-import de.bioforscher.jstructure.parser.uniprot.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +58,8 @@ public class ExplorerChain {
                 .collect(Collectors.toList());
 
         try {
-            PLIPInteractionContainer interactions = chain.getFeature(PLIPInteractionContainer.class, PLIPAnnotator.PLIP_INTERACTIONS);
-            LinearAlgebraAtom.Transformation transformation = chain.getFeature(LinearAlgebraAtom.Transformation.class, SVDSuperimposer.TRANSFORMATION);
+            PLIPInteractionContainer interactions = chain.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
+            LinearAlgebraAtom.Transformation transformation = chain.getFeatureContainer().getFeature(LinearAlgebraAtom.Transformation.class);
             this.halogenBonds = convert(interactions.getHalogenBonds(), transformation, chain);
             this.hydrogenBonds = convert(interactions.getHydrogenBonds(), transformation, chain);
             this.metalComplexes = convert(interactions.getMetalComplexes(), transformation, chain);
@@ -82,7 +80,7 @@ public class ExplorerChain {
         }
 
         try {
-            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeature(UniProtAnnotationContainer.class, UniProtAnnotator.UNIPROT_ANNOTATION);
+            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeatureContainer().getFeature(UniProtAnnotationContainer.class);
             this.active = uniProtAnnotationContainer.getActiveSites();
             this.disulfide = uniProtAnnotationContainer.getDisulfideBonds();
             this.mutagenesis = uniProtAnnotationContainer.getMutagenesisSites();

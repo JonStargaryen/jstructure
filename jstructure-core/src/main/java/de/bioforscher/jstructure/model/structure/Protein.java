@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
+import de.bioforscher.jstructure.model.feature.FeatureContainerRoot;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  * {@link Chain} objects.<br />
  * Created by S on 27.09.2016.
  */
-public class Protein extends AbstractFeatureContainer implements ChainContainer {
+public class Protein extends AbstractFeatureable implements ChainContainer, FeatureContainerRoot {
     /**
      * reference to an undefined protein - this is used by chains without explicit parent reference
      */
@@ -44,6 +45,7 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
                 .collect(Collectors.toList());
         this.chains.forEach(chain -> chain.setParentProtein(this));
         this.identifier = protein.identifier;
+        setFeatureContainer(protein.getFeatureContainer());
     }
 
     public Protein(List<Chain> chains) {
@@ -112,7 +114,7 @@ public class Protein extends AbstractFeatureContainer implements ChainContainer 
 
     /**
      * Registers a child. This object will assign a reference to itself to the getChain.
-     * @param chain the getChain to process
+     * @param chain the getChain to processUniProtId
      */
     public void addChain(Chain chain) {
         getChains().add(chain);

@@ -4,15 +4,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Annotation of an algorithm which can compute features and write them to the feature map of a {@link FeatureContainer}.
- * TODO distinction between global and local features?
+ * Annotation of an algorithm which can compute features and write them to the feature map of a {@link Featureable}.
  * Created by S on 02.10.2016.
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FeatureProvider {
     int DEFAULT_PRIORITY = 100;
 
-    FeatureType type() default FeatureType.ANNOTATION;
+    FeatureOrigin origin() default FeatureOrigin.ANNOTATION;
 
     /**
      * The priority of this feature provider which can be used to assign an ordering on which implementation is employed
@@ -25,7 +24,7 @@ public @interface FeatureProvider {
      * All features provided by the implementing class. This list should contain at least 1 element.
      * @return all features provided by this implemented
      */
-    String[] provides();
+    Class<? extends FeatureContainerEntry>[] provides();
 
     /**
      * Access to all required features which need to be present in order for the computation about to happen to succeed.
@@ -34,5 +33,13 @@ public @interface FeatureProvider {
      * compute all requirements beforehand automatically. This list can be empty.
      * @return all features needed for the computation implemented by this provider
      */
-    String[] requires() default {};
+    Class<? extends FeatureContainerEntry>[] requires() default {};
+
+    /**
+     * The possible feature types - predictions and annotations.
+     */
+    enum FeatureOrigin {
+        ANNOTATION,
+        PREDICTION
+    }
 }

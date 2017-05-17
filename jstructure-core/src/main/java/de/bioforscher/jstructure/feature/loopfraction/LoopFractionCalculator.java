@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
-import de.bioforscher.jstructure.feature.sse.SecStrucState;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructure;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
@@ -17,10 +16,8 @@ import java.util.stream.DoubleStream;
  * Computes the loop fraction of a protein.
  * Created by S on 16.01.2017.
  */
-@FeatureProvider(provides = LoopFractionCalculator.LOOP_FRACTION, requires = SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES)
+@FeatureProvider(provides = LoopFraction.class, requires = SecondaryStructure.class)
 public class LoopFractionCalculator extends AbstractFeatureProvider {
-    private static final String RAW_LOOP_FRACTION = "RAW_LOOP_FRACTION";
-    public static final String LOOP_FRACTION = "LOOP_FRACTION";
     private static final int WINDOW_SIZE = 9;
     private static final int WINDOW_MIDDLE_INDEX = (WINDOW_SIZE / 2) + 1;
     private final double[] weights;
@@ -59,7 +56,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
     /**
      * Transforms the binary annotation of secondary structure elements into the loop fraction feature by averaging the
      * value with sequential neighbors in a window of size 9.
-     * @param protein the container to process
+     * @param protein the container to processUniProtId
      */
     private void smoothLoopFraction(Protein protein) {
         protein.chains()
@@ -75,17 +72,17 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
 
         // smooth values of start and end residues of the chain
         chain.aminoAcids()
-                .filter(group -> !group.getFeatureMap().containsKey(LOOP_FRACTION))
+                .filter(group -> !group.getFeatureContainer().getFeatureOptional(LoopFraction.class).isPresent())
                 .forEach(group -> {
                     int residueNumber = group.getResidueNumber();
                     double smoothedValue =chain.select()
                             .aminoAcids()
                             .residueNumber(surroundingResidueNumbers(residueNumber))
                             .asFilteredGroups()
-                            .mapToDouble(surroundingGroup -> surroundingGroup.getFeatureAsDouble(RAW_LOOP_FRACTION))
+                            .mapToDouble(surroundingGroup -> surroundingGroup.getFeatureContainer().getFeature(RawLoopFraction.class).getRawLoopFraction())
                             .average()
                             .orElse(1.0);
-                    group.setFeature(LOOP_FRACTION, smoothedValue);
+                    group.getFeatureContainer().addFeature(new LoopFraction(this, smoothedValue));
         });
     }
 
@@ -104,14 +101,14 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
         double smoothedLoopFraction = 0;
 
         for(int i = 0; i < WINDOW_SIZE; i++) {
-            smoothedLoopFraction += weights[i] * fragment.getElement(i).getFeatureAsDouble(RAW_LOOP_FRACTION);
+            smoothedLoopFraction += weights[i] * fragment.getElement(i).getFeatureContainer().getFeature(RawLoopFraction.class).getRawLoopFraction();
         }
-        middleGroup.setFeature(LOOP_FRACTION, smoothedLoopFraction);
+        middleGroup.getFeatureContainer().addFeature(new LoopFraction(this, smoothedLoopFraction));
     }
 
     /**
      * Assigns the raw loop fraction, i.e. 1 if loop and 0 otherwise.
-     * @param protein the container to process
+     * @param protein the container to processUniProtId
      */
     private void assignRawLoopFraction(Protein protein) {
         protein.aminoAcids()
@@ -119,7 +116,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
     }
 
     private void assignRawLoopFraction(Group group) {
-        group.setFeature(RAW_LOOP_FRACTION, group.getFeature(SecStrucState.class,
-                    SecondaryStructureAnnotator.SECONDARY_STRUCTURE_STATES).getSecondaryStructure().isCoilType() ? 1.0 : 0.0);
+        group.getFeatureContainer().addFeature(new RawLoopFraction(this,
+                group.getFeatureContainer().getFeature(SecondaryStructure.class).getSecondaryStructure().isCoilType() ? 1.0 : 0.0));
     }
 }

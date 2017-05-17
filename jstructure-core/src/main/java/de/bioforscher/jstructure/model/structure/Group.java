@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureContainer;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * Created by S on 06.10.2016.
  */
-public class Group extends AbstractFeatureContainer implements AtomContainer {
+public class Group extends AbstractFeatureable implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
@@ -64,7 +64,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
         this.parentChain = group.parentChain;
         this.groupInformation = group.groupInformation;
         // set reference to feature map
-        setFeatureMap(group.getFeatureMap());
+        setFeatureContainer(group.getFeatureContainer());
     }
 
     public Selection.AtomSelection select() {
@@ -123,7 +123,7 @@ public class Group extends AbstractFeatureContainer implements AtomContainer {
 
     /**
      * Registers a child. This object will assign a reference to itself to the atom.
-     * @param atom the atom to process
+     * @param atom the atom to processUniProtId
      */
     public void addAtom(Atom atom) {
         getAtoms().add(atom);

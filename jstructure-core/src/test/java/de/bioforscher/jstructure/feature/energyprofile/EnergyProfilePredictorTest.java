@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
@@ -20,7 +20,7 @@ public class EnergyProfilePredictorTest {
     @Before
     public void setup() {
         protein = ProteinParser.source("1brr").parse();
-        energyProfilePredictor = FeatureProviderRegistry.resolvePredictor(EnergyProfileCalculator.SOLVATION_ENERGY);
+        energyProfilePredictor = FeatureProviderRegistry.resolvePredictor(EnergyProfile.class);
     }
 
     @Test
@@ -28,7 +28,9 @@ public class EnergyProfilePredictorTest {
         energyProfilePredictor.process(protein);
 
         protein.aminoAcids()
-                .map(group -> group.getFeatureAsDouble(EnergyProfileCalculator.SOLVATION_ENERGY))
+                .map(Group::getFeatureContainer)
+                .map(container -> container.getFeature(EnergyProfile.class))
+                .map(EnergyProfile::getSolvationEnergy)
                 .forEach(value -> Assert.assertTrue(!value.isNaN()));
     }
 }

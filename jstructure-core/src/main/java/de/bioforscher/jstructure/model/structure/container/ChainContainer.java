@@ -18,11 +18,20 @@ public interface ChainContainer extends GroupContainer {
     List<Chain> getChains();
 
     /**
-     * Access to all getChain objects associated to this container.
-     * @return a select of chains
+     * Access to all chain objects associated to this container.
+     * @return a stream of chains
      */
     default Stream<Chain> chains() {
         return getChains().stream();
+    }
+
+    /**
+     * Access to all chains which actually contains amino acids.
+     * @return a stream of chains with at least 1 amino acid
+     */
+    default Stream<Chain> aminoAcidChains() {
+        return chains()
+                .filter(chain -> chain.aminoAcids().count() > 0);
     }
 
     default ChainContainer createCopy() {

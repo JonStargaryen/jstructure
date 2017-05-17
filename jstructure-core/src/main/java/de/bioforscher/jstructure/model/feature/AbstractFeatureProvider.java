@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.model.feature;
 
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +22,15 @@ public abstract class AbstractFeatureProvider {
 
     /**
      * Runs the computations implemented by this feature provider and assigns the results to the given container.
-     * @param protein the container to process
+     * @param protein the container to processUniProtId
      */
     public void process(Protein protein) {
         FeatureProvider annotation = getClass().getDeclaredAnnotation(FeatureProvider.class);
-        Group firstGroup = protein.getGroups().get(0);
         // additional features must be computed beforehand
         if (!Arrays.equals(annotation.requires(), new String[0])) {
-            for(String requiredFeature : annotation.requires()) {
+            for(Class<? extends FeatureContainerEntry> requiredFeature : annotation.requires()) {
                 // feature present
-                //TODO maybe move back to some feature container root
-                if(firstGroup.getFeatureMap().containsKey(requiredFeature)) {
+                if(protein.featureIsPresent(requiredFeature)) {
                     continue;
                 }
 
@@ -52,6 +49,10 @@ public abstract class AbstractFeatureProvider {
 
         // 'hook' to postprocessing routine, empty by default but can be overridden by implementations if needed
         postprocessInternally(protein);
+
+        // registered the computed feature entry class
+        Stream.of(annotation.provides())
+                .forEach(protein::registerFeature);
     }
 
     /**

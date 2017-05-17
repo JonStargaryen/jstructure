@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.model.structure.Group;
 
 import java.text.DecimalFormat;
@@ -22,7 +22,7 @@ public class ExplorerGroup {
         this.resn = group.getResidueNumber();
         this.aa = group.isAminoAcid() ? group.getGroupInformation().getOneLetterCode() : group.getThreeLetterCode();
         try {
-            this.rasa = DECIMAL_FORMAT.format(group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA));
+            this.rasa = DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea());
         } catch (NullPointerException e) {
             // happens for mutation sites
         }

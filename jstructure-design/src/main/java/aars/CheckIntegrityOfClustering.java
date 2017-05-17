@@ -1,14 +1,11 @@
 package aars;
 
-import de.bioforscher.jstructure.parser.pdb.PDBDatabaseQuery;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,8 +33,9 @@ public class CheckIntegrityOfClustering {
                 .collect(Collectors.toList());
 
         // fetch all pdb clusters
-        pdbClusters = allIds.stream()
-                .collect(Collectors.toMap(Function.identity(), id -> PDBDatabaseQuery.fetchSequenceCluster(id.split("_")[0], id.split("_")[1], 95)));
+        //TODO reimpl with ensemble generator
+//        pdbClusters = allIds.stream()
+//                .collect(Collectors.toMap(Function.identity(), id -> PDBDatabaseQuery.fetchSequenceCluster(id.split("_")[0], id.split("_")[1], 95)));
 
         // retain but considered structures, drop potential additional ballast added by the pdb query
         pdbClusters.values().forEach(list -> list.retainAll(allIds));

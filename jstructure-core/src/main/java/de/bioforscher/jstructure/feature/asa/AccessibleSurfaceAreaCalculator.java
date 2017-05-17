@@ -7,7 +7,6 @@ import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,11 +32,9 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pr>
  * @author duarte_j
  */
-@FeatureProvider(provides = { AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA, AccessibleSurfaceAreaCalculator.RELATIVE_ACCESSIBLE_SURFACE_AREA })
+@FeatureProvider(provides = { AccessibleSurfaceArea.class, AtomRadius.class})
 public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
-    public static final String ACCESSIBLE_SURFACE_AREA = "ACCESSIBLE_SURFACE_AREA";
-    public static final String RELATIVE_ACCESSIBLE_SURFACE_AREA = "RELATIVE_ACCESSIBLE_SURFACE_AREA";
     private static final String ATOM_RADIUS = "ATOM_RADIUS";
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
@@ -76,16 +73,19 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     }
 
     private void assignRadius(Atom atom) {
-        atom.setFeature(ATOM_RADIUS, determineRadius(atom));
+        atom.getFeatureContainer().addFeature(new AtomRadius(this, determineRadius(atom)));
     }
 
     private void assignSingleAsa(Group group, AtomContainer nonHydrogenAtoms) {
-        group.setFeature(ACCESSIBLE_SURFACE_AREA,
-                Selection.on(group)
-                        .nonHydrogenAtoms()
-                        .asFilteredAtoms()
-                        .mapToDouble(atom -> calcSingleAsa(atom, nonHydrogenAtoms))
-                        .sum());
+        double asa = group.select()
+                .nonHydrogenAtoms()
+                .asFilteredAtoms()
+                .mapToDouble(atom -> calcSingleAsa(atom, nonHydrogenAtoms))
+                .sum();
+        double rasa = asa / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
+        group.getFeatureContainer().addFeature(new AccessibleSurfaceArea(this,
+                asa,
+                rasa));
     }
 
     @Override
@@ -104,14 +104,6 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         residueContainer.groups()
                 .parallel()
                 .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
-
-        // assign RASA of all groups
-        residueContainer.groups()
-                .forEach(group -> {
-                    double rasa = group.getFeatureAsDouble(AccessibleSurfaceAreaCalculator.ACCESSIBLE_SURFACE_AREA) /
-                            AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
-                    group.setFeature(RELATIVE_ACCESSIBLE_SURFACE_AREA, rasa);
-                });
     }
 
     /**
@@ -185,29 +177,30 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
      * @return all neighbored atoms
      */
     private List<Atom> findNeighbors(Atom referenceAtom, AtomContainer nonHydrogenAtoms) {
-        final double cutoff = probeSize + probeSize + referenceAtom.getFeatureAsDouble(ATOM_RADIUS);
+        final double cutoff = probeSize + probeSize + referenceAtom.getFeatureContainer().getFeature(AtomRadius.class).getRadius();
 
         return nonHydrogenAtoms.atoms()
                 .filter(atom -> !atom.equals(referenceAtom))
-                .filter(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), referenceAtom.getCoordinates()) < cutoff + atom.getFeatureAsDouble(ATOM_RADIUS))
+                .filter(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), referenceAtom.getCoordinates()) < cutoff
+                        + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius())
                 .collect(Collectors.toList());
     }
 
     /**
      * Calculates the accessible surface area (ASA) of an individual atom.
-     * @param atom the atom to process
+     * @param atom the atom to processUniProtId
      * @return this atom's ASA
      */
     private double calcSingleAsa(Atom atom, AtomContainer nonHydrogenAtoms) {
         List<Atom> neighborAtoms = findNeighbors(atom, nonHydrogenAtoms);
-        double radius = probeSize + atom.getFeatureAsDouble(ATOM_RADIUS);
+        double radius = probeSize + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius();
         int accessiblePoints = 0;
 
         for (double[] point : spherePoints) {
             boolean isAccessible = true;
             double[] testPoint = LinearAlgebra3D.add(LinearAlgebra3D.multiply(point, radius), atom.getCoordinates());
             for(Atom neighborAtom : neighborAtoms) {
-                double neighborAtomRadius = neighborAtom.getFeatureAsDouble(ATOM_RADIUS) + probeSize;
+                double neighborAtomRadius = neighborAtom.getFeatureContainer().getFeature(AtomRadius.class).getRadius() + probeSize;
                 double differenceSquared = LinearAlgebra3D.distanceFast(testPoint, neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;

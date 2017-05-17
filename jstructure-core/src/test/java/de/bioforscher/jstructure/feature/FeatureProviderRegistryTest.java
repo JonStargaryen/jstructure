@@ -1,7 +1,10 @@
 package de.bioforscher.jstructure.feature;
 
-import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfilePredictor;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +16,11 @@ import java.util.NoSuchElementException;
  * Created by bittrich on 1/17/17.
  */
 public class FeatureProviderRegistryTest {
-    private static final String NOT_REGISTERED_FEATURE_NAME = "NOT_REGISTERED_FEATURE_NAME";
+    class NotRegisteredFeature extends FeatureContainerEntry {
+        public NotRegisteredFeature(AbstractFeatureProvider featureProvider) {
+            super(featureProvider);
+        }
+    }
 
     @Test
     public void shouldGetAllRegisteredFeatureProviders() throws Exception {
@@ -27,17 +34,16 @@ public class FeatureProviderRegistryTest {
 
     @Test(expected = NoSuchElementException.class)
     public void shouldFailToResolve() throws Exception {
-        FeatureProviderRegistry.resolve(NOT_REGISTERED_FEATURE_NAME);
+        FeatureProviderRegistry.resolve(NotRegisteredFeature.class);
     }
 
     @Test
     public void shouldResolveProvider() {
-        //TODO fails in the core-module because other modules are not visible - can this be actually fixed?
-        FeatureProviderRegistry.resolve("MEMBRANE");
+        FeatureProviderRegistry.resolve(AccessibleSurfaceArea.class);
     }
 
     @Test
     public void shouldResolvePredictor() {
-        Assert.assertTrue(FeatureProviderRegistry.resolvePredictor(EnergyProfileCalculator.SOLVATION_ENERGY).getClass().equals(EnergyProfilePredictor.class));
+        Assert.assertTrue(FeatureProviderRegistry.resolvePredictor(EnergyProfile.class).getClass().equals(EnergyProfilePredictor.class));
     }
 }

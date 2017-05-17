@@ -1,65 +1,41 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.StructureCollectors;
-import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.GroupInformation;
-
-import java.util.stream.Collectors;
-
 /**
  * The container object of a found sequence motif.
  * Created by S on 02.10.2016.
  */
 public class SequenceMotif {
     private final SequenceMotifDefinition motifDefinition;
-    private final Group startGroup;
-    private final Group endGroup;
-    private final GroupContainer groups;
+    private final String chainId;
+    private final int start;
+    private final int end;
+    private final String sequence;
 
-    public SequenceMotif(SequenceMotifDefinition candidate, Group startGroup, Group endGroup) {
+    public SequenceMotif(SequenceMotifDefinition candidate, String chainId, int start, int end, String sequence) {
         this.motifDefinition = candidate;
-        this.startGroup = startGroup;
-        this.endGroup = endGroup;
-
-        int startResNum = startGroup.getResidueNumber();
-        int endResNum = endGroup.getResidueNumber();
-        Chain chain = startGroup.getParentChain();
-
-        // extract groups
-        this.groups = chain.groups()
-                .filter(group -> group.getResidueNumber() >= startResNum && group.getResidueNumber() <= endResNum)
-                .collect(StructureCollectors.toGroupContainer());
-    }
-
-    public GroupContainer getGroupContainer() {
-        return groups;
-    }
-
-    public String getSequence() {
-        return groups.groups()
-                .map(Group::getGroupInformation)
-                .map(GroupInformation::getOneLetterCode)
-                .collect(Collectors.joining());
-    }
-
-    public Group getEndGroup() {
-        return endGroup;
-    }
-
-    public Group getStartGroup() {
-        return startGroup;
+        this.chainId = chainId;
+        this.start = start;
+        this.end = end;
+        this.sequence = sequence;
     }
 
     public SequenceMotifDefinition getMotifDefinition() {
         return motifDefinition;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " motifDefinition='" + motifDefinition + "' sequence='" + getSequence() +
-                "' startGroup='" + startGroup.getThreeLetterCode() + "-" + startGroup.getResidueNumber() +
-                "' endGroup='" + endGroup.getThreeLetterCode() + "-" + endGroup.getResidueNumber() + "'";
+    public String getChainId() {
+        return chainId;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public String getSequence() {
+        return sequence;
     }
 }

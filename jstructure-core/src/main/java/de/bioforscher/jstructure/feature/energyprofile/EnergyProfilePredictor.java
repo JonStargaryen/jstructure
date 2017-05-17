@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.feature.energyprofile;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureType;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -23,7 +22,7 @@ import java.util.stream.Stream;
  * Created by S on 20.01.2017.
  * @author originally written by Florian Heinke
  */
-@FeatureProvider(provides = EnergyProfileCalculator.SOLVATION_ENERGY, type = FeatureType.PREDICTION, priority = 200)
+@FeatureProvider(provides = EnergyProfile.class, origin = FeatureProvider.FeatureOrigin.PREDICTION, priority = 200)
 public class EnergyProfilePredictor extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfilePredictor.class);
     private static final int WINDOW_SIZE = 3;
@@ -83,7 +82,9 @@ public class EnergyProfilePredictor extends AbstractFeatureProvider {
         List<Group> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
         for(int i = 0; i < entropies.size(); i++) {
             QuantileEntropySum maximalEntropy = getMaximalEntropy(entropies.get(i));
-            aminoAcids.get(i).setFeature(EnergyProfileCalculator.SOLVATION_ENERGY, QUANTIL_ENERGIES[maximalEntropy.getIndex() - 1]);
+            aminoAcids.get(i)
+                    .getFeatureContainer()
+                    .addFeature(new EnergyProfile(this, QUANTIL_ENERGIES[maximalEntropy.getIndex() - 1]));
         }
     }
 
