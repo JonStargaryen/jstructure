@@ -25,7 +25,7 @@ public class PLIPAnnotator extends AbstractFeatureProvider {
         protein.aminoAcidChains()
                 .forEach(chain -> {
                     try {
-                        String plipXmlContent = PLIPRestServiceQuery.getPlipResults(protein.getName(), chain.getChainId());
+                        String plipXmlContent = PLIPRestServiceQuery.getPlipResults(chain.getChainId());
                         globalPlipInteractions.addAll(PLIPParser.parse(chain, plipXmlContent));
                     } catch (UncheckedIOException e) {
                         logger.warn("failed to fetch PLIP results");

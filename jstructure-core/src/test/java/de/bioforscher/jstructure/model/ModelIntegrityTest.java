@@ -6,7 +6,6 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +25,7 @@ public class ModelIntegrityTest {
 
     @Test
     public void shouldGetGroupCopy() {
-        GroupContainer copiedGroups = Selection.on(protein)
+        GroupContainer copiedGroups = protein.select()
                 .chainName("A", "C")
                 .aminoAcids(AminoAcidFamily.ASPARAGINE)
                 .asGroupContainer()
@@ -37,7 +36,7 @@ public class ModelIntegrityTest {
 
     @Test
     public void shouldGetAtomCopy() {
-        AtomContainer clonedSelectedAtoms = Selection.on(protein)
+        AtomContainer clonedSelectedAtoms = protein.select()
                 .chainName("A", "B")
                 .aminoAcids()
                 .aminoAcids(AminoAcidFamily.HISTIDINE)

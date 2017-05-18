@@ -41,18 +41,18 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        Document document = downloadXml(protein.getName());
+        Document document = downloadXml(protein.getPdbId().getPdbId());
         protein.aminoAcidChains()
                 .forEach(chain -> processInternally(document, chain));
     }
 
     private void processInternally(Document document, Chain chain) {
         chain.aminoAcids().forEach(group -> {
-            ResidueMapping mapping = mapGroup(document, chain.getChainId(), group.getResidueNumber());
+            ResidueMapping mapping = mapGroup(document, chain.getChainId().getChainId(), group.getResidueNumber());
             group.getFeatureContainer().addFeature(mapping);
         });
 
-        String pdbId = chain.getParentProtein().getName().toLowerCase();
+        String pdbId = chain.getParentProtein().getPdbId().getPdbId();
         String ecNumber = getLinesForPdbId(ENZYME_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chain.getChainId()))
                 .map(split -> split[3])

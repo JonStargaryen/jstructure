@@ -1,15 +1,11 @@
 package de.bioforscher.jstructure.feature.mapping;
 
-import de.bioforscher.jstructure.model.identifier.PdbChainId;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 /**
  * Test the SIFTS-mapping.

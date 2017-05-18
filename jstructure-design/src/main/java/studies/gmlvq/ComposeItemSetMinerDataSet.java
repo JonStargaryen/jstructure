@@ -8,16 +8,15 @@ import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import studies.StudyConstants;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
  */
 public class ComposeItemSetMinerDataSet {
     private static final boolean FUNCTIONAL = false;
-    private static final String FILENAME = "gmlvq/" + (FUNCTIONAL ? "positives.txt" : "negatives.txt");
+    private static final String FILENAME = "studies/gmlvq/" + (FUNCTIONAL ? "positives.txt" : "negatives.txt");
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
     private static final List<AbstractFeatureProvider> featureProviders = Stream.of(AccessibleSurfaceArea.class,
@@ -38,8 +37,8 @@ public class ComposeItemSetMinerDataSet {
             .collect(Collectors.toList());
 
     public static void main(String[] args) throws IOException {
-        int numberOfGroups = Files.lines(Paths.get(getResourceAsFilepath(FILENAME))).findFirst().orElseThrow(() -> new IllegalArgumentException("no valid input line found")).split("_").length - 1;
-        List<String> outputLines = Files.lines(Paths.get(getResourceAsFilepath(FILENAME)))
+        int numberOfGroups = Files.lines(Paths.get(StudyConstants.getResourceAsFilepath(FILENAME))).findFirst().orElseThrow(() -> new IllegalArgumentException("no valid input line found")).split("_").length - 1;
+        List<String> outputLines = Files.lines(Paths.get(StudyConstants.getResourceAsFilepath(FILENAME)))
                 .filter(ComposeItemSetMinerDataSet::filterFunctionalProteins)
                 .map(ComposeItemSetMinerDataSet::handleLine)
                 .filter(line -> !line.isEmpty())
@@ -61,7 +60,7 @@ public class ComposeItemSetMinerDataSet {
 
     static {
         try {
-            functionalPdbIds = Files.lines(Paths.get(getResourceAsFilepath("gmlvq/positives.txt")))
+            functionalPdbIds = Files.lines(Paths.get(StudyConstants.getResourceAsFilepath("studies/gmlvq/positives.txt")))
                     .map(line -> line.split("_")[0])
                     .distinct()
                     .collect(Collectors.toList());
@@ -131,12 +130,5 @@ public class ComposeItemSetMinerDataSet {
             throw new IllegalArgumentException("amino acid does not match expectation: " + residueSection + " found " + group.getGroupInformation().getOneLetterCode());
         }
         return group;
-    }
-
-    private static String getResourceAsFilepath(String filename) {
-        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
-        URL resource = ccl.getResource(filename);
-        // some a bit hacky way to ensure correct paths on windows (as some / will be added as prefix)
-        return Objects.requireNonNull(resource).getPath().replaceFirst("^/(.:/)", "$1");
     }
 }

@@ -31,7 +31,7 @@ public class SelectionTest {
 
     @Test
     public void shouldSelectBasedOnRange() {
-        List<Group> selection = Selection.on(protein)
+        List<Group> selection = protein.select()
                 .chainName("A")
                 .residueNumber(new IntegerRange(100, 105))
                 .asFilteredGroups()
@@ -45,18 +45,18 @@ public class SelectionTest {
     @Test
     public void shouldSelectChains() {
         System.out.println("Chain 'A':");
-        Chain chainA = Selection.on(protein)
+        Chain chainA = protein.select()
                 .asChain();
         System.out.println(chainA);
 
         System.out.println("Chain 'B':");
-        Chain chainB = Selection.on(protein)
+        Chain chainB = protein.select()
                 .chainName("B")
                 .asChain();
         System.out.println(chainB);
 
         System.out.println("Chains 'B', 'C':");
-        ChainContainer chains = Selection.on(protein)
+        ChainContainer chains = protein.select()
                 .chainName("B", "C")
                 .asChainContainer();
         Assert.assertEquals(2, chains.getChains().size());
@@ -68,7 +68,7 @@ public class SelectionTest {
     public void shouldSelectGroupsFromChains() {
         // select all arginines in chain 'B' and 'C'
         System.out.println("arginines in Chain 'B' and 'C'");
-        GroupContainer argGroups = Selection.on(protein)
+        GroupContainer argGroups = protein.select()
                 .chainName("B", "C")
                 .aminoAcids(AminoAcidFamily.ARGININE)
                 .asGroupContainer();
@@ -76,7 +76,7 @@ public class SelectionTest {
 
         // select hetatms in chain 'A'
         System.out.println("Hetatms in Chain 'B':");
-        GroupContainer hets = Selection.on(protein)
+        GroupContainer hets = protein.select()
                 .chainName("C")
                 .hetatms()
                 .asGroupContainer();
@@ -88,7 +88,7 @@ public class SelectionTest {
     @Test
     public void shouldSelectAtomsFromGroupsFromChains() {
         System.out.println("alpha carbons and beta carbons of PHEs in chain 'A' and 'C'");
-        AtomContainer atoms = Selection.on(protein)
+        AtomContainer atoms = protein.select()
                 .chainName("A", "C")
                 .aminoAcids(AminoAcidFamily.PHENYLALANINE)
                 .atomName(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME, AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME)
@@ -100,7 +100,7 @@ public class SelectionTest {
 
     @Test
     public void shouldNameContainer() {
-        GroupContainer container = Selection.on(protein)
+        GroupContainer container = protein.select()
                 .aminoAcids()
                 .nameContainer(givenName)
                 .asGroupContainer();
@@ -110,7 +110,7 @@ public class SelectionTest {
 
     @Test
     public void shouldNameAfterParentContainer() {
-        GroupContainer parentContainer = Selection.on(protein)
+        GroupContainer parentContainer = protein.select()
                 .cloneElements()
                 .nameContainer(givenName)
                 .asGroupContainer();
@@ -129,7 +129,7 @@ public class SelectionTest {
         Atom firstAtom = protein.getAtoms().get(0);
         double probeDistance = 4.4499;
 
-        int neighboringGroupCountSelectionAPI = (int) Selection.on(protein)
+        int neighboringGroupCountSelectionAPI = (int) protein.select()
                 .atomSelection()
                 .distance(firstAtom, probeDistance)
                 .asFilteredAtoms()

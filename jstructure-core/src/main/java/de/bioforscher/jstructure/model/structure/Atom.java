@@ -258,7 +258,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
             Group parentGroup = atom.parentGroup;
             Chain parentChain = parentGroup.getParentChain();
             //TODO check - needed?
-            String chainId = parentChain.getChainId() != null ? parentChain.getChainId() : Chain.UNKNOWN_CHAIN.getChainId();
+            String chainId = parentChain.getChainId() != null ? parentChain.getChainId().getChainId() : Chain.UNKNOWN_CHAIN.getChainId().getChainId();
             String record = parentGroup.isInTerminatedParentChain() ? HETATM_PREFIX : ATOM_PREFIX;
             // format output ...
             String resName = parentGroup.getThreeLetterCode();

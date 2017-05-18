@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,7 +39,7 @@ public class EnergyProfileCalculatorTest {
     }
 
     @Test
-    @Ignore("skipping long calcuation")
+    @Ignore("skipping long calculation")
     public void shouldComputeEnergyProfilesForAllStructures() throws IOException {
         System.err.println("skipping energy profile calculation on aaRS data set");
         // this takes ages - uncomment if needed
@@ -86,7 +85,7 @@ public class EnergyProfileCalculatorTest {
                 .filter(line -> line.startsWith("ENGY"))
                 .map(line -> line.split("\t"))
                 .forEach(split -> {
-                    Group group = Selection.on(protein)
+                    Group group = protein.select()
                             .chainName(split[1])
                             .residueNumber(Integer.valueOf(split[2]))
                             .asGroup();

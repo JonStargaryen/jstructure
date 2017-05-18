@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.model.identifier;
+package de.bioforscher.jstructure.model.structure.identifier;
 
 /**
  * Represents the name/id of a protein chain.
@@ -8,6 +8,8 @@ public class PdbChainId {
     //TODO pattern for chainIds?
     private PdbId pdbId;
     private String chainId;
+
+    public static final PdbChainId UNKNOWN_CHAIN_ID = PdbChainId.createFromChainId(PdbId.UNKNOWN_PROTEIN_ID, "X");
 
     private PdbChainId(PdbId pdbId, String chainId) {
         this.pdbId = pdbId;

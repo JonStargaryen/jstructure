@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.parser;
 
 import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
+import de.bioforscher.jstructure.model.structure.identifier.PdbId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,15 +63,15 @@ public class ProteinParser {
                 try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                     bufferedReader.lines().forEach(this::parseLineChecked);
 
-                    if(protein.getName() == null || protein.getName().isEmpty()) {
-                        protein.setName(builder.hintProteinName);
+                    if(protein.getPdbId() == null || protein.getPdbId().getPdbId() == null || protein.getPdbId().getPdbId().isEmpty()) {
+                        protein.setPdbId(builder.hintProteinName);
                     }
                     protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
                 }
             }
 
             if(builder.forceProteinName != null) {
-                protein.setName(builder.forceProteinName);
+                protein.setPdbId(builder.forceProteinName);
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -104,7 +105,7 @@ public class ProteinParser {
         // found header record
         // 63 - 66       IDcode        idCode            This identifier is unique within the PDB.
         if(line.startsWith(HEADER_PREFIX)) {
-            protein.setName(line.substring(62, 66));
+            protein.setPdbId(PdbId.createFromPdbId(line.substring(62, 66)));
         }
 
         // handling title records
@@ -119,7 +120,7 @@ public class ProteinParser {
 
         if(line.startsWith(TER_PREFIX)) {
             // mark chain as terminated - everything parsed from now on, associated to this chain will be an HETATM
-            Chain chainToTerminate = Selection.on(protein)
+            Chain chainToTerminate = protein.select()
                     .chainName(line.length() > 22 ? line.substring(21, 22) : "?")
                     .asOptionalChain()
                     .orElse(currentChain);
@@ -162,12 +163,12 @@ public class ProteinParser {
             }
 
             String pdbName = line.substring(17, 20).trim();
-            String chainId = line.substring(21, 22);
+            PdbChainId chainId = PdbChainId.createFromChainId(protein.getPdbId(), line.substring(21, 22));
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
 
             if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
-                Optional<Chain> selectedChain = Selection.on(protein)
-                        .chainName(chainId)
+                Optional<Chain> selectedChain = protein.select()
+                        .chainName(chainId.getChainId())
                         .asOptionalChain();
                 if(selectedChain.isPresent()) {
                     // chain already present - just an het-group not directly connected
@@ -179,7 +180,8 @@ public class ProteinParser {
                 }
             }
 
-            if(currentGroup == null || currentGroup.getResidueNumber() != resNum || !currentGroup.getParentChain().getChainId().equals(chainId)) {
+            if(currentGroup == null || currentGroup.getResidueNumber() != resNum ||
+                    !currentGroup.getParentChain().getChainId().equals(chainId)) {
                 // residue changed - create new group object and set reference
                 currentGroup = new Group(pdbName,
                         resNum,
@@ -233,7 +235,7 @@ public class ProteinParser {
         if(line.startsWith(END_MODEL_PREFIX)) {
             //TODO handling of multiple models
             passedFirstModel = true;
-            logger.debug("skipping models for {}", protein.getName());
+            logger.debug("skipping models for {}", protein.getPdbId().getFullName());
         }
     }
 
@@ -247,11 +249,11 @@ public class ProteinParser {
 
     //TODO users could expect this to be a filepath too - change method name? decide internally on-the-fly?
     public static OptionalSteps source(String pdbId) {
-        return new OptionalSteps(pdbId).hintProteinName(pdbId);
+        return new OptionalSteps(pdbId).hintProteinName(PdbId.createFromPdbId(pdbId));
     }
 
     public static OptionalSteps source(Path path) {
-        return new OptionalSteps(path).hintProteinName(path.toFile().getName());
+        return new OptionalSteps(path).hintProteinName(PdbId.createFromName(path.toFile().getName()));
     }
 
     public static class OptionalSteps {
@@ -261,8 +263,8 @@ public class ProteinParser {
         boolean skipModels = true;
         boolean strictMode = false;
         boolean skipHydrogens = true;
-        String forceProteinName;
-        String hintProteinName;
+        PdbId forceProteinName;
+        PdbId hintProteinName;
         private static final int DEFAULT_CACHE_SIZE = 1000;
 
         OptionalSteps(InputStream inputStream) {
@@ -292,12 +294,12 @@ public class ProteinParser {
             return this;
         }
 
-        public OptionalSteps forceProteinName(String proteinName) {
+        public OptionalSteps forceProteinName(PdbId proteinName) {
             this.forceProteinName = proteinName;
             return this;
         }
 
-        public OptionalSteps hintProteinName(String proteinName) {
+        public OptionalSteps hintProteinName(PdbId proteinName) {
             this.hintProteinName = proteinName;
             return this;
         }
@@ -323,7 +325,7 @@ public class ProteinParser {
                     if(forceProteinName == null) {
                         String fileName = path.toFile().getName();
                         // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
-                        forceProteinName = fileName.substring(0, fileName.lastIndexOf("."));
+                        forceProteinName = PdbId.createFromName(fileName.substring(0, fileName.lastIndexOf(".")));
                     }
                 }
             } catch (IOException e) {

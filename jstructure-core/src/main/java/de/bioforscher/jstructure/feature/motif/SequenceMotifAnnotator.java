@@ -65,7 +65,7 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
 
                     List<Group> residueList = aminoAcids.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate,
-                            chain.getChainId(),
+                            chain.getChainId().getChainId(),
                             startResidue.getResidueNumber(),
                             endResidue.getResidueNumber(),
                             residueList.stream()

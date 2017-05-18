@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.feature.sse;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.structure.Group;
 import org.biojava.nbio.structure.GroupType;
@@ -49,9 +48,7 @@ public class SecondaryStructureAnnotatorTest {
         featureProvider.process(protein);
 
         // return complete DSSP annotation string from jstructrue
-        return Selection.on(protein)
-                .aminoAcids()
-                .asFilteredGroups()
+        return protein.aminoAcids()
                 .map(residue -> residue.getFeatureContainer().getFeature(SecondaryStructure.class))
                 .map(SecondaryStructure::getSecondaryStructure)
                 .map(SecondaryStructureElement::getOneLetterRepresentation)

@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.parser;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.junit.Assert;
 import org.junit.Test;
 import util.TestUtils;
@@ -74,7 +73,7 @@ public class ProteinParserTest {
          */
         Protein protein1bs2 = ProteinParser.source("1bs2").parse();
 
-        List<Group> waters = Selection.on(protein1bs2)
+        List<Group> waters = protein1bs2.select()
                 .water()
                 .asFilteredGroups()
                 .collect(Collectors.toList());
@@ -84,13 +83,13 @@ public class ProteinParserTest {
             Assert.assertTrue(group.composePDBRecord().startsWith(Atom.HETATM_PREFIX));
         });
 
-        Group arginineAsLigand = Selection.on(protein1bs2)
+        Group arginineAsLigand = protein1bs2.select()
                 // in chain A at resNum 900 there is the ARG ligand
                 .residueNumber(900)
                 .asGroup();
 
         // assert that selection does not return ARG ligand as normal amino acid
-        boolean arginineLigandIsNoAminoAcid = Selection.on(protein1bs2)
+        boolean arginineLigandIsNoAminoAcid = protein1bs2.select()
                 .aminoAcids()
                 .asFilteredGroups()
                 .noneMatch(group -> group.equals(arginineAsLigand));
@@ -99,7 +98,7 @@ public class ProteinParserTest {
         // ensure last amino acid is MET and not the ARG ligand
         Assert.assertThat(protein1bs2.getAminoAcidSequence(), endsWith("M"));
 
-        List<Group> hetatm1bs2 = Selection.on(protein1bs2)
+        List<Group> hetatm1bs2 = protein1bs2.select()
                 .hetatms()
                 .asFilteredGroups()
                 .collect(Collectors.toList());

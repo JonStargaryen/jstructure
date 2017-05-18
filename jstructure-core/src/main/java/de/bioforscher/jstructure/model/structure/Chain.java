@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
@@ -16,13 +17,13 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     /**
      * reference to an undefined chain - this is used by groups without explicit parent reference
      */
-    static final Chain UNKNOWN_CHAIN = new Chain("X");
+    static final Chain UNKNOWN_CHAIN = new Chain(PdbChainId.UNKNOWN_CHAIN_ID);
 
     private List<Group> groups;
     /**
      * The unique getChain name. Usually one character, e.g. 'A'.
      */
-    private String chainId;
+    private PdbChainId chainId;
     /**
      * Handle to the containing element.
      */
@@ -30,10 +31,10 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     private String identifier;
 
     /**
-     * Constructor for getChain objects.
-     * @param chainId the unique name of this getChain
+     * Constructor for chain objects.
+     * @param chainId the unique name of this chain
      */
-    public Chain(String chainId) {
+    public Chain(PdbChainId chainId) {
         this.chainId = chainId;
         this.groups = new ArrayList<>();
     }
@@ -72,10 +73,10 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     }
 
     /**
-     * Returns the unique name of this getChain.
-     * @return a String, usually containing only a single char
+     * Returns the unique name of this chain.
+     * @return a {@link PdbChainId}
      */
-    public String getChainId() {
+    public PdbChainId getChainId() {
         return chainId;
     }
 
@@ -88,7 +89,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     }
 
     /**
-     * Returns the {@link Protein} this getChain is associated to.
+     * Returns the {@link Protein} this chain is associated to.
      * @return the parent container
      */
     public Protein getParentProtein() {
@@ -112,7 +113,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? chainId : identifier;
+        return identifier == null ? chainId.getFullName() : identifier;
     }
 
     public void setIdentifier(String identifier) {

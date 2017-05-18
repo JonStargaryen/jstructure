@@ -2,7 +2,6 @@ package aars;
 
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.nio.file.Path;
@@ -58,7 +57,7 @@ class BindingSiteExtractor {
                     String chainId = split[13];
                     Protein protein = ProteinParser.source(AARSConstants.RENUMBERED_STRUCTURES_PATH + className + "/renumbered_structures/" + pdbId + "_renum.pdb").parse();
 
-                    String output = "HEADER    LIGASE/RNA                              15-JUL-99   " + pdbId.toUpperCase() + "              " + System.lineSeparator() + Selection.on(protein)
+                    String output = "HEADER    LIGASE/RNA                              15-JUL-99   " + pdbId.toUpperCase() + "              " + System.lineSeparator() + protein.select()
                             .chainName(chainId)
                             .aminoAcids()
                             .residueNumber(residueNumbers)

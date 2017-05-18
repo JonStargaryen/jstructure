@@ -1,12 +1,14 @@
 package studies.interactions.topology;
 
-import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
-import studies.StudyConstants;
+import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
+import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
@@ -26,13 +28,20 @@ import java.nio.file.Paths;
 public class LinkInteractionsToTopologyAndSequenceMotifs {
     private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
     private static final SequenceMotifAnnotator sequenceMotifAnnotator = new SequenceMotifAnnotator();
+    private static final OrientationsOfProteinsInMembranesAnnotator topologyAnnotator = new OrientationsOfProteinsInMembranesAnnotator();
 
     public static void main(String[] args) throws IOException {
-        Files.list(Paths.get(StudyConstants.GIT + "phd_sb_repo/data/chains/"))
-                .forEach(LinkInteractionsToTopologyAndSequenceMotifs::handleFile);
+        Files.lines(Paths.get(""))
+                .limit(5)
+                .forEach(LinkInteractionsToTopologyAndSequenceMotifs::handleLine);
     }
 
-    private static void handleFile(Path path) {
-        System.out.println(path);
+    private static void handleLine(String line) {
+        System.out.println(line);
+        Protein protein = ProteinParser.source(line.split("_")[0]).parse();
+        Chain chain = protein.select().chainName(line.split("_")[1]).asChain();
+        plipAnnotator.process(protein);
+        sequenceMotifAnnotator.process(protein);
+        topologyAnnotator.process(protein);
     }
 }

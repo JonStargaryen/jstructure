@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.feature.FeatureContainerRoot;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
+import de.bioforscher.jstructure.model.structure.identifier.PdbId;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
@@ -20,12 +21,9 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
      */
     static final Protein UNKNOWN_PROTEIN = new Protein();
     static {
-        UNKNOWN_PROTEIN.setName("UNKNOWN PROTEIN");
+        UNKNOWN_PROTEIN.setPdbId(PdbId.UNKNOWN_PROTEIN_ID);
     }
-    /**
-     * The <tt>PDB</tt> id of this protein. If none is known (e.g. because this is a modeled structure, the filename is returned)
-     */
-    private String name;
+    private PdbId pdbId;
     /**
      * The <tt>PDB</tt> description of this protein.
      */
@@ -38,7 +36,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
     }
 
     public Protein(Protein protein) {
-        this.name = protein.name;
+        this.pdbId = protein.pdbId;
         this.title = protein.title;
         this.chains = protein.chains()
                 .map(Chain::new)
@@ -81,19 +79,19 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
 
     /**
      * The name of this structure as <tt>PDB</tt> id (or the parsed file's name as fallback).
-     * @return the name of this protein
+     * @return the id of this protein
      */
-    public String getName() {
-        return name;
+    public PdbId getPdbId() {
+        return pdbId;
     }
 
     /**
      * Assign a name (i.e. most of the time a <tt>PDB</tt> id) to this protein.
-     * @param name the <tt>PDB</tt> id found in the file which was parsed to create this protein, otherwise the filename,
+     * @param pdbId the <tt>PDB</tt> id found in the file which was parsed to create this protein, otherwise the filename,
      *             otherwise probably <code>null</code>
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setPdbId(PdbId pdbId) {
+        this.pdbId = pdbId;
     }
 
     /**
@@ -123,7 +121,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? name : identifier;
+        return identifier == null ? pdbId.getFullName() : identifier;
     }
 
     @Override

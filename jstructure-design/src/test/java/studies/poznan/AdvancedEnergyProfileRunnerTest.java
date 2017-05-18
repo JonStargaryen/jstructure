@@ -14,13 +14,11 @@ import java.net.URL;
 public class AdvancedEnergyProfileRunnerTest {
     private String basepath;
     private Protein protein1a8h;
-    private Protein protein1asy;
 
     @Before
     public void setup() {
         basepath = "/home/bittrich/playground/";
         protein1a8h = ProteinParser.source("1a8h").parse();
-        protein1asy = ProteinParser.source("1asy").parse();
     }
 
     @Test

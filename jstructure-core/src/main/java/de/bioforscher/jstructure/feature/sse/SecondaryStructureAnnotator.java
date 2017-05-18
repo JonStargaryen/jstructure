@@ -12,7 +12,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -317,11 +316,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 Group res1 = residues.getGroups().get(i);
                 Group res2 = residues.getGroups().get(j);
                 double distance = LinearAlgebra3D.distanceFast(
-                        Selection.on(res1)
+                        res1.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates(),
-                        Selection.on(res2)
+                        res2.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates());
@@ -413,10 +412,12 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             // Check if all atoms form peptide bonds (backbone discontinuity)
             for (int k = 0; k < 4; k++) {
                 int index = i + k - 2;
-                Atom c = Selection.on(residues.getGroups().get(index))
+                Atom c = residues.getGroups().get(index)
+                        .select()
                         .backboneCarbonAtoms()
                         .asAtom();
-                Atom n = Selection.on(residues.getGroups().get(index + 1))
+                Atom n = residues.getGroups().get(index + 1)
+                        .select()
                         .backboneNitrogenAtoms()
                         .asAtom();
                 // Peptide bond C-N
@@ -426,13 +427,16 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 }
             }
 
-            Atom caim2 = Selection.on(residues.getGroups().get(i - 2))
+            Atom caim2 = residues.getGroups().get(i - 2)
+                    .select()
                     .alphaCarbonAtoms()
                     .asAtom();
-            Atom cag = Selection.on(residues.getGroups().get(i))
+            Atom cag = residues.getGroups().get(i)
+                    .select()
                     .alphaCarbonAtoms()
                     .asAtom();
-            Atom caip2 = Selection.on(residues.getGroups().get(i + 2))
+            Atom caip2 = residues.getGroups().get(i + 2)
+                    .select()
                     .alphaCarbonAtoms()
                     .asAtom();
 
@@ -624,23 +628,23 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             Group res1 = residues.getGroups().get(i);
             Group res2 = residues.getGroups().get(i + 1);
 
-            Atom n1 = Selection.on(res1)
+            Atom n1 = res1.select()
                     .backboneNitrogenAtoms()
                     .asAtom();
-            Atom ca1 = Selection.on(res1)
+            Atom ca1 = res1.select()
                     .alphaCarbonAtoms()
                     .asAtom();
-            Atom c1 = Selection.on(res1)
+            Atom c1 = res1.select()
                     .backboneCarbonAtoms()
                     .asAtom();
 
-            Atom n2 = Selection.on(res2)
+            Atom n2 = res2.select()
                     .backboneNitrogenAtoms()
                     .asAtom();
-            Atom ca2 = Selection.on(res2)
+            Atom ca2 = res2.select()
                     .alphaCarbonAtoms()
                     .asAtom();
-            Atom c2 = Selection.on(res2)
+            Atom c2 = res2.select()
                     .backboneCarbonAtoms()
                     .asAtom();
 
@@ -668,11 +672,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 Group res1 = residues.getGroups().get(i);
                 Group res2 = residues.getGroups().get(j);
                 double squaredDistance = LinearAlgebra3D.distanceFast(
-                        Selection.on(res1)
+                        res1.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates(),
-                        Selection.on(res2)
+                        res2.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates());
@@ -788,7 +792,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 .backboneNitrogenAtoms()
                 .asAtom();
         double[] n = nAtom.getCoordinates();
-        double[] h = Selection.on(res1)
+        double[] h = res1.select()
                 .backboneHydrogen()
                 .asAtom()
                 .getCoordinates();
@@ -859,7 +863,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @return true if no backbone hydrogen is present
      */
     private boolean lacksBackboneHydrogen(Group residue) {
-        return !Selection.on(residue)
+        return !residue.select()
                 .backboneHydrogen()
                 .asOptionalAtom()
                 .isPresent();
@@ -871,15 +875,15 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      */
     private void calcSimpleH(Fragment<Group> fragmentOfSize2) {
         try {
-            double[] c = Selection.on(fragmentOfSize2.getElement(0))
+            double[] c = fragmentOfSize2.getElement(0).select()
                     .backboneCarbonAtoms()
                     .asAtom()
                     .getCoordinates();
-            double[] o = Selection.on(fragmentOfSize2.getElement(0))
+            double[] o = fragmentOfSize2.getElement(0).select()
                     .backboneOxygenAtoms()
                     .asAtom()
                     .getCoordinates();
-            double[] n = Selection.on(fragmentOfSize2.getElement(1))
+            double[] n = fragmentOfSize2.getElement(1).select()
                     .backboneNitrogenAtoms()
                     .asAtom()
                     .getCoordinates();

@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.CIFParser;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
@@ -121,9 +120,9 @@ public class SVDSuperimposerTest {
                 AlignmentAlgorithm.NEUTRAL_ROTATION);
 
         SVDSuperimposer svd = new SVDSuperimposer();
-        StructureAlignmentResult result = svd.align(Selection.on(protein1acj)
+        StructureAlignmentResult result = svd.align(protein1acj.select()
                 .aminoAcids()
-                .asGroupContainer(), Selection.on(protein1acjCopy)
+                .asGroupContainer(), protein1acjCopy.select()
                 .aminoAcids()
                 .asGroupContainer());
         Assert.assertEquals(0.0, result.getAlignmentScore(), 0.001);

@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.slf4j.Logger;
@@ -20,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static de.bioforscher.jstructure.model.structure.selection.Selection.on;
 
 /**
  * A collection of commonly used function to manipulate atom coordinates. In contrast to the the functions in
@@ -59,23 +56,23 @@ public class LinearAlgebraAtom {
                     System.lineSeparator() + "found: " + group1.getIdentifier() + " and " + group2.getIdentifier());
         }
 
-        Atom n1 = Selection.on(group1)
+        Atom n1 = group1.select()
                 .backboneNitrogenAtoms()
                 .asAtom();
-        Atom ca1 = Selection.on(group1)
+        Atom ca1 = group1.select()
                 .alphaCarbonAtoms()
                 .asAtom();
-        Atom c1 = Selection.on(group1)
+        Atom c1 = group1.select()
                 .backboneCarbonAtoms()
                 .asAtom();
 
-        Atom n2 = Selection.on(group2)
+        Atom n2 = group2.select()
                 .backboneNitrogenAtoms()
                 .asAtom();
-        Atom ca2 = Selection.on(group2)
+        Atom ca2 = group2.select()
                 .alphaCarbonAtoms()
                 .asAtom();
-        Atom c2 = Selection.on(group2)
+        Atom c2 = group2.select()
                 .backboneCarbonAtoms()
                 .asAtom();
 
@@ -125,7 +122,7 @@ public class LinearAlgebraAtom {
      * @return the maximal distance occurring between the centroid and any other atom
      */
     public static double maximalExtent(AtomContainer atomContainer, final double[] centroid) {
-        return on(atomContainer)
+        return atomContainer.select()
                 .alphaCarbonAtoms()
                 .asFilteredAtoms()
                 .mapToDouble(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), centroid))

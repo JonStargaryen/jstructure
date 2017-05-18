@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.selection.Selection;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,11 +60,11 @@ class BindingSiteAligner {
                     logger.info("determining representative ligands {}", id);
 
                     Protein protein = entry.getValue();
-                    GroupContainer representativeChain = Selection.on(protein)
+                    GroupContainer representativeChain = protein.select()
                             .chainName(entry.getKey().split("_")[1])
                             .asGroupContainer();
 
-                    AtomContainer ligand = Selection.on(protein)
+                    AtomContainer ligand = protein.select()
                             .hetatms()
                             .asFilteredGroups()
                             // screen for ligands containing nitrogen
@@ -105,7 +104,7 @@ class BindingSiteAligner {
                     .get()
                     .split(",");
 
-            GroupContainer chain = Selection.on(proteinMap.get(id))
+            GroupContainer chain = proteinMap.get(id).select()
                     .chainName(id.split("_")[1])
                     .aminoAcids()
                     .asGroupContainer();

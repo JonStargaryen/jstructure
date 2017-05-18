@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.model.identifier.PdbChainId;
+import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

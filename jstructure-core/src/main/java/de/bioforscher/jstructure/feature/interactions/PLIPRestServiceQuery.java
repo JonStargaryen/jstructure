@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.feature.interactions;
 
+import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,14 @@ public class PLIPRestServiceQuery {
             return getPlipResults(new URL(BASE_URL + pdbId + "/" + chainId + "/" + residueNumber));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        }
+    }
+
+    public static String getPlipResults(PdbChainId chainId) {
+        try {
+            return getPlipResults(new URL(BASE_URL + "plain/" + chainId.getPdbId().getPdbId() + "/" + chainId.getChainId()));
+        } catch (IOException e) {
+            throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }
     }
 

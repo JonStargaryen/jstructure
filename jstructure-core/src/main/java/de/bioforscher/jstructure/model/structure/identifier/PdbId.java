@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.model.identifier;
+package de.bioforscher.jstructure.model.structure.identifier;
 
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,6 +15,8 @@ public class PdbId {
     //TODO maybe some selection criteria and stuff automatically
     //TODO maybe the source / filename automatically
     //TODO consistent naming pattern
+
+    public static final PdbId UNKNOWN_PROTEIN_ID = PdbId.createFromName("UNKNOWN PROTEIN");
 
     private PdbId(String pdbId, String additionalName) {
         this.pdbId = pdbId.toLowerCase();
