@@ -5,7 +5,11 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.parser.ProteinParser;
 
+import java.util.OptionalDouble;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
