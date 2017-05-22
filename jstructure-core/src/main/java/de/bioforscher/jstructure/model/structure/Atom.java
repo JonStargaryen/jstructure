@@ -28,6 +28,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     private float bfactor;
     private boolean virtual;
     private String identifier;
+    private String alternativeLocation;
 
     /**
      * Copy constructor.
@@ -42,6 +43,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
         this.occupancy = atom.occupancy;
         this.bfactor = atom.bfactor;
         this.virtual = atom.virtual;
+        this.alternativeLocation = atom.alternativeLocation;
     }
 
     /**
@@ -52,14 +54,16 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
      * @param coordinates the spatial coordinates of this atom
      * @param occupancy the occupancy value
      * @param bfactor the b-factor
+     * @param alternativeLocation the indicator for alt locations (e.g. A or B) - maybe empty
      */
-    public Atom(String name, int pdbSerial, Element element, double[] coordinates, float occupancy, float bfactor) {
+    public Atom(String name, int pdbSerial, Element element, double[] coordinates, float occupancy, float bfactor, String alternativeLocation) {
         this.name = name;
         this.pdbSerial = pdbSerial;
         this.element = element;
         this.coordinates = coordinates;
         this.occupancy = occupancy;
         this.bfactor = bfactor;
+        this.alternativeLocation = alternativeLocation;
     }
 
     /**
@@ -72,8 +76,8 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
      * @param occupancy the occupancy value
      * @param bfactor the b-factor
      */
-    public Atom(String name, int pdbSerial, String elementName, double[] coordinates, float occupancy, float bfactor) {
-        this(name, pdbSerial, Element.valueOfIgnoreCase(elementName), coordinates, occupancy, bfactor);
+    public Atom(String name, int pdbSerial, String elementName, double[] coordinates, float occupancy, float bfactor, String alternativeLocation) {
+        this(name, pdbSerial, Element.valueOfIgnoreCase(elementName), coordinates, occupancy, bfactor, alternativeLocation);
     }
 
     /**
@@ -85,7 +89,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
      * @param coordinates the spatial coordinates of this atom
      */
     public Atom(String name, int pdbSerial, Element element, double[] coordinates) {
-        this(name, pdbSerial, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
+        this(name, pdbSerial, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR, "");
     }
 
     /**
@@ -96,7 +100,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
      * @param coordinates the coordinates
      */
     public Atom(String name, Element element, double[] coordinates) {
-        this(name, 0, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR);
+        this(name, 0, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR, "");
         this.virtual = true;
     }
 
@@ -173,7 +177,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     }
 
     @Override
-    public String composePDBRecord() {
+    public String getPdbRepresentation() {
         try {
             String pdbRecord = AtomRecordProvider.toPDBString(this);
             if (pdbRecord.length() == 0) {
@@ -206,6 +210,18 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
      */
     public float getBfactor() {
         return bfactor;
+    }
+
+    /**
+     * The indicator for alternative locations - maybe empty if there is none.
+     * @return the alt location indicator (if any)
+     */
+    public String getAlternativeLocation() {
+        return alternativeLocation;
+    }
+
+    public boolean hasAlternativeLocations() {
+        return !alternativeLocation.isEmpty();
     }
 
     /**
@@ -259,7 +275,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
             Chain parentChain = parentGroup.getParentChain();
             //TODO check - needed?
             String chainId = parentChain.getChainId() != null ? parentChain.getChainId().getChainId() : Chain.UNKNOWN_CHAIN.getChainId().getChainId();
-            String record = parentGroup.isInTerminatedParentChain() ? HETATM_PREFIX : ATOM_PREFIX;
+            String record = parentGroup.isHetAtm() ? HETATM_PREFIX : ATOM_PREFIX;
             // format output ...
             String resName = parentGroup.getThreeLetterCode();
             String pdbcode = String.valueOf(parentGroup.getResidueNumber());
@@ -268,7 +284,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
             String serial = String.format("%5d", seri);
             String fullName = formatAtomName(atom);
 
-            Character altLoc = ' ';
+            String altLoc = atom.hasAlternativeLocations() ? atom.alternativeLocation : " ";
             String resseq = String.format("%4s", pdbcode) + " ";
 
             String x = String.format("%8s", d3.format(atom.coordinates[0]));

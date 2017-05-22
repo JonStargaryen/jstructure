@@ -42,7 +42,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     @Override
     protected void processInternally(Protein protein) {
         Document document = downloadXml(protein.getPdbId().getPdbId());
-        protein.aminoAcidChains()
+        protein.chainsWithAminoAcids()
                 .forEach(chain -> processInternally(document, chain));
     }
 
@@ -54,13 +54,13 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
 
         String pdbId = chain.getParentProtein().getPdbId().getPdbId();
         String ecNumber = getLinesForPdbId(ENZYME_MAPPING, pdbId)
-                .filter(split -> split[1].equals(chain.getChainId()))
+                .filter(split -> split[1].equals(chain.getChainId().getChainId()))
                 .map(split -> split[3])
                 .findFirst()
                 .orElse(UNKNOWN_MAPPING);
 
         String[] mappingString = getLinesForPdbId(PFAM_MAPPING, pdbId)
-                .filter(split -> split[1].equals(chain.getChainId()))
+                .filter(split -> split[1].equals(chain.getChainId().getChainId()))
                 .findFirst()
                 .orElse(UNKNOWN_PFAM_MAPPING);
 

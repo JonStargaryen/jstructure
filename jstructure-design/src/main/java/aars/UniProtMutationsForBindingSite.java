@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.alignment.Alignments;
 import org.biojava.nbio.alignment.SimpleGapPenalty;
@@ -48,7 +49,7 @@ class UniProtMutationsForBindingSite {
                 // only consider truncated/curated files
                 .filter(path -> path.toFile().getName().contains("truncated"))
                 .flatMap(AARSConstants::list)
-                .map(path -> ProteinParser.source(path).forceProteinName(path.toFile().getAbsolutePath()).parse())
+                .map(path -> ProteinParser.source(path).forceProteinName(ProteinIdentifier.createFromAdditionalName(path.toFile().getAbsolutePath())).parse())
                 .map(UniProtMutationsForBindingSite::extractBindingSiteResidueNumbers)
                 .filter(UniProtMutationsForBindingSite::hasMutations)
                 .forEach(UniProtMutationsForBindingSite::handleBindingSite);
@@ -168,8 +169,8 @@ class UniProtMutationsForBindingSite {
     }
 
     private static BindingSite extractBindingSiteResidueNumbers(Protein protein) {
-        return new BindingSite(protein.getName(),
-                protein.chains().findFirst().get().getChainId(),
+        return new BindingSite(protein.getPdbId().getPdbId(),
+                protein.chains().findFirst().get().getChainId().getChainId(),
                 protein.getGroups());
     }
 

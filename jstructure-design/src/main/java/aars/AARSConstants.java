@@ -10,6 +10,7 @@ import java.util.stream.Stream;
  * Path constants for the aars project.
  * Created by bittrich on 2/7/17.
  */
+@Deprecated
 class AARSConstants {
     static final String HOME_PATH = System.getProperty("user.home");
     private static final String PROJECT_BASE_PATH = HOME_PATH + "/git/aars_analysis/data/";

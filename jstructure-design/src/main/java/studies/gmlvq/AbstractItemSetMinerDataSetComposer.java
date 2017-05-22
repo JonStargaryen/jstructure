@@ -8,10 +8,8 @@ import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
-import studies.StudyConstants;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -22,13 +20,10 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Create some data set for the GMLVQ-project.
- * Created by bittrich on 4/11/17.
+ * The abstract composer for GMLVQ_MAIN-data sets dealing with itemset miner data.
+ * Created by bittrich on 5/22/17.
  */
-public class ComposeItemSetMinerDataSet {
-    private static final boolean FUNCTIONAL = false;
-    private static final String FILENAME = "studies/gmlvq/" + (FUNCTIONAL ? "positives.txt" : "negatives.txt");
-
+public abstract class AbstractItemSetMinerDataSetComposer {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
     private static final List<AbstractFeatureProvider> featureProviders = Stream.of(AccessibleSurfaceArea.class,
             LoopFraction.class,
@@ -36,11 +31,26 @@ public class ComposeItemSetMinerDataSet {
             .map(FeatureProviderRegistry::resolve)
             .collect(Collectors.toList());
 
-    public static void main(String[] args) throws IOException {
-        int numberOfGroups = Files.lines(Paths.get(StudyConstants.getResourceAsFilepath(FILENAME))).findFirst().orElseThrow(() -> new IllegalArgumentException("no valid input line found")).split("_").length - 1;
-        List<String> outputLines = Files.lines(Paths.get(StudyConstants.getResourceAsFilepath(FILENAME)))
-                .filter(ComposeItemSetMinerDataSet::filterFunctionalProteins)
-                .map(ComposeItemSetMinerDataSet::handleLine)
+    private List<String> functionalPdbIds;
+
+    protected AbstractItemSetMinerDataSetComposer(String positiveFilename, String negativeFilename) throws IOException {
+        this.functionalPdbIds = Files.lines(Paths.get(positiveFilename))
+                .map(line -> line.split("_")[0])
+                .distinct()
+                .collect(Collectors.toList());
+        handleCase(positiveFilename, true);
+        handleCase(negativeFilename, false);
+    }
+
+    private void handleCase(String filename, boolean functional) throws IOException {
+        // the number of considered residues
+        int numberOfGroups = Files.lines(Paths.get(filename))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("no valid input line found"))
+                .split("_").length - 1;
+        List<String> outputLines = Files.lines(Paths.get(filename))
+                .filter(line -> filterFunctionalProteins(line, functional))
+                .map(line -> handleLine(line, functional))
                 .filter(line -> !line.isEmpty())
                 .collect(Collectors.toList());
 
@@ -48,7 +58,7 @@ public class ComposeItemSetMinerDataSet {
                 .collect(Collectors.joining(System.lineSeparator(), "@RELATION ism" + System.lineSeparator() +
                         "@ATTRIBUTE id             STRING" + System.lineSeparator() +
                         IntStream.range(0, numberOfGroups)
-                                .mapToObj(ComposeItemSetMinerDataSet::mapToHeaderLine)
+                                .mapToObj(this::mapToHeaderLine)
                                 .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
                         "@ATTRIBUTE class          {functional,non-functional}" + System.lineSeparator() +
                         "@DATA" + System.lineSeparator(), ""));
@@ -56,21 +66,8 @@ public class ComposeItemSetMinerDataSet {
         System.out.println(output);
     }
 
-    private static List<String> functionalPdbIds;
-
-    static {
-        try {
-            functionalPdbIds = Files.lines(Paths.get(StudyConstants.getResourceAsFilepath("studies/gmlvq/positives.txt")))
-                    .map(line -> line.split("_")[0])
-                    .distinct()
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    private static boolean filterFunctionalProteins(String line) {
-        if(FUNCTIONAL) {
+    private boolean filterFunctionalProteins(String line, boolean functional) {
+        if(functional) {
             return true;
         }
 
@@ -83,14 +80,14 @@ public class ComposeItemSetMinerDataSet {
         return true;
     }
 
-    private static String mapToHeaderLine(int index) {
+    private String mapToHeaderLine(int index) {
         index++;
         return "@ATTRIBUTE energy" + index + "        NUMERIC" + System.lineSeparator() +
                 "@ATTRIBUTE loopFraction" + index + "  NUMERIC" + System.lineSeparator() +
                 "@ATTRIBUTE rasa" + index + "          NUMERIC";
     }
 
-    private static String handleLine(String line) {
+    private String handleLine(String line, boolean functional) {
         System.out.println(line);
         try {
             String[] sectionSplit = line.split("_");
@@ -107,22 +104,25 @@ public class ComposeItemSetMinerDataSet {
                     .map(residueSection -> extractResidue(protein, residueSection))
                     .collect(Collectors.toList());
 
-            return groups.stream()
-                    .map(ComposeItemSetMinerDataSet::mapToString)
-                    .collect(Collectors.joining(",", line + ",", "," + (FUNCTIONAL ? "" : "non-") + "functional"));
+            String partialOutput = groups.stream()
+                    .map(this::mapToString)
+                    .collect(Collectors.joining(",", line + ",", "," + (functional ? "" : "non-") + "functional"));
+            System.out.println(partialOutput);
+            return partialOutput;
         } catch (NoSuchElementException | NullPointerException | NumberFormatException e) {
+            e.printStackTrace();
             // thrown upon missing backbone atoms during secondary structure assignment
             return "";
         }
     }
 
-    private static String mapToString(Group group) {
-        return DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(EnergyProfile.class)) + "," +
-                DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(LoopFraction.class)) + "," +
-                DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class));
+    private String mapToString(Group group) {
+        return DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy()) + "," +
+                DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(LoopFraction.class).getLoopFraction()) + "," +
+                DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea());
     }
 
-    private static Group extractResidue(Protein protein, String residueSection) {
+    private Group extractResidue(Protein protein, String residueSection) {
         String[] split = residueSection.split("-");
         Group group = protein.select().chainName(split[0]).residueNumber(Integer.valueOf(split[1].substring(1))).asGroup();
         // check for integrity

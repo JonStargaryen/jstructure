@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.feature.FeatureContainerRoot;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
-import de.bioforscher.jstructure.model.structure.identifier.PdbId;
+import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
@@ -19,11 +19,8 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
     /**
      * reference to an undefined protein - this is used by chains without explicit parent reference
      */
-    static final Protein UNKNOWN_PROTEIN = new Protein();
-    static {
-        UNKNOWN_PROTEIN.setPdbId(PdbId.UNKNOWN_PROTEIN_ID);
-    }
-    private PdbId pdbId;
+    static final Protein UNKNOWN_PROTEIN = new Protein(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
+    private ProteinIdentifier pdbId;
     /**
      * The <tt>PDB</tt> description of this protein.
      */
@@ -32,6 +29,11 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
     private String identifier;
 
     public Protein() {
+        this(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
+    }
+
+    public Protein(ProteinIdentifier pdbId) {
+        this.pdbId = pdbId;
         this.chains = new ArrayList<>();
     }
 
@@ -81,7 +83,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
      * The name of this structure as <tt>PDB</tt> id (or the parsed file's name as fallback).
      * @return the id of this protein
      */
-    public PdbId getPdbId() {
+    public ProteinIdentifier getPdbId() {
         return pdbId;
     }
 
@@ -90,7 +92,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
      * @param pdbId the <tt>PDB</tt> id found in the file which was parsed to create this protein, otherwise the filename,
      *             otherwise probably <code>null</code>
      */
-    public void setPdbId(PdbId pdbId) {
+    public void setPdbId(ProteinIdentifier pdbId) {
         this.pdbId = pdbId;
     }
 

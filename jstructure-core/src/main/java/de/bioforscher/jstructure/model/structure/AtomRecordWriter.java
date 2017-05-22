@@ -11,5 +11,5 @@ public interface AtomRecordWriter {
      * @return an <tt>ATOM</tt> for each {@link Atom} associated to this element, separated by
      * {@link System#lineSeparator()}
      */
-    String composePDBRecord();
+    String getPdbRepresentation();
 }

@@ -26,6 +26,7 @@ import static aars.AARSConstants.MAIN_TABLE_CATALYTIC_PATH;
  * Aligns binding sites with respect to a present ligand.
  * Created by bittrich on 2/7/17.
  */
+@Deprecated
 class BindingSiteAligner {
     private static final Logger logger = LoggerFactory.getLogger(BindingSiteAligner.class);
 
@@ -109,7 +110,7 @@ class BindingSiteAligner {
                     .aminoAcids()
                     .asGroupContainer();
             AtomContainer ligand = ligandMap.get(id);
-            String output = chain.composePDBRecord() + System.lineSeparator() + ligand.composePDBRecord();
+            String output = chain.getPdbRepresentation() + System.lineSeparator() + ligand.getPdbRepresentation();
             Files.write(Paths.get("/home/bittrich/bs/" + split[0] + "-" + split[1] +  "-" + id + ".pdb"), output.getBytes());
         }
     }

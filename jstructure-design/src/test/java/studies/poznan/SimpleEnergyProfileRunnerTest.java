@@ -52,7 +52,7 @@ public class SimpleEnergyProfileRunnerTest {
             try {
                 String basePath = "/home/bittrich/energyprofiles/";
                 Path pdbFile = Paths.get(basePath + id + ".pdb");
-                Files.write(pdbFile, protein.composePDBRecord().getBytes());
+                Files.write(pdbFile, protein.getPdbRepresentation().getBytes());
                 SimpleEnergyProfileRunner.main(pdbFile.toFile().getAbsolutePath(), basePath + id + ".ep");
             } catch (IOException e) {
                 throw new UncheckedIOException(e);

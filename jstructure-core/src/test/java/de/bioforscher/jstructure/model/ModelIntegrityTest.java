@@ -31,7 +31,7 @@ public class ModelIntegrityTest {
                 .asGroupContainer()
                 .createCopy();
         Assert.assertTrue(copiedGroups instanceof Chain);
-        System.out.println(copiedGroups.composePDBRecord());
+        System.out.println(copiedGroups.getPdbRepresentation());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class ModelIntegrityTest {
                 .atomName(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME)
                 .asAtomContainer()
                 .createCopy();
-        System.out.println(clonedSelectedAtoms.composePDBRecord());
+        System.out.println(clonedSelectedAtoms.getPdbRepresentation());
     }
 
     @Test

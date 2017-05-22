@@ -18,7 +18,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group("UNK", 0, GroupInformation.UNKNOWN_GROUP, false);
+    static final Group UNKNOWN_GROUP = new Group(0, GroupInformation.UNKNOWN_GROUP, false, false);
 
     private int residueNumber;
     private List<Atom> atoms;
@@ -28,13 +28,15 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     private Chain parentChain;
     private String identifier;
     private GroupInformation groupInformation;
-    private boolean parentChainIsTermianted;
+    private boolean parentChainIsTerminated;
+    private boolean hetAtm;
 
-    public Group(String pdbName, int residueNumber, GroupInformation groupInformation, boolean parentChainIsTerminated) {
+    public Group(int residueNumber, GroupInformation groupInformation, boolean parentChainIsTerminated, boolean hetAtm) {
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
         this.groupInformation = groupInformation;
-        this.parentChainIsTermianted = parentChainIsTerminated;
+        this.parentChainIsTerminated = parentChainIsTerminated;
+        this.hetAtm = hetAtm;
     }
 
     Group() {
@@ -85,11 +87,11 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     }
 
     public boolean isAminoAcid() {
-        return !parentChainIsTermianted && groupInformation.getType().contains("PEPTIDE LINKING");
+        return !parentChainIsTerminated && groupInformation.getType().contains("PEPTIDE LINKING");
     }
 
     public boolean isNucleotide() {
-        return !parentChainIsTermianted && groupInformation.getType().contains("NA LINKING");
+        return !parentChainIsTerminated && groupInformation.getType().contains("NA LINKING");
     }
 
     public boolean isLigand() {
@@ -152,6 +154,10 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     }
 
     boolean isInTerminatedParentChain() {
-        return parentChainIsTermianted;
+        return parentChainIsTerminated;
+    }
+
+    public boolean isHetAtm() {
+        return hetAtm;
     }
 }

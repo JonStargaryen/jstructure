@@ -30,7 +30,7 @@ public class EnsembleGenerator {
 //        }
 //    }
 //
-//    public static List<Chain> createChainsFromPdbSequenceCluster(PdbChainId referenceId, PdbSequenceClusterCutoff cutoff) {
+//    public static List<Chain> createChainsFromPdbSequenceCluster(ChainIdentifier referenceId, PdbSequenceClusterCutoff cutoff) {
 //        return createStreamFromPdbChainIds(referenceId.getFullName(), PDBEnsembleQuery.fetchSequenceCluster(referenceId, cutoff));
 //    }
 //
@@ -43,11 +43,11 @@ public class EnsembleGenerator {
 //        return createStreamFromPdbChainIds(pfamId, new SiftsMappingProvider().mapPfamIdToPdbIds(pfamId));
 //    }
 //
-//    private static List<Chain> createStreamFromPdbChainIds(String referenceId, List<PdbChainId> pdbChainIds) {
+//    private static List<Chain> createStreamFromPdbChainIds(String referenceId, List<ChainIdentifier> pdbChainIds) {
 //        logger.info("[{}] cluster consists of {}", referenceId, pdbChainIds);
 //
-//        Map<PdbId, Protein> uniqueProteins = pdbChainIds.parallelStream()
-//                .map(PdbChainId::getPdbId)
+//        Map<ProteinIdentifier, Protein> uniqueProteins = pdbChainIds.parallelStream()
+//                .map(ChainIdentifier::getPdbId)
 //                .distinct()
 //                .peek(pdbId -> logger.info("[{}] fetching pdb structure {}", referenceId, pdbId))
 //                .collect(Collectors.toMap(Function.identity(), pdbId -> ProteinParser.source(pdbId.getPdbId()).parse()));
@@ -130,14 +130,14 @@ public class EnsembleGenerator {
 //         * @return all chain ids (in the format pdbId_chainId) which are similar to the reference - they are sorted, the
 //         *      first entry is the most relevant one
 //         */
-//        static List<PdbChainId> fetchSequenceCluster(PdbChainId pdbChainId, PdbSequenceClusterCutoff cutoff) {
+//        static List<ChainIdentifier> fetchSequenceCluster(ChainIdentifier pdbChainId, PdbSequenceClusterCutoff cutoff) {
 //            try {
 //                logger.debug("fetching {}-cluster fom PDB for {}", cutoff.getCutoff(), pdbChainId);
 //                Document document = Jsoup.connect(String.format(CLUSTER_FETCH_URL, cutoff.getCutoff(), pdbChainId.getPdbId().getPdbId(), pdbChainId.getChainId())).get();
 //                return document.getElementsByTag("pdbChain").stream()
 //                        .map(pdbChain -> pdbChain.attr("name"))
 //                        .map(pdbChain -> pdbChain.split("\\."))
-//                        .map(split -> PdbChainId.createFromChainId(PdbId.createFromPdbId(split[0]), split[1]))
+//                        .map(split -> ChainIdentifier.createFromChainId(ProteinIdentifier.createFromPdbId(split[0]), split[1]))
 //                        .collect(Collectors.toList());
 //            } catch (IOException e) {
 //                throw new UncheckedIOException(e);

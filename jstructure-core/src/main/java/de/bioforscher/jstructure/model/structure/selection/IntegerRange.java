@@ -10,4 +10,9 @@ public class IntegerRange extends Pair<Integer, Integer> {
     public IntegerRange(int i1, int i2) {
         super(i1, i2);
     }
+
+    @Override
+    public String toString() {
+        return "Range [" + getLeft() + ", " + getRight() + "]";
+    }
 }

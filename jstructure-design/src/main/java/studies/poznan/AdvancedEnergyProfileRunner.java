@@ -8,6 +8,8 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.CIFParser;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
@@ -89,8 +91,10 @@ public class AdvancedEnergyProfileRunner {
         void execute() {
             String output;
             if(alignmentMode) {
-                double distanceScore = energyProfileAligner.align(proteinContainer1.getEnergyProfile(), proteinContainer2.getEnergyProfile());
-                output = "energy profile alignment between " + proteinContainer1.protein.getIdentifier() + " and " + proteinContainer2.protein.getIdentifier() + System.lineSeparator() +
+                double distanceScore = energyProfileAligner.align(proteinContainer1.getEnergyProfile(),
+                        proteinContainer2.getEnergyProfile());
+                output = "energy profile alignment between " + proteinContainer1.protein.getIdentifier() + " and " +
+                        proteinContainer2.protein.getIdentifier() + System.lineSeparator() +
                         "distance score: " + distanceScore + System.lineSeparator() +
                         "continuous values between 0 and 5, 0 = optimal alignment, 5 = worst possible alignment score";
             } else {
@@ -142,13 +146,16 @@ public class AdvancedEnergyProfileRunner {
 
         ProteinContainer(String sequence) {
             this.protein = new Protein();
-            this.protein.setName("UNKNOWN PROTEIN");
-            Chain chain = new Chain("A");
+            ProteinIdentifier pdbId = ProteinIdentifier.UNKNOWN_PROTEIN_ID;
+            this.protein.setPdbId(pdbId);
+            Chain chain = new Chain(ChainIdentifier.createFromChainId(pdbId, "A"));
             this.protein.addChain(chain);
             for(int resNum = 1; resNum <= sequence.length(); resNum++) {
                 String aminoAcidName = String.valueOf(sequence.charAt(resNum - 1));
-                AminoAcidFamily aminoAcidFamily = AminoAcidFamily.valueOfIgnoreCase(aminoAcidName).orElseThrow(() -> new IllegalArgumentException("unknown amino acid '" + aminoAcidName + "'"));
-                Group group = new Group(aminoAcidFamily.getThreeLetterCode(), resNum, CIFParser.parseLigandInformation(aminoAcidFamily.getThreeLetterCode()), false);
+                AminoAcidFamily aminoAcidFamily = AminoAcidFamily.valueOfIgnoreCase(aminoAcidName).orElseThrow(() ->
+                        new IllegalArgumentException("unknown amino acid '" + aminoAcidName + "'"));
+                Group group = new Group(resNum,
+                        CIFParser.parseLigandInformation(aminoAcidFamily.getThreeLetterCode()), false);
                 chain.addGroup(group);
             }
             Builder.energyProfilePredictor.process(protein);
@@ -156,19 +163,22 @@ public class AdvancedEnergyProfileRunner {
     }
 
     private static final String DELIMITER = "\t";
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000", DecimalFormatSymbols.getInstance(Locale.US));
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000",
+            DecimalFormatSymbols.getInstance(Locale.US));
 
     static String composeOutput(Protein protein) {
         return protein.aminoAcids()
                 .map(AdvancedEnergyProfileRunner::composeOutputLine)
                 .collect(Collectors.joining(System.lineSeparator(),
                         "ID" + DELIMITER + protein.getIdentifier() + System.lineSeparator() +
-                                "chain" + DELIMITER + "resNum" + DELIMITER + "resName" + DELIMITER + "energy" + System.lineSeparator(),
+                                "chain" + DELIMITER + "resNum" + DELIMITER + "resName" + DELIMITER + "energy" +
+                                System.lineSeparator(),
                         ""));
     }
 
     private static String composeOutputLine(Group group) {
         return group.getParentChain().getIdentifier() + DELIMITER + group.getResidueNumber() + DELIMITER +
-                group.getThreeLetterCode() + DELIMITER + DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy());
+                group.getThreeLetterCode() + DELIMITER +
+                DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy());
     }
 }

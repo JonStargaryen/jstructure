@@ -1,4 +1,4 @@
-package studies.gmlvq;
+package studies.gmlvq.cmh;
 
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.parser.ProteinParser;
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
+import studies.StudyConstants;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,11 +17,10 @@ import java.util.stream.Collectors;
  * Take the original itemset miner data set and enrich it with PLIP interaction counts.
  * Created by bittrich on 4/18/17.
  */
-public class EnrichItemSetMinderDataSetWithInteractionData {
+class S02_EnrichItemSetMinderDataSetWithInteractionData {
     public static void main(String[] args) throws IOException {
-        //TODO global pattern of external files and resources - design should not have resources at all
-        String output = Files.lines(Paths.get("/home/bittrich/git/gmlvq_main/data/itemset_miner/PF00127/PF00127.arff"))
-                .map(EnrichItemSetMinderDataSetWithInteractionData::handleLine)
+        String output = Files.lines(Paths.get(StudyConstants.GMLVQ_MAIN, "data/itemset_miner/PF00127/PF00127.arff"))
+                .map(S02_EnrichItemSetMinderDataSetWithInteractionData::handleLine)
                 .filter(line -> !line.isEmpty())
                 .collect(Collectors.joining(System.lineSeparator()));
 
@@ -34,7 +34,7 @@ public class EnrichItemSetMinderDataSetWithInteractionData {
 @ATTRIBUTE waterBridges1  NUMERIC
          */
 
-        Files.write(Paths.get("/home/bittrich/git/gmlvq_main/data/itemset_miner/PF00127/PF00127_plip.arff"), output.getBytes());
+        Files.write(Paths.get(StudyConstants.GMLVQ_MAIN, "/data/itemset_miner/PF00127/PF00127_plip.arff"), output.getBytes());
     }
 
     private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();

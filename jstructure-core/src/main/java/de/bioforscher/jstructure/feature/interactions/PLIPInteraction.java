@@ -8,7 +8,6 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import org.jsoup.nodes.Element;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -79,12 +78,9 @@ public abstract class PLIPInteraction {
     }
 
     Atom resolveAtom(String tagName) {
-        int pdbSerial = getIntValueOfTag(tagName);
-        Optional<Atom> atom = protein.select()
-                .pdbSerial(pdbSerial)
-                .asOptionalAtom();
-
-        return atom.orElseThrow(() -> new NoSuchElementException("no atom found for pdbSerial '" + pdbSerial + "'"));
+        return protein.select()
+                .pdbSerial(getIntValueOfTag(tagName))
+                .asAtom();
     }
 
     List<Atom> resolveAtoms(String tagname) {

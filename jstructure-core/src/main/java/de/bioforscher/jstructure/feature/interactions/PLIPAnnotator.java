@@ -22,7 +22,7 @@ public class PLIPAnnotator extends AbstractFeatureProvider {
     protected void processInternally(Protein protein) {
         List<PLIPInteraction> globalPlipInteractions = new ArrayList<>();
 
-        protein.aminoAcidChains()
+        protein.chainsWithAminoAcids()
                 .forEach(chain -> {
                     try {
                         String plipXmlContent = PLIPRestServiceQuery.getPlipResults(chain.getChainId());

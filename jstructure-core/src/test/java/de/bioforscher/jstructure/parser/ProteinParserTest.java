@@ -7,12 +7,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import util.TestUtils;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.endsWith;
@@ -23,12 +25,14 @@ import static org.hamcrest.CoreMatchers.startsWith;
  * Created by S on 29.09.2016.
  */
 public class ProteinParserTest {
-    public static final String PDB_EXTENSION = ".pdb";
-    public static final String PDB_DIRECTORY = "parser/";
-    private static final String PDB_PARSED_DIRECTORY = PDB_DIRECTORY + "parsed/";
-    private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "1brr", "4cha");
-    private static final List<String> PDB_FILE_PATHS = PDB_IDS.stream()
-            .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION).collect(Collectors.toList());
+    private static final String PDB_EXTENSION = ".pdb";
+    private static final String PDB_DIRECTORY = "parser/";
+    private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "4bpm");
+    private static final List<Path> PDB_FILE_PATHS = PDB_IDS.stream()
+            .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION)
+            .map(TestUtils::getResourceAsFilepath)
+            .map(Paths::get)
+            .collect(Collectors.toList());
     /**
      * contains selenomethionine at pos 1, marked as HETATM
      */
@@ -36,7 +40,16 @@ public class ProteinParserTest {
 
     @Test
     public void shouldParseNonStandardAminoAcid() {
-        parseFilepath(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb");
+        ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb"))).parse();
+    }
+
+    @Test
+    public void shouldParseAlternativePositions() {
+        Protein protein = ProteinParser.source("4bpm").parse();
+        protein.select()
+                // atom 61 an alternative position
+                .pdbSerial(61)
+                .asAtom();
     }
 
     @Test
@@ -52,7 +65,9 @@ public class ProteinParserTest {
      */
     @Test
     public void shouldParseAllStructureFiles() {
-        PDB_FILE_PATHS.forEach(ProteinParserTest::parseFilepath);
+        PDB_FILE_PATHS.stream()
+                .map(ProteinParser::source)
+                .forEach(ProteinParser.OptionalSteps::parse);
     }
 
     @Test
@@ -80,7 +95,7 @@ public class ProteinParserTest {
 
         waters.forEach(group -> {
             Assert.assertTrue(group.isLigand());
-            Assert.assertTrue(group.composePDBRecord().startsWith(Atom.HETATM_PREFIX));
+            Assert.assertTrue(group.getPdbRepresentation().startsWith(Atom.HETATM_PREFIX));
         });
 
         Group arginineAsLigand = protein1bs2.select()
@@ -111,38 +126,35 @@ public class ProteinParserTest {
      */
     @Test
     public void shouldWriteEqualAtomRecords() {
-        for (String pdbFilePath : PDB_FILE_PATHS) {
-            Protein protein = parseFilepath(pdbFilePath);
-            protein.chains().forEach(chain -> System.out.println("parsed getChain '" + chain.getChainId() + "'"));
-            String parsedFilepath = TestUtils.getResourceAsFilepath(pdbFilePath.replace(PDB_DIRECTORY, PDB_PARSED_DIRECTORY));
-            try {
-                List<String> originalLines = Files.readAllLines(new File(parsedFilepath).toPath());
-                List<String> writtenLines = Arrays.asList(protein.composePDBRecord().split(System.lineSeparator()));
-                if(originalLines.size() != writtenLines.size()) {
-                    System.out.println("original and written PDB file differ in size!");
-                    originalLines.removeAll(writtenLines);
-                    System.out.println("missing from original: " + originalLines);
-                    Assert.fail();
-                }
-                for(int i = 0; i < originalLines.size(); i++) {
-                    String originalLine = originalLines.get(i);
-                    String writtenLine = writtenLines.get(i);
-                    if(originalLine.length() != writtenLine.length()) {
-                        System.out.println("lines differ in size!");
-                        System.out.println("'" + originalLine + "'");
-                        System.out.println("'" + writtenLine + "'");
-                        Assert.fail();
-                    }
-                    Assert.assertEquals(originalLine, writtenLine);
-                }
-            } catch (IOException e) {
-                Assert.fail("failed with IOException: " + e.getLocalizedMessage());
-            }
-        }
+        PDB_IDS.stream()
+                .skip(1)
+                .forEach(this::checkAgreement);
     }
 
-    public static Protein parseFilepath(String filepath) {
-        System.out.println("parsing PDB file " + filepath);
-        return ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath(filepath))).parse();
+    private void checkAgreement(String pdbId) {
+        System.out.println("checking agreement between written and expected ATOM records for " + pdbId);
+        Protein protein = ProteinParser.source(pdbId).parse();
+        List<String> writtenLines = Pattern.compile("\n")
+                .splitAsStream(protein.getPdbRepresentation())
+                .collect(Collectors.toList());
+        try {
+            List<String> expectedLines = Files.lines(Paths.get(TestUtils.getResourceAsFilepath("parser/parsed/" + pdbId + ".pdb")))
+                    .collect(Collectors.toList());
+
+            for(int i = 0; i < writtenLines.size(); i++) {
+                // some file have shorter lines
+                if(expectedLines.get(i).length() > writtenLines.get(i).length()) {
+                    Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
+                            "expected: " + expectedLines.get(i) + System.lineSeparator() +
+                            "actual:   " + writtenLines.get(i), expectedLines.get(i).startsWith(writtenLines.get(i)));
+                } else {
+                    Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
+                            "expected: " + expectedLines.get(i) + System.lineSeparator() +
+                            "actual:   " + writtenLines.get(i), writtenLines.get(i).startsWith(expectedLines.get(i)));
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException("did not find expected output file for " + pdbId, e);
+        }
     }
 }

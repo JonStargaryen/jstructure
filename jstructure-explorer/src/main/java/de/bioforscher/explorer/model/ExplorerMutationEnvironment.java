@@ -27,7 +27,7 @@ public class ExplorerMutationEnvironment {
     }
 
     public ExplorerMutationEnvironment(Chain environment, ExplorerChain explorerChain, String id) {
-        this.pdb = environment.composePDBRecord();
+        this.pdb = environment.getPdbRepresentation();
         this.id = id;
         this.groups = environment.groups()
                 .map(ExplorerGroup::new)

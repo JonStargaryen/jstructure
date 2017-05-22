@@ -1,9 +1,10 @@
-package aars;
+package studies.aars;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import studies.StudyConstants;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,12 +24,13 @@ import java.util.stream.Collectors;
  * </ul>
  * Created by S on 12.05.2017.
  */
-public class ValidateDataSet {
-    private static final Path mainTablePath = Paths.get(System.getProperty("user.home"),
-            "/git/aars_data/main_table/main_table_curated_v01.csv");
+class ValidateDataSet {
+    private static final Path mainTablePath = Paths.get(StudyConstants.GIT,
+            "/aars_data/main_table/main_table_curated_v02.csv");
 
     public static void main(String[] args) throws IOException {
         List<String> errors = Files.lines(mainTablePath)
+                .parallel()
                 // skip header line
                 .filter(line -> !line.startsWith("identifier"))
                 .map(ValidateDataSet::handleLine)
@@ -44,6 +46,7 @@ public class ValidateDataSet {
             handleLineChecked(line);
             return "";
         } catch(Exception e) {
+            e.printStackTrace();
             System.err.println(e.getLocalizedMessage());
             return line + ";" + e.getLocalizedMessage();
         }
@@ -51,7 +54,7 @@ public class ValidateDataSet {
 
     private static void handleLineChecked(String line) {
         System.out.println(line);
-        String[] split = line.split(";");
+        String[] split = line.split(",");
         String pdbId = split[0].split("_")[0];
         String chainId = split[0].split("_")[1];
 

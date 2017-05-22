@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.parser;
 
 import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
-import de.bioforscher.jstructure.model.structure.identifier.PdbId;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +63,8 @@ public class ProteinParser {
                 try(BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
                     bufferedReader.lines().forEach(this::parseLineChecked);
 
-                    if(protein.getPdbId() == null || protein.getPdbId().getPdbId() == null || protein.getPdbId().getPdbId().isEmpty()) {
+                    // if id is missing, use hinted fall back
+                    if(idIsMissing()) {
                         protein.setPdbId(builder.hintProteinName);
                     }
                     protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
@@ -76,6 +77,10 @@ public class ProteinParser {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    private boolean idIsMissing() {
+        return protein.getPdbId() == null || protein.getPdbId().getPdbId() == null || protein.getPdbId().getPdbId().isEmpty();
     }
 
     private void parseLineChecked(String line) {
@@ -105,7 +110,7 @@ public class ProteinParser {
         // found header record
         // 63 - 66       IDcode        idCode            This identifier is unique within the PDB.
         if(line.startsWith(HEADER_PREFIX)) {
-            protein.setPdbId(PdbId.createFromPdbId(line.substring(62, 66)));
+            protein.setPdbId(ProteinIdentifier.createFromPdbId(line.substring(62, 66)));
         }
 
         // handling title records
@@ -162,8 +167,9 @@ public class ProteinParser {
                 return;
             }
 
+            String alternativeLocationIndicator = line.substring(16, 17).trim();
             String pdbName = line.substring(17, 20).trim();
-            PdbChainId chainId = PdbChainId.createFromChainId(protein.getPdbId(), line.substring(21, 22));
+            ChainIdentifier chainId = ChainIdentifier.createFromChainId(protein.getPdbId(), line.substring(21, 22));
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
 
             if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
@@ -183,10 +189,10 @@ public class ProteinParser {
             if(currentGroup == null || currentGroup.getResidueNumber() != resNum ||
                     !currentGroup.getParentChain().getChainId().equals(chainId)) {
                 // residue changed - create new group object and set reference
-                currentGroup = new Group(pdbName,
-                        resNum,
+                currentGroup = new Group(resNum,
                         CIFParser.parseLigandInformation(pdbName),
-                        terminatedChains.contains(currentChain));
+                        terminatedChains.contains(currentChain),
+                        line.startsWith(Atom.HETATM_PREFIX));
                 currentChain.addGroup(currentGroup);
             }
 
@@ -223,13 +229,17 @@ public class ProteinParser {
                             Double.valueOf(line.substring(46, 54).trim())
                     },
                     occupancy,
-                    bfactor);
-            if(currentGroup.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
-                currentGroup.addAtom(atom);
-            } else {
-                //TODO find solution for this - maybe only the atom with the highest occupancy should be kept
-                logger.debug("skipping atoms for {}", atom);
-            }
+                    bfactor,
+                    alternativeLocationIndicator);
+
+            // 17/05/22 - stopping to skip alternative positions
+//            if(currentGroup.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
+//                currentGroup.addAtom(atom);
+//            } else {
+//                //TODO find solution for this - maybe only the atom with the highest occupancy should be kept
+//                logger.debug("skipping atoms for {}", atom);
+//            }
+            currentGroup.addAtom(atom);
         }
 
         if(line.startsWith(END_MODEL_PREFIX)) {
@@ -249,11 +259,11 @@ public class ProteinParser {
 
     //TODO users could expect this to be a filepath too - change method name? decide internally on-the-fly?
     public static OptionalSteps source(String pdbId) {
-        return new OptionalSteps(pdbId).hintProteinName(PdbId.createFromPdbId(pdbId));
+        return new OptionalSteps(pdbId).hintProteinName(ProteinIdentifier.createFromPdbId(pdbId));
     }
 
     public static OptionalSteps source(Path path) {
-        return new OptionalSteps(path).hintProteinName(PdbId.createFromName(path.toFile().getName()));
+        return new OptionalSteps(path).hintProteinName(ProteinIdentifier.createFromAdditionalName(path.toFile().getName()));
     }
 
     public static class OptionalSteps {
@@ -263,8 +273,8 @@ public class ProteinParser {
         boolean skipModels = true;
         boolean strictMode = false;
         boolean skipHydrogens = true;
-        PdbId forceProteinName;
-        PdbId hintProteinName;
+        ProteinIdentifier forceProteinName;
+        ProteinIdentifier hintProteinName;
         private static final int DEFAULT_CACHE_SIZE = 1000;
 
         OptionalSteps(InputStream inputStream) {
@@ -294,12 +304,12 @@ public class ProteinParser {
             return this;
         }
 
-        public OptionalSteps forceProteinName(PdbId proteinName) {
+        public OptionalSteps forceProteinName(ProteinIdentifier proteinName) {
             this.forceProteinName = proteinName;
             return this;
         }
 
-        public OptionalSteps hintProteinName(PdbId proteinName) {
+        public OptionalSteps hintProteinName(ProteinIdentifier proteinName) {
             this.hintProteinName = proteinName;
             return this;
         }
@@ -325,7 +335,7 @@ public class ProteinParser {
                     if(forceProteinName == null) {
                         String fileName = path.toFile().getName();
                         // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
-                        forceProteinName = PdbId.createFromName(fileName.substring(0, fileName.lastIndexOf(".")));
+                        forceProteinName = ProteinIdentifier.createFromAdditionalName(fileName.substring(0, fileName.lastIndexOf(".")));
                     }
                 }
             } catch (IOException e) {

@@ -3,9 +3,10 @@ package de.bioforscher.jstructure.feature.asa;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         atom.getFeatureContainer().addFeature(new AtomRadius(this, determineRadius(atom)));
     }
 
-    private void assignSingleAsa(Group group, AtomContainer nonHydrogenAtoms) {
+    private void assignSingleAsa(Group group, List<Atom> nonHydrogenAtoms) {
         double asa = group.select()
                 .nonHydrogenAtoms()
                 .asFilteredAtoms()
@@ -90,18 +91,33 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-        GroupContainer residueContainer = protein.aminoAcids()
-                .collect(StructureCollectors.toGroupContainer());
+//        // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
+//        GroupContainer residueContainer = protein.aminoAcids()
+//                .collect(StructureCollectors.toGroupContainer());
+//
+//        AtomContainer nonHydrogenAtoms = residueContainer.select()
+//                .nonHydrogenAtoms()
+//                .asAtomContainer();
+//        nonHydrogenAtoms.atoms()
+//                .parallel()
+//                .forEach(this::assignRadius);
+//
+//        residueContainer.groups()
+//                .parallel()
+//                .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
 
-        AtomContainer nonHydrogenAtoms = residueContainer.select()
+        List<Atom> nonHydrogenAtoms = protein.select()
+                .aminoAcids()
                 .nonHydrogenAtoms()
-                .asAtomContainer();
-        nonHydrogenAtoms.atoms()
-                .parallel()
+                .asFilteredAtoms()
+                .collect(Collectors.toList());
+
+        nonHydrogenAtoms.parallelStream()
                 .forEach(this::assignRadius);
 
-        residueContainer.groups()
+        protein.select()
+                .aminoAcids()
+                .asFilteredGroups()
                 .parallel()
                 .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
     }
@@ -176,10 +192,10 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
      * @param referenceAtom the atom whose neighbor shall be assessed
      * @return all neighbored atoms
      */
-    private List<Atom> findNeighbors(Atom referenceAtom, AtomContainer nonHydrogenAtoms) {
+    private List<Atom> findNeighbors(Atom referenceAtom, List<Atom> nonHydrogenAtoms) {
         final double cutoff = probeSize + probeSize + referenceAtom.getFeatureContainer().getFeature(AtomRadius.class).getRadius();
 
-        return nonHydrogenAtoms.atoms()
+        return nonHydrogenAtoms.stream()
                 .filter(atom -> !atom.equals(referenceAtom))
                 .filter(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), referenceAtom.getCoordinates()) < cutoff
                         + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius())
@@ -191,7 +207,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
      * @param atom the atom to processUniProtId
      * @return this atom's ASA
      */
-    private double calcSingleAsa(Atom atom, AtomContainer nonHydrogenAtoms) {
+    private double calcSingleAsa(Atom atom, List<Atom> nonHydrogenAtoms) {
         List<Atom> neighborAtoms = findNeighbors(atom, nonHydrogenAtoms);
         double radius = probeSize + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius();
         int accessiblePoints = 0;

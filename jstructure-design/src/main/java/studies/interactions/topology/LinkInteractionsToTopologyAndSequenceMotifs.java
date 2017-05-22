@@ -25,7 +25,7 @@ import java.nio.file.Paths;
  * </ul>
  * Created by bittrich on 5/16/17.
  */
-public class LinkInteractionsToTopologyAndSequenceMotifs {
+class LinkInteractionsToTopologyAndSequenceMotifs {
     private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
     private static final SequenceMotifAnnotator sequenceMotifAnnotator = new SequenceMotifAnnotator();
     private static final OrientationsOfProteinsInMembranesAnnotator topologyAnnotator = new OrientationsOfProteinsInMembranesAnnotator();

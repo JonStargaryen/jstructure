@@ -6,8 +6,8 @@ import de.bioforscher.explorer.model.ExplorerCluster;
 import de.bioforscher.explorer.model.ModelFactory;
 import de.bioforscher.explorer.repository.AlignmentRepository;
 import de.bioforscher.explorer.repository.ChainRepository;
-import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
-import de.bioforscher.jstructure.model.structure.identifier.PdbId;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class ChainService {
     private static final Logger logger = LoggerFactory.getLogger(ChainService.class);
     private ChainRepository chainRepository;
     private AlignmentRepository alignmentRepository;
-    private List<PdbChainId> allRepresentativeChainIds;
+    private List<ChainIdentifier> allRepresentativeChainIds;
 
     @Autowired
     public ChainService(ChainRepository chainRepository, AlignmentRepository alignmentRepository) {
@@ -42,7 +42,7 @@ public class ChainService {
     public void activate() throws IOException {
         logger.info("starting protein service");
         allRepresentativeChainIds = Stream.of("1rc2_A")
-                .map(id -> PdbChainId.createFromChainId(PdbId.createFromPdbId(id.split("_")[0]), id.split("_")[1]))
+                .map(id -> ChainIdentifier.createFromChainId(ProteinIdentifier.createFromPdbId(id.split("_")[0]), id.split("_")[1]))
                 .collect(Collectors.toList());
 
 //        reinitialize(false);
@@ -63,7 +63,7 @@ public class ChainService {
         }
     }
 
-    private void processSequenceCluster(PdbChainId clusterEntryId) {
+    private void processSequenceCluster(ChainIdentifier clusterEntryId) {
         logger.info("[{}] spawned thread on representative chain id", clusterEntryId);
         ExplorerCluster explorerCluster = ModelFactory.createCluster(clusterEntryId);
 
@@ -81,7 +81,7 @@ public class ChainService {
 
     public List<String> getAllRepresentativeChainIds() {
         return allRepresentativeChainIds.stream()
-                .map(PdbChainId::getFullName)
+                .map(ChainIdentifier::getFullName)
                 .collect(Collectors.toList());
     }
 

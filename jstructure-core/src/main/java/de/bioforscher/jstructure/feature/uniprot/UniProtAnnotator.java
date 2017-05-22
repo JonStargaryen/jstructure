@@ -24,7 +24,7 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        protein.aminoAcidChains()
+        protein.chainsWithAminoAcids()
                 .forEach(this::processInternally);
     }
 

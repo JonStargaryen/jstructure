@@ -201,7 +201,7 @@ public class LinearAlgebraAtom {
 
         public Atom transformCoordinates(Atom atom) {
             double[] vector = atom.getCoordinates();
-            logger.trace("initial atom {}", atom.composePDBRecord());
+            logger.trace("initial atom {}", atom.getPdbRepresentation());
 
             // apply rotation if needed
             if(rotation != null) {
@@ -214,7 +214,7 @@ public class LinearAlgebraAtom {
                 atom.setCoordinates(LinearAlgebra3D.add(vector, translation));
             }
 
-            logger.trace("transf. atom {}", atom.composePDBRecord());
+            logger.trace("transf. atom {}", atom.getPdbRepresentation());
             return atom;
         }
 

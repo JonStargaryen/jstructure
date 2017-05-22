@@ -10,6 +10,7 @@ import java.util.Objects;
 public class StudyConstants {
     public static final String HOME = System.getProperty("user.home");
     public static final String GIT = HOME + "/git/";
+    public static final String GMLVQ_MAIN = GIT + "gmlvq_main/";
 
     public static String getResourceAsFilepath(String filename) {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();

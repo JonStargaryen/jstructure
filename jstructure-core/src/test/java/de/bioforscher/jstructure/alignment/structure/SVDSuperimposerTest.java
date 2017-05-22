@@ -28,7 +28,7 @@ public class SVDSuperimposerTest {
     private GroupContainer container4;
 
     private Group createGroup(String aminoAcidName, int residueNumber) {
-        return new Group(aminoAcidName, residueNumber, CIFParser.parseLigandInformation(aminoAcidName), false);
+        return new Group(residueNumber, CIFParser.parseLigandInformation(aminoAcidName), false, false);
     }
 
     @Before
@@ -91,13 +91,13 @@ public class SVDSuperimposerTest {
 
     @Test
     public void shouldSuperimposeBasedOnAlignment() {
-        String initialCoordinates1 = container1.composePDBRecord();
-        String initialCoordinates2 = container2.composePDBRecord();
+        String initialCoordinates1 = container1.getPdbRepresentation();
+        String initialCoordinates2 = container2.getPdbRepresentation();
         StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
         double rmsd1 = alignmentResult.getAlignmentScore();
         // coordinates should not be changed by aligning
-        Assert.assertEquals(initialCoordinates1, container1.composePDBRecord());
-        Assert.assertEquals(initialCoordinates2, container2.composePDBRecord());
+        Assert.assertEquals(initialCoordinates1, container1.getPdbRepresentation());
+        Assert.assertEquals(initialCoordinates2, container2.getPdbRepresentation());
         alignmentResult.transform(container2);
         double rmsd2 = LinearAlgebraAtom.calculateRmsd(container1, container2);
         Assert.assertEquals(rmsd1, rmsd2, TestUtils.TOLERANT_ERROR_MARGIN);

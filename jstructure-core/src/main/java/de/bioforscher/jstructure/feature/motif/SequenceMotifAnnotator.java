@@ -23,7 +23,7 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
     protected void processInternally(Protein protein) {
         SequenceMotifContainer globalList = new SequenceMotifContainer(this);
 
-        protein.aminoAcidChains()
+        protein.chainsWithAminoAcids()
                 .forEach(chain -> {
             List<Group> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
 

@@ -9,56 +9,68 @@ import java.util.stream.Stream;
  * information. PDB-ids will internally always be represented by lowercase strings.
  * Created by bittrich on 4/27/17.
  */
-public class PdbId {
+public class ProteinIdentifier {
     private static final Pattern PDBID_PATTERN = Pattern.compile("[1-9][A-Za-z0-9]{3}");
-    private String pdbId, additionalName;
+    private final String pdbId;
+    private final String additionalName;
     //TODO maybe some selection criteria and stuff automatically
     //TODO maybe the source / filename automatically
     //TODO consistent naming pattern
 
-    public static final PdbId UNKNOWN_PROTEIN_ID = PdbId.createFromName("UNKNOWN PROTEIN");
+    public static final ProteinIdentifier UNKNOWN_PROTEIN_ID = ProteinIdentifier.createFromAdditionalName("UNKNOWN-PROTEIN");
 
-    private PdbId(String pdbId, String additionalName) {
+    private ProteinIdentifier(String pdbId, String additionalName) {
         this.pdbId = pdbId.toLowerCase();
         this.additionalName = additionalName;
     }
 
     private static void validatePdbId(String pdbId) {
         if(!PDBID_PATTERN.matcher(pdbId).find()) {
-            throw new IllegalArgumentException("'" + pdbId + "' is no valid PDB-id");
+            throw new IllegalArgumentException("'" + pdbId + "' is no valid pdbId");
+        }
+    }
+
+    private static void validateAdditionalName(String additionalName) {
+        if(additionalName.contains("_")) {
+            throw new IllegalArgumentException("'" + additionalName + "' is no valid additional protein name as it " +
+                    "contains a underscore _ which is used to separate the chain identifer from the pdbId");
         }
     }
 
     /**
+     * This protein is identified by only a pdbId.
      * @see #createFromPdbIdAndName(String, String)
      */
-    public static PdbId createFromPdbId(String pdbId) {
-        validatePdbId(pdbId);
-        return new PdbId(pdbId, "");
+    public static ProteinIdentifier createFromPdbId(String pdbId) {
+        return createFromPdbIdAndName(pdbId, "");
     }
 
     /**
+     * This protein is not identified by any pdbId, but a custom string instead.
      * @see #createFromPdbIdAndName(String, String)
      */
-    public static PdbId createFromName(String additionalName) {
-        return new PdbId("", additionalName);
+    public static ProteinIdentifier createFromAdditionalName(String additionalName) {
+        return createFromPdbIdAndName("", additionalName);
     }
 
     /**
-     * Construct an identifier of a PDB-id and an additional name.
-     * @param pdbId the PDB-id
+     * Construct an identifier of a pdbId and an additional name.
+     * @param pdbId the pdbId
      * @param additionalName further information
      * @return the create instance
-     * @throws IllegalArgumentException when pdbId does not match the PDB-id pattern
+     * @throws IllegalArgumentException when pdbId does not match the pdbId pattern
      */
-    public static PdbId createFromPdbIdAndName(String pdbId, String additionalName) {
-        validatePdbId(pdbId);
-        return new PdbId(pdbId, additionalName);
+    public static ProteinIdentifier createFromPdbIdAndName(String pdbId, String additionalName) {
+        if(!pdbId.isEmpty()) {
+            validatePdbId(pdbId);
+        }
+        validateAdditionalName(additionalName);
+        return new ProteinIdentifier(pdbId, additionalName);
     }
 
     /**
-     * Returns the PDB-id of this protein (if any).
-     * @return the protein's PDB-id
+     * Returns the pdbId of this protein (if any).
+     * @return the protein's pdbId
      */
     public String getPdbId() {
         return pdbId;
@@ -73,7 +85,7 @@ public class PdbId {
     }
 
     /**
-     * Composes the complex name of this protein (i.e. its PDB-id and additional name).
+     * Composes the complex name of this protein (i.e. its pdbId and additional name, delimited by a hyphen).
      * @return the complex name of this protein
      */
     public String getFullName() {
@@ -83,11 +95,12 @@ public class PdbId {
     }
 
     /**
-     * Checks whether this identifier refers to a standard PDB-id and nothing else.
+     * Checks whether this identifier refers to a standard pdbId and nothing else.
      * @return <code>true</code> iff this protein directly originates from a PDB-entry
      */
     public boolean isStandardPdbId() {
-        return PDBID_PATTERN.matcher(pdbId).find() && additionalName.isEmpty();
+        // identifier can only by standard, when the pdbId is set and no additional name was provided
+        return !pdbId.isEmpty() && additionalName.isEmpty();
     }
 
     @Override
@@ -100,7 +113,7 @@ public class PdbId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PdbId pdbId1 = (PdbId) o;
+        ProteinIdentifier pdbId1 = (ProteinIdentifier) o;
 
         return (pdbId != null ? pdbId.equals(pdbId1.pdbId) : pdbId1.pdbId == null) && (additionalName != null ? additionalName.equals(pdbId1.additionalName) : pdbId1.additionalName == null);
     }

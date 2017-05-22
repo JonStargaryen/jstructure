@@ -29,7 +29,7 @@ public interface ChainContainer extends GroupContainer {
      * Access to all chains which actually contains amino acids.
      * @return a stream of chains with at least 1 amino acid
      */
-    default Stream<Chain> aminoAcidChains() {
+    default Stream<Chain> chainsWithAminoAcids() {
         return chains()
                 .filter(chain -> chain.aminoAcids().count() > 0);
     }

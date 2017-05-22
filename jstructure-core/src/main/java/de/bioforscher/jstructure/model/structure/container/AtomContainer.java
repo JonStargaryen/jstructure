@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.selection.Selectable;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,9 +28,21 @@ public interface AtomContainer extends StructureContainer, Selectable {
         return getAtoms().stream();
     }
 
-    default String composePDBRecord() {
-        return atoms().map(Atom::composePDBRecord)
-                      .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    default String getPdbRepresentation() {
+//        StringJoiner pdbRepresentation = new StringJoiner(System.lineSeparator(),
+//                "",
+//                System.lineSeparator() +
+//                                "END                                                                             " +
+//                                System.lineSeparator());
+//        return pdbRepresentation.toString();
+
+        // TODO the current approach ignoring TER records
+        return atoms()
+                .sorted(Comparator.comparingInt(Atom::getPdbSerial))
+                .map(Atom::getPdbRepresentation)
+                .collect(Collectors.joining(System.lineSeparator(),
+                        "",
+                        System.lineSeparator()));
     }
 
     /**

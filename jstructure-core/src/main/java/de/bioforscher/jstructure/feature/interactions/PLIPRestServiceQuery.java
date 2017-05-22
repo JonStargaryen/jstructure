@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    public static String getPlipResults(PdbChainId chainId) {
+    public static String getPlipResults(ChainIdentifier chainId) {
         try {
             return getPlipResults(new URL(BASE_URL + "plain/" + chainId.getPdbId().getPdbId() + "/" + chainId.getChainId()));
         } catch (IOException e) {

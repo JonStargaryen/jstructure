@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.model.structure.identifier.PdbChainId;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class ModelFactory {
     private static final Logger logger = LoggerFactory.getLogger(ModelFactory.class);
 
-    public static ExplorerCluster createCluster(PdbChainId entryId) {
+    public static ExplorerCluster createCluster(ChainIdentifier entryId) {
 //        List<Chain> chains = EnsembleGenerator.createChainsFromPfamCluster(new SiftsMappingProvider().mapPdbChainIdToPfam(entryId));
 //
 //        List<ExplorerChain> explorerChains = chains.parallelStream()

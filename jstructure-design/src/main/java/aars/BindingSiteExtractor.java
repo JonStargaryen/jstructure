@@ -62,7 +62,7 @@ class BindingSiteExtractor {
                             .aminoAcids()
                             .residueNumber(residueNumbers)
                             .asGroupContainer()
-                            .composePDBRecord();
+                            .getPdbRepresentation();
                     AARSConstants.write(Paths.get(AARSConstants.BINDING_SITE_PATH + className + "/ligand_based/per_type/"
                             + modeName +  "/" + aminoAcid.substring(0, 1).toUpperCase() + aminoAcid.substring(1, 3).toLowerCase() + "/" +
                             pdbId + "_" + chainId + "_renum.pdb"), output.getBytes());
