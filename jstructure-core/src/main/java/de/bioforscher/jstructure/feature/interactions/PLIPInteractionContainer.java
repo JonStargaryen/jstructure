@@ -23,7 +23,7 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
     private final List<SaltBridge> saltBridges;
     private final List<WaterBridge> waterBridges;
 
-    public PLIPInteractionContainer(AbstractFeatureProvider featureProvider, List<PLIPInteraction> plipInteractions) {
+    PLIPInteractionContainer(AbstractFeatureProvider featureProvider, List<PLIPInteraction> plipInteractions) {
         super(featureProvider);
         halogenBonds = filterInteractions(plipInteractions, HalogenBond.class);
         hydrogenBonds = filterInteractions(plipInteractions, HydrogenBond.class);

@@ -12,7 +12,7 @@ import de.bioforscher.jstructure.model.structure.Group;
 public class EnergyProfile extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {
     private final double solvationEnergy;
 
-    public EnergyProfile(AbstractFeatureProvider featureProvider, double solvationEnergy) {
+    EnergyProfile(AbstractFeatureProvider featureProvider, double solvationEnergy) {
         super(featureProvider);
         this.solvationEnergy = solvationEnergy;
     }

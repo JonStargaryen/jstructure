@@ -13,7 +13,7 @@ public class ChainMapping extends FeatureContainerEntry {
     private final String ecNumber;
     private final String pfamId;
 
-    public ChainMapping(AbstractFeatureProvider featureProvider, String uniProtId, String ecNumber, String pfamId) {
+    ChainMapping(AbstractFeatureProvider featureProvider, String uniProtId, String ecNumber, String pfamId) {
         super(featureProvider);
         this.uniProtId = uniProtId;
         this.ecNumber = ecNumber;

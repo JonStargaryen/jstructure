@@ -11,7 +11,7 @@ public class SequenceMotif {
     private final int end;
     private final String sequence;
 
-    public SequenceMotif(SequenceMotifDefinition candidate, String chainId, int start, int end, String sequence) {
+    SequenceMotif(SequenceMotifDefinition candidate, String chainId, int start, int end, String sequence) {
         this.motifDefinition = candidate;
         this.chainId = chainId;
         this.start = start;

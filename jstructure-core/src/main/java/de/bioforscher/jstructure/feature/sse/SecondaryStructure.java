@@ -34,7 +34,7 @@ public class SecondaryStructure extends FeatureContainerEntry {
     private BetaBridge bridge1;
     private BetaBridge bridge2;
 
-    public SecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement ss) {
+    SecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement ss) {
         super(featureProvider);
         this.secondaryStructure = ss;
 

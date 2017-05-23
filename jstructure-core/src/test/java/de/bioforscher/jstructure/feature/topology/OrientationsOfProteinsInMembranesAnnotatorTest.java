@@ -1,9 +1,11 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.ComputationException;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.nodes.Document;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -14,6 +16,12 @@ import java.io.IOException;
  */
 public class OrientationsOfProteinsInMembranesAnnotatorTest {
     private OrientationsOfProteinsInMembranesAnnotator annotator = new OrientationsOfProteinsInMembranesAnnotator();
+    private Protein protein;
+
+    @Before
+    public void setup() {
+        protein = ProteinParser.source("1brr").parse();
+    }
 
     @Test
     public void shouldMoveToRepresentative() throws IOException {
@@ -29,7 +37,14 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
 
     @Test
     public void shouldHandleTransMembraneProtein() {
+        annotator.process(protein);
+        Membrane membrane = protein.getFeatureContainer().getFeature(Membrane.class);
+        System.out.println(membrane);
+    }
 
+    @Test
+    public void shouldHandleMalformedData() {
+        //TODO there is a entry with malformed segments (missing brackets), test with that
     }
 
     @Test(expected = ComputationException.class)

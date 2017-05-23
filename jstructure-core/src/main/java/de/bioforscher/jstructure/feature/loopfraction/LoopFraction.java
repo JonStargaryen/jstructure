@@ -11,7 +11,7 @@ import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 public class LoopFraction extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {
     private final double loopFraction;
 
-    public LoopFraction(AbstractFeatureProvider featureProvider, double loopFraction) {
+    LoopFraction(AbstractFeatureProvider featureProvider, double loopFraction) {
         super(featureProvider);
         this.loopFraction = loopFraction;
     }

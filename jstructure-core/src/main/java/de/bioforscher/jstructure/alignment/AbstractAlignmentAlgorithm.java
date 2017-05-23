@@ -32,7 +32,8 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
         this(Collections.emptySet(), AminoAcidFamily.ATOM_NAMES.ALL_ATOM_NAMES);
     }
 
-    public AbstractAlignmentAlgorithm(Set<String> minimalSetOfAtomNames, Set<String> maximalSetOfAtomNames) {
+    public AbstractAlignmentAlgorithm(Set<String> minimalSetOfAtomNames,
+                                      Set<String> maximalSetOfAtomNames) {
         this.minimalSetOfAtomNames = minimalSetOfAtomNames;
         this.maximalSetOfAtomNames = maximalSetOfAtomNames;
     }
@@ -43,7 +44,8 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
      * @param atomContainer2 another collection of atoms
      * @return the RMSD value of this alignment
      */
-    static double calculateRmsd(AtomContainer atomContainer1, AtomContainer atomContainer2) {
+    static double calculateRmsd(AtomContainer atomContainer1,
+                                AtomContainer atomContainer2) {
         Pair<GroupContainer, GroupContainer> groupContainerPair = comparableGroupContainerPair(atomContainer1, atomContainer2);
         double msd = Combinatorics.sequentialPairsOf(groupContainerPair.getLeft().getAtoms(), groupContainerPair.getRight().getAtoms())
                 .mapToDouble(pair -> LinearAlgebra.on(pair.getLeft().getCoordinates()).distanceFast(pair.getRight().getCoordinates()))
@@ -69,9 +71,9 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
      * @return a pair of both collections which can now be aligned
      */
     static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer container1,
-                                                                                    AtomContainer container2,
-                                                                                    Set<String> minimalSetOfAtomNames,
-                                                                                    Set<String> maximalSetOfAtomNames) {
+                                                                             AtomContainer container2,
+                                                                             Set<String> minimalSetOfAtomNames,
+                                                                             Set<String> maximalSetOfAtomNames) {
         //TODO what happens for alternative positions?
         GroupContainer groupContainer1 = cloneIntoGroupContainer(container1);
         GroupContainer groupContainer2 = cloneIntoGroupContainer(container2);
@@ -107,7 +109,7 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
      * Returns the set of atoms shared by both containers.
      */
     static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer atomContainer1,
-                                                                                    AtomContainer atomContainer2) {
+                                                                             AtomContainer atomContainer2) {
         return comparableGroupContainerPair(atomContainer1,
                 atomContainer2,
                 Collections.emptySet(),
@@ -127,7 +129,8 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
         return new Pair<>(selectAtoms(group1, sharedAtomNames), selectAtoms(group2, sharedAtomNames));
     }
 
-    private static List<Atom> selectAtoms(Group group, Set<String> atomNamesToSelect) {
+    private static List<Atom> selectAtoms(Group group,
+                                          Set<String> atomNamesToSelect) {
         // fix 02/08/17 - mere retaining does not ensure correct ordering
         return atomNamesToSelect.stream()
                 .flatMap(name -> group.atoms()

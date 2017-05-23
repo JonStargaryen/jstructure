@@ -7,11 +7,11 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Access to the internet resource of the OPM.
  * Created by bittrich on 5/17/17.
  */
-@FeatureProvider(provides = { GenericMembrane.class, TransMembraneHelixContainer.class })
+@FeatureProvider(provides = Membrane.class)
 public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(OrientationsOfProteinsInMembranesAnnotator.class);
     private static final String BASE_URL = "http://opm.phar.umich.edu/";
@@ -54,29 +54,63 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                     Protein opmProtein = ProteinParser.source(new ByteArrayInputStream(bytes))
                             .forceProteinName(ProteinIdentifier.createFromPdbId(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
                             .parse();
+                    Membrane membrane = new Membrane(this);
 
                     // superimpose opm protein onto instance of the original protein
-                    AtomContainer superimposedOpmProtein = SVDSuperimposer.ALPHA_CARBON_SVD_INSTANCE.align(protein, opmProtein).getAlignedQuery();
+                    //TODO this alignment is by no means perfect, but works for a first glance
+                    SVDSuperimposer.ALPHA_CARBON_SVD_INSTANCE
+                            .align(protein.select()
+                                    .aminoAcids()
+                                    .asGroupContainer(),
+                                   opmProtein.select()
+                                    .aminoAcids()
+                                    .asGroupContainer())
+                            .transform(opmProtein);
 
                     // extract dummy atoms and move them to membrane object
-                    List<double[]> membraneAtoms = superimposedOpmProtein.atoms()
+                    List<double[]> membraneAtoms = opmProtein.atoms()
                             .map(Atom::getParentGroup)
                             .filter(group -> group.getThreeLetterCode().equals("DUM"))
                             .flatMap(Group::atoms)
                             .map(Atom::getCoordinates)
                             .collect(Collectors.toList());
-                    GenericMembrane membrane = new GenericMembrane(this, membraneAtoms);
+                    membrane.setMembraneAtoms(membraneAtoms);
+
+                    // extract general information - that is the first table
+                    Element generalDataTable = document.getElementsByClass("data").get(0);
+                    Element thicknessTr = generalDataTable.getElementsByTag("tr").get(1);
+                    membrane.setHydrophobicThickness(thicknessTr.getElementsByTag("td").get(1).text());
+
+                    Element tiltTr = generalDataTable.getElementsByTag("tr").get(2);
+                    membrane.setTiltAngle(tiltTr.getElementsByTag("td").get(1).text());
+
+                    Element transferTr = generalDataTable.getElementsByTag("tr").get(3);
+                    membrane.setDeltaGTransfer(transferTr.getElementsByTag("td").get(1).text());
+
+                    Element topologyTr = generalDataTable.getElementsByTag("tr").get(5);
+                    membrane.setTopology(topologyTr.getElementsByTag("td").get(1).text());
+
+                    // extract trans-membrane helices - second table
+                    Element transMembraneSubunitsTable = document.getElementsByClass("data").get(1);
+                    List<TransMembraneHelix> helices = transMembraneSubunitsTable.getElementsByTag("tr").stream()
+                            // skip the header
+                            .skip(1)
+                            .map(element -> element.getElementsByTag("td").get(0))
+                            .map(Element::text)
+                            .map(TransMembraneHelix::new)
+                            .collect(Collectors.toList());
+                    membrane.setTransMembraneHelices(helices);
+
                     protein.getFeatureContainer().addFeature(membrane);
+                    //TODO remove, used to evaluate alignment manually
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getPdbRepresentation().getBytes());
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/opm.pdb"), opmProtein.getPdbRepresentation().getBytes());
                 }
             }
-
-            // extract trans-membrane helices
-            //TODO implement parsing of web page
         } catch (IOException e) {
             throw new ComputationException("failed to fetch OPM file", e);
         }
     }
-
 
     Document getDocument(String url) throws IOException {
         logger.info("fetching OPM annotation from {}", url);

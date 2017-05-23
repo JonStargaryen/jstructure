@@ -11,7 +11,7 @@ public class CeroseneEmbedding extends FeatureContainerEntry {
     private final double[] rgb;
     private final double[] hsv;
 
-    public CeroseneEmbedding(AbstractFeatureProvider featureProvider, double[] rgb, double[] hsv) {
+    CeroseneEmbedding(AbstractFeatureProvider featureProvider, double[] rgb, double[] hsv) {
         super(featureProvider);
         this.rgb = rgb;
         this.hsv = hsv;

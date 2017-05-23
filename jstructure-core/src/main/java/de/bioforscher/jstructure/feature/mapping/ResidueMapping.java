@@ -11,7 +11,7 @@ public class ResidueMapping extends FeatureContainerEntry {
     public static final String UNKNOWN_MAPPING = "?";
     private final String uniProtResidueNumber;
 
-    public ResidueMapping(AbstractFeatureProvider featureProvider, String uniProtResidueNumber) {
+    ResidueMapping(AbstractFeatureProvider featureProvider, String uniProtResidueNumber) {
         super(featureProvider);
         this.uniProtResidueNumber = uniProtResidueNumber;
     }

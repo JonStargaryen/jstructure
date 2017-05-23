@@ -13,7 +13,7 @@ import java.util.List;
 public class SequenceMotifContainer extends FeatureContainerEntry {
     private List<SequenceMotif> sequenceMotifs;
 
-    public SequenceMotifContainer(AbstractFeatureProvider featureProvider) {
+    SequenceMotifContainer(AbstractFeatureProvider featureProvider) {
         super(featureProvider);
         this.sequenceMotifs = new ArrayList<>();
     }

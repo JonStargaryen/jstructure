@@ -11,7 +11,7 @@ public class AccessibleSurfaceArea extends FeatureContainerEntry {
     private final double accessibleSurfaceArea;
     private final double relativeAccessibleSurfaceArea;
 
-    public AccessibleSurfaceArea(AbstractFeatureProvider featureProvider, double accessibleSurfaceArea, double relativeAccessibleSurfaceArea) {
+    AccessibleSurfaceArea(AbstractFeatureProvider featureProvider, double accessibleSurfaceArea, double relativeAccessibleSurfaceArea) {
         super(featureProvider);
         this.accessibleSurfaceArea = accessibleSurfaceArea;
         this.relativeAccessibleSurfaceArea = relativeAccessibleSurfaceArea;
