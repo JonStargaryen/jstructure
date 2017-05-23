@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.feature.FeatureContainerRoot;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
@@ -54,6 +55,10 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
 
     public Selection.ChainSelection select() {
         return Selection.on(this);
+    }
+
+    public LinearAlgebra.AtomContainerLinearAlgebra algebra() {
+        return LinearAlgebra.on(this);
     }
 
     @Override

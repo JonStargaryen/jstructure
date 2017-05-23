@@ -1,8 +1,6 @@
-package de.bioforscher.jstructure.alignment.structure;
+package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.parser.CIFParser;
@@ -71,11 +69,12 @@ public class SVDSuperimposerTest {
     @Test
     public void shouldAlignArbitraryPoints() {
         // compute alignment
-        StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
+        SVDSuperimposer svd = new SVDSuperimposer();
+        StructureAlignmentResult alignmentResult = svd.align(container1, container2);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
         System.out.println("rmsd " + alignmentResult.getAlignmentScore());
-        System.out.println("rmsd2 " + LinearAlgebraAtom.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
+        System.out.println("rmsd2 " + AbstractAlignmentAlgorithm.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
         Assert.assertEquals(0.19986, alignmentResult.getAlignmentScore(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
@@ -99,7 +98,7 @@ public class SVDSuperimposerTest {
         Assert.assertEquals(initialCoordinates1, container1.getPdbRepresentation());
         Assert.assertEquals(initialCoordinates2, container2.getPdbRepresentation());
         alignmentResult.transform(container2);
-        double rmsd2 = LinearAlgebraAtom.calculateRmsd(container1, container2);
+        double rmsd2 = AbstractAlignmentAlgorithm.calculateRmsd(container1, container2);
         Assert.assertEquals(rmsd1, rmsd2, TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
@@ -115,9 +114,7 @@ public class SVDSuperimposerTest {
     public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
         Protein protein1acjCopy = ProteinParser.source("1acj").parse();
         double[] translation = new double[] { 10, 20, 30 };
-        LinearAlgebraAtom.transform(protein1acjCopy,
-                translation,
-                AlignmentAlgorithm.NEUTRAL_ROTATION);
+        protein1acjCopy.algebra().transform(translation);
 
         SVDSuperimposer svd = new SVDSuperimposer();
         StructureAlignmentResult result = svd.align(protein1acj.select()
@@ -126,6 +123,6 @@ public class SVDSuperimposerTest {
                 .aminoAcids()
                 .asGroupContainer());
         Assert.assertEquals(0.0, result.getAlignmentScore(), 0.001);
-        Assert.assertArrayEquals(result.getTranslation(), LinearAlgebra3D.multiply(translation, -1.0), 0.001);
+        Assert.assertArrayEquals(result.getTranslation(), LinearAlgebra.on(translation).multiply(-1.0).getValue(), 0.001);
     }
 }

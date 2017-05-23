@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -174,7 +174,7 @@ public class Selection {
                             chainPredicates)
                             .flatMap(Collection::stream)
                             .map(Pair::getRight)
-                            .collect(Collectors.joining(", ", "[",  "]"))));
+                            .collect(Collectors.joining(", ", "[",  "]")) + " in " + atomContainer.getIdentifier()));
         }
 
         private void registerAtomPredicate(Predicate<Atom> atomPredicate, String description) {
@@ -272,8 +272,8 @@ public class Selection {
 
         public AtomSelection distance(double[] coordinates, double distanceCutoff) {
             double squaredDistanceCutoff = distanceCutoff * distanceCutoff;
-            registerAtomPredicate(atom -> LinearAlgebra3D.distanceFast(coordinates,
-                    atom.getCoordinates()) < squaredDistanceCutoff, distanceCutoff + " A around " + Arrays.toString(coordinates));
+            registerAtomPredicate(atom -> LinearAlgebra.on(coordinates).distanceFast(atom.getCoordinates()) <
+                    squaredDistanceCutoff, distanceCutoff + " A around " + Arrays.toString(coordinates));
             return this;
         }
     }
@@ -358,7 +358,7 @@ public class Selection {
                             chainPredicates)
                             .flatMap(Collection::stream)
                             .map(Pair::getRight)
-                            .collect(Collectors.joining(", ", "[",  "]"))));
+                            .collect(Collectors.joining(", ", "[",  "]")) + " in " + groupContainer.getIdentifier()));
         }
 
         private void registerGroupPredicate(Predicate<Group> groupPredicate, String description) {
@@ -423,8 +423,8 @@ public class Selection {
         public GroupSelection distance(double[] coordinates, double distanceCutoff) {
             double squaredDistanceCutoff = distanceCutoff * distanceCutoff;
             registerGroupPredicate(group -> group.atoms()
-                    .anyMatch(atom -> LinearAlgebra3D.distanceFast(coordinates, atom.getCoordinates()) < squaredDistanceCutoff),
-                    distanceCutoff + " A around " + Arrays.toString(coordinates));
+                    .anyMatch(atom -> LinearAlgebra.on(coordinates).distanceFast(atom.getCoordinates()) <
+                            squaredDistanceCutoff), distanceCutoff + " A around " + Arrays.toString(coordinates));
             return this;
         }
     }
@@ -500,7 +500,7 @@ public class Selection {
                     .orElseThrow(() -> new SelectionException("did not find chain matching " + Stream.of(chainPredicates)
                             .flatMap(Collection::stream)
                             .map(Pair::getRight)
-                            .collect(Collectors.joining(", ", "[",  "]"))));
+                            .collect(Collectors.joining(", ", "[",  "]"))  + " in " + chainContainer.getIdentifier()));
         }
 
         private void registerChainPredicate(Predicate<Chain> chainPredicate, String description) {

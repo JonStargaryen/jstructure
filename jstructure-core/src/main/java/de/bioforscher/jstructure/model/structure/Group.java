@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.family.GroupInformation;
@@ -71,6 +72,10 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     public Selection.AtomSelection select() {
         return Selection.on(this);
+    }
+
+    public LinearAlgebra.AtomContainerLinearAlgebra algebra() {
+        return LinearAlgebra.on(this);
     }
 
     public GroupInformation getGroupInformation() {

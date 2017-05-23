@@ -1,5 +1,6 @@
 package studies.gmlvq;
 
+import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
@@ -11,13 +12,14 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -36,7 +38,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
             .collect(Collectors.toList());
 
     private List<String> functionalPdbIds;
-    private StringJoiner output;
+    private FileWriter output;
 
     protected AbstractItemSetMinerDataSetComposer(String positiveFilename,
                                                   String negativeFilename,
@@ -46,7 +48,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 .distinct()
                 .collect(Collectors.toList());
 
-        this.output = new StringJoiner(System.lineSeparator());
+        this.output = new FileWriter(outputFilename, false);
 
         // compose header
         // the number of considered residues
@@ -54,7 +56,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("no valid input line found"))
                 .split("_").length - 1;
-        output.add("@RELATION ism" + System.lineSeparator() +
+        output.write("@RELATION ism" + System.lineSeparator() +
                         "@ATTRIBUTE id             STRING" + System.lineSeparator() +
                         IntStream.range(0, numberOfGroups)
                                 .mapToObj(this::mapToHeaderLine)
@@ -64,18 +66,15 @@ public abstract class AbstractItemSetMinerDataSetComposer {
 
         handleCase(positiveFilename, true);
         handleCase(negativeFilename, false);
-        Files.write(Paths.get(outputFilename), output.toString().getBytes());
+        output.flush();
+        output.close();
     }
 
     private void handleCase(String filename, boolean functional) throws IOException {
-        Files.lines(Paths.get(filename))
-                // for the negative case, we have to filter out positive instances
-                .filter(line -> filterFunctionalProteins(line, functional))
-                .map(line -> handleLine(line, functional))
-                // failed entries will return empty lines: filter them out
-                .filter(line -> !line.isEmpty())
-                .peek(System.out::println)
-                .forEach(output::add);
+        Map<String, List<String>> sortedLines = Files.lines(Paths.get(filename))
+                .collect(Collectors.groupingBy(line -> line.split("_")[0]));
+
+        sortedLines.values().forEach(lines -> handleLineGroup(lines, functional));
     }
 
     private boolean filterFunctionalProteins(String line, boolean functional) {
@@ -105,15 +104,31 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 "@ATTRIBUTE waterBridges" + index + "  NUMERIC";
     }
 
-    private String handleLine(String line, boolean functional) {
-        System.out.println(line);
+    private void handleLineGroup(List<String> lines, boolean functional) {
+        if(!filterFunctionalProteins(lines.get(0), functional)) {
+            return;
+        }
         try {
-            String[] sectionSplit = line.split("_");
-            String pdbId = sectionSplit[0];
-            Protein protein = ProteinParser.source(pdbId).parse();
-
+            Protein protein = ProteinParser.source(lines.get(0).split("_")[0]).parse();
             // compute features
             featureProviders.forEach(featureProvider -> featureProvider.process(protein));
+
+            for(String line : lines) {
+                String outputLine = handleLine(protein, line, functional);
+                if(outputLine.isEmpty()) {
+                    continue;
+                }
+                System.out.println(outputLine);
+                output.write(outputLine + System.lineSeparator());
+            }
+        } catch (NoSuchElementException | NullPointerException | NumberFormatException | ComputationException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String handleLine(Protein protein, String line, boolean functional) {
+        try {
+            String[] sectionSplit = line.split("_");
 
             PLIPInteractionContainer container = protein.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
 
@@ -124,12 +139,10 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                     .map(residueSection -> extractResidue(protein, residueSection))
                     .collect(Collectors.toList());
 
-            String partialOutput = groups.stream()
+            return groups.stream()
                     .map(group -> mapToString(container, group))
                     .collect(Collectors.joining(",", line + ",", "," + (functional ? "" : "non-") + "functional"));
-            System.out.println(partialOutput);
-            return partialOutput;
-        } catch (NoSuchElementException | NullPointerException | NumberFormatException e) {
+        } catch (NoSuchElementException | NullPointerException | NumberFormatException | ComputationException e) {
             e.printStackTrace();
             // thrown upon missing backbone atoms during secondary structure assignment
             return "";

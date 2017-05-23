@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import org.apache.commons.math3.linear.MatrixUtils;
 

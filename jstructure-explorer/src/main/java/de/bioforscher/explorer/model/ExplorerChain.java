@@ -3,7 +3,7 @@ package de.bioforscher.explorer.model;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.uniprot.*;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.Chain;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class ExplorerChain {
 
         try {
             PLIPInteractionContainer interactions = chain.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
-            LinearAlgebraAtom.Transformation transformation = chain.getFeatureContainer().getFeature(LinearAlgebraAtom.Transformation.class);
+            Transformation transformation = chain.getFeatureContainer().getFeature(Transformation.class);
             this.halogenBonds = convert(interactions.getHalogenBonds(), transformation, chain);
             this.hydrogenBonds = convert(interactions.getHydrogenBonds(), transformation, chain);
             this.metalComplexes = convert(interactions.getMetalComplexes(), transformation, chain);
@@ -100,7 +100,7 @@ public class ExplorerChain {
     }
 
     private List<ExplorerInteraction> convert(List<? extends PLIPInteraction> interactions,
-                                              LinearAlgebraAtom.Transformation transformation,
+                                              Transformation transformation,
                                               Chain chain) {
         return interactions.stream()
                 .filter(interaction -> interaction.getPartner1().getParentChain().getChainId().equals(chain.getChainId()) && interaction.getPartner2().getParentChain().getChainId().equals(chain.getChainId()))

@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
@@ -37,17 +37,17 @@ public class StructureCollectors {
         }
 
         double[] average() {
-            return count > 0 ? LinearAlgebra3D.divide(total, count) : new double[3];
+            return count > 0 ? LinearAlgebra.on(total).divide(count).getValue() : new double[3];
         }
 
         @Override
         public void accept(Atom atom) {
-            total = LinearAlgebra3D.add(total, atom.getCoordinates());
+            total = LinearAlgebra.on(total).add(atom.getCoordinates()).getValue();
             count++;
         }
 
         CentroidAverager combine(CentroidAverager other) {
-            total = LinearAlgebra3D.add(total, other.total);
+            total = LinearAlgebra.on(total).add(other.total).getValue();
             count += other.count;
             return this;
         }
@@ -71,18 +71,17 @@ public class StructureCollectors {
         }
 
         double[] average() {
-            return mass > 0 ? LinearAlgebra3D.divide(coordinate, mass) : new double[3];
+            return mass > 0 ? LinearAlgebra.on(coordinate).divide(mass).getValue() : new double[3];
         }
 
         @Override
         public void accept(Atom atom) {
-            coordinate = LinearAlgebra3D.add(coordinate, LinearAlgebra3D.multiply(atom.getCoordinates(),
-                    atom.getElement().getAtomicMass()));
+            coordinate = LinearAlgebra.on(atom.getCoordinates()).multiply(atom.getElement().getAtomicMass()).add(coordinate).getValue();
             mass += atom.getElement().getAtomicMass();
         }
 
         CenterOfMassAverager combine(CenterOfMassAverager other) {
-            coordinate = LinearAlgebra3D.add(coordinate, other.coordinate);
+            coordinate = LinearAlgebra.on(coordinate).add(other.coordinate).getValue();
             mass += other.mass;
             return this;
         }

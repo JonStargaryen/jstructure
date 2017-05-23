@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;

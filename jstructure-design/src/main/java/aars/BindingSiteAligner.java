@@ -1,8 +1,7 @@
 package aars;
 
-import de.bioforscher.jstructure.alignment.structure.SVDSuperimposer;
-import de.bioforscher.jstructure.alignment.structure.StructureAlignmentResult;
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -116,13 +115,11 @@ class BindingSiteAligner {
     }
 
     private static double computeMinimalDistanceToChain(Group potentialLigand, GroupContainer representativeChain) {
-        double[] centroid = potentialLigand.atoms()
-                .map(Atom::getCoordinates)
-                .reduce(new double[3], LinearAlgebra3D::add, LinearAlgebra3D::add);
+        double[] centroid = potentialLigand.algebra().centroid().getValue();
 
         return representativeChain.atoms()
-                .map(Atom::getCoordinates)
-                .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(centroid, coordinates))
+                .map(Atom::algebra)
+                .mapToDouble(coordinates -> coordinates.distanceFast(centroid))
                 .min()
                 .orElseThrow(NoSuchElementException::new);
     }

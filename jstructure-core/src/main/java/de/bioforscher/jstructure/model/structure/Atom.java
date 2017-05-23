@@ -1,19 +1,18 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
+import de.bioforscher.jstructure.model.Algebrable;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.StructureContainer;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * The most fine-grained element describing a {@link Protein}.
  * Created by S on 27.09.2016.
  */
-public class Atom extends AbstractFeatureable implements AtomRecordWriter, CoordinateProvider, StructureContainer {
+public class Atom extends AbstractFeatureable implements AtomRecordWriter, CoordinateProvider, StructureContainer, Algebrable<LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra> {
     public static final float DEFAULT_BFACTOR = 100.0f;
     public static final float DEFAULT_OCCUPANCY = 1.0f;
     public static final String ATOM_PREFIX = "ATOM  ";
@@ -125,7 +124,6 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     /**
      * Returns a 3D vector of the atom's spatial coordinates.
      * @return a 3D double[]
-     * @see de.bioforscher.jstructure.mathematics.LinearAlgebra3D
      */
     @Override
     public double[] getCoordinates() {
@@ -250,94 +248,8 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
         this.pdbSerial = pdbSerial;
     }
 
-    /**
-     * Inner class to write <tt>ATOM</tt> records. BioJava-Code.
-     */
-    static class AtomRecordProvider {
-        static DecimalFormat d3 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-
-        static {
-            d3.setMaximumIntegerDigits(4);
-            d3.setMinimumFractionDigits(3);
-            d3.setMaximumFractionDigits(3);
-        }
-
-        static DecimalFormat d2 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
-
-        static {
-            d2.setMaximumIntegerDigits(3);
-            d2.setMinimumFractionDigits(2);
-            d2.setMaximumFractionDigits(2);
-        }
-
-        static String toPDBString(Atom atom) {
-            Group parentGroup = atom.parentGroup;
-            Chain parentChain = parentGroup.getParentChain();
-            //TODO check - needed?
-            String chainId = parentChain.getChainId() != null ? parentChain.getChainId().getChainId() : Chain.UNKNOWN_CHAIN.getChainId().getChainId();
-            String record = parentGroup.isHetAtm() ? HETATM_PREFIX : ATOM_PREFIX;
-            // format output ...
-            String resName = parentGroup.getThreeLetterCode();
-            String pdbcode = String.valueOf(parentGroup.getResidueNumber());
-
-            int seri = atom.pdbSerial;
-            String serial = String.format("%5d", seri);
-            String fullName = formatAtomName(atom);
-
-            String altLoc = atom.hasAlternativeLocations() ? atom.alternativeLocation : " ";
-            String resseq = String.format("%4s", pdbcode) + " ";
-
-            String x = String.format("%8s", d3.format(atom.coordinates[0]));
-            String y = String.format("%8s", d3.format(atom.coordinates[1]));
-            String z = String.format("%8s", d3.format(atom.coordinates[2]));
-            String occupancy = String.format("%6s", d2.format(atom.occupancy));
-            String bfactor = String.format("%6s", d2.format(atom.bfactor));
-            String leftResName = String.format("%3s", resName);
-
-            String s = record +
-                    serial +
-                    " " +
-                    fullName +
-                    altLoc +
-                    leftResName +
-                    " " +
-                    chainId +
-                    resseq +
-                    "   " +
-                    x +
-                    y +
-                    z +
-                    occupancy +
-                    bfactor;
-
-            String e = atom.element.toString().toUpperCase();
-
-            return String.format("%-76s%2s", s, e) + "  ";
-        }
-
-        static String formatAtomName(Atom atom) {
-            String fullName = null;
-            String name = atom.name;
-            String element = atom.element.toString().toUpperCase();
-
-            // RULES FOR ATOM NAME PADDING: 4 columns in total: 13, 14, 15, 16
-
-            // if length 4: nothing to do
-            if (name.length() == 4) {
-                fullName = name;
-            } else if (name.length() == 3) {
-                fullName = " " + name;
-            } else if (name.length() == 2) {
-                if (element.equals("C") || element.equals("N") || element.equals("O") || element.equals("P") || element.equals("S")) {
-                    fullName = " " + name + " ";
-                } else {
-                    fullName = name + "  ";
-                }
-            } else if (name.length() == 1) {
-                fullName = " " + name + "  ";
-            }
-
-            return fullName;
-        }
+    @Override
+    public LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra algebra() {
+        return LinearAlgebra.on(this);
     }
 }

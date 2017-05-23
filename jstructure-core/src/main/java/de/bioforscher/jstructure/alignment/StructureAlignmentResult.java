@@ -1,8 +1,7 @@
-package de.bioforscher.jstructure.alignment.structure;
+package de.bioforscher.jstructure.alignment;
 
-import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
-import de.bioforscher.jstructure.alignment.AlignmentResult;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
+import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 /**
@@ -15,7 +14,7 @@ public class StructureAlignmentResult implements AlignmentResult {
     private final AtomContainer originalQuery;
     private final AtomContainer alignedQuery;
     private final double alignmentScore;
-    private final LinearAlgebraAtom.Transformation transformation;
+    private final Transformation transformation;
 
     /**
      * Constructs a new alignment result container.
@@ -31,17 +30,17 @@ public class StructureAlignmentResult implements AlignmentResult {
         this.originalQuery = originalQuery;
         this.alignedQuery = alignedQuery;
         this.alignmentScore = alignmentScore;
-        this.transformation = new LinearAlgebraAtom.Transformation(translation, rotation);
+        this.transformation = new Transformation(translation, rotation);
     }
 
     /**
      * Convenience method to transform a {@link AtomContainer} based on the
      * translation and rotation described by this alignment result.
      * @param atomContainer the atom collection to transform
-     * @see LinearAlgebraAtom#transform(AtomContainer, double[], double[][])
+     * @see LinearAlgebra.AtomContainerLinearAlgebra#transform(Transformation)
      */
     public void transform(AtomContainer atomContainer) {
-        LinearAlgebraAtom.transform(atomContainer, transformation);
+        atomContainer.algebra().transform(transformation);
     }
 
     /**

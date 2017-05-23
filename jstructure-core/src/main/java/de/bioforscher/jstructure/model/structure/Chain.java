@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
@@ -61,6 +62,10 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
 
     public Selection.GroupSelection select() {
         return Selection.on(this);
+    }
+
+    public LinearAlgebra.AtomContainerLinearAlgebra algebra() {
+        return LinearAlgebra.on(this);
     }
 
     /**

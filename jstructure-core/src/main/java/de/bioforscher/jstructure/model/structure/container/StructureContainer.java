@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.model.Identifiable;
-import de.bioforscher.jstructure.model.feature.Featureable;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.Featureable;
 import de.bioforscher.jstructure.model.structure.AtomRecordWriter;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;

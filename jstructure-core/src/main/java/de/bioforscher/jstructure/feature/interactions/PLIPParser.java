@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.feature.interactions;
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -58,6 +59,8 @@ public class PLIPParser {
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                     logger.warn("encountered exception during plip parsing: {}", e.getLocalizedMessage());
                     throw new ComputationException(e);
+                } catch (SelectionException e) {
+                    logger.warn("selection exception during plip parsing: {}", e.getLocalizedMessage());
                 }
             }
         }

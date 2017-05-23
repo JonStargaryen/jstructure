@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.cerosene;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -25,14 +24,15 @@ public class SequenceCerosene extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        final double[] centroid = LinearAlgebraAtom.centroid(protein);
-        final double maximalExtent = LinearAlgebra3D.capToInterval(23.0, maximalExtent(protein, centroid), Double.MAX_VALUE);
+        final double[] centroid = protein.algebra().centroid().getValue();
+        final double rawMaximalExtent = protein.algebra().maximalExtent();
+        final double maximalExtent = rawMaximalExtent < 23.0 ? 23.0 : rawMaximalExtent;
 
         protein.chains()
                 .flatMap(Chain::groups)
                 .forEach(group -> {
-                    double[] coordinates = LinearAlgebraAtom.centroid(group);
-                    double[] rgb = LinearAlgebra3D.add(LinearAlgebra3D.multiply(LinearAlgebra3D.subtract(centroid, coordinates), (double) 127 / maximalExtent), SUMMAND);
+                    double[] coordinates = group.algebra().centroid().getValue();
+                    double[] rgb = LinearAlgebra.on(centroid).subtract(coordinates).multiply(127 / maximalExtent).add(SUMMAND).getValue();
                     double[] hsv = rgb2hsv(rgb);
                     group.getFeatureContainer().addFeature(new CeroseneEmbedding(this, rgb, hsv));
                 });
@@ -41,7 +41,7 @@ public class SequenceCerosene extends AbstractFeatureProvider {
     static double maximalExtent(Protein protein, double[] centroid) {
         return protein.atoms()
                 .map(Atom::getCoordinates)
-                .map(coordinates -> LinearAlgebra3D.subtract(coordinates, centroid))
+                .map(coordinates -> LinearAlgebra.on(coordinates).subtract(centroid).getValue())
                 .mapToDouble(difference -> IntStream.range(0, 3).mapToDouble(dimension -> difference[dimension]).max().getAsDouble())
                 .max()
                 .orElse(23.0);
@@ -49,7 +49,7 @@ public class SequenceCerosene extends AbstractFeatureProvider {
 
 
     static double[] rgb2hsv(double[] rgb) {
-        rgb = LinearAlgebra3D.divide(rgb, 255.0);
+        rgb = LinearAlgebra.on(rgb).divide(255.0).getValue();
 
         double min = Math.min(Math.min(rgb[0], rgb[1]), rgb[2]);
         double max = Math.max(Math.max(rgb[0], rgb[1]), rgb[2]);

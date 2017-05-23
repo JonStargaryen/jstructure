@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.feature.sse;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
+import de.bioforscher.jstructure.mathematics.TorsionAngles;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
@@ -315,12 +316,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             for (int j = i + 1; j < residues.getGroups().size(); j++) {
                 Group res1 = residues.getGroups().get(i);
                 Group res2 = residues.getGroups().get(j);
-                double distance = LinearAlgebra3D.distanceFast(
-                        res1.select()
+                double distance = LinearAlgebra.on(res1.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
-                                .getCoordinates(),
-                        res2.select()
+                                .getCoordinates())
+                        .distanceFast(res2.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates());
@@ -421,8 +421,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                         .backboneNitrogenAtoms()
                         .asAtom();
                 // Peptide bond C-N
-                if (LinearAlgebra3D.distanceFast(c.getCoordinates(), n.getCoordinates()) >
-                        MAX_PEPTIDE_BOND_LENGTH_SQUARED) {
+                if (LinearAlgebra.on(c.getCoordinates()).distanceFast(n.getCoordinates()) > MAX_PEPTIDE_BOND_LENGTH_SQUARED) {
                     continue f1;
                 }
             }
@@ -441,10 +440,10 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                     .asAtom();
 
             // Create vectors ( Ca i to Ca i-2 ) ; ( Ca i to CA i + 2 )
-            double[] caminus2 = LinearAlgebra3D.subtract(caim2.getCoordinates(), cag.getCoordinates());
-            double[] caplus2 = LinearAlgebra3D.subtract(cag.getCoordinates(), caip2.getCoordinates());
+            double[] caminus2 = LinearAlgebra.on(caim2.getCoordinates()).subtract(cag.getCoordinates()).getValue();
+            double[] caplus2 = LinearAlgebra.on(cag.getCoordinates()).subtract(caip2.getCoordinates()).getValue();
 
-            double angle = LinearAlgebra3D.angle(caminus2, caplus2);
+            double angle = LinearAlgebra.on(caminus2).angle(caplus2);
 
             SecondaryStructure state = getState(residues.getGroups().get(i));
             state.setKappa((float) angle);
@@ -628,36 +627,14 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             Group res1 = residues.getGroups().get(i);
             Group res2 = residues.getGroups().get(i + 1);
 
-            Atom n1 = res1.select()
-                    .backboneNitrogenAtoms()
-                    .asAtom();
-            Atom ca1 = res1.select()
-                    .alphaCarbonAtoms()
-                    .asAtom();
-            Atom c1 = res1.select()
-                    .backboneCarbonAtoms()
-                    .asAtom();
-
-            Atom n2 = res2.select()
-                    .backboneNitrogenAtoms()
-                    .asAtom();
-            Atom ca2 = res2.select()
-                    .alphaCarbonAtoms()
-                    .asAtom();
-            Atom c2 = res2.select()
-                    .backboneCarbonAtoms()
-                    .asAtom();
-
-            double phi = LinearAlgebra3D.torsionAngle(c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates(), c2.getCoordinates());
-            double psi = LinearAlgebra3D.torsionAngle(n1.getCoordinates(), ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates());
-            double omega = LinearAlgebra3D.torsionAngle(ca1.getCoordinates(), c1.getCoordinates(), n2.getCoordinates(), ca2.getCoordinates());
+            TorsionAngles torsionAngles = new TorsionAngles(res1, res2);
 
             SecondaryStructure state1 = getState(res1);
             SecondaryStructure state2 = getState(res2);
 
-            state2.setPhi(phi);
-            state1.setPsi(psi);
-            state1.setOmega(omega);
+            state2.setPhi(torsionAngles.getPhi());
+            state1.setPsi(torsionAngles.getPsi());
+            state1.setOmega(torsionAngles.getOmega());
         }
     }
 
@@ -671,12 +648,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             for (int j = i + 1; j < residues.getGroups().size(); j++) {
                 Group res1 = residues.getGroups().get(i);
                 Group res2 = residues.getGroups().get(j);
-                double squaredDistance = LinearAlgebra3D.distanceFast(
-                        res1.select()
+                double squaredDistance = LinearAlgebra.on(res1.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
-                                .getCoordinates(),
-                        res2.select()
+                                .getCoordinates())
+                        .distanceFast(res2.select()
                                 .alphaCarbonAtoms()
                                 .asAtom()
                                 .getCoordinates());
@@ -806,10 +782,10 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 .asAtom()
                 .getCoordinates();
 
-        double dno = LinearAlgebra3D.distance(o, n);
-        double dhc = LinearAlgebra3D.distance(c, h);
-        double dho = LinearAlgebra3D.distance(o, h);
-        double dnc = LinearAlgebra3D.distance(c, n);
+        double dno = LinearAlgebra.on(o).distance(n);
+        double dhc = LinearAlgebra.on(c).distance(h);
+        double dho = LinearAlgebra.on(o).distance(h);
+        double dnc = LinearAlgebra.on(c).distance(n);
 
 //        logger.debug("     cccc: " + res1.getResidueNumber() + " " + res1.getAminoAcid() + " " +
 //                res2.getResidueNumber() + " " + res2.getAminoAcid() + String.format( " O (" + oAtom.getPdbSerial() +
@@ -873,7 +849,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * Places a pseudo hydrogen atoms between 2 residues, when it is lacking.
      * @param fragmentOfSize2 the fragment where the atom shall be placed
      */
-    private void calcSimpleH(Fragment<Group> fragmentOfSize2) {
+    void calcSimpleH(Fragment<Group> fragmentOfSize2) {
         try {
             double[] c = fragmentOfSize2.getElement(0).select()
                     .backboneCarbonAtoms()
@@ -888,8 +864,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                     .asAtom()
                     .getCoordinates();
 
-            double[] xyz = LinearAlgebra3D.add(n, LinearAlgebra3D.divide(LinearAlgebra3D.subtract(c, o),
-                    LinearAlgebra3D.distance(o, c)));
+            double[] xyz = LinearAlgebra.on(c).subtract(o).divide(LinearAlgebra.on(c).distance(o)).add(n).getValue();
 
             // pdbSerial of minimal int value flags them as pseudo-hydrogen
             fragmentOfSize2.getElement(1).addAtom(new Atom("H", Element.H, xyz));

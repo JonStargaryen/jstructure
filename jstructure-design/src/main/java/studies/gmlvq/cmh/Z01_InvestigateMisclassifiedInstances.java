@@ -1,6 +1,5 @@
 package studies.gmlvq.cmh;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -57,7 +56,7 @@ class Z01_InvestigateMisclassifiedInstances {
                     .mapToDouble(atom -> Stream.of(residue1, residue2, residue3)
                             .map(residue -> residue.select().alphaCarbonAtoms().asAtom())
                             .map(Atom::getCoordinates)
-                            .mapToDouble(coordinates -> LinearAlgebra3D.distanceFast(atom.getCoordinates(), coordinates))
+                            .mapToDouble(coordinates -> atom.algebra().distanceFast(coordinates))
                             .average()
                             .getAsDouble())
                     .map(Math::sqrt)

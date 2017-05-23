@@ -40,6 +40,7 @@ class LinkInteractionsToTopologyAndSequenceMotifs {
         System.out.println(line);
         Protein protein = ProteinParser.source(line.split("_")[0]).parse();
         Chain chain = protein.select().chainName(line.split("_")[1]).asChain();
+
         plipAnnotator.process(protein);
         sequenceMotifAnnotator.process(protein);
         topologyAnnotator.process(protein);

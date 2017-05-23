@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.asa;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -91,21 +91,6 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-//        // determine radius for all non-hydrogen atoms and assign it to the atom's internal feature map
-//        GroupContainer residueContainer = protein.aminoAcids()
-//                .collect(StructureCollectors.toGroupContainer());
-//
-//        AtomContainer nonHydrogenAtoms = residueContainer.select()
-//                .nonHydrogenAtoms()
-//                .asAtomContainer();
-//        nonHydrogenAtoms.atoms()
-//                .parallel()
-//                .forEach(this::assignRadius);
-//
-//        residueContainer.groups()
-//                .parallel()
-//                .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
-
         List<Atom> nonHydrogenAtoms = protein.select()
                 .aminoAcids()
                 .nonHydrogenAtoms()
@@ -197,7 +182,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
 
         return nonHydrogenAtoms.stream()
                 .filter(atom -> !atom.equals(referenceAtom))
-                .filter(atom -> LinearAlgebra3D.distance(atom.getCoordinates(), referenceAtom.getCoordinates()) < cutoff
+                .filter(atom -> atom.algebra().distance(referenceAtom.getCoordinates()) < cutoff
                         + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius())
                 .collect(Collectors.toList());
     }
@@ -214,10 +199,10 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
 
         for (double[] point : spherePoints) {
             boolean isAccessible = true;
-            double[] testPoint = LinearAlgebra3D.add(LinearAlgebra3D.multiply(point, radius), atom.getCoordinates());
+            double[] testPoint = LinearAlgebra.on(point).multiply(radius).add(atom.getCoordinates()).getValue();
             for(Atom neighborAtom : neighborAtoms) {
                 double neighborAtomRadius = neighborAtom.getFeatureContainer().getFeature(AtomRadius.class).getRadius() + probeSize;
-                double differenceSquared = LinearAlgebra3D.distanceFast(testPoint, neighborAtom.getCoordinates());
+                double differenceSquared = LinearAlgebra.on(testPoint).distanceFast(neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;
                     break;

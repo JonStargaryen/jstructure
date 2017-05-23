@@ -1,7 +1,5 @@
 package aars;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -104,8 +102,7 @@ class UniProtMutationsForBindingSite {
                 renumberedGroup -> originalChain.select()
                         .groupName(renumberedGroup.getThreeLetterCode())
                         .asFilteredGroups()
-                        .min(Comparator.comparingDouble(originalGroup -> LinearAlgebra3D.distanceFast(LinearAlgebraAtom.centroid(originalGroup),
-                                LinearAlgebraAtom.centroid(renumberedGroup))))
+                        .min(Comparator.comparingDouble(originalGroup -> originalGroup.algebra().centroid().distanceFast(renumberedGroup.algebra().centroid())))
                         .get()));
 
         // determine sequence position in sequence alignment - rarely these indices do not match

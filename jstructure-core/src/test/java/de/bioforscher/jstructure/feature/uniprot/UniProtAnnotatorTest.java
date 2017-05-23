@@ -13,6 +13,7 @@ import org.junit.Test;
  */
 public class UniProtAnnotatorTest {
     private AbstractFeatureProvider uniProtAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotationContainer.class);
+
     @Test
     public void shouldAnnotate4LG6() {
         Protein protein = ProteinParser.source("4LG6").parse();

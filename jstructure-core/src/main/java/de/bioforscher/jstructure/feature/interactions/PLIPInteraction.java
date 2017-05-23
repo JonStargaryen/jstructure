@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.feature.ComputationException;
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -49,7 +49,7 @@ public abstract class PLIPInteraction {
         }
         this.coords1 = extractCoordinateArray(ligcoo);
         this.coords2 = extractCoordinateArray(protcoo);
-        this.representation = LinearAlgebra3D.divide(LinearAlgebra3D.add(coords1, coords2), 2);
+        this.representation = LinearAlgebra.on(coords1).add(coords2).divide(2).getValue();
     }
 
     private double[] extractCoordinateArray(Element coo) {

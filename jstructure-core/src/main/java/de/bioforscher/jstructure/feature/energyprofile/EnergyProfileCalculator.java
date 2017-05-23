@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
-import de.bioforscher.jstructure.mathematics.LinearAlgebraAtom;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -65,7 +64,8 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
             Optional<Atom> currentGroupBetaCarbon = currentGroup.select()
                     .betaCarbonAtoms()
                     .asOptionalAtom();
-            double[] currentGroupCoordinates = currentGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() -> LinearAlgebraAtom.centroid(currentGroup));
+            double[] currentGroupCoordinates = currentGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() ->
+                    currentGroup.algebra().centroid().getValue());
             double solvation = 0;
             double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
@@ -77,9 +77,10 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                 Optional<Atom> surroundingGroupBetaCarbon = surroundingGroup.select()
                         .betaCarbonAtoms()
                         .asOptionalAtom();
-                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() -> LinearAlgebraAtom.centroid(surroundingGroup));
+                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() ->
+                        surroundingGroup.algebra().centroid().getValue());
 
-                if(LinearAlgebra3D.distanceFast(currentGroupCoordinates, surroundingGroupCoordinates) > squaredDistanceCutoff) {
+                if(LinearAlgebra.on(currentGroupCoordinates).distanceFast(surroundingGroupCoordinates) > squaredDistanceCutoff) {
                     continue;
                 }
 

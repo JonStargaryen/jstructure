@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra3D;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -126,20 +125,20 @@ public class SelectionTest {
     public void shouldFindSimilarNeighbors() {
         Protein protein = ProteinParser.source("1acj").parse();
 
-        Atom firstAtom = protein.getAtoms().get(0);
-        double probeDistance = 4.4499;
+        Atom atom = protein.getAtoms().get(100);
+        double probeDistance = 4;
 
         List<Atom> neighboringGroupCountSelectionAPI = protein.select()
                 .atomSelection()
-                .distance(firstAtom, probeDistance)
+                .distance(atom, probeDistance)
                 .asFilteredAtoms()
                 .collect(Collectors.toList());
 
         List<Atom> neighboringGroupCountNaive = protein.atoms()
-                .filter(atom -> LinearAlgebra3D.distanceFast(atom.getCoordinates(), firstAtom.getCoordinates()) <
-                        probeDistance * probeDistance)
+                .filter(a -> a.algebra().distance(atom.getCoordinates()) < probeDistance)
                 .collect(Collectors.toList());
 
-        Assert.assertEquals(neighboringGroupCountSelectionAPI, neighboringGroupCountNaive);
+        Assert.assertTrue(neighboringGroupCountSelectionAPI.containsAll(neighboringGroupCountNaive));
+        Assert.assertTrue(neighboringGroupCountNaive.containsAll(neighboringGroupCountSelectionAPI));
     }
 }
