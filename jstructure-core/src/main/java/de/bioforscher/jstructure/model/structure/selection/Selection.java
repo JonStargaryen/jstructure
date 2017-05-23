@@ -169,7 +169,7 @@ public class Selection {
 
         public Atom asAtom() {
             return asOptionalAtom()
-                    .orElseThrow(() -> new NoSuchElementException("did not find atom matching " + Stream.of(atomPredicates,
+                    .orElseThrow(() -> new SelectionException("did not find atom matching " + Stream.of(atomPredicates,
                             groupPredicates,
                             chainPredicates)
                             .flatMap(Collection::stream)
@@ -354,7 +354,7 @@ public class Selection {
 
         public Group asGroup() {
             return asOptionalGroup()
-                    .orElseThrow(() -> new NoSuchElementException("did not find group matching " + Stream.of(groupPredicates,
+                    .orElseThrow(() -> new SelectionException("did not find group matching " + Stream.of(groupPredicates,
                             chainPredicates)
                             .flatMap(Collection::stream)
                             .map(Pair::getRight)
@@ -497,7 +497,7 @@ public class Selection {
 
         public Chain asChain() {
             return asOptionalChain()
-                    .orElseThrow(() -> new NoSuchElementException("did not find chain matching " + Stream.of(chainPredicates)
+                    .orElseThrow(() -> new SelectionException("did not find chain matching " + Stream.of(chainPredicates)
                             .flatMap(Collection::stream)
                             .map(Pair::getRight)
                             .collect(Collectors.joining(", ", "[",  "]"))));

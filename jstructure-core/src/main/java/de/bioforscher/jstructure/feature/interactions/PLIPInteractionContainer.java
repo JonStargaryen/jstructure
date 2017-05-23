@@ -75,4 +75,6 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
     public List<WaterBridge> getWaterBridges() {
         return waterBridges;
     }
+
+    //TODO checks for given residues and convenience functions to retrieve information
 }

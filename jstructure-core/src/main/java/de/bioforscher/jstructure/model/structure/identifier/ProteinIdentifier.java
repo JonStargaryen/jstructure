@@ -95,11 +95,11 @@ public class ProteinIdentifier {
     }
 
     /**
-     * Checks whether this identifier refers to a standard pdbId and nothing else.
+     * Checks whether this identifier refers to a standard pdbId and nothing else. Identifiers can only by standard,
+     * when the pdbId is set and no additional name was provided.
      * @return <code>true</code> iff this protein directly originates from a PDB-entry
      */
     public boolean isStandardPdbId() {
-        // identifier can only by standard, when the pdbId is set and no additional name was provided
         return !pdbId.isEmpty() && additionalName.isEmpty();
     }
 

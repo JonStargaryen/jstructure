@@ -295,6 +295,7 @@ public class LinearAlgebraAtom {
                                                                                     AtomContainer container2,
                                                                                     Set<String> minimalSetOfAtomNames,
                                                                                     Set<String> maximalSetOfAtomNames) {
+        //TODO what happens for alternative positions?
         GroupContainer groupContainer1 = cloneIntoGroupContainer(container1);
         GroupContainer groupContainer2 = cloneIntoGroupContainer(container2);
 

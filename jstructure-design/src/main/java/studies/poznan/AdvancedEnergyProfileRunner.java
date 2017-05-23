@@ -155,7 +155,7 @@ public class AdvancedEnergyProfileRunner {
                 AminoAcidFamily aminoAcidFamily = AminoAcidFamily.valueOfIgnoreCase(aminoAcidName).orElseThrow(() ->
                         new IllegalArgumentException("unknown amino acid '" + aminoAcidName + "'"));
                 Group group = new Group(resNum,
-                        CIFParser.parseLigandInformation(aminoAcidFamily.getThreeLetterCode()), false);
+                        CIFParser.parseLigandInformation(aminoAcidFamily.getThreeLetterCode()), false, false);
                 chain.addGroup(group);
             }
             Builder.energyProfilePredictor.process(protein);
