@@ -1,10 +1,12 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.model.Algebrable;
+import de.bioforscher.jstructure.model.Calculable;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.StructureContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
@@ -12,7 +14,9 @@ import java.util.Arrays;
  * The most fine-grained element describing a {@link Protein}.
  * Created by S on 27.09.2016.
  */
-public class Atom extends AbstractFeatureable implements AtomRecordWriter, CoordinateProvider, StructureContainer, Algebrable<LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra> {
+public class Atom extends AbstractFeatureable implements AtomRecordWriter, CoordinateProvider, StructureContainer,
+        Calculable<LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra> {
+    private static final Logger logger = LoggerFactory.getLogger(Atom.class);
     public static final float DEFAULT_BFACTOR = 100.0f;
     public static final float DEFAULT_OCCUPANCY = 1.0f;
     public static final String ATOM_PREFIX = "ATOM  ";
@@ -179,8 +183,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
         try {
             String pdbRecord = AtomRecordProvider.toPDBString(this);
             if (pdbRecord.length() == 0) {
-                //TODO error handling
-//                logger.warn("peculiar ATOM record {}", toString());
+                logger.warn("malformed ATOM record {}", toString());
             }
             return pdbRecord;
         } catch (NullPointerException e) {
@@ -249,7 +252,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     }
 
     @Override
-    public LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra algebra() {
+    public LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra calculate() {
         return LinearAlgebra.on(this);
     }
 }

@@ -57,7 +57,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
         return Selection.on(this);
     }
 
-    public LinearAlgebra.AtomContainerLinearAlgebra algebra() {
+    public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
         return LinearAlgebra.on(this);
     }
 

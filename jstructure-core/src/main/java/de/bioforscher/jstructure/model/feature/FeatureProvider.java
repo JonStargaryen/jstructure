@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Annotation of an algorithm which can compute features and write them to the feature map of a {@link Featureable}.
+ * Annotation of an algorithm which can calculate features and write them to the feature map of a {@link Featureable}.
  * Created by S on 02.10.2016.
  */
 @Retention(RetentionPolicy.RUNTIME)
@@ -15,7 +15,7 @@ public @interface FeatureProvider {
 
     /**
      * The priority of this feature provider which can be used to assign an ordering on which implementation is employed
-     * to compute certain features. Override this method to assign custom priorities.
+     * to calculate certain features. Override this method to assign custom priorities.
      * @return this feature providers priority
      */
     int priority() default DEFAULT_PRIORITY;
@@ -30,7 +30,7 @@ public @interface FeatureProvider {
      * Access to all required features which need to be present in order for the computation about to happen to succeed.
      * E.g., the computation of something like the loop fraction requires the previous calculation/annotation of all
      * secondary structure information. By resolving these dependencies, the {@link AbstractFeatureProvider} will try to
-     * compute all requirements beforehand automatically. This list can be empty.
+     * calculate all requirements beforehand automatically. This list can be empty.
      * @return all features needed for the computation implemented by this provider
      */
     Class<? extends FeatureContainerEntry>[] requires() default {};

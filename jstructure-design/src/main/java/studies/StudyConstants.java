@@ -11,6 +11,7 @@ public class StudyConstants {
     public static final String HOME = System.getProperty("user.home");
     public static final String GIT = HOME + "/git/";
     public static final String GMLVQ_MAIN = GIT + "gmlvq_main/";
+    public static final String PHD = GIT + "phd_sb_repo/";
 
     public static String getResourceAsFilepath(String filename) {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();

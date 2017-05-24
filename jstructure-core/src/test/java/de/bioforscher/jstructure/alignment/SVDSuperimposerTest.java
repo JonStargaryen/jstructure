@@ -26,7 +26,7 @@ public class SVDSuperimposerTest {
     private GroupContainer container4;
 
     private Group createGroup(String aminoAcidName, int residueNumber) {
-        return new Group(residueNumber, CIFParser.parseLigandInformation(aminoAcidName), false, false);
+        return new Group(residueNumber, CIFParser.parseLigandInformation(aminoAcidName), false, false, "");
     }
 
     @Before
@@ -68,7 +68,7 @@ public class SVDSuperimposerTest {
 
     @Test
     public void shouldAlignArbitraryPoints() {
-        // compute alignment
+        // calculate alignment
         SVDSuperimposer svd = new SVDSuperimposer();
         StructureAlignmentResult alignmentResult = svd.align(container1, container2);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
@@ -80,7 +80,7 @@ public class SVDSuperimposerTest {
 
     @Test
     public void shouldAlignAnotherSetOfArbitraryPoints() {
-        // compute alignment
+        // calculate alignment
         StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(container3, container4);
         System.out.println(Arrays.toString(alignmentResult.getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
@@ -114,7 +114,7 @@ public class SVDSuperimposerTest {
     public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
         Protein protein1acjCopy = ProteinParser.source("1acj").parse();
         double[] translation = new double[] { 10, 20, 30 };
-        protein1acjCopy.algebra().transform(translation);
+        protein1acjCopy.calculate().transform(translation);
 
         SVDSuperimposer svd = new SVDSuperimposer();
         StructureAlignmentResult result = svd.align(protein1acj.select()

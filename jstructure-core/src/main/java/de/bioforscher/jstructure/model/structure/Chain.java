@@ -64,7 +64,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
         return Selection.on(this);
     }
 
-    public LinearAlgebra.AtomContainerLinearAlgebra algebra() {
+    public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
         return LinearAlgebra.on(this);
     }
 

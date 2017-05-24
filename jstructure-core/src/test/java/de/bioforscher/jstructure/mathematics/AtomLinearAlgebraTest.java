@@ -27,7 +27,7 @@ public class AtomLinearAlgebraTest {
 
     @Test
     public void center() throws Exception {
-        protein.algebra().center();
+        protein.calculate().center();
         Assert.assertArrayEquals(LinearAlgebra.on(protein).centroid().getValue(),
                 AlignmentAlgorithm.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
     }

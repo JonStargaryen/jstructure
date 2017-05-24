@@ -43,7 +43,13 @@ class AtomRecordProvider {
         String fullName = formatAtomName(atom);
 
         String altLoc = atom.hasAlternativeLocations() ? atom.getAlternativeLocation() : " ";
-        String resseq = String.format("%4s", pdbcode) + " ";
+        String resseq;
+        if(parentGroup.hasInsertionCode()) {
+            // substring for safety
+            resseq = String.format("%4s", pdbcode) + parentGroup.getInsertionCode().substring(0, 1);
+        } else {
+            resseq = String.format("%4s", pdbcode) + " ";
+        }
 
         double[] coordinates = atom.getCoordinates();
         String x = String.format("%8s", d3.format(coordinates[0]));

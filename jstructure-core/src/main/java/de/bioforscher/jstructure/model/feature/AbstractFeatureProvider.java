@@ -34,9 +34,9 @@ public abstract class AbstractFeatureProvider {
                     continue;
                 }
 
-                // need to compute
+                // need to calculate
                 AbstractFeatureProvider resolvedFeatureProvider = FeatureProviderRegistry.resolve(requiredFeature);
-                logger.debug("computing {}: using {} to compute required feature {}",
+                logger.debug("computing {}: using {} to calculate required feature {}",
                         Arrays.toString(annotation.provides()),
                         resolvedFeatureProvider.getClass().getSimpleName(),
                         requiredFeature);

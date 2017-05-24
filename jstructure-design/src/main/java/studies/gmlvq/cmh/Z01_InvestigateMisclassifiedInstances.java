@@ -56,7 +56,7 @@ class Z01_InvestigateMisclassifiedInstances {
                     .mapToDouble(atom -> Stream.of(residue1, residue2, residue3)
                             .map(residue -> residue.select().alphaCarbonAtoms().asAtom())
                             .map(Atom::getCoordinates)
-                            .mapToDouble(coordinates -> atom.algebra().distanceFast(coordinates))
+                            .mapToDouble(coordinates -> atom.calculate().distanceFast(coordinates))
                             .average()
                             .getAsDouble())
                     .map(Math::sqrt)

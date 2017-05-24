@@ -44,7 +44,7 @@ public class ProteinParser {
     private ProteinParser(OptionalSteps builder) {
         skipModels = builder.skipModels;
         strictMode = builder.strictMode;
-        skipHydrogens = builder.skipHydrogens;
+        skipHydrogens = builder.skipHydrogenAtoms;
 
         protein = new Protein();
         // 'initialize' title field as it tends to be split over multiple lines - thus, we have to append previous results when we find further entries
@@ -171,6 +171,7 @@ public class ProteinParser {
             String pdbName = line.substring(17, 20).trim();
             ChainIdentifier chainId = ChainIdentifier.createFromChainId(protein.getPdbId(), line.substring(21, 22));
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
+            String insertionCode = line.substring(26, 27).trim();
 
             if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
                 Optional<Chain> selectedChain = protein.select()
@@ -186,14 +187,14 @@ public class ProteinParser {
                 }
             }
 
-            if(currentGroup == null || currentGroup.getResidueNumber() != resNum ||
-                    !currentGroup.getParentChain().getChainId().equals(chainId)) {
-                // residue changed - create new group object and set reference
-                currentGroup = new Group(resNum,
-                        CIFParser.parseLigandInformation(pdbName),
-                        terminatedChains.contains(currentChain),
-                        line.startsWith(Atom.HETATM_PREFIX));
-                currentChain.addGroup(currentGroup);
+            if(currentGroup == null || currentGroup.getResidueNumber() != resNum || !currentGroup.getInsertionCode().equals(insertionCode) || !currentGroup.getParentChain().getChainId().equals(chainId)) {
+                    // residue changed - create new group object and set reference
+                    currentGroup = new Group(resNum,
+                            CIFParser.parseLigandInformation(pdbName),
+                            terminatedChains.contains(currentChain),
+                            line.startsWith(Atom.HETATM_PREFIX),
+                            insertionCode);
+                    currentChain.addGroup(currentGroup);
             }
 
             float occupancy;
@@ -233,12 +234,6 @@ public class ProteinParser {
                     alternativeLocationIndicator);
 
             // 17/05/22 - stopping to skip alternative positions
-//            if(currentGroup.atoms().noneMatch(a -> a.getName().equals(atom.getName()))) {
-//                currentGroup.addAtom(atom);
-//            } else {
-//                //TODO find solution for this - maybe only the atom with the highest occupancy should be kept
-//                logger.debug("skipping atoms for {}", atom);
-//            }
             currentGroup.addAtom(atom);
         }
 
@@ -272,7 +267,9 @@ public class ProteinParser {
         private Path path;
         boolean skipModels = true;
         boolean strictMode = false;
-        boolean skipHydrogens = true;
+        boolean skipHydrogenAtoms = true;
+        boolean approximateMissingAtoms = false;
+        boolean minimalParsing = false;
         ProteinIdentifier forceProteinName;
         ProteinIdentifier hintProteinName;
         private static final int DEFAULT_CACHE_SIZE = 1000;
@@ -294,13 +291,18 @@ public class ProteinParser {
             return this;
         }
 
+        public OptionalSteps minimalParsing(boolean minimalParsing) {
+            this.minimalParsing = minimalParsing;
+            return this;
+        }
+
         public OptionalSteps strictMode(boolean strictMode) {
             this.strictMode = strictMode;
             return this;
         }
 
-        public OptionalSteps skipHydrogens(boolean skipHydrogens) {
-            this.skipHydrogens = skipHydrogens;
+        public OptionalSteps skipHydrogenAtoms(boolean skipHydrogenAtoms) {
+            this.skipHydrogenAtoms = skipHydrogenAtoms;
             return this;
         }
 
@@ -311,6 +313,12 @@ public class ProteinParser {
 
         public OptionalSteps hintProteinName(ProteinIdentifier proteinName) {
             this.hintProteinName = proteinName;
+            return this;
+        }
+
+        public OptionalSteps approximateMissingAtoms(boolean approximateMissingAtoms) {
+            this.approximateMissingAtoms = approximateMissingAtoms;
+            //TODO impl
             return this;
         }
 

@@ -7,7 +7,7 @@ import static util.TestUtils.TOLERANT_ERROR_MARGIN;
 import static util.TestUtils.ZERO_VECTOR;
 
 /**
- * Unit tests for linear algebra on double arrays.
+ * Unit tests for linear calculate on double arrays.
  * Created by bittrich on 5/23/17.
  */
 public class PrimitiveDoubleArrayLinearAlgebraTest {

@@ -65,7 +65,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                     .betaCarbonAtoms()
                     .asOptionalAtom();
             double[] currentGroupCoordinates = currentGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() ->
-                    currentGroup.algebra().centroid().getValue());
+                    currentGroup.calculate().centroid().getValue());
             double solvation = 0;
             double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
@@ -78,7 +78,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                         .betaCarbonAtoms()
                         .asOptionalAtom();
                 double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() ->
-                        surroundingGroup.algebra().centroid().getValue());
+                        surroundingGroup.calculate().centroid().getValue());
 
                 if(LinearAlgebra.on(currentGroupCoordinates).distanceFast(surroundingGroupCoordinates) > squaredDistanceCutoff) {
                     continue;

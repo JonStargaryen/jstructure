@@ -102,9 +102,20 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                     membrane.setTransMembraneHelices(helices);
 
                     protein.getFeatureContainer().addFeature(membrane);
-                    //TODO remove, used to evaluate alignment manually
+
+//                    //TODO remove, used to evaluate alignment manually
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getPdbRepresentation().getBytes());
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/opm.pdb"), opmProtein.getPdbRepresentation().getBytes());
+//                    //TODO remove, used to evaluate segment positions manually
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/tm.pdb"), protein.select()
+//                            .residueNumber(helices.stream()
+//                                    .map(TransMembraneHelix::getSegments)
+//                                    .flatMap(Collection::stream)
+//                                    .collect(Collectors.toList())
+//                                    .toArray(new IntegerRange[0]))
+//                            .asGroupContainer()
+//                            .getPdbRepresentation()
+//                            .getBytes());
                 }
             }
         } catch (IOException e) {

@@ -40,7 +40,7 @@ public class StructureAlignmentResult implements AlignmentResult {
      * @see LinearAlgebra.AtomContainerLinearAlgebra#transform(Transformation)
      */
     public void transform(AtomContainer atomContainer) {
-        atomContainer.algebra().transform(transformation);
+        atomContainer.calculate().transform(transformation);
     }
 
     /**

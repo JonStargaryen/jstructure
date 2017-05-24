@@ -240,7 +240,7 @@ public class LinearAlgebra {
             return Math.sqrt(atomContainer.atoms()
                     .mapToDouble(atom -> LinearAlgebra.on(atom.getCoordinates()).distanceFast(centroid))
                     .max()
-                    .orElseThrow(() -> new IllegalArgumentException("cannot compute maximal extent for single atom")));
+                    .orElseThrow(() -> new IllegalArgumentException("cannot calculate maximal extent for single atom")));
         }
 
         public AtomContainerLinearAlgebra transform(double[] translation) {

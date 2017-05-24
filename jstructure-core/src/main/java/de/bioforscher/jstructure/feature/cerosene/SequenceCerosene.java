@@ -24,14 +24,14 @@ public class SequenceCerosene extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        final double[] centroid = protein.algebra().centroid().getValue();
-        final double rawMaximalExtent = protein.algebra().maximalExtent();
+        final double[] centroid = protein.calculate().centroid().getValue();
+        final double rawMaximalExtent = protein.calculate().maximalExtent();
         final double maximalExtent = rawMaximalExtent < 23.0 ? 23.0 : rawMaximalExtent;
 
         protein.chains()
                 .flatMap(Chain::groups)
                 .forEach(group -> {
-                    double[] coordinates = group.algebra().centroid().getValue();
+                    double[] coordinates = group.calculate().centroid().getValue();
                     double[] rgb = LinearAlgebra.on(centroid).subtract(coordinates).multiply(127 / maximalExtent).add(SUMMAND).getValue();
                     double[] hsv = rgb2hsv(rgb);
                     group.getFeatureContainer().addFeature(new CeroseneEmbedding(this, rgb, hsv));

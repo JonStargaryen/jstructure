@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -39,6 +38,8 @@ public abstract class AbstractItemSetMinerDataSetComposer {
 
     private List<String> functionalPdbIds;
     private FileWriter output;
+    //TODO remove
+    private List<String> processedEntries;
 
     protected AbstractItemSetMinerDataSetComposer(String positiveFilename,
                                                   String negativeFilename,
@@ -48,24 +49,32 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 .distinct()
                 .collect(Collectors.toList());
 
-        this.output = new FileWriter(outputFilename, false);
+//        this.output = new FileWriter(outputFilename, false);
+//
+//        // compose header
+//        // the number of considered residues
+//        int numberOfGroups = Files.lines(Paths.get(positiveFilename))
+//                .findFirst()
+//                .orElseThrow(() -> new IllegalArgumentException("no valid input line found"))
+//                .split("_").length - 1;
+//        output.write("@RELATION ism" + System.lineSeparator() +
+//                        "@ATTRIBUTE id             STRING" + System.lineSeparator() +
+//                        IntStream.range(0, numberOfGroups)
+//                                .mapToObj(this::mapToHeaderLine)
+//                                .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
+//                        "@ATTRIBUTE class          {functional,non-functional}" + System.lineSeparator() +
+//                        "@DATA" + System.lineSeparator());
+//
+//        handleCase(positiveFilename, true);
+//        handleCase(negativeFilename, false);
 
-        // compose header
-        // the number of considered residues
-        int numberOfGroups = Files.lines(Paths.get(positiveFilename))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("no valid input line found"))
-                .split("_").length - 1;
-        output.write("@RELATION ism" + System.lineSeparator() +
-                        "@ATTRIBUTE id             STRING" + System.lineSeparator() +
-                        IntStream.range(0, numberOfGroups)
-                                .mapToObj(this::mapToHeaderLine)
-                                .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                        "@ATTRIBUTE class          {functional,non-functional}" + System.lineSeparator() +
-                        "@DATA" + System.lineSeparator());
-
-        handleCase(positiveFilename, true);
+        //TODO remove - continue on partial file
+        this.output = new FileWriter(outputFilename, true);
+        this.processedEntries = Files.lines(Paths.get(outputFilename))
+                .map(string -> string.split(",")[0])
+                .collect(Collectors.toList());
         handleCase(negativeFilename, false);
+
         output.flush();
         output.close();
     }
@@ -105,12 +114,18 @@ public abstract class AbstractItemSetMinerDataSetComposer {
     }
 
     private void handleLineGroup(List<String> lines, boolean functional) {
+        // skip filtered lines
         if(!filterFunctionalProteins(lines.get(0), functional)) {
+            return;
+        }
+        //TODO remove - skip already processed entries
+        if(processedEntries.containsAll(lines)) {
+            System.out.println("skipping already processed entries: " + lines);
             return;
         }
         try {
             Protein protein = ProteinParser.source(lines.get(0).split("_")[0]).parse();
-            // compute features
+            // calculate features
             featureProviders.forEach(featureProvider -> featureProvider.process(protein));
 
             for(String line : lines) {
@@ -142,7 +157,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
             return groups.stream()
                     .map(group -> mapToString(container, group))
                     .collect(Collectors.joining(",", line + ",", "," + (functional ? "" : "non-") + "functional"));
-        } catch (NoSuchElementException | NullPointerException | NumberFormatException | ComputationException e) {
+        } catch (NoSuchElementException | NullPointerException | ComputationException | IllegalArgumentException e) {
             e.printStackTrace();
             // thrown upon missing backbone atoms during secondary structure assignment
             return "";
@@ -165,6 +180,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 .asGroup();
         // check for integrity
         if(!group.getGroupInformation().getOneLetterCode().equals(split[1].substring(0, 1))) {
+            // happens for alternative positions
             throw new IllegalArgumentException("amino acid does not match expectation: " + residueSection + " found " + group.getGroupInformation().getOneLetterCode());
         }
         return group;

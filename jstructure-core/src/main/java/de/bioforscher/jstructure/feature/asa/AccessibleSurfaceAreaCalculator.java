@@ -182,7 +182,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
 
         return nonHydrogenAtoms.stream()
                 .filter(atom -> !atom.equals(referenceAtom))
-                .filter(atom -> atom.algebra().distance(referenceAtom.getCoordinates()) < cutoff
+                .filter(atom -> atom.calculate().distance(referenceAtom.getCoordinates()) < cutoff
                         + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius())
                 .collect(Collectors.toList());
     }

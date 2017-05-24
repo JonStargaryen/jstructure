@@ -50,7 +50,7 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
         double msd = Combinatorics.sequentialPairsOf(groupContainerPair.getLeft().getAtoms(), groupContainerPair.getRight().getAtoms())
                 .mapToDouble(pair -> LinearAlgebra.on(pair.getLeft().getCoordinates()).distanceFast(pair.getRight().getCoordinates()))
                 .average()
-                .orElseThrow(() -> new IllegalArgumentException("cannot compute rmsd for empty or non-intersecting containers"));
+                .orElseThrow(() -> new IllegalArgumentException("cannot calculate rmsd for empty or non-intersecting containers"));
         return Math.sqrt(msd);
     }
 

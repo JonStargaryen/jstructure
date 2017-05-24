@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for shared functions by the linear algebra implementation.
+ * Test for shared functions by the linear calculate implementation.
  * Created by bittrich on 5/23/17.
  */
 public class LinearAlgebraTest {

@@ -53,12 +53,12 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignme
         reference = atomContainerPair.getLeft();
         query = atomContainerPair.getRight();
 
-        // compute centroids
-        double[] centroid1 = reference.algebra().centroid().getValue();
-        double[] centroid2 = query.algebra().centroid().getValue();
+        // calculate centroids
+        double[] centroid1 = reference.calculate().centroid().getValue();
+        double[] centroid2 = query.calculate().centroid().getValue();
         // center atoms
-        reference.algebra().center();
-        query.algebra().center();
+        reference.calculate().center();
+        query.calculate().center();
 
         // compose covariance matrix and calculate SVD
         RealMatrix matrix1 = convertToMatrix(reference);
@@ -78,7 +78,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignme
         }
         double[][] rotation = rotationMatrix.getData();
 
-        // compute translation
+        // calculate translation
         double[] translation = LinearAlgebra.on(centroid1).subtract(LinearAlgebra.on(centroid2).multiply(rotation)).getValue();
 
         logger.trace("rotation matrix\n{}\ntranslation vector\n{}", Arrays.deepToString(rotationMatrix.getData()),
@@ -86,7 +86,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignme
 
         /* transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are already
         * centered and calculate RMSD */
-        query.algebra().transform(new Transformation(rotation));
+        query.calculate().transform(new Transformation(rotation));
         double rmsd = calculateRmsd(reference, query);
 
         // return alignment

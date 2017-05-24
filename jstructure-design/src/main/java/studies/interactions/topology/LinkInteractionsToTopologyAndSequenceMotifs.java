@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembra
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import studies.StudyConstants;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,18 +32,27 @@ class LinkInteractionsToTopologyAndSequenceMotifs {
     private static final OrientationsOfProteinsInMembranesAnnotator topologyAnnotator = new OrientationsOfProteinsInMembranesAnnotator();
 
     public static void main(String[] args) throws IOException {
-        Files.lines(Paths.get(""))
+        Files.lines(Paths.get(StudyConstants.PHD + "data/pdbtm_alpha_nr.list.txt"))
+                // skip header and malformed lines
+                .filter(line -> line.length() == 6)
                 .limit(5)
                 .forEach(LinkInteractionsToTopologyAndSequenceMotifs::handleLine);
     }
 
     private static void handleLine(String line) {
         System.out.println(line);
-        Protein protein = ProteinParser.source(line.split("_")[0]).parse();
-        Chain chain = protein.select().chainName(line.split("_")[1]).asChain();
 
+        // load protein, calculate features
+        Protein protein = ProteinParser.source(line.split("_")[0]).parse();
         plipAnnotator.process(protein);
         sequenceMotifAnnotator.process(protein);
         topologyAnnotator.process(protein);
+
+        // select wanted chain
+        Chain chain = protein.select()
+                .chainName(line.split("_")[1])
+                .asChain();
+
+        System.out.println(chain.getAminoAcidSequence());
     }
 }

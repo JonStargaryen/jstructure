@@ -79,5 +79,8 @@ store respectively analyze it.
 
 These classes are used to tweak the `core` package and spot shortcomings of the
 current design. Also they provide examples on how to employ the capabilities of it.
-Be aware, that everything in all modules is suspect to drastic changes as the library
-grows and requirements change.
+Be aware, that at this point in time everything in all modules is suspect to drastic 
+changes as the library grows and requirements change.
+
+### Design guidelines
+* no public method takes `null` as argument, none will return `null`

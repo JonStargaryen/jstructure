@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 
 /**
- * The radius of an atom, used to compute the accessible surface area.
+ * The radius of an atom, used to calculate the accessible surface area.
  * Created by bittrich on 5/17/17.
  */
 public class AtomRadius extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {

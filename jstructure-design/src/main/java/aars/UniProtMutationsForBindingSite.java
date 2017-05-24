@@ -102,7 +102,7 @@ class UniProtMutationsForBindingSite {
                 renumberedGroup -> originalChain.select()
                         .groupName(renumberedGroup.getThreeLetterCode())
                         .asFilteredGroups()
-                        .min(Comparator.comparingDouble(originalGroup -> originalGroup.algebra().centroid().distanceFast(renumberedGroup.algebra().centroid())))
+                        .min(Comparator.comparingDouble(originalGroup -> originalGroup.calculate().centroid().distanceFast(renumberedGroup.calculate().centroid())))
                         .get()));
 
         // determine sequence position in sequence alignment - rarely these indices do not match

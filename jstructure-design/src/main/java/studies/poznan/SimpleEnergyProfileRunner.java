@@ -49,7 +49,7 @@ public class SimpleEnergyProfileRunner {
             // read and parse protein
             Protein protein = ProteinParser.source(inputPath).parse();
 
-            // compute energy profile
+            // calculate energy profile
             featureProvider.process(protein);
 
             // compose output

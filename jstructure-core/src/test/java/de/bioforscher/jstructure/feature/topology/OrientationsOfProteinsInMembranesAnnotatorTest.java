@@ -38,8 +38,6 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
     @Test
     public void shouldHandleTransMembraneProtein() {
         annotator.process(protein);
-        Membrane membrane = protein.getFeatureContainer().getFeature(Membrane.class);
-        System.out.println(membrane);
     }
 
     @Test

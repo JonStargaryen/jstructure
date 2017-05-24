@@ -115,10 +115,10 @@ class BindingSiteAligner {
     }
 
     private static double computeMinimalDistanceToChain(Group potentialLigand, GroupContainer representativeChain) {
-        double[] centroid = potentialLigand.algebra().centroid().getValue();
+        double[] centroid = potentialLigand.calculate().centroid().getValue();
 
         return representativeChain.atoms()
-                .map(Atom::algebra)
+                .map(Atom::calculate)
                 .mapToDouble(coordinates -> coordinates.distanceFast(centroid))
                 .min()
                 .orElseThrow(NoSuchElementException::new);

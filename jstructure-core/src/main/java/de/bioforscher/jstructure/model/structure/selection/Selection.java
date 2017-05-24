@@ -164,7 +164,7 @@ public class Selection {
 
         public Optional<Atom> asOptionalAtom() {
             return asFilteredAtoms()
-                    .findAny();
+                    .findFirst();
         }
 
         public Atom asAtom() {
@@ -349,7 +349,7 @@ public class Selection {
 
         public Optional<Group> asOptionalGroup() {
             return asFilteredGroups()
-                    .findAny();
+                    .findFirst();
         }
 
         public Group asGroup() {
@@ -406,6 +406,8 @@ public class Selection {
                     .contains(group.getResidueNumber()), "residue numbers: " + Arrays.toString(residueNumbers));
             return this;
         }
+
+        //TODO support for insertion codes
 
         public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
@@ -492,7 +494,7 @@ public class Selection {
 
         public Optional<Chain> asOptionalChain() {
             return asFilteredChains()
-                    .findAny();
+                    .findFirst();
         }
 
         public Chain asChain() {

@@ -76,7 +76,7 @@ public class FeatureProviderRegistry {
 
     /**
      * Access to all features supported by the current setup.
-     * @return a list of all features names for which at least 1 {@link FeatureProvider} is registered which can compute
+     * @return a list of all features names for which at least 1 {@link FeatureProvider} is registered which can calculate
      * it
      */
     public static List<Class<? extends FeatureContainerEntry>> getSupportedFeatures() {
@@ -117,10 +117,10 @@ public class FeatureProviderRegistry {
 
     /**
      * Allows to resolve arbitrary feature name and returns the {@link FeatureProvider} which should be employed to
-     * compute it.
+     * calculate it.
      * @return the favored {@link FeatureProvider} (according to the priority with which that feature provider is
      * registered)
-     * @throws java.util.NoSuchElementException if no {@link FeatureProvider} is registered which can compute the
+     * @throws java.util.NoSuchElementException if no {@link FeatureProvider} is registered which can calculate the
      * requested feature
      */
     public static AbstractFeatureProvider resolve(Class<? extends FeatureContainerEntry> requestedFeature) {

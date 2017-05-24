@@ -19,7 +19,11 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group(0, GroupInformation.UNKNOWN_GROUP, false, false);
+    static final Group UNKNOWN_GROUP = new Group(0,
+            GroupInformation.UNKNOWN_GROUP,
+            false,
+            false,
+            "");
 
     private int residueNumber;
     private List<Atom> atoms;
@@ -31,13 +35,19 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     private GroupInformation groupInformation;
     private boolean parentChainIsTerminated;
     private boolean hetAtm;
+    private String insertionCode;
 
-    public Group(int residueNumber, GroupInformation groupInformation, boolean parentChainIsTerminated, boolean hetAtm) {
+    public Group(int residueNumber,
+                 GroupInformation groupInformation,
+                 boolean parentChainIsTerminated,
+                 boolean hetAtm,
+                 String insertionCode) {
         this.residueNumber = residueNumber;
         this.atoms = new ArrayList<>();
         this.groupInformation = groupInformation;
         this.parentChainIsTerminated = parentChainIsTerminated;
         this.hetAtm = hetAtm;
+        this.insertionCode = insertionCode;
     }
 
     Group() {
@@ -66,6 +76,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         // reference parent
         this.parentChain = group.parentChain;
         this.groupInformation = group.groupInformation;
+        this.insertionCode = group.insertionCode;
         // set reference to feature map
         setFeatureContainer(group.getFeatureContainer());
     }
@@ -74,7 +85,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return Selection.on(this);
     }
 
-    public LinearAlgebra.AtomContainerLinearAlgebra algebra() {
+    public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
         return LinearAlgebra.on(this);
     }
 
@@ -164,5 +175,13 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     public boolean isHetAtm() {
         return hetAtm;
+    }
+
+    public String getInsertionCode() {
+        return insertionCode;
+    }
+
+    public boolean hasInsertionCode() {
+        return !insertionCode.isEmpty();
     }
 }

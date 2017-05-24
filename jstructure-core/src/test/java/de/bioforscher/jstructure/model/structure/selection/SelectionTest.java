@@ -135,7 +135,7 @@ public class SelectionTest {
                 .collect(Collectors.toList());
 
         List<Atom> neighboringGroupCountNaive = protein.atoms()
-                .filter(a -> a.algebra().distance(atom.getCoordinates()) < probeDistance)
+                .filter(a -> a.calculate().distance(atom.getCoordinates()) < probeDistance)
                 .collect(Collectors.toList());
 
         Assert.assertTrue(neighboringGroupCountSelectionAPI.containsAll(neighboringGroupCountNaive));

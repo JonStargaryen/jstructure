@@ -21,13 +21,13 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.startsWith;
 
 /**
- * Checks functions of the PDB parser and its integrity with the data de.bioforscher.explorer.helices.model.
+ * Checks functions of the PDB parser and its integrity with the data model.
  * Created by S on 29.09.2016.
  */
 public class ProteinParserTest {
     private static final String PDB_EXTENSION = ".pdb";
     private static final String PDB_DIRECTORY = "parser/";
-    private static final List<String> PDB_IDS = Arrays.asList("1acj", "1asz", "4bpm");
+    private static final List<String> PDB_IDS = Arrays.asList("2w0l", "1acj", "1asz", "4bpm");
     private static final List<Path> PDB_FILE_PATHS = PDB_IDS.stream()
             .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION)
             .map(TestUtils::getResourceAsFilepath)
@@ -41,6 +41,18 @@ public class ProteinParserTest {
     @Test
     public void shouldParseNonStandardAminoAcid() {
         ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb"))).parse();
+    }
+
+    @Test
+    public void shouldParseInsertedAminoAcids() {
+        Protein protein = ProteinParser.source("2w0l").parse();
+        List<Group> groups = protein.select()
+                .chainName("A")
+                .residueNumber(95)
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+        Assert.assertEquals(2, groups.size());
+        groups.forEach(System.out::println);
     }
 
     @Test
@@ -122,13 +134,11 @@ public class ProteinParserTest {
     }
 
     /**
-     * Tests whether <tt>ATOM</tt> records findAny parsed and written correctly.
+     * Tests whether <tt>ATOM</tt> records are parsed and written correctly.
      */
     @Test
     public void shouldWriteEqualAtomRecords() {
-        PDB_IDS.stream()
-                .skip(1)
-                .forEach(this::checkAgreement);
+        PDB_IDS.forEach(this::checkAgreement);
     }
 
     private void checkAgreement(String pdbId) {
