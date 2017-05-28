@@ -141,7 +141,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     /**
      * Registers a child. This object will assign a reference to itself to the atom.
-     * @param atom the atom to processUniProtId
+     * @param atom the atom to process
      */
     public void addAtom(Atom atom) {
         getAtoms().add(atom);

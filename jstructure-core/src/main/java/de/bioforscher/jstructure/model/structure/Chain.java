@@ -18,7 +18,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     /**
      * reference to an undefined chain - this is used by groups without explicit parent reference
      */
-    static final Chain UNKNOWN_CHAIN = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
+    public static final Chain UNKNOWN_CHAIN = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
 
     private List<Group> groups;
     /**
