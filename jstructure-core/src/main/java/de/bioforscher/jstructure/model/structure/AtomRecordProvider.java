@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.aminoacid.NonStandardAminoAcid;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -33,10 +35,10 @@ class AtomRecordProvider {
         Chain parentChain = parentGroup.getParentChain();
         //TODO check - needed?
         String chainId = parentChain.getChainId() != null ? parentChain.getChainId().getChainId() : Chain.UNKNOWN_CHAIN.getChainId().getChainId();
-        String record = parentGroup.isHetAtm() ? HETATM_PREFIX : ATOM_PREFIX;
+        String record = isHetAtm(parentGroup) ? HETATM_PREFIX : ATOM_PREFIX;
         // format output ...
         String resName = parentGroup.getThreeLetterCode();
-        String pdbcode = String.valueOf(parentGroup.getResidueNumber());
+        String pdbcode = String.valueOf(parentGroup.getResidueNumber().getResidueNumber());
 
         int seri = atom.getPdbSerial();
         String serial = String.format("%5d", seri);
@@ -44,9 +46,9 @@ class AtomRecordProvider {
 
         String altLoc = atom.hasAlternativeLocations() ? atom.getAlternativeLocation() : " ";
         String resseq;
-        if(parentGroup.hasInsertionCode()) {
+        if(parentGroup.getResidueNumber().hasInsertionCode()) {
             // substring for safety
-            resseq = String.format("%4s", pdbcode) + parentGroup.getInsertionCode().substring(0, 1);
+            resseq = String.format("%4s", pdbcode) + parentGroup.getResidueNumber().getInsertionCode().substring(0, 1);
         } else {
             resseq = String.format("%4s", pdbcode) + " ";
         }
@@ -78,6 +80,11 @@ class AtomRecordProvider {
         String e = atom.getElement().toString().toUpperCase();
 
         return String.format("%-76s%2s", s, e) + "  ";
+    }
+
+    private static boolean isHetAtm(Group parentGroup) {
+        //TODO is this check for HETATM annotation correct?
+        return parentGroup.isLigand() || parentGroup instanceof NonStandardAminoAcid;
     }
 
     static String formatAtomName(Atom atom) {

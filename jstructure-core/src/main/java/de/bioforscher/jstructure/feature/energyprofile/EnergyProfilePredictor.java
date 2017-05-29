@@ -64,7 +64,8 @@ public class EnergyProfilePredictor extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        protein.chains().forEach(this::predictEnergyProfile);
+        protein.chainsWithAminoAcids()
+                .forEach(this::predictEnergyProfile);
     }
 
     private void predictEnergyProfile(Chain chain) {

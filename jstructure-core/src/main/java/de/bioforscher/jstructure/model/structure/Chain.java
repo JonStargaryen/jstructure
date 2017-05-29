@@ -18,7 +18,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     /**
      * reference to an undefined chain - this is used by groups without explicit parent reference
      */
-    public static final Chain UNKNOWN_CHAIN = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
+    static final Chain UNKNOWN_CHAIN = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
 
     private List<Group> groups;
     /**
@@ -49,15 +49,8 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
         this.chainId = chain.chainId;
         // reference parent
         this.parentProtein = chain.parentProtein;
+        this.identifier = chain.identifier;
         setFeatureContainer(chain.getFeatureContainer());
-    }
-
-    public Chain(List<Group> groups) {
-        this.groups = groups;
-    }
-
-    Chain() {
-
     }
 
     public Selection.GroupSelection select() {
@@ -103,7 +96,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' groups='" + getGroups().size() + "'";
+        return getClass().getSimpleName() + " '" + getIdentifier() + "' groups='" + getGroups().size() + "'";
     }
 
     @Override
@@ -121,6 +114,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
         return identifier == null ? chainId.getFullName() : identifier;
     }
 
+    @Override
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }

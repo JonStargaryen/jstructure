@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +30,27 @@ public class SelectionTest {
     }
 
     @Test
+    public void shouldRetainParentReferences() {
+        Optional<Group> group = protein.select()
+                .chainName("A")
+                .residueNumber(100)
+                .asOptionalGroup();
+
+        System.out.println(group.get().getParentChain().getParentProtein().getIdentifier());
+    }
+
+    @Test
+    public void shouldRetainParentReferencesForIntegerResidueNumber() {
+
+        Optional<Group> group = protein.select()
+                .chainName("A")
+                .residueNumber(new Integer(100))
+                .asOptionalGroup();
+
+        System.out.println(group.get().getParentChain().getParentProtein().getIdentifier());
+    }
+
+    @Test
     public void shouldSelectBasedOnRange() {
         List<Group> selection = protein.select()
                 .chainName("A")
@@ -36,7 +58,8 @@ public class SelectionTest {
                 .asFilteredGroups()
                 .collect(Collectors.toList());
 
-        selection.forEach(group -> Assert.assertTrue(group.getResidueNumber() >= 100 && group.getResidueNumber() <= 105));
+        selection.forEach(group -> Assert.assertTrue(group.getResidueNumber().getResidueNumber() >= 100 &&
+                group.getResidueNumber().getResidueNumber() <= 105));
         System.out.println(selection);
         Assert.assertTrue(selection.size() == 6);
     }

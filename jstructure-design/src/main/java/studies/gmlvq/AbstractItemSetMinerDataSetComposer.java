@@ -1,6 +1,5 @@
 package studies.gmlvq;
 
-import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
@@ -14,13 +13,11 @@ import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,8 +36,8 @@ public abstract class AbstractItemSetMinerDataSetComposer {
 
     private List<String> functionalPdbIds;
     private FileWriter output;
-    //TODO remove
-    private List<String> processedEntries;
+    private String lastProcessedEntry;
+    private boolean passedLastProcessedEntry = false;
 
     protected AbstractItemSetMinerDataSetComposer(String positiveFilename,
                                                   String negativeFilename,
@@ -71,9 +68,10 @@ public abstract class AbstractItemSetMinerDataSetComposer {
 
         //TODO remove - continue on partial file
         this.output = new FileWriter(outputFilename, true);
-        this.processedEntries = Files.lines(Paths.get(outputFilename))
+        List<String> processedEntries = Files.lines(Paths.get(outputFilename))
                 .map(string -> string.split(",")[0])
                 .collect(Collectors.toList());
+        this.lastProcessedEntry = processedEntries.get(processedEntries.size() - 1);
         handleCase(negativeFilename, false);
 
         output.flush();
@@ -120,11 +118,17 @@ public abstract class AbstractItemSetMinerDataSetComposer {
             return;
         }
         //TODO remove - skip already processed entries
-        if(processedEntries.containsAll(lines)) {
+        if(lines.contains(lastProcessedEntry)) {
+            passedLastProcessedEntry = true;
+            System.out.println("skipping already processed entries: " + lines);
+            return;
+        }
+        if(!passedLastProcessedEntry) {
             System.out.println("skipping already processed entries: " + lines);
             return;
         }
         try {
+            System.out.println(lines);
             Protein protein = ProteinParser.source(lines.get(0).split("_")[0]).parse();
             // calculate features
             featureProviders.forEach(featureProvider -> featureProvider.process(protein));
@@ -137,7 +141,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 System.out.println(outputLine);
                 output.write(outputLine + System.lineSeparator());
             }
-        } catch (NoSuchElementException | NullPointerException | NumberFormatException | ComputationException | IOException | UncheckedIOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -159,7 +163,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                     .map(group -> mapToString(container, group))
                     .collect(Collectors.joining(",", line + ",", "," + (functional ? "" : "non-") + "functional"));
         } catch (Exception e) {
-            e.printStackTrace();
+            e.fillInStackTrace();
             // thrown upon missing backbone atoms during secondary structure assignment
             return "";
         }
@@ -180,9 +184,10 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 .residueNumber(Integer.valueOf(split[1].substring(1)))
                 .asGroup();
         // check for integrity
-        if(!group.getGroupInformation().getOneLetterCode().equals(split[1].substring(0, 1))) {
+        if(!group.getGroupPrototype().getOneLetterCode().get().equals(split[1].substring(0, 1))) {
             // happens for alternative positions
-            throw new IllegalArgumentException("amino acid does not match expectation: " + residueSection + " found " + group.getGroupInformation().getOneLetterCode());
+            throw new IllegalArgumentException("amino acid does not match expectation: " + residueSection + " found " +
+                    group.getGroupPrototype().getOneLetterCode());
         }
         return group;
     }

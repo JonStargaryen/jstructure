@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.*;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,16 +157,18 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
                         atomName.equals("CG2")) {
                     return TETRAHEDRAL_CARBON_VDW;
                 }
-                switch(parentResidue.getGroupInformation().getAminoAcidFamily()) {
-                    case PHENYLALANINE: case TRYPTOPHAN: case TYROSINE: case HISTIDINE: case ASPARTIC_ACID: case ASPARAGINE:
-                        return TRIGONAL_CARBON_VDW;
-                    case PROLINE: case LYSINE: case ARGININE: case METHIONINE: case ISOLEUCINE: case LEUCINE:
-                        return TETRAHEDRAL_CARBON_VDW;
-                    case GLUTAMIC_ACID: case GLUTAMINE:
-                        return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
-                    default:
-                        //TODO this is not optimal - what value to return?
-                        return TETRAHEDRAL_CARBON_VDW;
+                if(parentResidue instanceof Phenylalanine || parentResidue instanceof Tryptophan || parentResidue
+                        instanceof Tyrosine || parentResidue instanceof Histidine || parentResidue instanceof
+                        AsparticAcid || parentResidue instanceof Asparagine) {
+                    return TRIGONAL_CARBON_VDW;
+                }
+                if(parentResidue instanceof Proline || parentResidue instanceof Lysine || parentResidue instanceof
+                        Arginine || parentResidue instanceof Methionine || parentResidue instanceof Isoleucine ||
+                        parentResidue instanceof Leucine) {
+                    return TETRAHEDRAL_CARBON_VDW;
+                }
+                if(parentResidue instanceof GlutamicAcid || parentResidue instanceof Glutamine) {
+                    return atomName.equals("CD") ? TRIGONAL_CARBON_VDW : TETRAHEDRAL_CARBON_VDW;
                 }
             default:
                 return atom.getElement().getVDWRadius();

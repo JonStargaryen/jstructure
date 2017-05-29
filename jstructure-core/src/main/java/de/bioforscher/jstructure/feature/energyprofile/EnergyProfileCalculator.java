@@ -4,14 +4,13 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -54,31 +53,30 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
     @Override
     protected void processInternally(Protein protein) {
         final double squaredDistanceCutoff = DEFAULT_INTERACTION_CUTOFF * DEFAULT_INTERACTION_CUTOFF;
-        final List<Group> aminoAcids = protein.aminoAcids().collect(Collectors.toList());
+        final List<AminoAcid> aminoAcids = protein.aminoAcids()
+                .collect(Collectors.toList());
 
-        for(Group currentGroup : aminoAcids) {
-            if(!currentGroup.isAminoAcid()) {
-                continue;
-            }
-
+        for(AminoAcid currentGroup : aminoAcids) {
             Optional<Atom> currentGroupBetaCarbon = currentGroup.select()
                     .betaCarbonAtoms()
                     .asOptionalAtom();
-            double[] currentGroupCoordinates = currentGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() ->
-                    currentGroup.calculate().centroid().getValue());
+            double[] currentGroupCoordinates = currentGroupBetaCarbon
+                    .map(Atom::getCoordinates)
+                    .orElseGet(() -> currentGroup.calculate().centroid().getValue());
             double solvation = 0;
             double currentGroupSolvationValue = resolve(globularSolvationData, currentGroup);
 
-            for(Group surroundingGroup : aminoAcids) {
-                if(!surroundingGroup.isAminoAcid() || currentGroup.equals(surroundingGroup)) {
+            for(AminoAcid surroundingGroup : aminoAcids) {
+                if(currentGroup.equals(surroundingGroup)) {
                     continue;
                 }
 
                 Optional<Atom> surroundingGroupBetaCarbon = surroundingGroup.select()
                         .betaCarbonAtoms()
                         .asOptionalAtom();
-                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon.map(Atom::getCoordinates).orElseGet(() ->
-                        surroundingGroup.calculate().centroid().getValue());
+                double[] surroundingGroupCoordinates = surroundingGroupBetaCarbon
+                        .map(Atom::getCoordinates)
+                        .orElseGet(() -> surroundingGroup.calculate().centroid().getValue());
 
                 if(LinearAlgebra.on(currentGroupCoordinates).distanceFast(surroundingGroupCoordinates) > squaredDistanceCutoff) {
                     continue;
@@ -91,22 +89,21 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
         }
     }
 
-    private double resolve(Map<String, Double> preferenceMap, Group group) {
+    private double resolve(Map<String, Double> preferenceMap, AminoAcid group) {
         String threeLetterCode = group.getThreeLetterCode();
         // standard amino acid
         if(preferenceMap.containsKey(threeLetterCode)) {
             return preferenceMap.get(threeLetterCode);
         }
 
+        //TODO handling of fallback
         // modified/non-standard - move to fallback
-        String fallback = group.getGroupInformation().getParentCompound();
-        logger.debug("encountered non-standard amino acid {}, using {} as fallback", threeLetterCode, fallback);
+        String fallback = group.getGroupPrototype()
+                .getParentCompound()
+                .orElse("ALA");
+        logger.warn("encountered non-standard amino acid {}, using {} as fallback", threeLetterCode, fallback);
 
-        if(preferenceMap.containsKey(fallback)) {
-            return preferenceMap.get(fallback);
-        }
-
-        throw new NoSuchElementException("map does not contain key for " + threeLetterCode + " or " + fallback);
+        return preferenceMap.getOrDefault(fallback, preferenceMap.get("ALA"));
     }
 
     private synchronized void initializeLibrary() {
@@ -115,6 +112,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
                 // skip header line
                 .filter(line -> !line.startsWith("amino_acid"))
                 .map(line -> line.split(" "))
-                .collect(Collectors.toMap(key -> key[0], value -> -Math.log(Double.valueOf(value[1]) / Double.valueOf(value[2]))));
+                .collect(Collectors.toMap(key -> key[0],
+                        value -> -Math.log(Double.valueOf(value[1]) / Double.valueOf(value[2]))));
     }
 }

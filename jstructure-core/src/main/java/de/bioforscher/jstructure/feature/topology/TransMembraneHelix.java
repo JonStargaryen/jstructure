@@ -1,8 +1,10 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
+import de.bioforscher.jstructure.parser.ParsingException;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,7 @@ public class TransMembraneHelix {
     private String tilt;
     private List<IntegerRange> segments;
     private static final Pattern SEGMENTS_PATTERN = Pattern.compile(",");
+    private static final Pattern RANGE_PATTERN = Pattern.compile("\\d+");
 
     TransMembraneHelix(String describingText) {
         String[] globalSplit = describingText.split("-");
@@ -23,10 +26,29 @@ public class TransMembraneHelix {
 
         String segments = describingText.split("Segments:")[1].trim();
         this.segments = SEGMENTS_PATTERN.splitAsStream(segments)
-                .map(rawString -> rawString.split("\\(")[1].split("\\)")[0])
-                .map(rangeString -> rangeString.split("-"))
-                .map(rangeSplit -> new IntegerRange(Integer.valueOf(rangeSplit[0].trim()), Integer.valueOf(rangeSplit[1].trim())))
+                .map(this::mapToIntegerRange)
                 .collect(Collectors.toList());
+    }
+
+    private IntegerRange mapToIntegerRange(String segment) {
+        Matcher matcher = RANGE_PATTERN.matcher(segment);
+        int start = Integer.MIN_VALUE;
+        int end = Integer.MIN_VALUE;
+        int counter = 0;
+        while(matcher.find()) {
+            if(counter == 1) {
+                start = Integer.valueOf(matcher.group());
+            }
+            if(counter == 2) {
+                end = Integer.valueOf(matcher.group());
+            }
+            counter++;
+        }
+        if(start == Integer.MIN_VALUE || end == Integer.MIN_VALUE) {
+            throw new ParsingException("opm output malformed for segment entry: " + segment);
+        }
+        return new IntegerRange(start, end);
+
     }
 
     public String getChainId() {

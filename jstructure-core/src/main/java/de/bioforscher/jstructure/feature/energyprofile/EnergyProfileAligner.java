@@ -241,7 +241,7 @@ public class EnergyProfileAligner {
 
     /**
      * Merely retrieves the solvation energy value for a given group.
-     * @param group the container to processUniProtId
+     * @param group the container to process
      * @return its solvation energy value as double
      */
     private double getSolvationEnergy(Group group) {

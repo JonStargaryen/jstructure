@@ -48,7 +48,9 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
 
     private void processInternally(Document document, Chain chain) {
         chain.aminoAcids().forEach(group -> {
-            ResidueMapping mapping = mapGroup(document, chain.getChainId().getChainId(), group.getResidueNumber());
+            ResidueMapping mapping = mapGroup(document,
+                    chain.getChainId().getChainId(),
+                    group.getResidueNumber().getResidueNumber());
             group.getFeatureContainer().addFeature(mapping);
         });
 
@@ -97,7 +99,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
                 return Jsoup.parse(gzipInputStream, "UTF-8", url, Parser.xmlParser());
             }
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new UncheckedIOException("the request protein '" + pdbId + "' does not exist on the server", e);
         }
     }
 

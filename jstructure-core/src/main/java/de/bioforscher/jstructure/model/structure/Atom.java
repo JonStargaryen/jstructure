@@ -30,8 +30,8 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     private float occupancy;
     private float bfactor;
     private boolean virtual;
-    private String identifier;
     private String alternativeLocation;
+    private String identifier;
 
     /**
      * Copy constructor.
@@ -47,7 +47,10 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
         this.bfactor = atom.bfactor;
         this.virtual = atom.virtual;
         this.alternativeLocation = atom.alternativeLocation;
+        this.identifier = atom.identifier;
     }
+
+    //TODO clean-up constructor mess
 
     /**
      * Constructs an atom.
@@ -114,15 +117,6 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     public Atom(double[] coordinates) {
         this.coordinates = coordinates;
         this.virtual = true;
-    }
-
-    Atom() {
-
-    }
-
-    @Override
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
     }
 
     /**
@@ -194,7 +188,17 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' coords='" + Arrays.toString(coordinates);
+        return getClass().getSimpleName() + " '" + getIdentifier() + "' coords='" + Arrays.toString(coordinates);
+    }
+
+    @Override
+    public String getIdentifier() {
+        return identifier == null ? name + "-" + pdbSerial : identifier;
+    }
+
+    @Override
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     /**
@@ -240,11 +244,6 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
 
     public boolean isVirtual() {
         return virtual;
-    }
-
-    @Override
-    public String getIdentifier() {
-        return identifier == null ? name + "-" + pdbSerial : identifier;
     }
 
     public void setPdbSerial(int pdbSerial) {

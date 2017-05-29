@@ -325,7 +325,9 @@ public class Selection {
             if(!(this instanceof ChainSelection)) {
                 prefilteredGroupStream = groupContainer.groups();
             } else {
-                prefilteredGroupStream = chainContainer.chains().filter(Selection.compose(chainPredicates)).flatMap(Chain::groups);
+                prefilteredGroupStream = chainContainer.chains()
+                        .filter(Selection.compose(chainPredicates))
+                        .flatMap(Chain::groups);
             }
 
             Stream<Group> filteredGroupStream =  prefilteredGroupStream
@@ -365,6 +367,10 @@ public class Selection {
             groupPredicates.add(new Pair<>(negationMode ? groupPredicate.negate() : groupPredicate, description));
         }
 
+        /**
+         * All amino acids which are part of the protein chain (i.e. ligands are ignored).
+         * @return a stream of all entities which are part of the protein chain
+         */
         public GroupSelection aminoAcids() {
             registerGroupPredicate(Group::isAminoAcid, "amino acids");
             return this;
@@ -403,7 +409,7 @@ public class Selection {
 
         public GroupSelection residueNumber(int... residueNumbers) {
             registerGroupPredicate(group -> IntStream.of(residueNumbers).boxed().collect(Collectors.toList())
-                    .contains(group.getResidueNumber()), "residue numbers: " + Arrays.toString(residueNumbers));
+                    .contains(group.getResidueNumber().getResidueNumber()), "residue numbers: " + Arrays.toString(residueNumbers));
             return this;
         }
 
@@ -411,7 +417,8 @@ public class Selection {
 
         public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
-                    .anyMatch(range -> group.getResidueNumber() >= range.getLeft() && group.getResidueNumber() <= range.getRight()),
+                    .anyMatch(range -> group.getResidueNumber().getResidueNumber() >= range.getLeft() &&
+                            group.getResidueNumber().getResidueNumber() <= range.getRight()),
                     "residue ranges: " + Arrays.toString(residueNumberRanges));
             return this;
         }

@@ -8,6 +8,7 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
@@ -74,7 +75,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
         chain.aminoAcids()
                 .filter(group -> !group.getFeatureContainer().getFeatureOptional(LoopFraction.class).isPresent())
                 .forEach(group -> {
-                    int residueNumber = group.getResidueNumber();
+                    int residueNumber = group.getResidueNumber().getResidueNumber();
                     double smoothedValue =chain.select()
                             .aminoAcids()
                             .residueNumber(surroundingResidueNumbers(residueNumber))
@@ -96,7 +97,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
         return surroundingResidueNumbers;
     }
 
-    private void smoothLoopFraction(Fragment<Group> fragment) {
+    private void smoothLoopFraction(Fragment<AminoAcid> fragment) {
         Group middleGroup = fragment.getElement(WINDOW_MIDDLE_INDEX);
         double smoothedLoopFraction = 0;
 

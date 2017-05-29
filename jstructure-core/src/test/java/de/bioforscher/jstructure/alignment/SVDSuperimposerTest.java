@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.alignment;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.parser.CIFParser;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,7 +25,9 @@ public class SVDSuperimposerTest {
     private GroupContainer container4;
 
     private Group createGroup(String aminoAcidName, int residueNumber) {
-        return new Group(residueNumber, CIFParser.parseLigandInformation(aminoAcidName), false, false, "");
+        return new Group(aminoAcidName,
+                new ResidueNumber(residueNumber),
+                false);
     }
 
     @Before

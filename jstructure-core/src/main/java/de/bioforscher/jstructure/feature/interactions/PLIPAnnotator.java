@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,8 @@ public class PLIPAnnotator extends AbstractFeatureProvider {
     protected void processInternally(Protein protein) {
         List<PLIPInteraction> plipInteractions = protein.chainsWithAminoAcids()
                 .parallel()
-                .flatMap(chain -> PLIPParser.parse(chain, PLIPRestServiceQuery.getPlipResults(chain.getChainId())).stream())
+                .map(chain -> PLIPParser.parse(chain, PLIPRestServiceQuery.getDocument(chain.getChainId())))
+                .flatMap(Collection::stream)
                 .collect(Collectors.toList());
 
         protein.getFeatureContainer().addFeature(new PLIPInteractionContainer(this, plipInteractions));

@@ -15,15 +15,31 @@ public class UniProtAnnotatorTest {
     private AbstractFeatureProvider uniProtAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotationContainer.class);
 
     @Test
-    public void shouldAnnotate4LG6() {
-        Protein protein = ProteinParser.source("4LG6").parse();
+    public void shouldAnnotate4lgd() {
+        Protein protein = ProteinParser.source("4lgd").parse();
         uniProtAnnotator.process(protein);
 
-        protein.chains().forEach(chain -> {
-            UniProtAnnotationContainer container = chain.getFeatureContainer().getFeature(UniProtAnnotationContainer.class);
-            Assert.assertTrue(container.getReferences().size() == 6);
-            Assert.assertTrue(container.getMutagenesisSites().size() == 3);
-            Assert.assertTrue(container.getNaturalVariants().size() == 0);
+        protein.select()
+                .chainName("A", "B", "C", "D")
+                .asFilteredChains()
+                .forEach(chain -> {
+                        UniProtAnnotationContainer container = chain.getFeatureContainer().getFeature(UniProtAnnotationContainer.class);
         });
+    }
+
+    @Test
+    public void shouldAnnotate4lg6() {
+        Protein protein = ProteinParser.source("4lg6").parse();
+        uniProtAnnotator.process(protein);
+
+        protein.select()
+                .chainName("A")
+                .asFilteredChains()
+                .forEach(chain -> {
+                    UniProtAnnotationContainer container = chain.getFeatureContainer().getFeature(UniProtAnnotationContainer.class);
+                    Assert.assertTrue(container.getReferences().size() == 6);
+                    Assert.assertTrue(container.getMutagenesisSites().size() == 3);
+                    Assert.assertTrue(container.getNaturalVariants().size() == 0);
+                });
     }
 }

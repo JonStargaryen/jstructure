@@ -2,9 +2,8 @@ package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.family.GroupInformation;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,16 +24,16 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
 
         protein.chainsWithAminoAcids()
                 .forEach(chain -> {
-            List<Group> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+            List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
 
             // init with empty containers
             aminoAcids.forEach(group -> group.getFeatureContainer().addFeature(new SequenceMotifContainer(this)));
 
             int chainLength = aminoAcids.size();
             for (int resNum = 0; resNum < chainLength; resNum++) {
-                Group startResidue = aminoAcids.get(resNum);
+                AminoAcid startResidue = aminoAcids.get(resNum);
                 // even though we express 1-letter-codes as Strings, excessive matching is probably much faster when done with chars
-                char startAminoAcid = startResidue.getGroupInformation().getOneLetterCode().charAt(0);
+                char startAminoAcid = startResidue.getOneLetterCode().charAt(0);
                 for (SequenceMotifDefinition candidate : SequenceMotifDefinition.values()) {
                     // findAny motif length
                     int motifLength = Integer.parseInt(candidate.name().substring(2));
@@ -51,26 +50,25 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
                         continue;
                     }
 
-                    Group endResidue = aminoAcids.get(resNum + motifLength);
+                    AminoAcid endResidue = aminoAcids.get(resNum + motifLength);
 
                     // end amino acid does not match
-                    if (endResidue.getGroupInformation().getOneLetterCode().charAt(0) != motifEnd) {
+                    if (endResidue.getOneLetterCode().charAt(0) != motifEnd) {
                         continue;
                     }
 
                     // motif lacks internal residues or has a invalid ordering
-                    if(startResidue.getResidueNumber() + motifLength != endResidue.getResidueNumber()) {
+                    if(startResidue.getResidueNumber().getResidueNumber() + motifLength != endResidue.getResidueNumber().getResidueNumber()) {
                         continue;
                     }
 
-                    List<Group> residueList = aminoAcids.subList(resNum, resNum + motifLength + 1);
+                    List<AminoAcid> residueList = aminoAcids.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate,
                             chain.getChainId().getChainId(),
-                            startResidue.getResidueNumber(),
-                            endResidue.getResidueNumber(),
+                            startResidue.getResidueNumber().getResidueNumber(),
+                            endResidue.getResidueNumber().getResidueNumber(),
                             residueList.stream()
-                                .map(Group::getGroupInformation)
-                                .map(GroupInformation::getOneLetterCode)
+                                .map(AminoAcid::getOneLetterCode)
                                 .collect(Collectors.joining()));
 
                     if(!globalList.containsSequenceMotif(sequenceMotif)) {

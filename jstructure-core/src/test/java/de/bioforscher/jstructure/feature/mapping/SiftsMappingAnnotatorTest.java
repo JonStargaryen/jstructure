@@ -15,8 +15,8 @@ public class SiftsMappingAnnotatorTest {
     private SiftsMappingAnnotator annotator = new SiftsMappingAnnotator();
 
     @Test
-    public void shouldHandle5tgz() {
-        Protein protein = ProteinParser.source("5tgz").parse();
+    public void shouldHandle5tgl() {
+        Protein protein = ProteinParser.source("5tgl").parse();
         annotator.process(protein);
     }
 

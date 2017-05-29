@@ -78,7 +78,7 @@ public class EnergyProfileCalculatorTest {
 
     @Test
     public void shouldAgreeRegardingEnergyTerms() throws IOException {
-        Protein protein = ProteinParser.source("1BS2").parse();
+        Protein protein = ProteinParser.source("1bs2").parse();
         featureProvider.process(protein);
 
         Files.lines(Paths.get(TestUtils.getResourceAsFilepath("energy/1bs2.ep2")))
@@ -90,7 +90,8 @@ public class EnergyProfileCalculatorTest {
                             .residueNumber(Integer.valueOf(split[2]))
                             .asGroup();
 
-                    Assert.assertEquals(Double.valueOf(split[5]),
+                    Assert.assertEquals("energy values differ for " + group,
+                            Double.valueOf(split[5]),
                             group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy(),
                             0.001);
                 });

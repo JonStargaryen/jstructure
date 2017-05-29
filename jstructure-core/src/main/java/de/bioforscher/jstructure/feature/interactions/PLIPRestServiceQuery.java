@@ -1,6 +1,8 @@
 package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,25 +33,25 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    static String getPlipResults(String pdbId, String chainId, int residueNumber) {
+    static Document getDocument(String pdbId, String chainId, int residueNumber) {
         try {
-            return getPlipResults(new URL(BASE_URL + pdbId + "/" + chainId + "/" + residueNumber));
+            return getDocument(new URL(BASE_URL + pdbId + "/" + chainId + "/" + residueNumber));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
     }
 
-    public static String getPlipResults(ChainIdentifier chainId) {
+    public static Document getDocument(ChainIdentifier chainId) {
         try {
-            return getPlipResults(new URL(BASE_URL + "plain/" + chainId.getPdbId().getPdbId() + "/" + chainId.getChainId()));
+            return getDocument(new URL(BASE_URL + "plain/" + chainId.getPdbId().getPdbId() + "/" + chainId.getChainId()));
         } catch (IOException e) {
             throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }
     }
 
-    public static String getPlipResults(String pdbId, String chainId) {
+    public static Document getDocument(String pdbId, String chainId) {
         try {
-            return getPlipResults(new URL(BASE_URL + "plain/" + pdbId + "/" + chainId));
+            return getDocument(new URL(BASE_URL + "plain/" + pdbId + "/" + chainId));
         } catch (IOException e) {
             throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }
@@ -61,7 +63,7 @@ public class PLIPRestServiceQuery {
      * @return the server's answer as String
      * @throws IOException thrown when the service cannot be reached, authentication fails or the query is not supported
      */
-    static String getPlipResults(URL url) throws IOException {
+    static Document getDocument(URL url) throws IOException {
         logger.info("querying PLIP-rest-service for {}", url.toString());
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Authorization", "Basic " + secret);
@@ -69,7 +71,7 @@ public class PLIPRestServiceQuery {
 
         try (InputStream inputStream = connection.getInputStream()) {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-                return bufferedReader.lines().collect(Collectors.joining(System.lineSeparator()));
+                return Jsoup.parse(bufferedReader.lines().collect(Collectors.joining(System.lineSeparator())));
             }
         }
     }

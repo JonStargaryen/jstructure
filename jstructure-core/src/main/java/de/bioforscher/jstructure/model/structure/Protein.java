@@ -29,10 +29,6 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
     private List<Chain> chains;
     private String identifier;
 
-    public Protein() {
-        this(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
-    }
-
     public Protein(ProteinIdentifier pdbId) {
         this.pdbId = pdbId;
         this.chains = new ArrayList<>();
@@ -47,10 +43,6 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
         this.chains.forEach(chain -> chain.setParentProtein(this));
         this.identifier = protein.identifier;
         setFeatureContainer(protein.getFeatureContainer());
-    }
-
-    public Protein(List<Chain> chains) {
-        this.chains = chains;
     }
 
     public Selection.ChainSelection select() {
@@ -127,15 +119,16 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
     }
 
     @Override
+    public String toString() {
+        return getClass().getSimpleName() + " '" + getIdentifier() + "' chains='"  + getChains().size() + "'";
+    }
+
+    @Override
     public String getIdentifier() {
         return identifier == null ? pdbId.getFullName() : identifier;
     }
 
     @Override
-    public String toString() {
-        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "' chains='"  + getChains().size() + "'";
-    }
-
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }

@@ -18,11 +18,11 @@ public class PLIPRestServiceQueryTest {
 
     @Test
     public void shouldRetrievePLIPDataSpecific() throws IOException {
-        System.out.println(PLIPRestServiceQuery.getPlipResults(new URL(PLIPRestServiceQuery.BASE_URL + "1brr/A/100")));
+        System.out.println(PLIPRestServiceQuery.getDocument(new URL(PLIPRestServiceQuery.BASE_URL + "1brr/A/100")));
     }
 
     @Test
     public void shouldRetrievePLIPDataForChain() throws IOException {
-        System.out.println(PLIPRestServiceQuery.getPlipResults(new URL(PLIPRestServiceQuery.BASE_URL + "1brr/A")));
+        System.out.println(PLIPRestServiceQuery.getDocument(new URL(PLIPRestServiceQuery.BASE_URL + "1brr/A")));
     }
 }

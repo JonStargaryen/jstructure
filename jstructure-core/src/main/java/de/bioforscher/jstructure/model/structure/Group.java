@@ -3,71 +3,62 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.family.GroupInformation;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
-import de.bioforscher.jstructure.parser.CIFParser;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- *
- * Created by S on 06.10.2016.
+ * The abstract representation of a group within a molecular structure. Some group implementations provide explicit
+ * functions to retrieve specific atom. They are registered automatically during parsing. The atom registered first will
+ * always be kept even when e.g. multiple alpha carbons would be provided for an amino acid. Also, these methods may
+ * return null, when the corresponding atom was not provided by a PDB file. These methods are used to speed up access
+ * to atoms as a more convenient, but slower alternative use the {@link Selection} implementation accessible by
+ * {@link Group#select()}.
+ * Created by bittrich on 5/24/17.
  */
 public class Group extends AbstractFeatureable implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group(0,
-            GroupInformation.UNKNOWN_GROUP,
-            false,
-            false,
-            "");
-
-    private int residueNumber;
+    static final Group UNKNOWN_GROUP = new Group("UNK",
+            new ResidueNumber(0),
+            false);
+    private String threeLetterCode;
+    private ResidueNumber residueNumber;
+    private GroupPrototype groupPrototype;
+    private boolean ligand;
     private List<Atom> atoms;
-    /**
-     * Handle to the container element.
-     */
     private Chain parentChain;
     private String identifier;
-    private GroupInformation groupInformation;
-    private boolean parentChainIsTerminated;
-    private boolean hetAtm;
-    private String insertionCode;
 
-    public Group(int residueNumber,
-                 GroupInformation groupInformation,
-                 boolean parentChainIsTerminated,
-                 boolean hetAtm,
-                 String insertionCode) {
+    public Group(String threeLetterCode,
+                 ResidueNumber residueNumber,
+                 boolean ligand) {
+        this(createPrototypeInstance(threeLetterCode),
+                residueNumber,
+                ligand);
+        // safety-net: maybe the group prototype cannot be created, still keep given threeLetterCode
+        this.threeLetterCode = threeLetterCode;
+    }
+
+    public Group(GroupPrototype groupPrototype,
+                 ResidueNumber residueNumber,
+                 boolean ligand) {
+        this.threeLetterCode = groupPrototype.getThreeLetterCode();
         this.residueNumber = residueNumber;
+        this.groupPrototype = groupPrototype;
+        this.ligand = ligand;
         this.atoms = new ArrayList<>();
-        this.groupInformation = groupInformation;
-        this.parentChainIsTerminated = parentChainIsTerminated;
-        this.hetAtm = hetAtm;
-        this.insertionCode = insertionCode;
-    }
-
-    Group() {
-
-    }
-
-    @Deprecated
-    public Group(String pdbName, int residueNumber) {
-        this.residueNumber = residueNumber;
-        this.atoms = new ArrayList<>();
-        //TODO it is not really nice, that the data model is actually 'parsing' stuff
-        this.groupInformation = CIFParser.parseLigandInformation(pdbName);
-    }
-
-    public void setResidueNumber(int residueNumber) {
-        this.residueNumber = residueNumber;
+        this.parentChain = Chain.UNKNOWN_CHAIN;
     }
 
     public Group(Group group) {
+        this.threeLetterCode = group.threeLetterCode;
         this.residueNumber = group.residueNumber;
+        this.groupPrototype = group.groupPrototype;
+        this.ligand = group.ligand;
         // deep clone entries
         this.atoms = group.atoms()
                 .map(Atom::new)
@@ -75,77 +66,65 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         this.atoms().forEach(atom -> atom.setParentGroup(this));
         // reference parent
         this.parentChain = group.parentChain;
-        this.groupInformation = group.groupInformation;
-        this.insertionCode = group.insertionCode;
+        this.identifier = group.identifier;
         // set reference to feature map
         setFeatureContainer(group.getFeatureContainer());
     }
 
-    public Selection.AtomSelection select() {
-        return Selection.on(this);
+    public String getThreeLetterCode() {
+        return threeLetterCode;
     }
 
-    public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
-        return LinearAlgebra.on(this);
+    public ResidueNumber getResidueNumber() {
+        return residueNumber;
     }
 
-    public GroupInformation getGroupInformation() {
-        return groupInformation;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public Group(List<Atom> atoms) {
-        this.atoms = atoms;
-        this.groupInformation = GroupInformation.UNKNOWN_AMINO_ACID;
-    }
-
-    public boolean isAminoAcid() {
-        return !parentChainIsTerminated && groupInformation.getType().contains("PEPTIDE LINKING");
-    }
-
-    public boolean isNucleotide() {
-        return !parentChainIsTerminated && groupInformation.getType().contains("NA LINKING");
-    }
-
-    public boolean isLigand() {
-        return !isAminoAcid() && !isNucleotide();
+    public GroupPrototype getGroupPrototype() {
+        return groupPrototype;
     }
 
     public List<Atom> getAtoms() {
         return atoms;
     }
 
-    public String getThreeLetterCode() {
-        return groupInformation.getThreeLetterCode();
+    public GroupPrototype.PolymerType getPolymerType() {
+        return getGroupPrototype().getPolymerType();
     }
 
-    public void setGroupInformation(GroupInformation groupInformation) {
-        this.groupInformation = groupInformation;
+    public boolean isAminoAcid() {
+        return !isLigand() && getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING;
     }
 
-    /**
-     * Returns the {@link Chain}-wide unique number to identify this getResidue.
-     * @return an integer
-     */
-    public int getResidueNumber() {
-        return residueNumber;
+    public boolean isNucleotide() {
+        return !isLigand() && getPolymerType() == GroupPrototype.PolymerType.NA_LINKING;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + " identifier='" + getIdentifier() + "'";
+    public boolean isWater() {
+        return getThreeLetterCode().equals(Water.THREE_LETTER_CODE);
     }
 
-    /**
-     * Registers a child. This object will assign a reference to itself to the atom.
-     * @param atom the atom to process
-     */
+    public boolean isLigand() {
+        return ligand;
+    }
+
     public void addAtom(Atom atom) {
-        getAtoms().add(atom);
+        atoms.add(atom);
+        // set reference to this as parent
         atom.setParentGroup(this);
+        // delegate to internal implementation
+        addAtomInternal(atom);
+    }
+
+    /**
+     * If the child class supports specific atom identified by name.
+     * @param atom the atom to be handled - identified by its name, assigned to a particular field of the child class
+     */
+    protected void addAtomInternal(Atom atom) {
+        //TODO this could be realized by reflection
+    }
+
+    protected static GroupPrototype createPrototypeInstance(String id) {
+        return GroupPrototypeParser.getInstance().getPrototype(id);
     }
 
     /**
@@ -164,24 +143,26 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         this.parentChain = parentChain;
     }
 
+    public Selection.AtomSelection select() {
+        return Selection.on(this);
+    }
+
+    public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
+        return LinearAlgebra.on(this);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " '" + getIdentifier() + "'";
+    }
+
     @Override
     public String getIdentifier() {
-        return identifier == null ? getThreeLetterCode() + "-" + residueNumber : identifier;
+        return identifier == null ? threeLetterCode + "-" + residueNumber : identifier;
     }
 
-    boolean isInTerminatedParentChain() {
-        return parentChainIsTerminated;
-    }
-
-    public boolean isHetAtm() {
-        return hetAtm;
-    }
-
-    public String getInsertionCode() {
-        return insertionCode;
-    }
-
-    public boolean hasInsertionCode() {
-        return !insertionCode.isEmpty();
+    @Override
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

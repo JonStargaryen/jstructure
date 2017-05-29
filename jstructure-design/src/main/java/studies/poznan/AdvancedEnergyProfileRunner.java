@@ -7,10 +7,10 @@ import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.parser.CIFParser;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.io.IOException;
@@ -145,17 +145,16 @@ public class AdvancedEnergyProfileRunner {
         }
 
         ProteinContainer(String sequence) {
-            this.protein = new Protein();
-            ProteinIdentifier pdbId = ProteinIdentifier.UNKNOWN_PROTEIN_ID;
-            this.protein.setPdbId(pdbId);
-            Chain chain = new Chain(ChainIdentifier.createFromChainId(pdbId, "A"));
+            this.protein = new Protein(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
+            Chain chain = new Chain(ChainIdentifier.createFromChainId(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "A"));
             this.protein.addChain(chain);
             for(int resNum = 1; resNum <= sequence.length(); resNum++) {
                 String aminoAcidName = String.valueOf(sequence.charAt(resNum - 1));
                 AminoAcidFamily aminoAcidFamily = AminoAcidFamily.valueOfIgnoreCase(aminoAcidName).orElseThrow(() ->
                         new IllegalArgumentException("unknown amino acid '" + aminoAcidName + "'"));
-                Group group = new Group(resNum,
-                        CIFParser.parseLigandInformation(aminoAcidFamily.getThreeLetterCode()), false, false, "");
+                Group group = new Group(aminoAcidFamily.getThreeLetterCode(),
+                        new ResidueNumber(resNum),
+                        false);
                 chain.addGroup(group);
             }
             Builder.energyProfilePredictor.process(protein);

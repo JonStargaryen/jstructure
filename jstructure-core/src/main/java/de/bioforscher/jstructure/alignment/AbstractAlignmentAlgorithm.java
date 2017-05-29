@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -102,7 +101,8 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
             groups2.add(group2);
         }
 
-        return new Pair<>(new Chain(groups1), new Chain(groups2));
+        return new Pair<>(groups1.stream().collect(StructureCollectors.toGroupContainer()),
+                groups2.stream().collect(StructureCollectors.toGroupContainer()));
     }
 
     /**

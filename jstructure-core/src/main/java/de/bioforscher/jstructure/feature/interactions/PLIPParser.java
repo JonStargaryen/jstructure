@@ -3,8 +3,6 @@ package de.bioforscher.jstructure.feature.interactions;
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.selection.SelectionException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -12,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,9 +22,7 @@ import java.util.Optional;
 public class PLIPParser {
     private static final Logger logger = LoggerFactory.getLogger(PLIPParser.class);
 
-    public static List<PLIPInteraction> parse(Chain chain, String documentDescribingChain) {
-        Document document = Jsoup.parse(documentDescribingChain);
-
+    public static List<PLIPInteraction> parse(Chain chain, Document document) {
         List<PLIPInteraction> plipInteractions = new ArrayList<>();
         for(PLIPInteractionType plipInteractionType : PLIPInteractionType.values()) {
             logger.debug("parsing interactions of type {}", plipInteractionType);
@@ -38,8 +33,8 @@ public class PLIPParser {
                         .map(Element::text)
                         // a safety net for exceedingly big numbers outputted by PLIP
                         .filter(string -> string.length() < 10)
-                        .map(Integer::valueOf)
-                        .map(residueNumber -> chain.select()
+                        .mapToInt(Integer::valueOf)
+                        .mapToObj(residueNumber -> chain.select()
                                 .residueNumber(residueNumber)
                                 .asOptionalGroup())
                         .findFirst()
@@ -47,7 +42,7 @@ public class PLIPParser {
 
                 if(!currentGroup.isPresent()) {
                     //TODO does a partner in another chain actually make sense?
-                    logger.trace("reference to group in different chain or failed to parse line:" + System.lineSeparator() + interactionElement.text());
+                    logger.trace("reference to group in different chain or failed to parse line:{}{}", System.lineSeparator(), interactionElement.text());
                     continue;
                 }
 
@@ -56,11 +51,14 @@ public class PLIPParser {
                     constructor.setAccessible(true);
                     PLIPInteraction plipInteraction = constructor.newInstance(currentGroup.get(), interactionElement);
                     plipInteractions.add(plipInteraction);
-                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
-                    logger.warn("encountered exception during plip parsing: {}", e.getLocalizedMessage());
+                } catch (Exception e) {
+                    // move to root cause
+                    Throwable cause = e;
+                    while(cause.getCause() != null) {
+                        cause = cause.getCause();
+                    }
+                    logger.warn("encountered exception during plip parsing: {}", cause);
                     throw new ComputationException(e);
-                } catch (SelectionException e) {
-                    logger.warn("selection exception during plip parsing: {}", e.getLocalizedMessage());
                 }
             }
         }
@@ -73,7 +71,7 @@ public class PLIPParser {
 
             if(plipInteraction instanceof PiCationInteraction || plipInteraction instanceof PiStacking || plipInteraction instanceof SaltBridge) {
                 // keep only those interactions where the first resNum is smaller
-                if(partner1.getResidueNumber() > partner2.getResidueNumber()) {
+                if(partner1.getResidueNumber().getResidueNumber() > partner2.getResidueNumber().getResidueNumber()) {
                     plipInteractionsToRemove.add(plipInteraction);
                     continue;
                 }

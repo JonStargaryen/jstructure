@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.parser;
 
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.aminoacid.*;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import org.slf4j.Logger;
@@ -46,7 +47,7 @@ public class ProteinParser {
         strictMode = builder.strictMode;
         skipHydrogens = builder.skipHydrogenAtoms;
 
-        protein = new Protein();
+        protein = new Protein(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
         // 'initialize' title field as it tends to be split over multiple lines - thus, we have to append previous results when we find further entries
         titleString = new StringBuilder();
 
@@ -80,7 +81,8 @@ public class ProteinParser {
     }
 
     private boolean idIsMissing() {
-        return protein.getPdbId() == null || protein.getPdbId().getPdbId() == null || protein.getPdbId().getPdbId().isEmpty();
+        return protein.getPdbId() == null || protein.getPdbId().getPdbId() == null ||
+                protein.getPdbId().getPdbId().isEmpty() || protein.getPdbId().equals(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
     }
 
     private void parseLineChecked(String line) {
@@ -187,13 +189,13 @@ public class ProteinParser {
                 }
             }
 
-            if(currentGroup == null || currentGroup.getResidueNumber() != resNum || !currentGroup.getInsertionCode().equals(insertionCode) || !currentGroup.getParentChain().getChainId().equals(chainId)) {
+            if(currentGroup == null || currentGroup.getResidueNumber().getResidueNumber() != resNum ||
+                    !currentGroup.getResidueNumber().getInsertionCode().equals(insertionCode) ||
+                    !currentGroup.getParentChain().getChainId().equals(chainId)) {
                     // residue changed - create new group object and set reference
-                    currentGroup = new Group(resNum,
-                            CIFParser.parseLigandInformation(pdbName),
-                            terminatedChains.contains(currentChain),
-                            line.startsWith(Atom.HETATM_PREFIX),
-                            insertionCode);
+                    currentGroup = createGroup(pdbName,
+                            new ResidueNumber(resNum, insertionCode),
+                            terminatedChains.contains(currentChain));
                     currentChain.addGroup(currentGroup);
             }
 
@@ -242,6 +244,71 @@ public class ProteinParser {
             passedFirstModel = true;
             logger.debug("skipping models for {}", protein.getPdbId().getFullName());
         }
+    }
+
+    private Group createGroup(String pdbName, ResidueNumber residueNumber, boolean ligand) {
+        GroupPrototype prototype = GroupPrototypeParser.getInstance().getPrototype(pdbName);
+
+        // it is an amino acid
+        if(prototype.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING)
+        switch(pdbName.toUpperCase()) {
+            case Alanine.THREE_LETTER_CODE:
+                return new Alanine(residueNumber, ligand);
+            case Arginine.THREE_LETTER_CODE:
+                return new Arginine(residueNumber, ligand);
+            case Asparagine.THREE_LETTER_CODE:
+                return new Asparagine(residueNumber, ligand);
+            case AsparticAcid.THREE_LETTER_CODE:
+                return new AsparticAcid(residueNumber, ligand);
+            case Cysteine.THREE_LETTER_CODE:
+                return new Cysteine(residueNumber, ligand);
+            case GlutamicAcid.THREE_LETTER_CODE:
+                return new GlutamicAcid(residueNumber, ligand);
+            case Glutamine.THREE_LETTER_CODE:
+                return new Glutamine(residueNumber, ligand);
+            case Glycine.THREE_LETTER_CODE:
+                return new Glycine(residueNumber, ligand);
+            case Histidine.THREE_LETTER_CODE:
+                return new Histidine(residueNumber, ligand);
+            case Isoleucine.THREE_LETTER_CODE:
+                return new Isoleucine(residueNumber, ligand);
+            case Leucine.THREE_LETTER_CODE:
+                return new Leucine(residueNumber, ligand);
+            case Lysine.THREE_LETTER_CODE:
+                return new Lysine(residueNumber, ligand);
+            case Methionine.THREE_LETTER_CODE:
+                return new Methionine(residueNumber, ligand);
+            case Phenylalanine.THREE_LETTER_CODE:
+                return new Phenylalanine(residueNumber, ligand);
+            case Proline.THREE_LETTER_CODE:
+                return new Proline(residueNumber, ligand);
+            case Pyrrolysine.THREE_LETTER_CODE:
+                return new Pyrrolysine(residueNumber, ligand);
+            case Selenocysteine.THREE_LETTER_CODE:
+                return new Selenocysteine(residueNumber, ligand);
+            case Selenomethionine.THREE_LETTER_CODE:
+                return new Selenomethionine(residueNumber, ligand);
+            case Serine.THREE_LETTER_CODE:
+                return new Serine(residueNumber, ligand);
+            case Threonine.THREE_LETTER_CODE:
+                return new Threonine(residueNumber, ligand);
+            case Tryptophan.THREE_LETTER_CODE:
+                return new Tryptophan(residueNumber, ligand);
+            case Tyrosine.THREE_LETTER_CODE:
+                return new Tyrosine(residueNumber, ligand);
+            case Valine.THREE_LETTER_CODE:
+                return new Valine(residueNumber, ligand);
+            default:
+                return new UnknownAminoAcid(pdbName, residueNumber, ligand);
+        }
+
+        // it is a nucleotide
+        if(prototype.getPolymerType() == GroupPrototype.PolymerType.NA_LINKING) {
+            //TODO impl
+        }
+
+        // it is neither
+        return new Group(prototype, residueNumber, ligand);
     }
 
     Protein getProtein() {

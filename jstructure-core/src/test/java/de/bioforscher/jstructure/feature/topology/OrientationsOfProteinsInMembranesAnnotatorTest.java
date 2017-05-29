@@ -42,7 +42,9 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
 
     @Test
     public void shouldHandleMalformedData() {
-        //TODO there is a entry with malformed segments (missing brackets), test with that
+        // id: 5a1s - chain B misses bracket
+        // B - Tilt: 10° - Segments: 1( 29- 44), 2( 51- 73), 3( 82- 94), 4( 116- 132), 5( 137- 166), 6 208- 230), 7( 265- 286), 8( 300- 314), 9( 322- 347), 10( 359- 384), 11( 422- 442)
+        annotator.process(ProteinParser.source("5a1s").parse());
     }
 
     @Test(expected = ComputationException.class)

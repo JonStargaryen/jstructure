@@ -32,7 +32,7 @@ public class AccessibleSurfaceAreaCalculatorTest {
         List<Double> biojavaASA = getBioJavaASA(id);
 
         Combinatorics.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
-                Assert.assertEquals(doublePair.getLeft(), doublePair.getRight(), 0.001)
+                Assert.assertEquals("asa values do not match", doublePair.getLeft(), doublePair.getRight(), 0.001)
         );
     }
 

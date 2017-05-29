@@ -4,7 +4,8 @@ import de.bioforscher.jstructure.model.structure.container.StructureContainer;
 
 /**
  * Specifies the capability of a container to return a specific name. This is not necessarily corresponding to data
- * parsed from <code>PDB</code> files.
+ * parsed from <code>PDB</code> files. This allows consistent access to the name of containers without knowledge of
+ * their exact implementation.
  * Created by S on 18.11.2016.
  */
 public interface Identifiable {

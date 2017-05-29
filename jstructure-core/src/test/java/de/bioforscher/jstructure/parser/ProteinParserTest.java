@@ -93,6 +93,22 @@ public class ProteinParserTest {
     }
 
     @Test
+    public void shouldHandleModifiedResidue() {
+        Protein protein = ProteinParser.source("1brr").parse();
+
+        Group pca = protein.select()
+                .chainName("C")
+                .residueNumber(1)
+                .asGroup();
+        Assert.assertTrue(pca.isAminoAcid());
+        Assert.assertFalse(pca.isLigand());
+        // assert correct mapping of PCA to GLU
+        Assert.assertEquals("incorrect mapping of PCA to GLU",
+                "E",
+                pca.getGroupPrototype().getOneLetterCode().get());
+    }
+
+    @Test
     public void shouldAnnotateHetAtmsCorrectlyFor1bs2() {
         /*
          * 1bs2 is an aars structure with the amino acid arginine in the binding site (annotated as ATOM record), some
@@ -107,7 +123,7 @@ public class ProteinParserTest {
 
         waters.forEach(group -> {
             Assert.assertTrue(group.isLigand());
-            Assert.assertTrue(group.getPdbRepresentation().startsWith(Atom.HETATM_PREFIX));
+            Assert.assertTrue("water records ought to start with HETATM", group.getPdbRepresentation().startsWith(Atom.HETATM_PREFIX));
         });
 
         Group arginineAsLigand = protein1bs2.select()
@@ -116,11 +132,9 @@ public class ProteinParserTest {
                 .asGroup();
 
         // assert that selection does not return ARG ligand as normal amino acid
-        boolean arginineLigandIsNoAminoAcid = protein1bs2.select()
-                .aminoAcids()
-                .asFilteredGroups()
+        boolean arginineLigandIsNoAminoAcid = protein1bs2.aminoAcids()
                 .noneMatch(group -> group.equals(arginineAsLigand));
-        Assert.assertTrue(arginineLigandIsNoAminoAcid);
+        Assert.assertTrue("amino acid ligand ought to be not a part of the amino acid chain", arginineLigandIsNoAminoAcid);
 
         // ensure last amino acid is MET and not the ARG ligand
         Assert.assertThat(protein1bs2.getAminoAcidSequence(), endsWith("M"));

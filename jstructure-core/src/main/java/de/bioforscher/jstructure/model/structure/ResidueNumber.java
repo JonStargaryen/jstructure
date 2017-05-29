@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
 /**
+ * Represents the numbering of {@link Group} instances within a protein chain.
  * Created by S on 25.05.2017.
  */
 public class ResidueNumber {
@@ -28,5 +29,10 @@ public class ResidueNumber {
 
     public boolean hasInsertionCode() {
         return !insertionCode.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return residueNumber + insertionCode;
     }
 }

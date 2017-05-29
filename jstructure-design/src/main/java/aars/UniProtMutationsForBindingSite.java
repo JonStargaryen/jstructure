@@ -3,6 +3,7 @@ package aars;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.alignment.Alignments;
@@ -94,6 +95,7 @@ class UniProtMutationsForBindingSite {
         // key: renumbered, transformed binding site group - value: original group in PDB chain
         List<Integer> residueIndices = bindingSite.residues.stream()
                 .map(Group::getResidueNumber)
+                .map(ResidueNumber::getResidueNumber)
                 .collect(Collectors.toList());
         Map<Group, Group> groupMapping = renumberedChain.aminoAcids()
                 .filter(aminoAcid -> residueIndices.contains(aminoAcid.getResidueNumber()))
