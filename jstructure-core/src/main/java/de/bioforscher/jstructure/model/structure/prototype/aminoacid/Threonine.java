@@ -34,4 +34,17 @@ public class Threonine extends AminoAcid implements StandardAminoAcid {
     public Atom getCg2() {
         return cg2;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("OG1") && og1 == null) {
+            og1 = atom;
+        }
+        if(atom.getName().equals("CG2") && cg2 == null) {
+            cg2 = atom;
+        }
+    }
 }

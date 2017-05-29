@@ -31,6 +31,16 @@ public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
     }
 
     @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("SE") && se == null) {
+            se = atom;
+        }
+    }
+
+    @Override
     public Class<UnknownAminoAcid> getParentAminoAcid() {
         return UnknownAminoAcid.class;
     }

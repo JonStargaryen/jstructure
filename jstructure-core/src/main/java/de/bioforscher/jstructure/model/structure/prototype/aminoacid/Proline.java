@@ -34,4 +34,17 @@ public class Proline extends AminoAcid implements StandardAminoAcid {
     public Atom getCd() {
         return cd;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("CD") && cd == null) {
+            cd = atom;
+        }
+    }
 }

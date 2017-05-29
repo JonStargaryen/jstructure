@@ -39,4 +39,20 @@ public class Methionine extends AminoAcid implements StandardAminoAcid {
     public Atom getCe() {
         return ce;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("SD") && sd == null) {
+            sd = atom;
+        }
+        if(atom.getName().equals("CE") && ce == null) {
+            ce = atom;
+        }
+    }
 }

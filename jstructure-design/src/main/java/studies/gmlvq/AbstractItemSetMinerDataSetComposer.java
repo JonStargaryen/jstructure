@@ -14,6 +14,7 @@ import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DecimalFormat;
@@ -136,7 +137,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 System.out.println(outputLine);
                 output.write(outputLine + System.lineSeparator());
             }
-        } catch (NoSuchElementException | NullPointerException | NumberFormatException | ComputationException | IOException e) {
+        } catch (NoSuchElementException | NullPointerException | NumberFormatException | ComputationException | IOException | UncheckedIOException e) {
             e.printStackTrace();
         }
     }
@@ -157,7 +158,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
             return groups.stream()
                     .map(group -> mapToString(container, group))
                     .collect(Collectors.joining(",", line + ",", "," + (functional ? "" : "non-") + "functional"));
-        } catch (NoSuchElementException | NullPointerException | ComputationException | IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             // thrown upon missing backbone atoms during secondary structure assignment
             return "";

@@ -25,6 +25,22 @@ public class Selenomethionine extends AminoAcid implements NonStandardAminoAcid 
     }
 
     @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("SE") && se == null) {
+            se = atom;
+        }
+        if(atom.getName().equals("CE") && ce == null) {
+            ce = atom;
+        }
+    }
+
+    @Override
     public Class<Methionine> getParentAminoAcid() {
         return Methionine.class;
     }

@@ -39,4 +39,20 @@ public class Asparagine extends AminoAcid implements StandardAminoAcid {
     public Atom getNd2() {
         return nd2;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("OD1") && od1 == null) {
+            od1 = atom;
+        }
+        if(atom.getName().equals("ND2") && nd2 == null) {
+            nd2 = atom;
+        }
+    }
 }

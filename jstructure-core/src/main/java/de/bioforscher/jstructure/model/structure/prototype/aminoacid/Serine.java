@@ -29,4 +29,14 @@ public class Serine extends AminoAcid implements StandardAminoAcid {
     public Atom getOg() {
         return og;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("OG") && og == null) {
+            og = atom;
+        }
+    }
 }

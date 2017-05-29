@@ -39,4 +39,20 @@ public class AsparticAcid extends AminoAcid implements StandardAminoAcid {
     public Atom getOd2() {
         return od2;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("OD1") && od1 == null) {
+            od1 = atom;
+        }
+        if(atom.getName().equals("OD2") && od2 == null) {
+            od2 = atom;
+        }
+    }
 }

@@ -61,4 +61,26 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     public Atom getH() {
         return h;
     }
+
+    @Override
+    protected void addAtomInternal(Atom atom) {
+        if(atom.getName().equals("N") && n == null) {
+            n = atom;
+        }
+        if(atom.getName().equals("CA") && ca == null) {
+            ca = atom;
+        }
+        if(atom.getName().equals("C") && c == null) {
+            c = atom;
+        }
+        if(atom.getName().equals("O") && o == null) {
+            o = atom;
+        }
+        if(atom.getName().equals("H") && h == null) {
+            h = atom;
+        }
+        addSideChainAtom(atom);
+    }
+
+    protected abstract void addSideChainAtom(Atom atom);
 }

@@ -44,4 +44,23 @@ public class GlutamicAcid extends AminoAcid implements StandardAminoAcid {
     public Atom getOe2() {
         return oe2;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("CD") && cd == null) {
+            cd = atom;
+        }
+        if(atom.getName().equals("OE1") && oe1 == null) {
+            oe1 = atom;
+        }
+        if(atom.getName().equals("OE2") && oe2 == null) {
+            oe2 = atom;
+        }
+    }
 }

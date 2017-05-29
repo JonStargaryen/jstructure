@@ -9,7 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The abstract representation of a group within a molecular structure.
+ * The abstract representation of a group within a molecular structure. Some group implementations provide explicit
+ * functions to retrieve specific atom. They are registered automatically during parsing. The atom registered first will
+ * always be kept even when e.g. multiple alpha carbons would be provided for an amino acid. Also, these methods may
+ * return null, when the corresponding atom was not provided by a PDB file. These methods are used to speed up access
+ * to atoms as a more convenient, but slower alternative use the {@link de.bioforscher.jstructure.model.structure.selection.Selection}
+ * implementation accessible by {@link Group#select()}
  * Created by bittrich on 5/24/17.
  */
 public class Group extends AbstractFeatureable {
@@ -79,6 +84,21 @@ public class Group extends AbstractFeatureable {
 
     public boolean isLigand() {
         return ligand;
+    }
+
+    public void addAtom(Atom atom) {
+        atoms.add(atom);
+//        atom.setParentGroup(this);
+        // delegate to internal implementation
+        addAtomInternal(atom);
+    }
+
+    /**
+     * If the child class supports specific atom identified by name.
+     * @param atom the atom to be handled - identified by its name, assigned to a particular field of the child class
+     */
+    protected void addAtomInternal(Atom atom) {
+        //TODO this could be realized by reflection
     }
 
     protected static GroupPrototype createPrototypeInstance(String id) {

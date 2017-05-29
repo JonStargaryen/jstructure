@@ -24,4 +24,11 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
     public Atom getCb() {
         return cb;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+    }
 }

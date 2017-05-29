@@ -21,4 +21,14 @@ public class Cysteine extends AminoAcid implements StandardAminoAcid {
     public Cysteine(ResidueNumber residueNumber) {
         this(residueNumber, false);
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("SG") && sg == null) {
+            sg = atom;
+        }
+    }
 }

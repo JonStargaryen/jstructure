@@ -44,4 +44,23 @@ public class Arginine extends AminoAcid implements StandardAminoAcid {
     public Atom getCz() {
         return cz;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("CD") && cd == null) {
+            cd = atom;
+        }
+        if(atom.getName().equals("NE") && ne == null) {
+            ne = atom;
+        }
+        if(atom.getName().equals("CZ") && cz == null) {
+            cz = atom;
+        }
+    }
 }

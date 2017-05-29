@@ -15,11 +15,13 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
     private Atom cd2;
     private Atom ce2;
     private Atom n2;
+    private Atom ca2;
     private Atom c2;
     private Atom o2;
     private Atom nz;
     private Atom ce;
     private Atom cd;
+    private Atom cg;
     private Atom cb;
 
     public Pyrrolysine(ResidueNumber residueNumber, boolean ligand) {
@@ -50,6 +52,10 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
         return n2;
     }
 
+    public Atom getCa2() {
+        return ca2;
+    }
+
     public Atom getC2() {
         return c2;
     }
@@ -70,8 +76,55 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
         return cd;
     }
 
+    public Atom getCg() {
+        return cg;
+    }
+
     public Atom getCb() {
         return cb;
+    }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB2") && cb2 == null) {
+            cb2 = atom;
+        }
+        if(atom.getName().equals("CG2") && cg2 == null) {
+            cg2 = atom;
+        }
+        if(atom.getName().equals("CD2") && cd2 == null) {
+            cd2 = atom;
+        }
+        if(atom.getName().equals("CE2") && ce2 == null) {
+            ce2 = atom;
+        }
+        if(atom.getName().equals("N2") && n2 == null) {
+            n2 = atom;
+        }
+        if(atom.getName().equals("CA2") && ca2 == null) {
+            ca2 = atom;
+        }
+        if(atom.getName().equals("C2") && c2 == null) {
+            c2 = atom;
+        }
+        if(atom.getName().equals("O2") && o2 == null) {
+            o2 = atom;
+        }
+        if(atom.getName().equals("NZ") && nz == null) {
+            nz = atom;
+        }
+        if(atom.getName().equals("CE") && ce == null) {
+            ce = atom;
+        }
+        if(atom.getName().equals("CD") && cd == null) {
+            cd = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
     }
 
     @Override

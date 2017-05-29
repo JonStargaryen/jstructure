@@ -34,4 +34,17 @@ public class Valine extends AminoAcid implements StandardAminoAcid {
     public Atom getCg2() {
         return cg2;
     }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG1") && cg1 == null) {
+            cg1 = atom;
+        }
+        if(atom.getName().equals("CG2") && cg2 == null) {
+            cg2 = atom;
+        }
+    }
 }

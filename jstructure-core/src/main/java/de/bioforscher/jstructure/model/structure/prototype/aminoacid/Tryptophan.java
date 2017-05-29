@@ -20,6 +20,7 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
     private Atom cz2;
     private Atom cz3;
     private Atom ch2;
+    private Atom oxt;
 
     public Tryptophan(ResidueNumber residueNumber,
                       boolean ligand) {
@@ -68,5 +69,46 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
 
     public Atom getCh2() {
         return ch2;
+    }
+
+    public Atom getOxt() {
+        return oxt;
+    }
+
+    @Override
+    protected void addSideChainAtom(Atom atom) {
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
+        }
+        if(atom.getName().equals("CG") && cg == null) {
+            cg = atom;
+        }
+        if(atom.getName().equals("CD1") && cd1 == null) {
+            cd1 = atom;
+        }
+        if(atom.getName().equals("CD2") && cd2 == null) {
+            cd2 = atom;
+        }
+        if(atom.getName().equals("CE2") && ce2 == null) {
+            ce2 = atom;
+        }
+        if(atom.getName().equals("NE1") && ne1 == null) {
+            ne1 = atom;
+        }
+        if(atom.getName().equals("CE3") && ce3 == null) {
+            ce3 = atom;
+        }
+        if(atom.getName().equals("CZ2") && cz2 == null) {
+            cz2 = atom;
+        }
+        if(atom.getName().equals("CZ3") && cz3 == null) {
+            cz3 = atom;
+        }
+        if(atom.getName().equals("CH2") && ch2 == null) {
+            ch2 = atom;
+        }
+        if(atom.getName().equals("OXT") && oxt == null) {
+            oxt = atom;
+        }
     }
 }

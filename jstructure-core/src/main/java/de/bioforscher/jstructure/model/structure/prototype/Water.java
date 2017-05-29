@@ -21,4 +21,11 @@ public class Water extends Group {
     public Atom getO() {
         return o;
     }
+
+    @Override
+    protected void addAtomInternal(Atom atom) {
+        if(atom.getName().equals("O") && o == null) {
+            o = atom;
+        }
+    }
 }
