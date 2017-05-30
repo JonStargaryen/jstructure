@@ -131,4 +131,10 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
     public Class<UnknownAminoAcid> getParentAminoAcid() {
         return UnknownAminoAcid.class;
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        //TODO maximum asa value
+        return 154.0 + 230.0;
+    }
 }

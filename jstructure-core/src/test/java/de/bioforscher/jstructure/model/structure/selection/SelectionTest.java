@@ -4,9 +4,11 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.aminoacid.Arginine;
+import de.bioforscher.jstructure.model.structure.aminoacid.Phenylalanine;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -92,7 +94,7 @@ public class SelectionTest {
         System.out.println("arginines in Chain 'B' and 'C'");
         GroupContainer argGroups = protein.select()
                 .chainName("B", "C")
-                .aminoAcids(AminoAcidFamily.ARGININE)
+                .groupName(Arginine.THREE_LETTER_CODE)
                 .asGroupContainer();
         System.out.println(argGroups.getPdbRepresentation());
 
@@ -112,8 +114,8 @@ public class SelectionTest {
         System.out.println("alpha carbons and beta carbons of PHEs in chain 'A' and 'C'");
         AtomContainer atoms = protein.select()
                 .chainName("A", "C")
-                .aminoAcids(AminoAcidFamily.PHENYLALANINE)
-                .atomName(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME, AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME)
+                .groupName(Phenylalanine.THREE_LETTER_CODE)
+                .atomName(AminoAcid.ALPHA_CARBON_NAME, AminoAcid.BETA_CARBON_NAME)
                 .asAtomContainer();
         System.out.println(atoms.getPdbRepresentation());
     }

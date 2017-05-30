@@ -6,9 +6,9 @@ import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
     protected final Set<String> maximalSetOfAtomNames;
 
     public AbstractAlignmentAlgorithm() {
-        this(Collections.emptySet(), AminoAcidFamily.ATOM_NAMES.ALL_ATOM_NAMES);
+        this(Collections.emptySet(), AminoAcid.ALL_ATOM_NAMES);
     }
 
     public AbstractAlignmentAlgorithm(Set<String> minimalSetOfAtomNames,

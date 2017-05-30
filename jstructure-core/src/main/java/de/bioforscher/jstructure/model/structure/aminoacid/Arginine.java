@@ -63,4 +63,9 @@ public class Arginine extends AminoAcid implements StandardAminoAcid {
             cz = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 265.0;
+    }
 }

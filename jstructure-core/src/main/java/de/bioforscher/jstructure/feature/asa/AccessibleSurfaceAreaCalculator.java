@@ -8,7 +8,6 @@ import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.*;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,13 +77,13 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         atom.getFeatureContainer().addFeature(new AtomRadius(this, determineRadius(atom)));
     }
 
-    private void assignSingleAsa(Group group, List<Atom> nonHydrogenAtoms) {
+    private void assignSingleAsa(AminoAcid group, List<Atom> nonHydrogenAtoms) {
         double asa = group.select()
                 .nonHydrogenAtoms()
                 .asFilteredAtoms()
                 .mapToDouble(atom -> calcSingleAsa(atom, nonHydrogenAtoms))
                 .sum();
-        double rasa = asa / AminoAcidFamily.valueOfIgnoreCase(group.getThreeLetterCode()).orElse(AminoAcidFamily.UNKNOWN).getMaximalAccessibleSurfaceArea();
+        double rasa = asa / group.getMaximumAccessibleSurfaceArea();
         group.getFeatureContainer().addFeature(new AccessibleSurfaceArea(this,
                 asa,
                 rasa));
@@ -101,9 +100,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
         nonHydrogenAtoms.parallelStream()
                 .forEach(this::assignRadius);
 
-        protein.select()
-                .aminoAcids()
-                .asFilteredGroups()
+        protein.aminoAcids()
                 .parallel()
                 .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
     }

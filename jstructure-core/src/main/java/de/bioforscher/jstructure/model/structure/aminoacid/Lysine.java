@@ -63,4 +63,9 @@ public class Lysine extends AminoAcid implements StandardAminoAcid {
             nz = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 230.0;
+    }
 }

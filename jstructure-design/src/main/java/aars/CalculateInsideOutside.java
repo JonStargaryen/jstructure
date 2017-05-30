@@ -3,8 +3,9 @@ package aars;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.nio.file.Paths;
@@ -45,8 +46,9 @@ class CalculateInsideOutside {
                 .collect(Collectors.groupingBy(Group::getThreeLetterCode, Collectors.counting()));
 
         System.out.println("aa\texposed\tburied");
-        Stream.of(AminoAcidFamily.values())
-                .map(AminoAcidFamily::getThreeLetterCode)
+        Stream.of(AminoAcid.Family.values())
+                .map(AminoAcid.Family::getGroupPrototype)
+                .map(GroupPrototype::getThreeLetterCode)
                 .map(tlc -> tlc + "\t" + exposedMap.get(tlc) + "\t" + buriedMap.get(tlc))
                 .forEach(System.out::println);
     }

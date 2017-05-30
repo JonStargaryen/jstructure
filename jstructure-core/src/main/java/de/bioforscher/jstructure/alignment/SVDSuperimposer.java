@@ -4,9 +4,9 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.LUDecomposition;
 import org.apache.commons.math3.linear.RealMatrix;
@@ -26,10 +26,9 @@ import java.util.stream.Stream;
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignmentResult> {
     private static final Logger logger = LoggerFactory.getLogger(SVDSuperimposer.class);
-    private static final Set<String> ALPHA_CARBON_NAMES = Stream.of(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME).collect(Collectors.toSet());
-    public static final SVDSuperimposer ALPHA_CARBON_SVD_INSTANCE = new SVDSuperimposer(ALPHA_CARBON_NAMES, ALPHA_CARBON_NAMES);
-    public static final SVDSuperimposer BACKBONE_SVD_INSTANCE = new SVDSuperimposer(AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES,
-            AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES);
+    private static final Set<String> ALPHA_CARBON_NAME = Stream.of(AminoAcid.ALPHA_CARBON_NAME).collect(Collectors.toSet());
+    public static final SVDSuperimposer ALPHA_CARBON_SVD_INSTANCE = new SVDSuperimposer(ALPHA_CARBON_NAME, ALPHA_CARBON_NAME);
+    public static final SVDSuperimposer BACKBONE_SVD_INSTANCE = new SVDSuperimposer(AminoAcid.BACKBONE_ATOM_NAMES, AminoAcid.BACKBONE_ATOM_NAMES);
 
     public SVDSuperimposer() {
         super();

@@ -9,11 +9,10 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -32,14 +31,15 @@ public class GroupPrototypeParser {
     private final Map<String, GroupPrototype> prototypes;
 
     private GroupPrototypeParser() {
-        try {
-            this.prototypes = Files.list(Paths.get(getResourceAsFilepath("prototype/")))
-                    .map(this::createPrototype)
-                    .collect(Collectors.toConcurrentMap(GroupPrototype::getId,
-                            Function.identity()));
-        } catch (IOException e) {
-            throw new UncheckedIOException("could not find local collection of definition files, failed to initialize parsers", e);
-        }
+//        try {
+//            this.prototypes = Files.list(Paths.get(getResourceAsFilepath("prototype/")))
+//                    .map(this::createPrototype)
+//                    .collect(Collectors.toConcurrentMap(GroupPrototype::getId,
+//                            Function.identity()));
+//        } catch (IOException e) {
+//            throw new UncheckedIOException("could not find local collection of definition files, failed to initialize parsers", e);
+//        }
+        this.prototypes = new ConcurrentHashMap<>();
     }
 
     private GroupPrototype createPrototype(InputStream inputStream) throws IOException {

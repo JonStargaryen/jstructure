@@ -47,4 +47,9 @@ public class Valine extends AminoAcid implements StandardAminoAcid {
             cg2 = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 165.0;
+    }
 }

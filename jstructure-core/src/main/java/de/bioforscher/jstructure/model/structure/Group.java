@@ -7,7 +7,9 @@ import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The abstract representation of a group within a molecular structure. Some group implementations provide explicit
@@ -25,6 +27,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     static final Group UNKNOWN_GROUP = new Group("UNK",
             new ResidueNumber(0),
             false);
+    public static final Set<String> HYDROGEN_NAMES = Stream.of("H", "D", "T").collect(Collectors.toSet());
     private String threeLetterCode;
     private ResidueNumber residueNumber;
     private GroupPrototype groupPrototype;

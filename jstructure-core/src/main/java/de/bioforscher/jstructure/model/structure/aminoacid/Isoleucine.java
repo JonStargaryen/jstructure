@@ -55,4 +55,9 @@ public class Isoleucine extends AminoAcid implements StandardAminoAcid {
             cd1 = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 195.0;
+    }
 }

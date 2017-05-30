@@ -11,4 +11,9 @@ public class GroupPrototypeParserTest {
     public void shouldParseStandardAminoAcid() {
         System.out.println(GroupPrototypeParser.getInstance().getPrototype("ALA"));
     }
+
+    @Test
+    public void s3TAK() {
+        System.out.println("3TAK");
+    }
 }

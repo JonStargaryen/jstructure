@@ -2,10 +2,12 @@ package de.bioforscher.jstructure.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.aminoacid.Asparagine;
+import de.bioforscher.jstructure.model.structure.aminoacid.Histidine;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +29,7 @@ public class ModelIntegrityTest {
     public void shouldGetGroupCopy() {
         GroupContainer copiedGroups = protein.select()
                 .chainName("A", "C")
-                .aminoAcids(AminoAcidFamily.ASPARAGINE)
+                .groupName(Asparagine.THREE_LETTER_CODE)
                 .asGroupContainer()
                 .createCopy();
         Assert.assertTrue(copiedGroups instanceof Chain);
@@ -39,8 +41,8 @@ public class ModelIntegrityTest {
         AtomContainer clonedSelectedAtoms = protein.select()
                 .chainName("A", "B")
                 .aminoAcids()
-                .aminoAcids(AminoAcidFamily.HISTIDINE)
-                .atomName(AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME)
+                .groupName(Histidine.THREE_LETTER_CODE)
+                .atomName(AminoAcid.ALPHA_CARBON_NAME)
                 .asAtomContainer()
                 .createCopy();
         System.out.println(clonedSelectedAtoms.getPdbRepresentation());

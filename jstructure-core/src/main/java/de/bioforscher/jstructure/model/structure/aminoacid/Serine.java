@@ -39,4 +39,9 @@ public class Serine extends AminoAcid implements StandardAminoAcid {
             og = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 143.0;
+    }
 }

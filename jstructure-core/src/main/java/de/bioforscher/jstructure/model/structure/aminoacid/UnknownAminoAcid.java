@@ -41,4 +41,9 @@ public class UnknownAminoAcid extends AminoAcid implements StandardAminoAcid {
             cg = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 121.0;
+    }
 }

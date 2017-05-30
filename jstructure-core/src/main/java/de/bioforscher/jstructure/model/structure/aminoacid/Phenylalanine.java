@@ -79,4 +79,9 @@ public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
             cz = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 228.0;
+    }
 }

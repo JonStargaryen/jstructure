@@ -24,4 +24,9 @@ public class Glycine extends AminoAcid implements StandardAminoAcid {
     protected void addSideChainAtom(Atom atom) {
 
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 97.0;
+    }
 }

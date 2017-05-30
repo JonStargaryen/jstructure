@@ -1,7 +1,8 @@
 package aars;
 
+import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.parser.ProteinParser;
 
 import java.nio.file.Path;
@@ -36,10 +37,11 @@ class BindingSiteExtractor {
         System.out.println(line);
 
         // map to amino acid family
-        String aminoAcid = Stream.of(AminoAcidFamily.values())
+        String aminoAcid = Stream.of(AminoAcid.Family.values())
                 .filter(aminoAcidFamily -> aminoAcidFamily.name().equalsIgnoreCase(line.split(":")[0]))
                 .findFirst()
-                .map(AminoAcidFamily::getThreeLetterCode)
+                .map(AminoAcid.Family::getGroupPrototype)
+                .map(GroupPrototype::getThreeLetterCode)
                 .orElse("Pyr");
 
         int[] residueNumbers = Pattern.compile(", ").splitAsStream(line.split("\\[")[1].split("]")[0])

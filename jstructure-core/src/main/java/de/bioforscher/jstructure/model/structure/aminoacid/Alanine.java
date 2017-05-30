@@ -31,4 +31,9 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
             cb = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 121.0;
+    }
 }

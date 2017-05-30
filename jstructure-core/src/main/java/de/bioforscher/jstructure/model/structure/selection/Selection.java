@@ -3,11 +3,11 @@ package de.bioforscher.jstructure.model.structure.selection;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.container.StructureContainer;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -202,43 +202,33 @@ public class Selection {
             return this;
         }
 
-        public AtomSelection backboneAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.BACKBONE_ATOM_NAMES.contains(atom.getName()), "backbone atoms");
-            return this;
-        }
-
-        public AtomSelection sideChainAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.SIDECHAIN_ATOM_NAMES.contains(atom.getName()), "side-chain atoms");
-            return this;
-        }
-
         public AtomSelection alphaCarbonAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.CA_ATOM_NAME.equals(atom.getName()), "alpha carbons");
+            registerAtomPredicate(atom -> AminoAcid.ALPHA_CARBON_NAME.equals(atom.getName()), "alpha carbons");
             return this;
         }
 
         public AtomSelection backboneCarbonAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.C_ATOM_NAME.equals(atom.getName()), "backbone carbons");
+            registerAtomPredicate(atom -> AminoAcid.BACKBONE_CARBON_NAME.equals(atom.getName()), "backbone carbons");
             return this;
         }
 
         public AtomSelection backboneNitrogenAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.N_ATOM_NAME.equals(atom.getName()), "backbone nitrogens");
+            registerAtomPredicate(atom -> AminoAcid.BACKBONE_NITROGEN_NAME.equals(atom.getName()), "backbone nitrogens");
             return this;
         }
 
         public AtomSelection backboneOxygenAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.O_ATOM_NAME.equals(atom.getName()), "backbone oxygens");
+            registerAtomPredicate(atom -> AminoAcid.BACKBONE_OXYGEN_NAME.equals(atom.getName()), "backbone oxygens");
             return this;
         }
 
         public AtomSelection betaCarbonAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.CB_ATOM_NAME.equals(atom.getName()), "beta carbons");
+            registerAtomPredicate(atom -> AminoAcid.BETA_CARBON_NAME.equals(atom.getName()), "beta carbons");
             return this;
         }
 
         public AtomSelection hydrogenAtoms() {
-            registerAtomPredicate(atom -> AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()), "hydrogens");
+            registerAtomPredicate(atom -> Group.HYDROGEN_NAMES.contains(atom.getName()), "hydrogens");
             return this;
         }
 
@@ -249,7 +239,7 @@ public class Selection {
         }
 
         public AtomSelection nonHydrogenAtoms() {
-            registerAtomPredicate(atom -> !AminoAcidFamily.ATOM_NAMES.H_ATOM_NAMES.contains(atom.getName()), "non-hydrogens");
+            registerAtomPredicate(atom -> !Group.HYDROGEN_NAMES.contains(atom.getName()), "non-hydrogens");
             return this;
         }
 
@@ -376,16 +366,6 @@ public class Selection {
             return this;
         }
 
-        public GroupSelection aminoAcids(AminoAcidFamily... aminoAcids) {
-            // pre-filter for group type amino acid
-            aminoAcids();
-            registerGroupPredicate(group -> Stream.of(aminoAcids)
-                    .map(AminoAcidFamily::getThreeLetterCode)
-                    .anyMatch(threeLetterCode -> threeLetterCode.equals(group.getThreeLetterCode())),
-                    "amino acids of types: " + Arrays.toString(aminoAcids));
-            return this;
-        }
-
         public GroupSelection nucleotides() {
             registerGroupPredicate(Group::isNucleotide, "nucleotides");
             return this;
@@ -397,7 +377,12 @@ public class Selection {
         }
 
         public GroupSelection water() {
-            registerGroupPredicate(group -> group.getThreeLetterCode().equals("HOH"), "waters");
+            registerGroupPredicate(Group::isWater, "waters");
+            return this;
+        }
+
+        public GroupSelection ligands() {
+            registerGroupPredicate(Group::isLigand, "ligands");
             return this;
         }
 

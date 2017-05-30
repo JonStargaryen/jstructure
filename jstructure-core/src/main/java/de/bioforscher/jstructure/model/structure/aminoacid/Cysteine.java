@@ -31,4 +31,9 @@ public class Cysteine extends AminoAcid implements StandardAminoAcid {
             sg = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 148.0;
+    }
 }

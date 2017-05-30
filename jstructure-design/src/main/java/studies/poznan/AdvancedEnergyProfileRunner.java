@@ -8,7 +8,7 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.ResidueNumber;
-import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -150,9 +150,8 @@ public class AdvancedEnergyProfileRunner {
             this.protein.addChain(chain);
             for(int resNum = 1; resNum <= sequence.length(); resNum++) {
                 String aminoAcidName = String.valueOf(sequence.charAt(resNum - 1));
-                AminoAcidFamily aminoAcidFamily = AminoAcidFamily.valueOfIgnoreCase(aminoAcidName).orElseThrow(() ->
-                        new IllegalArgumentException("unknown amino acid '" + aminoAcidName + "'"));
-                Group group = new Group(aminoAcidFamily.getThreeLetterCode(),
+                AminoAcid.Family aminoAcid = AminoAcid.Family.resolveOneLetterCode(aminoAcidName);
+                Group group = new Group(aminoAcid.getGroupPrototype(),
                         new ResidueNumber(resNum),
                         false);
                 chain.addGroup(group);

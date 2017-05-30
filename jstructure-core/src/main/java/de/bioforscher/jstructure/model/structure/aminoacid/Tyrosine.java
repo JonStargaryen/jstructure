@@ -87,4 +87,9 @@ public class Tyrosine extends AminoAcid implements StandardAminoAcid {
             oh = atom;
         }
     }
+
+    @Override
+    public double getMaximumAccessibleSurfaceArea() {
+        return 255.0;
+    }
 }
