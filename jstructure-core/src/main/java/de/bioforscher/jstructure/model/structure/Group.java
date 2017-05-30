@@ -92,7 +92,8 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     }
 
     public boolean isAminoAcid() {
-        return !isLigand() && getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING;
+        return !isLigand() && (getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING || getPolymerType() ==
+                GroupPrototype.PolymerType.PEPTIDE_LIKE);
     }
 
     public boolean isNucleotide() {

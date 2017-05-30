@@ -250,7 +250,8 @@ public class ProteinParser {
         GroupPrototype prototype = GroupPrototypeParser.getInstance().getPrototype(pdbName);
 
         // it is an amino acid
-        if(prototype.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING)
+        if(prototype.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING || prototype.getPolymerType() ==
+                GroupPrototype.PolymerType.PEPTIDE_LIKE)
         switch(pdbName.toUpperCase()) {
             case Alanine.THREE_LETTER_CODE:
                 return new Alanine(residueNumber, ligand);

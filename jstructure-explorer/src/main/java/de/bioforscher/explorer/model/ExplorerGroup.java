@@ -2,6 +2,7 @@ package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.text.DecimalFormat;
 
@@ -19,8 +20,8 @@ public class ExplorerGroup {
     }
 
     public ExplorerGroup(Group group) {
-        this.resn = group.getResidueNumber();
-        this.aa = group.isAminoAcid() ? group.getGroupInformation().getOneLetterCode() : group.getThreeLetterCode();
+        this.resn = group.getResidueNumber().getResidueNumber();
+        this.aa = group.isAminoAcid() ? ((AminoAcid) group).getOneLetterCode() : group.getThreeLetterCode();
         try {
             this.rasa = DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea());
         } catch (NullPointerException e) {

@@ -2,7 +2,9 @@ package de.bioforscher.jstructure.parser;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.junit.Assert;
 import org.junit.Test;
 import util.TestUtils;
@@ -37,6 +39,19 @@ public class ProteinParserTest {
      * contains selenomethionine at pos 1, marked as HETATM
      */
     private static final String NON_STANDARD_PDB_ID = "1dw9";
+
+    @Test
+    public void shouldHandleProteinWithOligopeptide() {
+        Protein protein = ProteinParser.source("1lyb").parse();
+        // contains peptide-like groups - ought to be an AminoAcid
+        AminoAcid statine = (AminoAcid) protein.select()
+                .groupName("STA")
+                .asGroup();
+        Assert.assertTrue(statine.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LIKE);
+        Assert.assertTrue(statine.isAminoAcid());
+        Assert.assertFalse(statine.isLigand());
+        Assert.assertTrue(protein.aminoAcids().collect(Collectors.toList()).contains(statine));
+    }
 
     @Test
     public void shouldParseNonStandardAminoAcid() {

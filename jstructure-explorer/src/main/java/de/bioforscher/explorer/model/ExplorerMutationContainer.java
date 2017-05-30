@@ -1,10 +1,11 @@
 package de.bioforscher.explorer.model;
 
+import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -45,8 +46,8 @@ public class ExplorerMutationContainer {
 
         renumberSubStructures(originalGroups, mutatedGroups);
 
-        this.original = new ExplorerMutationEnvironment(originalGroups, originalExplorerChain, originalProtein.getName());
-        this.mutation = new ExplorerMutationEnvironment(mutatedGroups, mutatedExplorerChain, mutatedProtein.getName());
+        this.original = new ExplorerMutationEnvironment(originalGroups, originalExplorerChain, originalProtein.getPdbId().getFullName());
+        this.mutation = new ExplorerMutationEnvironment(mutatedGroups, mutatedExplorerChain, mutatedProtein.getPdbId().getFullName());
     }
 
     private void renumberSubStructures(Chain... groups) {
@@ -72,7 +73,7 @@ public class ExplorerMutationContainer {
      */
     private boolean around(Group referenceGroup, Group candidateGroup) {
         return Combinatorics.cartesianProductOf(referenceGroup.getAtoms(), candidateGroup.getAtoms())
-                .anyMatch(pair -> LinearAlgebra3D.distanceFast(pair.getLeft().getCoordinates(), pair.getRight().getCoordinates()) < DISTANCE_CUTOFF_SQUARED);
+                .anyMatch(pair -> LinearAlgebra.on(pair.getLeft().getCoordinates()).distanceFast(pair.getRight().getCoordinates()) < DISTANCE_CUTOFF_SQUARED);
     }
 
     public ExplorerMutationEnvironment getOriginal() {

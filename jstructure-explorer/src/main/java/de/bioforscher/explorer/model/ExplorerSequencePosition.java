@@ -1,10 +1,11 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.feature.uniprot.UniProtActiveSite;
 import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotationContainer;
 import de.bioforscher.jstructure.feature.uniprot.UniProtMutagenesisSite;
 import de.bioforscher.jstructure.feature.uniprot.UniProtNaturalVariant;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ExplorerSequencePosition {
     public ExplorerSequencePosition(Set<UniProtAnnotationContainer> containers, List<Chain> chains, int position) {
         this.olcs = chains.stream()
                 .map(chain -> chain.select().aminoAcids().residueNumber(position).asOptionalGroup())
-                .map(optionalGroup -> optionalGroup.map(group -> group.getGroupInformation().getOneLetterCode()).orElse("-"))
+                .map(optionalGroup -> optionalGroup.map(group -> ((AminoAcid) group).getOneLetterCode()).orElse("-"))
                 .collect(Collectors.joining(System.lineSeparator()));
 
         // determine if variant positions

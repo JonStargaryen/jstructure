@@ -41,7 +41,7 @@ public class ExplorerChain {
     }
 
     public ExplorerChain(Chain chain, String representativeId) {
-        this.id = chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId();
+        this.id = chain.getChainId().getFullName();
         this.pdb = chain.getPdbRepresentation();
         this.rep = representativeId;
         this.sequence = chain.getAminoAcidSequence();

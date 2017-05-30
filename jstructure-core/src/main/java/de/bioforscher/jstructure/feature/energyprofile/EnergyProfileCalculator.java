@@ -101,7 +101,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
         String fallback = group.getGroupPrototype()
                 .getParentCompound()
                 .orElse("ALA");
-        logger.warn("encountered non-standard amino acid {}, using {} as fallback", threeLetterCode, fallback);
+        logger.debug("encountered non-standard amino acid {}, using {} as fallback", threeLetterCode, fallback);
 
         return preferenceMap.getOrDefault(fallback, preferenceMap.get("ALA"));
     }

@@ -13,12 +13,12 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.aminoacid.Proline;
+import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
@@ -314,47 +314,45 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
         for (int i = 0; i < residues.size() - 1; i++) {
             for (int j = i + 1; j < residues.size(); j++) {
-                Group res1 = residues.get(i);
-                Group res2 = residues.get(j);
-                double distance = LinearAlgebra.on(res1.select()
-                                .alphaCarbonAtoms()
-                                .asAtom()
-                                .getCoordinates())
-                        .distanceFast(res2.select()
-                                .alphaCarbonAtoms()
-                                .asAtom()
-                                .getCoordinates());
-                if (distance > CA_MIN_DIST_SQUARED) {
-                    continue;
-                }
-                // If i>j switch them over
-                if(i > j){
-                    // Switch them over
-                    int old = i;
-                    i = j;
-                    j = old;
-                }
-                // Only these
-                if(j < i + 3){
-                    continue;
-                }
-                // If it's the first
-                if(i == 0){
-                    continue;
-                }
-                if(j == 0){
-                    continue;
-                }
-                // If it's the last
-                if(i == residues.size() - 1){
-                    continue;
-                }
-                if(j == residues.size() - 1){
-                    continue;
-                }
+                AminoAcid res1 = residues.get(i);
+                AminoAcid res2 = residues.get(j);
+                try {
+                    double distance = LinearAlgebra.on(res1.getCa().getCoordinates())
+                            .distanceFast(res2.getCa().getCoordinates());
+                    if (distance > CA_MIN_DIST_SQUARED) {
+                        continue;
+                    }
+                    // If i>j switch them over
+                    if (i > j) {
+                        // Switch them over
+                        int old = i;
+                        i = j;
+                        j = old;
+                    }
+                    // Only these
+                    if (j < i + 3) {
+                        continue;
+                    }
+                    // If it's the first
+                    if (i == 0) {
+                        continue;
+                    }
+                    if (j == 0) {
+                        continue;
+                    }
+                    // If it's the last
+                    if (i == residues.size() - 1) {
+                        continue;
+                    }
+                    if (j == residues.size() - 1) {
+                        continue;
+                    }
 
-                int[] thisPair = new int[] { i, j };
-                outList.add(thisPair);
+                    int[] thisPair = new int[]{i, j};
+                    outList.add(thisPair);
+                } catch (NullPointerException e) {
+                    throw new SelectionException("missing alpha carbons for " + res1 + " or " + res2);
+                }
             }
         }
 
@@ -409,49 +407,38 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
     private void detectBends(List<AminoAcid> residues) {
         f1: for (int i = 2; i < residues.size() - 2; i++) {
-            // Check if all atoms form peptide bonds (backbone discontinuity)
-            for (int k = 0; k < 4; k++) {
-                int index = i + k - 2;
-                Atom c = residues.get(index)
-                        .select()
-                        .backboneCarbonAtoms()
-                        .asAtom();
-                Atom n = residues.get(index + 1)
-                        .select()
-                        .backboneNitrogenAtoms()
-                        .asAtom();
-                // Peptide bond C-N
-                if (LinearAlgebra.on(c.getCoordinates()).distanceFast(n.getCoordinates()) > MAX_PEPTIDE_BOND_LENGTH_SQUARED) {
-                    continue f1;
+            try {
+                // Check if all atoms form peptide bonds (backbone discontinuity)
+                for (int k = 0; k < 4; k++) {
+                    int index = i + k - 2;
+                    Atom c = residues.get(index).getCa();
+                    Atom n = residues.get(index + 1).getN();
+                    // Peptide bond C-N
+                    if (LinearAlgebra.on(c.getCoordinates()).distanceFast(n.getCoordinates()) > MAX_PEPTIDE_BOND_LENGTH_SQUARED) {
+                        continue f1;
+                    }
                 }
-            }
 
-            Atom caim2 = residues.get(i - 2)
-                    .select()
-                    .alphaCarbonAtoms()
-                    .asAtom();
-            Atom cag = residues.get(i)
-                    .select()
-                    .alphaCarbonAtoms()
-                    .asAtom();
-            Atom caip2 = residues.get(i + 2)
-                    .select()
-                    .alphaCarbonAtoms()
-                    .asAtom();
+                Atom caim2 = residues.get(i - 2).getCa();
+                Atom cag = residues.get(i).getCa();
+                Atom caip2 = residues.get(i + 2).getCa();
 
-            // Create vectors ( Ca i to Ca i-2 ) ; ( Ca i to CA i + 2 )
-            double[] caminus2 = LinearAlgebra.on(caim2.getCoordinates()).subtract(cag.getCoordinates()).getValue();
-            double[] caplus2 = LinearAlgebra.on(cag.getCoordinates()).subtract(caip2.getCoordinates()).getValue();
+                // Create vectors ( Ca i to Ca i-2 ) ; ( Ca i to CA i + 2 )
+                double[] caminus2 = LinearAlgebra.on(caim2.getCoordinates()).subtract(cag.getCoordinates()).getValue();
+                double[] caplus2 = LinearAlgebra.on(cag.getCoordinates()).subtract(caip2.getCoordinates()).getValue();
 
-            double angle = LinearAlgebra.on(caminus2).angle(caplus2);
+                double angle = LinearAlgebra.on(caminus2).angle(caplus2);
 
-            SecondaryStructure state = getState(residues.get(i));
-            state.setKappa((float) angle);
+                SecondaryStructure state = getState(residues.get(i));
+                state.setKappa((float) angle);
 
-            // Angles = 360 should be discarded
-            if (angle > 70.0 && angle < 359.99) {
-                setSecStrucType(residues, i, SecondaryStructureElement.BEND);
-                state.setBend(true);
+                // Angles = 360 should be discarded
+                if (angle > 70.0 && angle < 359.99) {
+                    setSecStrucType(residues, i, SecondaryStructureElement.BEND);
+                    state.setBend(true);
+                }
+            } catch (NullPointerException e) {
+                throw new SelectionException("missing backbone atoms for " + residues.subList(i, i + 3));
             }
         }
     }
@@ -624,8 +611,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         // N-CA-CB-CG1(ILE/VAL), N-CA-CB-SG(CYS)
         // Omega: CA-C-N-CA
         for (int i = 0; i < residues.size() - 1; i++) {
-            Group res1 = residues.get(i);
-            Group res2 = residues.get(i + 1);
+            AminoAcid res1 = residues.get(i);
+            AminoAcid res2 = residues.get(i + 1);
 
             TorsionAngles torsionAngles = new TorsionAngles(res1, res2);
 
@@ -640,28 +627,24 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
     /**
      * Calculate the HBonds between different groups. see Creighton page 147 f
-     * Modified to use only the contact map
      */
     private void calculateHBonds(List<AminoAcid> residues) {
-//        residues.
         for (int i = 0; i < residues.size() - 1; i++) {
             for (int j = i + 1; j < residues.size(); j++) {
                 AminoAcid res1 = residues.get(i);
                 AminoAcid res2 = residues.get(j);
-                double squaredDistance = LinearAlgebra.on(res1.select()
-                                .alphaCarbonAtoms()
-                                .asAtom()
-                                .getCoordinates())
-                        .distanceFast(res2.select()
-                                .alphaCarbonAtoms()
-                                .asAtom()
-                                .getCoordinates());
-                if (squaredDistance > CA_MIN_DIST_SQUARED) {
-                    continue;
-                }
-                checkAddHBond(res1, res2);
-                if (j != (i + 1)) {
-                    checkAddHBond(res2, res1);
+                try {
+                    double squaredDistance = LinearAlgebra.on(res1.getCa().getCoordinates())
+                            .distanceFast(res2.getCa().getCoordinates());
+                    if (squaredDistance > CA_MIN_DIST_SQUARED) {
+                        continue;
+                    }
+                    checkAddHBond(res1, res2);
+                    if (j != (i + 1)) {
+                        checkAddHBond(res2, res1);
+                    }
+                } catch (NullPointerException e) {
+                    throw new SelectionException("missing alpha carbons for " + res1 + " or " + res2);
                 }
             }
         }
@@ -678,7 +661,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             return;
         }
 
-        Pair<Group, Group> residuePair = new Pair<>(residue1, residue2);
+        Pair<AminoAcid, AminoAcid> residuePair = new Pair<>(residue1, residue2);
         trackHBondEnergy(residuePair, calculateHBondEnergy(residuePair));
     }
 
@@ -690,9 +673,9 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * Store Hbonds in the Groups. DSSP allows two HBonds per amino acid to
      * allow bifurcated bonds.
      */
-    private void trackHBondEnergy(Pair<Group, Group> residuePair, double energy) {
-        Group res1 = residuePair.getLeft();
-        Group res2 = residuePair.getRight();
+    private void trackHBondEnergy(Pair<AminoAcid, AminoAcid> residuePair, double energy) {
+        AminoAcid res1 = residuePair.getLeft();
+        AminoAcid res2 = residuePair.getRight();
         if (isProline(res1)) {
             logger.debug("Ignore: PRO {}", res1.getResidueNumber());
             return;
@@ -761,56 +744,50 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @param residuePair
      * @return the energy of this h-bond
      */
-    private double calculateHBondEnergy(Pair<Group, Group> residuePair) {
-        Group res1 = residuePair.getLeft();
-        Group res2 = residuePair.getRight();
-        Atom nAtom = res1.select()
-                .backboneNitrogenAtoms()
-                .asAtom();
-        double[] n = nAtom.getCoordinates();
-        double[] h = res1.select()
-                .backboneHydrogen()
-                .asAtom()
-                .getCoordinates();
+    private double calculateHBondEnergy(Pair<AminoAcid, AminoAcid> residuePair) {
+        AminoAcid res1 = residuePair.getLeft();
+        AminoAcid res2 = residuePair.getRight();
+        try {
+            Atom nAtom = res1.getN();
+            double[] n = nAtom.getCoordinates();
+            double[] h = res1.getH().getCoordinates();
 
-        Atom oAtom = res2.select()
-                .backboneOxygenAtoms()
-                .asAtom();
-        double[] o = oAtom.getCoordinates();
-        double[] c = res2.select()
-                .backboneCarbonAtoms()
-                .asAtom()
-                .getCoordinates();
+            Atom oAtom = res2.getO();
+            double[] o = oAtom.getCoordinates();
+            double[] c = res2.getC().getCoordinates();
 
-        double dno = LinearAlgebra.on(o).distance(n);
-        double dhc = LinearAlgebra.on(c).distance(h);
-        double dho = LinearAlgebra.on(o).distance(h);
-        double dnc = LinearAlgebra.on(c).distance(n);
+            double dno = LinearAlgebra.on(o).distance(n);
+            double dhc = LinearAlgebra.on(c).distance(h);
+            double dho = LinearAlgebra.on(o).distance(h);
+            double dnc = LinearAlgebra.on(c).distance(n);
 
 //        logger.debug("     cccc: " + res1.getResidueNumber() + " " + res1.getAminoAcid() + " " +
 //                res2.getResidueNumber() + " " + res2.getAminoAcid() + String.format( " O (" + oAtom.getPdbSerial() +
 //                ")..N (" + nAtom.getPdbSerial() + "):%4.1f  |  ho:%4.1f - hc:%4.1f + nc:%4.1f - no:%4.1f ", dno, dho,
 //                dhc, dnc, dno));
 
-        // there seems to be a contact!
-        if ((dno < MINDIST) || (dhc < MINDIST) || (dnc < MINDIST) || (dno < MINDIST)) {
-            return HBONDLOWENERGY;
-        }
+            // there seems to be a contact!
+            if ((dno < MINDIST) || (dhc < MINDIST) || (dnc < MINDIST) || (dno < MINDIST)) {
+                return HBONDLOWENERGY;
+            }
 
-        double e1 = Q / dho - Q / dhc;
-        double e2 = Q / dnc - Q / dno;
+            double e1 = Q / dho - Q / dhc;
+            double e2 = Q / dnc - Q / dno;
 
-        double energy = e1 + e2;
+            double energy = e1 + e2;
 
 //        logger.debug(String.format("      N (%d) O(%d): %4.1f : %4.2f ", nAtom.getPdbSerial(),
 //                oAtom.getPdbSerial(), (float) dno, energy));
 
-        // Avoid too strong energy
-        if (energy > HBONDLOWENERGY) {
-            return energy;
-        }
+            // Avoid too strong energy
+            if (energy > HBONDLOWENERGY) {
+                return energy;
+            }
 
-        return HBONDLOWENERGY;
+            return HBONDLOWENERGY;
+        } catch (NullPointerException e) {
+            throw new SelectionException("missing backbone atoms for " + residuePair);
+        }
     }
 
     /**
@@ -839,10 +816,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @return true if no backbone hydrogen is present
      */
     private boolean lacksBackboneHydrogen(AminoAcid residue) {
-        return !residue.select()
-                .backboneHydrogen()
-                .asOptionalAtom()
-                .isPresent();
+        return residue.getH() == null;
     }
 
     /**
@@ -851,24 +825,16 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      */
     void calcSimpleH(Fragment<AminoAcid> fragmentOfSize2) {
         try {
-            double[] c = fragmentOfSize2.getElement(0).select()
-                    .backboneCarbonAtoms()
-                    .asAtom()
-                    .getCoordinates();
-            double[] o = fragmentOfSize2.getElement(0).select()
-                    .backboneOxygenAtoms()
-                    .asAtom()
-                    .getCoordinates();
-            double[] n = fragmentOfSize2.getElement(1).select()
-                    .backboneNitrogenAtoms()
-                    .asAtom()
-                    .getCoordinates();
+            double[] c = fragmentOfSize2.getElement(0).getC().getCoordinates();
+            double[] o = fragmentOfSize2.getElement(0).getO().getCoordinates();
+            double[] n = fragmentOfSize2.getElement(1).getN().getCoordinates();
 
             double[] xyz = LinearAlgebra.on(c).subtract(o).divide(LinearAlgebra.on(c).distance(o)).add(n).getValue();
 
             // pdbSerial of minimal int value flags them as pseudo-hydrogen
             fragmentOfSize2.getElement(1).addAtom(new Atom("H", Element.H, xyz));
-        } catch (NoSuchElementException e) {
+        } catch (NullPointerException e) {
+            //TODO consistent error-handling
             logger.warn("missing backbone atoms for peptide bond between {} and {} - cannot approximate hydrogen atom position",
                     fragmentOfSize2.getElement(0).getIdentifier(),
                     fragmentOfSize2.getElement(1).getIdentifier());

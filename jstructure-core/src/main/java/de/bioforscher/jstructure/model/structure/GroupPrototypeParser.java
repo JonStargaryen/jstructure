@@ -61,7 +61,7 @@ public class GroupPrototypeParser {
                         .map(Element::text)
                         .map(this::mapToPolymerType)
                         .findFirst()
-                        .orElseThrow(() -> new ParsingException("definition file for '" + id +"' did not contain type tag"));
+                        .orElseThrow(() -> new ParsingException("definition file for '" + id + "' did not contain type tag"));
 
                 String parentCompound = document.getElementsByTag("PDBx:mon_nstd_parent_comp_id")
                         .stream()
@@ -115,6 +115,9 @@ public class GroupPrototypeParser {
         }
         if(polymerType.contains("saccharide")) {
             return GroupPrototype.PolymerType.SACCHARIDE;
+        }
+        if(polymerType.contains("peptide-like")) {
+            return GroupPrototype.PolymerType.PEPTIDE_LIKE;
         }
         throw new ParsingException(polymerType + " is an unknown polymer type");
     }

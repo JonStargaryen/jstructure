@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.family.AminoAcidFamily;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -78,12 +77,13 @@ public class SelectionTest {
         System.out.println(chainB);
 
         System.out.println("Chains 'B', 'C':");
-        ChainContainer chains = protein.select()
+        List<Chain> chains = protein.select()
                 .chainName("B", "C")
-                .asChainContainer();
-        Assert.assertEquals(2, chains.getChains().size());
+                .asFilteredChains()
+                .collect(Collectors.toList());
+        Assert.assertEquals("chains do not match, expected 'B' and 'C' - found: "  + chains, 2, chains.size());
 
-        chains.chains().forEach(System.out::println);
+        chains.forEach(System.out::println);
     }
 
     @Test

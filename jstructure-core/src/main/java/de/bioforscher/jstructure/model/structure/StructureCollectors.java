@@ -16,7 +16,6 @@ import java.util.stream.Collector;
  * A custom collection of structure collectors.
  * Created by S on 09.11.2016.
  */
-@Deprecated
 public class StructureCollectors {
     private static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
 
@@ -105,7 +104,6 @@ public class StructureCollectors {
 
         AtomContainer getContainer() {
             //TODO clone reasonable here?
-            logger.warn("unsafe use of StructureCollector");
             Group group = new Group(atoms.get(0).getParentGroup());
             atoms.forEach(group::addAtom);
             return group;
@@ -139,7 +137,6 @@ public class StructureCollectors {
 
         GroupContainer getContainer() {
             //TODO clone reasonable here?
-            logger.warn("unsafe use of StructureCollector");
             Chain chain = new Chain(groups.get(0).getParentChain());
             groups.forEach(chain::addGroup);
             return chain;
@@ -173,7 +170,6 @@ public class StructureCollectors {
 
         ChainContainer getContainer() {
             //TODO clone reasonable here?
-            logger.warn("unsafe use of StructureCollector");
             Protein protein = new Protein(chains.get(0).getParentProtein());
             chains.forEach(protein::addChain);
             return protein;

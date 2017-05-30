@@ -15,6 +15,8 @@ public class GroupPrototype {
         PEPTIDE_LINKING,
         // nucleotides
         NA_LINKING,
+        // the case for e.g. STA
+        PEPTIDE_LIKE,
         SACCHARIDE
     }
 

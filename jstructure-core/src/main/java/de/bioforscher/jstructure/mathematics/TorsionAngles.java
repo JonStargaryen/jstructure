@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 
 /**
  * Represents torsion angles (phi, psi and omega) between 2 amino acids.
@@ -12,30 +13,22 @@ public class TorsionAngles {
     private final double psi;
     private final double omega;
 
-    public TorsionAngles(Group group1, Group group2) {
-        Atom n1 = group1.select()
-                .backboneNitrogenAtoms()
-                .asAtom();
-        Atom ca1 = group1.select()
-                .alphaCarbonAtoms()
-                .asAtom();
-        Atom c1 = group1.select()
-                .backboneCarbonAtoms()
-                .asAtom();
+    public TorsionAngles(AminoAcid group1, AminoAcid group2) {
+        try {
+            Atom n1 = group1.getN();
+            Atom ca1 = group1.getCa();
+            Atom c1 = group1.getC();
 
-        Atom n2 = group2.select()
-                .backboneNitrogenAtoms()
-                .asAtom();
-        Atom ca2 = group2.select()
-                .alphaCarbonAtoms()
-                .asAtom();
-        Atom c2 = group2.select()
-                .backboneCarbonAtoms()
-                .asAtom();
+            Atom n2 = group2.getN();
+            Atom ca2 = group2.getCa();
+            Atom c2 = group2.getC();
 
-        this.phi = torsionAngle(c1, n2, ca2, c2);
-        this.psi = torsionAngle(n1, ca1, c1, n2);
-        this.omega = torsionAngle(ca1, c1, n2, ca2);
+            this.phi = torsionAngle(c1, n2, ca2, c2);
+            this.psi = torsionAngle(n1, ca1, c1, n2);
+            this.omega = torsionAngle(ca1, c1, n2, ca2);
+        } catch (NullPointerException e) {
+            throw new SelectionException("missing backbone atoms for torsion angle calculation in " + group1 + " or " + group2);
+        }
     }
 
     /**

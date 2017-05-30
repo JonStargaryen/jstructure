@@ -30,7 +30,7 @@ public class ExplorerAlignment {
     public ExplorerAlignment(List<Chain> originalChains, String representativeId) {
         this.representativeId = representativeId;
         this.homologous = originalChains.stream()
-                .map(chain -> chain.getParentProtein().getName().toLowerCase() + "_" + chain.getChainId())
+                .map(chain -> chain.getChainId().getFullName())
                 .collect(Collectors.toList());
 
         this.chains = originalChains.stream()
