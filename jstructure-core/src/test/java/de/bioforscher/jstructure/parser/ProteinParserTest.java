@@ -41,6 +41,13 @@ public class ProteinParserTest {
     private static final String NON_STANDARD_PDB_ID = "1dw9";
 
     @Test
+    public void shouldHandleDubiousPeptideLinkingGroup() {
+        //TODO impl
+        Assert.fail();
+        System.out.println("2AD");
+    }
+
+    @Test
     public void shouldHandleProteinWithOligopeptide() {
         Protein protein = ProteinParser.source("1lyb").parse();
         // contains peptide-like groups - ought to be an AminoAcid

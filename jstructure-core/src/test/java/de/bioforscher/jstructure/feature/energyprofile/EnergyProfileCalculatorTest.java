@@ -41,8 +41,7 @@ public class EnergyProfileCalculatorTest {
     @Test
     @Ignore("skipping long calculation")
     public void shouldComputeEnergyProfilesForAllStructures() throws IOException {
-        System.err.println("skipping energy profile calculation on aaRS data set");
-        // this takes ages - uncomment if needed
+        // this takes ages
         ids.stream()
                 .map(path -> ProteinParser.source(path).parse())
                 .peek(System.out::println)
