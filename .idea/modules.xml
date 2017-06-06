@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jstructure-all/jstructure-all.iml" filepath="$PROJECT_DIR$/jstructure-all/jstructure-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-core/jstructure-core.iml" filepath="$PROJECT_DIR$/jstructure-core/jstructure-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-design/jstructure-design.iml" filepath="$PROJECT_DIR$/jstructure-design/jstructure-design.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-explorer/jstructure-explorer.iml" filepath="$PROJECT_DIR$/jstructure-explorer/jstructure-explorer.iml" />
+    </modules>
+  </component>
+</project>

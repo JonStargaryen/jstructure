@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="design" />
+        <module name="explorer" />
+        <module name="helix-explorer" />
+        <module name="jstructure-core" />
+        <module name="jstructure-design" />
+        <module name="jstructure-explorer" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="core" target="1.8" />
+      <module name="design" target="1.8" />
+      <module name="explorer" target="1.8" />
+      <module name="helix-explorer" target="1.8" />
+      <module name="jstructure-all" target="1.8" />
+      <module name="jstructure-core" target="1.8" />
+      <module name="jstructure-design" target="1.8" />
+      <module name="jstructure-explorer" target="1.8" />
+      <module name="jstructurestudies" target="1.8" />
+      <module name="membrane" target="1.5" />
+      <module name="membrane-explorer" target="1.8" />
+      <module name="pmw" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
