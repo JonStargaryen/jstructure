@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
 /**
@@ -55,6 +56,16 @@ public class HydrogenBond extends PLIPInteraction {
 
     public Atom getAcceptor() {
         return acceptor;
+    }
+
+    @Override
+    public boolean isBackboneInteraction() {
+        return AminoAcid.isBackboneAtom(acceptor) && AminoAcid.isBackboneAtom(donor);
+    }
+
+    @Override
+    public boolean isSideChainInteraction() {
+        return !AminoAcid.isBackboneAtom(acceptor) && !AminoAcid.isBackboneAtom(donor);
     }
 
     @Override

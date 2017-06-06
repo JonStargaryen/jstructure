@@ -2,27 +2,29 @@ package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.structure.Group;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Represents the membrane layer of proteins as a set of 2 layers of points.
  * Created by bittrich on 5/17/17.
  */
-public class Membrane extends FeatureContainerEntry {
+public class MembraneContainer extends FeatureContainerEntry {
     private List<double[]> membraneAtoms;
-    private List<TransMembraneHelix> transMembraneHelices;
+    private List<TransMembraneSubunit> transMembraneHelices;
     private String hydrophobicThickness;
     private String tiltAngle;
     private String deltaGTransfer;
     private String topology;
 
-    Membrane(AbstractFeatureProvider featureProvider) {
+    MembraneContainer(AbstractFeatureProvider featureProvider) {
         super(featureProvider);
     }
 
-    public void addTransMembraneHelix(TransMembraneHelix transMembraneHelix) {
-        transMembraneHelices.add(transMembraneHelix);
+    public void addTransMembraneHelix(TransMembraneSubunit transMembraneSubunit) {
+        transMembraneHelices.add(transMembraneSubunit);
     }
 
     public List<double[]> getMembraneAtoms() {
@@ -33,11 +35,11 @@ public class Membrane extends FeatureContainerEntry {
         this.membraneAtoms = membraneAtoms;
     }
 
-    public List<TransMembraneHelix> getTransMembraneHelices() {
+    public List<TransMembraneSubunit> getTransMembraneHelices() {
         return transMembraneHelices;
     }
 
-    public void setTransMembraneHelices(List<TransMembraneHelix> transMembraneHelices) {
+    public void setTransMembraneHelices(List<TransMembraneSubunit> transMembraneHelices) {
         this.transMembraneHelices = transMembraneHelices;
     }
 
@@ -73,5 +75,14 @@ public class Membrane extends FeatureContainerEntry {
         this.topology = topology;
     }
 
-    //TODO checks if some residue is trans-membrane or not
+    public boolean isTransmembraneGroup(Group group) {
+        int residueNumber = group.getResidueNumber().getResidueNumber();
+        return transMembraneHelices.stream()
+                .filter(transMembraneSubunit -> transMembraneSubunit.getChainId().equals(group.getParentChain().getChainId().getChainId()))
+                .map(TransMembraneSubunit::getSegments)
+                .flatMap(Collection::stream)
+                .anyMatch(range -> range.getLeft() <= residueNumber && range.getRight() >= residueNumber);
+    }
+
+    //TODO a class for the topology of individual groups
 }

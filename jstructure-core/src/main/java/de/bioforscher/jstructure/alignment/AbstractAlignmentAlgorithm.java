@@ -24,15 +24,15 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> implements AlignmentAlgorithm<R> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractAlignmentAlgorithm.class);
-    protected final Set<String> minimalSetOfAtomNames;
-    protected final Set<String> maximalSetOfAtomNames;
+    final Set<String> minimalSetOfAtomNames;
+    final Set<String> maximalSetOfAtomNames;
 
-    public AbstractAlignmentAlgorithm() {
+    AbstractAlignmentAlgorithm() {
         this(Collections.emptySet(), AminoAcid.ALL_ATOM_NAMES);
     }
 
-    public AbstractAlignmentAlgorithm(Set<String> minimalSetOfAtomNames,
-                                      Set<String> maximalSetOfAtomNames) {
+    AbstractAlignmentAlgorithm(Set<String> minimalSetOfAtomNames,
+                               Set<String> maximalSetOfAtomNames) {
         this.minimalSetOfAtomNames = minimalSetOfAtomNames;
         this.maximalSetOfAtomNames = maximalSetOfAtomNames;
     }
@@ -108,7 +108,7 @@ public abstract class AbstractAlignmentAlgorithm<R extends AlignmentResult> impl
     /**
      * Returns the set of atoms shared by both containers.
      */
-    static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer atomContainer1,
+    private static Pair<GroupContainer, GroupContainer> comparableGroupContainerPair(AtomContainer atomContainer1,
                                                                              AtomContainer atomContainer2) {
         return comparableGroupContainerPair(atomContainer1,
                 atomContainer2,

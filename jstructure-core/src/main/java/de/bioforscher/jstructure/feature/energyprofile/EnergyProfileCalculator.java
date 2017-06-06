@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
  *
  * References:<br />
  * <ul>
- *     <li>F. Heinke and D. Labudde. Membrane protein stability analyses by means of protein energy profiles in case of nephrogenic diabetes insipidus. Comput Math Methods Med, 2012:790281, February 2012.</li>
- *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of Membrane Protein Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
+ *     <li>F. Heinke and D. Labudde. MembraneContainer protein stability analyses by means of protein energy profiles in case of nephrogenic diabetes insipidus. Comput Math Methods Med, 2012:790281, February 2012.</li>
+ *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of MembraneContainer Protein Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
  *     <li>F. Heinke and D. Labudde. Predicting functionality of the non-expressed putative human OHCU decarboxylase by means of novel protein energy profile-based methods. Conference proceedings of 13. Nachwuchswissenschaftlerkonferenz, April 2012.</li>
  *     <li>F. Heinke, D. Stockmann, S. Schildbach, M. Langer and D. Labudde. eProS - A Bioinformatics Knowledgebase, Toolbox and Database for Characterizing Protein Function. BDAS 2015.</li>
  * </ul>

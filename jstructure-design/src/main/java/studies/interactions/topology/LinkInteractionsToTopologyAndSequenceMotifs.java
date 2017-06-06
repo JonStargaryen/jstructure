@@ -1,7 +1,12 @@
 package studies.interactions.topology;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
+import de.bioforscher.jstructure.feature.motif.SequenceMotifContainer;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
+import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -30,6 +35,7 @@ class LinkInteractionsToTopologyAndSequenceMotifs {
     private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
     private static final SequenceMotifAnnotator sequenceMotifAnnotator = new SequenceMotifAnnotator();
     private static final OrientationsOfProteinsInMembranesAnnotator topologyAnnotator = new OrientationsOfProteinsInMembranesAnnotator();
+    private static final SecondaryStructureAnnotator secondaryStructureAnnotator = new SecondaryStructureAnnotator();
 
     public static void main(String[] args) throws IOException {
         Files.lines(Paths.get(StudyConstants.PHD + "data/pdbtm_alpha_nr.list.txt"))
@@ -47,12 +53,30 @@ class LinkInteractionsToTopologyAndSequenceMotifs {
         plipAnnotator.process(protein);
         sequenceMotifAnnotator.process(protein);
         topologyAnnotator.process(protein);
+        secondaryStructureAnnotator.process(protein);
+
+        // retrieve containers
+        PLIPInteractionContainer plipInteractionContainer = protein.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
+        SequenceMotifContainer sequenceMotifContainer = protein.getFeatureContainer().getFeature(SequenceMotifContainer.class);
+        MembraneContainer membraneContainer = protein.getFeatureContainer().getFeature(MembraneContainer.class);
 
         // select wanted chain
         Chain chain = protein.select()
                 .chainName(line.split("_")[1])
                 .asChain();
 
-        System.out.println(chain.getAminoAcidSequence());
+        chain.aminoAcids().forEach(aminoAcid -> {
+            PLIPInteractionContainer interactions = plipInteractionContainer.getInteractionsFor(aminoAcid);
+            SequenceMotifContainer sequenceMotifs = sequenceMotifContainer.getEmbeddingSequenceMotifsFor(aminoAcid);
+            boolean isTransmembrane = membraneContainer.isTransmembraneGroup(aminoAcid);
+            String secondaryStructure = aminoAcid.getFeatureContainer().getFeature(SecondaryStructure.class)
+                    .getSecondaryStructure()
+                    .getOneLetterRepresentation();
+
+            System.out.println(aminoAcid.getIdentifier() + "\t" + secondaryStructure + "\t" + isTransmembrane + "\t" +
+                    sequenceMotifs.getSequenceMotifs().size() + "\t" + interactions.getInteractions().size() + "\t" +
+                    interactions.getBackboneInteractions().size() + "\t" + interactions.getSideChainInteractions().size() +
+                    "\t" + interactions.getMixedInteractions().size());
+        });
     }
 }

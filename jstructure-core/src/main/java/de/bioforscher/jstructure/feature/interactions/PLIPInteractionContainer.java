@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.feature.interactions;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.Featureable;
+import de.bioforscher.jstructure.model.structure.Group;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,6 +49,24 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
                 .collect(Collectors.toList());
     }
 
+    public List<PLIPInteraction> getBackboneInteractions() {
+        return getInteractions().stream()
+                .filter(PLIPInteraction::isBackboneInteraction)
+                .collect(Collectors.toList());
+    }
+
+    public List<PLIPInteraction> getSideChainInteractions() {
+        return getInteractions().stream()
+                .filter(PLIPInteraction::isSideChainInteraction)
+                .collect(Collectors.toList());
+    }
+
+    public List<PLIPInteraction> getMixedInteractions() {
+        return getInteractions().stream()
+                .filter(PLIPInteraction::isMixedInteraction)
+                .collect(Collectors.toList());
+    }
+
     public List<HalogenBond> getHalogenBonds() {
         return halogenBonds;
     }
@@ -76,5 +95,10 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
         return waterBridges;
     }
 
-    //TODO checks for given residues and convenience functions to retrieve information
+    public PLIPInteractionContainer getInteractionsFor(Group group) {
+        List<PLIPInteraction> filteredInteractions = getInteractions().stream()
+                .filter(plipInteraction -> plipInteraction.getPartner1().equals(group) || plipInteraction.getPartner2().equals(group))
+                .collect(Collectors.toList());
+        return new PLIPInteractionContainer(getFeatureProvider(), filteredInteractions);
+    }
 }

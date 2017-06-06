@@ -58,6 +58,16 @@ public class WaterBridge extends PLIPInteraction {
     }
 
     @Override
+    public boolean isBackboneInteraction() {
+        return false;
+    }
+
+    @Override
+    public boolean isSideChainInteraction() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " atom1=" + toString(atom1) + " atom2=" + toString(atom2);
     }

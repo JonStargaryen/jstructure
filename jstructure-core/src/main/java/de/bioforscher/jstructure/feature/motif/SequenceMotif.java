@@ -7,15 +7,15 @@ package de.bioforscher.jstructure.feature.motif;
 public class SequenceMotif {
     private final SequenceMotifDefinition motifDefinition;
     private final String chainId;
-    private final int start;
-    private final int end;
+    private final int startResidueNumber;
+    private final int endResidueNumber;
     private final String sequence;
 
-    SequenceMotif(SequenceMotifDefinition candidate, String chainId, int start, int end, String sequence) {
+    SequenceMotif(SequenceMotifDefinition candidate, String chainId, int startResidueNumber, int endResidueNumber, String sequence) {
         this.motifDefinition = candidate;
         this.chainId = chainId;
-        this.start = start;
-        this.end = end;
+        this.startResidueNumber = startResidueNumber;
+        this.endResidueNumber = endResidueNumber;
         this.sequence = sequence;
     }
 
@@ -27,12 +27,12 @@ public class SequenceMotif {
         return chainId;
     }
 
-    public int getStart() {
-        return start;
+    public int getStartResidueNumber() {
+        return startResidueNumber;
     }
 
-    public int getEnd() {
-        return end;
+    public int getEndResidueNumber() {
+        return endResidueNumber;
     }
 
     public String getSequence() {

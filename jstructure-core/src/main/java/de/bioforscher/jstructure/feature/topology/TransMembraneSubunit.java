@@ -9,17 +9,17 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * The generic instance of trans-membrane helices.
+ * The generic instance of trans-membrane chain.
  * Created by bittrich on 5/17/17.
  */
-public class TransMembraneHelix {
+public class TransMembraneSubunit {
     private String chainId;
     private String tilt;
     private List<IntegerRange> segments;
     private static final Pattern SEGMENTS_PATTERN = Pattern.compile(",");
     private static final Pattern RANGE_PATTERN = Pattern.compile("\\d+");
 
-    TransMembraneHelix(String describingText) {
+    TransMembraneSubunit(String describingText) {
         String[] globalSplit = describingText.split("-");
         this.chainId = globalSplit[0].trim();
         this.tilt = globalSplit[1].trim().replace("Tilt: ", "").trim();
@@ -45,7 +45,7 @@ public class TransMembraneHelix {
             counter++;
         }
         if(start == Integer.MIN_VALUE || end == Integer.MIN_VALUE) {
-            throw new ParsingException("opm output malformed for segment entry: " + segment);
+            throw new ParsingException("OPM output malformed for segment entry: " + segment);
         }
         return new IntegerRange(start, end);
 

@@ -16,6 +16,7 @@ import java.util.stream.Stream;
  * "registry" implemented by {@link FeatureProviderRegistry}.
  * TODO a register function which fills each featureMap with the provided keys of this provider, thus multiple predictors could be employed concurrently
  * TODO strict mode flag
+ * TODO indicate where the results are attached to - on atom level? residues? chains? whole protein? a mix?
  *  Created by S on 16.01.2017.
  */
 public abstract class AbstractFeatureProvider {

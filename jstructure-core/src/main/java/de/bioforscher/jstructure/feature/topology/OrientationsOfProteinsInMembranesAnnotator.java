@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Access to the internet resource of the OPM.
  * Created by bittrich on 5/17/17.
  */
-@FeatureProvider(provides = Membrane.class)
+@FeatureProvider(provides = MembraneContainer.class)
 public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(OrientationsOfProteinsInMembranesAnnotator.class);
     private static final String BASE_URL = "http://opm.phar.umich.edu/";
@@ -54,7 +54,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                     Protein opmProtein = ProteinParser.source(new ByteArrayInputStream(bytes))
                             .forceProteinName(ProteinIdentifier.createFromPdbId(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
                             .parse();
-                    Membrane membrane = new Membrane(this);
+                    MembraneContainer membraneContainer = new MembraneContainer(this);
 
                     // superimpose opm protein onto instance of the original protein
                     //TODO this alignment is by no means perfect, but works for a first glance
@@ -67,41 +67,41 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                                     .asGroupContainer())
                             .transform(opmProtein);
 
-                    // extract dummy atoms and move them to membrane object
+                    // extract dummy atoms and move them to membraneContainer object
                     List<double[]> membraneAtoms = opmProtein.atoms()
                             .map(Atom::getParentGroup)
                             .filter(group -> group.getThreeLetterCode().equals("DUM"))
                             .flatMap(Group::atoms)
                             .map(Atom::getCoordinates)
                             .collect(Collectors.toList());
-                    membrane.setMembraneAtoms(membraneAtoms);
+                    membraneContainer.setMembraneAtoms(membraneAtoms);
 
                     // extract general information - that is the first table
                     Element generalDataTable = document.getElementsByClass("data").get(0);
                     Element thicknessTr = generalDataTable.getElementsByTag("tr").get(1);
-                    membrane.setHydrophobicThickness(thicknessTr.getElementsByTag("td").get(1).text());
+                    membraneContainer.setHydrophobicThickness(thicknessTr.getElementsByTag("td").get(1).text());
 
                     Element tiltTr = generalDataTable.getElementsByTag("tr").get(2);
-                    membrane.setTiltAngle(tiltTr.getElementsByTag("td").get(1).text());
+                    membraneContainer.setTiltAngle(tiltTr.getElementsByTag("td").get(1).text());
 
                     Element transferTr = generalDataTable.getElementsByTag("tr").get(3);
-                    membrane.setDeltaGTransfer(transferTr.getElementsByTag("td").get(1).text());
+                    membraneContainer.setDeltaGTransfer(transferTr.getElementsByTag("td").get(1).text());
 
                     Element topologyTr = generalDataTable.getElementsByTag("tr").get(5);
-                    membrane.setTopology(topologyTr.getElementsByTag("td").get(1).text());
+                    membraneContainer.setTopology(topologyTr.getElementsByTag("td").get(1).text());
 
-                    // extract trans-membrane helices - second table
+                    // extract trans-membraneContainer helices - second table
                     Element transMembraneSubunitsTable = document.getElementsByClass("data").get(1);
-                    List<TransMembraneHelix> helices = transMembraneSubunitsTable.getElementsByTag("tr").stream()
+                    List<TransMembraneSubunit> helices = transMembraneSubunitsTable.getElementsByTag("tr").stream()
                             // skip the header
                             .skip(1)
                             .map(element -> element.getElementsByTag("td").get(0))
                             .map(Element::text)
-                            .map(TransMembraneHelix::new)
+                            .map(TransMembraneSubunit::new)
                             .collect(Collectors.toList());
-                    membrane.setTransMembraneHelices(helices);
+                    membraneContainer.setTransMembraneHelices(helices);
 
-                    protein.getFeatureContainer().addFeature(membrane);
+                    protein.getFeatureContainer().addFeature(membraneContainer);
 
 //                    //TODO remove, used to evaluate alignment manually
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getPdbRepresentation().getBytes());
@@ -109,7 +109,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 //                    //TODO remove, used to evaluate segment positions manually
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/tm.pdb"), protein.select()
 //                            .residueNumber(helices.stream()
-//                                    .map(TransMembraneHelix::getSegments)
+//                                    .map(TransMembraneSubunit::getSegments)
 //                                    .flatMap(Collection::stream)
 //                                    .collect(Collectors.toList())
 //                                    .toArray(new IntegerRange[0]))

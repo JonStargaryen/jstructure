@@ -19,6 +19,14 @@ import java.util.stream.Collectors;
  * Created by S on 09.11.2016.
  */
 public class StructureCollectors {
+    interface OriginIndicator {
+        /**
+         * The model instance on which this container was created upon.
+         * @return access to the origin of this container
+         */
+        Protein getOrigin();
+    }
+
     public static Collector<Atom, ?, double[]> toCentroid() {
         return Collector.of(CentroidAverage::new,
                 CentroidAverage::accept,
@@ -118,19 +126,13 @@ public class StructureCollectors {
         }
     }
 
-    interface OriginIndicator {
-        /**
-         * The model instance on which this container was created upon.
-         * @return
-         */
-        Protein getOrigin();
-    }
-
     static abstract class AbstractBasicContainer extends AbstractFeatureable implements OriginIndicator, Identifiable {
         private final Protein origin;
+        private String identifier;
 
         AbstractBasicContainer(Protein origin) {
             this.origin = origin;
+            this.identifier = origin.getIdentifier();
         }
 
         public Protein getOrigin() {
@@ -139,12 +141,12 @@ public class StructureCollectors {
 
         @Override
         public String getIdentifier() {
-            return origin.getIdentifier();
+            return identifier;
         }
 
         @Override
         public void setIdentifier(String identifier) {
-            throw new UnsupportedOperationException("cannot rename synthetic container");
+            this.identifier = identifier;
         }
     }
 

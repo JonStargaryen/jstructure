@@ -35,6 +35,21 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             "OG", "OG1", "NE1", "CE3", "CZ2", "CZ3", "CH2", "OH").collect(Collectors.toSet());
     public static final Set<String> ALL_ATOM_NAMES = Stream.concat(SIDE_CHAIN_ATOM_NAMES.stream(),
             BACKBONE_ATOM_NAMES.stream()).collect(Collectors.toSet());
+
+    /**
+     * Convenience function to determine whether a certain atom is a backbone atom of an amino acid.
+     * @param atom the instance to check
+     * @return <code>true</code> iff this atom's name refers to that of a backbone atom
+     */
+    public static boolean isBackboneAtom(Atom atom) {
+        String atomName = atom.getName();
+        return ALPHA_CARBON_NAME.equals(atomName) ||
+                BACKBONE_CARBON_NAME.equals(atomName) ||
+                BACKBONE_NITROGEN_NAME.equals(atomName) ||
+                BACKBONE_OXYGEN_NAME.equals(atomName) ||
+                BACKBONE_HYDROGEN_NAME.equals(atomName);
+    }
+
     public enum Family {
         ALANINE(Alanine.class, Alanine.GROUP_PROTOTYPE),
         ARGININE(Arginine.class, Arginine.GROUP_PROTOTYPE),

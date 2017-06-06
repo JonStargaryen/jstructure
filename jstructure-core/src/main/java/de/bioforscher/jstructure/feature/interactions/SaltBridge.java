@@ -43,6 +43,16 @@ public class SaltBridge extends PLIPInteraction {
     }
 
     @Override
+    public boolean isBackboneInteraction() {
+        return false;
+    }
+
+    @Override
+    public boolean isSideChainInteraction() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " atoms1=" + toString(atoms1) + " atoms2=" + toString(atoms2);
     }

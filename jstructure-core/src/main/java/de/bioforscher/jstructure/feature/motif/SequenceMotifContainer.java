@@ -2,9 +2,11 @@ package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.structure.Group;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A collection of all {@link SequenceMotif} instances associated to a given instance.
@@ -12,6 +14,11 @@ import java.util.List;
  */
 public class SequenceMotifContainer extends FeatureContainerEntry {
     private List<SequenceMotif> sequenceMotifs;
+
+    private SequenceMotifContainer(AbstractFeatureProvider featureProvider, List<SequenceMotif> sequenceMotifs) {
+        super(featureProvider);
+        this.sequenceMotifs = sequenceMotifs;
+    }
 
     SequenceMotifContainer(AbstractFeatureProvider featureProvider) {
         super(featureProvider);
@@ -22,13 +29,23 @@ public class SequenceMotifContainer extends FeatureContainerEntry {
         return sequenceMotifs;
     }
 
-    public void addSequenceMotif(SequenceMotif sequenceMotif) {
+    void addSequenceMotif(SequenceMotif sequenceMotif) {
         sequenceMotifs.add(sequenceMotif);
     }
 
-    public boolean containsSequenceMotif(SequenceMotif sequenceMotif) {
+    boolean containsSequenceMotif(SequenceMotif sequenceMotif) {
         return sequenceMotifs.contains(sequenceMotif);
     }
 
-    //TODO convenience functions to check if some group lies in any (or specific) motif etc
+    public SequenceMotifContainer getEmbeddingSequenceMotifsFor(Group group) {
+        String chainId = group.getParentChain().getChainId().getChainId();
+        int residueNumber = group.getResidueNumber().getResidueNumber();
+        List<SequenceMotif> filteredSequenceMotifs = sequenceMotifs.stream()
+                // filter for correct chain
+                .filter(sequenceMotif -> sequenceMotif.getChainId().equals(chainId))
+                // filter for correct residue number range
+                .filter(sequenceMotif -> sequenceMotif.getStartResidueNumber() <= residueNumber && sequenceMotif.getEndResidueNumber() >= residueNumber)
+                .collect(Collectors.toList());
+        return new SequenceMotifContainer(getFeatureProvider(), filteredSequenceMotifs);
+    }
 }

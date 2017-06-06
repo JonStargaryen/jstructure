@@ -119,6 +119,23 @@ public abstract class PLIPInteraction {
         return partner2.isAminoAcid();
     }
 
+    /**
+     * @return <code>true</code> iff this interaction occurs between two backbone atoms of amino acids
+     */
+    public abstract boolean isBackboneInteraction();
+
+    /**
+     * @return <code>true</code> iff this interaction occurs between two side chain atoms of amino acids
+     */
+    public abstract boolean isSideChainInteraction();
+
+    /**
+     * @return <code>true</code> iff this interaction occurs between one backbone atom and one side chain atom
+     */
+    public boolean isMixedInteraction() {
+        return !isBackboneInteraction() && !isSideChainInteraction();
+    }
+
     String toString(Atom atom) {
         return "'" + atom.getParentGroup().getIdentifier() + "-" + atom.getIdentifier() + "'";
     }

@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
 /**
@@ -43,6 +44,24 @@ public class HalogenBond extends PLIPInteraction {
 
     public Atom getAcceptor() {
         return acceptor;
+    }
+
+    /**
+     * True iff this is an interaction to another amino acid.
+     * @return true when <code>partner2.isAminoAcid()</code> evaluates to <code>true</code>
+     */
+    public boolean partnerIsAminoAcid() {
+        return partner2.isAminoAcid();
+    }
+
+    @Override
+    public boolean isBackboneInteraction() {
+        return AminoAcid.isBackboneAtom(acceptor) && AminoAcid.isBackboneAtom(donor);
+    }
+
+    @Override
+    public boolean isSideChainInteraction() {
+        return !AminoAcid.isBackboneAtom(acceptor) && !AminoAcid.isBackboneAtom(donor);
     }
 
     @Override
