@@ -1,14 +1,18 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
+import de.bioforscher.jstructure.model.Identifiable;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * A custom collection of structure collectors.
@@ -83,7 +87,7 @@ public class StructureCollectors {
         }
     }
 
-    public static Collector<Atom, ?, AtomContainer> toAtomContainer() {
+    public static Collector<Atom, ?, BasicAtomContainer> toAtomContainer() {
         return Collector.of(AtomContainerConsumer::new,
                 AtomContainerConsumer::accept,
                 AtomContainerConsumer::combine,
@@ -98,11 +102,9 @@ public class StructureCollectors {
             this.atoms = new ArrayList<>();
         }
 
-        AtomContainer getContainer() {
-            //TODO clone reasonable here?
-            Group group = new Group(atoms.get(0).getParentGroup());
-            atoms.forEach(group::addAtom);
-            return group;
+        BasicAtomContainer getContainer() {
+            return new BasicAtomContainer(atoms,
+                    atoms.get(0).getParentGroup().getParentChain().getParentProtein());
         }
 
         @Override
@@ -116,7 +118,61 @@ public class StructureCollectors {
         }
     }
 
-    public static Collector<Group, ?, GroupContainer> toGroupContainer() {
+    interface OriginIndicator {
+        /**
+         * The model instance on which this container was created upon.
+         * @return
+         */
+        Protein getOrigin();
+    }
+
+    static abstract class AbstractBasicContainer extends AbstractFeatureable implements OriginIndicator, Identifiable {
+        private final Protein origin;
+
+        AbstractBasicContainer(Protein origin) {
+            this.origin = origin;
+        }
+
+        public Protein getOrigin() {
+            return origin;
+        }
+
+        @Override
+        public String getIdentifier() {
+            return origin.getIdentifier();
+        }
+
+        @Override
+        public void setIdentifier(String identifier) {
+            throw new UnsupportedOperationException("cannot rename synthetic container");
+        }
+    }
+
+    static class BasicAtomContainer extends AbstractBasicContainer implements AtomContainer {
+        private final List<Atom> atoms;
+
+        BasicAtomContainer(List<Atom> atoms, Protein origin) {
+            super(origin);
+            this.atoms = atoms;
+        }
+
+        @Override
+        public Selection.AtomSelection select() {
+            return Selection.on(this);
+        }
+
+        @Override
+        public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
+            return LinearAlgebra.on(this);
+        }
+
+        @Override
+        public List<Atom> getAtoms() {
+            return atoms;
+        }
+    }
+
+    public static Collector<Group, ?, BasicGroupContainer> toGroupContainer() {
         return Collector.of(GroupContainerConsumer::new,
                 GroupContainerConsumer::accept,
                 GroupContainerConsumer::combine,
@@ -131,11 +187,9 @@ public class StructureCollectors {
             this.groups = new ArrayList<>();
         }
 
-        GroupContainer getContainer() {
-            //TODO clone reasonable here?
-            Chain chain = new Chain(groups.get(0).getParentChain());
-            groups.forEach(chain::addGroup);
-            return chain;
+        BasicGroupContainer getContainer() {
+            return new BasicGroupContainer(groups,
+                    groups.get(0).getParentChain().getParentProtein());
         }
 
         @Override
@@ -149,7 +203,40 @@ public class StructureCollectors {
         }
     }
 
-    public static Collector<Chain, ?, ChainContainer> toChainContainer() {
+    static class BasicGroupContainer extends AbstractBasicContainer implements GroupContainer {
+        private final List<Group> groups;
+        private final List<Atom> atoms;
+
+        BasicGroupContainer(List<Group> groups, Protein origin) {
+            super(origin);
+            this.groups = groups;
+            this.atoms = groups.stream()
+                    .flatMap(Group::atoms)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public Selection.AtomSelection select() {
+            return Selection.on(this);
+        }
+
+        @Override
+        public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
+            return LinearAlgebra.on(this);
+        }
+
+        @Override
+        public List<Group> getGroups() {
+            return groups;
+        }
+
+        @Override
+        public List<Atom> getAtoms() {
+            return atoms;
+        }
+    }
+
+    public static Collector<Chain, ?, BasicChainContainer> toChainContainer() {
         return Collector.of(ChainContainerConsumer::new,
                 ChainContainerConsumer::accept,
                 ChainContainerConsumer::combine,
@@ -164,11 +251,9 @@ public class StructureCollectors {
             this.chains = new ArrayList<>();
         }
 
-        ChainContainer getContainer() {
-            //TODO clone reasonable here?
-            Protein protein = new Protein(chains.get(0).getParentProtein());
-            chains.forEach(protein::addChain);
-            return protein;
+        BasicChainContainer getContainer() {
+            return new BasicChainContainer(chains,
+                    chains.get(0).getParentProtein());
         }
 
         @Override
@@ -181,4 +266,47 @@ public class StructureCollectors {
             return this;
         }
     }
+
+    static class BasicChainContainer extends AbstractBasicContainer implements ChainContainer {
+        private final List<Chain> chains;
+        private final List<Group> groups;
+        private final List<Atom> atoms;
+
+        BasicChainContainer(List<Chain> chains, Protein origin) {
+            super(origin);
+            this.chains = chains;
+            this.groups = chains.stream()
+                    .flatMap(Chain::groups)
+                    .collect(Collectors.toList());
+            this.atoms = groups.stream()
+                    .flatMap(Group::atoms)
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public Selection.AtomSelection select() {
+            return Selection.on(this);
+        }
+
+        @Override
+        public LinearAlgebra.AtomContainerLinearAlgebra calculate() {
+            return LinearAlgebra.on(this);
+        }
+
+        @Override
+        public List<Group> getGroups() {
+            return groups;
+        }
+
+        @Override
+        public List<Atom> getAtoms() {
+            return atoms;
+        }
+
+        @Override
+        public List<Chain> getChains() {
+            return chains;
+        }
+    }
+
 }
