@@ -16,6 +16,15 @@ public class Glutamine extends AminoAcid implements StandardAminoAcid {
     private Atom oe1;
     private Atom ne2;
 
+    public Glutamine(Glutamine glutamine) {
+        super(glutamine);
+        this.cb = glutamine.cb;
+        this.cg = glutamine.cg;
+        this.cd = glutamine.cd;
+        this.oe1 = glutamine.oe1;
+        this.ne2 = glutamine.ne2;
+    }
+
     public Glutamine(ResidueNumber residueNumber,
                      boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

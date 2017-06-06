@@ -15,6 +15,14 @@ public class AsparticAcid extends AminoAcid implements StandardAminoAcid {
     private Atom od1;
     private Atom od2;
 
+    public AsparticAcid(AsparticAcid asparticAcid) {
+        super(asparticAcid);
+        this.cb = asparticAcid.cb;
+        this.cg = asparticAcid.cg;
+        this.od1 = asparticAcid.od1;
+        this.od2 = asparticAcid.od2;
+    }
+
     public AsparticAcid(ResidueNumber residueNumber,
                         boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

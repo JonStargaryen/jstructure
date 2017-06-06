@@ -13,6 +13,12 @@ public class UnknownAminoAcid extends AminoAcid implements StandardAminoAcid {
     private Atom cb;
     private Atom cg;
 
+    public UnknownAminoAcid(UnknownAminoAcid unknownAminoAcid) {
+        super(unknownAminoAcid);
+        this.cb = unknownAminoAcid.cb;
+        this.cg = unknownAminoAcid.cg;
+    }
+
     public UnknownAminoAcid(String threeLetterCode,
                             ResidueNumber residueNumber,
                             boolean ligand) {

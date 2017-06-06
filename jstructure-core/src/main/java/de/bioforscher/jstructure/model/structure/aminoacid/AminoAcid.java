@@ -87,6 +87,15 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     private Atom o;
     private Atom h;
 
+    AminoAcid(AminoAcid aminoAcid) {
+        super(aminoAcid);
+        this.n = aminoAcid.n;
+        this.ca = aminoAcid.ca;
+        this.c = aminoAcid.c;
+        this.o = aminoAcid.o;
+        this.h = aminoAcid.h;
+    }
+
     AminoAcid(String threeLetterCode,
               ResidueNumber residueNumber,
               boolean ligand) {

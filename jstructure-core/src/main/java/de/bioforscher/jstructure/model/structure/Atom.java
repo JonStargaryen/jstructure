@@ -139,8 +139,6 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     /**
      * A unique identifier for each atom in a {@link AtomContainer}.
      * @return a String, e.g. 'CA' or 'CZ'
-     * @see de.bioforscher.jstructure.model.structure.family.AminoAcidFamily#allAtomNames()
-     * @see de.bioforscher.jstructure.model.structure.family.AminoAcidFamily#sideChainAtomNames()
      */
     public String getName() {
         return name;

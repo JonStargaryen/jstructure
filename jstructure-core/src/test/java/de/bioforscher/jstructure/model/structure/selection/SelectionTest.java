@@ -1,9 +1,6 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.aminoacid.Arginine;
 import de.bioforscher.jstructure.model.structure.aminoacid.Phenylalanine;
@@ -31,21 +28,24 @@ public class SelectionTest {
     }
 
     @Test
+    public void shouldSelectAminoAcidsAndReturnAsContainer() {
+        List<Group> groups = protein.select()
+                .aminoAcids()
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+
+        groups.forEach(group -> Assert.assertTrue("group " + group + " of original selected stream is no amino acid, was " + group.getClass().getSimpleName(), group instanceof AminoAcid));
+
+        GroupContainer container = groups.stream()
+                .collect(StructureCollectors.toGroupContainer());
+        container.groups().forEach(group -> Assert.assertTrue("group " + group + " of container stream is no amino acid, was " + group.getClass().getSimpleName(), group instanceof AminoAcid));
+    }
+
+    @Test
     public void shouldRetainParentReferences() {
         Optional<Group> group = protein.select()
                 .chainName("A")
                 .residueNumber(100)
-                .asOptionalGroup();
-
-        System.out.println(group.get().getParentChain().getParentProtein().getIdentifier());
-    }
-
-    @Test
-    public void shouldRetainParentReferencesForIntegerResidueNumber() {
-
-        Optional<Group> group = protein.select()
-                .chainName("A")
-                .residueNumber(new Integer(100))
                 .asOptionalGroup();
 
         System.out.println(group.get().getParentChain().getParentProtein().getIdentifier());

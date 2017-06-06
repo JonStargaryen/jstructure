@@ -35,7 +35,7 @@ class LinkInteractionsToTopologyAndSequenceMotifs {
         Files.lines(Paths.get(StudyConstants.PHD + "data/pdbtm_alpha_nr.list.txt"))
                 // skip header and malformed lines
                 .filter(line -> line.length() == 6)
-                .limit(5)
+                .limit(1)
                 .forEach(LinkInteractionsToTopologyAndSequenceMotifs::handleLine);
     }
 

@@ -16,6 +16,15 @@ public class Lysine extends AminoAcid implements StandardAminoAcid {
     private Atom ce;
     private Atom nz;
 
+    public Lysine(Lysine lysine) {
+        super(lysine);
+        this.cb = lysine.cb;
+        this.cg = lysine.cg;
+        this.cd = lysine.cd;
+        this.ce = lysine.ce;
+        this.nz = lysine.nz;
+    }
+
     public Lysine(ResidueNumber residueNumber,
                   boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

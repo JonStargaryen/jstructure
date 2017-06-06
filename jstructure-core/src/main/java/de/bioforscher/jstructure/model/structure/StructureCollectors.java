@@ -4,8 +4,6 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,21 +15,19 @@ import java.util.stream.Collector;
  * Created by S on 09.11.2016.
  */
 public class StructureCollectors {
-    private static final Logger logger = LoggerFactory.getLogger(StructureCollectors.class);
-
     public static Collector<Atom, ?, double[]> toCentroid() {
-        return Collector.of(CentroidAverager::new,
-                CentroidAverager::accept,
-                CentroidAverager::combine,
-                CentroidAverager::average,
+        return Collector.of(CentroidAverage::new,
+                CentroidAverage::accept,
+                CentroidAverage::combine,
+                CentroidAverage::average,
                 Collector.Characteristics.CONCURRENT);
     }
 
-    static class CentroidAverager implements Consumer<Atom> {
+    static class CentroidAverage implements Consumer<Atom> {
         private double[] total;
         private int count;
 
-        CentroidAverager() {
+        CentroidAverage() {
             this.total = new double[3];
             this.count = 0;
         }
@@ -46,7 +42,7 @@ public class StructureCollectors {
             count++;
         }
 
-        CentroidAverager combine(CentroidAverager other) {
+        CentroidAverage combine(CentroidAverage other) {
             total = LinearAlgebra.on(total).add(other.total).getValue();
             count += other.count;
             return this;
@@ -54,18 +50,18 @@ public class StructureCollectors {
     }
 
     public static Collector<Atom, ?, double[]> toCenterOfMass() {
-        return Collector.of(CenterOfMassAverager::new,
-                CenterOfMassAverager::accept,
-                CenterOfMassAverager::combine,
-                CenterOfMassAverager::average,
+        return Collector.of(CenterOfMassAverage::new,
+                CenterOfMassAverage::accept,
+                CenterOfMassAverage::combine,
+                CenterOfMassAverage::average,
                 Collector.Characteristics.CONCURRENT);
     }
 
-    static class CenterOfMassAverager implements Consumer<Atom> {
+    static class CenterOfMassAverage implements Consumer<Atom> {
         private double[] coordinate;
         private double mass;
 
-        CenterOfMassAverager() {
+        CenterOfMassAverage() {
             this.coordinate = new double[3];
             this.mass = 0;
         }
@@ -80,7 +76,7 @@ public class StructureCollectors {
             mass += atom.getElement().getAtomicMass();
         }
 
-        CenterOfMassAverager combine(CenterOfMassAverager other) {
+        CenterOfMassAverage combine(CenterOfMassAverage other) {
             coordinate = LinearAlgebra.on(coordinate).add(other.coordinate).getValue();
             mass += other.mass;
             return this;

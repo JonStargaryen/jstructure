@@ -17,6 +17,16 @@ public class Histidine extends AminoAcid implements StandardAminoAcid {
     private Atom ce1;
     private Atom ne2;
 
+    public Histidine(Histidine histidine) {
+        super(histidine);
+        this.cb = histidine.cb;
+        this.cg = histidine.cg;
+        this.nd1 = histidine.nd1;
+        this.cd2 = histidine.cd2;
+        this.ce1 = histidine.ce1;
+        this.ne2 = histidine.ne2;
+    }
+
     public Histidine(ResidueNumber residueNumber,
                      boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

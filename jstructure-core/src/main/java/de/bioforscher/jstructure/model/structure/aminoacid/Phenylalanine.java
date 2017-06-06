@@ -18,6 +18,17 @@ public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
     private Atom ce2;
     private Atom cz;
 
+    public Phenylalanine(Phenylalanine phenylalanine) {
+        super(phenylalanine);
+        this.cb = phenylalanine.cb;
+        this.cg = phenylalanine.cg;
+        this.cd1 = phenylalanine.cd1;
+        this.cd2 = phenylalanine.cd2;
+        this.ce1 = phenylalanine.ce1;
+        this.ce2 = phenylalanine.ce2;
+        this.cz = phenylalanine.cz;
+    }
+
     public Phenylalanine(ResidueNumber residueNumber,
                          boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

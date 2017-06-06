@@ -15,6 +15,14 @@ public class Leucine extends AminoAcid implements StandardAminoAcid {
     private Atom cd1;
     private Atom cd2;
 
+    public Leucine(Leucine leucine) {
+        super(leucine);
+        this.cb = leucine.cb;
+        this.cg = leucine.cg;
+        this.cd1 = leucine.cd1;
+        this.cd2 = leucine.cd2;
+    }
+
     public Leucine(ResidueNumber residueNumber,
                    boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

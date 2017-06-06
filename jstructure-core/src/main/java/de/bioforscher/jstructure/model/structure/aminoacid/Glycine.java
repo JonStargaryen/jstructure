@@ -11,6 +11,10 @@ public class Glycine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "GLY";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
 
+    public Glycine(Glycine glycine) {
+        super(glycine);
+    }
+
     public Glycine(ResidueNumber residueNumber,
                    boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

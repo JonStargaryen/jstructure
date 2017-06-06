@@ -13,6 +13,12 @@ public class Serine extends AminoAcid implements StandardAminoAcid {
     private Atom cb;
     private Atom og;
 
+    public Serine(Serine serine) {
+        super(serine);
+        this.cb = serine.cb;
+        this.og = serine.og;
+    }
+
     public Serine(ResidueNumber residueNumber,
                   boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

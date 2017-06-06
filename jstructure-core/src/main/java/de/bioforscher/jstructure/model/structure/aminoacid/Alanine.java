@@ -12,6 +12,11 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
     private Atom cb;
 
+    public Alanine(Alanine alanine) {
+        super(alanine);
+        this.cb = alanine.cb;
+    }
+
     public Alanine(ResidueNumber residueNumber,
                    boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

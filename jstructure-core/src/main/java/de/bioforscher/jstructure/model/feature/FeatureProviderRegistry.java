@@ -34,7 +34,7 @@ public class FeatureProviderRegistry {
 
         for(Class<?> annotatedFeatureProvider : annotatedFeatureProviders) {
             FeatureProvider annotation = annotatedFeatureProvider.getDeclaredAnnotation(FeatureProvider.class);
-            logger.info("registering provider {} with priority {}",
+            logger.debug("registering provider {} with priority {}",
                     annotatedFeatureProvider.getSimpleName(),
                     annotation.priority());
 

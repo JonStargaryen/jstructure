@@ -19,6 +19,18 @@ public class Tyrosine extends AminoAcid implements StandardAminoAcid {
     private Atom cz;
     private Atom oh;
 
+    public Tyrosine(Tyrosine tyrosine) {
+        super(tyrosine);
+        this.cb = tyrosine.cb;
+        this.cg = tyrosine.cg;
+        this.cd1 = tyrosine.cd1;
+        this.cd2 = tyrosine.cd2;
+        this.ce1 = tyrosine.ce1;
+        this.ce2 = tyrosine.ce2;
+        this.cz = tyrosine.cz;
+        this.oh = tyrosine.oh;
+    }
+
     public Tyrosine(ResidueNumber residueNumber,
                     boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

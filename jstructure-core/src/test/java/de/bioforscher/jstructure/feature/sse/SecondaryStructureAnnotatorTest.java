@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.feature.sse;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.structure.Group;
@@ -24,11 +22,17 @@ import java.util.stream.Collectors;
  */
 public class SecondaryStructureAnnotatorTest {
     private static final String ID = "1brr";
-    private AbstractFeatureProvider featureProvider;
+    private SecondaryStructureAnnotator featureProvider;
 
     @Before
     public void setup() {
-        featureProvider = FeatureProviderRegistry.resolve(SecondaryStructure.class);
+        featureProvider = new SecondaryStructureAnnotator();
+    }
+
+    @Test
+    public void testTorsionAngleComputationForResiduesInDifferentChains() {
+        // should ignore amino acids in different chains
+        featureProvider.process(ProteinParser.source("4cqn").parse());
     }
 
     @Test

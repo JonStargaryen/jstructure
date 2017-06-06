@@ -14,6 +14,13 @@ public class Valine extends AminoAcid implements StandardAminoAcid {
     private Atom cg1;
     private Atom cg2;
 
+    public Valine(Valine valine) {
+        super(valine);
+        this.cb = valine.cb;
+        this.cg1 = valine.cg1;
+        this.cg2 = valine.cg2;
+    }
+
     public Valine(ResidueNumber residueNumber,
                   boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);

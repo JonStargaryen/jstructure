@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
+import de.bioforscher.jstructure.model.structure.ResidueNumber;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -15,6 +15,15 @@ public class Arginine extends AminoAcid implements StandardAminoAcid {
     private Atom cd;
     private Atom ne;
     private Atom cz;
+
+    public Arginine(Arginine arginine) {
+        super(arginine);
+        this.cb = arginine.cb;
+        this.cg = arginine.cg;
+        this.cd = arginine.cd;
+        this.ne = arginine.ne;
+        this.cz = arginine.cz;
+    }
 
     public Arginine(ResidueNumber residueNumber,
                     boolean ligand) {

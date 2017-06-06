@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
+import de.bioforscher.jstructure.model.structure.ResidueNumber;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -14,6 +14,14 @@ public class Isoleucine extends AminoAcid implements StandardAminoAcid {
     private Atom cg1;
     private Atom cg2;
     private Atom cd1;
+
+    public Isoleucine(Isoleucine isoleucine) {
+        super(isoleucine);
+        this.cb = isoleucine.cb;
+        this.cg1 = isoleucine.cg1;
+        this.cg2 = isoleucine.cg2;
+        this.cd1 = isoleucine.cd1;
+    }
 
     public Isoleucine(ResidueNumber residueNumber,
                       boolean ligand) {

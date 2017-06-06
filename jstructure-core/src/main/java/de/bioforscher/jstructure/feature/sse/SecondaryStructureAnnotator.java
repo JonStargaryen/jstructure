@@ -7,10 +7,7 @@ import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.aminoacid.Proline;
 import de.bioforscher.jstructure.model.structure.selection.SelectionException;
@@ -46,7 +43,6 @@ import java.util.stream.Collectors;
 @FeatureProvider(provides = SecondaryStructure.class)
 public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
-    public static final String SECONDARY_STRUCTURE_STATES = "SECONDARY_STRUCTURE_STATES";
     /**
      * DSSP assigns helices one getResidue shorter at each end, because the
      * residues at (i-1) and (i+n+1) are not assigned helix type although they
@@ -89,7 +85,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        List<AminoAcid> residues = protein.aminoAcids()
+        protein.chainsWithAminoAcids().forEach(this::processInternally);
+    }
+
+    private void processInternally(Chain chain) {
+        List<AminoAcid> residues = chain.aminoAcids()
                 .collect(Collectors.toList());
         List<BetaBridge> bridges = new ArrayList<>();
         List<Ladder> ladders = new ArrayList<>();
@@ -104,7 +104,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         detectBends(residues);
         detectStrands(residues, ladders, bridges);
 
-        protein.clearPseudoAtoms();
+        chain.clearPseudoAtoms();
     }
 
     private void detectStrands(List<AminoAcid> residues, List<Ladder> ladders, List<BetaBridge> bridges) {
@@ -205,7 +205,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                 (l2.getConnectedTo() == 0));
 
         if(!bulge) {
-            return bulge;
+            return false;
         }
 
         switch(l1.getBtype()){
@@ -614,14 +614,18 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             AminoAcid res1 = residues.get(i);
             AminoAcid res2 = residues.get(i + 1);
 
-            TorsionAngles torsionAngles = new TorsionAngles(res1, res2);
+            try {
+                TorsionAngles torsionAngles = new TorsionAngles(res1, res2);
 
-            SecondaryStructure state1 = getState(res1);
-            SecondaryStructure state2 = getState(res2);
+                SecondaryStructure state1 = getState(res1);
+                SecondaryStructure state2 = getState(res2);
 
-            state2.setPhi(torsionAngles.getPhi());
-            state1.setPsi(torsionAngles.getPsi());
-            state1.setOmega(torsionAngles.getOmega());
+                state2.setPhi(torsionAngles.getPhi());
+                state1.setPsi(torsionAngles.getPsi());
+                state1.setOmega(torsionAngles.getOmega());
+            } catch (SelectionException e) {
+                logger.debug(e.getLocalizedMessage());
+            }
         }
     }
 

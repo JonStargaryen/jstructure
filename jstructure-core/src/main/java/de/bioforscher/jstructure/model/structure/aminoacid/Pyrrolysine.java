@@ -24,6 +24,23 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
     private Atom cg;
     private Atom cb;
 
+    public Pyrrolysine(Pyrrolysine pyrrolysine) {
+        super(pyrrolysine);
+        this.cb2 = pyrrolysine.cb2;
+        this.cg2 = pyrrolysine.cg2;
+        this.cd2 = pyrrolysine.cd2;
+        this.ce2 = pyrrolysine.ce2;
+        this.n2 = pyrrolysine.n2;
+        this.ca2 = pyrrolysine.ca2;
+        this.c2 = pyrrolysine.c2;
+        this.o2 = pyrrolysine.o2;
+        this.nz = pyrrolysine.nz;
+        this.ce = pyrrolysine.ce;
+        this.cd = pyrrolysine.cd;
+        this.cg = pyrrolysine.cg;
+        this.cb = pyrrolysine.cb;
+    }
+
     public Pyrrolysine(ResidueNumber residueNumber, boolean ligand) {
         super(GROUP_PROTOTYPE, residueNumber, ligand);
     }

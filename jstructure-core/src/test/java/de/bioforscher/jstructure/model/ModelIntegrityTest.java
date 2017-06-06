@@ -1,10 +1,8 @@
 package de.bioforscher.jstructure.model;
 
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.aminoacid.Asparagine;
-import de.bioforscher.jstructure.model.structure.aminoacid.Histidine;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
@@ -26,31 +24,23 @@ public class ModelIntegrityTest {
     }
 
     @Test
-    public void shouldGetGroupCopy() {
-        GroupContainer copiedGroups = protein.select()
-                .chainName("A", "C")
-                .groupName(Asparagine.THREE_LETTER_CODE)
-                .asGroupContainer()
-                .createCopy();
-        Assert.assertTrue(copiedGroups instanceof Chain);
-        System.out.println(copiedGroups.getPdbRepresentation());
+    public void testGroupCreateCopy() {
+        AtomContainer groupOriginal = protein.getGroups().get(0);
+        AtomContainer groupCopy = groupOriginal.createCopy();
+        Assert.assertTrue(groupCopy instanceof Group);
     }
 
     @Test
-    public void shouldGetAtomCopy() {
-        AtomContainer clonedSelectedAtoms = protein.select()
-                .chainName("A", "B")
-                .aminoAcids()
-                .groupName(Histidine.THREE_LETTER_CODE)
-                .atomName(AminoAcid.ALPHA_CARBON_NAME)
-                .asAtomContainer()
+    public void testChainCreateCopy() {
+        GroupContainer chainCopy = protein.getChains()
+                .get(0)
                 .createCopy();
-        System.out.println(clonedSelectedAtoms.getPdbRepresentation());
+        Assert.assertTrue(chainCopy instanceof Chain);
     }
 
     @Test
-    public void shouldGetProteinCopy() {
-        ChainContainer copiedProtein = protein.createCopy();
-        Assert.assertTrue(copiedProtein instanceof Protein);
+    public void testProteinCreateCopy() {
+        ChainContainer proteinCopy = protein.createCopy();
+        Assert.assertTrue(proteinCopy instanceof Protein);
     }
 }
