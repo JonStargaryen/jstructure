@@ -23,7 +23,7 @@ import java.nio.file.Path;
  */
 public class ExternalResourceDownloader {
     public static void main(String[] args) throws IOException {
-        MembraneConstants.getIdsOfPdbtmAlphaNrList()
+        MembraneConstants.PdbtmAlphaNr.getIds()
                 .forEach(ExternalResourceDownloader::handleLine);
     }
 

@@ -1,6 +1,8 @@
 package studies.membrane;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifContainer;
@@ -38,19 +40,6 @@ public class MembraneConstants extends StudyConstants {
     private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR = new OrientationsOfProteinsInMembranesAnnotator();
     private static final SequenceMotifAnnotator SEQUENCE_MOTIF_ANNOTATOR = new SequenceMotifAnnotator();
 
-    public static Stream<String> getIdsOfPdbtmAlphaNrList() {
-        return lines(PDBTM_ALPHA_NR_LIST)
-                // skip header and malformed lines
-                .filter(line -> line.length() == 6 && !line.endsWith("_"));
-    }
-
-    public static Stream<Chain> getChainsOfPdbtmAlphaNrList() {
-        return getIdsOfPdbtmAlphaNrList()
-                .map(MembraneConstants::mapToOptionalChain)
-                .filter(Optional::isPresent)
-                .map(Optional::get);
-    }
-
     private static Optional<Chain> mapToOptionalChain(String id) {
         try {
             System.out.println("fetching " + id);
@@ -77,29 +66,72 @@ public class MembraneConstants extends StudyConstants {
         }
     }
 
-    public static Stream<AminoAcid> getAminoAcidsOfPdbtmAlphaNrList() {
-        return getChainsOfPdbtmAlphaNrList()
-                .flatMap(Chain::aminoAcids);
-    }
+    public static class PdbtmAlphaNr {
+        public static Stream<String> getIds() {
+            return lines(PDBTM_ALPHA_NR_LIST)
+                    // skip header and malformed lines
+                    .filter(line -> line.length() == 6 && !line.endsWith("_"));
+        }
 
-    public static Stream<AminoAcid> getAminoAcidsOfPdbtmAlphaNrListTransmembrane() {
-        return getAminoAcidsOfPdbtmAlphaNrList()
-                .filter(aminoAcid -> aminoAcid.getParentChain()
-                        .getParentProtein()
-                        .getFeatureContainer()
-                        .getFeature(MembraneContainer.class)
-                        .isTransmembraneGroup(aminoAcid));
-    }
+        public static Stream<Chain> getChains() {
+            return getIds()
+                    .map(MembraneConstants::mapToOptionalChain)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get);
+        }
 
-    public static Stream<SequenceMotif> getSequenceMotifsOfPdbtmAlphaNrListTransmembrane() {
-        return getChainsOfPdbtmAlphaNrList()
-                .map(Chain::getFeatureContainer)
-                .map(featureContainer -> featureContainer.getFeature(SequenceMotifContainer.class))
-                .map(SequenceMotifContainer::getSequenceMotifs)
-                .flatMap(Collection::stream)
-                // filter for tm
-                .filter(sequenceMotif -> sequenceMotif.getAminoAcids()
-                        .stream()
-                        .allMatch(aminoAcid -> aminoAcid.getFeatureContainer().getFeature(Topology.class).isTransmembrane()));
+        public static Stream<AminoAcid> getAminoAcids() {
+            return getChains()
+                    .flatMap(Chain::aminoAcids);
+        }
+
+        public static Stream<AminoAcid> getAminoAcidsTransmembrane() {
+            return getAminoAcids()
+                    .filter(aminoAcid -> aminoAcid.getParentChain()
+                            .getParentProtein()
+                            .getFeatureContainer()
+                            .getFeature(MembraneContainer.class)
+                            .isTransmembraneGroup(aminoAcid));
+        }
+
+        public static Stream<SequenceMotif> getSequenceMotifs() {
+            return getChains()
+                    .map(Chain::getFeatureContainer)
+                    .map(featureContainer -> featureContainer.getFeature(SequenceMotifContainer.class))
+                    .map(SequenceMotifContainer::getSequenceMotifs)
+                    .flatMap(Collection::stream);
+        }
+
+        public static Stream<SequenceMotif> getSequenceMotifsTransmembrane() {
+            return getSequenceMotifs()
+                    // filter for tm
+                    .filter(sequenceMotif -> sequenceMotif.getAminoAcids()
+                            .stream()
+                            .allMatch(aminoAcid -> aminoAcid.getFeatureContainer().getFeature(Topology.class).isTransmembrane()));
+        }
+
+        public static Stream<PLIPInteraction> getInteractions() {
+            return getChains()
+                    .map(Chain::getFeatureContainer)
+                    .map(featureContainer -> featureContainer.getFeature(PLIPInteractionContainer.class))
+                    .map(PLIPInteractionContainer::getInteractions)
+                    .flatMap(Collection::stream);
+        }
+
+        public static Stream<PLIPInteraction> getInteractionsTransmembrane() {
+            return getInteractions()
+                    .filter(plipInteraction -> plipInteraction.getPartner1().isAminoAcid() && plipInteraction.getPartner2().isAminoAcid())
+                    .filter(plipInteraction -> plipInteraction.getPartner1().getFeatureContainer().getFeature(Topology.class).isTransmembrane() &&
+                        plipInteraction.getPartner2().getFeatureContainer().getFeature(Topology.class).isTransmembrane());
+        }
+
+        public static Stream<PLIPInteraction> getInteractionsBetweenTransmembraneHelices() {
+            return getInteractionsTransmembrane()
+                    // filter for interactions of different parts of transmembrane helices
+                    .filter(plipInteraction -> {
+                        MembraneContainer membraneContainer = plipInteraction.getPartner1().getParentChain().getParentProtein().getFeatureContainer().getFeature(MembraneContainer.class);
+                        return membraneContainer.getEmbeddingTransmembraneSegment(plipInteraction.getPartner1()) != membraneContainer.getEmbeddingTransmembraneSegment(plipInteraction.getPartner2());
+                    });
+        }
     }
 }

@@ -3,9 +3,11 @@ package de.bioforscher.jstructure.feature.topology;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents the membrane layer of proteins as a set of 2 layers of points.
@@ -76,13 +78,16 @@ public class MembraneContainer extends FeatureContainerEntry {
     }
 
     public boolean isTransmembraneGroup(Group group) {
+        return getEmbeddingTransmembraneSegment(group).isPresent();
+    }
+
+    public Optional<IntegerRange> getEmbeddingTransmembraneSegment(Group group) {
         int residueNumber = group.getResidueNumber().getResidueNumber();
         return transMembraneHelices.stream()
                 .filter(transMembraneSubunit -> transMembraneSubunit.getChainId().equals(group.getParentChain().getChainId().getChainId()))
                 .map(TransMembraneSubunit::getSegments)
                 .flatMap(Collection::stream)
-                .anyMatch(range -> range.getLeft() <= residueNumber && range.getRight() >= residueNumber);
+                .filter(range -> range.getLeft() <= residueNumber && range.getRight() >= residueNumber)
+                .findFirst();
     }
-
-    //TODO a class for the topology of individual groups
 }

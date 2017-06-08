@@ -12,17 +12,17 @@ import java.util.stream.Collectors;
  */
 public class T02_StatisticsByTopology {
     public static void main(String[] args) {
-        Map<Boolean, StatisticsCollector.OccurrenceSummary> occurrences = MembraneConstants.getAminoAcidsOfPdbtmAlphaNrList()
+        Map<Boolean, StatisticsCollector.AminoAcidSummary> occurrences = MembraneConstants.PdbtmAlphaNr.getAminoAcids()
                 .sequential()
                 .collect(Collectors.partitioningBy(aminoAcid -> aminoAcid
                         .getParentChain()
                         .getParentProtein()
                         .getFeatureContainer()
                         .getFeature(MembraneContainer.class)
-                        .isTransmembraneGroup(aminoAcid), StatisticsCollector.toOccurrenceSummary()));
+                        .isTransmembraneGroup(aminoAcid), StatisticsCollector.toAminoAcidSummary()));
 
         MembraneConstants.write(MembraneConstants.PDBTM_STATISTICS_PATH.resolve("global_by_topology.tsv"),
-                "header\t" + StatisticsCollector.OccurrenceSummary.getHeaderLine() + System.lineSeparator() +
+                "header\t" + occurrences.get(true).getHeaderLine() + System.lineSeparator() +
                 "tm\t" + occurrences.get(true).getOccurrenceLine() + System.lineSeparator() +
                 "ntm\t" + occurrences.get(false).getOccurrenceLine());
     }

@@ -16,10 +16,10 @@ import studies.membrane.MembraneConstants;
  */
 public class T01_GeneralStatistics {
     public static void main(String[] args) {
-        String output = MembraneConstants.getAminoAcidsOfPdbtmAlphaNrList()
+        String output = MembraneConstants.PdbtmAlphaNr.getAminoAcids()
                 .sequential()
-                .collect(StatisticsCollector.toOccurrenceSummary())
-                .toString();
+                .collect(StatisticsCollector.toAminoAcidSummary())
+                .getLine();
 
         MembraneConstants.write(MembraneConstants.PDBTM_STATISTICS_PATH.resolve("global.tsv"), output);
     }

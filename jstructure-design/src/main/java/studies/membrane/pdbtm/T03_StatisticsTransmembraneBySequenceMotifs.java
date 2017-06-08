@@ -14,20 +14,20 @@ import java.util.stream.Stream;
  */
 public class T03_StatisticsTransmembraneBySequenceMotifs {
     public static void main(String[] args) {
-        Map<SequenceMotifDefinition, StatisticsCollector.OccurrenceSummary> statistics = new HashMap<>();
+        Map<SequenceMotifDefinition, StatisticsCollector.AminoAcidSummary> statistics = new HashMap<>();
         Stream.of(SequenceMotifDefinition.values())
-                .forEach(sequenceMotifDefinition -> statistics.put(sequenceMotifDefinition, new StatisticsCollector.OccurrenceSummary()));
-        MembraneConstants.getSequenceMotifsOfPdbtmAlphaNrListTransmembrane()
+                .forEach(sequenceMotifDefinition -> statistics.put(sequenceMotifDefinition, new StatisticsCollector.AminoAcidSummary()));
+        MembraneConstants.PdbtmAlphaNr.getSequenceMotifsTransmembrane()
                 .sequential()
                 .forEach(sequenceMotif -> {
-                    StatisticsCollector.OccurrenceSummary occurrenceSummary = statistics.get(sequenceMotif.getMotifDefinition());
-                    sequenceMotif.getAminoAcids().forEach(occurrenceSummary);
+                    StatisticsCollector.AminoAcidSummary aminoAcidSummary = statistics.get(sequenceMotif.getMotifDefinition());
+                    sequenceMotif.getAminoAcids().forEach(aminoAcidSummary);
                 });
 
         String output = statistics.entrySet().stream()
                 .map(entry -> entry.getKey().name() + "\t" + entry.getValue().getOccurrenceLine())
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "motif\t" + StatisticsCollector.OccurrenceSummary.getHeaderLine(),
+                        "motif\t" + statistics.values().iterator().next().getHeaderLine() + System.lineSeparator(),
                         ""));
 
         MembraneConstants.write(MembraneConstants.PDBTM_STATISTICS_PATH.resolve("transmembrane_by_sequenceMotif.tsv"), output);

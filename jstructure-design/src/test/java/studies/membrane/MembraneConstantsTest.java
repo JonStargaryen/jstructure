@@ -14,7 +14,7 @@ public class MembraneConstantsTest {
     @Test
     @Ignore("long creation of PDBTM data set skipped")
     public void getChainsOfPdbtmAlphaNrList() throws Exception {
-        MembraneConstants.getChainsOfPdbtmAlphaNrList()
+        MembraneConstants.PdbtmAlphaNr.getChains()
                 .forEach(chain -> {
                     System.out.println(chain.getChainId().getFullName());
                     chain.getFeatureContainer().getFeature(PLIPInteractionContainer.class);

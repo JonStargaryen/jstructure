@@ -1,6 +1,6 @@
 package studies.membrane.pdbtm;
 
-import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.interactions.*;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructure;
@@ -21,15 +21,137 @@ import java.util.stream.Stream;
  * Created by bittrich on 6/7/17.
  */
 public class StatisticsCollector {
-    public static Collector<AminoAcid, ?, OccurrenceSummary> toOccurrenceSummary() {
-        return Collector.of(OccurrenceSummary::new,
-                OccurrenceSummary::accept,
-                OccurrenceSummary::combine,
+    public static Collector<PLIPInteraction, ?, InteractingAminoAcidSummary> toInteractingAminoAcidSummary() {
+        return Collector.of(InteractingAminoAcidSummary::new,
+                InteractingAminoAcidSummary::accept,
+                InteractingAminoAcidSummary::combine,
                 Function.identity(),
                 Collector.Characteristics.CONCURRENT);
     }
 
-    static class OccurrenceSummary implements Consumer<AminoAcid> {
+    interface CustomCollector {
+        String getOccurrenceLine();
+
+        String getHeaderLine();
+
+        default String getLine() {
+            return getHeaderLine() + System.lineSeparator() + getOccurrenceLine();
+        }
+
+        default int[] addVectors(int[] vector1, int[] vector2) {
+            int[] result = new int[vector1.length];
+            for(int index = 0; index <= result.length; index++) {
+                result[index] = vector1[index] + vector2[index];
+            }
+            return result;
+        }
+    }
+
+    static class InteractingAminoAcidSummary implements Consumer<PLIPInteraction>, CustomCollector {
+        private int count = 0;
+        private int[] motifs = new int[SequenceMotifDefinition.values().length];
+        //                                           a, y, m, c, s, l, w
+        private int[] interactionTypes = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+        //                                          b, s, m
+        private int[] interactingParts = new int[] { 0, 0, 0 };
+        private boolean normalized = false;
+
+        @Override
+        public void accept(PLIPInteraction plipInteraction) {
+            SequenceMotifContainer sequenceMotifContainer = plipInteraction
+                    .getPartner1()
+                    .getParentChain()
+                    .getParentProtein()
+                    .getFeatureContainer()
+                    .getFeature(SequenceMotifContainer.class);
+
+            count++;
+
+            // sequence motifs
+            sequenceMotifContainer.getEmbeddingSequenceMotifsFor(plipInteraction.getPartner1()).getSequenceMotifs()
+                    .forEach(sequenceMotif -> motifs[sequenceMotif.getMotifDefinition().ordinal()]++);
+            sequenceMotifContainer.getEmbeddingSequenceMotifsFor(plipInteraction.getPartner2()).getSequenceMotifs()
+                    .forEach(sequenceMotif -> motifs[sequenceMotif.getMotifDefinition().ordinal()]++);
+
+            // interaction type
+            if(plipInteraction instanceof HalogenBond) {
+                interactionTypes[0]++;
+            } else if(plipInteraction instanceof HydrogenBond) {
+                interactionTypes[1]++;
+            } else if(plipInteraction instanceof MetalComplex) {
+                interactionTypes[2]++;
+            } else if(plipInteraction instanceof PiCationInteraction) {
+                interactionTypes[3]++;
+            } else if(plipInteraction instanceof PiStacking) {
+                interactionTypes[4]++;
+            } else if(plipInteraction instanceof SaltBridge) {
+                interactionTypes[5]++;
+            } else {
+                interactionTypes[6]++;
+            }
+
+            // interacting atoms
+            if(plipInteraction.isBackboneInteraction()) {
+                interactingParts[0]++;
+            } else if(plipInteraction.isSideChainInteraction()) {
+                interactingParts[1]++;
+            } else {
+                interactingParts[2]++;
+            }
+        }
+
+        InteractingAminoAcidSummary combine(InteractingAminoAcidSummary other) {
+            count += other.count;
+            motifs = addVectors(motifs, other.motifs);
+            interactionTypes = addVectors(interactionTypes, other.interactionTypes);
+            interactingParts = addVectors(interactingParts, other.interactingParts);
+            return this;
+        }
+
+        @Override
+        public String getOccurrenceLine() {
+            if(!normalized) {
+                normalize();
+            }
+
+            return count + "\t" +
+                    IntStream.of(motifs)
+                            .mapToObj(String::valueOf)
+                            .collect(Collectors.joining("\t")) + "\t" +
+                    IntStream.of(interactionTypes)
+                            .mapToObj(String::valueOf)
+                            .collect(Collectors.joining("\t")) + "\t" +
+                    IntStream.of(interactingParts)
+                            .mapToObj(String::valueOf)
+                            .collect(Collectors.joining("\t"));
+        }
+
+        /**
+         * Normalize occurrence numbers, e.g. by the number of possible interactions or sequence motifs
+         */
+        private void normalize() {
+            //TODO impl
+        }
+
+        @Override
+        public String getHeaderLine() {
+            return "aminoAcids\t" +
+                    Stream.of(SequenceMotifDefinition.values())
+                            .map(SequenceMotifDefinition::name)
+                            .collect(Collectors.joining("\t")) + "\thalogen\thydrogen\t" +
+                    "metal\tpiCation\tpiStacking\tsalt\twater\tbackbone\tsideChain\tmixed";
+        }
+    }
+
+    public static Collector<AminoAcid, ?, AminoAcidSummary> toAminoAcidSummary() {
+        return Collector.of(AminoAcidSummary::new,
+                AminoAcidSummary::accept,
+                AminoAcidSummary::combine,
+                Function.identity(),
+                Collector.Characteristics.CONCURRENT);
+    }
+
+    static class AminoAcidSummary implements Consumer<AminoAcid>, CustomCollector {
         private int count = 0;
         //                                tm, ntm
         private int[] region = new int[] { 0, 0 };
@@ -39,10 +161,10 @@ public class StatisticsCollector {
         //                                           a, y, m, c, s, l, w
         private int[] interactionTypes = new int[] { 0, 0, 0, 0, 0, 0, 0 };
         //                                          b, s, m
-        private int[] interatingParts = new int[] { 0, 0, 0 };
+        private int[] interactingParts = new int[] { 0, 0, 0 };
         private boolean normalized = false;
 
-        OccurrenceSummary() {
+        AminoAcidSummary() {
             this.count = 0;
         }
 
@@ -94,38 +216,26 @@ public class StatisticsCollector {
             groupSpecificInteractionContainer.getInteractions()
                     .forEach(plipInteraction -> {
                         if(plipInteraction.isBackboneInteraction()) {
-                            interatingParts[0]++;
+                            interactingParts[0]++;
                         } else if(plipInteraction.isSideChainInteraction()) {
-                            interatingParts[1]++;
+                            interactingParts[1]++;
                         } else {
-                            interatingParts[2]++;
+                            interactingParts[2]++;
                         }
                     });
         }
 
-        OccurrenceSummary combine(OccurrenceSummary other) {
+        AminoAcidSummary combine(AminoAcidSummary other) {
             count += other.count;
             region = addVectors(region, other.region);
             motifs = addVectors(motifs, other.motifs);
             secondaryStructureElements = addVectors(secondaryStructureElements, other.secondaryStructureElements);
             interactionTypes = addVectors(interactionTypes, other.interactionTypes);
-            interatingParts = addVectors(interatingParts, other.interatingParts);
+            interactingParts = addVectors(interactingParts, other.interactingParts);
             return this;
         }
 
-        private int[] addVectors(int[] vector1, int[] vector2) {
-            int[] result = new int[vector1.length];
-            for(int index = 0; index <= result.length; index++) {
-                result[index] = vector1[index] + vector2[index];
-            }
-            return result;
-        }
-
         @Override
-        public String toString() {
-            return getHeaderLine() + System.lineSeparator() + getOccurrenceLine();
-        }
-
         public String getOccurrenceLine() {
             if(!normalized) {
                 normalize();
@@ -144,19 +254,20 @@ public class StatisticsCollector {
                     IntStream.of(interactionTypes)
                             .mapToObj(String::valueOf)
                             .collect(Collectors.joining("\t")) + "\t" +
-                    IntStream.of(interatingParts)
+                    IntStream.of(interactingParts)
                             .mapToObj(String::valueOf)
                             .collect(Collectors.joining("\t"));
         }
 
         /**
-         * Normalize occurrence numbers
+         * Normalize occurrence numbers, e.g. by the number of possible interactions or sequence motifs
          */
         private void normalize() {
             //TODO impl
         }
 
-        public static String getHeaderLine() {
+        @Override
+        public String getHeaderLine() {
             return "aminoAcids\ttm\tntm\t" +
                     Stream.of(SequenceMotifDefinition.values())
                             .map(SequenceMotifDefinition::name)

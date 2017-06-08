@@ -109,6 +109,13 @@ public class PLIPParser {
             }
         }
 
+        // sanity - PLIP does not recognize chain ids correctly, i.e. 'A' and 'a' are assumed to refer to the same chain
+        for(PLIPInteraction plipInteraction : plipInteractions) {
+            if(plipInteraction.getPartner1().getParentChain() != plipInteraction.getPartner2().getParentChain()) {
+                plipInteractionsToRemove.add(plipInteraction);
+            }
+        }
+
         plipInteractions.removeAll(plipInteractionsToRemove);
 
         return plipInteractions;
