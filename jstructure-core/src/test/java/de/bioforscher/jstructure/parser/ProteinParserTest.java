@@ -41,10 +41,24 @@ public class ProteinParserTest {
     private static final String NON_STANDARD_PDB_ID = "1dw9";
 
     @Test
-    public void shouldHandleDubiousPeptideLinkingGroup() {
-        //TODO impl
-        Assert.fail();
-        System.out.println("2AD");
+    public void shouldSkipLigandParsing() {
+        //TODO move to structure actually containing nucleotides
+        String id = "5GRO";
+        Protein proteinFast = ProteinParser.source(id).minimalParsing(true).parse();
+        List<Group> ligandsFast = proteinFast.select()
+                .ligands()
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+
+        Protein proteinConventional = ProteinParser.source(id).parse();
+        List<Group> ligandsConventional = proteinConventional.select()
+                .ligands()
+                .asFilteredGroups()
+                .collect(Collectors.toList());
+
+        Assert.assertEquals("amino acids should match in size", proteinConventional.aminoAcids().count(), proteinFast.aminoAcids().count());
+        Assert.assertEquals("nucleotides should match in size", proteinConventional.select().nucleotides().asFilteredGroups().count(), proteinFast.select().nucleotides().asFilteredGroups().count());
+        Assert.assertEquals("annotated ligands should match", ligandsConventional.size(), ligandsFast.size());
     }
 
     @Test

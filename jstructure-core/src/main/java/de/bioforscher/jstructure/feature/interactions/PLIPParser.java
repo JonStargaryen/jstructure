@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import org.jsoup.nodes.Document;
@@ -57,8 +56,10 @@ public class PLIPParser {
                     while(cause.getCause() != null) {
                         cause = cause.getCause();
                     }
-                    logger.warn("encountered exception during plip parsing: {}", cause);
-                    throw new ComputationException(e);
+                    logger.warn("encountered exception during plip parsing: {} - {}", cause.getClass(), cause.getMessage());
+                    // interactions whose parsing failed are ignore and do not result in a thrown exception
+                    //TODO strict flag
+//                    throw new ComputationException(e);
                 }
             }
         }

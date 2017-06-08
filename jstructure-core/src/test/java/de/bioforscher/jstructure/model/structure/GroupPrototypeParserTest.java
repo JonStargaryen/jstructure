@@ -13,6 +13,16 @@ public class GroupPrototypeParserTest {
     }
 
     @Test
+    public void shouldGetDocumentForAlanine() {
+        System.out.println(GroupPrototypeParser.getDocument("ALA"));
+    }
+
+    @Test
+    public void shouldHandleUnknownLigand() {
+        System.out.println(GroupPrototypeParser.getInstance().getPrototype("UNL"));
+    }
+
+    @Test
     public void s3TAK() {
         System.out.println("3TAK");
     }

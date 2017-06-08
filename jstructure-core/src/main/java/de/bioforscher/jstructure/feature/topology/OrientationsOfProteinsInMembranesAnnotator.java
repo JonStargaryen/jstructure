@@ -15,11 +15,9 @@ import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,7 @@ import java.util.stream.Collectors;
  * Access to the internet resource of the OPM.
  * Created by bittrich on 5/17/17.
  */
-@FeatureProvider(provides = MembraneContainer.class)
+@FeatureProvider(provides = { MembraneContainer.class, Topology.class })
 public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(OrientationsOfProteinsInMembranesAnnotator.class);
     private static final String BASE_URL = "http://opm.phar.umich.edu/";
@@ -35,73 +33,81 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 
     @Override
     protected void processInternally(Protein protein) {
+        Document document = getDocument(protein.getPdbId().getPdbId());
+        processInternally(protein, document, true);
+    }
+
+    public void process(Protein protein, Document document) {
+        processInternally(protein, document, false);
+    }
+
+    private void processInternally(Protein protein, Document document, boolean parseMembraneLayer) {
         try {
-            Document document = getDocument(SEARCH_URL + protein.getPdbId().getPdbId());
+            MembraneContainer membraneContainer = new MembraneContainer(this);
+            // extract general information - that is the first table
+            Element generalDataTable = document.getElementsByClass("data").get(0);
+            Element thicknessTr = generalDataTable.getElementsByTag("tr").get(1);
+            membraneContainer.setHydrophobicThickness(thicknessTr.getElementsByTag("td").get(1).text());
 
-            if(document.text().contains("No matches")) {
-                throw new ComputationException("did not find OPM entry for " + protein.getIdentifier() + " - possibly it is no membrane protein");
+            Element tiltTr = generalDataTable.getElementsByTag("tr").get(2);
+            membraneContainer.setTiltAngle(tiltTr.getElementsByTag("td").get(1).text());
+
+            Element transferTr = generalDataTable.getElementsByTag("tr").get(3);
+            membraneContainer.setDeltaGTransfer(transferTr.getElementsByTag("td").get(1).text());
+
+            Element topologyTr = generalDataTable.getElementsByTag("tr").get(5);
+            membraneContainer.setTopology(topologyTr.getElementsByTag("td").get(1).text());
+
+            // extract trans-membraneContainer helices - second table
+            Element transMembraneSubunitsTable = document.getElementsByClass("data").get(1);
+            List<TransMembraneSubunit> helices;
+            try {
+                helices = transMembraneSubunitsTable.getElementsByTag("tr").stream()
+                        // skip the header
+                        .skip(1)
+                        .map(element -> element.getElementsByTag("td").get(0))
+                        .map(Element::text)
+                        .map(TransMembraneSubunit::new)
+                        .collect(Collectors.toList());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                // happens for pdbId: '2k21', a structure without TM-segments but rather a statement
+                helices = new ArrayList<>();
             }
+            membraneContainer.setTransMembraneHelices(helices);
 
-            // create global membrane object - 3rd link points to download
-            String downloadLink = document.getElementById("caption").getElementsByTag("a").get(2).attr("href");
-            try (InputStreamReader inputStreamReader = new InputStreamReader(new URL(BASE_URL + downloadLink).openStream())) {
-                try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                    byte[] bytes = bufferedReader.lines()
-                            .collect(Collectors.joining(System.lineSeparator()))
-                            .getBytes();
+            if (parseMembraneLayer) {
+                // create global membrane object - 3rd link points to download
+                String downloadLink = document.getElementById("caption").getElementsByTag("a").get(2).attr("href");
+                try (InputStreamReader inputStreamReader = new InputStreamReader(new URL(BASE_URL + downloadLink).openStream())) {
+                    try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                        byte[] bytes = bufferedReader.lines()
+                                .collect(Collectors.joining(System.lineSeparator()))
+                                .getBytes();
 
-                    // parse protein
-                    Protein opmProtein = ProteinParser.source(new ByteArrayInputStream(bytes))
-                            .forceProteinName(ProteinIdentifier.createFromPdbId(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
-                            .parse();
-                    MembraneContainer membraneContainer = new MembraneContainer(this);
+                        // parse protein
+                        Protein opmProtein = ProteinParser.source(new ByteArrayInputStream(bytes))
+                                .forceProteinName(ProteinIdentifier.createFromPdbId(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
+                                .parse();
 
-                    // superimpose opm protein onto instance of the original protein
-                    //TODO this alignment is by no means perfect, but works for a first glance
-                    SVDSuperimposer.ALPHA_CARBON_SVD_INSTANCE
-                            .align(protein.select()
-                                    .aminoAcids()
-                                    .asGroupContainer(),
-                                   opmProtein.select()
-                                    .aminoAcids()
-                                    .asGroupContainer())
-                            .transform(opmProtein);
+                        // superimpose opm protein onto instance of the original protein
+                        //TODO this alignment is by no means perfect, but works for a first glance
+                        SVDSuperimposer.ALPHA_CARBON_SVD_INSTANCE
+                                .align(protein.select()
+                                                .aminoAcids()
+                                                .asGroupContainer(),
+                                        opmProtein.select()
+                                                .aminoAcids()
+                                                .asGroupContainer())
+                                .transform(opmProtein);
 
-                    // extract dummy atoms and move them to membraneContainer object
-                    List<double[]> membraneAtoms = opmProtein.atoms()
-                            .map(Atom::getParentGroup)
-                            .filter(group -> group.getThreeLetterCode().equals("DUM"))
-                            .flatMap(Group::atoms)
-                            .map(Atom::getCoordinates)
-                            .collect(Collectors.toList());
-                    membraneContainer.setMembraneAtoms(membraneAtoms);
-
-                    // extract general information - that is the first table
-                    Element generalDataTable = document.getElementsByClass("data").get(0);
-                    Element thicknessTr = generalDataTable.getElementsByTag("tr").get(1);
-                    membraneContainer.setHydrophobicThickness(thicknessTr.getElementsByTag("td").get(1).text());
-
-                    Element tiltTr = generalDataTable.getElementsByTag("tr").get(2);
-                    membraneContainer.setTiltAngle(tiltTr.getElementsByTag("td").get(1).text());
-
-                    Element transferTr = generalDataTable.getElementsByTag("tr").get(3);
-                    membraneContainer.setDeltaGTransfer(transferTr.getElementsByTag("td").get(1).text());
-
-                    Element topologyTr = generalDataTable.getElementsByTag("tr").get(5);
-                    membraneContainer.setTopology(topologyTr.getElementsByTag("td").get(1).text());
-
-                    // extract trans-membraneContainer helices - second table
-                    Element transMembraneSubunitsTable = document.getElementsByClass("data").get(1);
-                    List<TransMembraneSubunit> helices = transMembraneSubunitsTable.getElementsByTag("tr").stream()
-                            // skip the header
-                            .skip(1)
-                            .map(element -> element.getElementsByTag("td").get(0))
-                            .map(Element::text)
-                            .map(TransMembraneSubunit::new)
-                            .collect(Collectors.toList());
-                    membraneContainer.setTransMembraneHelices(helices);
-
-                    protein.getFeatureContainer().addFeature(membraneContainer);
+                        // extract dummy atoms and move them to membraneContainer object
+                        List<double[]> membraneAtoms = opmProtein.atoms()
+                                .map(Atom::getParentGroup)
+                                .filter(group -> group.getThreeLetterCode().equals("DUM"))
+                                .flatMap(Group::atoms)
+                                .map(Atom::getCoordinates)
+                                .collect(Collectors.toList());
+                        membraneContainer.setMembraneAtoms(membraneAtoms);
 
 //                    //TODO remove, used to evaluate alignment manually
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getPdbRepresentation().getBytes());
@@ -116,14 +122,35 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 //                            .asGroupContainer()
 //                            .getPdbRepresentation()
 //                            .getBytes());
+                    }
                 }
             }
-        } catch (IOException e) {
-            throw new ComputationException("failed to fetch OPM file", e);
+
+            protein.getFeatureContainer().addFeature(membraneContainer);
+            protein.aminoAcids()
+                    .forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new Topology(this,
+                            membraneContainer.isTransmembraneGroup(aminoAcid))));
+        } catch (Exception e) {
+            System.err.println(document.html());
+            throw new ComputationException("failed to fetch or parse OPM file", e);
         }
     }
 
-    Document getDocument(String url) throws IOException {
+    public static Document getDocument(String pdbId) {
+        try {
+            Document document = getDocumentInternal(SEARCH_URL + pdbId);
+
+            if(document.text().contains("No matches")) {
+                throw new ComputationException("did not find OPM entry for " + pdbId + " - possibly it is no membrane protein");
+            }
+
+            return document;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    static Document getDocumentInternal(String url) throws IOException {
         logger.info("fetching OPM annotation from {}", url);
         Document document = Jsoup.connect(url).get();
 
@@ -131,7 +158,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
         if(document.text().contains("Representative structure(s) of this protein: ")) {
             String href = document.getElementById("body").getElementsByTag("a").first().attr("href");
             logger.info("moving to representative structure at {}", href);
-            return getDocument(BASE_URL + href);
+            return getDocumentInternal(BASE_URL + href);
         }
 
         return document;

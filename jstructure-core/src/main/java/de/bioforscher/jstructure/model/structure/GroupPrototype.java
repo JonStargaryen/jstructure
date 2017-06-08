@@ -17,6 +17,7 @@ public class GroupPrototype {
         NA_LINKING,
         // the case for e.g. STA
         PEPTIDE_LIKE,
+        PEPTIDE_TERMINUS,
         SACCHARIDE
     }
 

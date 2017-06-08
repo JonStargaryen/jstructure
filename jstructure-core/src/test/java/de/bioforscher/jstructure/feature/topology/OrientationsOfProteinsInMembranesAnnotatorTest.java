@@ -23,15 +23,43 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
         protein = ProteinParser.source("1brr").parse();
     }
 
+    @Test(expected = ComputationException.class)
+    public void shouldFailForNotPresentProtein() {
+        OrientationsOfProteinsInMembranesAnnotator.getDocument("2ac6");
+    }
+
+    @Test
+    public void shouldHandle2k21() {
+        String id = "2k21";
+        Protein protein = ProteinParser.source(id).parse();
+        annotator.process(protein);
+        MembraneContainer container = protein.getFeatureContainer().getFeature(MembraneContainer.class);
+        Assert.assertEquals(0, container.getTransMembraneHelices().size());
+        Assert.assertTrue(container.getMembraneAtoms().size() > 0);
+    }
+
+    @Test
+    public void shouldHandle3abk() {
+        String id = "3abk";
+        Protein protein = ProteinParser.source(id).parse();
+        Document document = OrientationsOfProteinsInMembranesAnnotator.getDocument(id);
+        annotator.process(protein, document);
+    }
+
+    @Test
+    public void shouldHandle4rz0() {
+        annotator.process(ProteinParser.source("4zr0").parse());
+    }
+
     @Test
     public void shouldMoveToRepresentative() throws IOException {
-        Document document = annotator.getDocument(OrientationsOfProteinsInMembranesAnnotator.SEARCH_URL + "1brr");
+        Document document = OrientationsOfProteinsInMembranesAnnotator.getDocumentInternal(OrientationsOfProteinsInMembranesAnnotator.SEARCH_URL + "1brr");
         Assert.assertTrue(document.text().startsWith("1m0l"));
     }
 
     @Test
     public void shouldFetchResultsDirectly() throws IOException {
-        Document document = annotator.getDocument(OrientationsOfProteinsInMembranesAnnotator.SEARCH_URL + "1m0l");
+        Document document = OrientationsOfProteinsInMembranesAnnotator.getDocumentInternal(OrientationsOfProteinsInMembranesAnnotator.SEARCH_URL + "1m0l");
         Assert.assertTrue(document.text().startsWith("1m0l"));
     }
 

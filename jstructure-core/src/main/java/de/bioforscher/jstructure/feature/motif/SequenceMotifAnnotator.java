@@ -25,13 +25,13 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
         protein.chainsWithAminoAcids()
                 .forEach(chain -> {
             List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-
-            // init with empty containers
-            aminoAcids.forEach(group -> group.getFeatureContainer().addFeature(new SequenceMotifContainer(this)));
+            SequenceMotifContainer chainSpecificSequenceMotifs = new SequenceMotifContainer(this);
 
             int chainLength = aminoAcids.size();
             for (int resNum = 0; resNum < chainLength; resNum++) {
                 AminoAcid startResidue = aminoAcids.get(resNum);
+                // initialize with empty sequence motif container
+                startResidue.getFeatureContainer().addFeature(new SequenceMotifContainer(this));
                 // even though we express 1-letter-codes as Strings, excessive matching is probably much faster when done with chars
                 char startAminoAcid = startResidue.getOneLetterCode().charAt(0);
                 for (SequenceMotifDefinition candidate : SequenceMotifDefinition.values()) {
@@ -67,16 +67,16 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
                             chain.getChainId().getChainId(),
                             startResidue.getResidueNumber().getResidueNumber(),
                             endResidue.getResidueNumber().getResidueNumber(),
-                            residueList.stream()
-                                .map(AminoAcid::getOneLetterCode)
-                                .collect(Collectors.joining()));
+                            residueList);
 
-                    if(!globalList.containsSequenceMotif(sequenceMotif)) {
-                        globalList.addSequenceMotif(sequenceMotif);
+                    if(!chainSpecificSequenceMotifs.containsSequenceMotif(sequenceMotif)) {
+                        chainSpecificSequenceMotifs.addSequenceMotif(sequenceMotif);
                     }
                     logger.debug("found sequence motif: {}", sequenceMotif);
                 }
             }
+            chain.getFeatureContainer().addFeature(chainSpecificSequenceMotifs);
+            chainSpecificSequenceMotifs.getSequenceMotifs().forEach(globalList::addSequenceMotif);
         });
 
         // set global reference to all entries

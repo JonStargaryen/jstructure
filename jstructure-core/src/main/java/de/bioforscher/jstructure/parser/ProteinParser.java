@@ -34,6 +34,7 @@ public class ProteinParser {
     private boolean skipModels;
     private boolean strictMode;
     private boolean skipHydrogens;
+    private boolean minimalParsing;
 
     private Protein protein;
     private StringBuilder titleString;
@@ -46,6 +47,7 @@ public class ProteinParser {
         skipModels = builder.skipModels;
         strictMode = builder.strictMode;
         skipHydrogens = builder.skipHydrogenAtoms;
+        minimalParsing = builder.minimalParsing;
 
         protein = new Protein(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
         // 'initialize' title field as it tends to be split over multiple lines - thus, we have to append previous results when we find further entries
@@ -247,7 +249,8 @@ public class ProteinParser {
     }
 
     private Group createGroup(String pdbName, ResidueNumber residueNumber, boolean ligand) {
-        GroupPrototype prototype = GroupPrototypeParser.getInstance().getPrototype(pdbName);
+        GroupPrototypeParser groupPrototypeParser = minimalParsing ? GroupPrototypeParser.getFastInstance() : GroupPrototypeParser.getInstance();
+        GroupPrototype prototype = groupPrototypeParser.getPrototype(pdbName);
 
         // it is an amino acid
         if(prototype.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING || prototype.getPolymerType() ==
@@ -309,7 +312,11 @@ public class ProteinParser {
         }
 
         // it is neither
-        return new Group(prototype, residueNumber, ligand);
+        Group group = new Group(prototype, residueNumber, ligand);
+        // force the pdbName parsed from the file, otherwise upon unknown ligands (and, thus, missing prototypes) this
+        // information would get lost
+        group.setThreeLetterCode(pdbName);
+        return group;
     }
 
     Protein getProtein() {

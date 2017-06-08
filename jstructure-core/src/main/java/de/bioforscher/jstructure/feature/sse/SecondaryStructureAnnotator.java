@@ -74,7 +74,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * constant for electrostatic energy
      *
      * <pre>
-     *      f  *  q1 *   q2  *  scale
+     *        f *   q1 *   q2 *  scale
      * Q = -332 * 0.42 * 0.20 * 1000.0
      * </pre>
      *
@@ -351,7 +351,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                     int[] thisPair = new int[]{i, j};
                     outList.add(thisPair);
                 } catch (NullPointerException e) {
-                    throw new SelectionException("missing alpha carbons for " + res1 + " or " + res2);
+                    logger.debug("missing alpha carbons for {} or {}", res1, res2);
                 }
             }
         }
@@ -438,7 +438,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                     state.setBend(true);
                 }
             } catch (NullPointerException e) {
-                throw new SelectionException("missing backbone atoms for " + residues.subList(i, i + 3));
+                logger.debug("missing backbone atoms for {}", residues.subList(i, i + 3));
             }
         }
     }
@@ -648,7 +648,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
                         checkAddHBond(res2, res1);
                     }
                 } catch (NullPointerException e) {
-                    throw new SelectionException("missing alpha carbons for " + res1 + " or " + res2);
+                    logger.debug("missing alpha carbons for {} or {}", res1, res2);
                 }
             }
         }
@@ -665,8 +665,12 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             return;
         }
 
-        Pair<AminoAcid, AminoAcid> residuePair = new Pair<>(residue1, residue2);
-        trackHBondEnergy(residuePair, calculateHBondEnergy(residuePair));
+        try {
+            Pair<AminoAcid, AminoAcid> residuePair = new Pair<>(residue1, residue2);
+            trackHBondEnergy(residuePair, calculateHBondEnergy(residuePair));
+        } catch (Exception e) {
+            logger.debug("hbond energy calculation failed because of: {}", e.getMessage());
+        }
     }
 
     private boolean isProline(Group group) {
@@ -751,53 +755,48 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private double calculateHBondEnergy(Pair<AminoAcid, AminoAcid> residuePair) {
         AminoAcid res1 = residuePair.getLeft();
         AminoAcid res2 = residuePair.getRight();
-        try {
-            Atom nAtom = res1.getN();
-            double[] n = nAtom.getCoordinates();
-            double[] h = res1.getH().getCoordinates();
+        Atom nAtom = res1.getN();
+        double[] n = nAtom.getCoordinates();
+        double[] h = res1.getH().getCoordinates();
 
-            Atom oAtom = res2.getO();
-            double[] o = oAtom.getCoordinates();
-            double[] c = res2.getC().getCoordinates();
+        Atom oAtom = res2.getO();
+        double[] o = oAtom.getCoordinates();
+        double[] c = res2.getC().getCoordinates();
 
-            double dno = LinearAlgebra.on(o).distance(n);
-            double dhc = LinearAlgebra.on(c).distance(h);
-            double dho = LinearAlgebra.on(o).distance(h);
-            double dnc = LinearAlgebra.on(c).distance(n);
+        double dno = LinearAlgebra.on(o).distance(n);
+        double dhc = LinearAlgebra.on(c).distance(h);
+        double dho = LinearAlgebra.on(o).distance(h);
+        double dnc = LinearAlgebra.on(c).distance(n);
 
 //        logger.debug("     cccc: " + res1.getResidueNumber() + " " + res1.getAminoAcid() + " " +
 //                res2.getResidueNumber() + " " + res2.getAminoAcid() + String.format( " O (" + oAtom.getPdbSerial() +
 //                ")..N (" + nAtom.getPdbSerial() + "):%4.1f  |  ho:%4.1f - hc:%4.1f + nc:%4.1f - no:%4.1f ", dno, dho,
 //                dhc, dnc, dno));
 
-            // there seems to be a contact!
-            if ((dno < MINDIST) || (dhc < MINDIST) || (dnc < MINDIST) || (dno < MINDIST)) {
-                return HBONDLOWENERGY;
-            }
+        // there seems to be a contact!
+        if ((dno < MINDIST) || (dhc < MINDIST) || (dnc < MINDIST) || (dno < MINDIST)) {
+            return HBONDLOWENERGY;
+        }
 
-            double e1 = Q / dho - Q / dhc;
-            double e2 = Q / dnc - Q / dno;
+        double e1 = Q / dho - Q / dhc;
+        double e2 = Q / dnc - Q / dno;
 
-            double energy = e1 + e2;
+        double energy = e1 + e2;
 
 //        logger.debug(String.format("      N (%d) O(%d): %4.1f : %4.2f ", nAtom.getPdbSerial(),
 //                oAtom.getPdbSerial(), (float) dno, energy));
 
-            // Avoid too strong energy
-            if (energy > HBONDLOWENERGY) {
-                return energy;
-            }
-
-            return HBONDLOWENERGY;
-        } catch (NullPointerException e) {
-            throw new SelectionException("missing backbone atoms for " + residuePair);
+        // Avoid too strong energy
+        if (energy > HBONDLOWENERGY) {
+            return energy;
         }
+
+        return HBONDLOWENERGY;
     }
 
     /**
-     * Calculate the coordinates of the H atoms. They are usually missing in the
-     * PDB files as only few experimental methods allow to resolve their
-     * location.
+     * Calculate the coordinates of the H atoms. They are usually missing in the PDB files as only few experimental
+     * methods allow to resolve their location.
      */
     private void calculateHAtoms(List<AminoAcid> residues) {
         Combinatorics.fragmentsOf(residues, 2)
@@ -839,7 +838,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             fragmentOfSize2.getElement(1).addAtom(new Atom("H", Element.H, xyz));
         } catch (NullPointerException e) {
             //TODO consistent error-handling
-            logger.warn("missing backbone atoms for peptide bond between {} and {} - cannot approximate hydrogen atom position",
+            logger.debug("missing backbone atoms for peptide bond between {} and {} - cannot approximate hydrogen atom position",
                     fragmentOfSize2.getElement(0).getIdentifier(),
                     fragmentOfSize2.getElement(1).getIdentifier());
         }

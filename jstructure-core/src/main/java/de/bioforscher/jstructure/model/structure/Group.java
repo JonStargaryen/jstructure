@@ -78,6 +78,10 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return threeLetterCode;
     }
 
+    public void setThreeLetterCode(String threeLetterCode) {
+        this.threeLetterCode = threeLetterCode;
+    }
+
     public ResidueNumber getResidueNumber() {
         return residueNumber;
     }
@@ -96,7 +100,8 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     public boolean isAminoAcid() {
         return !isLigand() && (getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING || getPolymerType() ==
-                GroupPrototype.PolymerType.PEPTIDE_LIKE);
+                GroupPrototype.PolymerType.PEPTIDE_LIKE || getPolymerType() ==
+                GroupPrototype.PolymerType.PEPTIDE_TERMINUS);
     }
 
     public boolean isNucleotide() {

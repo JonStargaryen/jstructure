@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<PDBx:datablock  datablockName="UNL"
+                 xmlns:PDBx="http://deposit.pdb.org/pdbML/pdbx.xsd"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://deposit.pdb.org/pdbML/pdbx.xsd pdbx.xsd">
+    <PDBx:chem_compCategory>
+        <PDBx:chem_comp id="UNL">
+            <PDBx:name>Unknown ligand</PDBx:name>
+            <PDBx:type>non-polymer</PDBx:type>
+            <PDBx:pdbx_type>HETAIN</PDBx:pdbx_type>
+            <PDBx:pdbx_formal_charge>0</PDBx:pdbx_formal_charge>
+            <PDBx:pdbx_initial_date>2008-04-10</PDBx:pdbx_initial_date>
+            <PDBx:pdbx_modified_date>2008-12-05</PDBx:pdbx_modified_date>
+            <PDBx:pdbx_ambiguous_flag>Y</PDBx:pdbx_ambiguous_flag>
+            <PDBx:pdbx_release_status>REL</PDBx:pdbx_release_status>
+            <PDBx:formula_weight>0.000</PDBx:formula_weight>
+            <PDBx:three_letter_code>UNL</PDBx:three_letter_code>
+            <PDBx:pdbx_model_coordinates_missing_flag>N</PDBx:pdbx_model_coordinates_missing_flag>
+            <PDBx:pdbx_ideal_coordinates_missing_flag>N</PDBx:pdbx_ideal_coordinates_missing_flag>
+            <PDBx:pdbx_processing_site>RCSB</PDBx:pdbx_processing_site>
+        </PDBx:chem_comp>
+    </PDBx:chem_compCategory>
+    <PDBx:pdbx_chem_comp_auditCategory>
+        <PDBx:pdbx_chem_comp_audit comp_id="UNL" action_type="Create component" date="2008-04-10">
+            <PDBx:processing_site>RCSB</PDBx:processing_site>
+        </PDBx:pdbx_chem_comp_audit>
+    </PDBx:pdbx_chem_comp_auditCategory>
+</PDBx:datablock>

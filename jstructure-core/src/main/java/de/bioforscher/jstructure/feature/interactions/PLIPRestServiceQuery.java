@@ -71,7 +71,8 @@ public class PLIPRestServiceQuery {
 
         try (InputStream inputStream = connection.getInputStream()) {
             try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-                return Jsoup.parse(bufferedReader.lines().collect(Collectors.joining(System.lineSeparator())));
+                return Jsoup.parse(bufferedReader.lines()
+                        .collect(Collectors.joining(System.lineSeparator())));
             }
         }
     }

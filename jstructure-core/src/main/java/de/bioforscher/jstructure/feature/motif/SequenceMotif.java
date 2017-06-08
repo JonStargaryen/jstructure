@@ -1,5 +1,10 @@
 package de.bioforscher.jstructure.feature.motif;
 
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * The container object of a found sequence motif.
  * Created by S on 02.10.2016.
@@ -9,14 +14,14 @@ public class SequenceMotif {
     private final String chainId;
     private final int startResidueNumber;
     private final int endResidueNumber;
-    private final String sequence;
+    private final List<AminoAcid> aminoAcids;
 
-    SequenceMotif(SequenceMotifDefinition candidate, String chainId, int startResidueNumber, int endResidueNumber, String sequence) {
+    SequenceMotif(SequenceMotifDefinition candidate, String chainId, int startResidueNumber, int endResidueNumber, List<AminoAcid> aminoAcids) {
         this.motifDefinition = candidate;
         this.chainId = chainId;
         this.startResidueNumber = startResidueNumber;
         this.endResidueNumber = endResidueNumber;
-        this.sequence = sequence;
+        this.aminoAcids = aminoAcids;
     }
 
     public SequenceMotifDefinition getMotifDefinition() {
@@ -36,6 +41,17 @@ public class SequenceMotif {
     }
 
     public String getSequence() {
-        return sequence;
+        return aminoAcids.stream()
+                .map(AminoAcid::getOneLetterCode)
+                .collect(Collectors.joining());
+    }
+
+    public List<AminoAcid> getAminoAcids() {
+        return aminoAcids;
+    }
+
+    @Override
+    public String toString() {
+        return motifDefinition + " " + chainId + "_" + startResidueNumber + "-" + endResidueNumber;
     }
 }

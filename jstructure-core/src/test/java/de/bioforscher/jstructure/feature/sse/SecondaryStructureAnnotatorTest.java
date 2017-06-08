@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Checks whether the ported BioJava DSSP implementation is still in agreement with the original one.
@@ -37,12 +38,24 @@ public class SecondaryStructureAnnotatorTest {
 
     @Test
     public void checkAgreement() throws IOException, StructureException {
-        String id = ID;
+        checkAgreement(ID);
+    }
 
-        String jstructureAnnotation = getSecondaryStructureAnnotation(id);
-        String biojavaAnnotation = getDSSPAnnotatedStructure(id);
+    private void checkAgreement(String id) {
+        try {
+            String jstructureAnnotation = getSecondaryStructureAnnotation(id);
+            String biojavaAnnotation = getDSSPAnnotatedStructure(id);
 
-        Assert.assertEquals(biojavaAnnotation, jstructureAnnotation);
+            Assert.assertEquals(biojavaAnnotation, jstructureAnnotation);
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void checkAgreementForErrorCases() throws IOException, StructureException {
+        Stream.of("1ar1", "3aqp", "4b4a")
+                .forEach(this::checkAgreement);
     }
 
     private String getSecondaryStructureAnnotation(String id) {
