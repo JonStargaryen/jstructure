@@ -1,7 +1,8 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
  * Statistics for transmembrane regions, grouped by interacting atoms.
  * Created by bittrich on 6/8/17.
  */
-public class T05_StatisticsTransmembraneByInteractingAtoms {
+public class T015_StatisticsTransmembraneByInteractingAtoms {
     public static void main(String[] args) {
         Map<String, StatisticsCollector.AminoAcidSummary> statistics = new HashMap<>();
         statistics.put("backbone", new StatisticsCollector.AminoAcidSummary());

@@ -1,7 +1,8 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
  * Statistics now with a split by topology.
  * Created by bittrich on 6/7/17.
  */
-public class T02_StatisticsByTopology {
+public class T012_StatisticsByTopology {
     public static void main(String[] args) {
         Map<Boolean, StatisticsCollector.AminoAcidSummary> occurrences = MembraneConstants.PdbtmAlphaNr.getAminoAcids()
                 .sequential()

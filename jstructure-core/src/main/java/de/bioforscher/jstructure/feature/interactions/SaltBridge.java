@@ -2,10 +2,12 @@ package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * A salt bridge as described by PLIP.
@@ -44,12 +46,14 @@ public class SaltBridge extends PLIPInteraction {
 
     @Override
     public boolean isBackboneInteraction() {
-        return false;
+        return Stream.concat(atoms1.stream(), atoms2.stream())
+                .allMatch(AminoAcid::isBackboneAtom);
     }
 
     @Override
     public boolean isSideChainInteraction() {
-        return true;
+        return Stream.concat(atoms1.stream(), atoms2.stream())
+                .allMatch(AminoAcid::isSideChainAtom);
     }
 
     @Override

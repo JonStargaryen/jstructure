@@ -1,6 +1,7 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
  * Extract interactions between amino acids in different helices, grouped by interacting atoms.
  * Created by bittrich on 6/8/17.
  */
-public class T08_StatisticsForInteractingHelicesByInteractingAtoms {
+public class T018_StatisticsForInteractingHelicesByInteractingAtoms {
     public static void main(String[] args) {
         Map<String, StatisticsCollector.InteractingAminoAcidSummary> statistics = new HashMap<>();
         statistics.put("backbone", new StatisticsCollector.InteractingAminoAcidSummary());

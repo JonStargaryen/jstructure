@@ -1,9 +1,10 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionType;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
  * Statistics for transmembrane regions, grouped by interaction type.
  * Created by bittrich on 6/8/17.
  */
-public class T04_StatisticsTransmembraneByInteractionType {
+public class T014_StatisticsTransmembraneByInteractionType {
     public static void main(String[] args) {
         Map<Class<? extends PLIPInteraction>, StatisticsCollector.AminoAcidSummary> statistics = new HashMap<>();
         Stream.of(PLIPInteractionType.values())

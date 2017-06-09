@@ -50,6 +50,10 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                 BACKBONE_HYDROGEN_NAME.equals(atomName);
     }
 
+    public static boolean isSideChainAtom(Atom atom) {
+        return !isBackboneAtom(atom);
+    }
+
     public enum Family {
         ALANINE(Alanine.class, Alanine.GROUP_PROTOTYPE),
         ARGININE(Arginine.class, Arginine.GROUP_PROTOTYPE),

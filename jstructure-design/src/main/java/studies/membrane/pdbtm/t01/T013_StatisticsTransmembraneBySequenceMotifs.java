@@ -1,7 +1,8 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.stream.Stream;
  * Statistics for transmembrane regions, grouped by sequence motifs.
  * Created by bittrich on 6/8/17.
  */
-public class T03_StatisticsTransmembraneBySequenceMotifs {
+public class T013_StatisticsTransmembraneBySequenceMotifs {
     public static void main(String[] args) {
         Map<SequenceMotifDefinition, StatisticsCollector.AminoAcidSummary> statistics = new HashMap<>();
         Stream.of(SequenceMotifDefinition.values())

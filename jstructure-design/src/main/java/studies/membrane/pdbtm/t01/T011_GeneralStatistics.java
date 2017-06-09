@@ -1,6 +1,7 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 /**
  * Accumulate general statistics describing the data set.
@@ -14,7 +15,7 @@ import studies.membrane.MembraneConstants;
  * </ul>
  * Created by bittrich on 6/7/17.
  */
-public class T01_GeneralStatistics {
+public class T011_GeneralStatistics {
     public static void main(String[] args) {
         String output = MembraneConstants.PdbtmAlphaNr.getAminoAcids()
                 .sequential()

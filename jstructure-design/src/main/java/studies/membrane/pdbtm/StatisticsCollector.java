@@ -47,7 +47,7 @@ public class StatisticsCollector {
         }
     }
 
-    static class InteractingAminoAcidSummary implements Consumer<PLIPInteraction>, CustomCollector {
+    public static class InteractingAminoAcidSummary implements Consumer<PLIPInteraction>, CustomCollector {
         private int count = 0;
         private int[] motifs = new int[SequenceMotifDefinition.values().length];
         //                                           a, y, m, c, s, l, w
@@ -151,7 +151,7 @@ public class StatisticsCollector {
                 Collector.Characteristics.CONCURRENT);
     }
 
-    static class AminoAcidSummary implements Consumer<AminoAcid>, CustomCollector {
+    public static class AminoAcidSummary implements Consumer<AminoAcid>, CustomCollector {
         private int count = 0;
         //                                tm, ntm
         private int[] region = new int[] { 0, 0 };
@@ -164,7 +164,7 @@ public class StatisticsCollector {
         private int[] interactingParts = new int[] { 0, 0, 0 };
         private boolean normalized = false;
 
-        AminoAcidSummary() {
+        public AminoAcidSummary() {
             this.count = 0;
         }
 

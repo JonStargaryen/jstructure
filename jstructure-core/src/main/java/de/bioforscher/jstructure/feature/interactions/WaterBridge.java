@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
 /**
@@ -59,12 +60,12 @@ public class WaterBridge extends PLIPInteraction {
 
     @Override
     public boolean isBackboneInteraction() {
-        return false;
+        return AminoAcid.isBackboneAtom(atom1) && AminoAcid.isBackboneAtom(atom2);
     }
 
     @Override
     public boolean isSideChainInteraction() {
-        return true;
+        return !AminoAcid.isBackboneAtom(atom1) && !AminoAcid.isBackboneAtom(atom2);
     }
 
     @Override

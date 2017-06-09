@@ -1,8 +1,9 @@
-package studies.membrane.pdbtm;
+package studies.membrane.pdbtm.t01;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionType;
 import studies.membrane.MembraneConstants;
+import studies.membrane.pdbtm.StatisticsCollector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.stream.Stream;
  * Extract interactions between amino acids in different helices, grouped by interaction type.
  * Created by bittrich on 6/8/17.
  */
-public class T07_StatisticsForInteractingHelicesByInteractionType {
+public class T017_StatisticsForInteractingHelicesByInteractionType {
     public static void main(String[] args) {
         Map<Class<? extends PLIPInteraction>, StatisticsCollector.InteractingAminoAcidSummary> statistics = new HashMap<>();
         Stream.of(PLIPInteractionType.values())
