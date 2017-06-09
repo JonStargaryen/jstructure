@@ -54,9 +54,4 @@ public class Proline extends AminoAcid implements StandardAminoAcid {
             cd = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 154.0;
-    }
 }

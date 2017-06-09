@@ -63,9 +63,4 @@ public class Methionine extends AminoAcid implements StandardAminoAcid {
             ce = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 203.0;
-    }
 }

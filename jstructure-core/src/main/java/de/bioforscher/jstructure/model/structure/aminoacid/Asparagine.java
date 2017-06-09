@@ -63,9 +63,4 @@ public class Asparagine extends AminoAcid implements StandardAminoAcid {
             nd2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 187.0;
-    }
 }

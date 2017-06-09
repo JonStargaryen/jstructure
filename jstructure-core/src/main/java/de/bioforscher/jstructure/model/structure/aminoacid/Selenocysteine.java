@@ -50,9 +50,4 @@ public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
     public Class<UnknownAminoAcid> getParentAminoAcid() {
         return UnknownAminoAcid.class;
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 148.0;
-    }
 }

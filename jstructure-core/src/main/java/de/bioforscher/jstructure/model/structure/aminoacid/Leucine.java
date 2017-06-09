@@ -63,9 +63,4 @@ public class Leucine extends AminoAcid implements StandardAminoAcid {
             cd2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 191.0;
-    }
 }

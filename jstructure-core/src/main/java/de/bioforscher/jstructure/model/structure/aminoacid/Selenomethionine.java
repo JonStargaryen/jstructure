@@ -52,9 +52,4 @@ public class Selenomethionine extends AminoAcid implements NonStandardAminoAcid 
     public Class<Methionine> getParentAminoAcid() {
         return Methionine.class;
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 203.0;
-    }
 }

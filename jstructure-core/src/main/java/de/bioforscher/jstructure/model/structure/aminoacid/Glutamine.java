@@ -72,9 +72,4 @@ public class Glutamine extends AminoAcid implements StandardAminoAcid {
             ne2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 214.0;
-    }
 }

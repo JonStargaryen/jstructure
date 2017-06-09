@@ -81,9 +81,4 @@ public class Histidine extends AminoAcid implements StandardAminoAcid {
             ne2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 216.0;
-    }
 }

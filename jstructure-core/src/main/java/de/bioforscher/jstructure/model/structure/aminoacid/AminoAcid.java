@@ -1,9 +1,6 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.*;
 
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -55,33 +52,117 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public enum Family {
-        ALANINE(Alanine.class, Alanine.GROUP_PROTOTYPE),
-        ARGININE(Arginine.class, Arginine.GROUP_PROTOTYPE),
-        ASPARAGINE(Asparagine.class, Asparagine.GROUP_PROTOTYPE),
-        ASPARTIC_ACID(AsparticAcid.class, AsparticAcid.GROUP_PROTOTYPE),
-        CYSTEINE(Cysteine.class, Cysteine.GROUP_PROTOTYPE),
-        GLUTAMIC_ACID(GlutamicAcid.class, GlutamicAcid.GROUP_PROTOTYPE),
-        GLUTAMINE(Glutamine.class, Glutamine.GROUP_PROTOTYPE),
-        GLYCINE(Glycine.class, Glycine.GROUP_PROTOTYPE),
-        HISTIDINE(Histidine.class, Histidine.GROUP_PROTOTYPE),
-        ISOLEUCINE(Isoleucine.class, Isoleucine.GROUP_PROTOTYPE),
-        LEUCINE(Leucine.class, Leucine.GROUP_PROTOTYPE),
-        LYSINE(Lysine.class, Lysine.GROUP_PROTOTYPE),
-        METHIONINE(Methionine.class, Methionine.GROUP_PROTOTYPE),
-        PHENYLALANINE(Phenylalanine.class, Phenylalanine.GROUP_PROTOTYPE),
-        PROLINE(Proline.class, Proline.GROUP_PROTOTYPE),
-        SERINE(Serine.class, Serine.GROUP_PROTOTYPE),
-        THREONINE(Threonine.class, Threonine.GROUP_PROTOTYPE),
-        TRYPTOPHAN(Tryptophan.class, Tryptophan.GROUP_PROTOTYPE),
-        TYROSINE(Tyrosine.class, Tyrosine.GROUP_PROTOTYPE),
-        VALINE(Valine.class, Valine.GROUP_PROTOTYPE);
+        ALANINE(Alanine.class,
+                Alanine.GROUP_PROTOTYPE,
+                121.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        ARGININE(Arginine.class,
+                Arginine.GROUP_PROTOTYPE,
+                265.0,
+                GroupPrototype.GutteridgeGrouping.GUANIDINIUM),
+        ASPARAGINE(Asparagine.class,
+                Asparagine.GROUP_PROTOTYPE,
+                187.0,
+                GroupPrototype.GutteridgeGrouping.AMIDE),
+        ASPARTIC_ACID(AsparticAcid.class,
+                AsparticAcid.GROUP_PROTOTYPE,
+                187.0,
+                GroupPrototype.GutteridgeGrouping.CARBOXYLATE),
+        CYSTEINE(Cysteine.class,
+                Cysteine.GROUP_PROTOTYPE,
+                148.0,
+                GroupPrototype.GutteridgeGrouping.THIOL),
+        GLUTAMIC_ACID(GlutamicAcid.class,
+                GlutamicAcid.GROUP_PROTOTYPE,
+                214.0,
+                GroupPrototype.GutteridgeGrouping.AMIDE),
+        GLUTAMINE(Glutamine.class,
+                Glutamine.GROUP_PROTOTYPE,
+                214.0,
+                GroupPrototype.GutteridgeGrouping.CARBOXYLATE),
+        GLYCINE(Glycine.class,
+                Glycine.GROUP_PROTOTYPE,
+                97.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        HISTIDINE(Histidine.class,
+                Histidine.GROUP_PROTOTYPE,
+                216.0,
+                GroupPrototype.GutteridgeGrouping.IMIDAZOLE),
+        ISOLEUCINE(Isoleucine.class,
+                Isoleucine.GROUP_PROTOTYPE,
+                195.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        LEUCINE(Leucine.class,
+                Leucine.GROUP_PROTOTYPE,
+                191.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        LYSINE(Lysine.class,
+                Lysine.GROUP_PROTOTYPE,
+                230.0,
+                GroupPrototype.GutteridgeGrouping.AMINO),
+        METHIONINE(Methionine.class,
+                Methionine.GROUP_PROTOTYPE,
+                203.0,
+                GroupPrototype.GutteridgeGrouping.THIOL),
+        PHENYLALANINE(Phenylalanine.class,
+                Phenylalanine.GROUP_PROTOTYPE,
+                228.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        PROLINE(Proline.class,
+                Proline.GROUP_PROTOTYPE,
+                154.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        SERINE(Serine.class,
+                Serine.GROUP_PROTOTYPE,
+                143.0,
+                GroupPrototype.GutteridgeGrouping.HYDROXYL),
+        THREONINE(Threonine.class,
+                Threonine.GROUP_PROTOTYPE,
+                163.0,
+                GroupPrototype.GutteridgeGrouping.HYDROXYL),
+        TRYPTOPHAN(Tryptophan.class,
+                Tryptophan.GROUP_PROTOTYPE,
+                264.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        TYROSINE(Tyrosine.class,
+                Tyrosine.GROUP_PROTOTYPE,
+                255.0,
+                GroupPrototype.GutteridgeGrouping.HYDROXYL),
+        VALINE(Valine.class,
+                Valine.GROUP_PROTOTYPE,
+                165.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        UNKNOWN_AMINO_ACID(UnknownAminoAcid.class,
+                UnknownAminoAcid.GROUP_PROTOTYPE,
+                121.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        PYRROLYSINE(Pyrrolysine.class,
+                Pyrrolysine.GROUP_PROTOTYPE,
+                //TODO maximum asa value
+                154.0 + 230.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        SELENOCYSTEINE(Selenocysteine.class,
+                Selenocysteine.GROUP_PROTOTYPE,
+                148.0,
+                GroupPrototype.GutteridgeGrouping.NONE),
+        SELENOMETHIONINE(Selenomethionine.class,
+                Selenomethionine.GROUP_PROTOTYPE,
+                203.0,
+                GroupPrototype.GutteridgeGrouping.NONE);
 
         private Class<? extends AminoAcid> representingClass;
         private GroupPrototype groupPrototype;
+        private double maximumAccessibleSurfaceArea;
+        private GroupPrototype.GutteridgeGrouping gutteridgeGrouping;
 
-        Family(Class<? extends AminoAcid> representingClass, GroupPrototype groupPrototype) {
+        Family(Class<? extends AminoAcid> representingClass,
+               GroupPrototype groupPrototype,
+               double maximumAccessibleSurfaceArea,
+               GroupPrototype.GutteridgeGrouping gutteridgeGrouping) {
             this.representingClass = representingClass;
             this.groupPrototype = groupPrototype;
+            this.maximumAccessibleSurfaceArea = maximumAccessibleSurfaceArea;
+            this.gutteridgeGrouping = gutteridgeGrouping;
         }
 
         public Class<? extends AminoAcid> getRepresentingClass() {
@@ -92,11 +173,40 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             return groupPrototype;
         }
 
+        public double getMaximumAccessibleSurfaceArea() {
+            return maximumAccessibleSurfaceArea;
+        }
+
+        public GroupPrototype.GutteridgeGrouping getGutteridgeGrouping() {
+            return gutteridgeGrouping;
+        }
+
         public static Family resolveOneLetterCode(String oneLetterCode) {
             return Stream.of(Family.values())
                     .filter(aminoAcid -> oneLetterCode.equalsIgnoreCase(aminoAcid.getGroupPrototype().getOneLetterCode().get()))
                     .findFirst()
                     .orElseThrow(() -> new NoSuchElementException("'" + oneLetterCode + "' is no valid amino acid one-letter-code"));
+        }
+
+        public static Family resolveGroupPrototype(GroupPrototype groupPrototype) {
+            GroupPrototype.PolymerType polymerType = groupPrototype.getPolymerType();
+            if(groupPrototype.getPolymerType() != GroupPrototype.PolymerType.PEPTIDE_LINKING && polymerType !=
+                    GroupPrototype.PolymerType.PEPTIDE_LIKE && polymerType !=
+                    GroupPrototype.PolymerType.PEPTIDE_TERMINUS) {
+                throw new UnsupportedOperationException("method only supported for amino acids - group '" +
+                        groupPrototype.getThreeLetterCode() + "' has polymer type: " + polymerType);
+            }
+
+            return Stream.of(Family.values())
+                    .filter(aminoAcid -> groupPrototype.equals(aminoAcid.getGroupPrototype()))
+                    .findFirst()
+                    .orElse(UNKNOWN_AMINO_ACID);
+        }
+
+        public static Stream<AminoAcid.Family> canonicalAminoAcids() {
+            return Stream.of(values())
+                    // canonical amino acids are the first 20 of the enum - TODO not the nicest way, UnknownAminoAcid is a StandardAminoAcid however
+                    .limit(20);
         }
     }
 
@@ -186,6 +296,4 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     protected abstract void addSideChainAtom(Atom atom);
-
-    public abstract double getMaximumAccessibleSurfaceArea();
 }

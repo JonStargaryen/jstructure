@@ -83,7 +83,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
                 .asFilteredAtoms()
                 .mapToDouble(atom -> calcSingleAsa(atom, nonHydrogenAtoms))
                 .sum();
-        double rasa = asa / group.getMaximumAccessibleSurfaceArea();
+        double rasa = asa / group.getGroupPrototype().getMaximumAccessibleSurfaceArea();
         group.getFeatureContainer().addFeature(new AccessibleSurfaceArea(this,
                 asa,
                 rasa));

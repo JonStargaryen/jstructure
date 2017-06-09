@@ -117,9 +117,4 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
             ch2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 264.0;
-    }
 }

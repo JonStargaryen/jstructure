@@ -63,9 +63,4 @@ public class AsparticAcid extends AminoAcid implements StandardAminoAcid {
             od2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 187.0;
-    }
 }

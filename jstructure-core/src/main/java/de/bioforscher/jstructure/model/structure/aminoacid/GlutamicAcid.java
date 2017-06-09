@@ -72,9 +72,4 @@ public class GlutamicAcid extends AminoAcid implements StandardAminoAcid {
             oe2 = atom;
         }
     }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 214.0;
-    }
 }

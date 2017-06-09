@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +21,20 @@ public class GroupPrototype {
         PEPTIDE_LIKE,
         PEPTIDE_TERMINUS,
         SACCHARIDE
+    }
+
+    /**
+     * Gutteridge grouping (doi:10.1016/j.tibs.2005.09.006)
+     */
+    public enum GutteridgeGrouping {
+        NONE,
+        THIOL,
+        HYDROXYL,
+        GUANIDINIUM,
+        IMIDAZOLE,
+        AMINO,
+        CARBOXYLATE,
+        AMIDE
     }
 
     private final String id;
@@ -84,6 +100,14 @@ public class GroupPrototype {
 
     public List<Atom> getPrototypeAtoms() {
         return prototypeAtoms;
+    }
+
+    public double getMaximumAccessibleSurfaceArea() {
+        return AminoAcid.Family.resolveGroupPrototype(this).getMaximumAccessibleSurfaceArea();
+    }
+
+    public GutteridgeGrouping getGutteridgeGrouping() {
+        return AminoAcid.Family.resolveGroupPrototype(this).getGutteridgeGrouping();
     }
 
     @Override

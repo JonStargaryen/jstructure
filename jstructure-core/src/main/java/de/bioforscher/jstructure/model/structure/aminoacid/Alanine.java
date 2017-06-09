@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
+import de.bioforscher.jstructure.model.structure.ResidueNumber;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -35,10 +35,5 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
         if(atom.getName().equals("CB") && cb == null) {
             cb = atom;
         }
-    }
-
-    @Override
-    public double getMaximumAccessibleSurfaceArea() {
-        return 121.0;
     }
 }
