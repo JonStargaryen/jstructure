@@ -28,7 +28,7 @@ public class UniProtAnnotationContainer extends FeatureContainerEntry {
     UniProtAnnotationContainer(AbstractFeatureProvider featureProvider, String uniProtId, Document describingDocument) {
         super(featureProvider);
         this.uniProtId = uniProtId;
-        this.uniProtSequence = describingDocument.getElementsByTag("uniProtSequence").text().replaceAll("\\s+", "");
+        this.uniProtSequence = describingDocument.getElementsByTag("sequence").text().replaceAll("\\s+", "");
         this.aminoAcidModifications = describingDocument.getElementsByTag("feature").stream()
                 //TODO register further modifications
                 .filter(element -> element.hasAttr("type"))
@@ -56,7 +56,7 @@ public class UniProtAnnotationContainer extends FeatureContainerEntry {
         this.mutagenesisSites = describingDocument.getElementsByAttributeValue("type", "mutagenesis site").stream()
                 .map(UniProtMutagenesisSite::new)
                 .collect(Collectors.toList());
-        this.naturalVariants = describingDocument.getElementsByAttributeValue("type", "uniProtSequence variant").stream()
+        this.naturalVariants = describingDocument.getElementsByAttributeValue("type", "sequence variant").stream()
                 .map(UniProtNaturalVariant::new)
                 .collect(Collectors.toList());
         this.references = describingDocument.getElementsByTag("reference").stream()
