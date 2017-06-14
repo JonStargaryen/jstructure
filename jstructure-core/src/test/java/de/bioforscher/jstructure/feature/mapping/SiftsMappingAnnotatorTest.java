@@ -17,6 +17,22 @@ public class SiftsMappingAnnotatorTest {
     private SiftsMappingAnnotator mappingAnnotator = new SiftsMappingAnnotator();
 
     @Test
+    public void shouldMap4r3z_A() {
+        Protein protein = ProteinParser.source("4r3z")
+                .minimalParsing(true)
+                .parse();
+        mappingAnnotator.process(protein);
+        ChainMapping chainMapping = protein.select()
+                .chainName("A")
+                .asChain()
+                .getFeatureContainer()
+                .getFeature(ChainMapping.class);
+        Assert.assertEquals("PF01588", chainMapping.getPfamId());
+        Assert.assertEquals("?", chainMapping.getEcNumber());
+        Assert.assertEquals("Q12904", chainMapping.getUniProtId());
+    }
+
+    @Test
     public void shouldMap1o0c_A() {
         Protein protein = ProteinParser.source("1o0c")
                 .minimalParsing(true)

@@ -40,7 +40,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     private static final String PFAM_MAPPING = SIFTS_DIR + "pdb_chain_pfam.csv";
 
     private static final String UNKNOWN_MAPPING = "?";
-    private static final String[] UNKNOWN_ENZYME_MAPPING = new String[] {};
+    private static final String[] UNKNOWN_ENZYME_MAPPING = new String[] { UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING };
     private static final String[] UNKNOWN_PFAM_MAPPING = new String[] { UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING };
 
     @Override
@@ -85,12 +85,14 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
                     .map(AminoAcid::getFeatureContainer)
                     .map(featureContainer -> featureContainer.getFeature(ResidueMapping.class))
                     .map(ResidueMapping::getUniProtId)
+                    .filter(id -> id.length() > 1)
                     .collect(Collectors.toSet());
             uniProtId = uniProtIds.iterator().next();
             //TODO maybe need a way to decide when there are multiple
             if(uniProtIds.size() > 1) {
                 logger.warn("multiple UniProt ids found for {}, going with {}", pdbId, uniProtId);
             }
+            //TODO checks for contradicting annotation
         }
 
         chain.getFeatureContainer().addFeature(new ChainMapping(this, uniProtId, ecMappingString[3], pfamMappingString[3]));

@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-all/pom.xml" afterPath="$PROJECT_DIR$/jstructure-all/pom.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/ResidueMapping.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/ResidueMapping.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java" afterPath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotatorTest.java" afterPath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotatorTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -87,8 +84,28 @@
       <file leaf-file-name="SiftsMappingAnnotatorTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="23" column="42" lean-forward="true" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+            <state relative-caret-position="378">
+              <caret line="30" column="30" lean-forward="false" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pdb_chain_enzyme.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/resources/sifts/pdb_chain_enzyme.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="141178" column="4" lean-forward="false" selection-start-line="141178" selection-start-column="0" selection-end-line="141178" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pdb_chain_pfam.csv" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/resources/sifts/pdb_chain_pfam.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="309062" column="21" lean-forward="true" selection-start-line="309062" selection-start-column="15" selection-end-line="309062" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -97,8 +114,8 @@
       <file leaf-file-name="SiftsMappingAnnotator.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="700">
-              <caret line="91" column="85" lean-forward="false" selection-start-line="91" selection-start-column="85" selection-end-line="91" selection-end-column="85" />
+            <state relative-caret-position="155">
+              <caret line="42" column="141" lean-forward="false" selection-start-line="42" selection-start-column="141" selection-end-line="42" selection-end-column="141" />
               <folding />
             </state>
           </provider>
@@ -119,7 +136,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>description</find>
       <find>ordinal</find>
       <find>scale.li</find>
       <find>d3.svg</find>
@@ -149,6 +165,7 @@
       <find>3a0b</find>
       <find>3tzl</find>
       <find>1o0c</find>
+      <find>4r3z</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -216,8 +233,8 @@
         <option value="$PROJECT_DIR$/jstructure-all/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotatorTest.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/ResidueMapping.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java" />
       </list>
     </option>
   </component>
@@ -275,7 +292,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="4" />
     <option name="y" value="6" />
-    <option name="width" value="2402" />
+    <option name="width" value="1714" />
     <option name="height" value="1430" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -307,6 +324,86 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="jstructure-core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sifts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -498,59 +595,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SiftsMappingAnnotatorTest.shouldMap1o0c_A">
-    <configuration default="false" name="SiftsMappingAnnotatorTest.shouldFailForUnknownPdbId" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.feature.mapping.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-core" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.mapping" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotatorTest" />
-      <option name="METHOD_NAME" value="shouldFailForUnknownPdbId" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="UniProtAnnotatorTest.shouldHandle3tzl" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.feature.uniprot.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-core" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.uniprot" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.uniprot.UniProtAnnotatorTest" />
-      <option name="METHOD_NAME" value="shouldHandle3tzl" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.SiftsMappingAnnotatorTest.shouldMap4r3z_A">
     <configuration default="false" name="UniProtAnnotatorTest.shouldAnnotate1o0c_A" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -616,6 +661,58 @@
       <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.mapping" />
       <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotatorTest" />
       <option name="METHOD_NAME" value="shouldMap1o0c_A" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="SiftsMappingAnnotatorTest.shouldMap4r3z_B" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.feature.mapping.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="jstructure-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.mapping" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotatorTest" />
+      <option name="METHOD_NAME" value="shouldMap4r3z_B" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="SiftsMappingAnnotatorTest.shouldMap4r3z_A" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.feature.mapping.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="jstructure-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.mapping" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotatorTest" />
+      <option name="METHOD_NAME" value="shouldMap4r3z_A" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -1143,19 +1240,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldFailForUnknownPdbId" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldHandle3tzl" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldAnnotate1o0c_A" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldAnnotate1o0c_A" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap1o0c_A" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldAnnotate1o0c_A" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldAnnotate1o0c_A" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap1o0c_A" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap4r3z_B" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap4r3z_A" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap1o0c_A" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldAnnotate1o0c_A" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldAnnotate1o0c_A" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldHandle3tzl" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldFailForUnknownPdbId" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap4r3z_A" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap4r3z_B" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldMap1o0c_A" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.shouldAnnotate1o0c_A" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldAnnotate1o0c_A" />
       </list>
     </recent_temporary>
   </component>
@@ -1247,14 +1344,7 @@
       <workItem from="1497337322824" duration="13000" />
       <workItem from="1497337370878" duration="38000" />
       <workItem from="1497362338305" duration="48000" />
-      <workItem from="1497368254496" duration="8009000" />
-    </task>
-    <task id="LOCAL-00063" summary="testing on bigger data set: performance issues for sequence hover effect">
-      <created>1490285223138</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1490285223138</updated>
+      <workItem from="1497368254496" duration="8597000" />
     </task>
     <task id="LOCAL-00064" summary="about to change msa-object-design">
       <created>1490618574925</created>
@@ -1592,22 +1682,17 @@
       <option name="project" value="LOCAL" />
       <updated>1497432485443</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="moving to more consistent UniProt mapping by looking at individual residues when chain-level mapping fails">
+      <created>1497443318557</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1497443318557</updated>
+    </task>
+    <option name="localTasksCounter" value="113" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="SiftsMappingAnnotatorTest_shouldMap1o0c_A - 2017.06.14 at 14h 13m 56s.xml">
-      <configuration name="SiftsMappingAnnotatorTest.shouldMap1o0c_A" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="SiftsMappingAnnotatorTest_shouldMap1o0c_A - 2017.06.14 at 14h 14m 42s.xml">
-      <configuration name="SiftsMappingAnnotatorTest.shouldMap1o0c_A" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="SiftsMappingAnnotatorTest_shouldMap1o0c_A - 2017.06.14 at 14h 19m 40s.xml">
-      <configuration name="SiftsMappingAnnotatorTest.shouldMap1o0c_A" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="SiftsMappingAnnotatorTest_shouldMap1o0c_A - 2017.06.14 at 14h 19m 56s.xml">
-      <configuration name="SiftsMappingAnnotatorTest.shouldMap1o0c_A" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="SiftsMappingAnnotatorTest_shouldMap1o0c_A - 2017.06.14 at 14h 21m 02s.xml">
       <configuration name="SiftsMappingAnnotatorTest.shouldMap1o0c_A" configurationId="JUnit" />
     </history-entry>
@@ -1626,9 +1711,21 @@
     <history-entry file="SiftsMappingAnnotatorTest_shouldMap1o0c_A - 2017.06.14 at 14h 27m 37s.xml">
       <configuration name="SiftsMappingAnnotatorTest.shouldMap1o0c_A" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="SiftsMappingAnnotatorTest_shouldMap4r3z_A - 2017.06.14 at 14h 37m 32s.xml">
+      <configuration name="SiftsMappingAnnotatorTest.shouldMap4r3z_A" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SiftsMappingAnnotatorTest_shouldMap4r3z_B - 2017.06.14 at 14h 35m 32s.xml">
+      <configuration name="SiftsMappingAnnotatorTest.shouldMap4r3z_B" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SiftsMappingAnnotatorTest_shouldMap4r3z_B - 2017.06.14 at 14h 35m 43s.xml">
+      <configuration name="SiftsMappingAnnotatorTest.shouldMap4r3z_B" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SiftsMappingAnnotatorTest_shouldMap4r3z_B - 2017.06.14 at 14h 36m 13s.xml">
+      <configuration name="SiftsMappingAnnotatorTest.shouldMap4r3z_B" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1421324000" />
+    <option name="totallyTimeSpent" value="1421912000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1640,13 +1737,13 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="6" width="2402" height="1430" extended-state="6" />
+    <frame x="4" y="6" width="1714" height="1430" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39143732" sideWeight="0.39555824" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.64585835" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.6456368" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1664,7 +1761,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4120795" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2506372" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35414165" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32953182" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
@@ -1739,7 +1836,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="pre-mittelerde comiit" />
     <MESSAGE value="project structure fixed, maven warnings fixed" />
     <MESSAGE value="feature container-commit&#10;&#10;- huge clean up&#10;- feature map entries are now classes&#10;- unified lots of a providers/parsers/tests" />
     <MESSAGE value="pdbIdentifier stub" />
@@ -1764,7 +1860,8 @@
     <MESSAGE value="updates the way the interacting atoms are determined&#10;composed single execution class for general statistical analysis" />
     <MESSAGE value="moved maximum-asa value to group prototypes, implemented gutteridge grouping" />
     <MESSAGE value="softens rules on protein identifier names" />
-    <option name="LAST_COMMIT_MESSAGE" value="softens rules on protein identifier names" />
+    <MESSAGE value="moving to more consistent UniProt mapping by looking at individual residues when chain-level mapping fails" />
+    <option name="LAST_COMMIT_MESSAGE" value="moving to more consistent UniProt mapping by looking at individual residues when chain-level mapping fails" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2142,10 +2239,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/resources/sifts/pdb_chain_enzyme.csv">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379728">
-          <caret line="21096" column="17" lean-forward="false" selection-start-line="21096" selection-start-column="9" selection-end-line="21096" selection-end-column="17" />
+        <state relative-caret-position="155">
+          <caret line="42" column="141" lean-forward="false" selection-start-line="42" selection-start-column="141" selection-end-line="42" selection-end-column="141" />
           <folding />
         </state>
       </provider>
@@ -2153,23 +2250,23 @@
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/resources/sifts/pdb_chain_pfam.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="233">
-          <caret line="41151" column="3" lean-forward="false" selection-start-line="41151" selection-start-column="3" selection-end-line="41151" selection-end-column="3" />
+          <caret line="309062" column="21" lean-forward="true" selection-start-line="309062" selection-start-column="15" selection-end-line="309062" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/resources/sifts/pdb_chain_enzyme.csv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="700">
-          <caret line="91" column="85" lean-forward="false" selection-start-line="91" selection-start-column="85" selection-end-line="91" selection-end-column="85" />
+        <state relative-caret-position="233">
+          <caret line="141178" column="4" lean-forward="false" selection-start-line="141178" selection-start-column="0" selection-end-line="141178" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="23" column="42" lean-forward="true" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+        <state relative-caret-position="378">
+          <caret line="30" column="30" lean-forward="false" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
           <folding />
         </state>
       </provider>
