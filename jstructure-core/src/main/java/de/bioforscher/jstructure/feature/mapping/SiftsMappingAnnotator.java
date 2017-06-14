@@ -41,9 +41,13 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
 
     @Override
     protected void processInternally(Protein protein) {
-        Document document = downloadXml(protein.getPdbId().getPdbId());
-        protein.chainsWithAminoAcids()
-                .forEach(chain -> processInternally(document, chain));
+        try {
+            Document document = downloadXml(protein.getPdbId().getPdbId());
+            protein.chainsWithAminoAcids()
+                    .forEach(chain -> processInternally(document, chain));
+        } catch (NullPointerException e) {
+            throw new ComputationException("protein did not provide pdbId, thus, cannot be mapped to UniProt");
+        }
     }
 
     private void processInternally(Document document, Chain chain) {

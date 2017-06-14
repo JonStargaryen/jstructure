@@ -5,6 +5,8 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
+import java.util.stream.Stream;
+
 /**
  * A hydrogen bond as described by PLIP.
  * Created by bittrich on 2/15/17.
@@ -65,7 +67,17 @@ public class HydrogenBond extends PLIPInteraction {
 
     @Override
     public boolean isSideChainInteraction() {
-        return !AminoAcid.isBackboneAtom(acceptor) && !AminoAcid.isBackboneAtom(donor);
+        return AminoAcid.isSideChainAtom(acceptor) && AminoAcid.isSideChainAtom(donor);
+    }
+
+    @Override
+    boolean isSane() {
+        return acceptor != null && donor != null;
+    }
+
+    @Override
+    Stream<Atom> allAtoms() {
+        return Stream.of(acceptor, donor);
     }
 
     @Override

@@ -32,13 +32,13 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
         String uniprotId = chain.getFeatureContainer().getFeature(ChainMapping.class).getUniProtId();
         // mapping may fail
         if(ChainMapping.UNKNOWN_MAPPING.equals(uniprotId)) {
-            logger.warn("could not retrieve UniProt mapping for {} - ignoring chain", chain.getChainId().getFullName());
+            logger.debug("could not retrieve UniProt mapping for {} - ignoring chain", chain.getChainId().getFullName());
             return;
         }
 
         UniProtAnnotationContainer uniProtAnnotationContainer = processUniProtId(uniprotId);
         chain.getFeatureContainer().addFeature(uniProtAnnotationContainer);
-        logger.info("{} mutations, {} variants, {} references", uniProtAnnotationContainer.getMutagenesisSites().size(), uniProtAnnotationContainer.getNaturalVariants().size(), uniProtAnnotationContainer.getReferences().size());
+        logger.debug("{} mutations, {} variants, {} references", uniProtAnnotationContainer.getMutagenesisSites().size(), uniProtAnnotationContainer.getNaturalVariants().size(), uniProtAnnotationContainer.getReferences().size());
     }
 
     public UniProtAnnotationContainer processUniProtId(String uniProtId) {
@@ -51,6 +51,4 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
                     e.getCause().getLocalizedMessage(), e);
         }
     }
-
-
 }

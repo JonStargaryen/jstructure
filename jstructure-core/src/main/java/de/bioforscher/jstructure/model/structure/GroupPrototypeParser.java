@@ -157,7 +157,7 @@ public class GroupPrototypeParser {
 
     public static Document getDocument(String id) {
         try {
-            logger.info("creating prototype '{}' from online definition file", id);
+            logger.debug("creating prototype '{}' from online definition file", id);
             return getDocument(new URL(String.format(DEFINITION_FETCH_URL, id)).openStream());
         } catch (IOException e) {
             throw new UncheckedIOException(e);

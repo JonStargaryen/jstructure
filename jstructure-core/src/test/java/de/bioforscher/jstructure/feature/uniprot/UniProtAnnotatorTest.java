@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.feature.uniprot;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
@@ -12,7 +10,7 @@ import org.junit.Test;
  * Created by bittrich on 3/2/17.
  */
 public class UniProtAnnotatorTest {
-    private AbstractFeatureProvider uniProtAnnotator = FeatureProviderRegistry.resolve(UniProtAnnotationContainer.class);
+    private UniProtAnnotator uniProtAnnotator = new UniProtAnnotator();
 
     @Test
     public void shouldAnnotate4lgd() {

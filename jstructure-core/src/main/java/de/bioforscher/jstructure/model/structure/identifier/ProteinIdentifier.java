@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.model.structure.identifier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -10,6 +13,7 @@ import java.util.stream.Stream;
  * Created by bittrich on 4/27/17.
  */
 public class ProteinIdentifier {
+    private static final Logger logger = LoggerFactory.getLogger(ProteinIdentifier.class);
     private static final Pattern PDBID_PATTERN = Pattern.compile("[1-9][A-Za-z0-9]{3}");
     private final String pdbId;
     private final String additionalName;
@@ -32,7 +36,9 @@ public class ProteinIdentifier {
 
     private static void validateAdditionalName(String additionalName) {
         if(additionalName.contains("_")) {
-            throw new IllegalArgumentException("'" + additionalName + "' is no valid additional protein name as it " +
+//            throw new IllegalArgumentException("'" + additionalName + "' is no valid additional protein name as it " +
+//                    "contains a underscore _ which is used to separate the chain identifer from the pdbId");
+            logger.debug("'" + additionalName + "' is no valid additional protein name as it " +
                     "contains a underscore _ which is used to separate the chain identifer from the pdbId");
         }
     }
