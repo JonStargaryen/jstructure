@@ -5,11 +5,13 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The abstract implementation of a PLIP interaction.
@@ -122,12 +124,30 @@ public abstract class PLIPInteraction {
     /**
      * @return <code>true</code> iff this interaction occurs between two backbone atoms of amino acids
      */
-    public abstract boolean isBackboneInteraction();
+    public boolean isBackboneInteraction() {
+        return allNonHydrogenAtoms().allMatch(AminoAcid::isBackboneAtom);
+    }
 
     /**
      * @return <code>true</code> iff this interaction occurs between two side chain atoms of amino acids
      */
-    public abstract boolean isSideChainInteraction();
+    public boolean isSideChainInteraction() {
+        return allNonHydrogenAtoms().allMatch(AminoAcid::isSideChainAtom);
+    }
+
+    abstract boolean isSane();
+
+    boolean isSane(List<Atom> atoms) {
+        return !atoms.isEmpty();
+    }
+
+    Stream<Atom> allNonHydrogenAtoms() {
+        return allAtoms()
+                // ignore all hydrogen atoms
+                .filter(atom -> !AminoAcid.HYDROGEN_NAMES.contains(atom.getName()));
+    }
+
+    abstract Stream<Atom> allAtoms();
 
     /**
      * @return <code>true</code> iff this interaction occurs between one backbone atom and one side chain atom

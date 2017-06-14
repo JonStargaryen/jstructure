@@ -109,9 +109,21 @@ public class PLIPParser {
             }
         }
 
-        // sanity - PLIP does not recognize chain ids correctly, i.e. 'A' and 'a' are assumed to refer to the same chain
         for(PLIPInteraction plipInteraction : plipInteractions) {
+            // sanity - PLIP does not recognize chain ids correctly, i.e. 'A' and 'a' are assumed to refer to the same chain
             if(plipInteraction.getPartner1().getParentChain() != plipInteraction.getPartner2().getParentChain()) {
+                plipInteractionsToRemove.add(plipInteraction);
+                continue;
+            }
+
+            // ignore interactions with non-amino acids
+            if(!plipInteraction.getPartner1().isAminoAcid() || !plipInteraction.getPartner2().isAminoAcid()) {
+                plipInteractionsToRemove.add(plipInteraction);
+                continue;
+            }
+
+            // sometimes, one side of the container will be empty
+            if(!plipInteraction.isSane()) {
                 plipInteractionsToRemove.add(plipInteraction);
             }
         }

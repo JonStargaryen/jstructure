@@ -69,6 +69,16 @@ public class PiStacking extends PLIPInteraction {
     }
 
     @Override
+    boolean isSane() {
+        return isSane(atoms1) && isSane(atoms2);
+    }
+
+    @Override
+    Stream<Atom> allAtoms() {
+        return Stream.concat(atoms1.stream(), atoms2.stream());
+    }
+
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " atoms1=" + toString(atoms1) + " atoms2=" + toString(atoms2);
     }

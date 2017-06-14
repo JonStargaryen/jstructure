@@ -5,6 +5,8 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
+import java.util.stream.Stream;
+
 /**
  * A water bridge as described by PLIP.
  * Created by bittrich on 2/15/17.
@@ -65,7 +67,17 @@ public class WaterBridge extends PLIPInteraction {
 
     @Override
     public boolean isSideChainInteraction() {
-        return !AminoAcid.isBackboneAtom(atom1) && !AminoAcid.isBackboneAtom(atom2);
+        return AminoAcid.isSideChainAtom(atom1) && AminoAcid.isSideChainAtom(atom2);
+    }
+
+    @Override
+    boolean isSane() {
+        return atom1 != null && atom2 != null;
+    }
+
+    @Override
+    Stream<Atom> allAtoms() {
+        return Stream.of(atom1, atom2);
     }
 
     @Override

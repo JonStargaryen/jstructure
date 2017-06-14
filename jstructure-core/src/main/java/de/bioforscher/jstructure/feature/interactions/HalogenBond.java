@@ -2,8 +2,9 @@ package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
+
+import java.util.stream.Stream;
 
 /**
  * A halogen bond as described by PLIP.
@@ -55,13 +56,13 @@ public class HalogenBond extends PLIPInteraction {
     }
 
     @Override
-    public boolean isBackboneInteraction() {
-        return AminoAcid.isBackboneAtom(acceptor) && AminoAcid.isBackboneAtom(donor);
+    boolean isSane() {
+        return acceptor != null && donor != null;
     }
 
     @Override
-    public boolean isSideChainInteraction() {
-        return !AminoAcid.isBackboneAtom(acceptor) && !AminoAcid.isBackboneAtom(donor);
+    Stream<Atom> allAtoms() {
+        return Stream.of(acceptor, donor);
     }
 
     @Override
