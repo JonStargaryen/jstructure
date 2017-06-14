@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.feature.uniprot;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;

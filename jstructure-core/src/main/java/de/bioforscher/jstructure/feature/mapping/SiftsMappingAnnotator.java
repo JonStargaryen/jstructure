@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.GZIPInputStream;
 
@@ -37,6 +40,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     private static final String PFAM_MAPPING = SIFTS_DIR + "pdb_chain_pfam.csv";
 
     private static final String UNKNOWN_MAPPING = "?";
+    private static final String[] UNKNOWN_ENZYME_MAPPING = new String[] {};
     private static final String[] UNKNOWN_PFAM_MAPPING = new String[] { UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING };
 
     @Override
@@ -59,18 +63,37 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
         });
 
         String pdbId = chain.getParentProtein().getPdbId().getPdbId();
-        String ecNumber = getLinesForPdbId(ENZYME_MAPPING, pdbId)
+        String[] ecMappingString = getLinesForPdbId(ENZYME_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chain.getChainId().getChainId()))
-                .map(split -> split[3])
                 .findFirst()
-                .orElse(UNKNOWN_MAPPING);
+                .orElse(UNKNOWN_ENZYME_MAPPING);
 
-        String[] mappingString = getLinesForPdbId(PFAM_MAPPING, pdbId)
+        String[] pfamMappingString = getLinesForPdbId(PFAM_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chain.getChainId().getChainId()))
                 .findFirst()
                 .orElse(UNKNOWN_PFAM_MAPPING);
 
-        chain.getFeatureContainer().addFeature(new ChainMapping(this, mappingString[2], ecNumber, mappingString[3]));
+        String uniProtId = UNKNOWN_MAPPING;
+        // check for length - will either be '?', empty or a white-space
+        if(ecMappingString[2].length() > 1) {
+            uniProtId = ecMappingString[2];
+        } else if(pfamMappingString[2].length() > 1) {
+            uniProtId = pfamMappingString[2];
+        } else {
+            // nothing matched, use amino acid mapping instead
+            Set<String> uniProtIds = chain.aminoAcids()
+                    .map(AminoAcid::getFeatureContainer)
+                    .map(featureContainer -> featureContainer.getFeature(ResidueMapping.class))
+                    .map(ResidueMapping::getUniProtId)
+                    .collect(Collectors.toSet());
+            uniProtId = uniProtIds.iterator().next();
+            //TODO maybe need a way to decide when there are multiple
+            if(uniProtIds.size() > 1) {
+                logger.warn("multiple UniProt ids found for {}, going with {}", pdbId, uniProtId);
+            }
+        }
+
+        chain.getFeatureContainer().addFeature(new ChainMapping(this, uniProtId, ecMappingString[3], pfamMappingString[3]));
     }
 
     private Stream<String> getLines(String path) {
@@ -116,7 +139,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
         Elements uniProtElements = describingElement.getElementsByAttributeValue("dbSource", "UniProt");
         if(!uniProtElements.isEmpty()) {
             Element uniProtElement = uniProtElements.first();
-            return new ResidueMapping(this, uniProtElement.attr("dbResNum"));
+            return new ResidueMapping(this, uniProtElement.attr("dbResNum"), uniProtElement.attr("dbAccessionId"));
         } else {
             logger.warn("could not retrieve UniProt mapping for " + chainId + "-" + pdbResidueNumber);
             return new ResidueMapping(this);

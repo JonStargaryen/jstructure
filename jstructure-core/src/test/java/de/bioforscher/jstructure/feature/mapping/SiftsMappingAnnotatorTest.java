@@ -16,6 +16,22 @@ import util.TestUtils;
 public class SiftsMappingAnnotatorTest {
     private SiftsMappingAnnotator mappingAnnotator = new SiftsMappingAnnotator();
 
+    @Test
+    public void shouldMap1o0c_A() {
+        Protein protein = ProteinParser.source("1o0c")
+                .minimalParsing(true)
+                .parse();
+        mappingAnnotator.process(protein);
+        ChainMapping chainMapping = protein.select()
+                .chainName("A")
+                .asChain()
+                .getFeatureContainer()
+                .getFeature(ChainMapping.class);
+        Assert.assertEquals("?", chainMapping.getPfamId());
+        Assert.assertEquals("6.1.1.18", chainMapping.getEcNumber());
+        Assert.assertEquals("P00962", chainMapping.getUniProtId());
+    }
+
     @Test(expected = ComputationException.class)
     public void shouldFailForUnknownPdbId() {
         Protein protein = ProteinParser.source(TestUtils.getResourceAsStream("uniprot/1bs2_A_renum.pdb"))

@@ -8,19 +8,25 @@ import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
  * Created by bittrich on 5/17/17.
  */
 public class ResidueMapping extends FeatureContainerEntry {
-    public static final String UNKNOWN_MAPPING = "?";
+    private static final String UNKNOWN_MAPPING = "?";
     private final String uniProtResidueNumber;
+    private final String uniProtId;
 
-    ResidueMapping(AbstractFeatureProvider featureProvider, String uniProtResidueNumber) {
+    ResidueMapping(AbstractFeatureProvider featureProvider, String uniProtResidueNumber, String dbAccessionId) {
         super(featureProvider);
         this.uniProtResidueNumber = uniProtResidueNumber;
+        this.uniProtId = dbAccessionId;
     }
 
     public ResidueMapping(AbstractFeatureProvider featureProvider) {
-        this(featureProvider, UNKNOWN_MAPPING);
+        this(featureProvider, UNKNOWN_MAPPING, UNKNOWN_MAPPING);
     }
 
     public String getUniProtResidueNumber() {
         return uniProtResidueNumber;
+    }
+
+    public String getUniProtId() {
+        return uniProtId;
     }
 }
