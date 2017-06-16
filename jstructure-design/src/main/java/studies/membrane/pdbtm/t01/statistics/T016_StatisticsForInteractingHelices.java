@@ -1,4 +1,4 @@
-package studies.membrane.pdbtm.t01;
+package studies.membrane.pdbtm.t01.statistics;
 
 import studies.membrane.MembraneConstants;
 import studies.membrane.pdbtm.StatisticsCollector;

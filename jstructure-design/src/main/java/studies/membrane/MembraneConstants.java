@@ -45,7 +45,9 @@ public class MembraneConstants extends StudyConstants {
             System.out.println("fetching " + id);
             String pdbId = id.split("_")[0];
             String chainId = id.split("_")[1];
-            Protein protein = ProteinParser.source(PDBTM_PDB_PATH.resolve(pdbId + ".pdb")).minimalParsing(true).parse();
+            Protein protein = ProteinParser.source(PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
+                    .minimalParsing(true)
+                    .parse();
             Chain chain = protein.select()
                     .chainName(chainId)
                     .asChain();

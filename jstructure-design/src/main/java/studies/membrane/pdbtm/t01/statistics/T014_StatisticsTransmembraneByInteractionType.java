@@ -1,4 +1,4 @@
-package studies.membrane.pdbtm.t01;
+package studies.membrane.pdbtm.t01.statistics;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionType;

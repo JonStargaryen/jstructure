@@ -1,4 +1,4 @@
-package studies.membrane.pdbtm.t01;
+package studies.membrane.pdbtm.t01.statistics;
 
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import studies.membrane.MembraneConstants;

@@ -1,6 +1,6 @@
 package studies.membrane.pdbtm;
 
-import studies.membrane.pdbtm.t01.*;
+import studies.membrane.pdbtm.t01.statistics.*;
 
 /**
  * Runs all tasks of #01.

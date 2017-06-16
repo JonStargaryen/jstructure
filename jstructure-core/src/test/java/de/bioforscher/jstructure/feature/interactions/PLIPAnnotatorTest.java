@@ -1,9 +1,7 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -13,12 +11,7 @@ import java.io.IOException;
  * Created by bittrich on 2/9/17.
  */
 public class PLIPAnnotatorTest {
-    private AbstractFeatureProvider plipAnnotator;
-
-    @Before
-    public void setup() {
-        plipAnnotator = new PLIPAnnotator();
-    }
+    private PLIPAnnotator plipAnnotator = new PLIPAnnotator();
 
     @Test
     public void shouldAnnotateSingleProtein() throws IOException {

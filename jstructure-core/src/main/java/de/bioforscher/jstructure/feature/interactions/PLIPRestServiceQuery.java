@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class PLIPRestServiceQuery {
     private static final Logger logger = LoggerFactory.getLogger(PLIPRestServiceQuery.class);
-    static final String BASE_URL = "http://141.55.231.200:8731/plip/";
+    static final String BASE_URL = "https://biosciences.hs-mittweida.de/plip/interaction/";
     private static final String REST_USER_PASSWORD_PATH = System.getProperty("user.home") + "/git/phd_sb_repo/data/.plip-rest-auth";
     static String secret;
 
@@ -29,7 +29,7 @@ public class PLIPRestServiceQuery {
             String line = Files.readAllLines(Paths.get(REST_USER_PASSWORD_PATH)).get(0);
             secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
         }
     }
 

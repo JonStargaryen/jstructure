@@ -1,6 +1,5 @@
-package studies.membrane.pdbtm.t01;
+package studies.membrane.pdbtm.t01.statistics;
 
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import studies.membrane.MembraneConstants;
 import studies.membrane.pdbtm.StatisticsCollector;
 
@@ -9,17 +8,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Statistics for transmembrane regions, grouped by interacting atoms.
+ * Extract interactions between amino acids in different helices, grouped by interacting atoms.
  * Created by bittrich on 6/8/17.
  */
-public class T015_StatisticsTransmembraneByInteractingAtoms {
+public class T018_StatisticsForInteractingHelicesByInteractingAtoms {
     public static void main(String[] args) {
-        Map<String, StatisticsCollector.AminoAcidSummary> statistics = new HashMap<>();
-        statistics.put("backbone", new StatisticsCollector.AminoAcidSummary());
-        statistics.put("sideChain", new StatisticsCollector.AminoAcidSummary());
-        statistics.put("mixed", new StatisticsCollector.AminoAcidSummary());
+        Map<String, StatisticsCollector.InteractingAminoAcidSummary> statistics = new HashMap<>();
+        statistics.put("backbone", new StatisticsCollector.InteractingAminoAcidSummary());
+        statistics.put("sideChain", new StatisticsCollector.InteractingAminoAcidSummary());
+        statistics.put("mixed", new StatisticsCollector.InteractingAminoAcidSummary());
 
-        MembraneConstants.PdbtmAlphaNr.getInteractionsTransmembrane()
+        MembraneConstants.PdbtmAlphaNr.getInteractionsBetweenTransmembraneHelices()
                 .sequential()
                 .forEach(plipInteraction -> {
                     String atoms;
@@ -30,9 +29,8 @@ public class T015_StatisticsTransmembraneByInteractingAtoms {
                     } else {
                         atoms = "mixed";
                     }
-                    StatisticsCollector.AminoAcidSummary aminoAcidSummary = statistics.get(atoms);
-                    aminoAcidSummary.accept((AminoAcid) plipInteraction.getPartner1());
-                    aminoAcidSummary.accept((AminoAcid) plipInteraction.getPartner2());
+                    StatisticsCollector.InteractingAminoAcidSummary aminoAcidSummary = statistics.get(atoms);
+                    aminoAcidSummary.accept(plipInteraction);
                 });
 
         String output = statistics.entrySet().stream()
@@ -41,6 +39,6 @@ public class T015_StatisticsTransmembraneByInteractingAtoms {
                         "atoms\t" + statistics.values().iterator().next().getHeaderLine() + System.lineSeparator(),
                         ""));
 
-        MembraneConstants.write(MembraneConstants.PDBTM_STATISTICS_PATH.resolve("transmembrane_by_interactingAtoms.tsv"), output);
+        MembraneConstants.write(MembraneConstants.PDBTM_STATISTICS_PATH.resolve("interactingHelices_by_interactingAtoms.tsv"), output);
     }
 }

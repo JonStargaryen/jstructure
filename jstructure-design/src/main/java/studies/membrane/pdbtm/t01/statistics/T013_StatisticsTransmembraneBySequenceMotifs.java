@@ -1,4 +1,4 @@
-package studies.membrane.pdbtm.t01;
+package studies.membrane.pdbtm.t01.statistics;
 
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import studies.membrane.MembraneConstants;
