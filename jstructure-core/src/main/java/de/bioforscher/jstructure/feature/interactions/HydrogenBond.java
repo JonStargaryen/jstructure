@@ -76,7 +76,7 @@ public class HydrogenBond extends PLIPInteraction {
     }
 
     @Override
-    Stream<Atom> allAtoms() {
+    public Stream<Atom> allAtoms() {
         return Stream.of(acceptor, donor);
     }
 

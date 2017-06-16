@@ -33,6 +33,59 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     private String alternativeLocation;
     private String identifier;
 
+    public static AtomBuilder builder(Element element, double[] coordinates) {
+        return new AtomBuilder(element, coordinates);
+    }
+
+    public static class AtomBuilder {
+        Element element;
+        String name;
+        int pdbSerial = 0;
+        double[] coordinates;
+        String alternativeLocation = "";
+        float occupancy = DEFAULT_OCCUPANCY;
+        float bfactor = DEFAULT_BFACTOR;
+        boolean virtual;
+
+        AtomBuilder(Element element, double[] coordinates) {
+            this.element = element;
+            this.coordinates = coordinates;
+        }
+
+        public AtomBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public AtomBuilder pdbSerial(int pdbSerial) {
+            this.pdbSerial = pdbSerial;
+            return this;
+        }
+
+        public AtomBuilder alternativeLocation(String alternativeLocation) {
+            this.alternativeLocation = alternativeLocation;
+            return this;
+        }
+
+        public AtomBuilder occupancy(float occupancy) {
+            this.occupancy = occupancy;
+            return this;
+        }
+
+        public AtomBuilder bfactor(float bfactor) {
+            this.bfactor = bfactor;
+            return this;
+        }
+
+        public Atom build() {
+            this.virtual = pdbSerial == 0;
+            if(!virtual && name == null) {
+                throw new IllegalArgumentException("no atom name provided for non-virtual atom with pdbSerial " + pdbSerial);
+            }
+            return new Atom(this);
+        }
+    }
+
     /**
      * Copy constructor.
      * @param atom the original instance
@@ -50,73 +103,15 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
         this.identifier = atom.identifier;
     }
 
-    //TODO clean-up constructor mess
-
-    /**
-     * Constructs an atom.
-     * @param name the unique {@link AtomContainer}-wide identifier
-     * @param pdbSerial the unique protein-wide identifier
-     * @param element this atom's chemical element as Object
-     * @param coordinates the spatial coordinates of this atom
-     * @param occupancy the occupancy value
-     * @param bfactor the b-factor
-     * @param alternativeLocation the indicator for alt locations (e.g. A or B) - maybe empty
-     */
-    public Atom(String name, int pdbSerial, Element element, double[] coordinates, float occupancy, float bfactor, String alternativeLocation) {
-        this.name = name;
-        this.pdbSerial = pdbSerial;
-        this.element = element;
-        this.coordinates = coordinates;
-        this.occupancy = occupancy;
-        this.bfactor = bfactor;
-        this.alternativeLocation = alternativeLocation;
-    }
-
-    /**
-     * Constructs an atom with all information assigned (mostly by being parsed from a <code>PDB</code> file).
-     * @param name the unique {@link AtomContainer}-wide identifier
-     * @param pdbSerial the unique protein-wide identifier
-     * @param elementName this atom's chemical element as <code>String</code> which will be parsed by
-     * {@link Element#valueOfIgnoreCase(String)}
-     * @param coordinates the spatial coordinates of this atom
-     * @param occupancy the occupancy value
-     * @param bfactor the b-factor
-     */
-    public Atom(String name, int pdbSerial, String elementName, double[] coordinates, float occupancy, float bfactor, String alternativeLocation) {
-        this(name, pdbSerial, Element.valueOfIgnoreCase(elementName), coordinates, occupancy, bfactor, alternativeLocation);
-    }
-
-    /**
-     * Constructs an atom without occupancy and bfactor explicitly set (mostly by reconstructing this atom)
-     * @param name the unique {@link AtomContainer}-wide identifier
-     * @param pdbSerial the u nique protein-wide identifier
-     * @param element this atom's chemical element as <code>String</code> which will be parsed by
-     * {@link Element#valueOfIgnoreCase(String)}
-     * @param coordinates the spatial coordinates of this atom
-     */
-    public Atom(String name, int pdbSerial, Element element, double[] coordinates) {
-        this(name, pdbSerial, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR, "");
-    }
-
-    /**
-     * The constructor for a virtual atom with some extra information if necessary.  Calling {@link Atom#isVirtual()}
-     * will return <code>true</code>.
-     * @param name the name of this atom
-     * @param element the element of this atom
-     * @param coordinates the coordinates
-     */
-    public Atom(String name, Element element, double[] coordinates) {
-        this(name, 0, element, coordinates, DEFAULT_OCCUPANCY, DEFAULT_BFACTOR, "");
-        this.virtual = true;
-    }
-
-    /**
-     * The constructor for a virtual atom. Calling {@link Atom#isVirtual()} will return <code>true</code>.
-     * @param coordinates the coordinates
-     */
-    public Atom(double[] coordinates) {
-        this.coordinates = coordinates;
-        this.virtual = true;
+    Atom(AtomBuilder atomBuilder) {
+        this.element = atomBuilder.element;
+        this.name = atomBuilder.name;
+        this.pdbSerial = atomBuilder.pdbSerial;
+        this.coordinates = atomBuilder.coordinates;
+        this.occupancy = atomBuilder.occupancy;
+        this.bfactor = atomBuilder.bfactor;
+        this.alternativeLocation = atomBuilder.alternativeLocation;
+        this.virtual = atomBuilder.virtual;
     }
 
     /**
@@ -179,6 +174,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
             }
             return pdbRecord;
         } catch (NullPointerException e) {
+            e.printStackTrace();
             //TODO replace with actual fallback - will fail for virtual atoms without parent references
             return toString();
         }

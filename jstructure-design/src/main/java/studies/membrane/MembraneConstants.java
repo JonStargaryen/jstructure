@@ -35,6 +35,9 @@ public class MembraneConstants extends StudyConstants {
     public static final Path PDBTM_OPM_PATH = PDBTM.resolve("opm");
     public static final Path PDBTM_PLIP_PATH = PDBTM.resolve("plip");
     public static final Path PDBTM_STATISTICS_PATH = PDBTM.resolve("statistics");
+    public static final Path PDBTM_FRAGMENTS_PATH = PDBTM.resolve("fragments");
+    public static final Path PDBTM_FRAGMENTS_TM_PATH = PDBTM_FRAGMENTS_PATH.resolve("tm");
+    public static final Path PDBTM_FRAGMENTS_TM_BY_SEQUENCE_MOTIF_PATH = PDBTM_FRAGMENTS_TM_PATH.resolve("by_sequenceMotif");
     private static final SecondaryStructureAnnotator SECONDARY_STRUCTURE_ANNOTATOR = new SecondaryStructureAnnotator();
     private static final PLIPAnnotator PLIP_ANNOTATOR = new PLIPAnnotator();
     private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR = new OrientationsOfProteinsInMembranesAnnotator();
@@ -72,7 +75,8 @@ public class MembraneConstants extends StudyConstants {
         public static Stream<String> getIds() {
             return lines(PDBTM_ALPHA_NR_LIST)
                     // skip header and malformed lines
-                    .filter(line -> line.length() == 6 && !line.endsWith("_"));
+                    .filter(line -> line.length() == 6 && !line.endsWith("_"))
+                    .limit(5);
         }
 
         public static Stream<Chain> getChains() {

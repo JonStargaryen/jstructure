@@ -103,8 +103,11 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         buildHelices(residues);
         detectBends(residues);
         detectStrands(residues, ladders, bridges);
+    }
 
-        chain.clearPseudoAtoms();
+    @Override
+    protected void postprocessInternally(Protein protein) {
+        protein.aminoAcids().forEach(aminoAcid -> aminoAcid.getAtoms().removeIf(Atom::isVirtual));
     }
 
     private void detectStrands(List<AminoAcid> residues, List<Ladder> ladders, List<BetaBridge> bridges) {
@@ -835,7 +838,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             double[] xyz = LinearAlgebra.on(c).subtract(o).divide(LinearAlgebra.on(c).distance(o)).add(n).getValue();
 
             // pdbSerial of minimal int value flags them as pseudo-hydrogen
-            fragmentOfSize2.getElement(1).addAtom(new Atom("H", Element.H, xyz));
+            Atom atom = Atom.builder(Element.H, xyz).name("H").build();
+            fragmentOfSize2.getElement(1).addAtom(atom);
         } catch (NullPointerException e) {
             //TODO consistent error-handling
             logger.debug("missing backbone atoms for peptide bond between {} and {} - cannot approximate hydrogen atom position",

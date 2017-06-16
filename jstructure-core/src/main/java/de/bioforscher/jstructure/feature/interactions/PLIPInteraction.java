@@ -147,7 +147,7 @@ public abstract class PLIPInteraction {
                 .filter(atom -> !AminoAcid.HYDROGEN_NAMES.contains(atom.getName()));
     }
 
-    abstract Stream<Atom> allAtoms();
+    public abstract Stream<Atom> allAtoms();
 
     /**
      * @return <code>true</code> iff this interaction occurs between one backbone atom and one side chain atom
@@ -176,5 +176,30 @@ public abstract class PLIPInteraction {
 
     public double[] getRepresentation() {
         return representation;
+    }
+
+    public Atom getAtomRepresentation() {
+        de.bioforscher.jstructure.model.structure.Element pseudoElement = mapToPseudoElement();
+        return Atom.builder(pseudoElement, representation)
+                .name(pseudoElement.name())
+                .build();
+    }
+
+    private de.bioforscher.jstructure.model.structure.Element mapToPseudoElement() {
+        if(this instanceof HalogenBond) {
+            return de.bioforscher.jstructure.model.structure.Element.Al;
+        } else if(this instanceof HydrogenBond) {
+            return de.bioforscher.jstructure.model.structure.Element.Y;
+        } else if(this instanceof MetalComplex) {
+            return de.bioforscher.jstructure.model.structure.Element.Cm;
+        } else if(this instanceof PiStacking) {
+            return de.bioforscher.jstructure.model.structure.Element.Sc;
+        } else if(this instanceof PiCationInteraction) {
+            return de.bioforscher.jstructure.model.structure.Element.Ca;
+        } else if(this instanceof SaltBridge) {
+            return de.bioforscher.jstructure.model.structure.Element.Sb;
+        } else {
+            return de.bioforscher.jstructure.model.structure.Element.W;
+        }
     }
 }

@@ -13,11 +13,6 @@ public class PdbIdTest {
         ProteinIdentifier.createFromPdbId("xxxx");
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailForAdditionalNameContainingUnderscore() {
-        ProteinIdentifier.createFromAdditionalName("1bbr_test");
-    }
-
     @Test
     public void shouldConvertIdToLowerCase() {
         Assert.assertEquals("1brr", ProteinIdentifier.createFromPdbId("1BRR").getPdbId());

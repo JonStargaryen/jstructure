@@ -37,33 +37,57 @@ public class SVDSuperimposerTest {
         Group his1 = createGroup("HIS", 1);
         Group asp1 = createGroup("ASP", 2);
         Group ser1 = createGroup("SER", 3);
-        his1.addAtom(new Atom("CA", Element.C, new double[] { 6.994, 8.354, 42.405 }));
-        asp1.addAtom(new Atom("CA", Element.C, new double[] { 9.429, 7.479, 48.266 }));
-        ser1.addAtom(new Atom("CA", Element.C, new double[] { 5.547, 0.158, 42.050 }));
+        his1.addAtom(Atom.builder(Element.C, new double[] { 6.994, 8.354, 42.405 })
+                .name("CA")
+                .build());
+        asp1.addAtom(Atom.builder(Element.C, new double[] { 9.429, 7.479, 48.266 })
+                .name("CA")
+                .build());
+        ser1.addAtom(Atom.builder(Element.C, new double[] { 5.547, 0.158, 42.050 })
+                .name("CA")
+                .build());
         container1 = Stream.of(his1, asp1, ser1).collect(StructureCollectors.toGroupContainer());
 
         Group his2 = createGroup("HIS", 1);
         Group asp2 = createGroup("ASP", 2);
         Group ser2 = createGroup("SER", 3);
-        his2.addAtom(new Atom("CA", Element.C, new double[] { 3.908, 12.066, -6.159 }));
-        asp2.addAtom(new Atom("CA", Element.C, new double[] { 4.588, 6.531, -9.119 }));
-        ser2.addAtom(new Atom("CA", Element.C, new double[] { 12.080, 12.645, -7.073 }));
+        his2.addAtom(Atom.builder(Element.C, new double[] { 3.908, 12.066, -6.159 })
+                .name("CA")
+                .build());
+        asp2.addAtom(Atom.builder(Element.C, new double[] { 4.588, 6.531, -9.119 })
+                .name("CA")
+                .build());
+        ser2.addAtom(Atom.builder(Element.C, new double[] { 12.080, 12.645, -7.073 })
+                .name("CA")
+                .build());
         container2 = Stream.of(his2, asp2, ser2).collect(StructureCollectors.toGroupContainer());
 
         Group ala3 = createGroup("HIS", 1);
         Group his3 = createGroup("ASP", 2);
         Group cys3 = createGroup("SER", 3);
-        ala3.addAtom(new Atom("CA", Element.C, new double[] { 5.055, 74.865, 22.585 }));
-        his3.addAtom(new Atom("CA", Element.C, new double[] { 7.320, 76.960, 20.325 }));
-        cys3.addAtom(new Atom("CA", Element.C, new double[] { 6.021, 74.874, 17.385 }));
+        ala3.addAtom(Atom.builder(Element.C, new double[] { 5.055, 74.865, 22.585 })
+                .name("CA")
+                .build());
+        his3.addAtom(Atom.builder(Element.C, new double[] { 7.320, 76.960, 20.325 })
+                .name("CA")
+                .build());
+        cys3.addAtom(Atom.builder(Element.C, new double[] { 6.021, 74.874, 17.385 })
+                .name("CA")
+                .build());
         container3 = Stream.of(ala3, his3, cys3).collect(StructureCollectors.toGroupContainer());
 
         Group ala4 = createGroup("HIS", 1);
         Group his4 = createGroup("ASP", 2);
         Group cys4 = createGroup("SER", 3);
-        ala4.addAtom(new Atom("CA", Element.C, new double[] { 5.055, 74.864, 22.583 }));
-        his4.addAtom(new Atom("CA", Element.C, new double[] { 7.321, 76.962, 20.326 }));
-        cys4.addAtom(new Atom("CA", Element.C, new double[] { 6.020, 74.873, 17.386 }));
+        ala4.addAtom(Atom.builder(Element.C, new double[] { 5.055, 74.864, 22.583 })
+                .name("CA")
+                .build());
+        his4.addAtom(Atom.builder(Element.C, new double[] { 7.321, 76.962, 20.326 })
+                .name("CA")
+                .build());
+        cys4.addAtom(Atom.builder(Element.C, new double[] { 6.020, 74.873, 17.386 })
+                .name("CA")
+                .build());
         container4 = Stream.of(ala4, his4, cys4).collect(StructureCollectors.toGroupContainer());
     }
 

@@ -31,6 +31,14 @@ public class SecondaryStructureAnnotatorTest {
     }
 
     @Test
+    public void shouldClearPseudoAtomsAfterRun() {
+        Protein protein = ProteinParser.source(ID).parse();
+        featureProvider.process(protein);
+        boolean containsPseudoHydrogenLine = protein.getPdbRepresentation().contains("ATOM      0  H");
+        Assert.assertFalse("pseudo-atoms were not removed!", containsPseudoHydrogenLine);
+    }
+
+    @Test
     public void testTorsionAngleComputationForResiduesInDifferentChains() {
         // should ignore amino acids in different chains
         featureProvider.process(ProteinParser.source("4cqn").parse());

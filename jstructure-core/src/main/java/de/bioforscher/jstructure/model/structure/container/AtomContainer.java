@@ -40,20 +40,6 @@ public interface AtomContainer extends StructureContainer, Selectable, Calculabl
                         System.lineSeparator()));
     }
 
-    /**
-     * Discards all atoms from this container.
-     */
-    default void clearAtoms() {
-        getAtoms().clear();
-    }
-
-    /**
-     * Deletes all pseudo atoms originating by internal computations.
-     */
-    default void clearPseudoAtoms() {
-        getAtoms().removeIf(Atom::isVirtual);
-    }
-
     default AtomContainer createCopy() {
         try {
             return getClass().getConstructor(getClass()).newInstance(this);

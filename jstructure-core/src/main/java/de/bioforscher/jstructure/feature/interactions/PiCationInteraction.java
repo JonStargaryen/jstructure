@@ -74,7 +74,7 @@ public class PiCationInteraction extends PLIPInteraction {
     }
 
     @Override
-    Stream<Atom> allAtoms() {
+    public Stream<Atom> allAtoms() {
         return Stream.concat(atoms1.stream(), atoms2.stream());
     }
 

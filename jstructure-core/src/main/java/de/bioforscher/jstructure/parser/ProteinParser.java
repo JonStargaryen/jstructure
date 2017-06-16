@@ -225,17 +225,18 @@ public class ProteinParser {
                 }
             }
 
-            // we append the current getResidue container with additional atoms
-            Atom atom = new Atom(line.substring(12, 16).trim(),
-                    Integer.valueOf(line.substring(6, 11).trim()),
-                    element,
+            // we append the current group with additional atoms
+            Atom atom = Atom.builder(element,
                     new double[] { Double.valueOf(line.substring(30, 38).trim()),
                             Double.valueOf(line.substring(38, 46).trim()),
                             Double.valueOf(line.substring(46, 54).trim())
-                    },
-                    occupancy,
-                    bfactor,
-                    alternativeLocationIndicator);
+                    })
+                    .name(line.substring(12, 16).trim())
+                    .pdbSerial(Integer.valueOf(line.substring(6, 11).trim()))
+                    .occupancy(occupancy)
+                    .bfactor(bfactor)
+                    .alternativeLocation(alternativeLocationIndicator)
+                    .build();
 
             // 17/05/22 - stopping to skip alternative positions
             currentGroup.addAtom(atom);

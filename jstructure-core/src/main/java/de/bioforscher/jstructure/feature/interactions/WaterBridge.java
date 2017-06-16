@@ -76,7 +76,7 @@ public class WaterBridge extends PLIPInteraction {
     }
 
     @Override
-    Stream<Atom> allAtoms() {
+    public Stream<Atom> allAtoms() {
         return Stream.of(atom1, atom2);
     }
 

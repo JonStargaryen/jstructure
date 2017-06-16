@@ -56,4 +56,12 @@ public class StudyConstants {
             throw new UncheckedIOException(e);
         }
     }
+
+    public static void createDirectories(Path directory) {
+        try {
+            Files.createDirectories(directory);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 }

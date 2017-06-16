@@ -22,6 +22,8 @@ import java.util.stream.Stream;
 
 /**
  * Implementation of the singular value decomposition rigid body alignment algorithm.
+ * TODO something is horrible wrong when aligning fragments in clone group/atom container - could not reproduce til now
+ * TODO tests and contracts
  * Created by S on 30.09.2016.
  */
 public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignmentResult> {
@@ -41,7 +43,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignme
     @Override
     public StructureAlignmentResult align(AtomContainer reference, AtomContainer query) {
         AtomContainer originalReference = reference;
-        AtomContainer originalCandidate = query;
+        AtomContainer originalQuery = query;
 
         Pair<GroupContainer, GroupContainer> atomContainerPair =
                 AbstractAlignmentAlgorithm.comparableGroupContainerPair(reference,
@@ -89,7 +91,7 @@ public class SVDSuperimposer extends AbstractAlignmentAlgorithm<StructureAlignme
         double rmsd = calculateRmsd(reference, query);
 
         // return alignment
-        return new StructureAlignmentResult(originalReference, originalCandidate, query, rmsd, translation, rotation);
+        return new StructureAlignmentResult(originalReference, originalQuery, query, rmsd, translation, rotation);
     }
 
     /**

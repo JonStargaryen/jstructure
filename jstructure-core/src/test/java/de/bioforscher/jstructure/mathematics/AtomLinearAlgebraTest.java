@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
@@ -48,13 +49,13 @@ public class AtomLinearAlgebraTest {
     @Test
     public void transform() throws Exception {
         // example from http://stackoverflow.com/questions/34050929/3d-point-rotation-algorithm
-        double[] point = { 1, 0, 0 };
+        double[] point1 = { 1, 0, 0 };
         final double[] expectedPoint = { 0, -1, 0 };
-        System.out.printf("rotating %s by -90 degree yields ", Arrays.toString(point));
+        System.out.printf("rotating %s by -90 degree yields ", Arrays.toString(point1));
         // describes a rotation by 90°
         double[][] rotation = {{ 0, -1, 0 },{ 1, 0, 0 },{ 0, 0, 1 }};
         Transformation transformation = new Transformation(rotation);
-        Atom atom = new Atom(point);
+        Atom atom = Atom.builder(Element.C, point1).build();
         transformation.transformCoordinates(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
         Assert.assertArrayEquals(expectedPoint, atom.getCoordinates(), 0.0);
@@ -67,7 +68,7 @@ public class AtomLinearAlgebraTest {
         // describes a rotation by 90°
         double[][] rotation2 = { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
         Transformation transformation2 = new Transformation(translation2, rotation2);
-        Atom atom2 = new Atom(point2);
+        Atom atom2 = Atom.builder(Element.C, point2).build();
         transformation2.transformCoordinates(atom2);
         System.out.println(Arrays.toString(atom2.getCoordinates()));
         Assert.assertArrayEquals(expectedPoint2, atom2.getCoordinates(), 0.0);

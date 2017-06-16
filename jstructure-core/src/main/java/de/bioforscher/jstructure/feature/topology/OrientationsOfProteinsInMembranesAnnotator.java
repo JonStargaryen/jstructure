@@ -110,8 +110,8 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                         membraneContainer.setMembraneAtoms(membraneAtoms);
 
 //                    //TODO remove, used to evaluate alignment manually
-//                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getPdbRepresentation().getBytes());
-//                    Files.write(Paths.get(System.getProperty("user.home") + "/opm.pdb"), opmProtein.getPdbRepresentation().getBytes());
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getAtomRepresentation().getBytes());
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/opm.pdb"), opmProtein.getAtomRepresentation().getBytes());
 //                    //TODO remove, used to evaluate segment positions manually
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/tm.pdb"), protein.select()
 //                            .residueNumber(helices.stream()
@@ -120,7 +120,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 //                                    .collect(Collectors.toList())
 //                                    .toArray(new IntegerRange[0]))
 //                            .asGroupContainer()
-//                            .getPdbRepresentation()
+//                            .getAtomRepresentation()
 //                            .getBytes());
                     }
                 }

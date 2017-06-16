@@ -78,4 +78,8 @@ public class StructureAlignmentResult implements AlignmentResult {
     public AtomContainer getAlignedQuery() {
         return alignedQuery;
     }
+
+    public Transformation getTransformation() {
+        return transformation;
+    }
 }
