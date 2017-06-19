@@ -15,8 +15,8 @@ public class Serine extends AminoAcid implements StandardAminoAcid {
 
     public Serine(Serine serine) {
         super(serine);
-        this.cb = serine.cb;
-        this.og = serine.og;
+//        this.cb = new Atom(serine.cb);
+//        this.og = new Atom(serine.og);
     }
 
     public Serine(ResidueNumber residueNumber,

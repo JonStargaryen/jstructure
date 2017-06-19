@@ -18,11 +18,11 @@ public class Glutamine extends AminoAcid implements StandardAminoAcid {
 
     public Glutamine(Glutamine glutamine) {
         super(glutamine);
-        this.cb = glutamine.cb;
-        this.cg = glutamine.cg;
-        this.cd = glutamine.cd;
-        this.oe1 = glutamine.oe1;
-        this.ne2 = glutamine.ne2;
+//        this.cb = new Atom(glutamine.cb);
+//        this.cg = new Atom(glutamine.cg);
+//        this.cd = new Atom(glutamine.cd);
+//        this.oe1 = new Atom(glutamine.oe1);
+//        this.ne2 = new Atom(glutamine.ne2);
     }
 
     public Glutamine(ResidueNumber residueNumber,

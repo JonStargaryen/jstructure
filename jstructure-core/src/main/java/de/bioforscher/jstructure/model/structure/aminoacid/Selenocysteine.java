@@ -15,8 +15,8 @@ public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
 
     public Selenocysteine(Selenocysteine selenocysteine) {
         super(selenocysteine);
-        this.cb = selenocysteine.cb;
-        this.se = selenocysteine.se;
+//        this.cb = new Atom(selenocysteine.cb);
+//        this.se = new Atom(selenocysteine.se);
     }
 
     public Selenocysteine(ResidueNumber residueNumber,

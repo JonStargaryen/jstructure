@@ -1,7 +1,8 @@
 package studies.membrane.pdbtm.t02.fragments;
 
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
-import de.bioforscher.jstructure.alignment.StructureAlignmentResult;
+import de.bioforscher.jstructure.alignment.Alignment;
+import de.bioforscher.jstructure.alignment.AlignmentPolicy;
+import de.bioforscher.jstructure.alignment.StructureAligner;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
@@ -11,7 +12,6 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +37,7 @@ import java.util.stream.Stream;
 public class T021_TransmembraneSequenceMotifs {
     private static final Logger logger = LoggerFactory.getLogger(T021_TransmembraneSequenceMotifs.class);
     private static final Path outputPath = MembraneConstants.PDBTM_FRAGMENTS_TM_BY_SEQUENCE_MOTIF_PATH;
-    private static final Map<SequenceMotifDefinition, AtomContainer> referenceMotifs = new HashMap<>();
-    private static final SVDSuperimposer svd = new SVDSuperimposer(AminoAcid.BACKBONE_ATOM_NAMES, AminoAcid.ALL_ATOM_NAMES);
+    private static final Map<SequenceMotifDefinition, GroupContainer> referenceMotifs = new HashMap<>();
 
     public static void main(String[] args) {
         purgeDirectory(outputPath.toFile());
@@ -103,7 +102,7 @@ public class T021_TransmembraneSequenceMotifs {
                 .forEach(interactionGroup::addAtom);
 
         // align container and all interactions to reference
-        AtomContainer reference = referenceMotifs.get(sequenceMotif.getMotifDefinition());
+        GroupContainer reference = referenceMotifs.get(sequenceMotif.getMotifDefinition());
         logger.info("[{}] aligning {} to reference {}",
                 sequenceMotif.getMotifDefinition().name(),
                 filename.split("\\.")[0],
@@ -111,7 +110,10 @@ public class T021_TransmembraneSequenceMotifs {
                         reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
-        StructureAlignmentResult alignment = svd.align(reference, fragment);
+        Alignment alignment = StructureAligner.builder(reference, fragment)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
 //        alignment.transform(interactionGroup);
         // write fragment file
         MembraneConstants.write(sequenceMotifOutputPath, alignment.getAlignedQuery().getPdbRepresentation() +

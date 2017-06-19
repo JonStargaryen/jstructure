@@ -21,14 +21,14 @@ public class Tyrosine extends AminoAcid implements StandardAminoAcid {
 
     public Tyrosine(Tyrosine tyrosine) {
         super(tyrosine);
-        this.cb = tyrosine.cb;
-        this.cg = tyrosine.cg;
-        this.cd1 = tyrosine.cd1;
-        this.cd2 = tyrosine.cd2;
-        this.ce1 = tyrosine.ce1;
-        this.ce2 = tyrosine.ce2;
-        this.cz = tyrosine.cz;
-        this.oh = tyrosine.oh;
+//        this.cb = new Atom(tyrosine.cb);
+//        this.cg = new Atom(tyrosine.cg);
+//        this.cd1 = new Atom(tyrosine.cd1);
+//        this.cd2 = new Atom(tyrosine.cd2);
+//        this.ce1 = new Atom(tyrosine.ce1);
+//        this.ce2 = new Atom(tyrosine.ce2);
+//        this.cz = new Atom(tyrosine.cz);
+//        this.oh = new Atom(tyrosine.oh);
     }
 
     public Tyrosine(ResidueNumber residueNumber,

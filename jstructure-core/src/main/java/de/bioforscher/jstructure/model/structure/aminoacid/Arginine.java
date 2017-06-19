@@ -18,11 +18,11 @@ public class Arginine extends AminoAcid implements StandardAminoAcid {
 
     public Arginine(Arginine arginine) {
         super(arginine);
-        this.cb = arginine.cb;
-        this.cg = arginine.cg;
-        this.cd = arginine.cd;
-        this.ne = arginine.ne;
-        this.cz = arginine.cz;
+//        this.cb = new Atom(arginine.cb);
+//        this.cg = new Atom(arginine.cg);
+//        this.cd = new Atom(arginine.cd);
+//        this.ne = new Atom(arginine.ne);
+//        this.cz = new Atom(arginine.cz);
     }
 
     public Arginine(ResidueNumber residueNumber,

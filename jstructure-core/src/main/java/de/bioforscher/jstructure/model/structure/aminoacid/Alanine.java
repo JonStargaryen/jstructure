@@ -14,7 +14,7 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
 
     public Alanine(Alanine alanine) {
         super(alanine);
-        this.cb = alanine.cb;
+//        this.cb = new Atom(alanine.cb);
     }
 
     public Alanine(ResidueNumber residueNumber,

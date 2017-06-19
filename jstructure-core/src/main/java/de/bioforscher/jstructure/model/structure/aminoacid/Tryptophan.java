@@ -23,16 +23,16 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
 
     public Tryptophan(Tryptophan tryptophan) {
         super(tryptophan);
-        this.cb = tryptophan.cb;
-        this.cg = tryptophan.cg;
-        this.cd1 = tryptophan.cd1;
-        this.cd2 = tryptophan.cd2;
-        this.ne1 = tryptophan.ne1;
-        this.ce2 = tryptophan.ce2;
-        this.ce3 = tryptophan.ce3;
-        this.cz2 = tryptophan.cz2;
-        this.cz3 = tryptophan.cz3;
-        this.ch2 = tryptophan.ch2;
+//        this.cb = new Atom(tryptophan.cb);
+//        this.cg = new Atom(tryptophan.cg);
+//        this.cd1 = new Atom(tryptophan.cd1);
+//        this.cd2 = new Atom(tryptophan.cd2);
+//        this.ne1 = new Atom(tryptophan.ne1);
+//        this.ce2 = new Atom(tryptophan.ce2);
+//        this.ce3 = new Atom(tryptophan.ce3);
+//        this.cz2 = new Atom(tryptophan.cz2);
+//        this.cz3 = new Atom(tryptophan.cz3);
+//        this.ch2 = new Atom(tryptophan.ch2);
     }
 
     public Tryptophan(ResidueNumber residueNumber,

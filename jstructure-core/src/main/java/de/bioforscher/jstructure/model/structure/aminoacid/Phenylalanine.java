@@ -20,13 +20,13 @@ public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
 
     public Phenylalanine(Phenylalanine phenylalanine) {
         super(phenylalanine);
-        this.cb = phenylalanine.cb;
-        this.cg = phenylalanine.cg;
-        this.cd1 = phenylalanine.cd1;
-        this.cd2 = phenylalanine.cd2;
-        this.ce1 = phenylalanine.ce1;
-        this.ce2 = phenylalanine.ce2;
-        this.cz = phenylalanine.cz;
+//        this.cb = new Atom(phenylalanine.cb);
+//        this.cg = new Atom(phenylalanine.cg);
+//        this.cd1 = new Atom(phenylalanine.cd1);
+//        this.cd2 = new Atom(phenylalanine.cd2);
+//        this.ce1 = new Atom(phenylalanine.ce1);
+//        this.ce2 = new Atom(phenylalanine.ce2);
+//        this.cz = new Atom(phenylalanine.cz);
     }
 
     public Phenylalanine(ResidueNumber residueNumber,

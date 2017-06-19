@@ -15,8 +15,8 @@ public class Cysteine extends AminoAcid implements StandardAminoAcid {
 
     public Cysteine(Cysteine cysteine) {
         super(cysteine);
-        this.cb = cysteine.cb;
-        this.sg = cysteine.sg;
+//        this.cb = new Atom(cysteine.cb);
+//        this.sg = new Atom(cysteine.sg);
     }
 
     public Cysteine(ResidueNumber residueNumber,

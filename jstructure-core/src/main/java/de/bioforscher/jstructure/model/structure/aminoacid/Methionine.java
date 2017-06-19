@@ -17,10 +17,10 @@ public class Methionine extends AminoAcid implements StandardAminoAcid {
 
     public Methionine(Methionine methionine) {
         super(methionine);
-        this.cb = methionine.cb;
-        this.cg = methionine.cg;
-        this.sd = methionine.sd;
-        this.ce = methionine.ce;
+//        this.cb = new Atom(methionine.cb);
+//        this.cg = new Atom(methionine.cg);
+//        this.sd = new Atom(methionine.sd);
+//        this.ce = new Atom(methionine.ce);
     }
 
     public Methionine(ResidueNumber residueNumber,

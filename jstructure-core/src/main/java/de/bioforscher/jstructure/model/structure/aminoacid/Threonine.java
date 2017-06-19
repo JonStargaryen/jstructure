@@ -16,9 +16,9 @@ public class Threonine extends AminoAcid implements StandardAminoAcid {
 
     public Threonine(Threonine threonine) {
         super(threonine);
-        this.cb = threonine.cb;
-        this.og1 = threonine.og1;
-        this.cg2 = threonine.cg2;
+//        this.cb = new Atom(threonine.cb);
+//        this.og1 = new Atom(threonine.og1);
+//        this.cg2 = new Atom(threonine.cg2);
     }
 
     public Threonine(ResidueNumber residueNumber,

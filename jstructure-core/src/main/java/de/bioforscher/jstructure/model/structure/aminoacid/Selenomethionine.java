@@ -17,10 +17,10 @@ public class Selenomethionine extends AminoAcid implements NonStandardAminoAcid 
 
     public Selenomethionine(Selenomethionine selenomethionine) {
         super(selenomethionine);
-        this.cb = selenomethionine.cb;
-        this.cg = selenomethionine.cg;
-        this.se = selenomethionine.se;
-        this.ce = selenomethionine.ce;
+//        this.cb = new Atom(selenomethionine.cb);
+//        this.cg = new Atom(selenomethionine.cg);
+//        this.se = new Atom(selenomethionine.se);
+//        this.ce = new Atom(selenomethionine.ce);
     }
 
     public Selenomethionine(ResidueNumber residueNumber,

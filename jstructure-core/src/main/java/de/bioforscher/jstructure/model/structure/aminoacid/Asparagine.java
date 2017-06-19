@@ -17,10 +17,10 @@ public class Asparagine extends AminoAcid implements StandardAminoAcid {
 
     public Asparagine(Asparagine asparagine) {
         super(asparagine);
-        this.cb = asparagine.cb;
-        this.cg = asparagine.cg;
-        this.od1 = asparagine.od1;
-        this.nd2 = asparagine.nd2;
+//        this.cb = new Atom(asparagine.cb);
+//        this.cg = new Atom(asparagine.cg);
+//        this.od1 = new Atom(asparagine.od1);
+//        this.nd2 = new Atom(asparagine.nd2);
     }
 
     public Asparagine(ResidueNumber residueNumber,

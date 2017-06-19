@@ -16,9 +16,9 @@ public class Proline extends AminoAcid implements StandardAminoAcid {
 
     public Proline(Proline proline) {
         super(proline);
-        this.cb = proline.cb;
-        this.cg = proline.cg;
-        this.cd = proline.cd;
+//        this.cb = new Atom(proline.cb);
+//        this.cg = new Atom(proline.cg);
+//        this.cd = new Atom(proline.cd);
     }
 
     public Proline(ResidueNumber residueNumber,

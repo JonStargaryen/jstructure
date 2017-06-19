@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.alignment;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
+import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
@@ -14,10 +15,10 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
- * Tests the capabilities of the SVDSuperimposer.
- * Created by S on 02.10.2016.
+ * Tests for the structure aligner.
+ * Created by bittrich on 6/19/17.
  */
-public class SVDSuperimposerTest {
+public class StructureAlignerTest {
     private Protein protein1acj;
     private GroupContainer container1;
     private GroupContainer container2;
@@ -94,60 +95,83 @@ public class SVDSuperimposerTest {
     @Test
     public void shouldAlignArbitraryPoints() {
         // calculate alignment
-        SVDSuperimposer svd = new SVDSuperimposer();
-        StructureAlignmentResult alignmentResult = svd.align(container1, container2);
-        System.out.println(Arrays.toString(alignmentResult.getTranslation()));
-        System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
+        Alignment alignmentResult = StructureAligner.builder(container1, container2)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
+        System.out.println(Arrays.toString(alignmentResult.getTransformation().getTranslation()));
+        System.out.println(Arrays.deepToString(alignmentResult.getTransformation().getRotation()));
         System.out.println("rmsd " + alignmentResult.getAlignmentScore());
-        System.out.println("rmsd2 " + AbstractAlignmentAlgorithm.calculateRmsd(alignmentResult.getOriginalReference(), alignmentResult.getOriginalQuery()));
         Assert.assertEquals(0.19986, alignmentResult.getAlignmentScore(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void shouldAlignAnotherSetOfArbitraryPoints() {
         // calculate alignment
-        StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(container3, container4);
-        System.out.println(Arrays.toString(alignmentResult.getTranslation()));
-        System.out.println(Arrays.deepToString(alignmentResult.getRotation()));
+        Alignment alignmentResult = StructureAligner.builder(container3, container4)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
+        System.out.println(Arrays.toString(alignmentResult.getTransformation().getTranslation()));
+        System.out.println(Arrays.deepToString(alignmentResult.getTransformation().getRotation()));
         System.out.println("rmsd " + alignmentResult.getAlignmentScore());
         Assert.assertEquals(0.0021, alignmentResult.getAlignmentScore(), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
-    public void shouldSuperimposeBasedOnAlignment() {
+    public void shouldManipulateCoordinatesInplace() {
+        //TODO
+    }
+
+    @Test
+    public void shouldNotManipulateCoordinatesCopy() {
         String initialCoordinates1 = container1.getPdbRepresentation();
         String initialCoordinates2 = container2.getPdbRepresentation();
-        StructureAlignmentResult alignmentResult = new SVDSuperimposer().align(container1, container2);
-        double rmsd1 = alignmentResult.getAlignmentScore();
+        Alignment alignmentResult = StructureAligner.builder(container1, container2)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
         // coordinates should not be changed by aligning
+        Assert.assertNotEquals(initialCoordinates2, alignmentResult.getAlignedQuery().getPdbRepresentation());
         Assert.assertEquals(initialCoordinates1, container1.getPdbRepresentation());
         Assert.assertEquals(initialCoordinates2, container2.getPdbRepresentation());
-        alignmentResult.transform(container2);
-        double rmsd2 = AbstractAlignmentAlgorithm.calculateRmsd(container1, container2);
-        Assert.assertEquals(rmsd1, rmsd2, TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void shouldResultInPerfectAlignment() {
-        SVDSuperimposer svd = new SVDSuperimposer();
-        StructureAlignmentResult result = svd.align(protein1acj, protein1acj);
-        Assert.assertEquals(0.0, result.getAlignmentScore(), 0.001);
-        Assert.assertArrayEquals(result.getTranslation(), AlignmentAlgorithm.NEUTRAL_TRANSLATION, 0.001);
+        Alignment alignmentResult = StructureAligner.builder(protein1acj, protein1acj)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
+        Assert.assertEquals(0.0, alignmentResult.getAlignmentScore(), 0.001);
+        Assert.assertArrayEquals(alignmentResult.getTransformation().getTranslation(), Transformation.NEUTRAL_TRANSLATION, 0.001);
     }
 
     @Test
-    public void shouldResultInPerfectAlignmentForTransformedCopy() throws IOException {
+    public void shouldResultInPerfectAlignmentForTransformedCopy() {
         Protein protein1acjCopy = ProteinParser.source("1acj").parse();
         double[] translation = new double[] { 10, 20, 30 };
         protein1acjCopy.calculate().transform(translation);
 
-        SVDSuperimposer svd = new SVDSuperimposer();
-        StructureAlignmentResult result = svd.align(protein1acj.select()
+        Alignment alignmentResult = StructureAligner.builder(protein1acj, protein1acjCopy)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
+        Assert.assertEquals(0.0, alignmentResult.getAlignmentScore(), 0.001);
+        Assert.assertArrayEquals(alignmentResult.getTransformation().getTranslation(), LinearAlgebra.on(translation).multiply(-1.0).getValue(), 0.001);
+    }
+
+    @Test
+    public void shouldAlignSyntheticContainers() {
+        double rmsd = StructureAligner.builder(protein1acj.select()
                 .aminoAcids()
-                .asGroupContainer(), protein1acjCopy.select()
+                .asGroupContainer(), protein1acj.select()
                 .aminoAcids()
-                .asGroupContainer());
-        Assert.assertEquals(0.0, result.getAlignmentScore(), 0.001);
-        Assert.assertArrayEquals(result.getTranslation(), LinearAlgebra.on(translation).multiply(-1.0).getValue(), 0.001);
+                .asGroupContainer())
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align()
+                .getAlignmentScore();
+        Assert.assertEquals(0.0, rmsd, TestUtils.TOLERANT_ERROR_MARGIN);
     }
 }

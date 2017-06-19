@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,9 +19,26 @@ public class StructureCollectorsTest {
     }
 
     @Test
+    public void shouldCreateDistinctContainer() {
+        // create copy
+        AtomContainer original = protein.aminoAcids()
+                .findFirst()
+                .get();
+        String initialPdbRecord = original.getPdbRepresentation();
+        AtomContainer copy = original.createCopy();
+
+        // manipulate coordinates of copy
+        copy.getAtoms().get(0).setCoordinates(new double[] { 0, 0, 0 });
+
+        // should not affect original
+        Assert.assertNotEquals(initialPdbRecord, copy.getPdbRepresentation());
+        Assert.assertEquals(initialPdbRecord, original.getPdbRepresentation());
+    }
+
+    @Test
     public void toAtomContainer() throws Exception {
         //TODO rework concept, has there to be some structure for atoms (i.e. organize selection again into chains e.g.)
-        StructureCollectors.BasicAtomContainer container = protein.atoms()
+        BasicAtomContainer container = protein.atoms()
                 .collect(StructureCollectors.toAtomContainer());
         container.atoms().forEach(atom -> Assert.assertEquals("parent reference was lost",
                 "1brr",
@@ -36,7 +54,7 @@ public class StructureCollectorsTest {
 
     @Test
     public void toGroupContainer() throws Exception {
-        StructureCollectors.BasicGroupContainer container = protein.groups()
+        BasicGroupContainer container = protein.groups()
                 .collect(StructureCollectors.toGroupContainer());
         container.groups().forEach(group -> Assert.assertEquals("parent reference was lost",
                 "1brr",
@@ -51,7 +69,7 @@ public class StructureCollectorsTest {
 
     @Test
     public void toChainContainer() throws Exception {
-        StructureCollectors.BasicChainContainer container = protein.chains()
+        BasicChainContainer container = protein.chains()
                 .collect(StructureCollectors.toChainContainer());
         container.chains().forEach(chain -> Assert.assertEquals("parent reference was lost",
                 "1brr",

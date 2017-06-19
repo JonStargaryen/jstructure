@@ -2,11 +2,21 @@ package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import org.apache.commons.math3.linear.MatrixUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Transformation extends FeatureContainerEntry {
     private static final Logger logger = LoggerFactory.getLogger(Transformation.class);
+    /**
+     * The translation vector describing no shift whatsoever. 3D vector of zeros.
+     */
+    public static final double[] NEUTRAL_TRANSLATION = new double[3];
+    /**
+     * The rotation matrix describing no rotation whatsoever. <tt>3 x 3</tt> identity matrix.
+     */
+    public static final double[][] NEUTRAL_ROTATION = MatrixUtils.createRealIdentityMatrix(3).getData();
     private final double[] translation;
     private final double[][] rotation;
 
@@ -40,7 +50,7 @@ public class Transformation extends FeatureContainerEntry {
         this(null, rotation);
     }
 
-    public Atom transformCoordinates(Atom atom) {
+    public Atom transform(Atom atom) {
         double[] vector = atom.getCoordinates();
         logger.trace("initial atom {}", atom.getPdbRepresentation());
 
@@ -57,6 +67,10 @@ public class Transformation extends FeatureContainerEntry {
 
         logger.trace("transf. atom {}", atom.getPdbRepresentation());
         return atom;
+    }
+
+    public void transform(AtomContainer atomContainer) {
+        atomContainer.calculate().transform(this);
     }
 
     public double[] getTranslation() {

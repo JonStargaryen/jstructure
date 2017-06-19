@@ -197,10 +197,13 @@ public class LinearAlgebra {
          * point from each atom's coordinates. The operation will manipulate the provided atom's coordinates directly
          * (rather than creating new Objects).
          * @see AtomContainerLinearAlgebra#centroid()
+         * @return provides the centroid of this entity
          */
-        public AtomContainerLinearAlgebra center() {
+        public PrimitiveDoubleArrayLinearAlgebra center() {
+            PrimitiveDoubleArrayLinearAlgebra centroid = centroid();
             // invert the centroid/shift vector as it will be added to the coordinates by the shift function
-            return transform(centroid().multiply(-1).getValue());
+            transform(centroid().multiply(-1).getValue());
+            return centroid;
         }
 
         /**
@@ -256,7 +259,7 @@ public class LinearAlgebra {
         }
 
         public AtomContainerLinearAlgebra transform(Transformation transformation) {
-            atomContainer.atoms().forEach(transformation::transformCoordinates);
+            atomContainer.atoms().forEach(transformation::transform);
             return this;
         }
     }

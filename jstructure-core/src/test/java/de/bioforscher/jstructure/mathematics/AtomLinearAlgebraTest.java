@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.mathematics;
 
-import de.bioforscher.jstructure.alignment.AlignmentAlgorithm;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -30,7 +29,7 @@ public class AtomLinearAlgebraTest {
     public void center() throws Exception {
         protein.calculate().center();
         Assert.assertArrayEquals(LinearAlgebra.on(protein).centroid().getValue(),
-                AlignmentAlgorithm.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
+                Transformation.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
     }
 
     @Test
@@ -56,7 +55,7 @@ public class AtomLinearAlgebraTest {
         double[][] rotation = {{ 0, -1, 0 },{ 1, 0, 0 },{ 0, 0, 1 }};
         Transformation transformation = new Transformation(rotation);
         Atom atom = Atom.builder(Element.C, point1).build();
-        transformation.transformCoordinates(atom);
+        transformation.transform(atom);
         System.out.println(Arrays.toString(atom.getCoordinates()));
         Assert.assertArrayEquals(expectedPoint, atom.getCoordinates(), 0.0);
 
@@ -69,7 +68,7 @@ public class AtomLinearAlgebraTest {
         double[][] rotation2 = { { 0, -1, 0 }, { 1, 0, 0 }, { 0, 0, 1 } };
         Transformation transformation2 = new Transformation(translation2, rotation2);
         Atom atom2 = Atom.builder(Element.C, point2).build();
-        transformation2.transformCoordinates(atom2);
+        transformation2.transform(atom2);
         System.out.println(Arrays.toString(atom2.getCoordinates()));
         Assert.assertArrayEquals(expectedPoint2, atom2.getCoordinates(), 0.0);
     }

@@ -17,10 +17,10 @@ public class Isoleucine extends AminoAcid implements StandardAminoAcid {
 
     public Isoleucine(Isoleucine isoleucine) {
         super(isoleucine);
-        this.cb = isoleucine.cb;
-        this.cg1 = isoleucine.cg1;
-        this.cg2 = isoleucine.cg2;
-        this.cd1 = isoleucine.cd1;
+//        this.cb = new Atom(isoleucine.cb);
+//        this.cg1 = new Atom(isoleucine.cg1);
+//        this.cg2 = new Atom(isoleucine.cg2);
+//        this.cd1 = new Atom(isoleucine.cd1);
     }
 
     public Isoleucine(ResidueNumber residueNumber,

@@ -1,12 +1,14 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.alignment.SVDSuperimposer;
+import de.bioforscher.jstructure.alignment.AlignmentPolicy;
+import de.bioforscher.jstructure.alignment.StructureAligner;
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.Jsoup;
@@ -91,14 +93,15 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 
                         // superimpose opm protein onto instance of the original protein
                         //TODO this alignment is by no means perfect, but works for a first glance
-                        SVDSuperimposer.ALPHA_CARBON_SVD_INSTANCE
-                                .align(protein.select()
-                                                .aminoAcids()
-                                                .asGroupContainer(),
-                                        opmProtein.select()
-                                                .aminoAcids()
-                                                .asGroupContainer())
+                        //TODO alpha-carbon-only option
+                        StructureAligner.builder(protein.aminoAcids().collect(StructureCollectors.toGroupContainer()),
+                                        opmProtein.aminoAcids().collect(StructureCollectors.toGroupContainer()))
+                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                                .align()
+                                .getTransformation()
                                 .transform(opmProtein);
+
 
                         // extract dummy atoms and move them to membraneContainer object
                         List<double[]> membraneAtoms = opmProtein.atoms()
@@ -131,7 +134,9 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                     .forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new Topology(this,
                             membraneContainer.isTransmembraneGroup(aminoAcid))));
         } catch (Exception e) {
-            System.err.println(document.html());
+            logger.warn("OPM parsing for {} failed", protein.getPdbId().getFullName(), e);
+            // sometimes it is the html's fault
+//            System.err.println(document.html());
             throw new ComputationException("failed to fetch or parse OPM file", e);
         }
     }

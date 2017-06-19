@@ -18,11 +18,11 @@ public class GlutamicAcid extends AminoAcid implements StandardAminoAcid {
 
     public GlutamicAcid(GlutamicAcid glutamicAcid) {
         super(glutamicAcid);
-        this.cb = glutamicAcid.cb;
-        this.cg = glutamicAcid.cg;
-        this.cd = glutamicAcid.cd;
-        this.oe1 = glutamicAcid.oe1;
-        this.oe2 = glutamicAcid.oe2;
+//        this.cb = new Atom(glutamicAcid.cb);
+//        this.cg = new Atom(glutamicAcid.cg);
+//        this.cd = new Atom(glutamicAcid.cd);
+//        this.oe1 =new Atom( glutamicAcid.oe1);
+//        this.oe2 = new Atom(glutamicAcid.oe2);
     }
 
     public GlutamicAcid(ResidueNumber residueNumber,
