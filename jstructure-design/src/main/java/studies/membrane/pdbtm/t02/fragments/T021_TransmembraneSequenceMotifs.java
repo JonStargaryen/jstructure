@@ -46,11 +46,15 @@ public class T021_TransmembraneSequenceMotifs {
     }
 
     private static void purgeDirectory(File directory) {
-        for (File file: directory.listFiles()) {
-            if (file.isDirectory()) {
-                purgeDirectory(file);
+        try {
+            for (File file : directory.listFiles()) {
+                if (file.isDirectory()) {
+                    purgeDirectory(file);
+                }
+                file.delete();
             }
-            file.delete();
+        } catch (NullPointerException e) {
+            // nothing to purge, when directory does not exist yet
         }
     }
 

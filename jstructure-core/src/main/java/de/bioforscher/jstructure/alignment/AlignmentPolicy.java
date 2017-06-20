@@ -22,10 +22,10 @@ public interface AlignmentPolicy {
     @FunctionalInterface
     interface AtomMapping {
         /**
-         *
-         * @param reference
-         * @param query
-         * @return
+         * Traverses both containers and returns a comparable arrangement of atoms.
+         * @param reference the reference container
+         * @param query the query container
+         * @return a collection of compatible, paired atoms of both containers
          */
         List<Pair<Atom, Atom>> determineAtomMapping(GroupContainer reference, GroupContainer query);
     }
@@ -35,18 +35,21 @@ public interface AlignmentPolicy {
      */
     enum MatchingBehavior implements AtomMapping {
         /**
-         *
+         * Assumes equal number of atoms.
          */
-        BY_ATOM_INDEX((r, q) -> {
-            ensureMatchingAtomCount(r, q);
-            return IntStream.range(0, r.getAtoms().size())
-                    .mapToObj(index -> new Pair<>(r.getAtoms().get(index), q.getAtoms().get(index)))
+        BY_ATOM_INDEX((reference, query) -> {
+            ensureMatchingAtomCount(reference, query);
+            return IntStream.range(0, reference.getAtoms().size())
+                    .mapToObj(index -> new Pair<>(reference.getAtoms().get(index), query.getAtoms().get(index)))
                     .collect(Collectors.toList());
         }),
-        BY_COMPARABLE_ATOM_NAMES((r, q) -> {
-            ensureMatchingGroupCount(r, q);
-            return IntStream.range(0, r.getGroups().size())
-                    .mapToObj(index -> determineSharedAtoms(r.getGroups().get(index), q.getGroups().get(index)))
+        /**
+         * Assumes equal number of groups.
+         */
+        BY_COMPARABLE_ATOM_NAMES((reference, query) -> {
+            ensureMatchingGroupCount(reference, query);
+            return IntStream.range(0, reference.getGroups().size())
+                    .mapToObj(index -> determineSharedAtoms(reference.getGroups().get(index), query.getGroups().get(index)))
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
         });
@@ -57,6 +60,13 @@ public interface AlignmentPolicy {
             this.atomMapping = atomMapping;
         }
 
+        /**
+         * Pairs two {@link de.bioforscher.jstructure.model.structure.container.AtomContainer} entities in a comparable
+         * way. Will determine the set of shared atom names and pair matching names of both containers.
+         * @param referenceGroup the reference container
+         * @param queryGroup the query container
+         * @return a collection of compatible atom pairs
+         */
         private static List<Pair<Atom, Atom>> determineSharedAtoms(Group referenceGroup, Group queryGroup) {
             // determine set of shared atom names
             Set<String> sharedAtomNames = referenceGroup.atoms()
@@ -80,9 +90,9 @@ public interface AlignmentPolicy {
          * Native implementation of selection method. Could use
          * {@link de.bioforscher.jstructure.model.structure.selection.Selection} as well, but performance ought to be
          * favorable for the straight-forward implementation.
-         * @param group
-         * @param atomName
-         * @return
+         * @param group the container to process
+         * @param atomName the atom name to retrieve
+         * @return the desired atom
          */
         private static Atom selectAtom(Group group, String atomName) {
             return group.atoms()
@@ -94,9 +104,10 @@ public interface AlignmentPolicy {
         }
 
         /**
-         *
-         * @param reference
-         * @param query
+         * Checks for an agreement in total atom count.
+         * @param reference the reference container
+         * @param query the query container
+         * @throws AlignmentException when both containers do not match in size
          */
         private static void ensureMatchingAtomCount(GroupContainer reference, GroupContainer query) {
             if(reference.getAtoms().size() != query.getAtoms().size()) {
@@ -106,9 +117,10 @@ public interface AlignmentPolicy {
         }
 
         /**
-         *
-         * @param reference
-         * @param query
+         * Checks for an agreement in total group count.
+         * @param reference the reference container
+         * @param query the query container
+         * @throws AlignmentException when both containers do not match in size
          */
         private static void ensureMatchingGroupCount(GroupContainer reference, GroupContainer query) {
             if(reference.getGroups().size() != query.getGroups().size()) {
@@ -124,7 +136,8 @@ public interface AlignmentPolicy {
     }
 
     /**
-     *
+     * Determines whether the original query will be manipulated or if a copy is created whose coordinates will be
+     * manipulated.
      */
     enum ManipulationBehavior {
         /**
