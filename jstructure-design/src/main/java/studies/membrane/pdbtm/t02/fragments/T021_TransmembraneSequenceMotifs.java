@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Extract all purely transmembrane fragments from the dataset.
@@ -68,22 +67,34 @@ public class T021_TransmembraneSequenceMotifs {
             MembraneConstants.write(tsvPath, "id\ttype\toriginPos\ttargetPos" + System.lineSeparator());
         }
 
+        // determine output filename
+        AminoAcid firstResidue = sequenceMotif.getAminoAcids().get(0);
+        AminoAcid lastResidue = sequenceMotif.getAminoAcids().get(sequenceMotif.getAminoAcids().size() - 1);
+        String id = sequenceMotif.getChainId().getFullName();
+        String filename = id + "-" + firstResidue.getIdentifier() + "-" + lastResidue.getIdentifier() + ".pdb";
+        Path sequenceMotifOutputPath = sequenceMotifDirectory.resolve(filename);
+
         // if map does not contain reference already: make the current sequence motif reference
-        Group interactionGroup = new Group("INT", new ResidueNumber(999), true);
-//        GroupContainer fragment = sequenceMotif.getAminoAcids().stream()
-//                .collect(StructureCollectors.toGroupContainer());
-        GroupContainer fragment = Stream.concat(sequenceMotif.getAminoAcids().stream(), Stream.of(interactionGroup))
+        GroupContainer fragment = sequenceMotif.getAminoAcids().stream()
                 .collect(StructureCollectors.toGroupContainer());
+        fragment.setIdentifier(id);
         if(!referenceMotifs.containsKey(sequenceMotif.getMotifDefinition())) {
             referenceMotifs.put(sequenceMotif.getMotifDefinition(), fragment);
         }
 
-        // determine output filename
-        AminoAcid firstResidue = sequenceMotif.getAminoAcids().get(0);
-        AminoAcid lastResidue = sequenceMotif.getAminoAcids().get(sequenceMotif.getAminoAcids().size() - 1);
-        String id = firstResidue.getParentChain().getChainId().getFullName();
-        String filename = id + "-" + firstResidue.getIdentifier() + "-" + lastResidue.getIdentifier() + ".pdb";
-        Path sequenceMotifOutputPath = sequenceMotifDirectory.resolve(filename);
+        // align container
+        GroupContainer reference = referenceMotifs.get(sequenceMotif.getMotifDefinition());
+        logger.info("[{}] aligning {} to reference {}",
+                sequenceMotif.getMotifDefinition().name(),
+                filename.split("\\.")[0],
+                fragment.getIdentifier() + "-" +
+                        reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
+                        reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
+
+        Alignment alignment = StructureAligner.builder(reference, fragment)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.AMINO_ACIDS_COMPARABLE_BACKBONE_ATOM_NAMES)
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
+                .align();
 
         List<Atom> sequenceMotifAtoms = fragment.atoms()
                 .collect(Collectors.toList());
@@ -101,26 +112,19 @@ public class T021_TransmembraneSequenceMotifs {
                 .filter(plipInteraction -> plipInteraction.getPartner1().getResidueNumber().getResidueNumber() <
                         plipInteraction.getPartner2().getResidueNumber().getResidueNumber())
                 .collect(Collectors.toList());
+
+        // store interactions in synthetic group
+        Group interactionGroup = new Group("INT", new ResidueNumber(999), true);
         interactions.stream()
                 .map(PLIPInteraction::getAtomRepresentation)
                 .forEach(interactionGroup::addAtom);
+        // employ transformation on whole fragment including interactions
+        GroupContainer alignedFragment = fragment.createCopy();
+        alignment.getTransformation().transform(alignedFragment);
+        alignment.getTransformation().transform(interactionGroup);
 
-        // align container and all interactions to reference
-        GroupContainer reference = referenceMotifs.get(sequenceMotif.getMotifDefinition());
-        logger.info("[{}] aligning {} to reference {}",
-                sequenceMotif.getMotifDefinition().name(),
-                filename.split("\\.")[0],
-                reference.getAtoms().get(0).getParentGroup().getParentChain().getChainId().getFullName() + "-" +
-                        reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
-                        reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
-
-        Alignment alignment = StructureAligner.builder(reference, fragment)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.COMPARABLE_ATOM_NAMES)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
-                .align();
-//        alignment.transform(interactionGroup);
         // write fragment file
-        MembraneConstants.write(sequenceMotifOutputPath, alignment.getAlignedQuery().getPdbRepresentation() +
+        MembraneConstants.write(sequenceMotifOutputPath, alignedFragment.getPdbRepresentation() +
                 interactionGroup.getPdbRepresentation());
 
         // append total count file

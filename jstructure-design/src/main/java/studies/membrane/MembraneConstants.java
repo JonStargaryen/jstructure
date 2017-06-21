@@ -75,8 +75,7 @@ public class MembraneConstants extends StudyConstants {
         public static Stream<String> getIds() {
             return lines(PDBTM_ALPHA_NR_LIST)
                     // skip header and malformed lines
-                    .filter(line -> line.length() == 6 && !line.endsWith("_"))
-                    .limit(5);
+                    .filter(line -> line.length() == 6 && !line.endsWith("_"));
         }
 
         public static Stream<Chain> getChains() {

@@ -123,8 +123,5 @@ public class StructureCollectorsTest {
     public void toChainContainer() throws Exception {
         ChainContainer container = protein.chains()
                 .collect(StructureCollectors.toChainContainer());
-        container.chains().forEach(chain -> Assert.assertEquals("parent reference was lost",
-                "1brr",
-                chain.getParentProtein().getPdbId().getPdbId()));
     }
 }

@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.feature.motif;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,14 @@ public class SequenceMotifContainer extends FeatureContainerEntry {
     }
 
     public SequenceMotifContainer getEmbeddingSequenceMotifsFor(Group group) {
-        String chainId = group.getParentChain().getChainId().getChainId();
+        ChainIdentifier chainId = group.getParentChain().getChainId();
         int residueNumber = group.getResidueNumber().getResidueNumber();
         List<SequenceMotif> filteredSequenceMotifs = sequenceMotifs.stream()
                 // filter for correct chain
                 .filter(sequenceMotif -> sequenceMotif.getChainId().equals(chainId))
                 // filter for correct residue number range
-                .filter(sequenceMotif -> sequenceMotif.getStartResidueNumber() <= residueNumber && sequenceMotif.getEndResidueNumber() >= residueNumber)
+                .filter(sequenceMotif -> sequenceMotif.getStartResidueNumber() <= residueNumber &&
+                        sequenceMotif.getEndResidueNumber() >= residueNumber)
                 .collect(Collectors.toList());
         return new SequenceMotifContainer(getFeatureProvider(), filteredSequenceMotifs);
     }

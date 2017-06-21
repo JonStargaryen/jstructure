@@ -68,6 +68,17 @@ public interface AlignmentPolicy {
             return IntStream.range(0, referenceAminoAcids.getGroups().size())
                     .mapToObj(index -> determineSharedAtoms(referenceAminoAcids.getGroups().get(index), queryAminoAcids.getGroups().get(index)))
                     .flatMap(Collection::stream)
+//                    .peek(System.out::println)
+                    .collect(Collectors.toList());
+        }),
+        AMINO_ACIDS_COMPARABLE_BACKBONE_ATOM_NAMES((reference, query) -> {
+            GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toGroupContainer());
+            GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toGroupContainer());
+            ensureMatchingGroupCount(referenceAminoAcids, queryAminoAcids);
+            return IntStream.range(0, referenceAminoAcids.getGroups().size())
+                    .mapToObj(index -> determineSharedBackboneAtoms(referenceAminoAcids.getGroups().get(index), queryAminoAcids.getGroups().get(index)))
+                    .flatMap(Collection::stream)
+//                    .peek(System.out::println)
                     .collect(Collectors.toList());
         }),
         AMINO_ACIDS_ALPHA_CARBONS_TOLERANT((reference, query) -> {
@@ -109,6 +120,12 @@ public interface AlignmentPolicy {
             // pair atoms
             return sharedAtomNames.stream()
                     .map(atomName -> new Pair<>(selectAtom(referenceGroup, atomName), selectAtom(queryGroup, atomName)))
+                    .collect(Collectors.toList());
+        }
+
+        private static List<Pair<Atom, Atom>> determineSharedBackboneAtoms(Group referenceGroup, Group queryGroup) {
+            return determineSharedAtoms(referenceGroup, queryGroup).stream()
+                    .filter(pair -> AminoAcid.isBackboneAtom(pair.getLeft()) && AminoAcid.isBackboneAtom(pair.getRight()))
                     .collect(Collectors.toList());
         }
 

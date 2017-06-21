@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,12 +12,16 @@ import java.util.stream.Collectors;
  */
 public class SequenceMotif {
     private final SequenceMotifDefinition motifDefinition;
-    private final String chainId;
+    private final ChainIdentifier chainId;
     private final int startResidueNumber;
     private final int endResidueNumber;
     private final List<AminoAcid> aminoAcids;
 
-    SequenceMotif(SequenceMotifDefinition candidate, String chainId, int startResidueNumber, int endResidueNumber, List<AminoAcid> aminoAcids) {
+    SequenceMotif(SequenceMotifDefinition candidate,
+                  ChainIdentifier chainId,
+                  int startResidueNumber,
+                  int endResidueNumber,
+                  List<AminoAcid> aminoAcids) {
         this.motifDefinition = candidate;
         this.chainId = chainId;
         this.startResidueNumber = startResidueNumber;
@@ -28,7 +33,7 @@ public class SequenceMotif {
         return motifDefinition;
     }
 
-    public String getChainId() {
+    public ChainIdentifier getChainId() {
         return chainId;
     }
 

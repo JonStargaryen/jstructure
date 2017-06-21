@@ -120,15 +120,16 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
             throw new IllegalArgumentException(pdbId + " is no valid pdb-id");
         }
 
+        pdbId = pdbId.toLowerCase();
+        String url = String.format(XML_FETCH_URL, pdbId.substring(1, 3), pdbId);
         try {
-            pdbId = pdbId.toLowerCase();
-            String url = String.format(XML_FETCH_URL, pdbId.substring(1, 3), pdbId);
             InputStream inputStream = new BufferedInputStream(new URL(url).openStream(), 65535);
             try(GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
                 return Jsoup.parse(gzipInputStream, "UTF-8", url, Parser.xmlParser());
             }
         } catch (IOException e) {
-            throw new UncheckedIOException("the request protein '" + pdbId + "' does not exist on the server", e);
+            throw new UncheckedIOException("no entry for the requested protein '" + pdbId + "' exists on the server at:"
+                    + System.lineSeparator() + url, e);
         }
     }
 
