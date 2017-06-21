@@ -8,7 +8,6 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.jsoup.Jsoup;
@@ -94,9 +93,8 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                         // superimpose opm protein onto instance of the original protein
                         //TODO this alignment is by no means perfect, but works for a first glance
                         //TODO alpha-carbon-only option
-                        StructureAligner.builder(protein.aminoAcids().collect(StructureCollectors.toGroupContainer()),
-                                        opmProtein.aminoAcids().collect(StructureCollectors.toGroupContainer()))
-                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                        StructureAligner.builder(protein, opmProtein)
+                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.AMINO_ACIDS_ALPHA_CARBONS_TOLERANT)
                                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                                 .align()
                                 .getTransformation()
@@ -113,8 +111,8 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                         membraneContainer.setMembraneAtoms(membraneAtoms);
 
 //                    //TODO remove, used to evaluate alignment manually
-//                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getAtomRepresentation().getBytes());
-//                    Files.write(Paths.get(System.getProperty("user.home") + "/opm.pdb"), opmProtein.getAtomRepresentation().getBytes());
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/ori.pdb"), protein.getPdbRepresentation().getBytes());
+//                    Files.write(Paths.get(System.getProperty("user.home") + "/opm.pdb"), opmProtein.getPdbRepresentation().getBytes());
 //                    //TODO remove, used to evaluate segment positions manually
 //                    Files.write(Paths.get(System.getProperty("user.home") + "/tm.pdb"), protein.select()
 //                            .residueNumber(helices.stream()
@@ -134,7 +132,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                     .forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new Topology(this,
                             membraneContainer.isTransmembraneGroup(aminoAcid))));
         } catch (Exception e) {
-            logger.warn("OPM parsing for {} failed", protein.getPdbId().getFullName(), e);
+            logger.warn("OPM parsing for {} failed", protein.getPdbId().getFullName());
             // sometimes it is the html's fault
 //            System.err.println(document.html());
             throw new ComputationException("failed to fetch or parse OPM file", e);

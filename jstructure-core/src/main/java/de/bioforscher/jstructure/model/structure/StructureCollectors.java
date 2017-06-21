@@ -1,6 +1,9 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.ChainContainer;
+import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +83,7 @@ public class StructureCollectors {
         }
     }
 
-    public static Collector<Atom, ?, BasicAtomContainer> toAtomContainer() {
+    public static Collector<Atom, ?, AtomContainer> toAtomContainer() {
         return Collector.of(AtomContainerConsumer::new,
                 AtomContainerConsumer::accept,
                 AtomContainerConsumer::combine,
@@ -95,9 +98,14 @@ public class StructureCollectors {
             this.atoms = new ArrayList<>();
         }
 
-        BasicAtomContainer getContainer() {
-            return new BasicAtomContainer(atoms,
-                    atoms.get(0).getParentGroup().getParentChain().getParentProtein());
+        AtomContainer getContainer() {
+            Group container = new Group(Group.UNKNOWN_GROUP);
+            // set parent reference - however the cloned groups are unknown to the parent
+            container.setParentChain(atoms.get(0).getParentGroup().getParentChain());
+
+            // after: assign new parent reference, doing so detaches atoms for their previous parent
+            atoms.forEach(container::addAtom);
+            return container;
         }
 
         @Override
@@ -111,7 +119,7 @@ public class StructureCollectors {
         }
     }
 
-    public static Collector<Group, ?, BasicGroupContainer> toGroupContainer() {
+    public static Collector<Group, ?, GroupContainer> toGroupContainer() {
         return Collector.of(GroupContainerConsumer::new,
                 GroupContainerConsumer::accept,
                 GroupContainerConsumer::combine,
@@ -126,9 +134,14 @@ public class StructureCollectors {
             this.groups = new ArrayList<>();
         }
 
-        BasicGroupContainer getContainer() {
-            return new BasicGroupContainer(groups,
-                    groups.get(0).getParentChain().getParentProtein());
+        GroupContainer getContainer() {
+            Chain container = new Chain(Chain.UNKNOWN_CHAIN);
+            // set parent reference - however the cloned groups are unknown to the parent
+            container.setParentProtein(groups.get(0).getParentChain().getParentProtein());
+
+            // after: assign new parent reference, doing so detaches atoms for their previous parent
+            groups.forEach(container::addGroup);
+            return container;
         }
 
         @Override
@@ -142,7 +155,7 @@ public class StructureCollectors {
         }
     }
 
-    public static Collector<Chain, ?, BasicChainContainer> toChainContainer() {
+    public static Collector<Chain, ?, ChainContainer> toChainContainer() {
         return Collector.of(ChainContainerConsumer::new,
                 ChainContainerConsumer::accept,
                 ChainContainerConsumer::combine,
@@ -157,9 +170,10 @@ public class StructureCollectors {
             this.chains = new ArrayList<>();
         }
 
-        BasicChainContainer getContainer() {
-            return new BasicChainContainer(chains,
-                    chains.get(0).getParentProtein());
+        ChainContainer getContainer() {
+            Protein container = new Protein(Protein.UNKNOWN_PROTEIN);
+            chains.forEach(container::addChain);
+            return container;
         }
 
         @Override

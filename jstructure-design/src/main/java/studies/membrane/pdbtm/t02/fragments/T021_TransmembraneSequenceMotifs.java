@@ -115,7 +115,7 @@ public class T021_TransmembraneSequenceMotifs {
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
         Alignment alignment = StructureAligner.builder(reference, fragment)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.BY_COMPARABLE_ATOM_NAMES)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.COMPARABLE_ATOM_NAMES)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
 //        alignment.transform(interactionGroup);

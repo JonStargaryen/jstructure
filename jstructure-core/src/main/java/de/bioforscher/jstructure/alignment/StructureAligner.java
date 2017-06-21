@@ -184,12 +184,7 @@ public class StructureAligner {
         }
 
         public Alignment align() {
-            try {
-                return new StructureAligner(this).align();
-            } catch (Exception e) {
-                // wrap all occurring exceptions to a standardized alignment exception
-                throw new AlignmentException(e);
-            }
+            return new StructureAligner(this).align();
         }
     }
 }
