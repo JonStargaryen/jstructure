@@ -124,8 +124,9 @@ public interface AlignmentPolicy {
          */
         private static void ensureMatchingGroupCount(GroupContainer reference, GroupContainer query) {
             if(reference.getGroups().size() != query.getGroups().size()) {
-                throw new AlignmentException("group count in both containers does not match! " +
-                        reference.getGroups().size() + " vs " + query.getGroups().size());
+                throw new AlignmentException("group count in both containers does not match! " + System.lineSeparator() +
+                        "length: " + reference.getGroups().size() + " vs " + query.getGroups().size() + System.lineSeparator() +
+                        "sequence: " + reference.getAminoAcidSequence() + " vs " + query.getAminoAcidSequence());
             }
         }
 

@@ -43,7 +43,9 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     public Chain(Chain chain) {
         // deep clone entries
         this.groups = chain.groups()
-                .map(Group::new)
+                .map(Group::createCopy)
+                // returns instance as plain container instance
+                .map(Group.class::cast)
                 .collect(Collectors.toList());
         this.groups.forEach(group -> group.setParentChain(this));
         this.chainId = chain.chainId;

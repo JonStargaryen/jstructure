@@ -38,7 +38,8 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
         this.pdbId = protein.pdbId;
         this.title = protein.title;
         this.chains = protein.chains()
-                .map(Chain::new)
+                .map(Chain::createCopy)
+                .map(Chain.class::cast)
                 .collect(Collectors.toList());
         this.chains.forEach(chain -> chain.setParentProtein(this));
         this.identifier = protein.identifier;

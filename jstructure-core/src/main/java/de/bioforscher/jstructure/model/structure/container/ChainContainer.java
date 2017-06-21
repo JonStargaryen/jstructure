@@ -34,6 +34,7 @@ public interface ChainContainer extends GroupContainer {
                 .filter(chain -> chain.aminoAcids().count() > 0);
     }
 
+    @Override
     default ChainContainer createCopy() {
         return (ChainContainer) GroupContainer.super.createCopy();
     }

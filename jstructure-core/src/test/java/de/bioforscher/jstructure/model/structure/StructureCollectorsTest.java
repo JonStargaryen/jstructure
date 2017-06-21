@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,6 +17,16 @@ public class StructureCollectorsTest {
     @Before
     public void setup() {
         protein = ProteinParser.source("1brr").parse();
+    }
+
+    @Test
+    public void shouldCreateAminoAcids() {
+        // clone containers led to groups losing their identity meaning they were no longer concrete amino acid
+        // implementations but mere groups
+
+        // will fail when copy does not contain amino acids
+        ChainContainer copy = protein.createCopy();
+        copy.getAminoAcidSequence();
     }
 
     @Test
