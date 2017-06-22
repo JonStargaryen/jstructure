@@ -43,7 +43,7 @@ public class StructureAligner {
         this.query = queryOriginal.createCopy();
 
         // determine mapping
-        this.atomMapping = builder.matchingBehavior.determineAtomMapping(reference, query);
+        this.atomMapping = builder.atomMapping.determineAtomMapping(reference, query);
         this.referenceSelectedAtoms = atomMapping.stream()
                 .map(Pair::getLeft)
                 .collect(StructureCollectors.toAtomContainer());
@@ -139,15 +139,15 @@ public class StructureAligner {
     public static class MatchingBehaviorStep {
         final GroupContainer reference;
         final GroupContainer query;
-        AlignmentPolicy.MatchingBehavior matchingBehavior;
+        AlignmentPolicy.AtomMapping atomMapping;
 
         MatchingBehaviorStep(GroupContainer reference, GroupContainer query) {
             this.reference = reference;
             this.query = query;
         }
 
-        public ManipulationBehaviorStep matchingBehavior(AlignmentPolicy.MatchingBehavior matchingBehavior) {
-            this.matchingBehavior = matchingBehavior;
+        public ManipulationBehaviorStep matchingBehavior(AlignmentPolicy.AtomMapping atomMapping) {
+            this.atomMapping = atomMapping;
             return new ManipulationBehaviorStep(this);
         }
     }
@@ -155,13 +155,13 @@ public class StructureAligner {
     public static class ManipulationBehaviorStep {
         final GroupContainer reference;
         final GroupContainer query;
-        final AlignmentPolicy.MatchingBehavior matchingBehavior;
+        final AlignmentPolicy.AtomMapping atomMapping;
         AlignmentPolicy.ManipulationBehavior manipulationBehavior;
 
         ManipulationBehaviorStep(MatchingBehaviorStep matchingBehaviorStep) {
             this.reference = matchingBehaviorStep.reference;
             this.query = matchingBehaviorStep.query;
-            this.matchingBehavior = matchingBehaviorStep.matchingBehavior;
+            this.atomMapping = matchingBehaviorStep.atomMapping;
         }
 
         public StructureAlignerBuilder manipulationBehavior(AlignmentPolicy.ManipulationBehavior manipulationBehavior) {
@@ -173,13 +173,13 @@ public class StructureAligner {
     public static class StructureAlignerBuilder {
         final GroupContainer reference;
         final GroupContainer query;
-        final AlignmentPolicy.MatchingBehavior matchingBehavior;
+        final AlignmentPolicy.AtomMapping atomMapping;
         final AlignmentPolicy.ManipulationBehavior manipulationBehavior;
 
         StructureAlignerBuilder(ManipulationBehaviorStep manipulationBehaviorStep) {
             this.reference = manipulationBehaviorStep.reference;
             this.query = manipulationBehaviorStep.query;
-            this.matchingBehavior = manipulationBehaviorStep.matchingBehavior;
+            this.atomMapping = manipulationBehaviorStep.atomMapping;
             this.manipulationBehavior = manipulationBehaviorStep.manipulationBehavior;
         }
 

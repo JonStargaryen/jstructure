@@ -30,7 +30,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * Aim:
  * Extract all purely transmembrane fragments from the dataset.
+ *
+ * Results:
+ * Directories of aligned sequence motifs with additional interaction data (represented by pseudo-atoms). Need to be
+ * filtered (some observations are degenerated and do not really match the population). Furthermore, investigate where
+ * certain interactions occur - ideally residue <code>i</code> should be interacting with residue <code>i + 4</code>,
+ * what happens when the patterns moves to neighboring residues? What governs interactions on certain groups to be
+ * absent?
+ *
  * Created by bittrich on 6/16/17.
  */
 public class T021_TransmembraneSequenceMotifs {
@@ -59,7 +68,7 @@ public class T021_TransmembraneSequenceMotifs {
 
     private static void handleSequenceMotif(SequenceMotif sequenceMotif) {
         Path sequenceMotifDirectory = outputPath.resolve(sequenceMotif.getMotifDefinition().name());
-        Path tsvPath = sequenceMotifDirectory.resolve("interactions.tsv");
+        Path tsvPath = outputPath.resolve("interactions-" + sequenceMotif.getMotifDefinition().name() + ".tsv");
         // create dirs if needed
         MembraneConstants.createDirectories(sequenceMotifDirectory);
         // write tsv file if needed
@@ -87,12 +96,12 @@ public class T021_TransmembraneSequenceMotifs {
         logger.info("[{}] aligning {} to reference {}",
                 sequenceMotif.getMotifDefinition().name(),
                 filename.split("\\.")[0],
-                fragment.getIdentifier() + "-" +
+                reference.getIdentifier() + "-" +
                         reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
         Alignment alignment = StructureAligner.builder(reference, fragment)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.AMINO_ACIDS_COMPARABLE_BACKBONE_ATOM_NAMES)
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsComparableBackboneAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
 
@@ -131,11 +140,18 @@ public class T021_TransmembraneSequenceMotifs {
         try {
             String lines = interactions.stream()
                     .map(interaction -> id + "-" + firstResidue.getIdentifier() + "-" + lastResidue.getIdentifier() + "\t" +
+                            interaction.getAtomRepresentation().getName() + "\t" +
                             sequenceMotif.getAminoAcids().indexOf(interaction.getPartner1()) + "\t" +
                                     sequenceMotif.getAminoAcids().indexOf(interaction.getPartner2()) +
                             System.lineSeparator())
                     .distinct()
                     .collect(Collectors.joining());
+
+            // keep track of empty records
+            if(lines.isEmpty()) {
+                lines = filename.split("\\.")[0] + "\t-" + System.lineSeparator();
+            }
+
             Files.write(tsvPath, lines.getBytes(), StandardOpenOption.APPEND);
         } catch (IOException e) {
             throw new UncheckedIOException(e);

@@ -32,56 +32,61 @@ public interface AlignmentPolicy {
         List<Pair<Atom, Atom>> determineAtomMapping(GroupContainer reference, GroupContainer query);
     }
 
+    //TODO validation behavior
+
+
+
     /**
      * Describes which atoms or groups are used (and in which way) to align both containers.
-     * TODO split into validation, selection/filtering and matching
      */
-    enum MatchingBehavior implements AtomMapping {
+    interface MatchingBehavior {
         /**
          * Assumes equal number of atoms.
          */
-        ATOM_INDEX((reference, query) -> {
+        AtomMapping atomIndex = (reference, query) -> {
             ensureMatchingAtomCount(reference, query);
             return IntStream.range(0, reference.getAtoms().size())
                     .mapToObj(index -> new Pair<>(reference.getAtoms().get(index), query.getAtoms().get(index)))
                     .collect(Collectors.toList());
-        }),
+        };
+
         /**
          * Assumes equal number of groups. Allows for variable matched groups (e.g. Ala vs Ile), they must share at
          * least 1 atom however.
          */
-        COMPARABLE_ATOM_NAMES((reference, query) -> {
+        AtomMapping comparableAtomNames = (reference, query) -> {
             ensureMatchingGroupCount(reference, query);
             return IntStream.range(0, reference.getGroups().size())
                     .mapToObj(index -> determineSharedAtoms(reference.getGroups().get(index), query.getGroups().get(index)))
                     .flatMap(Collection::stream)
                     .collect(Collectors.toList());
-        }),
+        };
+
         /**
          * Matches amino acids of both containers. Assumes equal number of amino acids. Allows for variable matched
          * groups (e.g. Ala vs Ile), they must share at least 1 atom however.
          */
-        AMINO_ACIDS_COMPARABLE_ATOM_NAMES((reference, query) -> {
+        AtomMapping aminoAcidsComparableAtomNames = (reference, query) -> {
             GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toGroupContainer());
             GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toGroupContainer());
             ensureMatchingGroupCount(referenceAminoAcids, queryAminoAcids);
             return IntStream.range(0, referenceAminoAcids.getGroups().size())
                     .mapToObj(index -> determineSharedAtoms(referenceAminoAcids.getGroups().get(index), queryAminoAcids.getGroups().get(index)))
                     .flatMap(Collection::stream)
-//                    .peek(System.out::println)
                     .collect(Collectors.toList());
-        }),
-        AMINO_ACIDS_COMPARABLE_BACKBONE_ATOM_NAMES((reference, query) -> {
+        };
+
+        AtomMapping aminoAcidsComparableBackboneAtomNames = (reference, query) -> {
             GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toGroupContainer());
             GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toGroupContainer());
             ensureMatchingGroupCount(referenceAminoAcids, queryAminoAcids);
             return IntStream.range(0, referenceAminoAcids.getGroups().size())
                     .mapToObj(index -> determineSharedBackboneAtoms(referenceAminoAcids.getGroups().get(index), queryAminoAcids.getGroups().get(index)))
                     .flatMap(Collection::stream)
-//                    .peek(System.out::println)
                     .collect(Collectors.toList());
-        }),
-        AMINO_ACIDS_ALPHA_CARBONS_TOLERANT((reference, query) -> {
+        };
+
+        AtomMapping aminoAcidsAlphaCarbonsTolerant = (reference, query) -> {
             List<AminoAcid> referenceAminoAcids = reference.aminoAcids().collect(Collectors.toList());
             List<AminoAcid> queryAminoAcids = query.aminoAcids().collect(Collectors.toList());
             int limitingSize = Math.min(referenceAminoAcids.size(), queryAminoAcids.size());
@@ -89,13 +94,7 @@ public interface AlignmentPolicy {
                     //TODO fallback to centroid?
                     .mapToObj(index -> new Pair<>(referenceAminoAcids.get(index).getCa(), queryAminoAcids.get(index).getCa()))
                     .collect(Collectors.toList());
-        });
-
-        private final AtomMapping atomMapping;
-
-        MatchingBehavior(AtomMapping atomMapping) {
-            this.atomMapping = atomMapping;
-        }
+        };
 
         /**
          * Pairs two {@link de.bioforscher.jstructure.model.structure.container.AtomContainer} entities in a comparable
@@ -104,7 +103,7 @@ public interface AlignmentPolicy {
          * @param queryGroup the query container
          * @return a collection of compatible atom pairs
          */
-        private static List<Pair<Atom, Atom>> determineSharedAtoms(Group referenceGroup, Group queryGroup) {
+        static List<Pair<Atom, Atom>> determineSharedAtoms(Group referenceGroup, Group queryGroup) {
             // determine set of shared atom names
             Set<String> sharedAtomNames = referenceGroup.atoms()
                     .map(Atom::getName)
@@ -123,7 +122,7 @@ public interface AlignmentPolicy {
                     .collect(Collectors.toList());
         }
 
-        private static List<Pair<Atom, Atom>> determineSharedBackboneAtoms(Group referenceGroup, Group queryGroup) {
+        static List<Pair<Atom, Atom>> determineSharedBackboneAtoms(Group referenceGroup, Group queryGroup) {
             return determineSharedAtoms(referenceGroup, queryGroup).stream()
                     .filter(pair -> AminoAcid.isBackboneAtom(pair.getLeft()) && AminoAcid.isBackboneAtom(pair.getRight()))
                     .collect(Collectors.toList());
@@ -137,7 +136,7 @@ public interface AlignmentPolicy {
          * @param atomName the atom name to retrieve
          * @return the desired atom
          */
-        private static Atom selectAtom(Group group, String atomName) {
+        static Atom selectAtom(Group group, String atomName) {
             return group.atoms()
                     .filter(atom -> atomName.equals(atom.getName()))
                     //TODO test case for multiple atom names within the same group
@@ -152,7 +151,7 @@ public interface AlignmentPolicy {
          * @param query the query container
          * @throws AlignmentException when both containers do not match in size
          */
-        private static void ensureMatchingAtomCount(GroupContainer reference, GroupContainer query) {
+        static void ensureMatchingAtomCount(GroupContainer reference, GroupContainer query) {
             if(reference.getAtoms().size() != query.getAtoms().size()) {
                 throw new AlignmentException("atom count in both containers does not match! " +
                         reference.getAtoms().size() + " vs " + query.getAtoms().size());
@@ -165,18 +164,13 @@ public interface AlignmentPolicy {
          * @param query the query container
          * @throws AlignmentException when both containers do not match in size
          */
-        private static void ensureMatchingGroupCount(GroupContainer reference, GroupContainer query) {
+        static void ensureMatchingGroupCount(GroupContainer reference, GroupContainer query) {
             if(reference.getGroups().size() != query.getGroups().size()) {
                 throw new AlignmentException("group count in both containers does not match! " + System.lineSeparator()
                         + "length: " + reference.getGroups().size() + " vs " + query.getGroups().size() +
                         System.lineSeparator() + "sequences:" + System.lineSeparator() +
                         reference.getAminoAcidSequence() + System.lineSeparator() + query.getAminoAcidSequence());
             }
-        }
-
-        @Override
-        public List<Pair<Atom, Atom>> determineAtomMapping(GroupContainer reference, GroupContainer query) {
-            return atomMapping.determineAtomMapping(reference, query);
         }
     }
 

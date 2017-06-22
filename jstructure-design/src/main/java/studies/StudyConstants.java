@@ -64,4 +64,12 @@ public class StudyConstants {
             throw new UncheckedIOException(e);
         }
     }
+
+    public static Stream<Path> walk(Path path) {
+        try {
+            return Files.walk(path);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 }

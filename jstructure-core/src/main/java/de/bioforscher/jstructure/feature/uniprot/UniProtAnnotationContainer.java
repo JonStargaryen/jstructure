@@ -60,7 +60,8 @@ public class UniProtAnnotationContainer extends FeatureContainerEntry {
                 .map(UniProtNaturalVariant::new)
                 .collect(Collectors.toList());
         this.references = describingDocument.getElementsByTag("reference").stream()
-                .filter(element -> !element.getElementsByTag("citation").first().attr("type").equals("submission"))
+                // some reference are no real papers, keep them to keep evidence mapping intact
+//                .filter(element -> !element.getElementsByTag("citation").first().attr("type").equals("submission"))
                 .map(UniProtReference::new)
                 .collect(Collectors.toList());
         this.secondaryStructureElements = describingDocument.getElementsByTag("feature").stream()

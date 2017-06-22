@@ -94,7 +94,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                         //TODO this alignment is by no means perfect, but works for a first glance
                         //TODO alpha-carbon-only option
                         StructureAligner.builder(protein, opmProtein)
-                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.AMINO_ACIDS_ALPHA_CARBONS_TOLERANT)
+                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsAlphaCarbonsTolerant)
                                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                                 .align()
                                 .getTransformation()

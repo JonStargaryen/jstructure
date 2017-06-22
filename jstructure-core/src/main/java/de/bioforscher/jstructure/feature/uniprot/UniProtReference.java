@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.feature.uniprot;
 
 import org.jsoup.nodes.Element;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,21 +22,33 @@ public class UniProtReference {
     }
 
     UniProtReference(Element describingElement) {
-        this(describingElement.getElementsByTag("title").text(),
-                describingElement.getElementsByAttributeValue("type", "PubMed").attr("id"),
-                describingElement.getElementsByAttributeValue("type", "DOI").attr("id"),
-                describingElement.getElementsByTag("person").stream()
-                        .map(element -> element.attr("name"))
-                        .collect(Collectors.toList()),
-                new UniProtCitation(describingElement.getElementsByTag("citation").first()));
-    }
-
-    public UniProtReference(String title, String pubmed, String doi, List<String> authors, UniProtCitation citation) {
-        this.title = title;
-        this.pubmed = pubmed;
-        this.doi = doi;
-        this.authors = authors;
-        this.citation = citation;
+        try {
+            this.title = describingElement.getElementsByTag("title").text();
+        } catch (Exception e) {
+            this.title = "";
+        }
+        try {
+            this.pubmed = describingElement.getElementsByAttributeValue("type", "PubMed").attr("id");
+        } catch (Exception e) {
+            this.pubmed = "";
+        }
+        try {
+            this.doi = describingElement.getElementsByAttributeValue("type", "DOI").attr("id");
+        } catch (Exception e) {
+            this.doi = "";
+        }
+        try {
+            this.authors = describingElement.getElementsByTag("person").stream()
+                    .map(element -> element.attr("name"))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            this.authors = new ArrayList<>();
+        }
+        try {
+            this.citation = new UniProtCitation(describingElement.getElementsByTag("citation").first());
+        } catch (Exception e) {
+            this.citation = null;
+        }
     }
 
     public String getTitle() {
