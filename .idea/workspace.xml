@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T022_CondenseFragmentInteractionPositions.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T023_FilterForNonHydrogenBonds.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/alignment/AlignmentPolicy.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/alignment/AlignmentPolicy.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/alignment/StructureAligner.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/alignment/StructureAligner.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotationContainer.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotationContainer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtReference.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtReference.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/alignment/StructureAlignerTest.java" afterPath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/alignment/StructureAlignerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/StudyConstants.java" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/StudyConstants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T021_TransmembraneSequenceMotifs.java" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T021_TransmembraneSequenceMotifs.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -102,11 +94,33 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="T022_CondenseFragmentInteractionPositions.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="T022_CondenseFragmentInteractionPositions.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T022_CondenseFragmentInteractionPositions.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-126">
               <caret line="17" column="88" lean-forward="false" selection-start-line="17" selection-start-column="88" selection-end-line="17" selection-end-column="88" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractItemSetMinerDataSetComposer.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="27" column="11" lean-forward="false" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FingerPrintDataSetComposer.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="558">
+              <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -210,8 +224,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Glutamine.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Histidine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Isoleucine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Leucine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Lysine.java" />
@@ -261,6 +273,8 @@
         <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T022_CondenseFragmentInteractionPositions.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotationContainer.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtReference.java" />
+        <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java" />
+        <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java" />
       </list>
     </option>
   </component>
@@ -367,7 +381,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemId" value="jstructure-design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -377,7 +391,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemId" value="jstructure-design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -391,25 +405,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemId" value="jstructure-design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -420,14 +416,6 @@
               <option name="myItemId" value="main" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -435,7 +423,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemId" value="jstructure-design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -451,11 +439,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="feature" />
+              <option name="myItemId" value="studies" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -465,7 +449,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
+              <option name="myItemId" value="jstructure-design" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -481,15 +465,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
+              <option name="myItemId" value="studies" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="feature" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="uniprot" />
+              <option name="myItemId" value="gmlvq" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1413,14 +1393,7 @@
       <workItem from="1497362338305" duration="48000" />
       <workItem from="1497368254496" duration="11206000" />
       <workItem from="1497596338214" duration="34951000" />
-      <workItem from="1497876802024" duration="31397000" />
-    </task>
-    <task id="LOCAL-00071" summary="tribute to fanciness: slider, sequence positions and general styling">
-      <created>1491232820495</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1491232820495</updated>
+      <workItem from="1497876802024" duration="36412000" />
     </task>
     <task id="LOCAL-00072" summary="resolved table-layout struggle">
       <created>1491301780746</created>
@@ -1758,7 +1731,14 @@
       <option name="project" value="LOCAL" />
       <updated>1498053959885</updated>
     </task>
-    <option name="localTasksCounter" value="120" />
+    <task id="LOCAL-00120" summary="alignment policies changed, UniProt parser more robust">
+      <created>1498143500227</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1498143500227</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1794,7 +1774,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1490869000" />
+    <option name="totallyTimeSpent" value="1495884000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1807,7 +1787,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="2" width="3440" height="1438" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1827,7 +1806,7 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41185412" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38145897" sideWeight="0.60444176" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38145897" sideWeight="0.60444176" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287146" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1905,7 +1884,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="prototype stub" />
     <MESSAGE value="retrieval methods for specific atoms of amino acids" />
     <MESSAGE value="need to rework StructureCollectors as they forgot parent references" />
     <MESSAGE value="support for peptide-like groups, refactoring of explorer" />
@@ -1930,7 +1908,8 @@
     <MESSAGE value="fixes bug in copy-constructors respectively createCopy() which led to the loss of concrete classes on cloned amino acids" />
     <MESSAGE value="more fixes for createCopy() and StructureCollectors as well as tests/contracts for consistent behavior&#10;OPM parser working again (as previously the alignment would fail upon not perfectly matching containers)" />
     <MESSAGE value="implemented alignment of fragments enriched with interaction data" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented alignment of fragments enriched with interaction data" />
+    <MESSAGE value="alignment policies changed, UniProt parser more robust" />
+    <option name="LAST_COMMIT_MESSAGE" value="alignment policies changed, UniProt parser more robust" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1951,33 +1930,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/model/FrameworkMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding>
-            <element signature="e#869#1062#0" expanded="true" />
-            <element signature="e#1061#1062#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/InvokeMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/RunBefores.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/BlockJUnit4ClassRunner.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
@@ -2382,6 +2334,32 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-126">
           <caret line="17" column="88" lean-forward="false" selection-start-line="17" selection-start-column="88" selection-end-line="17" selection-end-column="88" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="27" column="11" lean-forward="false" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ProteinIdentifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="25" column="12" lean-forward="false" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
