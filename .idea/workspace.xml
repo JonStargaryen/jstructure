@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/S01_ConvertFingerprintDataToArff.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java" afterPath="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -84,33 +84,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="HydrogenBond.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/HydrogenBond.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="73" column="15" lean-forward="false" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="T022_CondenseFragmentInteractionPositions.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T022_CondenseFragmentInteractionPositions.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-126">
-              <caret line="17" column="88" lean-forward="false" selection-start-line="17" selection-start-column="88" selection-end-line="17" selection-end-column="88" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="AbstractItemSetMinerDataSetComposer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="27" column="11" lean-forward="false" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+            <state relative-caret-position="286">
+              <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="113" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -119,8 +97,8 @@
       <file leaf-file-name="FingerPrintDataSetComposer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+            <state relative-caret-position="448">
+              <caret line="157" column="74" lean-forward="true" selection-start-line="157" selection-start-column="74" selection-end-line="157" selection-end-column="74" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -128,34 +106,34 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="T021_TransmembraneSequenceMotifs.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T021_TransmembraneSequenceMotifs.java">
+      <file leaf-file-name="PLIPRestServiceQuery.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2037">
-              <caret line="144" column="83" lean-forward="false" selection-start-line="144" selection-start-column="83" selection-end-line="144" selection-end-column="83" />
+            <state relative-caret-position="250">
+              <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="T023_FilterForNonHydrogenBonds.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T023_FilterForNonHydrogenBonds.java">
+      <file leaf-file-name="PLIPAnnotator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPAnnotator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="28" lean-forward="false" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
+            <state relative-caret-position="252">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="S01_ConvertFingerprintDataToArff.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/S01_ConvertFingerprintDataToArff.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PLIPParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="511">
-              <caret line="125" column="34" lean-forward="false" selection-start-line="125" selection-start-column="34" selection-end-line="125" selection-end-column="34" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -224,7 +202,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Isoleucine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Leucine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Lysine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Methionine.java" />
@@ -274,6 +251,7 @@
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtAnnotationContainer.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtReference.java" />
         <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java" />
+        <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/S01_ConvertFingerprintDataToArff.java" />
         <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java" />
       </list>
     </option>
@@ -473,6 +451,74 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-design" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="studies" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gmlvq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fingerprint" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-design" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="studies" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gmlvq" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cmh" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -660,33 +706,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.T023_FilterForNonHydrogenBonds">
-    <configuration default="false" name="SiftsMappingAnnotatorTest.testXmlDownload" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.feature.mapping.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-core" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.mapping" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotatorTest" />
-      <option name="METHOD_NAME" value="testXmlDownload" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Application.S01_ConvertFingerprintDataToArff">
     <configuration default="false" name="SiftsMappingAnnotatorTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -761,6 +781,26 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="studies.membrane.pdbtm.t02.fragments.T023_FilterForNonHydrogenBonds" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jstructure-design" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="S01_ConvertFingerprintDataToArff" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="studies.gmlvq.fingerprint.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="studies.gmlvq.fingerprint.S01_ConvertFingerprintDataToArff" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -1287,19 +1327,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.testXmlDownload" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest" />
-      <item index="3" class="java.lang.String" itemvalue="Application.T021_TransmembraneSequenceMotifs" />
-      <item index="4" class="java.lang.String" itemvalue="Application.T022_CondenseFragmentInteractionPositions" />
-      <item index="5" class="java.lang.String" itemvalue="Application.T023_FilterForNonHydrogenBonds" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest" />
+      <item index="2" class="java.lang.String" itemvalue="Application.T021_TransmembraneSequenceMotifs" />
+      <item index="3" class="java.lang.String" itemvalue="Application.T022_CondenseFragmentInteractionPositions" />
+      <item index="4" class="java.lang.String" itemvalue="Application.T023_FilterForNonHydrogenBonds" />
+      <item index="5" class="java.lang.String" itemvalue="Application.S01_ConvertFingerprintDataToArff" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.T023_FilterForNonHydrogenBonds" />
-        <item index="1" class="java.lang.String" itemvalue="Application.T022_CondenseFragmentInteractionPositions" />
-        <item index="2" class="java.lang.String" itemvalue="Application.T021_TransmembraneSequenceMotifs" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest.testXmlDownload" />
+        <item index="0" class="java.lang.String" itemvalue="Application.S01_ConvertFingerprintDataToArff" />
+        <item index="1" class="java.lang.String" itemvalue="Application.T023_FilterForNonHydrogenBonds" />
+        <item index="2" class="java.lang.String" itemvalue="Application.T022_CondenseFragmentInteractionPositions" />
+        <item index="3" class="java.lang.String" itemvalue="Application.T021_TransmembraneSequenceMotifs" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.SiftsMappingAnnotatorTest" />
       </list>
     </recent_temporary>
   </component>
@@ -1393,14 +1433,7 @@
       <workItem from="1497362338305" duration="48000" />
       <workItem from="1497368254496" duration="11206000" />
       <workItem from="1497596338214" duration="34951000" />
-      <workItem from="1497876802024" duration="36412000" />
-    </task>
-    <task id="LOCAL-00072" summary="resolved table-layout struggle">
-      <created>1491301780746</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1491301780746</updated>
+      <workItem from="1497876802024" duration="41574000" />
     </task>
     <task id="LOCAL-00073" summary="about to create consistent mapping between UniProt, PDB and alignment">
       <created>1491402046276</created>
@@ -1738,7 +1771,14 @@
       <option name="project" value="LOCAL" />
       <updated>1498143500227</updated>
     </task>
-    <option name="localTasksCounter" value="121" />
+    <task id="LOCAL-00121" summary="GMLVQ-stub to deal with fingerprint data">
+      <created>1498222667435</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1498222667435</updated>
+    </task>
+    <option name="localTasksCounter" value="122" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1774,7 +1814,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1495884000" />
+    <option name="totallyTimeSpent" value="1501046000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1787,6 +1827,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="2" width="3440" height="1438" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1806,7 +1847,7 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41185412" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38145897" sideWeight="0.60444176" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38145897" sideWeight="0.60444176" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287146" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1884,7 +1925,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="retrieval methods for specific atoms of amino acids" />
     <MESSAGE value="need to rework StructureCollectors as they forgot parent references" />
     <MESSAGE value="support for peptide-like groups, refactoring of explorer" />
     <MESSAGE value="merge of explorer-branch" />
@@ -1909,7 +1949,8 @@
     <MESSAGE value="more fixes for createCopy() and StructureCollectors as well as tests/contracts for consistent behavior&#10;OPM parser working again (as previously the alignment would fail upon not perfectly matching containers)" />
     <MESSAGE value="implemented alignment of fragments enriched with interaction data" />
     <MESSAGE value="alignment policies changed, UniProt parser more robust" />
-    <option name="LAST_COMMIT_MESSAGE" value="alignment policies changed, UniProt parser more robust" />
+    <MESSAGE value="GMLVQ-stub to deal with fingerprint data" />
+    <option name="LAST_COMMIT_MESSAGE" value="GMLVQ-stub to deal with fingerprint data" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1930,37 +1971,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/BlockJUnit4ClassRunner.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/ParentRunner.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="240" column="0" lean-forward="false" selection-start-line="240" selection-start-column="0" selection-end-line="240" selection-end-column="0" />
-          <folding>
-            <element signature="e#2137#2138#0" expanded="true" />
-            <element signature="e#2181#2182#0" expanded="true" />
-            <element signature="e#5962#6097#0" expanded="true" />
-            <element signature="e#6096#6097#0" expanded="true" />
-            <element signature="e#6495#6659#0" expanded="true" />
-            <element signature="e#6658#6659#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runner/JUnitCore.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="76" column="0" lean-forward="false" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/OriginIndicator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -2272,22 +2282,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/HydrogenBond.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="73" column="15" lean-forward="false" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T021_TransmembraneSequenceMotifs.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2037">
-          <caret line="144" column="83" lean-forward="false" selection-start-line="144" selection-start-column="83" selection-end-line="144" selection-end-column="83" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/uniprot/UniProtReference.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="846">
@@ -2330,6 +2324,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ProteinIdentifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="25" column="12" lean-forward="false" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T022_CondenseFragmentInteractionPositions.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-126">
@@ -2340,26 +2342,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/HydrogenBond.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="27" column="11" lean-forward="false" selection-start-line="27" selection-start-column="11" selection-end-line="27" selection-end-column="11" />
+        <state relative-caret-position="540">
+          <caret line="73" column="15" lean-forward="false" selection-start-line="73" selection-start-column="15" selection-end-line="73" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ProteinIdentifier.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/membrane/pdbtm/t02/fragments/T021_TransmembraneSequenceMotifs.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="25" column="12" lean-forward="false" selection-start-line="25" selection-start-column="12" selection-end-line="25" selection-end-column="12" />
+        <state relative-caret-position="2037">
+          <caret line="144" column="83" lean-forward="false" selection-start-line="144" selection-start-column="83" selection-end-line="144" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/AbstractItemSetMinerDataSetComposer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="113" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/S01_ConvertFingerprintDataToArff.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPAnnotator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/fingerprint/FingerPrintDataSetComposer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="448">
+          <caret line="157" column="74" lean-forward="true" selection-start-line="157" selection-start-column="74" selection-end-line="157" selection-end-column="74" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
