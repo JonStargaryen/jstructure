@@ -17,6 +17,8 @@ public class StudyConstants {
     public static final Path HOME = Paths.get(System.getProperty("user.home"));
     public static final Path GIT = HOME.resolve("git");
     public static final Path GMLVQ_MAIN = GIT.resolve("gmlvq_main");
+    public static final Path PHD_REPO = GIT.resolve("phd_sb_repo");
+    public static final Path AHAH_DATA_SET = PHD_REPO.resolve("data").resolve("AHAH").resolve("data").resolve("ahah_gold_standard.csv");
 
     public static String getResourceAsFilepath(String filename) {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();

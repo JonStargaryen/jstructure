@@ -27,9 +27,8 @@ import java.util.stream.Stream;
  * Created by bittrich on 6/7/17.
  */
 public class MembraneConstants extends StudyConstants {
-    public static final Path PHD = GIT.resolve("phd_sb_repo");
-    public static final Path PDBTM_ALPHA_NR_LIST = PHD.resolve("data/pdbtm_alpha_nr.list.txt");
-    public static final Path PDBTM = PHD.resolve("data/pdbtm_alpha_nr/");
+    public static final Path PDBTM_ALPHA_NR_LIST = PHD_REPO.resolve("data/pdbtm_alpha_nr.list.txt");
+    public static final Path PDBTM = PHD_REPO.resolve("data/pdbtm_alpha_nr/");
     public static final Path PDBTM_PDB_PATH = PDBTM.resolve("pdb");
     public static final Path PDBTM_CIF_PATH = PDBTM.resolve("cif");
     public static final Path PDBTM_OPM_PATH = PDBTM.resolve("opm");

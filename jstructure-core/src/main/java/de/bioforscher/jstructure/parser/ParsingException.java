@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.parser;
 
 /**
- * Occurs when {@link ProteinParser} or {@link CIFParser} struggles.
+ * Occurs when {@link ProteinParser} struggles.
  * Created by bittrich on 1/19/17.
  */
 public class ParsingException extends RuntimeException {
