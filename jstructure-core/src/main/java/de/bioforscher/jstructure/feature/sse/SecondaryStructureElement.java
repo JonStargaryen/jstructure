@@ -1,15 +1,16 @@
 package de.bioforscher.jstructure.feature.sse;
 
 /**
- * The enum of DSSP secondary structure elements.
+ * The enum of secondary structure elements.
  * Created by S on 04.10.2016.
  */
 public enum SecondaryStructureElement {
     COIL("c"),
     BEND("S"),
     TURN("T"),
-    PIHELIX("I"),
-    THREE10HELIX("G"),
+    POLYPROLINE_HELIX("P"),
+    PI_HELIX("I"),
+    THREE_TEN_HELIX("G"),
     BRIDGE("B"),
     EXTENDED("E"),
     ALPHA_HELIX("H");
@@ -33,7 +34,7 @@ public enum SecondaryStructureElement {
             return EXTENDED.oneLetterRepresentation;
         }
 
-        return " ";
+        return "c";
     }
 
     public boolean isHelixType() {

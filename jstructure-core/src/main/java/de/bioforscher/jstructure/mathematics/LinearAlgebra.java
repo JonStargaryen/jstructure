@@ -81,6 +81,10 @@ public class LinearAlgebra {
             this.z = value[2];
         }
 
+        public PrimitiveDoubleArrayLinearAlgebra add(Atom vectorToAdd) {
+            return add(vectorToAdd.getCoordinates());
+        }
+
         public PrimitiveDoubleArrayLinearAlgebra add(double[] vectorToAdd) {
             return new PrimitiveDoubleArrayLinearAlgebra(x + vectorToAdd[0],
                     y + vectorToAdd[1],
@@ -89,6 +93,10 @@ public class LinearAlgebra {
 
         public PrimitiveDoubleArrayLinearAlgebra add(PrimitiveDoubleArrayLinearAlgebra vectorToAdd) {
             return add(vectorToAdd.getValue());
+        }
+
+        public double angle(Atom secondVector) {
+            return angle(secondVector.getCoordinates());
         }
 
         public double angle(double[] secondVector) {
@@ -100,12 +108,20 @@ public class LinearAlgebra {
             return angle(secondVector.getValue());
         }
 
+        public double distance(Atom secondVector) {
+            return distance(secondVector.getCoordinates());
+        }
+
         public double distance(double[] secondVector) {
             return Math.sqrt(distanceFast(secondVector));
         }
 
         public double distance(PrimitiveDoubleArrayLinearAlgebra secondVector) {
             return distance(secondVector.getValue());
+        }
+
+        public double distanceFast(Atom secondVector) {
+            return distanceFast(secondVector.getCoordinates());
         }
 
         public double distanceFast(double[] secondVector) {
@@ -122,6 +138,10 @@ public class LinearAlgebra {
             return new PrimitiveDoubleArrayLinearAlgebra(x / divisor,
                     y / divisor,
                     z / divisor);
+        }
+
+        public double dotProduct(Atom secondVector) {
+            return dotProduct(secondVector.getCoordinates());
         }
 
         public double dotProduct(double[] secondVector) {
@@ -161,6 +181,10 @@ public class LinearAlgebra {
             return divide(norm());
         }
 
+        public PrimitiveDoubleArrayLinearAlgebra subtract(Atom vectorToSubtract) {
+            return subtract(vectorToSubtract.getCoordinates());
+        }
+
         public PrimitiveDoubleArrayLinearAlgebra subtract(double[] vectorToSubtract) {
             return new PrimitiveDoubleArrayLinearAlgebra(x - vectorToSubtract[0],
                     y - vectorToSubtract[1],
@@ -169,6 +193,10 @@ public class LinearAlgebra {
 
         public PrimitiveDoubleArrayLinearAlgebra subtract(PrimitiveDoubleArrayLinearAlgebra vectorToSubtract) {
             return subtract(vectorToSubtract.getValue());
+        }
+
+        public PrimitiveDoubleArrayLinearAlgebra vectorProduct(Atom secondVector) {
+            return vectorProduct(secondVector.getCoordinates());
         }
 
         public PrimitiveDoubleArrayLinearAlgebra vectorProduct(double[] secondVector) {

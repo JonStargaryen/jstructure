@@ -34,7 +34,7 @@ public class TorsionAngles {
     /**
      * Computes the torsion angle of 4 consecutive points.
      */
-    private static double torsionAngle(Atom a1, Atom a2, Atom a3, Atom a4) {
+    public static double torsionAngle(Atom a1, Atom a2, Atom a3, Atom a4) {
         LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra ab = LinearAlgebra.on(a1).subtract(a2.getCoordinates());
         LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra cb = LinearAlgebra.on(a3).subtract(a2.getCoordinates());
         LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra bc = LinearAlgebra.on(a2).subtract(a3.getCoordinates());

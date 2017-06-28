@@ -1,5 +1,7 @@
-package de.bioforscher.jstructure.feature.sse;
+package de.bioforscher.jstructure.feature.sse.dssp;
 
+import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.TorsionAngles;
 import de.bioforscher.jstructure.model.Combinatorics;
@@ -40,9 +42,9 @@ import java.util.stream.Collectors;
  * @author Anthony Bradley
  *
  */
-@FeatureProvider(provides = SecondaryStructure.class)
-public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
-    private static final Logger logger = LoggerFactory.getLogger(SecondaryStructureAnnotator.class);
+@FeatureProvider(provides = { DSSPSecondaryStructure.class, GenericSecondaryStructure.class }, priority = 200)
+public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvider {
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryOfProteinSecondaryStructure.class);
     /**
      * DSSP assigns helices one getResidue shorter at each end, because the
      * residues at (i-1) and (i+n+1) are not assigned helix type although they
@@ -94,7 +96,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         List<BetaBridge> bridges = new ArrayList<>();
         List<Ladder> ladders = new ArrayList<>();
         // init mapping as unassigned state (i.e. coil)
-        residues.forEach(r -> r.getFeatureContainer().addFeature(new SecondaryStructure(this, SecondaryStructureElement.COIL)));
+        residues.forEach(r -> r.getFeatureContainer().addFeature(new DSSPSecondaryStructure(this, SecondaryStructureElement.COIL)));
 
         calculateHAtoms(residues);
         calculateHBonds(residues);
@@ -121,20 +123,20 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         updateSheets(residues, ladders);
     }
 
-    private SecondaryStructure getState(Group group) {
-        return group.getFeatureContainer().getFeature(SecondaryStructure.class);
+    private DSSPSecondaryStructure getState(Group group) {
+        return group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
     }
 
     private void updateSheets(List<AminoAcid> residues, List<Ladder> ladders) {
         for(Ladder ladder : ladders){
             for (int lcount = ladder.getFrom(); lcount <= ladder.getTo(); lcount++) {
-                SecondaryStructure state = getState(residues.get(lcount));
+                DSSPSecondaryStructure state = getState(residues.get(lcount));
                 SecondaryStructureElement stype = state.getSecondaryStructure();
 
                 int diff = ladder.getFrom() - lcount;
                 int l2count = ladder.getLfrom() - diff ;
 
-                SecondaryStructure state2 = getState(residues.get(l2count));
+                DSSPSecondaryStructure state2 = getState(residues.get(l2count));
                 SecondaryStructureElement stype2 = state2.getSecondaryStructure();
 
                 if(ladder.getFrom() != ladder.getTo()) {
@@ -432,7 +434,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
                 double angle = LinearAlgebra.on(caminus2).angle(caplus2);
 
-                SecondaryStructure state = getState(residues.get(i));
+                DSSPSecondaryStructure state = getState(residues.get(i));
                 state.setKappa((float) angle);
 
                 // Angles = 360 should be discarded
@@ -449,8 +451,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private void buildHelices(List<AminoAcid> residues) {
         // Alpha-helix (i+4), 3-10-helix (i+3), Pi-helix (i+5)
         checkSetHelix(residues, 4, SecondaryStructureElement.ALPHA_HELIX);
-        checkSetHelix(residues, 3, SecondaryStructureElement.THREE10HELIX);
-        checkSetHelix(residues, 5, SecondaryStructureElement.PIHELIX);
+        checkSetHelix(residues, 3, SecondaryStructureElement.THREE_TEN_HELIX);
+        checkSetHelix(residues, 5, SecondaryStructureElement.PI_HELIX);
 
         checkSetTurns(residues);
     }
@@ -460,7 +462,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
 
         for(int idx = 0; idx < 3; idx++) {
             for(int i = 0; i < residues.size() - 1; i++) {
-                SecondaryStructure state = getState(residues.get(i));
+                DSSPSecondaryStructure state = getState(residues.get(i));
                 char[] turn = state.getTurn();
 
                 // Any turn opening matters
@@ -486,7 +488,7 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
      * @param type the type to assign
      */
     private void setSecStrucType(List<AminoAcid> residues, int pos, SecondaryStructureElement type) {
-        SecondaryStructure ss = getState(residues.get(pos));
+        DSSPSecondaryStructure ss = getState(residues.get(pos));
         // more favorable according to DSSP ranking
         if (type.compareTo(ss.getSecondaryStructure()) > 0) {
             ss.setSecondaryStructure(type);
@@ -511,8 +513,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         logger.debug("Set helix {} {} {}", type, n, idx);
 
         for (int i = 1; i < residues.size() - n; i++) {
-            SecondaryStructure state = getState(residues.get(i));
-            SecondaryStructure previousState = getState(residues.get(i - 1));
+            DSSPSecondaryStructure state = getState(residues.get(i));
+            DSSPSecondaryStructure previousState = getState(residues.get(i - 1));
 
             // Check that no other helix was assgined to this range
             if (state.getSecondaryStructure().compareTo(type) > 0) {
@@ -582,8 +584,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
     private boolean isBonded(List<AminoAcid> residues, int i, int j) {
         Group residue1 = residues.get(i);
         Group residue2 = residues.get(j);
-        SecondaryStructure state1 = getState(residue1);
-        SecondaryStructure state2 = getState(residue2);
+        DSSPSecondaryStructure state1 = getState(residue1);
+        DSSPSecondaryStructure state2 = getState(residue2);
 
         double don1e = state1.getDonor1().getEnergy();
         double don2e = state1.getDonor2().getEnergy();
@@ -620,8 +622,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
             try {
                 TorsionAngles torsionAngles = new TorsionAngles(res1, res2);
 
-                SecondaryStructure state1 = getState(res1);
-                SecondaryStructure state2 = getState(res2);
+                DSSPSecondaryStructure state1 = getState(res1);
+                DSSPSecondaryStructure state2 = getState(res2);
 
                 state2.setPhi(torsionAngles.getPhi());
                 state1.setPsi(torsionAngles.getPsi());
@@ -693,8 +695,8 @@ public class SecondaryStructureAnnotator extends AbstractFeatureProvider {
         }
 
         // try to findAny entries or create new ones with coil secondary structure
-        SecondaryStructure state1 = getState(res1);
-        SecondaryStructure state2 = getState(res2);
+        DSSPSecondaryStructure state1 = getState(res1);
+        DSSPSecondaryStructure state2 = getState(res2);
 
         double acc1e = state1.getAccept1().getEnergy();
         double acc2e = state1.getAccept2().getEnergy();

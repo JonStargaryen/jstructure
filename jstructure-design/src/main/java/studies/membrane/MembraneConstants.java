@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifAnnotator;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifContainer;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator;
+import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
 import de.bioforscher.jstructure.feature.topology.Topology;
@@ -37,7 +37,7 @@ public class MembraneConstants extends StudyConstants {
     public static final Path PDBTM_FRAGMENTS_PATH = PDBTM.resolve("fragments");
     public static final Path PDBTM_FRAGMENTS_TM_PATH = PDBTM_FRAGMENTS_PATH.resolve("tm");
     public static final Path PDBTM_FRAGMENTS_TM_BY_SEQUENCE_MOTIF_PATH = PDBTM_FRAGMENTS_TM_PATH.resolve("by_sequenceMotif");
-    private static final SecondaryStructureAnnotator SECONDARY_STRUCTURE_ANNOTATOR = new SecondaryStructureAnnotator();
+    private static final DictionaryOfProteinSecondaryStructure SECONDARY_STRUCTURE_ANNOTATOR = new DictionaryOfProteinSecondaryStructure();
     private static final PLIPAnnotator PLIP_ANNOTATOR = new PLIPAnnotator();
     private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR = new OrientationsOfProteinsInMembranesAnnotator();
     private static final SequenceMotifAnnotator SEQUENCE_MOTIF_ANNOTATOR = new SequenceMotifAnnotator();

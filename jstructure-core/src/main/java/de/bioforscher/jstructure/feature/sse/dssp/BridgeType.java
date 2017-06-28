@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.sse;
+package de.bioforscher.jstructure.feature.sse.dssp;
 
 /**
  * A bridge is formed by two non-overlapping stretches of three residues each

@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
-import de.bioforscher.jstructure.feature.sse.SecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
@@ -17,7 +17,7 @@ import java.util.stream.DoubleStream;
  * Computes the loop fraction of a protein.
  * Created by S on 16.01.2017.
  */
-@FeatureProvider(provides = LoopFraction.class, requires = SecondaryStructure.class)
+@FeatureProvider(provides = LoopFraction.class, requires = DSSPSecondaryStructure.class)
 public class LoopFractionCalculator extends AbstractFeatureProvider {
     private static final int WINDOW_SIZE = 9;
     private static final int WINDOW_MIDDLE_INDEX = (WINDOW_SIZE / 2) + 1;
@@ -118,6 +118,6 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
 
     private void assignRawLoopFraction(Group group) {
         group.getFeatureContainer().addFeature(new RawLoopFraction(this,
-                group.getFeatureContainer().getFeature(SecondaryStructure.class).getSecondaryStructure().isCoilType() ? 1.0 : 0.0));
+                group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class).getSecondaryStructure().isCoilType() ? 1.0 : 0.0));
     }
 }

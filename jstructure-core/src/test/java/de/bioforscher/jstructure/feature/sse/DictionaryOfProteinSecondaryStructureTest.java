@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.feature.sse;
 
+import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.biojava.nbio.structure.Group;
@@ -21,13 +23,13 @@ import java.util.stream.Stream;
  * Checks whether the ported BioJava DSSP implementation is still in agreement with the original one.
  * Created by S on 01.11.2016.
  */
-public class SecondaryStructureAnnotatorTest {
+public class DictionaryOfProteinSecondaryStructureTest {
     private static final String ID = "1brr";
-    private SecondaryStructureAnnotator featureProvider;
+    private DictionaryOfProteinSecondaryStructure featureProvider;
 
     @Before
     public void setup() {
-        featureProvider = new SecondaryStructureAnnotator();
+        featureProvider = new DictionaryOfProteinSecondaryStructure();
     }
 
     @Test
@@ -74,8 +76,8 @@ public class SecondaryStructureAnnotatorTest {
 
         // return complete DSSP annotation string from jstructrue
         return protein.aminoAcids()
-                .map(residue -> residue.getFeatureContainer().getFeature(SecondaryStructure.class))
-                .map(SecondaryStructure::getSecondaryStructure)
+                .map(residue -> residue.getFeatureContainer().getFeature(DSSPSecondaryStructure.class))
+                .map(DSSPSecondaryStructure::getSecondaryStructure)
                 .map(SecondaryStructureElement::getOneLetterRepresentation)
                 .map(character -> character.equals("c") ? " " : character)
                 .collect(Collectors.joining());

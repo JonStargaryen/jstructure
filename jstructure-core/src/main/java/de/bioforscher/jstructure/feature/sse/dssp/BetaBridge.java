@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.sse;
+package de.bioforscher.jstructure.feature.sse.dssp;
 
 /**
  * StructureContainer that represents a beta Bridge between two residues. It contains the

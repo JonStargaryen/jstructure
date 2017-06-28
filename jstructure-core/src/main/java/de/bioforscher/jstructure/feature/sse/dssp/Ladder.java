@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.sse;
+package de.bioforscher.jstructure.feature.sse.dssp;
 
 /**
  * A Ladder is a set of one or more consecutive bridges of identical type. A

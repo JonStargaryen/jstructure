@@ -1,7 +1,7 @@
 package studies.membrane;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class MembraneConstantsTest {
                     System.out.println(chain.getChainId().getFullName());
                     chain.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
                     chain.getFeatureContainer().getFeature(MembraneContainer.class);
-                    chain.aminoAcids().findFirst().get().getFeatureContainer().getFeature(SecondaryStructure.class);
+                    chain.aminoAcids().findFirst().get().getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
                 });
     }
 }

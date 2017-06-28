@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.sse;
+package de.bioforscher.jstructure.feature.sse.dssp;
 
 import de.bioforscher.jstructure.model.structure.Group;
 

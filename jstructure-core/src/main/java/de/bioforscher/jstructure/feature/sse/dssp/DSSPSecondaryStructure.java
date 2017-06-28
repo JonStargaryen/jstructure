@@ -1,7 +1,8 @@
-package de.bioforscher.jstructure.feature.sse;
+package de.bioforscher.jstructure.feature.sse.dssp;
 
+import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 
 import java.util.Arrays;
 
@@ -13,9 +14,7 @@ import java.util.Arrays;
  * @author Aleix Lafita
  *
  */
-public class SecondaryStructure extends FeatureContainerEntry {
-    private SecondaryStructureElement secondaryStructure;
-
+public class DSSPSecondaryStructure extends GenericSecondaryStructure {
     private double phi;
     private double psi;
     private double omega;
@@ -34,9 +33,8 @@ public class SecondaryStructure extends FeatureContainerEntry {
     private BetaBridge bridge1;
     private BetaBridge bridge2;
 
-    SecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement ss) {
-        super(featureProvider);
-        this.secondaryStructure = ss;
+    DSSPSecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement ss) {
+        super(featureProvider, ss);
 
         this.phi = 360;
         this.psi = 360;
@@ -58,7 +56,7 @@ public class SecondaryStructure extends FeatureContainerEntry {
 
     @Override
     public String toString() {
-        return "SecondaryStructure{" +
+        return "DSSPSecondaryStructure{" +
                 "secondaryStructure=" + secondaryStructure +
                 ", phi=" + phi +
                 ", psi=" + psi +
@@ -183,8 +181,8 @@ public class SecondaryStructure extends FeatureContainerEntry {
     }
 
     /**
-     * Adds a Bridge to the getResidue. Each getResidue can only store two bridges. If
-     * the getResidue contains already two Bridges, the Bridge will not be added
+     * Adds a Bridge to the getResidue. Each residue can only store two bridges. If
+     * the residue contains already two Bridges, the Bridge will not be added
      * and the method returns false.
      *
      * @param bridge
@@ -212,13 +210,5 @@ public class SecondaryStructure extends FeatureContainerEntry {
 
     public void setBridge2(BetaBridge bridge2) {
         this.bridge2 = bridge2;
-    }
-
-    public void setSecondaryStructure(SecondaryStructureElement secondaryStructure) {
-        this.secondaryStructure = secondaryStructure;
-    }
-
-    public SecondaryStructureElement getSecondaryStructure() {
-        return this.secondaryStructure;
     }
 }
