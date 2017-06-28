@@ -5,13 +5,15 @@ import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 /**
  * The element dedicated to describe secondary structure elements assigned by ASSP.
  * Created by bittrich on 6/28/17.
  */
 public class ASSPSecondaryStructure extends GenericSecondaryStructure {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.US));
     private double t;
     private double h;
     private double vtor;
@@ -28,6 +30,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     // twist, rise and radius fulfill pi-helix (I, i, U)
     private String a3;
     private boolean helicalCharacteristics;
+    private int stretchId;
 
     ASSPSecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
         super(featureProvider, secondaryStructure);
@@ -42,10 +45,10 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
         this.helicalParameters = true;
     }
 
-    void setCharacteristics(String a1, String a2, String a3) {
-        this.a1 = a1;
-        this.a2 = a2;
-        this.a3 = a3;
+    void setCharacteristics(String[] helicalCharacteristics) {
+        this.a1 = helicalCharacteristics[0];
+        this.a2 = helicalCharacteristics[1];
+        this.a3 = helicalCharacteristics[2];
         this.helicalCharacteristics = true;
     }
 
@@ -93,7 +96,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     public String toString() {
         if(helicalParameters) {
             if(continuous) {
-                return "ASSP{" + (helicalCharacteristics ? a1 + " " + a2 + " " + a3 : "? ? ?") +
+                return "ASSP{" + (helicalCharacteristics ? a1 + " " + a2 + " " + a3 + " " + stretchId + "\t" : "? ? ? ?\t") +
                         " Twist=" + DECIMAL_FORMAT.format(t) +
                         "°, h=" + DECIMAL_FORMAT.format(h) +
                         "A, Vtor=" + DECIMAL_FORMAT.format(vtor) +
@@ -114,5 +117,13 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
 
     public boolean isContinuous() {
         return continuous;
+    }
+
+    public int getStretchId() {
+        return stretchId;
+    }
+
+    void setStretchId(int stretchId) {
+        this.stretchId = stretchId;
     }
 }
