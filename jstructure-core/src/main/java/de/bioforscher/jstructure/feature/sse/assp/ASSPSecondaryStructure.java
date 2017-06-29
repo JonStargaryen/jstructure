@@ -31,6 +31,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     private String a3;
     private boolean helicalCharacteristics;
     private int stretchId;
+    private String finalCharacteristic;
 
     ASSPSecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
         super(featureProvider, secondaryStructure);
@@ -125,5 +126,29 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
 
     void setStretchId(int stretchId) {
         this.stretchId = stretchId;
+    }
+
+    boolean isUnassigned() {
+        return "U".equals(a1) && "U".equals(a2) && "U".equals(a3);
+    }
+
+    String getAlpha() {
+        return a1;
+    }
+
+    String getThree() {
+        return a2;
+    }
+
+    String getPi() {
+        return a3;
+    }
+
+    void setFinalCharacteristic(String finalCharacteristic) {
+        this.finalCharacteristic = finalCharacteristic;
+    }
+
+    String getFinalCharacteristic() {
+        return finalCharacteristic;
     }
 }

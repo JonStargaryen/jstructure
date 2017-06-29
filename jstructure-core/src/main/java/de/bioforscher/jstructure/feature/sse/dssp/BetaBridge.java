@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.sse.dssp;
 
 /**
- * StructureContainer that represents a beta Bridge between two residues. It contains the
+ * Container that represents a beta Bridge between two residues. It contains the
  * two partner indices and the type of the bridge. For consistency, partner1 is
  * always the small index.
  *

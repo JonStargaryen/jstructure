@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.sse.dssp;
 import de.bioforscher.jstructure.model.structure.Group;
 
 /**
- * StructureContainer that represents a hydrogen bond. It contains the energy of the bond
+ * Container that represents a hydrogen bond. It contains the energy of the bond
  * in cal/mol and the partner index.
  *
  * @author Andreas Prlic

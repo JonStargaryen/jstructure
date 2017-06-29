@@ -7,14 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Creates new version of itemset miner data set for GMLVQ-project.
- * Created by bittrich on 6/26/17.
+ * Annotate data set as pipeline.
+ * Created by bittrich on 6/29/17.
  */
-public class S01_ConvertFingerprintDataToArff {
-    private static final Path basePath = StudyConstants.GMLVQ_MAIN
-            .resolve("data")
-            .resolve("fingerprint_miner")
-            .resolve("results");
+public class S02_FingerprintDataAnnotationPipeline {
+    private static final Path basePath = StudyConstants.HOME
+            .resolve("fingerprint_miner_out");
 
     public static void main(String[] args) throws IOException {
         // traverse over all directories in the base path - assumes identically structured subdirectories
@@ -22,6 +20,7 @@ public class S01_ConvertFingerprintDataToArff {
                 .peek(path -> System.out.println("handling " + path))
                 .flatMap(StudyConstants::list)
                 .filter(Files::isDirectory)
+                .filter(path -> !path.toFile().getName().equals("itemset-miner"))
                 .peek(path -> System.out.println("handling " + path))
                 .forEach(FingerPrintDataSetComposer::new);
     }

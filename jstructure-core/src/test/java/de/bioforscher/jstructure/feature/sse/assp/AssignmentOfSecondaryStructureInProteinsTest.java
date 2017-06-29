@@ -26,6 +26,7 @@ public class AssignmentOfSecondaryStructureInProteinsTest {
                 .forEach(aminoAcid -> {
                     ASSPSecondaryStructure asspSecondaryStructure = aminoAcid.getFeatureContainer().getFeature(ASSPSecondaryStructure.class);
                     System.out.println(aminoAcid.getIdentifier() + "\t" + asspSecondaryStructure);
+                    System.out.println(asspSecondaryStructure.getSecondaryStructure());
                 });
     }
 }
