@@ -151,4 +151,8 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     String getFinalCharacteristic() {
         return finalCharacteristic;
     }
+
+    public double getBa() {
+        return ba;
+    }
 }

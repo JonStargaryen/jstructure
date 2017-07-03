@@ -986,22 +986,24 @@ END
 #ASSIGN result reorganization
 $len_raw=@assign_raw;
 #print @assign_raw;
+# iterate over all secondary structure elements
 for($l=0;$l<$len_raw;$l++)
 	{
+	# current element
 	@split_raw=split(' ',$assign_raw[$l]);
 	$type=$split_raw[7];
 	$sr=$split_raw[3];
 	$er=$split_raw[6];
 	$chainr=$split_raw[2];
 	$length=$split_raw[8];
-
+#previous
 	@split_raw0=split(' ',$assign_raw[$l-1]);
 	$type0=$split_raw0[7];
 	$sr0=$split_raw0[3];
 	$er0=$split_raw0[6];
 	$chainr0=$split_raw0[2];
 	$length0=$split_raw0[8];
-
+#next
 	@split_raw1=split(' ',$assign_raw[$l+1]);
 	$type1=$split_raw1[7];
 	$sr1=$split_raw1[3];
@@ -1052,6 +1054,7 @@ END
 		}
 	elsif(($type == $type1)&&($er==$sr1)&&($chainr eq $chainr1))
 		{
+		# traverse all lines of diff
 		for($r=0;$r<$len_tab;$r++)
 			{
 			@splitr=split(' ',$data_tab[$r]);
@@ -1113,8 +1116,10 @@ sub reorganize
 			{
 			for($ps=0;$ps<$len_ss;$ps++)
 				{
+				# cont.out
 				@splitss=split(' ',$data_ss[$ps]);
 				@splitss1=split(' ',$data_ss[$ps+1]);
+				#                                               chainId matching
 				if(($splitss[8]==$end1)&&($splitss1[6]==$end1)&&($split_line[2] eq $splitss[12]))
 					{
 					if(((substr($data_ss[$ps],0,5)=~m/I/)&&(substr($data_ss[$ps+1],0,5)=~m/I/)&&($split_line1[0] eq 'PiHelix'))||((substr($data_ss[$ps],0,5)=~m/G/)&&(substr($data_ss[$ps+1],0,5)=~m/G/)&&($split_line1[0] eq 'ThreeHelix')))
@@ -1242,6 +1247,7 @@ chomp(@assign_raw);
 for($q=0;$q<$len_raw;$q++)
 	{
 	@split_final=split(' ',$assign_raw[$q]);
+	# split_final[8] = length
 	if($split_final[8]==2)
 		{
 		delete($assign_raw[$q]);
@@ -1255,6 +1261,7 @@ for($q=0;$q<$len_raw;$q++)
 	if(($split_final[0] eq 'AlphaHelix')&&($split_final[8]>3))
 		{
 		$split_final[0]='AlphaHelix';
+		# type == 'A'
 		if($split_final[7]==1)
 			{
 			@splita=split(' ',$alphar[$ar1-1]);
@@ -1272,6 +1279,7 @@ for($q=0;$q<$len_raw;$q++)
 END
 			$alphar[$ar1-1]=$str;
 			}
+        # type == 'a'
 		elsif($split_final[7]==6)
 			{
 			$ah1=$ah1+1;
@@ -1311,6 +1319,8 @@ END
 			if($split_final[0] eq 'AlphaHelix')
 				{
 				@splita=split(' ',$alphar[$ar1-1]);
+				# split final is the line of PDB SSE annotation
+				# splita should be the previous annotation
 				if(($splita[7]==$split_final[3]-1)&&($split_final[2] eq $splita[3]))
 					{
 					$split_final[3]=$splita[4];

@@ -15,7 +15,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
+import static de.bioforscher.jstructure.feature.sse.SecondaryStructureElement.*;
 
 /**
  * An algorithm to determine the secondary structure of proteins by investigating the angles for 4 consecutive amino
@@ -47,7 +50,9 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
         List<List<AminoAcid>> stretches = assignHelicalCharacteristics(aminoAcids);
 
         dropInitialAndTerminalCoil(stretches);
-        assignFinalCharacteristic(stretches);
+        List<RawSecondaryStructure> rawSecondaryStructures = assignFinalCharacteristic(aminoAcids, stretches);
+
+        assignSecondaryStructure(aminoAcids, rawSecondaryStructures);
     }
 
     /**
@@ -55,7 +60,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
      * @param aminoAcid the residue to process
      */
     private void assignNeutralState(AminoAcid aminoAcid) {
-        aminoAcid.getFeatureContainer().addFeature(new ASSPSecondaryStructure(this, SecondaryStructureElement.COIL));
+        aminoAcid.getFeatureContainer().addFeature(new ASSPSecondaryStructure(this, COIL));
     }
 
     private void assignHelicalParameters(List<AminoAcid> aminoAcids) {
@@ -160,8 +165,9 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 // stretch may just have ended
                 if(!aminoAcidsInCurrentStretch.isEmpty()) {
                     // add terminal amino acid of stretch
-                    System.out.println("stretch from " + aminoAcidsInCurrentStretch.get(1).getResidueNumber().getResidueNumber() + " to " +
-                            (aminoAcidsInCurrentStretch.get(aminoAcidsInCurrentStretch.size() - 1).getResidueNumber().getResidueNumber() + 2));
+                    logger.debug("stretch from {} to {}",
+                            aminoAcidsInCurrentStretch.get(1).getResidueNumber().getResidueNumber(),
+                            aminoAcidsInCurrentStretch.get(aminoAcidsInCurrentStretch.size() - 1).getResidueNumber().getResidueNumber() + 2);
                     // if so, determine secondary structure
                     for(int i = 0; i < aminoAcidsInCurrentStretch.size(); i++) {
                         ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))));
@@ -302,7 +308,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
         });
     }
 
-    private void assignFinalCharacteristic(List<List<AminoAcid>> stretches) {
+    private List<RawSecondaryStructure> assignFinalCharacteristic(List<AminoAcid> aminoAcids, List<List<AminoAcid>> stretches) {
+        List<RawSecondaryStructure> rawSecondaryStructures = new ArrayList<>();
         for (List<AminoAcid> stretch : stretches) {
             // do nothing for stretches less than 2 amino acids
             if(stretch.size() <= 1) {
@@ -405,18 +412,20 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 }
             }
             if(!"".equals(finala)) {
-                finala = streamlineAssignmentString(stretch, finala);
-                deriveSecondaryStructureElements(stretch, finala);
+                finala = streamlineAssignmentString(finala);
+                List<RawSecondaryStructure> rss = deriveSecondaryStructureElements(stretch, finala);
+                rawSecondaryStructures.addAll(reorganize(aminoAcids, rss));
             }
         }
+
+        return rawSecondaryStructures;
     }
 
     /**
      * ;>
-     * @param stretch all residues of this stretch
      * @param finala the string describing the assignments to make
      */
-    private String streamlineAssignmentString(List<AminoAcid> stretch, String finala) {
+    private String streamlineAssignmentString(String finala) {
         if(finala.startsWith("A I I I") || finala.startsWith("G I I I") || finala.startsWith("I A I I") || finala.startsWith("A I I A")) {
             finala = "I I I I" + finala.substring(7);
         }
@@ -479,7 +488,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
         return finala;
     }
 
-    private void deriveSecondaryStructureElements(List<AminoAcid> stretch, String finala) {
+    private List<RawSecondaryStructure> deriveSecondaryStructureElements(List<AminoAcid> stretch, String finala) {
+        List<RawSecondaryStructure> secondaryStructures = new ArrayList<>();
         String[] split = finala.split(" ");
 
         boolean inSecondaryStructure = false;
@@ -490,45 +500,82 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
             String assignment = split[i];
             if(i < split.length - 1 && assignment.equals(split[i + 1])) {
                 inSecondaryStructure = true;
-                startIndex = i;
+                if(startIndex == -1) {
+                    startIndex = i;
+                }
                 type = assignment;
             } else {
                 if(inSecondaryStructure) {
                     ASSPSecondaryStructure start = getSecondaryStructure(stretch.get(startIndex));
                     ASSPSecondaryStructure end = getSecondaryStructure(stretch.get(i));
 
-                    if(matches(start, "AGI") || (start.isUnassigned() && i != 0 && start.getT() < 180)) {
+                    /*if(matches(start, "AGI") || (start.isUnassigned() && i != 0 && start.getT() < 180)) {
                         type = type;
-                    } else if(matches(start, "agi") || (start.isUnassigned() && i != 0 && start.getT() > 180)) {
+                    } else*/ if(matches(start, "agi") || (start.isUnassigned() && i != 0 && start.getT() > 180)) {
                         type = type.toLowerCase();
                     } /*else if(matches(start, "P")) {
                         type = type;
                     }*/
                     if(matches(start, "AGIPagi") || ("AGIagi".contains(type) && i != 0)) {
                         SecondaryStructureElement secondaryStructureElement = matchToSecondaryStructureElement(type);
-                        stretch.stream()
-                                .map(this::getSecondaryStructure)
-                                .forEach(secondaryStructure -> secondaryStructure.setSecondaryStructure(secondaryStructureElement));
+                        secondaryStructures.add(new RawSecondaryStructure(secondaryStructureElement,
+                                type,
+                                stretch.get(startIndex).getResidueNumber().getResidueNumber() + 1,
+                                stretch.get(i).getResidueNumber().getResidueNumber() + 2));
                     }
 
+                    startIndex = -1;
                     inSecondaryStructure = false;
                 }
             }
+        }
+        return secondaryStructures;
+    }
+
+    class RawSecondaryStructure {
+        SecondaryStructureElement secondaryStructureElement;
+        String type;
+        int start;
+        int end;
+        int length;
+
+        RawSecondaryStructure(SecondaryStructureElement secondaryStructureElement,
+                              String type,
+                              int start,
+                              int end) {
+            this.secondaryStructureElement = secondaryStructureElement;
+            this.type = type;
+            this.start = start;
+            this.end = end;
+            this.length = end - start + 1;
+        }
+
+        @Override
+        public String toString() {
+            return secondaryStructureElement + "\t" + start + "\t" + end + "\t" + length;
+        }
+
+        boolean sameNatureAs(RawSecondaryStructure other) {
+            return isFreakSecondaryStructure() == other.isFreakSecondaryStructure();
+        }
+
+        boolean isFreakSecondaryStructure() {
+            return !("A".equals(type) || "G".equals(type) || "I".equals(type) || "S".equals(type));
         }
     }
 
     private SecondaryStructureElement matchToSecondaryStructureElement(String type) {
         switch (type) {
             case "A":case "a":
-                return SecondaryStructureElement.ALPHA_HELIX;
+                return ALPHA_HELIX;
             case "P":
-                return SecondaryStructureElement.POLYPROLINE_HELIX;
+                return POLYPROLINE_HELIX;
             case "G":case "g":
-                return SecondaryStructureElement.THREE_TEN_HELIX;
+                return THREE_TEN_HELIX;
             case "I":case "i":
-                return SecondaryStructureElement.PI_HELIX;
+                return PI_HELIX;
             default:
-                return SecondaryStructureElement.COIL;
+                return COIL;
         }
     }
 
@@ -540,6 +587,231 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
             }
         }
         return false;
+    }
+
+    private List<RawSecondaryStructure> reorganize(List<AminoAcid> aminoAcids, List<RawSecondaryStructure> rawSecondaryStructures) {
+        List<RawSecondaryStructure> rawSecondaryStructuresToRemove = new ArrayList<>();
+
+        for(int i = 1; i < rawSecondaryStructures.size() - 1; i++) {
+            RawSecondaryStructure rawSecondaryStructurePrevious = rawSecondaryStructures.get(i - 1);
+            RawSecondaryStructure rawSecondaryStructure = rawSecondaryStructures.get(i);
+            RawSecondaryStructure rawSecondaryStructureNext = rawSecondaryStructures.get(i + 1);
+
+            if((("a".equals(rawSecondaryStructure.type)) ||
+                    ("P".equals(rawSecondaryStructure.type)) ||
+                    ("i".equals(rawSecondaryStructure.type)) ||
+                    ("g".equals(rawSecondaryStructure.type))) &&
+                    (((!"a".equals(rawSecondaryStructurePrevious.type)) ||
+                    (!"P".equals(rawSecondaryStructurePrevious.type)) ||
+                    (!"i".equals(rawSecondaryStructurePrevious.type)) ||
+                    (!"g".equals(rawSecondaryStructurePrevious.type))))) {
+                if(rawSecondaryStructure.end >= rawSecondaryStructureNext.start) {
+                    if(("a".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 5) ||
+                            ("i".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 6) ||
+                            ("g".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 4) ||
+                            ("P".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 4)) {
+                        rawSecondaryStructuresToRemove.add(rawSecondaryStructure);
+                    } else {
+                        rawSecondaryStructure.end--;
+                        rawSecondaryStructure.length--;
+                        //TODO stretch ids
+                    }
+                }
+                if(rawSecondaryStructure.start <= rawSecondaryStructurePrevious.end) {
+                    if(("a".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 5) ||
+                            ("i".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 6) ||
+                            ("g".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 4) ||
+                            ("P".equals(rawSecondaryStructure.type) && rawSecondaryStructure.length < 4)) {
+                        rawSecondaryStructuresToRemove.add(rawSecondaryStructure);
+                    } else {
+                        rawSecondaryStructure.start++;
+                        rawSecondaryStructure.length--;
+
+                    }
+                }
+            } /* else if(rawSecondaryStructure.length == 2) {
+                continue;
+            } */else if(rawSecondaryStructure.type.equals(rawSecondaryStructureNext.type) && rawSecondaryStructure.end == rawSecondaryStructureNext.start) {
+                AminoAcid aminoAcid = findAminoAcid(aminoAcids, rawSecondaryStructure.end);
+                if(getSecondaryStructure(aminoAcid).getBa() < 60) {
+                    rawSecondaryStructure.end = rawSecondaryStructureNext.end;
+                    rawSecondaryStructure.length += rawSecondaryStructureNext.length - 1;
+                    rawSecondaryStructuresToRemove.add(rawSecondaryStructureNext);
+                } else {
+                    rawSecondaryStructuresToRemove.addAll(reorganize(aminoAcids, rawSecondaryStructure, rawSecondaryStructureNext));
+                }
+            } else if(!rawSecondaryStructure.type.equals(rawSecondaryStructureNext.type) && rawSecondaryStructure.end == rawSecondaryStructureNext.start) {
+                rawSecondaryStructuresToRemove.addAll(reorganize(aminoAcids, rawSecondaryStructure, rawSecondaryStructureNext));
+            }
+        }
+        rawSecondaryStructures.removeAll(rawSecondaryStructuresToRemove);
+        return rawSecondaryStructures;
+    }
+
+    private AminoAcid findAminoAcid(List<AminoAcid> aminoAcids, int residueNumber) {
+        for(AminoAcid aminoAcid : aminoAcids) {
+            if (aminoAcid.getResidueNumber().getResidueNumber() == residueNumber) {
+                return aminoAcid;
+            }
+        }
+        throw new NoSuchElementException("did not find amino acid with residue number '" + residueNumber + "'");
+    }
+
+    private List<RawSecondaryStructure> reorganize(List<AminoAcid> aminoAcids, RawSecondaryStructure rawSecondaryStructure1, RawSecondaryStructure rawSecondaryStructure2) {
+        List<RawSecondaryStructure> rawSecondaryStructuresToRemove = new ArrayList<>();
+
+        SecondaryStructureElement secondaryStructureElement1 = rawSecondaryStructure1.secondaryStructureElement;
+        SecondaryStructureElement secondaryStructureElement2 = rawSecondaryStructure2.secondaryStructureElement;
+
+        if(((secondaryStructureElement2 == ALPHA_HELIX && rawSecondaryStructure2.length > 4) ||
+                (secondaryStructureElement2 == PI_HELIX && rawSecondaryStructure2.length > 5) ||
+                (secondaryStructureElement2 == THREE_TEN_HELIX && rawSecondaryStructure2.length > 3)) &&
+                ((secondaryStructureElement1 == ALPHA_HELIX && rawSecondaryStructure1.length > 4) ||
+                (secondaryStructureElement1 == PI_HELIX && rawSecondaryStructure1.length > 5) ||
+                (secondaryStructureElement1 == THREE_TEN_HELIX && rawSecondaryStructure1.length > 3)) &&
+                (rawSecondaryStructure1.sameNatureAs(rawSecondaryStructure2))) {
+            if (secondaryStructureElement1 == PI_HELIX || secondaryStructureElement1 == THREE_TEN_HELIX || rawSecondaryStructure1.type.equals(rawSecondaryStructure2.type)) {
+                rawSecondaryStructure2.start++;
+                rawSecondaryStructure2.length--;
+            }
+            if(secondaryStructureElement1 == ALPHA_HELIX && (secondaryStructureElement2 == PI_HELIX || secondaryStructureElement2 == THREE_TEN_HELIX)) {
+                ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(findAminoAcid(aminoAcids, rawSecondaryStructure1.end));
+                ASSPSecondaryStructure secondaryStructure2 = getSecondaryStructure(findAminoAcid(aminoAcids, rawSecondaryStructure1.end + 1));
+                String alpha1 = secondaryStructure1.getAlpha();
+                String three1 = secondaryStructure1.getThree();
+                String pi1 = secondaryStructure1.getPi();
+                String alpha2 = secondaryStructure2.getAlpha();
+                String three2 = secondaryStructure2.getThree();
+                String pi2 = secondaryStructure2.getPi();
+                if ((("I".equals(alpha1) || "I".equals(three1) || "I".equals(pi1)) && ("I".equals(alpha2) || "I".equals(three2) || "I".equals(pi2)) && secondaryStructureElement2 == PI_HELIX) ||
+                        (("G".equals(alpha1) || "G".equals(three1) || "I".equals(pi1)) && ("G".equals(alpha2) || "I".equals(three2) || "I".equals(pi2)) && secondaryStructureElement2 == THREE_TEN_HELIX)) {
+                    rawSecondaryStructure1.end--;
+                    rawSecondaryStructure1.length--;
+                } else {
+                    rawSecondaryStructure2.start++;
+                    rawSecondaryStructure2.length--;
+                }
+                //TODO if(($splitss1[6]> $end1)&&($splitss1[12] eq $split_line[2]))
+            }
+        } else if(((secondaryStructureElement2 == ALPHA_HELIX && rawSecondaryStructure2.length > 4) || (secondaryStructureElement2 == PI_HELIX && rawSecondaryStructure2.length > 5) || (secondaryStructureElement2 == THREE_TEN_HELIX && rawSecondaryStructure2.length > 3)) && ((secondaryStructureElement1 == ALPHA_HELIX && rawSecondaryStructure1.length == 4) || (secondaryStructureElement1 == PI_HELIX && rawSecondaryStructure1.length == 5) || (secondaryStructureElement1 == THREE_TEN_HELIX && rawSecondaryStructure1.length == 3))) {
+            rawSecondaryStructure2.start++;
+            rawSecondaryStructure2.length--;
+        } else if(((secondaryStructureElement2 == ALPHA_HELIX && rawSecondaryStructure2.length == 4) || (secondaryStructureElement2 == PI_HELIX && rawSecondaryStructure2.length == 5) || (secondaryStructureElement2 == THREE_TEN_HELIX && rawSecondaryStructure2.length == 3)) && ((secondaryStructureElement1 == ALPHA_HELIX && rawSecondaryStructure1.length > 4) || (secondaryStructureElement1 == PI_HELIX  && rawSecondaryStructure1.length > 5) || (secondaryStructureElement1 == THREE_TEN_HELIX && rawSecondaryStructure1.length > 3))) {
+            rawSecondaryStructure1.end--;
+            rawSecondaryStructure1.length--;
+        } else if(((secondaryStructureElement2 == ALPHA_HELIX && rawSecondaryStructure2.length == 4) || (secondaryStructureElement2 == PI_HELIX && rawSecondaryStructure2.length == 5) || (secondaryStructureElement2 == THREE_TEN_HELIX && rawSecondaryStructure2.length == 3)) && ((secondaryStructureElement1 == ALPHA_HELIX && rawSecondaryStructure1.length == 4) || (secondaryStructureElement1 == PI_HELIX && rawSecondaryStructure1.length == 5) || (secondaryStructureElement1 == THREE_TEN_HELIX && rawSecondaryStructure1.length == 3))) {
+            if(rawSecondaryStructure1.type.equals(rawSecondaryStructure2.type)) {
+                rawSecondaryStructure1.end = rawSecondaryStructure2.end;
+                rawSecondaryStructure1.length += rawSecondaryStructure2.length - 1;
+                rawSecondaryStructuresToRemove.add(rawSecondaryStructure2);
+            } else if(rawSecondaryStructure1.length > rawSecondaryStructure2.length) {
+                rawSecondaryStructure1.end = rawSecondaryStructure2.end;
+                rawSecondaryStructure1.length += rawSecondaryStructure2.length - 1;
+                rawSecondaryStructuresToRemove.add(rawSecondaryStructure2);
+            } else if(rawSecondaryStructure2.length > rawSecondaryStructure1.length) {
+                rawSecondaryStructure2.length += rawSecondaryStructure1.length - 1;
+                rawSecondaryStructure2.start = rawSecondaryStructure1.start;
+                rawSecondaryStructuresToRemove.add(rawSecondaryStructure1);
+            }
+        } else if(((secondaryStructureElement2 == ALPHA_HELIX && rawSecondaryStructure2.length < 4) || (secondaryStructureElement2 == PI_HELIX && rawSecondaryStructure2.length < 5) || (secondaryStructureElement2 == THREE_TEN_HELIX && rawSecondaryStructure2.length < 3)) && ((secondaryStructureElement1 == ALPHA_HELIX && rawSecondaryStructure1.length >= 4) || (secondaryStructureElement1 == PI_HELIX && rawSecondaryStructure1.length >= 5) || (secondaryStructureElement1 == THREE_TEN_HELIX && rawSecondaryStructure1.length >= 3))) {
+            rawSecondaryStructure1.end = rawSecondaryStructure2.end;
+            rawSecondaryStructure1.length += rawSecondaryStructure2.length - 1;
+            rawSecondaryStructuresToRemove.add(rawSecondaryStructure2);
+        } else if(((secondaryStructureElement2 == ALPHA_HELIX && rawSecondaryStructure2.length >= 4) || (secondaryStructureElement2 == PI_HELIX && rawSecondaryStructure2.length >= 5) || (secondaryStructureElement2 == THREE_TEN_HELIX && rawSecondaryStructure2.length >= 3)) && ((secondaryStructureElement1 == ALPHA_HELIX && rawSecondaryStructure1.length < 4) || (secondaryStructureElement1 == PI_HELIX && rawSecondaryStructure1.length < 5) || (secondaryStructureElement1 == THREE_TEN_HELIX && rawSecondaryStructure1.length < 3 ))) {
+            rawSecondaryStructure2.length += rawSecondaryStructure1.length - 1;
+            rawSecondaryStructure2.start = rawSecondaryStructure1.start;
+            rawSecondaryStructuresToRemove.add(rawSecondaryStructure1);
+        }
+
+        return rawSecondaryStructuresToRemove;
+    }
+
+    private void assignSecondaryStructure(List<AminoAcid> aminoAcids, List<RawSecondaryStructure> rawSecondaryStructures) {
+        List<RawSecondaryStructure> rawSecondaryStructuresToRemove = new ArrayList<>();
+        List<RawSecondaryStructure> alphaHelices = new ArrayList<>();
+        boolean pi2alpha = false;
+
+        for (RawSecondaryStructure rawSecondaryStructure : rawSecondaryStructures) {
+            int length = rawSecondaryStructure.length;
+            String type = rawSecondaryStructure.type;
+            if (length < 3) {
+                rawSecondaryStructuresToRemove.add(rawSecondaryStructure);
+                continue;
+            }
+            if (rawSecondaryStructure.secondaryStructureElement == ALPHA_HELIX && length > 3) {
+                if ("A".equals(type)) {
+                    if (!alphaHelices.isEmpty()) {
+                        RawSecondaryStructure previousAlphaHelix = alphaHelices.get(alphaHelices.size() - 1);
+                        if (pi2alpha && previousAlphaHelix.end == rawSecondaryStructure.start - 1) {
+                            rawSecondaryStructure.start = previousAlphaHelix.start;
+                            rawSecondaryStructure.length += previousAlphaHelix.length;
+                            rawSecondaryStructuresToRemove.add(previousAlphaHelix);
+                            alphaHelices.remove(previousAlphaHelix);
+                            pi2alpha = false;
+                        }
+                    }
+
+                    alphaHelices.add(rawSecondaryStructure);
+                }
+            }
+            if (rawSecondaryStructure.secondaryStructureElement == THREE_TEN_HELIX && length > 2) {
+                if ("A".equals(type) || "G".equals(type)) {
+                    rawSecondaryStructure.type = "G";
+                }
+                if ("a".equals(type) || "g".equals(type)) {
+                    rawSecondaryStructure.type = "g";
+                }
+            }
+            if (rawSecondaryStructure.secondaryStructureElement == PI_HELIX && length > 4) {
+                if ("I".equals(type)) {
+                    rawSecondaryStructure.secondaryStructureElement = piTwistCheck(aminoAcids, rawSecondaryStructure);
+                    if (rawSecondaryStructure.secondaryStructureElement == ALPHA_HELIX) {
+                        if (!alphaHelices.isEmpty()) {
+                            RawSecondaryStructure previousAlphaHelix = alphaHelices.get(alphaHelices.size() - 1);
+                            if (previousAlphaHelix.end == rawSecondaryStructure.start - 1) {
+                                pi2alpha = true;
+                                rawSecondaryStructuresToRemove.add(previousAlphaHelix);
+                                alphaHelices.remove(previousAlphaHelix);
+                            }
+                        }
+
+                        alphaHelices.add(rawSecondaryStructure);
+                    }
+                }
+            }
+        }
+
+        rawSecondaryStructures.removeAll(rawSecondaryStructuresToRemove);
+        
+        // finally assign the secondary structure elements - was kinda hard to get here
+        rawSecondaryStructures.forEach(rawSecondaryStructure -> {
+            System.out.println(rawSecondaryStructure);
+        });
+    }
+
+    private SecondaryStructureElement piTwistCheck(List<AminoAcid> aminoAcids, RawSecondaryStructure rawSecondaryStructure) {
+        double tw = 0;
+        double rad = 0;
+        for(AminoAcid aminoAcid : aminoAcids) {
+            int resNum = aminoAcid.getResidueNumber().getResidueNumber();
+            if(resNum >= rawSecondaryStructure.start - 1 && resNum + 3 <= rawSecondaryStructure.end + 1) {
+                ASSPSecondaryStructure asspSecondaryStructure = getSecondaryStructure(aminoAcid);
+                tw += asspSecondaryStructure.getT();
+                rad += asspSecondaryStructure.getR();
+            }
+        }
+
+        // normalize by length
+        tw /= rawSecondaryStructure.length;
+        rad /= rawSecondaryStructure.length;
+
+        if(tw < 93.8 && rad > 2.45) {
+            return PI_HELIX;
+        } else if(tw > 102 && rad < 2.3) {
+            return THREE_TEN_HELIX;
+        } else {
+            return ALPHA_HELIX;
+        }
     }
 
     private ASSPSecondaryStructure getSecondaryStructure(AminoAcid aminoAcid) {
