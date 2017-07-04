@@ -217,6 +217,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                                 helicalCharacteristics[2] = "i";
                             }
                         } else if(i == aminoAcidsInCurrentStretch.size() - 2) {
+                            //TODO deviation for ILE-30: expected 'A U U', actually 'A U I'
                             //TODO deviation for PHE-33: expected 'A U U', actually 'A U I'
                             double sumt_l = 360 - (twist1 + twist2) / 2;
 
@@ -263,6 +264,12 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 
                         secondaryStructure1.setCharacteristics(helicalCharacteristics);
                         secondaryStructure1.setStretchId(stretchId);
+
+                        //TODO remove - temporary fix for other bug fixes downstream
+//                        int resNum = aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))).getResidueNumber().getResidueNumber();
+//                        if(resNum == 30 || resNum == 33) {
+//                            secondaryStructure1.setCharacteristics(new String[] { "A", "U", "U" });
+//                        }
                     }
                     aminoAcidsInCurrentStretch.stream()
                             .map(this::getSecondaryStructure)
@@ -925,21 +932,61 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 
         rawSecondaryStructures.removeAll(rawSecondaryStructuresToRemove);
 
-        naiveCheck(rawSecondaryStructures);
+//        naiveCheckForUnassignedRegions(aminoAcids, rawSecondaryStructures);
+        naiveCheckForOverlaps(rawSecondaryStructures);
 
         // finally assign the secondary structure elements - was kinda hard to get here
         rawSecondaryStructures.forEach(rawSecondaryStructure -> {
-            System.out.println(rawSecondaryStructure);
+            for(int i = rawSecondaryStructure.start; i <= rawSecondaryStructure.end; i++) {
+                getSecondaryStructure(aminoAcids.get(i)).setSecondaryStructure(rawSecondaryStructure.secondaryStructureElement);
+            }
         });
     }
 
-    private void naiveCheck(List<RawSecondaryStructure> rawSecondaryStructures) {
+//    private void naiveCheckForUnassignedRegions(List<AminoAcid> aminoAcids, List<RawSecondaryStructure> rawSecondaryStructures) {
+//        List<RawSecondaryStructure> rawSecondaryStructuresToRemove = new ArrayList<>();
+//        for(RawSecondaryStructure rawSecondaryStructure : rawSecondaryStructures) {
+//            for(int i = rawSecondaryStructure.start; i <= rawSecondaryStructure.end; i++) {
+//                ASSPSecondaryStructure asspSecondaryStructure = getSecondaryStructure(aminoAcids.get(i));
+//                if(!asspSecondaryStructure.isContinuous()) {
+//                    System.out.println(aminoAcids.get(i));
+//                    System.out.println(asspSecondaryStructure.isContinuous());
+//                    System.out.println(asspSecondaryStructure);
+//                }
+//            }
+//        }
+//        rawSecondaryStructures.removeAll(rawSecondaryStructuresToRemove);
+//    }
+
+    private void naiveCheckForOverlaps(List<RawSecondaryStructure> rawSecondaryStructures) {
         List<RawSecondaryStructure> rawSecondaryStructuresToRemove = new ArrayList<>();
-        for(RawSecondaryStructure rss1 : rawSecondaryStructures) {
-            for(RawSecondaryStructure rss2 : rawSecondaryStructures) {
-                if(rss1 == rss2) {
-                    continue;
-                }
+//        for(RawSecondaryStructure rss1 : rawSecondaryStructures) {
+//            for(RawSecondaryStructure rss2 : rawSecondaryStructures) {
+//                if(rss1 == rss2) {
+//                    continue;
+//                }
+//                if(rss1.end == rss2.start) {
+////                    System.out.println(rss2);
+//                    if(rss1.type.equals(rss2.type)) {
+//                        rss1.end = rss2.end;
+//                        rss1.length += rss2.length - 1;
+//                        rawSecondaryStructuresToRemove.add(rss2);
+//                    } else {
+//                        rss2.start++;
+//                        rss2.length--;
+//                    }
+//                } else if(rss1.end + 1 == rss2.start && rss1.type.equals(rss2.type)) {
+////                    System.out.println(rss2);
+//                    rss1.end = rss2.end;
+//                    rss1.length += rss2.length;
+//                    rawSecondaryStructuresToRemove.add(rss2);
+//                }
+//            }
+//        }
+        for(int i = 0; i < rawSecondaryStructures.size() - 1; i++) {
+            RawSecondaryStructure rss1 = rawSecondaryStructures.get(i);
+            for(int j = i + 1; j < rawSecondaryStructures.size(); j++) {
+                RawSecondaryStructure rss2 = rawSecondaryStructures.get(j);
                 if(rss1.end == rss2.start) {
 //                    System.out.println(rss2);
                     if(rss1.type.equals(rss2.type)) {
@@ -960,7 +1007,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
         }
         rawSecondaryStructures.removeAll(rawSecondaryStructuresToRemove);
         if(!rawSecondaryStructuresToRemove.isEmpty()) {
-            naiveCheck(rawSecondaryStructures);
+            naiveCheckForOverlaps(rawSecondaryStructures);
         }
     }
 

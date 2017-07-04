@@ -2,7 +2,15 @@ package de.bioforscher.jstructure.feature.sse.assp;
 
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import util.TestUtils;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Functional test for the ASSP implementation.
@@ -12,23 +20,60 @@ import org.junit.Test;
  */
 public class AssignmentOfSecondaryStructureInProteinsTest {
     private static final AssignmentOfSecondaryStructureInProteins assignmentOfSecondaryStructureInProteins = new AssignmentOfSecondaryStructureInProteins();
+    private Protein protein;
+    private List<String[]> contLines;
+    private List<String[]> asspLines;
 
-    @Test
-    public void shouldAgreeWithReferenceOutput() {
-        Protein protein = ProteinParser.source("2jho")
+    @Before
+    public void setup() {
+        protein = ProteinParser.source("2jho")
                 .minimalParsing(true)
                 .parse();
 
         assignmentOfSecondaryStructureInProteins.process(protein);
 
-        //TODO test for agreement with 2jho_nh.out, 2jho_cont.out and 2jho_assp.out
+        contLines = new BufferedReader(new InputStreamReader(TestUtils.getResourceAsStream("assp/2jho_cont.out")))
+                .lines()
+                .map(string -> string.replaceAll("\\s+", " "))
+                .map(string -> string.split(" "))
+                .filter(split -> split.length == 18)
+                .collect(Collectors.toList());
+
+        asspLines = new BufferedReader(new InputStreamReader(TestUtils.getResourceAsStream("assp/2jho_assp.out")))
+                .lines()
+                .map(string -> string.replaceAll("\\s+", " "))
+                .map(string -> string.split(" "))
+                .collect(Collectors.toList());
+    }
+
+    @Test
+    public void shouldAgreeInAssignment() {
+        // ASSP assigns 3 states to each amino acid in a stretch
         protein.aminoAcids()
                 .forEach(aminoAcid -> {
+                    String chainId = aminoAcid.getParentChain().getChainId().getChainId();
+                    int residueNumber = aminoAcid.getResidueNumber().getResidueNumber();
                     ASSPSecondaryStructure asspSecondaryStructure = aminoAcid.getFeatureContainer().getFeature(ASSPSecondaryStructure.class);
-                    System.out.println(asspSecondaryStructure.getAlpha() + " " +
-                            asspSecondaryStructure.getThree() + " " +
-                            asspSecondaryStructure.getPi() + " " +
-                            String.valueOf(aminoAcid.getResidueNumber().getResidueNumber()));
+
+                    contLines.stream()
+                            .filter(split -> split[12].equals(chainId))
+                            .filter(split -> Integer.valueOf(split[4]) == residueNumber)
+                            .forEach(split -> {
+                                if(!split[0].equals(asspSecondaryStructure.getAlpha()) ||
+                                        !split[1].equals(asspSecondaryStructure.getThree()) ||
+                                        !split[2].equals(asspSecondaryStructure.getPi())) {
+//                                    System.err.println("assignment does not match for " + aminoAcid.getIdentifier() +
+//                                            " expected: " + split[0] + " " + split[1] + " " + split[2] + " found: " +
+//                                            asspSecondaryStructure);
+                                    Assert.fail("assignment does not match for " + aminoAcid.getIdentifier() +
+                                            " expected: " + split[0] + " " + split[1] + " " + split[2] + " found: " +
+                                            asspSecondaryStructure);
+                                }
+                            });
                 });
+
+        //TODO deviations for
+        // ALPHA_HELIX	21	32	12    vs    AlphaHelix   2 VAL A   21  SER A   35  1                                  15
+        // ALPHA_HELIX	33	36	4
     }
 }

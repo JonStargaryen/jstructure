@@ -1,18 +1,4 @@
 AlphaHelix   1 GLU A    4  TRP A   14  1                                  11
-AlphaHelix   2 VAL A   21  SER A   35  1                                  15
-AlphaHelix   3 GLU A   52  ALA A   57  1                                   6
-AlphaHelix   4 LEU A   59  ILE A   75  1                                  17
-AlphaHelix   5 ALA A   84  SER A   92  1                                   9
-AlphaHelix   6 GLU A  105  ARG A  118  1                                  14
-AlphaHelix   7 ALA A  125  LEU A  149  1                                  25
-ThreeHelix   1 ALA A   15  ALA A   19  5                                   5
-ThreeHelix   2 PRO A   37  LYS A   42  5                                   6
-ThreeHelix   3 LEU A   76  LYS A   78  5                                   3
-ThreeHelix   4 ILE A  101  LEU A  104  5                                   4
-PiHelix      1 HIS A   93  HIS A   97  3                                   5
-
-# sorted:
-AlphaHelix   1 GLU A    4  TRP A   14  1                                  11
 ThreeHelix   1 ALA A   15  ALA A   19  5                                   5
 AlphaHelix   2 VAL A   21  SER A   35  1                                  15
 ThreeHelix   2 PRO A   37  LYS A   42  5                                   6

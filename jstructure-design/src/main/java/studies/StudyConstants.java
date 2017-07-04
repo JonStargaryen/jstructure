@@ -5,6 +5,9 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 /**
@@ -12,6 +15,7 @@ import java.util.stream.Stream;
  * Created by bittrich on 5/17/17.
  */
 public class StudyConstants {
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####", new DecimalFormatSymbols(Locale.US));
     public static final Path HOME = Paths.get(System.getProperty("user.home"));
     public static final Path GIT = HOME.resolve("git");
     public static final Path GMLVQ_MAIN = GIT.resolve("gmlvq_main");
@@ -65,5 +69,9 @@ public class StudyConstants {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static String format(Object object) {
+        return DECIMAL_FORMAT.format(object);
     }
 }

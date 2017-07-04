@@ -12,6 +12,7 @@ public class TestUtils {
     public static final double[] ZERO_VECTOR = new double[] { 0, 0, 0 };
     public static final double TOLERANT_ERROR_MARGIN = 0.001;
 
+    @Deprecated
     public static String getResourceAsFilepath(String filename) {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();
         Objects.requireNonNull(ccl);

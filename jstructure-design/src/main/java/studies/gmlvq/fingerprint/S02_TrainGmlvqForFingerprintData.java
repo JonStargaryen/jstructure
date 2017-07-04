@@ -1,6 +1,7 @@
 package studies.gmlvq.fingerprint;
 
 import studies.StudyConstants;
+import weka.classifiers.Evaluation;
 import weka.classifiers.functions.GMLVQ;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -12,6 +13,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -23,12 +27,19 @@ public class S02_TrainGmlvqForFingerprintData {
 
     public static void main(String[] args) throws IOException {
         // traverse directory with arff files
-        Files.list(StudyConstants.FINGERPRINT_MINER_PFAM_ARFF)
+        String output = Files.list(StudyConstants.FINGERPRINT_MINER_PFAM_ARFF)
                 .map(Path::toFile)
-                .forEach(S02_TrainGmlvqForFingerprintData::handlePath);
+                .map(S02_TrainGmlvqForFingerprintData::handlePath)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.joining(System.lineSeparator(),
+                        "id\tperc\tcorrect\tincorrect" + System.lineSeparator(),
+                        ""));
+
+        StudyConstants.write(StudyConstants.GMLVQ_MAIN.resolve("data").resolve("fingerprint_miner_pfam_performance.tsv"), output);
     }
 
-    private static void handlePath(File file) {
+    private static Optional<String> handlePath(File file) {
         System.out.println(file);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -57,9 +68,20 @@ public class S02_TrainGmlvqForFingerprintData {
             // create and build GMLVQ instance
             GMLVQ gmlvq = new GMLVQ();
             gmlvq.setVisualization(false);
-            gmlvq.buildClassifier(data);
+
+            Evaluation evaluation = new Evaluation(data);
+            evaluation.crossValidateModel(gmlvq, data, 10, new Random(1));
+
+            double fingerprintCount = Files.list(StudyConstants.HOME.resolve("fingerprint-miner").resolve("results").resolve(file.getName().split("_")[0]).resolve(file.getName().split("_")[1].split("\\.")[0]).resolve("fingerprint")).count();
+            double nonRedundantCount = Files.list(StudyConstants.HOME.resolve("fingerprint-miner").resolve(file.getName().split("_")[0]).resolve("nr")).count();
+
+            return Optional.of(file.getName().split("\\.")[0] + "\t" +
+                    StudyConstants.format(fingerprintCount / nonRedundantCount) + "\t" +
+                    evaluation.correct() + "\t" +
+                    evaluation.incorrect());
         } catch (Exception e) {
             e.printStackTrace();
+            return Optional.empty();
         }
     }
 }
