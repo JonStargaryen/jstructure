@@ -18,6 +18,7 @@ import java.util.stream.Stream;
  * GMLVQ_MAIN misclassifies some instances - check whether functionals are actually non-functional and vice versa.
  * Created by S on 05.05.2017.
  */
+@Deprecated
 class Z01_InvestigateMisclassifiedInstances {
     private static final String FILENAME = StudyConstants.GMLVQ_MAIN + "data/itemset_miner/PF00127/marika/misclassified.txt";
 

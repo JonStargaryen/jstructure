@@ -11,17 +11,16 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -31,6 +30,7 @@ import java.util.stream.Stream;
  * Created by bittrich on 6/23/17.
  */
 public class FingerPrintDataSetComposer {
+    private static final Logger logger = LoggerFactory.getLogger(FingerPrintDataSetComposer.class);
     private static final String DECOY = "decoy";
     private static final String FINGERPRINT = "fingerprint";
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
@@ -40,55 +40,88 @@ public class FingerPrintDataSetComposer {
             PLIPInteractionContainer.class)
             .map(FeatureProviderRegistry::resolve)
             .collect(Collectors.toList());
-    private final Map<ProteinIdentifier, Optional<Protein>> proteinMap;
+    private ProteinIdentifier lastProteinIdentifier = null;
+    private Protein lastProtein = null;
+    private static final double MINIMAL_PERCENTAGE = 0.25;
+    private static final int MAX_SIZE = 1000;
 
     /**
      *
-     * @param motifPath the path to the motif directory - supposed to contain 2 subdirectories: decoy and fingerprint
+     * @param familyPath the path to the motif directory - supposed to contain 2 subdirectories: decoy and fingerprint
      */
-    public FingerPrintDataSetComposer(Path motifPath) {
-        Path decoyDirectory = motifPath.resolve(DECOY);
-        Path fingerprintDirectory = motifPath.resolve(FINGERPRINT);
+    public FingerPrintDataSetComposer(Path familyPath, Path outputDirectory) {
+        String familyName = familyPath.toFile().getName();
+        logger.info("starting job on {}", familyName);
+        Path parentPath = familyPath.getParent();
+        Path resultPath = parentPath.resolve("results").resolve(familyName);
 
         try {
-            proteinMap = Stream.concat(Files.list(decoyDirectory), Files.list(fingerprintDirectory))
-                    .map(Path::toFile)
-                    .map(File::getName)
-                    .map(name -> name.split("_")[0])
-                    .map(ProteinIdentifier::createFromPdbId)
-                    .distinct()
-                    .collect(Collectors.toMap(Function.identity(),
-                            this::handleProteinIdentifier));
+            Files.list(resultPath)
+                    .forEach(motifPath -> {
+                        try {
+                            String motifName = motifPath.toFile().getName();
+                            Path outputPath = outputDirectory.resolve(familyName + "_" + motifName + ".arff");
+                            if(Files.exists(outputPath)) {
+                                logger.info("skipping already present results for {}/{}", familyName, motifName);
+                                return;
+                            }
 
-            int numberOfGroups = Files.list(decoyDirectory)
-                    .findFirst()
-                    .get()
-                    .toFile()
-                    .getName()
-                    .split("_")
-                    .length - 1;
-            String headerString = "@RELATION ism" + System.lineSeparator() +
-                    "@ATTRIBUTE id             STRING" + System.lineSeparator() +
-                    IntStream.range(0, numberOfGroups)
-                            .mapToObj(this::mapToHeaderLine)
-                            .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                    "@ATTRIBUTE class          {functional,non-functional}" + System.lineSeparator() +
-                    "@DATA";
-            String decoyString = Files.list(decoyDirectory)
-                    .map(this::handleLine)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .peek(System.out::println)
-                    .collect(Collectors.joining(System.lineSeparator()));
-            String fingerprintString = Files.list(fingerprintDirectory)
-                    .map(this::handleLine)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .peek(System.out::println)
-                    .collect(Collectors.joining(System.lineSeparator()));
+                            logger.info("starting sub-job on {}/{}", familyName, motifName);
+                            Path decoyDirectory = motifPath.resolve(DECOY);
+                            Path fingerprintDirectory = motifPath.resolve(FINGERPRINT);
 
-            Files.write(motifPath.resolve(motifPath.getParent().toFile().getName() + ".arff"),
-                    (headerString + System.lineSeparator() + decoyString + System.lineSeparator() + fingerprintString).getBytes());
+                            double decoyCount = Files.list(decoyDirectory).count();
+                            double fingerprintCount = Files.list(fingerprintDirectory).count();
+                            double nonRedundantCount = Files.list(familyPath.resolve("nr")).count();
+
+                            if(fingerprintCount < nonRedundantCount * MINIMAL_PERCENTAGE) {
+                                // skip sparsely populated results
+                                logger.warn("skipping sparsely populated results for {}/{}", familyName, motifName);
+                                return;
+                            }
+
+                            if(decoyCount > MAX_SIZE) {
+                                logger.warn("encountering highly populated decoy set for {}/{} - sampling down to {}", familyName, motifName, MAX_SIZE);
+                            }
+
+                            int numberOfGroups = Files.list(decoyDirectory)
+                                    .findFirst()
+                                    .get()
+                                    .toFile()
+                                    .getName()
+                                    .split("_")
+                                    .length - 1;
+                            String headerString = "@RELATION ism" + System.lineSeparator() +
+                                    "@ATTRIBUTE id             STRING" + System.lineSeparator() +
+                                    IntStream.range(0, numberOfGroups)
+                                            .mapToObj(this::mapToHeaderLine)
+                                            .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
+                                    "@ATTRIBUTE class          {functional,non-functional}" + System.lineSeparator() +
+                                    "@DATA";
+                            List<Path> decoyPaths = Files.list(decoyDirectory)
+                                    // max size of decoy set
+                                    .limit(MAX_SIZE)
+                                    .sorted(Path::compareTo)
+                                    .collect(Collectors.toList());
+                            String decoyString = decoyPaths.stream()
+                                    .map(this::handleLine)
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
+                                    .peek(logger::info)
+                                    .collect(Collectors.joining(System.lineSeparator()));
+                            String fingerprintString = Files.list(fingerprintDirectory)
+                                    .map(this::handleLine)
+                                    .filter(Optional::isPresent)
+                                    .map(Optional::get)
+                                    .peek(logger::info)
+                                    .collect(Collectors.joining(System.lineSeparator()));
+
+                            Files.write(outputPath,
+                                    (headerString + System.lineSeparator() + decoyString + System.lineSeparator() + fingerprintString).getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -108,24 +141,29 @@ public class FingerPrintDataSetComposer {
                 "@ATTRIBUTE waterBridges" + index + "  NUMERIC";
     }
 
-    private Optional<Protein> handleProteinIdentifier(ProteinIdentifier proteinIdentifier) {
-        try {
-            Protein protein = ProteinParser.source(proteinIdentifier.getPdbId()).parse();
-            featureProviders.forEach(featureProvider -> featureProvider.process(protein));
-            return Optional.of(protein);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Optional.empty();
-        }
-    }
-
     private Optional<String> handleLine(Path path) {
         try {
             String filename = path.toFile().getName().split("\\.")[0];
 
             String[] sectionSplit = filename.split("_");
             ProteinIdentifier proteinIdentifier = ProteinIdentifier.createFromPdbId(filename.split("_")[0]);
-            Protein protein = proteinMap.get(proteinIdentifier).get();
+            Protein protein;
+            if(proteinIdentifier.equals(lastProteinIdentifier)) {
+                protein = lastProtein;
+                if(lastProtein == null) {
+                    return Optional.empty();
+                }
+            } else {
+                lastProteinIdentifier = proteinIdentifier;
+                try {
+                    protein = ProteinParser.source(proteinIdentifier.getPdbId()).parse();
+                    featureProviders.forEach(featureProvider -> featureProvider.process(protein));
+                    lastProtein = protein;
+                } catch (Exception e) {
+                    lastProtein = null;
+                    return Optional.empty();
+                }
+            }
 
             // extract peculiar residues
             List<Group> groups = Stream.of(sectionSplit)

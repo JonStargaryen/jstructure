@@ -2,11 +2,9 @@ package studies;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -17,15 +15,9 @@ public class StudyConstants {
     public static final Path HOME = Paths.get(System.getProperty("user.home"));
     public static final Path GIT = HOME.resolve("git");
     public static final Path GMLVQ_MAIN = GIT.resolve("gmlvq_main");
+    public static final Path FINGERPRINT_MINER_PFAM_ARFF = StudyConstants.GMLVQ_MAIN.resolve("data").resolve("fingerprint_miner_pfam_arff");
     public static final Path PHD_REPO = GIT.resolve("phd_sb_repo");
     public static final Path AHAH_DATA_SET = PHD_REPO.resolve("data").resolve("AHAH").resolve("data").resolve("ahah_gold_standard.csv");
-
-    public static String getResourceAsFilepath(String filename) {
-        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
-        URL resource = ccl.getResource(filename);
-        // some a bit hacky way to ensure correct paths on windows (as some / will be added as prefix)
-        return Objects.requireNonNull(resource).getPath().replaceFirst("^/(.:/)", "$1");
-    }
 
     public static Stream<Path> list(Path path) {
         try {

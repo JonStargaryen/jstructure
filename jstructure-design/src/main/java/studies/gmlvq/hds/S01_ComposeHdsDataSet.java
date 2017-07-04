@@ -9,6 +9,7 @@ import java.io.IOException;
  * Create the new data set for the HDS-case.
  * Created by bittrich on 5/22/17.
  */
+@Deprecated
 class S01_ComposeHdsDataSet extends AbstractItemSetMinerDataSetComposer {
     private static final String FILEPATH = StudyConstants.GMLVQ_MAIN + "data/itemset_miner/PF00089/";
     private static final String POSITIVE_FILENAME = FILEPATH + "positives.txt";
