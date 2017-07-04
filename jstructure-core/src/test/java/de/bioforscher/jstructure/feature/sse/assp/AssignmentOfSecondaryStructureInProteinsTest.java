@@ -24,9 +24,11 @@ public class AssignmentOfSecondaryStructureInProteinsTest {
         //TODO test for agreement with 2jho_nh.out, 2jho_cont.out and 2jho_assp.out
         protein.aminoAcids()
                 .forEach(aminoAcid -> {
-//                    ASSPSecondaryStructure asspSecondaryStructure = aminoAcid.getFeatureContainer().getFeature(ASSPSecondaryStructure.class);
-//                    System.out.println(aminoAcid.getIdentifier() + "\t" + asspSecondaryStructure);
-//                    System.out.println(asspSecondaryStructure.getSecondaryStructure());
+                    ASSPSecondaryStructure asspSecondaryStructure = aminoAcid.getFeatureContainer().getFeature(ASSPSecondaryStructure.class);
+                    System.out.println(asspSecondaryStructure.getAlpha() + " " +
+                            asspSecondaryStructure.getThree() + " " +
+                            asspSecondaryStructure.getPi() + " " +
+                            String.valueOf(aminoAcid.getResidueNumber().getResidueNumber()));
                 });
     }
 }

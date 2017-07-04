@@ -619,7 +619,7 @@ sub assign
 		# push all info to dedicated arrays
 		$p++;
 		}
-	# scalar yields length of arra - iterate over all info for current stretch backwards
+	# scalar yields length of array - iterate over all info for current stretch backwards
 	# => removes all terminal lines which are exclusively U U U
 	for($ch=(scalar@step-1);$ch>=0;$ch--)
 		{
