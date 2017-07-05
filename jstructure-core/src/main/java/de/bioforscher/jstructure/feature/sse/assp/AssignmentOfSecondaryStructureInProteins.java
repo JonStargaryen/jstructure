@@ -77,7 +77,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
             if(aa1.getResidueNumber().getResidueNumber() + 1 != aa2.getResidueNumber().getResidueNumber() ||
                     aa2.getResidueNumber().getResidueNumber() + 1 != aa3.getResidueNumber().getResidueNumber() ||
                     aa3.getResidueNumber().getResidueNumber() + 1 != aa4.getResidueNumber().getResidueNumber()) {
-                logger.warn("encountered non-consecutive amino acids {} {} {} {}",
+                // happens e.g. for residues not solved by xray
+                logger.debug("encountered non-consecutive amino acids {} {} {} {}",
                         aa1,
                         aa2,
                         aa3,
@@ -127,7 +128,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 ASSPSecondaryStructure secondaryStructure = getSecondaryStructure(aa1);
                 secondaryStructure.setHelicalParameters(t, h, vtor, r, u.getValue());
             } catch (NullPointerException e) {
-                logger.warn("missing alpha carbons on fragment {} {} {} {}",
+                logger.debug("missing alpha carbons on fragment {} {} {} {}",
                         aa1,
                         aa2,
                         aa3,
@@ -175,12 +176,12 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                     for(int i = 0; i < aminoAcidsInCurrentStretch.size(); i++) {
                         ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))));
                         ASSPSecondaryStructure secondaryStructure2 = getSecondaryStructure(aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i)) + 1));
-                        double twist1 = secondaryStructure1.getT();
-                        double twist2 = secondaryStructure2.getT();
-                        double height1 = secondaryStructure1.getH();
-                        double height2 = secondaryStructure2.getH();
-                        double radius1 = secondaryStructure1.getR();
-                        double radius2 = secondaryStructure2.getR();
+                        double twist1 = secondaryStructure1.getTwist();
+                        double twist2 = secondaryStructure2.getTwist();
+                        double height1 = secondaryStructure1.getHeight();
+                        double height2 = secondaryStructure2.getHeight();
+                        double radius1 = secondaryStructure1.getRadius();
+                        double radius2 = secondaryStructure2.getRadius();
                         double sumt = (twist1 + twist2) / 2;
                         double sumh = (height1 + height2) / 2;
                         double sumrad = (radius1 + radius2) / 2;
@@ -190,10 +191,10 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 
                         if(i < aminoAcidsInCurrentStretch.size() - 2) {
                             ASSPSecondaryStructure secondaryStructure3 = getSecondaryStructure(aminoAcidsInCurrentStretch.get(i + 2));
-                            double twist3 = secondaryStructure3.getT();
+                            double twist3 = secondaryStructure3.getTwist();
                             double sumt1 = (twist1 + twist2 + twist3) / 3;
-                            double sumh1 = (height1 + height2 + secondaryStructure3.getH()) / 3;
-                            double sumrad1 = (radius1 + radius2 + secondaryStructure3.getR()) / 3;
+                            double sumh1 = (height1 + height2 + secondaryStructure3.getHeight()) / 3;
+                            double sumrad1 = (radius1 + radius2 + secondaryStructure3.getRadius()) / 3;
                             double sumt_l = 360 - (twist1 + twist2) / 2;
                             double sumt1_l = 360 - (twist1 + twist2 + twist3) / 3;
 
@@ -265,7 +266,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                         secondaryStructure1.setCharacteristics(helicalCharacteristics);
                         secondaryStructure1.setStretchId(stretchId);
 
-                        //TODO remove - temporary fix for other bug fixes downstream
+                        //TODO remove - temporary fix for other bug fixes downstream - did not cause problems
 //                        int resNum = aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))).getResidueNumber().getResidueNumber();
 //                        if(resNum == 30 || resNum == 33) {
 //                            secondaryStructure1.setCharacteristics(new String[] { "A", "U", "U" });
@@ -286,9 +287,9 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
     private boolean isContinuousStretch(List<AminoAcid> aminoAcids, int residueIndex) {
         ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(aminoAcids.get(residueIndex - 1));
         ASSPSecondaryStructure secondaryStructure2 = getSecondaryStructure(aminoAcids.get(residueIndex));
-        return Math.abs(secondaryStructure1.getT() - secondaryStructure2.getT()) <= 35 &&
-                Math.abs(secondaryStructure1.getH() - secondaryStructure2.getH()) <= 1.1 &&
-                Math.abs(secondaryStructure1.getVtor() - secondaryStructure2.getVtor()) <= 50;
+        return Math.abs(secondaryStructure1.getTwist() - secondaryStructure2.getTwist()) <= 35 &&
+                Math.abs(secondaryStructure1.getHeight() - secondaryStructure2.getHeight()) <= 1.1 &&
+                Math.abs(secondaryStructure1.getVirtualTorsionAngle() - secondaryStructure2.getVirtualTorsionAngle()) <= 50;
     }
 
     /**
@@ -345,7 +346,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 String alpha = secondaryStructure.getAlpha();
                 String three = secondaryStructure.getThree();
                 String pi = secondaryStructure.getPi();
-                double radius = secondaryStructure.getR();
+                double radius = secondaryStructure.getRadius();
 
                 String finalCharacteristics = "U";
 
@@ -379,9 +380,9 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                         finalCharacteristics = "A";
                     }
                 } else if("U".equals(alpha) && "U".equals(three) && "U".equals(pi)) {
-                    double twist = secondaryStructure.getT();
+                    double twist = secondaryStructure.getTwist();
                     double mod_t = 360 - twist;
-                    double height = secondaryStructure.getH();
+                    double height = secondaryStructure.getHeight();
                     if((((twist > 104.25) && (twist <= 120)) || ((mod_t > 104.25) && (twist > 180))) && (!pp2)) {
                         finalCharacteristics = "G";
                     } else if(((twist < 92.17) || ((mod_t < 92.17) && (twist  > 180))) && (!pp2)) {
@@ -414,8 +415,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 if("A G".equals(finala) || "A A".equals(finala) || "G A".equals(finala)) {
                     ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(stretch.get(0));
                     ASSPSecondaryStructure secondaryStructure2 = getSecondaryStructure(stretch.get(1));
-                    double avg_twist = (secondaryStructure1.getT() + secondaryStructure2.getT()) / 2;
-                    double avg_rad = (secondaryStructure1.getR() + secondaryStructure2.getR()) / 2;
+                    double avg_twist = (secondaryStructure1.getTwist() + secondaryStructure2.getTwist()) / 2;
+                    double avg_rad = (secondaryStructure1.getRadius() + secondaryStructure2.getRadius()) / 2;
                     double mod_t = 360 - avg_twist;
                     if((avg_rad <= 2.3) && (((avg_twist > 102) && (avg_twist <= 120)) || ((mod_t > 102) && (avg_twist > 180)))) {
                         finala = "G G";
@@ -452,7 +453,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 //            String alpha = secondaryStructure.getAlpha();
 //            String three = secondaryStructure.getThree();
 //            String pi = secondaryStructure.getPi();
-//            double radius = secondaryStructure.getR();
+//            double radius = secondaryStructure.getRadius();
 //
 //            String finalCharacteristics = "U";
 //
@@ -486,9 +487,9 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 //                    finalCharacteristics = "A";
 //                }
 //            } else if("U".equals(alpha) && "U".equals(three) && "U".equals(pi)) {
-//                double twist = secondaryStructure.getT();
+//                double twist = secondaryStructure.getTwist();
 //                double mod_t = 360 - twist;
-//                double height = secondaryStructure.getH();
+//                double height = secondaryStructure.getHeight();
 //                if((((twist > 104.25) && (twist <= 120)) || ((mod_t > 104.25) && (twist > 180))) && (!pp2)) {
 //                    finalCharacteristics = "G";
 //                } else if(((twist < 92.17) || ((mod_t < 92.17) && (twist  > 180))) && (!pp2)) {
@@ -521,8 +522,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 //            if("A G".equals(finala) || "A A".equals(finala) || "G A".equals(finala)) {
 //                ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(aminoAcids.get(0));
 //                ASSPSecondaryStructure secondaryStructure2 = getSecondaryStructure(aminoAcids.get(1));
-//                double avg_twist = (secondaryStructure1.getT() + secondaryStructure2.getT()) / 2;
-//                double avg_rad = (secondaryStructure1.getR() + secondaryStructure2.getR()) / 2;
+//                double avg_twist = (secondaryStructure1.getTwist() + secondaryStructure2.getTwist()) / 2;
+//                double avg_rad = (secondaryStructure1.getRadius() + secondaryStructure2.getRadius()) / 2;
 //                double mod_t = 360 - avg_twist;
 //                if((avg_rad <= 2.3) && (((avg_twist > 102) && (avg_twist <= 120)) || ((mod_t > 102) && (avg_twist > 180)))) {
 //                    finala = "G G";
@@ -640,7 +641,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 if(inSecondaryStructure) {
                     ASSPSecondaryStructure start = getSecondaryStructure(aminoAcids.get(startIndex));
 
-                    if(matches(start, "agi") || (start.isUnassigned() && i != 0 && start.getT() > 180)) {
+                    if(matches(start, "agi") || (start.isUnassigned() && i != 0 && start.getTwist() > 180)) {
                         type = type.toLowerCase();
                     }
                     if(matches(start, "AGIPagi") || ("AGIagi".contains(type) && i != 0)) {
@@ -772,7 +773,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 }
             } else if(rawSecondaryStructure.type.equals(rawSecondaryStructureNext.type) && rawSecondaryStructure.end == rawSecondaryStructureNext.start) {
                 AminoAcid aminoAcid = findAminoAcid(aminoAcids, rawSecondaryStructure.end);
-                if(getSecondaryStructure(aminoAcid).getBa() < 60) {
+                if(getSecondaryStructure(aminoAcid).getBendAngle() < 60) {
 //                    logger.info("fusing {} onto {}", rawSecondaryStructureNext, rawSecondaryStructure);
                     rawSecondaryStructure.end = rawSecondaryStructureNext.end;
                     rawSecondaryStructure.length += rawSecondaryStructureNext.length - 1;
@@ -1018,8 +1019,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
             int resNum = aminoAcid.getResidueNumber().getResidueNumber();
             if(resNum >= rawSecondaryStructure.start - 1 && resNum + 3 <= rawSecondaryStructure.end + 1) {
                 ASSPSecondaryStructure asspSecondaryStructure = getSecondaryStructure(aminoAcid);
-                tw += asspSecondaryStructure.getT();
-                rad += asspSecondaryStructure.getR();
+                tw += asspSecondaryStructure.getTwist();
+                rad += asspSecondaryStructure.getRadius();
             }
         }
 

@@ -37,10 +37,10 @@ public class MembraneConstants extends StudyConstants {
     public static final Path PDBTM_FRAGMENTS_PATH = PDBTM.resolve("fragments");
     public static final Path PDBTM_FRAGMENTS_TM_PATH = PDBTM_FRAGMENTS_PATH.resolve("tm");
     public static final Path PDBTM_FRAGMENTS_TM_BY_SEQUENCE_MOTIF_PATH = PDBTM_FRAGMENTS_TM_PATH.resolve("by_sequenceMotif");
-    private static final DictionaryOfProteinSecondaryStructure SECONDARY_STRUCTURE_ANNOTATOR = new DictionaryOfProteinSecondaryStructure();
-    private static final PLIPAnnotator PLIP_ANNOTATOR = new PLIPAnnotator();
-    private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR = new OrientationsOfProteinsInMembranesAnnotator();
-    private static final SequenceMotifAnnotator SEQUENCE_MOTIF_ANNOTATOR = new SequenceMotifAnnotator();
+    public static final DictionaryOfProteinSecondaryStructure SECONDARY_STRUCTURE_ANNOTATOR = new DictionaryOfProteinSecondaryStructure();
+    public static final PLIPAnnotator PLIP_ANNOTATOR = new PLIPAnnotator();
+    public static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR = new OrientationsOfProteinsInMembranesAnnotator();
+    public static final SequenceMotifAnnotator SEQUENCE_MOTIF_ANNOTATOR = new SequenceMotifAnnotator();
 
     private static Optional<Chain> mapToOptionalChain(String id) {
         try {

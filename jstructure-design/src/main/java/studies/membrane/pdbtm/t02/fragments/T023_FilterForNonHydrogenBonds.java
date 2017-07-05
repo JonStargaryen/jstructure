@@ -12,7 +12,8 @@ import java.util.stream.Stream;
  * Most interactions embedded in sequence motifs are hydrogen bonds. However, are there exceptions?
  *
  * Results:
- * There are 42 water bridges in the data set - seemingly spread evenly among sequence motifs.
+ * There are 42 water bridges in the data set - seemingly spread evenly among sequence motifs. Nothing particular to
+ * gain here.
  *
  * Created by bittrich on 6/22/17.
  */

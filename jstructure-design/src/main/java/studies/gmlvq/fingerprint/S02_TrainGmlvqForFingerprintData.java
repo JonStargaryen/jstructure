@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -46,6 +47,32 @@ public class S02_TrainGmlvqForFingerprintData {
             // load data into weka's data structure
             Instances data = new Instances(reader);
             reader.close();
+
+            // filter decoy instances which are part of the fingerprint
+            String family = file.getName().split("_")[0];
+            List<String> minedPdbIds = StudyConstants.list(S01_CreateArffsForFingerprintData.INPUT_PATH.resolve(family))
+                    .filter(path -> !Files.isDirectory(path))
+                    .map(Path::toFile)
+                    .map(File::getName)
+                    .map(filename -> filename.split("_")[0])
+                    .collect(Collectors.toList());
+            data.removeIf(instance -> {
+                // do nothing when class label is positive
+                if(instance.stringValue(instance.numAttributes() - 1).equals("functional")) {
+                    return false;
+                }
+
+                String pdbId = instance.stringValue(0).split("_")[0];
+                boolean remove = minedPdbIds.stream()
+                        .anyMatch(filename -> filename.equalsIgnoreCase(pdbId));
+
+                if(remove) {
+                    System.out.println("removing " + instance);
+                    return true;
+                }
+
+                return false;
+            });
 
             // data sets can have varying number of features - determine the number how often they repeat
             int numberOfResidues = (data.numAttributes() - 2) / NUMBER_OF_PLIP_FEATURES;

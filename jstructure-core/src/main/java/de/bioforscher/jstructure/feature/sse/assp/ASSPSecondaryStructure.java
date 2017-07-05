@@ -61,7 +61,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
      * The twist of a given fragment.
      * @return a double value in degree
      */
-    public double getT() {
+    public double getTwist() {
         return t;
     }
 
@@ -69,7 +69,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
      * The height respectively rise of a fragment.
      * @return a double value in Angstrom
      */
-    public double getH() {
+    public double getHeight() {
         return h;
     }
 
@@ -77,7 +77,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
      * The virtual torsion angle of a fragment.
      * @return a double value in degree
      */
-    public double getVtor() {
+    public double getVirtualTorsionAngle() {
         return vtor;
     }
 
@@ -85,7 +85,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
      * The radius of a fragment.
      * @return a double value in Angstrom
      */
-    public double getR() {
+    public double getRadius() {
         return r;
     }
 
@@ -116,11 +116,11 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
         this.continuous = continuous;
     }
 
-    public boolean isContinuous() {
+    boolean isContinuous() {
         return continuous;
     }
 
-    public int getStretchId() {
+    int getStretchId() {
         return stretchId;
     }
 
@@ -152,7 +152,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
         return finalCharacteristic;
     }
 
-    public double getBa() {
+    public double getBendAngle() {
         return ba;
     }
 }
