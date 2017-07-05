@@ -47,6 +47,12 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.23</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -80,5 +86,12 @@
         <module>../jstructure-core</module>
         <module>../jstructure-design</module>
         <module>../jstructure-explorer</module>
+        <module>../jstructure-align</module>
+        <module>../jstructure-testutils</module>
+        <module>../jstructure-features</module>
     </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 </project>

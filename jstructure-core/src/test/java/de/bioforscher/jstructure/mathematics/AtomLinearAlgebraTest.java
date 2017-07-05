@@ -4,14 +4,13 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-
-import static util.TestUtils.TOLERANT_ERROR_MARGIN;
 
 /**
  * Tests for coordinate manipulations.
@@ -29,7 +28,7 @@ public class AtomLinearAlgebraTest {
     public void center() throws Exception {
         protein.calculate().center();
         Assert.assertArrayEquals(LinearAlgebra.on(protein).centroid().getValue(),
-                Transformation.NEUTRAL_TRANSLATION, TOLERANT_ERROR_MARGIN);
+                Transformation.NEUTRAL_TRANSLATION, TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test

@@ -1,10 +1,8 @@
 package de.bioforscher.jstructure.mathematics;
 
+import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static util.TestUtils.TOLERANT_ERROR_MARGIN;
-import static util.TestUtils.ZERO_VECTOR;
 
 /**
  * Unit tests for linear calculate on double arrays.
@@ -22,10 +20,10 @@ public class PrimitiveDoubleArrayLinearAlgebraTest {
     public void addAndMultiply() throws Exception {
         Assert.assertArrayEquals(LinearAlgebra.on(vector1).add(vector1).getValue(),
             LinearAlgebra.on(vector1).multiply(scalar2).getValue(),
-            TOLERANT_ERROR_MARGIN);
+                TestUtils.TOLERANT_ERROR_MARGIN);
         Assert.assertArrayEquals(LinearAlgebra.on(vector2).add(vector2).getValue(),
                 LinearAlgebra.on(vector2).multiply(scalar2).getValue(),
-                TOLERANT_ERROR_MARGIN);
+                TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
@@ -35,7 +33,7 @@ public class PrimitiveDoubleArrayLinearAlgebraTest {
         // vector is orthogonal => 90°
         Assert.assertEquals(90.0, LinearAlgebra.on(orthogonalVector1).angle(orthogonalVector2), 0.0);
         // realistic case
-        Assert.assertEquals(Math.toDegrees(0.666946), LinearAlgebra.on(vector1).angle(vector2), TOLERANT_ERROR_MARGIN);
+        Assert.assertEquals(Math.toDegrees(0.666946), LinearAlgebra.on(vector1).angle(vector2), TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
@@ -44,7 +42,7 @@ public class PrimitiveDoubleArrayLinearAlgebraTest {
         Assert.assertEquals(0.0, LinearAlgebra.on(vector1).distance(vector1), 0.0);
         // should report norm
         Assert.assertEquals(LinearAlgebra.on(vector1).norm(),
-                LinearAlgebra.on(vector1).distance(ZERO_VECTOR), 0.0);
+                LinearAlgebra.on(vector1).distance(TestUtils.ZERO_VECTOR), 0.0);
     }
 
     @Test

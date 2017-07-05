@@ -9,7 +9,6 @@ import java.io.IOException;
  * Create some data set for the GMLVQ_MAIN-project. Handles the metal-binding motif.
  * Created by bittrich on 4/11/17.
  */
-@Deprecated
 class S01_ComposeMetalDataSet extends AbstractItemSetMinerDataSetComposer {
     private static final String FILEPATH = StudyConstants.GMLVQ_MAIN + "data/itemset_miner/PF00127/";
     private static final String POSITIVE_FILENAME = FILEPATH + "positives.txt";

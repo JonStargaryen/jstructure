@@ -2,10 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/jstructure-align/jstructure-align.iml" filepath="$PROJECT_DIR$/jstructure-align/jstructure-align.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-all/jstructure-all.iml" filepath="$PROJECT_DIR$/jstructure-all/jstructure-all.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-core/jstructure-core.iml" filepath="$PROJECT_DIR$/jstructure-core/jstructure-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-design/jstructure-design.iml" filepath="$PROJECT_DIR$/jstructure-design/jstructure-design.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-explorer/jstructure-explorer.iml" filepath="$PROJECT_DIR$/jstructure-explorer/jstructure-explorer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-features/jstructure-features.iml" filepath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" filepath="$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" />
     </modules>
   </component>
 </project>

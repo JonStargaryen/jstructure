@@ -1,8 +1,8 @@
 package studies.membrane.pdbtm.t02.fragments;
 
-import de.bioforscher.jstructure.alignment.Alignment;
-import de.bioforscher.jstructure.alignment.AlignmentPolicy;
-import de.bioforscher.jstructure.alignment.StructureAligner;
+import de.bioforscher.jstructure.align.Alignment;
+import de.bioforscher.jstructure.align.AlignmentPolicy;
+import de.bioforscher.jstructure.align.StructureAligner;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;

@@ -5,15 +5,13 @@ import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import util.TestUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -30,10 +28,9 @@ public class ProteinParserTest {
     private static final String PDB_EXTENSION = ".pdb";
     private static final String PDB_DIRECTORY = "parser/";
     private static final List<String> PDB_IDS = Arrays.asList("2w0l", "1acj", "1asz", "4bpm");
-    private static final List<Path> PDB_FILE_PATHS = PDB_IDS.stream()
+    private static final List<InputStream> PDB_FILE_PATHS = PDB_IDS.stream()
             .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION)
-            .map(TestUtils::getResourceAsFilepath)
-            .map(Paths::get)
+            .map(TestUtils::getResourceAsInputStream)
             .collect(Collectors.toList());
     /**
      * contains selenomethionine at pos 1, marked as HETATM
@@ -76,7 +73,7 @@ public class ProteinParserTest {
 
     @Test
     public void shouldParseNonStandardAminoAcid() {
-        ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb"))).parse();
+        ProteinParser.source(TestUtils.getResourceAsInputStream(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb")).parse();
     }
 
     @Test
@@ -125,7 +122,7 @@ public class ProteinParserTest {
 
     @Test(expected = ParsingException.class)
     public void shouldFailForInvalidStructure() {
-        ProteinParser.source(Paths.get(TestUtils.getResourceAsFilepath("pdb/invalid.pdb"))).strictMode(true).parse();
+        ProteinParser.source(TestUtils.getResourceAsInputStream("pdb/invalid.pdb")).strictMode(true).parse();
     }
 
     @Test
@@ -198,8 +195,7 @@ public class ProteinParserTest {
                 .splitAsStream(protein.getPdbRepresentation())
                 .collect(Collectors.toList());
         try {
-            List<String> expectedLines = Files.lines(Paths.get(TestUtils.getResourceAsFilepath("parser/parsed/" + pdbId + ".pdb")))
-                    .collect(Collectors.toList());
+            List<String> expectedLines = TestUtils.getResourceAsLines("parser/parsed/" + pdbId + ".pdb");
 
             for(int i = 0; i < writtenLines.size(); i++) {
                 // some file have shorter lines

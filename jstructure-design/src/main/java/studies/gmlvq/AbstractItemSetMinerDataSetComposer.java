@@ -25,7 +25,6 @@ import java.util.stream.Stream;
  * The abstract composer for GMLVQ_MAIN-data sets dealing with itemset miner data.
  * Created by bittrich on 5/22/17.
  */
-@Deprecated
 public abstract class AbstractItemSetMinerDataSetComposer {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
     private static final List<AbstractFeatureProvider> featureProviders = Stream.of(AccessibleSurfaceArea.class,

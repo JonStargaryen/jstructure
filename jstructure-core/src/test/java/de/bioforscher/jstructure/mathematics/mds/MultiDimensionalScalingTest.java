@@ -1,12 +1,10 @@
 package de.bioforscher.jstructure.mathematics.mds;
 
+import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
-import util.TestUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,8 +27,8 @@ public class MultiDimensionalScalingTest {
         System.out.println("processing " + resource);
         try {
             MultiDimensionalScaling mds = new MultiDimensionalScaling();
-            double[][] dataPoints = parseDistancesFromPocketAlignCSV(TestUtils.getResourceAsFilepath(resource));
-            List<String> dataLabels = parseLabels(TestUtils.getResourceAsFilepath(resource));
+            double[][] dataPoints = parseDistancesFromPocketAlignCSV(TestUtils.getResourceAsLines(resource));
+            List<String> dataLabels = parseLabels(TestUtils.getResourceAsLines(resource));
             List<double[]> embeddedDataPoints = mds.computeEmbedding(dataPoints, 3);
             for(int i = 0; i < dataLabels.size(); i++) {
                 String s = Arrays.toString(embeddedDataPoints.get(i));
@@ -43,13 +41,12 @@ public class MultiDimensionalScalingTest {
         }
     }
 
-    private List<String> parseLabels(String filepath) throws IOException {
-        String line = Files.readAllLines(new File(filepath).toPath()).get(0);
+    private List<String> parseLabels(List<String> lines) {
+        String line = lines.get(0);
         return Arrays.stream(line.split(",")).collect(Collectors.toList());
     }
 
-    private double[][] parseDistancesFromPocketAlignCSV(String filepath) throws IOException {
-        List<String> lines = Files.readAllLines(new File(filepath).toPath());
+    private double[][] parseDistancesFromPocketAlignCSV(List<String> lines) {
         double[][] data = new double[lines.size() - 1][];
 
         // skip first line
