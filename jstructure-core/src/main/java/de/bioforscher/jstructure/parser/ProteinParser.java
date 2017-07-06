@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A minimalistic parser for protein structures in <tt>PDB</tt> format.
@@ -324,6 +325,20 @@ public class ProteinParser {
         return protein;
     }
 
+    public static OptionalSteps localPdb(String pdbId) {
+        String middle = pdbId.substring(1, 3);
+        try {
+            Path pdbDirectory = OptionalSteps.localPdbDirectory;
+            if(pdbDirectory == null || !Files.isDirectory(pdbDirectory)) {
+                throw new IllegalArgumentException("local pdb directory '" + pdbDirectory + "' is not set or not valid - use ProteinParser.OptionalSteps.setLocalPdbDirectory to set up");
+            }
+            InputStream inputStream = Files.newInputStream(pdbDirectory.resolve(middle).resolve("pdb" + pdbId + ".ent.gz"));
+            return new OptionalSteps(new GZIPInputStream(inputStream)).hintProteinName(ProteinIdentifier.createFromPdbId(pdbId));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     public static OptionalSteps source(InputStream inputStream) {
         return new OptionalSteps(inputStream);
     }
@@ -348,7 +363,16 @@ public class ProteinParser {
         boolean minimalParsing = false;
         ProteinIdentifier forceProteinName;
         ProteinIdentifier hintProteinName;
+        private static Path localPdbDirectory;
         private static final int DEFAULT_CACHE_SIZE = 1000;
+
+        public static void setLocalPdbDirectory(Path localPdbDirectory) {
+            OptionalSteps.localPdbDirectory = localPdbDirectory;
+        }
+
+        public static Path getLocalPdbDirectory() {
+            return localPdbDirectory;
+        }
 
         OptionalSteps(InputStream inputStream) {
             this.inputStream = inputStream;

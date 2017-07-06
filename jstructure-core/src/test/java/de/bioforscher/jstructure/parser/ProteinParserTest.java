@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -34,6 +35,19 @@ public class ProteinParserTest {
      * contains selenomethionine at pos 1, marked as HETATM
      */
     private static final String NON_STANDARD_PDB_ID = "1dw9";
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldFailWhenLocalPdbDirectoryIsNotSet() {
+        ProteinParser.OptionalSteps.setLocalPdbDirectory(null);
+        ProteinParser.localPdb("10gs");
+    }
+
+    @Test
+    public void shouldUseLocalPdbDirectory() {
+        ProteinParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
+        Protein protein = ProteinParser.localPdb("10gs").minimalParsing(true).parse();
+        System.out.println(protein);
+    }
 
     @Test
     public void shouldSkipLigandParsing() {

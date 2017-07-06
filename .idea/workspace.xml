@@ -2,19 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Uridine.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Desoxythymidine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Thymidine.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Fragment.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Fragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/AminoAcid.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/AminoAcid.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Adenosine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Adenosine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Cytidine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Cytidine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Deoxyadenosine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Deoxyadenosine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Deoxycytidine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Deoxycytidine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Deoxyguanosine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Deoxyguanosine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Guanosine.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Guanosine.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/UnknownNucleotide.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/UnknownNucleotide.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/ProteinParser.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/ProteinParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/parser/ProteinParserTest.java" afterPath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/parser/ProteinParserTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -161,7 +151,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/PrimitiveDoubleArrayLinearAlgebraTest.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/AtomLinearAlgebraTest.java" />
         <option value="$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfileCalculatorTest.java" />
@@ -190,7 +179,6 @@
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java" />
         <option value="$PROJECT_DIR$/jstructure-testutils/src/main/java/de/bioforscher/testutil/TestUtils.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/mds/MultiDimensionalScalingTest.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/parser/ProteinParserTest.java" />
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfilePredictor.java" />
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfileCalculator.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/AbstractFeatureProvider.java" />
@@ -212,6 +200,8 @@
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Thymidine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Uridine.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/ProteinParser.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/parser/ProteinParserTest.java" />
       </list>
     </option>
   </component>
@@ -299,6 +289,104 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-features" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-features" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-features" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-features" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="feature" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure-features" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="feature" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="topology" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="jstructure" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="jstructure-core" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -354,112 +442,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="structure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure-core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="jstructure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="structure" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="nucleotide" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -559,59 +541,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Nucleotide">
-    <configuration default="false" name="UniProtAnnotatorTest.shouldAnnotate4lg6" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.feature.uniprot.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-features" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.uniprot" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.uniprot.UniProtAnnotatorTest" />
-      <option name="METHOD_NAME" value="shouldAnnotate4lg6" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="AssignmentOfSecondaryStructureInProteinsWrapperTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.feature.sse.assp.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-features" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.feature.sse.assp" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.feature.sse.assp.AssignmentOfSecondaryStructureInProteinsWrapperTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.ProteinParserTest.shouldUseLocalPdbDirectory">
     <configuration default="false" name="FeatureProviderRegistryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -682,6 +612,58 @@
       <option name="PASS_PARENT_ENVS" value="true" />
       <module name="jstructure-core" />
       <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="ProteinParserTest.shouldFailWhenLocalPdbDirectoryIsNotSet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.parser.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="jstructure-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.parser" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.parser.ProteinParserTest" />
+      <option name="METHOD_NAME" value="shouldFailWhenLocalPdbDirectoryIsNotSet" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="ProteinParserTest.shouldUseLocalPdbDirectory" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.parser.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="jstructure-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.parser" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.parser.ProteinParserTest" />
+      <option name="METHOD_NAME" value="shouldUseLocalPdbDirectory" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
       <method />
     </configuration>
     <configuration default="true" type="#PerlConfigurationType" factoryName="Perl" show_console_on_std_err="false" show_console_on_std_out="false">
@@ -1230,19 +1212,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldAnnotate4lg6" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.AssignmentOfSecondaryStructureInProteinsWrapperTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest.shouldRegisterProviderOnlyOnce" />
-      <item index="5" class="java.lang.String" itemvalue="Application.Nucleotide" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest.shouldRegisterProviderOnlyOnce" />
+      <item index="3" class="java.lang.String" itemvalue="Application.Nucleotide" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.ProteinParserTest.shouldFailWhenLocalPdbDirectoryIsNotSet" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.ProteinParserTest.shouldUseLocalPdbDirectory" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.Nucleotide" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest.shouldRegisterProviderOnlyOnce" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.AssignmentOfSecondaryStructureInProteinsWrapperTest" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.UniProtAnnotatorTest.shouldAnnotate4lg6" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.ProteinParserTest.shouldUseLocalPdbDirectory" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.ProteinParserTest.shouldFailWhenLocalPdbDirectoryIsNotSet" />
+        <item index="2" class="java.lang.String" itemvalue="Application.Nucleotide" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.FeatureProviderRegistryTest.shouldRegisterProviderOnlyOnce" />
       </list>
     </recent_temporary>
   </component>
@@ -1344,14 +1326,7 @@
       <workItem from="1498737730254" duration="55620000" />
       <workItem from="1499259448590" duration="3564000" />
       <workItem from="1499263028678" duration="1200000" />
-      <workItem from="1499264360168" duration="10945000" />
-    </task>
-    <task id="LOCAL-00082" summary="stub for d3 interaction visualization">
-      <created>1492776369780</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1492776369781</updated>
+      <workItem from="1499264360168" duration="13001000" />
     </task>
     <task id="LOCAL-00083" summary="stub for d3 interaction visualization">
       <created>1493138958016</created>
@@ -1689,19 +1664,17 @@
       <option name="project" value="LOCAL" />
       <updated>1499329754158</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <task id="LOCAL-00131" summary="nucleotide support">
+      <created>1499333097650</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1499333097650</updated>
+    </task>
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="AssignmentOfSecondaryStructureInProteinsWrapperTest - 2017.07.06 at 10h 03m 01s.xml">
-      <configuration name="AssignmentOfSecondaryStructureInProteinsWrapperTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="FeatureProviderRegistryTest - 2017.07.06 at 10h 17m 18s.xml">
-      <configuration name="FeatureProviderRegistryTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="FeatureProviderRegistryTest - 2017.07.06 at 10h 19m 46s.xml">
-      <configuration name="FeatureProviderRegistryTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="FeatureProviderRegistryTest - 2017.07.06 at 10h 23m 49s.xml">
       <configuration name="FeatureProviderRegistryTest" configurationId="JUnit" />
     </history-entry>
@@ -1717,15 +1690,24 @@
     <history-entry file="FeatureProviderRegistryTest - 2017.07.06 at 10h 27m 41s.xml">
       <configuration name="FeatureProviderRegistryTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="FeatureProviderRegistryTest_shouldRegisterProviderOnlyOnce - 2017.07.06 at 10h 21m 12s.xml">
-      <configuration name="FeatureProviderRegistryTest.shouldRegisterProviderOnlyOnce" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="FeatureProviderRegistryTest_shouldRegisterProviderOnlyOnce - 2017.07.06 at 10h 21m 45s.xml">
       <configuration name="FeatureProviderRegistryTest.shouldRegisterProviderOnlyOnce" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="ProteinParserTest_shouldFailWhenLocalPdbDirectoryIsNotSet - 2017.07.06 at 13h 41m 00s.xml">
+      <configuration name="ProteinParserTest.shouldFailWhenLocalPdbDirectoryIsNotSet" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ProteinParserTest_shouldFailWhenLocalPdbDirectoryIsNotSet - 2017.07.06 at 13h 41m 35s.xml">
+      <configuration name="ProteinParserTest.shouldFailWhenLocalPdbDirectoryIsNotSet" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ProteinParserTest_shouldUseLocalPdbDirectory - 2017.07.06 at 13h 42m 30s.xml">
+      <configuration name="ProteinParserTest.shouldUseLocalPdbDirectory" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ProteinParserTest_shouldUseLocalPdbDirectory - 2017.07.06 at 13h 42m 48s.xml">
+      <configuration name="ProteinParserTest.shouldUseLocalPdbDirectory" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1613691000" />
+    <option name="totallyTimeSpent" value="1615747000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1800,7 +1782,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="support for basic atom, group and chain containers&#10;fine-grained distinction between backbone and side chain interactions&#10;convenience methods in feature containers" />
     <MESSAGE value="feature provider now assign information to all relevant instances&#10;fast mode for protein/cif parser&#10;design: data set stream generator, statistics, collectors" />
     <MESSAGE value="fixes slight bug of PLIP&#10;statistics with grouping by and for interacting helix amino acids" />
     <MESSAGE value="updates the way the interacting atoms are determined&#10;composed single execution class for general statistical analysis" />
@@ -1825,7 +1806,8 @@
     <MESSAGE value="ASSP: wrapper implemented" />
     <MESSAGE value="project restructuring" />
     <MESSAGE value="unifies resource-handling, fixes multiple feature providers getting registered" />
-    <option name="LAST_COMMIT_MESSAGE" value="unifies resource-handling, fixes multiple feature providers getting registered" />
+    <MESSAGE value="nucleotide support" />
+    <option name="LAST_COMMIT_MESSAGE" value="nucleotide support" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1846,46 +1828,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-design/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2296">
-          <caret line="135" column="12" lean-forward="false" selection-start-line="135" selection-start-column="12" selection-end-line="135" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/test/resources/assp/assp.pl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/test/resources/plip/1ar1_A.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-design/src/test/java/studies/membrane/MembraneConstantsTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-align/src/test/resources/alignment/fragment/GG4-1C17-A-GLY23-GLY27.pdb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-features/src/test/resources/pdb/invalid.pdb">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1986,14 +1928,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/GroupPrototypeParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="187" column="5" lean-forward="true" selection-start-line="187" selection-start-column="5" selection-end-line="187" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-testutils/src/main/java/de/bioforscher/testutil/TestUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
@@ -2017,14 +1951,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
           <caret line="39" column="5" lean-forward="true" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/parser/ProteinParserTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1098">
-          <caret line="208" column="9" lean-forward="false" selection-start-line="195" selection-start-column="12" selection-end-line="208" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -2172,7 +2098,7 @@
         <state relative-caret-position="396">
           <caret line="22" column="8" lean-forward="false" selection-start-line="22" selection-start-column="8" selection-end-line="22" selection-end-column="8" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2306,6 +2232,68 @@
         <state relative-caret-position="486">
           <caret line="30" column="47" lean-forward="false" selection-start-line="30" selection-start-column="47" selection-end-line="30" selection-end-column="47" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/GroupPrototypeParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2428">
+          <caret line="187" column="5" lean-forward="true" selection-start-line="187" selection-start-column="5" selection-end-line="187" selection-end-column="5" />
+          <folding>
+            <element signature="e#6977#6978#0" expanded="true" />
+            <element signature="e#7008#7009#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="50" column="83" lean-forward="false" selection-start-line="50" selection-start-column="83" selection-end-line="50" selection-end-column="83" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/default/src.zip!/java/io/FilterInputStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="45" column="6" lean-forward="false" selection-start-line="45" selection-start-column="6" selection-end-line="45" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/default/src.zip!/java/util/zip/InflaterInputStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="41" column="42" lean-forward="false" selection-start-line="41" selection-start-column="42" selection-end-line="41" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar:///usr/lib/jvm/default/src.zip!/java/util/zip/GZIPInputStream.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="43" column="34" lean-forward="true" selection-start-line="43" selection-start-column="34" selection-end-line="43" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/parser/ProteinParserTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="522">
+          <caret line="51" column="9" lean-forward="true" selection-start-line="51" selection-start-column="9" selection-end-line="51" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/ProteinParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="22" column="20" lean-forward="true" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
+          <folding>
+            <element signature="e#17377#17378#0" expanded="true" />
+            <element signature="e#17425#17426#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
