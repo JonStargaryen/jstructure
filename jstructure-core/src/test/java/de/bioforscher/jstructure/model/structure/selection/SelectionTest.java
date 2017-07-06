@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.Arginine;
 import de.bioforscher.jstructure.model.structure.aminoacid.Phenylalanine;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

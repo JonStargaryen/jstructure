@@ -73,7 +73,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
                 .findFirst()
                 .orElse(UNKNOWN_PFAM_MAPPING);
 
-        String uniProtId = UNKNOWN_MAPPING;
+        String uniProtId;
         // check for length - will either be '?', empty or a white-space
         if(ecMappingString[2].length() > 1) {
             uniProtId = ecMappingString[2];
@@ -98,12 +98,28 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
         chain.getFeatureContainer().addFeature(new ChainMapping(this, uniProtId, ecMappingString[3], pfamMappingString[3]));
     }
 
-    private Stream<String> getLines(String path) {
+    private static Stream<String> getLines(String path) {
         return getResourceAsStream(path)
                 .filter(line -> !line.startsWith("#") && !line.startsWith("PDB"));
     }
 
-    private Stream<String[]> getLinesForPdbId(String path, String pdbId) {
+    public static Stream<String[]> getLinesForPdbId(String pdbId) {
+        return getLinesForPdbId(PFAM_MAPPING, pdbId);
+    }
+
+    public static Stream<String[]> getLinesForUniProtId(String uniProtId) {
+        return getLines(PFAM_MAPPING)
+                .map(line -> line.split(","))
+                .filter(split -> split[2].equals(uniProtId));
+    }
+
+    public static Stream<String[]> getLinesForPfamId(String pfamId) {
+        return getLines(PFAM_MAPPING)
+                .map(line -> line.split(","))
+                .filter(split -> split[3].equals(pfamId));
+    }
+
+    private static Stream<String[]> getLinesForPdbId(String path, String pdbId) {
         return getLines(path)
                 .filter(line -> line.startsWith(pdbId.toLowerCase()))
                 .map(line -> line.split(","));

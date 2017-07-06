@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

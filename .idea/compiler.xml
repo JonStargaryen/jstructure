@@ -14,6 +14,7 @@
         <module name="jstructure-design" />
         <module name="jstructure-explorer" />
         <module name="jstructure-features" />
+        <module name="jstructure-mutation" />
         <module name="jstructure-testutils" />
       </profile>
     </annotationProcessing>
@@ -28,6 +29,7 @@
       <module name="jstructure-design" target="1.8" />
       <module name="jstructure-explorer" target="1.8" />
       <module name="jstructure-features" target="1.8" />
+      <module name="jstructure-mutation" target="1.8" />
       <module name="jstructure-testutils" target="1.8" />
       <module name="jstructurestudies" target="1.8" />
       <module name="membrane" target="1.5" />

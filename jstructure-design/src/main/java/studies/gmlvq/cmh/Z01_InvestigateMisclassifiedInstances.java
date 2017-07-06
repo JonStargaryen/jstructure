@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import studies.StudyConstants;
 
 import java.io.IOException;

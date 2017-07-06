@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.mathematics;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;

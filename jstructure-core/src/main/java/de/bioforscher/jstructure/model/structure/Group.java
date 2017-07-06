@@ -78,7 +78,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return threeLetterCode;
     }
 
-    public void setThreeLetterCode(String threeLetterCode) {
+    void setThreeLetterCode(String threeLetterCode) {
         this.threeLetterCode = threeLetterCode;
     }
 
@@ -120,7 +120,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         atoms.add(atom);
         // set reference to this as parent
         atom.setParentGroup(this);
-        // delegate to internal implementation
+        // delegate to internal implementation, so that concrete impls such as an AminoAcid can infer their fields/getters correctly
         addAtomInternal(atom);
     }
 

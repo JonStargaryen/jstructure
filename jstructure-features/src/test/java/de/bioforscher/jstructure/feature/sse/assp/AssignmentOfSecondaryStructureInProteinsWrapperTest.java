@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.sse.assp;
 
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.junit.Test;
 
 /**

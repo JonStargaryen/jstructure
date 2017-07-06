@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.parser;
+package de.bioforscher.jstructure.model.structure;
 
 /**
  * Occurs when {@link ProteinParser} struggles.

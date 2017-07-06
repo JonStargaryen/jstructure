@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * The new take on structural alignments.
+ * The new take on structural alignments. The implementation is based on classic SVD alignment algorithms.
  * Created by bittrich on 6/19/17.
  */
 public class StructureAligner {

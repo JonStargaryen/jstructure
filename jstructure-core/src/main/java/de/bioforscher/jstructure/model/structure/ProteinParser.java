@@ -1,6 +1,5 @@
-package de.bioforscher.jstructure.parser;
+package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.*;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
@@ -315,7 +314,7 @@ public class ProteinParser {
 
         // it is neither
         Group group = new Group(prototype, residueNumber, ligand);
-        // force the pdbName parsed from the file, otherwise upon unknown ligands (and, thus, missing prototypes) this
+        // force the name parsed from the file, otherwise upon unknown ligands (and, thus, missing prototypes) this
         // information would get lost
         group.setThreeLetterCode(pdbName);
         return group;
@@ -325,6 +324,8 @@ public class ProteinParser {
         return protein;
     }
 
+    //TODO the local pdb approach handling is horrible
+    //TODO traverse-all function for local pdb
     public static OptionalSteps localPdb(String pdbId) {
         String middle = pdbId.substring(1, 3);
         try {

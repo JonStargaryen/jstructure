@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.jsoup.nodes.Document;
 import org.junit.Assert;
 import org.junit.Before;

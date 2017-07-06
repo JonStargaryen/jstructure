@@ -1,7 +1,7 @@
 package studies.poznan;
 
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.junit.Ignore;
 import org.junit.Test;
 

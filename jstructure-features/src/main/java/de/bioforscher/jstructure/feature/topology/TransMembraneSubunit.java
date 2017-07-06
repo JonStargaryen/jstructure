@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
-import de.bioforscher.jstructure.parser.ParsingException;
+import de.bioforscher.jstructure.model.structure.ParsingException;
 
 import java.util.List;
 import java.util.regex.Matcher;

@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/jstructure-design/jstructure-design.iml" filepath="$PROJECT_DIR$/jstructure-design/jstructure-design.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-explorer/jstructure-explorer.iml" filepath="$PROJECT_DIR$/jstructure-explorer/jstructure-explorer.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-features/jstructure-features.iml" filepath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-mutation/jstructure-mutation.iml" filepath="$PROJECT_DIR$/jstructure-mutation/jstructure-mutation.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" filepath="$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" />
     </modules>
   </component>

@@ -1,9 +1,6 @@
-package de.bioforscher.jstructure.parser;
+package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;

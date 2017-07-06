@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.parser.ParsingException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -126,8 +125,15 @@ public class GroupPrototypeParser {
     }
 
     private Atom mapToPrototypeAtom(Element element) {
-        //TODO impl
-        return null;
+        return Atom.builder(de.bioforscher.jstructure.model.structure.Element.valueOfIgnoreCase(element.getElementsByTag("PDBx:type_symbol").text()),
+                new double[]{
+                        Double.valueOf(element.getElementsByTag("PDBx:pdbx_model_Cartn_x_ideal").text()),
+                        Double.valueOf(element.getElementsByTag("PDBx:pdbx_model_Cartn_y_ideal").text()),
+                        Double.valueOf(element.getElementsByTag("PDBx:pdbx_model_Cartn_z_ideal").text())
+                })
+                .name(element.getElementsByTag("PDBx:pdbx_component_atom_id").text())
+                .pdbSerial(Integer.valueOf(element.getElementsByTag("PDBx:pdbx_ordinal").text()))
+                .build();
     }
 
     private GroupPrototype.PolymerType mapToPolymerType(String polymerType) {

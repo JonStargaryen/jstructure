@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -7,6 +8,13 @@ import org.junit.Test;
  * Created by S on 24.05.2017.
  */
 public class GroupPrototypeParserTest {
+    @Test
+    public void shouldCreatePrototypeAtoms() {
+        GroupPrototype prototype = GroupPrototypeParser.getInstance().getPrototype("ALA");
+        prototype.getPrototypeAtoms().forEach(Assert::assertNotNull);
+        prototype.getPrototypeAtoms().forEach(System.out::println);
+    }
+
     @Test
     public void shouldParseStandardAminoAcid() {
         System.out.println(GroupPrototypeParser.getInstance().getPrototype("ALA"));
@@ -24,6 +32,7 @@ public class GroupPrototypeParserTest {
 
     @Test
     public void s3TAK() {
+        //TODO impl test for peculiar protein
         System.out.println("3TAK");
     }
 }

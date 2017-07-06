@@ -89,6 +89,7 @@
         <module>../jstructure-align</module>
         <module>../jstructure-testutils</module>
         <module>../jstructure-features</module>
+        <module>../jstructure-mutation</module>
     </modules>
 
     <properties>

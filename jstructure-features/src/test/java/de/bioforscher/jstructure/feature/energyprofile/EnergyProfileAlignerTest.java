@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.energyprofile;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

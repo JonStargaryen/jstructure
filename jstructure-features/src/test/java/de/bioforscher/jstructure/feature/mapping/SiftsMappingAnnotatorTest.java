@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.mapping;
 
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import de.bioforscher.testutil.TestUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

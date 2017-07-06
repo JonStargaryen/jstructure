@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.asa;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ProteinParser;
+import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureException;
 import org.biojava.nbio.structure.asa.AsaCalculator;

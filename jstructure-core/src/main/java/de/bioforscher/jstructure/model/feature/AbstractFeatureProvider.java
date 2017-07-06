@@ -72,18 +72,18 @@ public abstract class AbstractFeatureProvider {
 
     }
 
-    protected InputStream getResourceAsInputStream(String filename) {
+    protected static InputStream getResourceAsInputStream(String filename) {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();
         Objects.requireNonNull(ccl);
         InputStream is = ccl.getResourceAsStream(filename);
         return Objects.requireNonNull(is);
     }
 
-    protected Stream<String> getResourceAsStream(String filename) {
+    protected static Stream<String> getResourceAsStream(String filename) {
         return getResourceAsLines(filename).stream();
     }
 
-    protected List<String> getResourceAsLines(String filename) {
+    protected static List<String> getResourceAsLines(String filename) {
         try {
             try (InputStreamReader inputStreamReader = new InputStreamReader(getResourceAsInputStream(filename))) {
                 try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
