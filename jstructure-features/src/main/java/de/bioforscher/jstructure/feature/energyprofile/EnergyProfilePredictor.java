@@ -45,13 +45,13 @@ public class EnergyProfilePredictor extends AbstractFeatureProvider {
 
     private void initializeLibrary() {
         // load occurrence data
-        OCCURRENCE_GLOBULAR = getLinesFromResource(OCCURRENCE_GLOBULAR_PATH)
+        OCCURRENCE_GLOBULAR = getResourceAsStream(OCCURRENCE_GLOBULAR_PATH)
                 .filter(line -> !line.startsWith("\t"))
                 .map(line -> line.split("\t"))
                 .collect(Collectors.toMap(split -> split[0], this::composeOccurrenceMap));
 
         // load pairings data
-        PAIRINGS_GLOBULAR = getLinesFromResource(PAIRINGS_GLOBULAR_PATH)
+        PAIRINGS_GLOBULAR = getResourceAsStream(PAIRINGS_GLOBULAR_PATH)
                 .map(line -> line.split("\t"))
                 .collect(Collectors.toMap(line -> line[0], line -> Integer.valueOf(line[1])));
     }

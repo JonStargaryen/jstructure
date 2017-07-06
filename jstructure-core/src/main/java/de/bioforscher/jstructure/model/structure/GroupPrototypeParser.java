@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -177,8 +178,9 @@ public class GroupPrototypeParser {
         }
     }
 
-    private InputStream getResourceAsStream(String filename) {
-        return Thread.currentThread().getContextClassLoader().getResourceAsStream(filename);
+    private InputStream getResourceAsStream(String filepath) {
+        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
+                "failed to find resource as InputStream");
     }
 
     public static GroupPrototypeParser getInstance() {

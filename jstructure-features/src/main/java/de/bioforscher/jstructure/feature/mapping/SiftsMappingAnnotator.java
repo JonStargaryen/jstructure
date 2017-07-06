@@ -99,7 +99,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     }
 
     private Stream<String> getLines(String path) {
-        return getLinesFromResource(path)
+        return getResourceAsStream(path)
                 .filter(line -> !line.startsWith("#") && !line.startsWith("PDB"));
     }
 

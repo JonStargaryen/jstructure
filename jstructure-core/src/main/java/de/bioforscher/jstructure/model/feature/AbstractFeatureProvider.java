@@ -4,16 +4,17 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * The abstract implementation of each {@link FeatureProvider}. Implicitly registers each provider in a global
- * "registry" implemented by {@link FeatureProviderRegistry}.
+ * "registry" implemented by {@link FeatureProviderRegistry}. Feature provider implementations are expected to be
+ * stateless.
  * TODO a register function which fills each featureMap with the provided keys of this provider, thus multiple predictors could be employed concurrently
  * TODO strict mode flag
  * TODO indicate where the results are attached to - on atom level? residues? chains? whole protein? a mix?
@@ -21,6 +22,11 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AbstractFeatureProvider.class);
+
+    protected AbstractFeatureProvider() {
+        // register feature providers upon creation in the registry - TODO does not fix as classes are not guaranteed to be loaded at all
+//        FeatureProviderRegistry.register(this.getClass());
+    }
 
     /**
      * Runs the computations implemented by this feature provider and assigns the results to the given container.
@@ -66,13 +72,28 @@ public abstract class AbstractFeatureProvider {
 
     }
 
-    protected InputStream getResourceAsStream(String filepath) {
-        return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(filepath),
-                "failed to find resource as InputStream");
+    protected InputStream getResourceAsInputStream(String filename) {
+        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        Objects.requireNonNull(ccl);
+        InputStream is = ccl.getResourceAsStream(filename);
+        return Objects.requireNonNull(is);
     }
 
-    protected Stream<String> getLinesFromResource(String filepath) {
-        return new BufferedReader(new InputStreamReader(getResourceAsStream(filepath))).lines();
+    protected Stream<String> getResourceAsStream(String filename) {
+        return getResourceAsLines(filename).stream();
+    }
+
+    protected List<String> getResourceAsLines(String filename) {
+        try {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(getResourceAsInputStream(filename))) {
+                try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    return bufferedReader.lines()
+                            .collect(Collectors.toList());
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     protected abstract void processInternally(Protein protein);

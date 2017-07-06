@@ -9,9 +9,7 @@ import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -194,23 +192,20 @@ public class ProteinParserTest {
         List<String> writtenLines = Pattern.compile("\n")
                 .splitAsStream(protein.getPdbRepresentation())
                 .collect(Collectors.toList());
-        try {
-            List<String> expectedLines = TestUtils.getResourceAsLines("parser/parsed/" + pdbId + ".pdb");
 
-            for(int i = 0; i < writtenLines.size(); i++) {
-                // some file have shorter lines
-                if(expectedLines.get(i).length() > writtenLines.get(i).length()) {
-                    Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
-                            "expected: " + expectedLines.get(i) + System.lineSeparator() +
-                            "actual:   " + writtenLines.get(i), expectedLines.get(i).startsWith(writtenLines.get(i)));
-                } else {
-                    Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
-                            "expected: " + expectedLines.get(i) + System.lineSeparator() +
-                            "actual:   " + writtenLines.get(i), writtenLines.get(i).startsWith(expectedLines.get(i)));
-                }
+        List<String> expectedLines = TestUtils.getResourceAsLines("parser/parsed/" + pdbId + ".pdb");
+
+        for(int i = 0; i < writtenLines.size(); i++) {
+            // some file have shorter lines
+            if(expectedLines.get(i).length() > writtenLines.get(i).length()) {
+                Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
+                        "expected: " + expectedLines.get(i) + System.lineSeparator() +
+                        "actual:   " + writtenLines.get(i), expectedLines.get(i).startsWith(writtenLines.get(i)));
+            } else {
+                Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
+                        "expected: " + expectedLines.get(i) + System.lineSeparator() +
+                        "actual:   " + writtenLines.get(i), writtenLines.get(i).startsWith(expectedLines.get(i)));
             }
-        } catch (IOException e) {
-            throw new UncheckedIOException("did not find expected output file for " + pdbId, e);
         }
     }
 }

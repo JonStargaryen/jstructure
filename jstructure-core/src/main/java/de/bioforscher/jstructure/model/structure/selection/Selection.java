@@ -256,11 +256,11 @@ public class Selection {
             return this;
         }
 
-        public AtomSelection distance(Atom referenceAtom, double distanceCutoff) {
-            return distance(referenceAtom.getCoordinates(), distanceCutoff);
+        public AtomSelection atomDistance(Atom referenceAtom, double distanceCutoff) {
+            return atomDistance(referenceAtom.getCoordinates(), distanceCutoff);
         }
 
-        public AtomSelection distance(double[] coordinates, double distanceCutoff) {
+        public AtomSelection atomDistance(double[] coordinates, double distanceCutoff) {
             double squaredDistanceCutoff = distanceCutoff * distanceCutoff;
             registerAtomPredicate(atom -> LinearAlgebra.on(coordinates).distanceFast(atom.getCoordinates()) <
                     squaredDistanceCutoff, distanceCutoff + " A around " + Arrays.toString(coordinates));
@@ -408,13 +408,11 @@ public class Selection {
             return this;
         }
 
-        @Override
-        public GroupSelection distance(Atom referenceAtom, double distanceCutoff) {
-            return distance(referenceAtom.getCoordinates(), distanceCutoff);
+        public GroupSelection groupDistance(Atom referenceAtom, double distanceCutoff) {
+            return groupDistance(referenceAtom.getCoordinates(), distanceCutoff);
         }
 
-        @Override
-        public GroupSelection distance(double[] coordinates, double distanceCutoff) {
+        public GroupSelection groupDistance(double[] coordinates, double distanceCutoff) {
             double squaredDistanceCutoff = distanceCutoff * distanceCutoff;
             registerGroupPredicate(group -> group.atoms()
                     .anyMatch(atom -> LinearAlgebra.on(coordinates).distanceFast(atom.getCoordinates()) <

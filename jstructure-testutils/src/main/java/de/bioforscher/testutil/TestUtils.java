@@ -1,9 +1,6 @@
 package de.bioforscher.testutil;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -24,16 +21,20 @@ public class TestUtils {
         return Objects.requireNonNull(is);
     }
 
-    public static Stream<String> getResourceAsStream(String filename) throws IOException {
-        try(InputStreamReader inputStreamReader = new InputStreamReader(getResourceAsInputStream(filename))) {
-            try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
-                return bufferedReader.lines();
-            }
-        }
+    public static Stream<String> getResourceAsStream(String filename) {
+        return getResourceAsLines(filename).stream();
     }
 
-    public static List<String> getResourceAsLines(String filename) throws IOException {
-        return getResourceAsStream(filename)
-                .collect(Collectors.toList());
+    public static List<String> getResourceAsLines(String filename) {
+        try {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(getResourceAsInputStream(filename))) {
+                try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    return bufferedReader.lines()
+                            .collect(Collectors.toList());
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

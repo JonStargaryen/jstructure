@@ -1,7 +1,6 @@
 package studies.poznan;
 
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.parser.ParsingException;
 import de.bioforscher.jstructure.parser.ProteinParser;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,11 +32,6 @@ public class SimpleEnergyProfileRunnerTest {
     @Test(expected = UncheckedIOException.class)
     public void shouldFailDueToInvalidFilepath() {
         SimpleEnergyProfileRunner.main("/invalid/filepath");
-    }
-
-    @Test(expected = ParsingException.class)
-    public void shouldFailDueToInvalidFile() {
-        SimpleEnergyProfileRunner.main(AdvancedEnergyProfileRunnerTest.getResourceAsFilepath("pdb/invalid.pdb"));
     }
 
     @Test

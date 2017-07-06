@@ -108,7 +108,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
 
     private synchronized void initializeLibrary() {
         // parse globular solvation data
-        globularSolvationData = getLinesFromResource(GLOBULAR_SOLVATION_PATH)
+        globularSolvationData = getResourceAsStream(GLOBULAR_SOLVATION_PATH)
                 // skip header line
                 .filter(line -> !line.startsWith("amino_acid"))
                 .map(line -> line.split(" "))

@@ -155,7 +155,7 @@ public class SelectionTest {
 
         List<Atom> neighboringGroupCountSelectionAPI = protein.select()
                 .atomSelection()
-                .distance(atom, probeDistance)
+                .atomDistance(atom, probeDistance)
                 .asFilteredAtoms()
                 .collect(Collectors.toList());
 

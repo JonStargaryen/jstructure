@@ -28,19 +28,33 @@ public class FeatureProviderRegistry {
         scanForFeatureProviders();
     }
 
+    public static void register(Class<? extends AbstractFeatureProvider> featureProviderToRegister) {
+        FeatureProvider annotation = featureProviderToRegister.getAnnotation(FeatureProvider.class);
+        INSTANCE.registerProvider(featureProviderToRegister, annotation);
+    }
+
     private void scanForFeatureProviders() {
         Reflections reflections = new Reflections("de.bioforscher");
         Set<Class<?>> annotatedFeatureProviders = reflections.getTypesAnnotatedWith(FeatureProvider.class);
 
         for(Class<?> annotatedFeatureProvider : annotatedFeatureProviders) {
             FeatureProvider annotation = annotatedFeatureProvider.getDeclaredAnnotation(FeatureProvider.class);
-            logger.debug("registering provider {} with priority {}",
-                    annotatedFeatureProvider.getSimpleName(),
-                    annotation.priority());
+            registerProvider(annotatedFeatureProvider, annotation);
+        }
+    }
 
+    private void registerProvider(Class<?> annotatedFeatureProvider, FeatureProvider annotation) {
+        if(annotation == null) {
+            throw new IllegalArgumentException(annotatedFeatureProvider.getSimpleName() + " does not feature the @FeatureProvider annotation - cannot register");
+        }
+
+        logger.debug("registering provider {} with priority {}",
+            annotatedFeatureProvider.getSimpleName(),
+            annotation.priority());
+        try {
+            AbstractFeatureProvider instance = (AbstractFeatureProvider) annotatedFeatureProvider.newInstance();
             for(Class<? extends FeatureContainerEntry> providedFeature : annotation.provides()) {
                 TreeMap<Integer, AbstractFeatureProvider> providers = registeredFeatureProviders.getOrDefault(providedFeature, new TreeMap<>());
-                try {
                     int priority = annotation.priority();
                     if(providers.containsKey(priority)) {
                         providers.put(priority, (AbstractFeatureProvider) annotatedFeatureProvider.newInstance());
@@ -50,13 +64,12 @@ public class FeatureProviderRegistry {
                             priority++;
                         }
 
-                        providers.put(priority, (AbstractFeatureProvider) annotatedFeatureProvider.newInstance());
+                        providers.put(priority, instance);
                     }
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new InstantiationError("could not create instance of feature provider " + annotatedFeatureProvider.getSimpleName());
-                }
                 registeredFeatureProviders.put(providedFeature, providers);
             }
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new InstantiationError("could not create instance of feature provider " + annotatedFeatureProvider.getSimpleName());
         }
     }
 

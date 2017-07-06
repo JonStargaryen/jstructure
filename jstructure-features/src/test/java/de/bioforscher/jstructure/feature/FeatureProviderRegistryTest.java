@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.feature;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfilePredictor;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
@@ -45,5 +46,13 @@ public class FeatureProviderRegistryTest {
     @Test
     public void shouldResolvePredictor() {
         Assert.assertTrue(FeatureProviderRegistry.resolvePredictor(EnergyProfile.class).getClass().equals(EnergyProfilePredictor.class));
+    }
+
+    @Test
+    public void shouldRegisterProviderOnlyOnce() {
+        Assert.assertEquals("feature provider was registered multiple times",1, FeatureProviderRegistry.getRegisteredFeatureProviders()
+                .stream()
+                .filter(featureProvider -> featureProvider.getClass().equals(AccessibleSurfaceAreaCalculator.class))
+                .count());
     }
 }

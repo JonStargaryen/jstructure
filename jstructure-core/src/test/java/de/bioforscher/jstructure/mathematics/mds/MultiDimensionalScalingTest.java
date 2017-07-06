@@ -34,8 +34,6 @@ public class MultiDimensionalScalingTest {
                 String s = Arrays.toString(embeddedDataPoints.get(i));
                 System.out.println(dataLabels.get(i) + "," + s.replace("[", "").replace("]", "").replace(" ", ""));
             }
-        } catch (IOException e) {
-            Assert.fail("failed with IOException: " + e.getLocalizedMessage());
         } catch (NullPointerException e) {
             Assert.fail("could not find test resource: " + e.getLocalizedMessage());
         }

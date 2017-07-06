@@ -17,11 +17,13 @@ import java.nio.file.Paths;
 
 /**
  * Use the CLI of ASSP.
+ * Be careful: this implementation is not thread-safe per se as it uses the external executable and has a state in the
+ * face that it writes temporary files to a working directory - when protein names equal, multiple threads could infer.
  * Created by bittrich on 7/5/17.
  */
 @FeatureProvider(provides = { GenericSecondaryStructure.class }, priority = 50)
 public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFeatureProvider {
-    private static final Path ASSP_DIRECTORY = Paths.get("/tmp/assp/");
+    private static final Path ASSP_DIRECTORY = Paths.get("/usr/local/bin/assp/");
 
     @Override
     protected void processInternally(Protein protein) {
