@@ -1,10 +1,10 @@
 package de.bioforscher.jstructure.model;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Implementation of an ordered consecutive list of equal objects.
+ * Implementation of an ordered consecutive collection of equal objects. Delegates to an internal list.
  * Created by S on 02.10.2016.
  */
 public class Fragment<T> {
@@ -27,8 +27,16 @@ public class Fragment<T> {
         return elements;
     }
 
+    public Stream<T> elements() {
+        return elements.stream();
+    }
+
+    public int size() {
+        return elements.size();
+    }
+
     @Override
     public String toString() {
-        return elements.stream().map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
+        return elements.toString();
     }
 }

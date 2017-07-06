@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure.nucleotide;
 
+import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.ResidueNumber;
 
 /**
@@ -15,5 +16,10 @@ public class UnknownNucleotide extends Nucleotide implements StandardNucleotide 
     public UnknownNucleotide(String threeLetterCode,
                             ResidueNumber residueNumber) {
         this(threeLetterCode, residueNumber, false);
+    }
+
+    @Override
+    protected void addBaseAtom(Atom atom) {
+
     }
 }

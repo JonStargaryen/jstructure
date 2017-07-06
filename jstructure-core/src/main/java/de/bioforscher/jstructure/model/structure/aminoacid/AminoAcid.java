@@ -218,11 +218,6 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
 
     AminoAcid(AminoAcid aminoAcid) {
         super(aminoAcid);
-//        this.n = new Atom(aminoAcid.n);
-//        this.ca = new Atom(aminoAcid.ca);
-//        this.c = new Atom(aminoAcid.c);
-//        this.o = new Atom(aminoAcid.o);
-//        this.h = new Atom(aminoAcid.h);
         atoms().forEach(this::addAtomInternal);
     }
 
