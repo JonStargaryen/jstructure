@@ -344,6 +344,18 @@ public class Selection {
                     .findFirst();
         }
 
+        public Optional<AminoAcid> asOptionalAminoAcid() {
+            Optional<Group> optional = asFilteredGroups()
+                    .findFirst();
+            try {
+                return optional
+                        .map(AminoAcid.class::cast);
+            } catch (ClassCastException e) {
+                // wrap potential ClassCastException as SelectionException
+                throw new SelectionException(optional + " cannot be cast to " + AminoAcid.class.getSimpleName(), e);
+            }
+        }
+
         public Group asGroup() {
             return asOptionalGroup()
                     .orElseThrow(() -> new SelectionException("did not find group matching " + Stream.of(groupPredicates,
@@ -351,6 +363,16 @@ public class Selection {
                             .flatMap(Collection::stream)
                             .map(Pair::getRight)
                             .collect(Collectors.joining(", ", "[",  "]")) + " in " + groupContainer.getIdentifier()));
+        }
+
+        public AminoAcid asAminoAcid() {
+            return asOptionalAminoAcid()
+                    .orElseThrow(() -> new SelectionException("did not find amino acid matching " + Stream.of(groupPredicates,
+                            chainPredicates)
+                            .flatMap(Collection::stream)
+                            .map(Pair::getRight)
+                            .collect(Collectors.joining(", ", "[",  "]")) + " in " + groupContainer.getIdentifier()));
+
         }
 
         private void registerGroupPredicate(Predicate<Group> groupPredicate, String description) {

@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 import de.bioforscher.jstructure.model.structure.*;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -292,4 +293,49 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     protected abstract void addSideChainAtom(Atom atom);
+
+    /**
+     * Access to the previous amino acid in the chain.
+     * <code>getPreviousAminoAcid() is equivalent to
+     * </code><blockquote><pre>
+     * getAminoAcidWithOffset(-1)
+     * </pre></blockquote>
+     * @see #getAminoAcidWithOffset(int)
+     * @return an optional wrapping the previous amino acid
+     */
+    public Optional<AminoAcid> getPreviousAminoAcid() {
+        return getAminoAcidWithOffset(-1);
+    }
+
+    /**
+     * Access to the amino acid with a custom offset in the chain. Zero will return the current instance, negative
+     * values will navigate towards the N-terminus, positive values to the C-terminus. Wrapped as optional as the
+     * operation is by no means guaranteed to succeed, the group could not exist (as the current instance is a terminal
+     * amino acid) or be no {@link AminoAcid}.
+     * @see #getPreviousAminoAcid()
+     * @see #getNextAminoAcid()
+     * @return an optional wrapping the amino acid with the given offset
+     */
+    public Optional<AminoAcid> getAminoAcidWithOffset(int offset) {
+        try {
+            Chain chain = getParentChain();
+            int index = chain.getGroups().indexOf(this);
+            return Optional.of((AminoAcid) chain.getGroups().get(index + offset));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Access to the next amino acid in the chain.
+     * <code>getPreviousAminoAcid() is equivalent to
+     * </code><blockquote><pre>
+     * getAminoAcidWithOffset(1)
+     * </pre></blockquote>
+     * @see #getAminoAcidWithOffset(int)
+     * @return an optional wrapping the next amino acid
+     */
+    public Optional<AminoAcid> getNextAminoAcid() {
+        return getAminoAcidWithOffset(1);
+    }
 }

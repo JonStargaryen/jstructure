@@ -1,9 +1,8 @@
 package de.bioforscher.jstructure.model.structure.nucleotide;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.*;
+
+import java.util.Optional;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -121,4 +120,49 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
     }
 
     protected abstract void addBaseAtom(Atom atom);
+
+    /**
+     * Access to the previous nucleotide in the chain.
+     * <code>getPreviousNucleotide() is equivalent to
+     * </code><blockquote><pre>
+     * getNucleotideWithOffset(-1)
+     * </pre></blockquote>
+     * @see #getNucleotideWithOffset(int)
+     * @return an optional wrapping the previous nucleotide
+     */
+    public Optional<Nucleotide> getPreviousNucleotide() {
+        return getNucleotideWithOffset(-1);
+    }
+
+    /**
+     * Access to the nucleotide with a custom offset in the chain. Zero will return the current instance, negative
+     * values will navigate towards the N-terminus, positive values to the C-terminus. Wrapped as optional as the
+     * operation is by no means guaranteed to succeed, the group could not exist (as the current instance is a terminal
+     * nucleotide) or be no {@link Nucleotide}.
+     * @see #getPreviousNucleotide()
+     * @see #getNextNucleotide()
+     * @return an optional wrapping the nucleotide with the given offset
+     */
+    public Optional<Nucleotide> getNucleotideWithOffset(int offset) {
+        try {
+            Chain chain = getParentChain();
+            int index = chain.getGroups().indexOf(this);
+            return Optional.of((Nucleotide) chain.getGroups().get(index + offset));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Access to the next nucleotide in the chain.
+     * <code>getPreviousNucleotide() is equivalent to
+     * </code><blockquote><pre>
+     * getNucleotideWithOffset(1)
+     * </pre></blockquote>
+     * @see #getNucleotideWithOffset(int)
+     * @return an optional wrapping the next nucleotide
+     */
+    public Optional<Nucleotide> getNextNucleotide() {
+        return getNucleotideWithOffset(1);
+    }
 }

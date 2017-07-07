@@ -14,7 +14,8 @@ public class SearchSpaceTest {
     }
 
     @Test
-    public void shouldGetIdsOfPF() {
+    public void shouldGetIdsOfPF00959() {
+        // lysozyme
         SearchSpace.pdbByPfam("PF00959").forEach(System.out::println);
     }
 
