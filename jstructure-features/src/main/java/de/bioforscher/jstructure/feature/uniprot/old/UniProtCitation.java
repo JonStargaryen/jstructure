@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import org.jsoup.nodes.Element;
 
@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
  * Represents a UniProt citation.
  * Created by bittrich on 3/2/17.
  */
+@Deprecated
 public class UniProtCitation {
     private String type;
     private String name;

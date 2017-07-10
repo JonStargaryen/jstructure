@@ -1,9 +1,9 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.feature.uniprot.UniProtActiveSite;
-import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotationContainer;
-import de.bioforscher.jstructure.feature.uniprot.UniProtMutagenesisSite;
-import de.bioforscher.jstructure.feature.uniprot.UniProtNaturalVariant;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtActiveSite;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtAnnotationContainer;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtMutagenesisSite;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtNaturalVariant;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 

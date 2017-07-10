@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import org.jsoup.nodes.Element;
 
@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
  * Describes a UniProt natural variant.
  * Created by bittrich on 3/2/17.
  */
+@Deprecated
 public class UniProtNaturalVariant {
     private String id;
     private String original;

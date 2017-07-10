@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import org.jsoup.nodes.Element;
 
@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
  * UniProt's annotation of disulfide bonds.
  * Created by bittrich on 4/18/17.
  */
+@Deprecated
 public class UniProtDisulfideBond {
     private int start;
     private int end;

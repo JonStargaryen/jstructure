@@ -21,6 +21,7 @@ public class StudyConstants {
     public static final Path GMLVQ_MAIN = GIT.resolve("gmlvq_main");
     public static final Path FINGERPRINT_MINER_PFAM_ARFF = StudyConstants.GMLVQ_MAIN.resolve("data").resolve("fingerprint_miner_pfam_arff");
     public static final Path PHD_REPO = GIT.resolve("phd_sb_repo");
+    public static final Path MUTATION_DATASET_SCHAEFER2012 = PHD_REPO.resolve("data").resolve("mutations").resolve("datasets").resolve("schaefer2012").resolve("mutants_stability.txt");
     public static final Path AHAH_DATA_SET = PHD_REPO.resolve("data").resolve("AHAH").resolve("data").resolve("ahah_gold_standard.csv");
 
     public static Stream<Path> list(Path path) {

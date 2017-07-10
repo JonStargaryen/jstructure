@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import org.jsoup.nodes.Element;
 
@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
  * Annotation of modified amino acids.
  * Created by bittrich on 4/18/17.
  */
+@Deprecated
 public class UniProtAminoAcidModification {
     private int position;
     private String description;

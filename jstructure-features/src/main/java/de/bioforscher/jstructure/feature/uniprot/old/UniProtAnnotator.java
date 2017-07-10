@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.feature.mapping.ChainMapping;
@@ -18,6 +18,7 @@ import java.io.IOException;
  * Created by bittrich on 3/2/17.
  */
 @FeatureProvider(provides = UniProtAnnotationContainer.class, requires = ResidueMapping.class)
+@Deprecated
 public class UniProtAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(UniProtAnnotator.class);
     private static final String UNIPROT_FETCH_URL = "http://www.uniprot.org/uniprot/%s.xml";

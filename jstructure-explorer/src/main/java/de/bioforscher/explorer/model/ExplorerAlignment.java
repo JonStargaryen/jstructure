@@ -1,8 +1,8 @@
 package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.feature.mapping.ChainMapping;
-import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotationContainer;
-import de.bioforscher.jstructure.feature.uniprot.UniProtAnnotator;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtAnnotationContainer;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtAnnotator;
 import de.bioforscher.jstructure.model.structure.Chain;
 
 import java.util.List;

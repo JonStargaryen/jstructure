@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
  * Gathers all UniProt information of a {@link Chain}.
  * Created by bittrich on 3/2/17.
  */
+@Deprecated
 public class UniProtAnnotationContainer extends FeatureContainerEntry {
     private String uniProtId;
     private String uniProtSequence;

@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.feature.uniprot;
+package de.bioforscher.jstructure.feature.uniprot.old;
 
 import org.jsoup.nodes.Element;
 
@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
  * Represents a UniProt mutation site and diseases linked to it.
  * Created by bittrich on 3/2/17.
  */
+@Deprecated
 public class UniProtMutagenesisSite {
     private String original;
     private String variation;

@@ -2,7 +2,7 @@ package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.uniprot.*;
+import de.bioforscher.jstructure.feature.uniprot.old.*;
 import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.Chain;
 

@@ -32,7 +32,6 @@ public interface GroupContainer extends AtomContainer {
      * @return all amino acids
      */
     default Stream<AminoAcid> aminoAcids() {
-        //TODO use Selection or naive approach
         return groups()
                 .filter(Group::isAminoAcid)
                 .map(AminoAcid.class::cast);

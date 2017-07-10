@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.feature.uniprot;
 
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtAnnotationContainer;
+import de.bioforscher.jstructure.feature.uniprot.old.UniProtAnnotator;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.junit.Assert;
@@ -9,6 +11,7 @@ import org.junit.Test;
  * Test the UniProt annotator.
  * Created by bittrich on 3/2/17.
  */
+@Deprecated
 public class UniProtAnnotatorTest {
     private UniProtAnnotator uniProtAnnotator = new UniProtAnnotator();
 
