@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
-import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +20,6 @@ import java.nio.file.Paths;
 public class SimpleEnergyProfileRunner {
     private static final Logger logger = LoggerFactory.getLogger(SimpleEnergyProfileRunner.class);
     private static final AbstractFeatureProvider featureProvider = FeatureProviderRegistry.resolve(EnergyProfile.class);
-
-    static {
-        BasicConfigurator.configure();
-    }
 
     public static void main(String... args) {
         if(args.length != 1 && args.length != 2) {

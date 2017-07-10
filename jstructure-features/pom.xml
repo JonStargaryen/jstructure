@@ -30,6 +30,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- handling and querying of UniProt -->
         <dependency>
             <groupId>uk.ac.ebi.uniprot</groupId>
             <artifactId>japi</artifactId>
@@ -54,6 +55,10 @@
                 <exclusion>
                     <groupId>org.apache.logging.log4j</groupId>
                     <artifactId>log4j-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.biojava.thirdparty</groupId>
+                    <artifactId>forester</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
