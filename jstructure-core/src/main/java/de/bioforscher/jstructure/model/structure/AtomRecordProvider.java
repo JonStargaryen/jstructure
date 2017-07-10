@@ -87,7 +87,7 @@ class AtomRecordProvider {
         return parentGroup.isLigand() || parentGroup instanceof NonStandardAminoAcid;
     }
 
-    static String formatAtomName(Atom atom) {
+    private static String formatAtomName(Atom atom) {
         String fullName = null;
         String name = atom.getName();
         String element = atom.getElement().toString().toUpperCase();

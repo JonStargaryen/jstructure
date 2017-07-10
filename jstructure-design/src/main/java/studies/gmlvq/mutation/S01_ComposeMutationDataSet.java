@@ -1,16 +1,12 @@
 package studies.gmlvq.mutation;
 
-import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtBlastQuery;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import studies.StudyConstants;
-import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
-import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
 
 /**
  * Annotate features
@@ -38,11 +34,11 @@ public class S01_ComposeMutationDataSet {
                 .chainName(chainId)
                 .asChain();
 
-        List<UniProtEntry> hits = new UniProtBlastQuery().runUniProtBlastService(chain.getAminoAcidSequence());
-        System.out.println(chain.getChainId() + " " + hits.size() + " similar sequences");
-        hits.stream()
-                .map(entry -> entry.getPrimaryUniProtAccession() + " " + entry.getFeatures(FeatureType.MUTAGEN).size() +
-                        " mutations " + entry.getFeatures(FeatureType.VARIANT).size() + " variants")
-                .forEach(System.out::println);
+//        List<UniProtEntry> hits = new UniProtHomologyAnnotator().runUniProtBlastService(chain.getAminoAcidSequence());
+//        System.out.println(chain.getChainId() + " " + hits.size() + " similar sequences");
+//        hits.stream()
+//                .map(entry -> entry.getPrimaryUniProtAccession() + " " + entry.getFeatures(FeatureType.MUTAGEN).size() +
+//                        " mutations " + entry.getFeatures(FeatureType.VARIANT).size() + " variants")
+//                .forEach(System.out::println);
     }
 }
