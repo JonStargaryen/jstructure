@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -21,13 +21,13 @@ public class Proline extends AminoAcid implements StandardAminoAcid {
 //        this.cd = new Atom(proline.cd);
     }
 
-    public Proline(ResidueNumber residueNumber,
+    public Proline(ResidueIdentifier residueIdentifier,
                    boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Proline(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Proline(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

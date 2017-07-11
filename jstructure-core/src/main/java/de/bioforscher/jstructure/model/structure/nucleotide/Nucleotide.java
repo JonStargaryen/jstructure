@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 import java.util.Optional;
 
@@ -35,29 +36,29 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
     }
 
     Nucleotide(String threeLetterCode,
-              ResidueNumber residueNumber,
+              ResidueIdentifier residueIdentifier,
               boolean ligand) {
         super(threeLetterCode,
-                residueNumber,
+                residueIdentifier,
                 ligand);
     }
 
     Nucleotide(String threeLetterCode,
-              ResidueNumber residueNumber) {
-        this(threeLetterCode, residueNumber, false);
+              ResidueIdentifier residueIdentifier) {
+        this(threeLetterCode, residueIdentifier, false);
     }
 
     Nucleotide(GroupPrototype groupPrototype,
-              ResidueNumber residueNumber,
+              ResidueIdentifier residueIdentifier,
               boolean ligand) {
         super(groupPrototype,
-                residueNumber,
+                residueIdentifier,
                 ligand);
     }
 
     Nucleotide(GroupPrototype groupPrototype,
-              ResidueNumber residueNumber) {
-        this(groupPrototype, residueNumber, false);
+              ResidueIdentifier residueIdentifier) {
+        this(groupPrototype, residueIdentifier, false);
     }
 
     @Override

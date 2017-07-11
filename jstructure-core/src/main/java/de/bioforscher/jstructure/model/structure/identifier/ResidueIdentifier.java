@@ -1,20 +1,23 @@
-package de.bioforscher.jstructure.model.structure;
+package de.bioforscher.jstructure.model.structure.identifier;
+
+import de.bioforscher.jstructure.model.structure.Group;
 
 /**
  * Represents the numbering of {@link Group} instances within a protein chain.
+ * TODO reference to parent ChainIdentifer?
+ * TODO support for residue ranges?
  * Created by S on 25.05.2017.
  */
-public class ResidueNumber {
-    private final int residueNumber;
-    private final String insertionCode;
+public class ResidueIdentifier {
+    private int residueNumber;
+    private String insertionCode;
 
-    public ResidueNumber(int residueNumber) {
+    ResidueIdentifier(int residueNumber) {
         this(residueNumber,
                 "");
     }
 
-    public ResidueNumber(int residueNumber,
-                         String insertionCode) {
+    ResidueIdentifier(int residueNumber, String insertionCode) {
         this.residueNumber = residueNumber;
         this.insertionCode = insertionCode;
     }

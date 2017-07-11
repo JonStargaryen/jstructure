@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 /**
- * Annotate features
+ * Annotate features for mutation data sets.
  * Created by bittrich on 7/10/17.
  */
 public class S01_ComposeMutationDataSet {

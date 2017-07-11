@@ -2,7 +2,9 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.*;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,7 +116,7 @@ public class ProteinParser {
         // found header record
         // 63 - 66       IDcode        idCode            This identifier is unique within the PDB.
         if(line.startsWith(HEADER_PREFIX)) {
-            protein.setPdbId(ProteinIdentifier.createFromPdbId(line.substring(62, 66)));
+            protein.setPdbId(IdentifierFactory.createProteinIdentifier(line.substring(62, 66)));
         }
 
         // handling title records
@@ -173,7 +175,7 @@ public class ProteinParser {
 
             String alternativeLocationIndicator = line.substring(16, 17).trim();
             String pdbName = line.substring(17, 20).trim();
-            ChainIdentifier chainId = ChainIdentifier.createFromChainId(protein.getPdbId(), line.substring(21, 22));
+            ChainIdentifier chainId = IdentifierFactory.createChainIdentifier(protein.getPdbId(), line.substring(21, 22));
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
             String insertionCode = line.substring(26, 27).trim();
 
@@ -191,12 +193,11 @@ public class ProteinParser {
                 }
             }
 
-            if(currentGroup == null || currentGroup.getResidueNumber().getResidueNumber() != resNum ||
-                    !currentGroup.getResidueNumber().getInsertionCode().equals(insertionCode) ||
+            if(currentGroup == null || currentGroup.getResidueIdentifier().getResidueNumber() != resNum ||
+                    !currentGroup.getResidueIdentifier().getInsertionCode().equals(insertionCode) ||
                     !currentGroup.getParentChain().getChainId().equals(chainId)) {
                     // residue changed - create new group object and set reference
-                    currentGroup = createGroup(pdbName,
-                            new ResidueNumber(resNum, insertionCode),
+                    currentGroup = createGroup(pdbName, IdentifierFactory.createResidueIdentifier(resNum, insertionCode),
                             terminatedChains.contains(currentChain));
                     currentChain.addGroup(currentGroup);
             }
@@ -249,7 +250,7 @@ public class ProteinParser {
         }
     }
 
-    private Group createGroup(String pdbName, ResidueNumber residueNumber, boolean ligand) {
+    private Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
         GroupPrototypeParser groupPrototypeParser = minimalParsing ? GroupPrototypeParser.getFastInstance() : GroupPrototypeParser.getInstance();
         GroupPrototype prototype = groupPrototypeParser.getPrototype(pdbName);
 
@@ -258,53 +259,53 @@ public class ProteinParser {
                 GroupPrototype.PolymerType.PEPTIDE_LIKE)
         switch(pdbName.toUpperCase()) {
             case Alanine.THREE_LETTER_CODE:
-                return new Alanine(residueNumber, ligand);
+                return new Alanine(residueIdentifier, ligand);
             case Arginine.THREE_LETTER_CODE:
-                return new Arginine(residueNumber, ligand);
+                return new Arginine(residueIdentifier, ligand);
             case Asparagine.THREE_LETTER_CODE:
-                return new Asparagine(residueNumber, ligand);
+                return new Asparagine(residueIdentifier, ligand);
             case AsparticAcid.THREE_LETTER_CODE:
-                return new AsparticAcid(residueNumber, ligand);
+                return new AsparticAcid(residueIdentifier, ligand);
             case Cysteine.THREE_LETTER_CODE:
-                return new Cysteine(residueNumber, ligand);
+                return new Cysteine(residueIdentifier, ligand);
             case GlutamicAcid.THREE_LETTER_CODE:
-                return new GlutamicAcid(residueNumber, ligand);
+                return new GlutamicAcid(residueIdentifier, ligand);
             case Glutamine.THREE_LETTER_CODE:
-                return new Glutamine(residueNumber, ligand);
+                return new Glutamine(residueIdentifier, ligand);
             case Glycine.THREE_LETTER_CODE:
-                return new Glycine(residueNumber, ligand);
+                return new Glycine(residueIdentifier, ligand);
             case Histidine.THREE_LETTER_CODE:
-                return new Histidine(residueNumber, ligand);
+                return new Histidine(residueIdentifier, ligand);
             case Isoleucine.THREE_LETTER_CODE:
-                return new Isoleucine(residueNumber, ligand);
+                return new Isoleucine(residueIdentifier, ligand);
             case Leucine.THREE_LETTER_CODE:
-                return new Leucine(residueNumber, ligand);
+                return new Leucine(residueIdentifier, ligand);
             case Lysine.THREE_LETTER_CODE:
-                return new Lysine(residueNumber, ligand);
+                return new Lysine(residueIdentifier, ligand);
             case Methionine.THREE_LETTER_CODE:
-                return new Methionine(residueNumber, ligand);
+                return new Methionine(residueIdentifier, ligand);
             case Phenylalanine.THREE_LETTER_CODE:
-                return new Phenylalanine(residueNumber, ligand);
+                return new Phenylalanine(residueIdentifier, ligand);
             case Proline.THREE_LETTER_CODE:
-                return new Proline(residueNumber, ligand);
+                return new Proline(residueIdentifier, ligand);
             case Pyrrolysine.THREE_LETTER_CODE:
-                return new Pyrrolysine(residueNumber, ligand);
+                return new Pyrrolysine(residueIdentifier, ligand);
             case Selenocysteine.THREE_LETTER_CODE:
-                return new Selenocysteine(residueNumber, ligand);
+                return new Selenocysteine(residueIdentifier, ligand);
             case Selenomethionine.THREE_LETTER_CODE:
-                return new Selenomethionine(residueNumber, ligand);
+                return new Selenomethionine(residueIdentifier, ligand);
             case Serine.THREE_LETTER_CODE:
-                return new Serine(residueNumber, ligand);
+                return new Serine(residueIdentifier, ligand);
             case Threonine.THREE_LETTER_CODE:
-                return new Threonine(residueNumber, ligand);
+                return new Threonine(residueIdentifier, ligand);
             case Tryptophan.THREE_LETTER_CODE:
-                return new Tryptophan(residueNumber, ligand);
+                return new Tryptophan(residueIdentifier, ligand);
             case Tyrosine.THREE_LETTER_CODE:
-                return new Tyrosine(residueNumber, ligand);
+                return new Tyrosine(residueIdentifier, ligand);
             case Valine.THREE_LETTER_CODE:
-                return new Valine(residueNumber, ligand);
+                return new Valine(residueIdentifier, ligand);
             default:
-                return new UnknownAminoAcid(pdbName, residueNumber, ligand);
+                return new UnknownAminoAcid(pdbName, residueIdentifier, ligand);
         }
 
         // it is a nucleotide
@@ -313,7 +314,7 @@ public class ProteinParser {
         }
 
         // it is neither
-        Group group = new Group(prototype, residueNumber, ligand);
+        Group group = new Group(prototype, residueIdentifier, ligand);
         // force the name parsed from the file, otherwise upon unknown ligands (and, thus, missing prototypes) this
         // information would get lost
         group.setThreeLetterCode(pdbName);
@@ -334,7 +335,7 @@ public class ProteinParser {
                 throw new IllegalArgumentException("local pdb directory '" + pdbDirectory + "' is not set or not valid - use ProteinParser.OptionalSteps.setLocalPdbDirectory to set up");
             }
             InputStream inputStream = Files.newInputStream(pdbDirectory.resolve(middle).resolve("pdb" + pdbId + ".ent.gz"));
-            return new OptionalSteps(new GZIPInputStream(inputStream)).hintProteinName(ProteinIdentifier.createFromPdbId(pdbId));
+            return new OptionalSteps(new GZIPInputStream(inputStream)).hintProteinName(IdentifierFactory.createProteinIdentifier(pdbId));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -346,11 +347,11 @@ public class ProteinParser {
 
     //TODO users could expect this to be a filepath too - change method name? decide internally on-the-fly?
     public static OptionalSteps source(String pdbId) {
-        return new OptionalSteps(pdbId).hintProteinName(ProteinIdentifier.createFromPdbId(pdbId));
+        return new OptionalSteps(pdbId).hintProteinName(IdentifierFactory.createProteinIdentifier(pdbId));
     }
 
     public static OptionalSteps source(Path path) {
-        return new OptionalSteps(path).hintProteinName(ProteinIdentifier.createFromAdditionalName(path.toFile().getName()));
+        return new OptionalSteps(path).hintProteinName(IdentifierFactory.createProteinIdentifier("", path.toFile().getName()));
     }
 
     public static class OptionalSteps {
@@ -444,7 +445,7 @@ public class ProteinParser {
                     if(forceProteinName == null) {
                         String fileName = path.toFile().getName();
                         // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
-                        forceProteinName = ProteinIdentifier.createFromAdditionalName(fileName.substring(0, fileName.lastIndexOf(".")));
+                        forceProteinName = IdentifierFactory.createProteinIdentifier("", fileName.substring(0, fileName.lastIndexOf(".")));
                     }
                 }
             } catch (IOException e) {

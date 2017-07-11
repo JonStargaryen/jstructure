@@ -8,8 +8,8 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -87,7 +87,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 
                         // parse protein
                         Protein opmProtein = ProteinParser.source(new ByteArrayInputStream(bytes))
-                                .forceProteinName(ProteinIdentifier.createFromPdbId(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
+                                .forceProteinName(IdentifierFactory.createProteinIdentifier(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
                                 .parse();
 
                         // superimpose opm protein onto instance of the original protein

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -25,13 +25,13 @@ public class Glutamine extends AminoAcid implements StandardAminoAcid {
 //        this.ne2 = new Atom(glutamine.ne2);
     }
 
-    public Glutamine(ResidueNumber residueNumber,
+    public Glutamine(ResidueIdentifier residueIdentifier,
                      boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Glutamine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Glutamine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

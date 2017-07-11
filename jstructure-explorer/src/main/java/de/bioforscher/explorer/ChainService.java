@@ -7,7 +7,7 @@ import de.bioforscher.explorer.model.ModelFactory;
 import de.bioforscher.explorer.repository.AlignmentRepository;
 import de.bioforscher.explorer.repository.ChainRepository;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class ChainService {
     public void activate() throws IOException {
         logger.info("starting protein service");
         allRepresentativeChainIds = Stream.of("1rc2_A")
-                .map(id -> ChainIdentifier.createFromChainId(ProteinIdentifier.createFromPdbId(id.split("_")[0]), id.split("_")[1]))
+                .map(id -> IdentifierFactory.createChainIdentifier(id.split("_")[0], id.split("_")[1]))
                 .collect(Collectors.toList());
 
 //        reinitialize(false);

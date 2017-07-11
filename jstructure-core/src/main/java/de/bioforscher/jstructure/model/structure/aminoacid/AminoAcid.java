@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -223,29 +224,29 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     AminoAcid(String threeLetterCode,
-              ResidueNumber residueNumber,
+              ResidueIdentifier residueIdentifier,
               boolean ligand) {
         super(threeLetterCode,
-                residueNumber,
+                residueIdentifier,
                 ligand);
     }
 
     AminoAcid(String threeLetterCode,
-              ResidueNumber residueNumber) {
-        this(threeLetterCode, residueNumber, false);
+              ResidueIdentifier residueIdentifier) {
+        this(threeLetterCode, residueIdentifier, false);
     }
 
     AminoAcid(GroupPrototype groupPrototype,
-              ResidueNumber residueNumber,
+              ResidueIdentifier residueIdentifier,
               boolean ligand) {
         super(groupPrototype,
-                residueNumber,
+                residueIdentifier,
                 ligand);
     }
 
     AminoAcid(GroupPrototype groupPrototype,
-              ResidueNumber residueNumber) {
-        this(groupPrototype, residueNumber, false);
+              ResidueIdentifier residueIdentifier) {
+        this(groupPrototype, residueIdentifier, false);
     }
 
     public Atom getN() {

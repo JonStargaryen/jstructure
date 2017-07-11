@@ -9,6 +9,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.slf4j.Logger;
@@ -146,7 +147,7 @@ public class FingerPrintDataSetComposer {
             String filename = path.toFile().getName().split("\\.")[0];
 
             String[] sectionSplit = filename.split("_");
-            ProteinIdentifier proteinIdentifier = ProteinIdentifier.createFromPdbId(filename.split("_")[0]);
+            ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier(filename.split("_")[0]);
             Protein protein;
             if(proteinIdentifier.equals(lastProteinIdentifier)) {
                 protein = lastProtein;

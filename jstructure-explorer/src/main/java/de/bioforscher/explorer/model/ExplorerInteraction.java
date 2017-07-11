@@ -17,8 +17,8 @@ public class ExplorerInteraction {
     }
 
     public ExplorerInteraction(PLIPInteraction interaction, Transformation transformation) {
-        this.partner1 = interaction.getPartner1().getResidueNumber().getResidueNumber();
-        this.partner2 = interaction.getPartner2().getResidueNumber().getResidueNumber();
+        this.partner1 = interaction.getPartner1().getResidueIdentifier().getResidueNumber();
+        this.partner2 = interaction.getPartner2().getResidueIdentifier().getResidueNumber();
         //TODO remove
         if (transformation != null) {
             this.coords1 = LinearAlgebra.on(interaction.getCoords1()).multiply(transformation.getRotation()).add(transformation.getTranslation()).getValue();

@@ -49,7 +49,7 @@ public class AssignmentOfSecondaryStructureInProteinsTest {
         protein.aminoAcids()
                 .forEach(aminoAcid -> {
                     String chainId = aminoAcid.getParentChain().getChainId().getChainId();
-                    int residueNumber = aminoAcid.getResidueNumber().getResidueNumber();
+                    int residueNumber = aminoAcid.getResidueIdentifier().getResidueNumber();
                     ASSPSecondaryStructure asspSecondaryStructure = aminoAcid.getFeatureContainer().getFeature(ASSPSecondaryStructure.class);
 
                     contLines.stream()

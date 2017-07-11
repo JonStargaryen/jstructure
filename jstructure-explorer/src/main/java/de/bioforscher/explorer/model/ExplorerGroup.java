@@ -20,7 +20,7 @@ public class ExplorerGroup {
     }
 
     public ExplorerGroup(Group group) {
-        this.resn = group.getResidueNumber().getResidueNumber();
+        this.resn = group.getResidueIdentifier().getResidueNumber();
         this.aa = group.isAminoAcid() ? ((AminoAcid) group).getOneLetterCode() : group.getThreeLetterCode();
         try {
             this.rasa = DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea());

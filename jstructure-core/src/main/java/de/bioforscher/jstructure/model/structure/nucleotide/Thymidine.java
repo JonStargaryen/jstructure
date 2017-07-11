@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -18,13 +18,13 @@ public class Thymidine extends Nucleotide implements StandardNucleotide {
         super(thymidine);
     }
 
-    public Thymidine(ResidueNumber residueNumber,
+    public Thymidine(ResidueIdentifier residueIdentifier,
                      boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Thymidine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Thymidine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     @Override

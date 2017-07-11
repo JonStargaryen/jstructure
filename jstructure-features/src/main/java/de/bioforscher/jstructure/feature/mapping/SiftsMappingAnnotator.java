@@ -58,7 +58,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
         chain.aminoAcids().forEach(group -> {
             ResidueMapping mapping = mapGroup(document,
                     chain.getChainId().getChainId(),
-                    group.getResidueNumber().getResidueNumber());
+                    group.getResidueIdentifier().getResidueNumber());
             group.getFeatureContainer().addFeature(mapping);
         });
 

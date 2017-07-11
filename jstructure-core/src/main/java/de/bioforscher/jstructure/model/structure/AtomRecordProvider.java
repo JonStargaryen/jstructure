@@ -38,7 +38,7 @@ class AtomRecordProvider {
         String record = isHetAtm(parentGroup) ? HETATM_PREFIX : ATOM_PREFIX;
         // format output ...
         String resName = parentGroup.getThreeLetterCode();
-        String pdbcode = String.valueOf(parentGroup.getResidueNumber().getResidueNumber());
+        String pdbcode = String.valueOf(parentGroup.getResidueIdentifier().getResidueNumber());
 
         int seri = atom.getPdbSerial();
         String serial = String.format("%5d", seri);
@@ -46,9 +46,9 @@ class AtomRecordProvider {
 
         String altLoc = atom.hasAlternativeLocations() ? atom.getAlternativeLocation() : " ";
         String resseq;
-        if(parentGroup.getResidueNumber().hasInsertionCode()) {
+        if(parentGroup.getResidueIdentifier().hasInsertionCode()) {
             // substring for safety
-            resseq = String.format("%4s", pdbcode) + parentGroup.getResidueNumber().getInsertionCode().substring(0, 1);
+            resseq = String.format("%4s", pdbcode) + parentGroup.getResidueIdentifier().getInsertionCode().substring(0, 1);
         } else {
             resseq = String.format("%4s", pdbcode) + " ";
         }

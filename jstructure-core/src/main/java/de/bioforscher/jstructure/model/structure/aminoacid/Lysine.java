@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -25,13 +25,13 @@ public class Lysine extends AminoAcid implements StandardAminoAcid {
 //        this.nz = new Atom(lysine.nz);
     }
 
-    public Lysine(ResidueNumber residueNumber,
+    public Lysine(ResidueIdentifier residueIdentifier,
                   boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Lysine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Lysine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

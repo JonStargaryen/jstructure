@@ -10,16 +10,16 @@ import org.junit.Test;
 public class PdbIdTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailForInvalidPdbId() {
-        ProteinIdentifier.createFromPdbId("xxxx");
+        IdentifierFactory.createProteinIdentifier("xxxx");
     }
 
     @Test
     public void shouldConvertIdToLowerCase() {
-        Assert.assertEquals("1brr", ProteinIdentifier.createFromPdbId("1BRR").getPdbId());
+        Assert.assertEquals("1brr", IdentifierFactory.createProteinIdentifier("1BRR").getPdbId());
     }
 
     @Test
     public void shouldCreateComplexIdSeparatedByHyphen() {
-        Assert.assertTrue(ProteinIdentifier.createFromPdbIdAndName("1brr", "mutated").getFullName().contains("-"));
+        Assert.assertTrue(IdentifierFactory.createProteinIdentifier("1brr", "mutated").getFullName().contains("-"));
     }
 }

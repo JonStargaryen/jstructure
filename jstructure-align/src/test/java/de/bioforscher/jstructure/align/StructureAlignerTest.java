@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +27,7 @@ public class StructureAlignerTest {
 
     private Group createGroup(String aminoAcidName, int residueNumber) {
         return new Group(aminoAcidName,
-                new ResidueNumber(residueNumber),
+                IdentifierFactory.createResidueIdentifier(residueNumber),
                 false);
     }
 

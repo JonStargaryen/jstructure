@@ -40,7 +40,7 @@ public class T025_HelixDistribution {
     }
 
     private static String composeLine(Fragment<AminoAcid> aminoAcidFragment) {
-        String id = aminoAcidFragment.getElement(0).getParentChain().getChainId() + "-" + aminoAcidFragment.getElement(0).getResidueNumber().getResidueNumber() + "-" + aminoAcidFragment.getElement(aminoAcidFragment.getElements().size() - 1).getResidueNumber().getResidueNumber();
+        String id = aminoAcidFragment.getElement(0).getParentChain().getChainId() + "-" + aminoAcidFragment.getElement(0).getResidueIdentifier().getResidueNumber() + "-" + aminoAcidFragment.getElement(aminoAcidFragment.getElements().size() - 1).getResidueIdentifier().getResidueNumber();
         String secondaryStructure = aminoAcidFragment.getElement(0).getFeatureContainer().getFeature(GenericSecondaryStructure.class).getSecondaryStructure().name();
         String sequence = aminoAcidFragment.getElements()
                 .stream()
@@ -77,7 +77,7 @@ public class T025_HelixDistribution {
                 })
                 // ensure consecutive fragments
                 .filter(fragment -> IntStream.range(1, fragment.getElements().size())
-                        .allMatch(i -> fragment.getElement(i).getResidueNumber().getResidueNumber() == fragment.getElement(i - 1).getResidueNumber().getResidueNumber() + 1))
+                        .allMatch(i -> fragment.getElement(i).getResidueIdentifier().getResidueNumber() == fragment.getElement(i - 1).getResidueIdentifier().getResidueNumber() + 1))
                 // filter for fragments exclusively
                 .filter(fragment -> fragment.getElements().stream()
                         .map(AbstractFeatureable::getFeatureContainer)
@@ -130,7 +130,7 @@ public class T025_HelixDistribution {
                 })
                 // ensure consecutive fragments
                 .filter(fragment -> IntStream.range(1, fragment.getElements().size())
-                        .allMatch(i -> fragment.getElement(i).getResidueNumber().getResidueNumber() == fragment.getElement(i - 1).getResidueNumber().getResidueNumber() + 1))
+                        .allMatch(i -> fragment.getElement(i).getResidueIdentifier().getResidueNumber() == fragment.getElement(i - 1).getResidueIdentifier().getResidueNumber() + 1))
                 // filter for fragments exclusively
                 .filter(fragment -> fragment.getElements().stream()
                         .map(AbstractFeatureable::getFeatureContainer)

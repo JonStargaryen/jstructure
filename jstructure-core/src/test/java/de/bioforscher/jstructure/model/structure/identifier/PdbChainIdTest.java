@@ -10,6 +10,6 @@ import org.junit.Test;
 public class PdbChainIdTest {
     @Test
     public void shouldCreateChainId() {
-        Assert.assertEquals("1brr_A", ChainIdentifier.createFromChainId(ProteinIdentifier.createFromPdbId("1brr"), "A").getFullName());
+        Assert.assertEquals("1brr_A", IdentifierFactory.createChainIdentifier("1brr", "A").getFullName());
     }
 }

@@ -82,7 +82,7 @@ public class MembraneContainer extends FeatureContainerEntry {
     }
 
     public Optional<IntegerRange> getEmbeddingTransmembraneSegment(Group group) {
-        int residueNumber = group.getResidueNumber().getResidueNumber();
+        int residueNumber = group.getResidueIdentifier().getResidueNumber();
         return transMembraneHelices.stream()
                 .filter(transMembraneSubunit -> transMembraneSubunit.getChainId().equals(group.getParentChain().getChainId().getChainId()))
                 .map(TransMembraneSubunit::getSegments)

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -21,13 +21,13 @@ public class Valine extends AminoAcid implements StandardAminoAcid {
 //        this.cg2 = new Atom(valine.cg2);
     }
 
-    public Valine(ResidueNumber residueNumber,
+    public Valine(ResidueIdentifier residueIdentifier,
                   boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Valine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Valine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

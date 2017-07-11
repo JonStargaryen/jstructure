@@ -40,7 +40,7 @@ public class SequenceMotifContainer extends FeatureContainerEntry {
 
     public SequenceMotifContainer getEmbeddingSequenceMotifsFor(Group group) {
         ChainIdentifier chainId = group.getParentChain().getChainId();
-        int residueNumber = group.getResidueNumber().getResidueNumber();
+        int residueNumber = group.getResidueIdentifier().getResidueNumber();
         List<SequenceMotif> filteredSequenceMotifs = sequenceMotifs.stream()
                 // filter for correct chain
                 .filter(sequenceMotif -> sequenceMotif.getChainId().equals(chainId))

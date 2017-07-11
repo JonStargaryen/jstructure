@@ -14,7 +14,7 @@ public class ExplorerLigand {
     }
 
     public ExplorerLigand(Group ligand) {
-        this.resn = ligand.getResidueNumber().getResidueNumber();
+        this.resn = ligand.getResidueIdentifier().getResidueNumber();
         this.tlc = ligand.getThreeLetterCode();
         this.type = tlc.equals("HOH") ? "water" : "ligand";
         this.name = ligand.getGroupPrototype().getName().replace("\"", "");

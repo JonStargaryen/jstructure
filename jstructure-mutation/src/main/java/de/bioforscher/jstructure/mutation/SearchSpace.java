@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.mutation;
 
 import de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotator;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 
 import java.io.File;
@@ -25,7 +26,7 @@ public class SearchSpace {
                     .map(Path::toFile)
                     .map(File::getName)
                     .map(name -> name.substring(3, 7))
-                    .map(ProteinIdentifier::createFromPdbId)
+                    .map(IdentifierFactory::createProteinIdentifier)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -34,13 +35,13 @@ public class SearchSpace {
 
     public static List<ChainIdentifier> pdbByPfam(String pfamId) {
         return SiftsMappingAnnotator.getLinesForPfamId(pfamId)
-                .map(split -> ChainIdentifier.createFromChainId(ProteinIdentifier.createFromPdbId(split[0]), split[1]))
+                .map(split -> IdentifierFactory.createChainIdentifier(split[0], split[1]))
                 .collect(Collectors.toList());
     }
 
     public static List<ChainIdentifier> pdbByUniProt(String uniProtId) {
         return SiftsMappingAnnotator.getLinesForUniProtId(uniProtId)
-                .map(split -> ChainIdentifier.createFromChainId(ProteinIdentifier.createFromPdbId(split[0]), split[1]))
+                .map(split -> IdentifierFactory.createChainIdentifier(split[0], split[1]))
                 .collect(Collectors.toList());
     }
 }

@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -23,13 +23,13 @@ public class Selenomethionine extends AminoAcid implements NonStandardAminoAcid 
 //        this.ce = new Atom(selenomethionine.ce);
     }
 
-    public Selenomethionine(ResidueNumber residueNumber,
+    public Selenomethionine(ResidueIdentifier residueIdentifier,
                           boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Selenomethionine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Selenomethionine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     @Override

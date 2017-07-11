@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -35,13 +35,13 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
 //        this.ch2 = new Atom(tryptophan.ch2);
     }
 
-    public Tryptophan(ResidueNumber residueNumber,
+    public Tryptophan(ResidueIdentifier residueIdentifier,
                       boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Tryptophan(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Tryptophan(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

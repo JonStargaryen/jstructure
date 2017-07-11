@@ -59,8 +59,8 @@ public class SelectionTest {
                 .asFilteredGroups()
                 .collect(Collectors.toList());
 
-        selection.forEach(group -> Assert.assertTrue(group.getResidueNumber().getResidueNumber() >= 100 &&
-                group.getResidueNumber().getResidueNumber() <= 105));
+        selection.forEach(group -> Assert.assertTrue(group.getResidueIdentifier().getResidueNumber() >= 100 &&
+                group.getResidueIdentifier().getResidueNumber() <= 105));
         System.out.println(selection);
         Assert.assertTrue(selection.size() == 6);
     }

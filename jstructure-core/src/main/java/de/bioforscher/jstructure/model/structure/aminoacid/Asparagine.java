@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -23,13 +23,13 @@ public class Asparagine extends AminoAcid implements StandardAminoAcid {
 //        this.nd2 = new Atom(asparagine.nd2);
     }
 
-    public Asparagine(ResidueNumber residueNumber,
+    public Asparagine(ResidueIdentifier residueIdentifier,
                       boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Asparagine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Asparagine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

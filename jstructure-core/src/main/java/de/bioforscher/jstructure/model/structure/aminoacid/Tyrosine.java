@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -31,13 +31,13 @@ public class Tyrosine extends AminoAcid implements StandardAminoAcid {
 //        this.oh = new Atom(tyrosine.oh);
     }
 
-    public Tyrosine(ResidueNumber residueNumber,
+    public Tyrosine(ResidueIdentifier residueIdentifier,
                     boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Tyrosine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Tyrosine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

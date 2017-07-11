@@ -9,10 +9,10 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import studies.membrane.MembraneConstants;
@@ -118,12 +118,12 @@ public class T021_TransmembraneSequenceMotifs {
                 // filter for interactions fully embedded into this sequence motif
                 .filter(plipInteraction -> plipInteraction.allAtoms().allMatch(sequenceMotifAtoms::contains))
                 // make list distinct
-                .filter(plipInteraction -> plipInteraction.getPartner1().getResidueNumber().getResidueNumber() <
-                        plipInteraction.getPartner2().getResidueNumber().getResidueNumber())
+                .filter(plipInteraction -> plipInteraction.getPartner1().getResidueIdentifier().getResidueNumber() <
+                        plipInteraction.getPartner2().getResidueIdentifier().getResidueNumber())
                 .collect(Collectors.toList());
 
         // store interactions in synthetic group
-        Group interactionGroup = new Group("INT", new ResidueNumber(999), true);
+        Group interactionGroup = new Group("INT", IdentifierFactory.createResidueIdentifier(999), true);
         interactions.stream()
                 .map(PLIPInteraction::getAtomRepresentation)
                 .forEach(interactionGroup::addAtom);

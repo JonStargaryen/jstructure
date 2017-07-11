@@ -661,12 +661,12 @@ public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvid
 
     private void checkAddHBond(AminoAcid residue1, AminoAcid residue2) {
         if (isProline(residue1)) {
-            logger.debug("Ignore: PRO {}", residue1.getResidueNumber());
+            logger.debug("Ignore: PRO {}", residue1.getResidueIdentifier());
             return;
         }
 
         if (lacksBackboneHydrogen(residue1)) {
-            logger.debug("Residue {} has no H", residue1.getResidueNumber());
+            logger.debug("Residue {} has no H", residue1.getResidueIdentifier());
             return;
         }
 
@@ -690,7 +690,7 @@ public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvid
         AminoAcid res1 = residuePair.getLeft();
         AminoAcid res2 = residuePair.getRight();
         if (isProline(res1)) {
-            logger.debug("Ignore: PRO {}", res1.getResidueNumber());
+            logger.debug("Ignore: PRO {}", res1.getResidueIdentifier());
             return;
         }
 
@@ -773,8 +773,8 @@ public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvid
         double dho = LinearAlgebra.on(o).distance(h);
         double dnc = LinearAlgebra.on(c).distance(n);
 
-//        logger.debug("     cccc: " + res1.getResidueNumber() + " " + res1.getAminoAcid() + " " +
-//                res2.getResidueNumber() + " " + res2.getAminoAcid() + String.format( " O (" + oAtom.getPdbSerial() +
+//        logger.debug("     cccc: " + res1.getResidueIdentifier() + " " + res1.getAminoAcid() + " " +
+//                res2.getResidueIdentifier() + " " + res2.getAminoAcid() + String.format( " O (" + oAtom.getPdbSerial() +
 //                ")..N (" + nAtom.getPdbSerial() + "):%4.1f  |  ho:%4.1f - hc:%4.1f + nc:%4.1f - no:%4.1f ", dno, dho,
 //                dhc, dnc, dno));
 

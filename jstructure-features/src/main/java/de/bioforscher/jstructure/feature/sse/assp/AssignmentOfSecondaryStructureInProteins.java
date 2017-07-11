@@ -74,9 +74,9 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
             AminoAcid aa3 = aminoAcids.get(residueIndex + 2);
             AminoAcid aa4 = aminoAcids.get(residueIndex + 3);
 
-            if(aa1.getResidueNumber().getResidueNumber() + 1 != aa2.getResidueNumber().getResidueNumber() ||
-                    aa2.getResidueNumber().getResidueNumber() + 1 != aa3.getResidueNumber().getResidueNumber() ||
-                    aa3.getResidueNumber().getResidueNumber() + 1 != aa4.getResidueNumber().getResidueNumber()) {
+            if(aa1.getResidueIdentifier().getResidueNumber() + 1 != aa2.getResidueIdentifier().getResidueNumber() ||
+                    aa2.getResidueIdentifier().getResidueNumber() + 1 != aa3.getResidueIdentifier().getResidueNumber() ||
+                    aa3.getResidueIdentifier().getResidueNumber() + 1 != aa4.getResidueIdentifier().getResidueNumber()) {
                 // happens e.g. for residues not solved by xray
                 logger.debug("encountered non-consecutive amino acids {} {} {} {}",
                         aa1,
@@ -170,8 +170,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                 if(!aminoAcidsInCurrentStretch.isEmpty()) {
                     // add terminal amino acid of stretch
                     logger.debug("stretch from {} to {}",
-                            aminoAcidsInCurrentStretch.get(1).getResidueNumber().getResidueNumber(),
-                            aminoAcidsInCurrentStretch.get(aminoAcidsInCurrentStretch.size() - 1).getResidueNumber().getResidueNumber() + 2);
+                            aminoAcidsInCurrentStretch.get(1).getResidueIdentifier().getResidueNumber(),
+                            aminoAcidsInCurrentStretch.get(aminoAcidsInCurrentStretch.size() - 1).getResidueIdentifier().getResidueNumber() + 2);
                     // if so, determine secondary structure
                     for(int i = 0; i < aminoAcidsInCurrentStretch.size(); i++) {
                         ASSPSecondaryStructure secondaryStructure1 = getSecondaryStructure(aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))));
@@ -267,7 +267,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                         secondaryStructure1.setStretchId(stretchId);
 
                         //TODO remove - temporary fix for other bug fixes downstream - did not cause problems
-//                        int resNum = aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))).getResidueNumber().getResidueNumber();
+//                        int resNum = aminoAcids.get(aminoAcids.indexOf(aminoAcidsInCurrentStretch.get(i))).getResidueIdentifier().getResidueIdentifier();
 //                        if(resNum == 30 || resNum == 33) {
 //                            secondaryStructure1.setCharacteristics(new String[] { "A", "U", "U" });
 //                        }
@@ -648,8 +648,8 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
                         SecondaryStructureElement secondaryStructureElement = matchToSecondaryStructureElement(type);
                         secondaryStructures.add(new RawSecondaryStructure(secondaryStructureElement,
                                 type,
-                                aminoAcids.get(startIndex).getResidueNumber().getResidueNumber() + 1,
-                                aminoAcids.get(i).getResidueNumber().getResidueNumber() + 2));
+                                aminoAcids.get(startIndex).getResidueIdentifier().getResidueNumber() + 1,
+                                aminoAcids.get(i).getResidueIdentifier().getResidueNumber() + 2));
                     }
 
                     startIndex = -1;
@@ -791,7 +791,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
 
     private AminoAcid findAminoAcid(List<AminoAcid> aminoAcids, int residueNumber) {
         for(AminoAcid aminoAcid : aminoAcids) {
-            if (aminoAcid.getResidueNumber().getResidueNumber() == residueNumber) {
+            if (aminoAcid.getResidueIdentifier().getResidueNumber() == residueNumber) {
                 return aminoAcid;
             }
         }
@@ -1016,7 +1016,7 @@ public class AssignmentOfSecondaryStructureInProteins extends AbstractFeaturePro
         double tw = 0;
         double rad = 0;
         for(AminoAcid aminoAcid : aminoAcids) {
-            int resNum = aminoAcid.getResidueNumber().getResidueNumber();
+            int resNum = aminoAcid.getResidueIdentifier().getResidueNumber();
             if(resNum >= rawSecondaryStructure.start - 1 && resNum + 3 <= rawSecondaryStructure.end + 1) {
                 ASSPSecondaryStructure asspSecondaryStructure = getSecondaryStructure(aminoAcid);
                 tw += asspSecondaryStructure.getTwist();

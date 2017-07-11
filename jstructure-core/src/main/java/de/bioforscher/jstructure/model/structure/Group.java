@@ -3,6 +3,8 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
@@ -25,11 +27,11 @@ public class Group extends AbstractFeatureable implements AtomContainer {
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
     static final Group UNKNOWN_GROUP = new Group("UNK",
-            new ResidueNumber(0),
+            IdentifierFactory.createResidueIdentifier(0),
             false);
     public static final Set<String> HYDROGEN_NAMES = Stream.of("H", "D", "T").collect(Collectors.toSet());
     private String threeLetterCode;
-    private ResidueNumber residueNumber;
+    private ResidueIdentifier residueIdentifier;
     private GroupPrototype groupPrototype;
     private boolean ligand;
     private List<Atom> atoms;
@@ -37,20 +39,20 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     private String identifier;
 
     public Group(String threeLetterCode,
-                 ResidueNumber residueNumber,
+                 ResidueIdentifier residueIdentifier,
                  boolean ligand) {
         this(createPrototypeInstance(threeLetterCode),
-                residueNumber,
+                residueIdentifier,
                 ligand);
         // safety-net: maybe the group prototype cannot be created, still keep given threeLetterCode
         this.threeLetterCode = threeLetterCode;
     }
 
     public Group(GroupPrototype groupPrototype,
-                 ResidueNumber residueNumber,
+                 ResidueIdentifier residueIdentifier,
                  boolean ligand) {
         this.threeLetterCode = groupPrototype.getThreeLetterCode();
-        this.residueNumber = residueNumber;
+        this.residueIdentifier = residueIdentifier;
         this.groupPrototype = groupPrototype;
         this.ligand = ligand;
         this.atoms = new ArrayList<>();
@@ -59,7 +61,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     public Group(Group group) {
         this.threeLetterCode = group.threeLetterCode;
-        this.residueNumber = group.residueNumber;
+        this.residueIdentifier = group.residueIdentifier;
         this.groupPrototype = group.groupPrototype;
         this.ligand = group.ligand;
         // deep clone entries
@@ -82,8 +84,8 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         this.threeLetterCode = threeLetterCode;
     }
 
-    public ResidueNumber getResidueNumber() {
-        return residueNumber;
+    public ResidueIdentifier getResidueIdentifier() {
+        return residueIdentifier;
     }
 
     public GroupPrototype getGroupPrototype() {
@@ -167,7 +169,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? threeLetterCode + "-" + residueNumber : identifier;
+        return identifier == null ? threeLetterCode + "-" + residueIdentifier : identifier;
     }
 
     @Override

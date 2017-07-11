@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -20,13 +20,13 @@ public class Deoxyguanosine extends Nucleotide implements StandardNucleotide {
         super(deoxyguanosine);
     }
 
-    public Deoxyguanosine(ResidueNumber residueNumber,
+    public Deoxyguanosine(ResidueIdentifier residueIdentifier,
                           boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Deoxyguanosine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Deoxyguanosine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     @Override

@@ -58,15 +58,15 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
                     }
 
                     // motif lacks internal residues or has a invalid ordering
-                    if(startResidue.getResidueNumber().getResidueNumber() + motifLength != endResidue.getResidueNumber().getResidueNumber()) {
+                    if(startResidue.getResidueIdentifier().getResidueNumber() + motifLength != endResidue.getResidueIdentifier().getResidueNumber()) {
                         continue;
                     }
 
                     List<AminoAcid> residueList = aminoAcids.subList(resNum, resNum + motifLength + 1);
                     SequenceMotif sequenceMotif = new SequenceMotif(candidate,
                             chain.getChainId(),
-                            startResidue.getResidueNumber().getResidueNumber(),
-                            endResidue.getResidueNumber().getResidueNumber(),
+                            startResidue.getResidueIdentifier().getResidueNumber(),
+                            endResidue.getResidueIdentifier().getResidueNumber(),
                             residueList);
 
                     if(!chainSpecificSequenceMotifs.containsSequenceMotif(sequenceMotif)) {

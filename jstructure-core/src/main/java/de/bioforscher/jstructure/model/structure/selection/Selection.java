@@ -416,7 +416,7 @@ public class Selection {
 
         public GroupSelection residueNumber(int... residueNumbers) {
             registerGroupPredicate(group -> IntStream.of(residueNumbers).boxed().collect(Collectors.toList())
-                    .contains(group.getResidueNumber().getResidueNumber()), "residue numbers: " + Arrays.toString(residueNumbers));
+                    .contains(group.getResidueIdentifier().getResidueNumber()), "residue numbers: " + Arrays.toString(residueNumbers));
             return this;
         }
 
@@ -424,8 +424,8 @@ public class Selection {
 
         public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
-                    .anyMatch(range -> group.getResidueNumber().getResidueNumber() >= range.getLeft() &&
-                            group.getResidueNumber().getResidueNumber() <= range.getRight()),
+                    .anyMatch(range -> group.getResidueIdentifier().getResidueNumber() >= range.getLeft() &&
+                            group.getResidueIdentifier().getResidueNumber() <= range.getRight()),
                     "residue ranges: " + Arrays.toString(residueNumberRanges));
             return this;
         }

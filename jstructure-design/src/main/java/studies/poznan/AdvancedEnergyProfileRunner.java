@@ -7,11 +7,10 @@ import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -146,13 +145,13 @@ public class AdvancedEnergyProfileRunner {
 
         ProteinContainer(String sequence) {
             this.protein = new Protein(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
-            Chain chain = new Chain(ChainIdentifier.createFromChainId(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "A"));
+            Chain chain = new Chain(IdentifierFactory.createChainIdentifier(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "A"));
             this.protein.addChain(chain);
             for(int resNum = 1; resNum <= sequence.length(); resNum++) {
                 String aminoAcidName = String.valueOf(sequence.charAt(resNum - 1));
                 AminoAcid.Family aminoAcid = AminoAcid.Family.resolveOneLetterCode(aminoAcidName);
                 Group group = new Group(aminoAcid.getGroupPrototype(),
-                        new ResidueNumber(resNum),
+                        IdentifierFactory.createResidueIdentifier(resNum),
                         false);
                 chain.addGroup(group);
             }
@@ -175,7 +174,7 @@ public class AdvancedEnergyProfileRunner {
     }
 
     private static String composeOutputLine(Group group) {
-        return group.getParentChain().getIdentifier() + DELIMITER + group.getResidueNumber() + DELIMITER +
+        return group.getParentChain().getIdentifier() + DELIMITER + group.getResidueIdentifier() + DELIMITER +
                 group.getThreeLetterCode() + DELIMITER +
                 DECIMAL_FORMAT.format(group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy());
     }

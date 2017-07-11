@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -17,13 +17,13 @@ public class Deoxycytidine extends Nucleotide implements StandardNucleotide {
         super(deoxycytidine);
     }
 
-    public Deoxycytidine(ResidueNumber residueNumber,
+    public Deoxycytidine(ResidueIdentifier residueIdentifier,
                          boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Deoxycytidine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Deoxycytidine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     @Override

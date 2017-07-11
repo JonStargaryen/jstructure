@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 import java.util.Comparator;
 import java.util.List;
@@ -42,8 +43,8 @@ public class ResidueMutatorService {
                     .asGroup();
 
             // get prototype atoms from target amino acid - we need GroupContainer instances for the superimposition
-            Group mutatedResidue = targetAminoAcid.getRepresentingClass().getConstructor(ResidueNumber.class, boolean.class)
-                    .newInstance(originalGroup.getResidueNumber(), originalGroup.isLigand());
+            Group mutatedResidue = targetAminoAcid.getRepresentingClass().getConstructor(ResidueIdentifier.class, boolean.class)
+                    .newInstance(originalGroup.getResidueIdentifier(), originalGroup.isLigand());
 
             // assign prototype atoms
             targetAminoAcid.getGroupPrototype()
@@ -86,8 +87,8 @@ public class ResidueMutatorService {
         for(Chain chain : protein.getChains()) {
             List<Group> groups = chain.getGroups();
             // sort groups by residue numbers
-            //TODO maybe provide standard comparator via ResidueNumber class
-            groups.sort(Comparator.comparingInt(group -> group.getResidueNumber().getResidueNumber()));
+            //TODO maybe provide standard comparator via ResidueIdentifier class
+            groups.sort(Comparator.comparingInt(group -> group.getResidueIdentifier().getResidueNumber()));
             for(Group group : groups) {
                 for(Atom atom : group.getAtoms()) {
                     atom.setPdbSerial(pdbSerial);

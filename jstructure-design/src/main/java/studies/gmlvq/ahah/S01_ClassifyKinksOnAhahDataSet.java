@@ -167,7 +167,7 @@ public class S01_ClassifyKinksOnAhahDataSet {
                     // donor should be backbone nitrogen
                     .filter(interaction -> "N".equals(interaction.getDonor().getName()))
                     // should be i -> i + 3
-                    .filter(interaction -> interaction.getPartner1().getResidueNumber().getResidueNumber() + 3 == interaction.getPartner2().getResidueNumber().getResidueNumber())
+                    .filter(interaction -> interaction.getPartner1().getResidueIdentifier().getResidueNumber() + 3 == interaction.getPartner2().getResidueIdentifier().getResidueNumber())
                     .count() / size;
             double missingBackboneInteractions4 = groups.aminoAcids()
                     .map(AminoAcid::getFeatureContainer)
@@ -179,7 +179,7 @@ public class S01_ClassifyKinksOnAhahDataSet {
                     // donor should be backbone nitrogen
                     .filter(interaction -> "N".equals(interaction.getDonor().getName()))
                     // should be i -> i + 4
-                    .filter(interaction -> interaction.getPartner1().getResidueNumber().getResidueNumber() + 4 == interaction.getPartner2().getResidueNumber().getResidueNumber())
+                    .filter(interaction -> interaction.getPartner1().getResidueIdentifier().getResidueNumber() + 4 == interaction.getPartner2().getResidueIdentifier().getResidueNumber())
                     .count() / size;
             double missingBackboneInteractions5 = groups.aminoAcids()
                     .map(AminoAcid::getFeatureContainer)
@@ -191,7 +191,7 @@ public class S01_ClassifyKinksOnAhahDataSet {
                     // donor should be backbone nitrogen
                     .filter(interaction -> "N".equals(interaction.getDonor().getName()))
                     // should be i -> i + 5
-                    .filter(interaction -> interaction.getPartner1().getResidueNumber().getResidueNumber() + 5 == interaction.getPartner2().getResidueNumber().getResidueNumber())
+                    .filter(interaction -> interaction.getPartner1().getResidueIdentifier().getResidueNumber() + 5 == interaction.getPartner2().getResidueIdentifier().getResidueNumber())
                     .count() / size;
 
             return Optional.of(

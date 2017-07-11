@@ -72,7 +72,7 @@ public class PLIPParser {
 
             if(plipInteraction instanceof PiCationInteraction || plipInteraction instanceof PiStacking || plipInteraction instanceof SaltBridge) {
                 // keep only those interactions where the first resNum is smaller
-                if(partner1.getResidueNumber().getResidueNumber() > partner2.getResidueNumber().getResidueNumber()) {
+                if(partner1.getResidueIdentifier().getResidueNumber() > partner2.getResidueIdentifier().getResidueNumber()) {
                     plipInteractionsToRemove.add(plipInteraction);
                     continue;
                 }

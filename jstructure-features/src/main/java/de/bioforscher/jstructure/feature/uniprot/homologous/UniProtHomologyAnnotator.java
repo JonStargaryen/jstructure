@@ -58,6 +58,7 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
                 .map(AminoAcid::getFeatureContainer)
                 .forEach(featureContainer -> featureContainer.addFeature(new UniProtFeatureContainer(this)));
 
+        logger.info("running blast with sequence{}>{}{}{}", System.lineSeparator(), chain.getChainId(), System.lineSeparator(), sequence);
         List<UniProtHit> uniProtHits = runUniProtBlastService(sequence);
         UniProtHomologousEntryContainer uniProtHomologousEntryContainer = new UniProtHomologousEntryContainer(this,
                 uniProtHits.stream()
@@ -69,6 +70,7 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
         for (UniProtHit uniProtHit : uniProtHits) {
             UniProtEntry uniProtEntry = uniProtHit.getEntry();
             String accession = uniProtEntry.getPrimaryUniProtAccession().getValue();
+            logger.info("processing hit {}", accession);
             Collection<Feature> features = uniProtEntry.getFeatures();
 
             Alignment alignment = uniProtHit.getSummary().getAlignments().get(0);

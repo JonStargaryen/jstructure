@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -23,13 +23,13 @@ public class Leucine extends AminoAcid implements StandardAminoAcid {
 //        this.cd2 = new Atom(leucine.cd2);
     }
 
-    public Leucine(ResidueNumber residueNumber,
+    public Leucine(ResidueIdentifier residueIdentifier,
                    boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Leucine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Leucine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     public Atom getCb() {

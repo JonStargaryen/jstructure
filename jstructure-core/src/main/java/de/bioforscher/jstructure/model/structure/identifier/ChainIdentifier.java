@@ -8,21 +8,11 @@ public class ChainIdentifier {
     private ProteinIdentifier pdbId;
     private String chainId;
 
-    public static final ChainIdentifier UNKNOWN_CHAIN_ID = ChainIdentifier.createFromChainId(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "X");
+    public static final ChainIdentifier UNKNOWN_CHAIN_ID = IdentifierFactory.createChainIdentifier(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "X");
 
-    private ChainIdentifier(ProteinIdentifier pdbId, String chainId) {
+    ChainIdentifier(ProteinIdentifier pdbId, String chainId) {
         this.pdbId = pdbId;
         this.chainId = chainId;
-    }
-
-    /**
-     * Creates a new instance of a chainIdentifer.
-     * @param pdbId the parent identifier
-     * @param chainId this chain's id
-     * @return the create instance
-     */
-    public static ChainIdentifier createFromChainId(ProteinIdentifier pdbId, String chainId) {
-        return new ChainIdentifier(pdbId, chainId);
     }
 
     /**

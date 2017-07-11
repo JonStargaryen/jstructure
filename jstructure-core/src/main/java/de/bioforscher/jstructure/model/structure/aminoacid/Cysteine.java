@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.ResidueNumber;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -19,13 +19,13 @@ public class Cysteine extends AminoAcid implements StandardAminoAcid {
 //        this.sg = new Atom(cysteine.sg);
     }
 
-    public Cysteine(ResidueNumber residueNumber,
+    public Cysteine(ResidueIdentifier residueIdentifier,
                     boolean ligand) {
-        super(GROUP_PROTOTYPE, residueNumber, ligand);
+        super(GROUP_PROTOTYPE, residueIdentifier, ligand);
     }
 
-    public Cysteine(ResidueNumber residueNumber) {
-        this(residueNumber, false);
+    public Cysteine(ResidueIdentifier residueIdentifier) {
+        this(residueIdentifier, false);
     }
 
     @Override
