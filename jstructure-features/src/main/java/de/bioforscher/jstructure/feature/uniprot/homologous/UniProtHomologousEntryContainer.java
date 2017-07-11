@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseType;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
+import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.UniProtHit;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,13 +18,17 @@ import java.util.stream.Collectors;
  * Created by bittrich on 7/10/17.
  */
 public class UniProtHomologousEntryContainer extends FeatureContainerEntry {
+    private final List<UniProtHit> uniProtHits;
     private final List<UniProtEntry> uniProtEntries;
     private final List<ChainIdentifier> homologousChains;
     private static final Pattern CHAIN_PATTERN = Pattern.compile("/");
 
-    public UniProtHomologousEntryContainer(AbstractFeatureProvider featureProvider, List<UniProtEntry> uniProtEntries) {
+    public UniProtHomologousEntryContainer(AbstractFeatureProvider featureProvider, List<UniProtHit> uniProtHits) {
         super(featureProvider);
-        this.uniProtEntries = uniProtEntries;
+        this.uniProtHits = uniProtHits;
+        this.uniProtEntries = uniProtHits.stream()
+                .map(UniProtHit::getEntry)
+                .collect(Collectors.toList());
         this.homologousChains = uniProtEntries.stream()
                 .map(uniProtEntry -> uniProtEntry.getDatabaseCrossReferences(DatabaseType.PDB))
                 .flatMap(Collection::stream)
@@ -34,7 +39,12 @@ public class UniProtHomologousEntryContainer extends FeatureContainerEntry {
                     return CHAIN_PATTERN.splitAsStream(split[0])
                             .map(chainId -> IdentifierFactory.createChainIdentifier(databaseCrossReference.getPrimaryId().getValue(), chainId));
                 })
+                .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public List<UniProtHit> getUniProtHits() {
+        return uniProtHits;
     }
 
     public List<UniProtEntry> getUniProtEntries() {

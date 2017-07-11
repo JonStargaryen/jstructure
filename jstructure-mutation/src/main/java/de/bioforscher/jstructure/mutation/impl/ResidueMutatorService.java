@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation;
+package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
 import de.bioforscher.jstructure.align.StructureAligner;
@@ -15,7 +15,7 @@ import java.util.List;
  * Introduces a mutation for a given residue in a protein structure.
  * Created by bittrich on 7/6/17.
  */
-public class ResidueMutatorService {
+class ResidueMutatorService {
     /**
      * Mutate a given position in a protein.
      * @param originalProtein the original protein which will not be manipulated

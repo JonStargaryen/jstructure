@@ -106,7 +106,7 @@ public class StructureCollectorsTest {
                 .collect(StructureCollectors.toAtomContainer());
         container.atoms().forEach(atom -> Assert.assertEquals("parent reference was lost",
                 "1brr",
-                atom.getParentGroup().getParentChain().getParentProtein().getPdbId().getPdbId()));
+                atom.getParentGroup().getParentChain().getParentProtein().getProteinIdentifier().getPdbId()));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class StructureCollectorsTest {
                 .collect(StructureCollectors.toGroupContainer());
         container.groups().forEach(group -> Assert.assertEquals("parent reference was lost",
                 "1brr",
-                group.getParentChain().getParentProtein().getPdbId().getPdbId()));
+                group.getParentChain().getParentProtein().getProteinIdentifier().getPdbId()));
     }
 
     @Test

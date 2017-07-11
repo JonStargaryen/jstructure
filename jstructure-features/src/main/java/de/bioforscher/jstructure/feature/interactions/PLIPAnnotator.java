@@ -21,7 +21,7 @@ public class PLIPAnnotator extends AbstractFeatureProvider {
     protected void processInternally(Protein protein) {
         protein.chainsWithAminoAcids()
                 .parallel()
-                .forEach(chain -> process(chain, PLIPRestServiceQuery.getDocument(chain.getChainId())));
+                .forEach(chain -> process(chain, PLIPRestServiceQuery.getDocument(chain.getChainIdentifier())));
 
         List<PLIPInteraction> plipInteractions = protein.chainsWithAminoAcids()
                 .map(AbstractFeatureable::getFeatureContainer)

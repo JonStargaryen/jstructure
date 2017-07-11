@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.stream.Collectors;
 
@@ -21,12 +19,13 @@ import java.util.stream.Collectors;
 public class PLIPRestServiceQuery {
     private static final Logger logger = LoggerFactory.getLogger(PLIPRestServiceQuery.class);
     static final String BASE_URL = "https://biosciences.hs-mittweida.de/plip/interaction/";
-    private static final String REST_USER_PASSWORD_PATH = System.getProperty("user.home") + "/git/phd_sb_repo/data/.plip-rest-auth";
+//    private static final String REST_USER_PASSWORD_PATH = System.getProperty("user.home") + "/git/phd_sb_repo/data/.plip-rest-auth";
     static String secret;
 
     static {
         try {
-            String line = Files.readAllLines(Paths.get(REST_USER_PASSWORD_PATH)).get(0);
+//            String line = Files.readAllLines(Paths.get(REST_USER_PASSWORD_PATH)).get(0);
+            String line = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("plip_credentials.txt"))).readLine();
             secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
         } catch (IOException e) {
             throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
@@ -43,7 +42,7 @@ public class PLIPRestServiceQuery {
 
     public static Document getDocument(ChainIdentifier chainId) {
         try {
-            return getDocument(new URL(BASE_URL + "plain/" + chainId.getPdbId().getPdbId() + "/" + chainId.getChainId()));
+            return getDocument(new URL(BASE_URL + "plain/" + chainId.getProteinIdentifier().getPdbId() + "/" + chainId.getChainId()));
         } catch (IOException e) {
             throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }

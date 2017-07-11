@@ -15,5 +15,7 @@
     <logger name="org.apache.axis2" level="WARN" />
     <logger name="org.apache.axiom" level="WARN" />
     <logger name="httpclient.wire" level="WARN" />
-    <logger name="com.gargoylesoftware" level="OFF" />
+    <logger name="org.reflections" level="OFF" />
+    <logger name="de.bioforscher.singa" level="OFF" />
+    <logger name="de.bioforscher.mmm" level="INFO" />
 </configuration>

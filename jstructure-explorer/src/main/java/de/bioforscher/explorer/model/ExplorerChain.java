@@ -41,7 +41,7 @@ public class ExplorerChain {
     }
 
     public ExplorerChain(Chain chain, String representativeId) {
-        this.id = chain.getChainId().getFullName();
+        this.id = chain.getChainIdentifier().getFullName();
         this.pdb = chain.getPdbRepresentation();
         this.rep = representativeId;
         this.sequence = chain.getAminoAcidSequence();
@@ -103,7 +103,7 @@ public class ExplorerChain {
                                               Transformation transformation,
                                               Chain chain) {
         return interactions.stream()
-                .filter(interaction -> interaction.getPartner1().getParentChain().getChainId().equals(chain.getChainId()) && interaction.getPartner2().getParentChain().getChainId().equals(chain.getChainId()))
+                .filter(interaction -> interaction.getPartner1().getParentChain().getChainIdentifier().equals(chain.getChainIdentifier()) && interaction.getPartner2().getParentChain().getChainIdentifier().equals(chain.getChainIdentifier()))
                 .map(interaction -> new ExplorerInteraction(interaction, transformation))
                 .collect(Collectors.toList());
     }

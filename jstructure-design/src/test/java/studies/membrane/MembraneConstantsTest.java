@@ -16,7 +16,7 @@ public class MembraneConstantsTest {
     public void getChainsOfPdbtmAlphaNrList() throws Exception {
         MembraneConstants.PdbtmAlphaNr.getChains()
                 .forEach(chain -> {
-                    System.out.println(chain.getChainId().getFullName());
+                    System.out.println(chain.getChainIdentifier().getFullName());
                     chain.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
                     chain.getFeatureContainer().getFeature(MembraneContainer.class);
                     chain.aminoAcids().findFirst().get().getFeatureContainer().getFeature(DSSPSecondaryStructure.class);

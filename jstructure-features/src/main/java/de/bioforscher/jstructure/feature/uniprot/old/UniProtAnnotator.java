@@ -33,7 +33,7 @@ public class UniProtAnnotator extends AbstractFeatureProvider {
         String uniprotId = chain.getFeatureContainer().getFeature(ChainMapping.class).getUniProtId();
         // mapping may fail
         if(ChainMapping.UNKNOWN_MAPPING.equals(uniprotId)) {
-            logger.debug("could not retrieve UniProt mapping for {} - ignoring chain", chain.getChainId().getFullName());
+            logger.debug("could not retrieve UniProt mapping for {} - ignoring chain", chain.getChainIdentifier().getFullName());
             return;
         }
 

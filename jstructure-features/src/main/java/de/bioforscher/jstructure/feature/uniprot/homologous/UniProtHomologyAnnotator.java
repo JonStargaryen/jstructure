@@ -39,15 +39,15 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
     public UniProtHomologyAnnotator() {
         ServiceFactory serviceFactoryInstance = Client.getServiceFactoryInstance();
         uniProtBlastService = serviceFactoryInstance.getUniProtBlastService();
+        uniProtBlastService.start();
     }
 
     @Override
     protected void processInternally(Protein protein) {
         //TODO statelessness and co
-        uniProtBlastService.start();
+        //TODO start/stop of service
         protein.chainsWithAminoAcids()
                 .forEach(this::processInternally);
-        uniProtBlastService.stop();
     }
 
     private void processInternally(Chain chain) {
@@ -58,12 +58,11 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
                 .map(AminoAcid::getFeatureContainer)
                 .forEach(featureContainer -> featureContainer.addFeature(new UniProtFeatureContainer(this)));
 
-        logger.info("running blast with sequence{}>{}{}{}", System.lineSeparator(), chain.getChainId(), System.lineSeparator(), sequence);
+        logger.info("submitting blast query");
+        logger.debug("sequence{}>{}{}{}", System.lineSeparator(), chain.getChainIdentifier(), System.lineSeparator(), sequence);
         List<UniProtHit> uniProtHits = runUniProtBlastService(sequence);
         UniProtHomologousEntryContainer uniProtHomologousEntryContainer = new UniProtHomologousEntryContainer(this,
-                uniProtHits.stream()
-                        .map(UniProtHit::getEntry)
-                        .collect(Collectors.toList()));
+                uniProtHits);
         // set mapping on chain level
         chain.getFeatureContainer().addFeature(uniProtHomologousEntryContainer);
 

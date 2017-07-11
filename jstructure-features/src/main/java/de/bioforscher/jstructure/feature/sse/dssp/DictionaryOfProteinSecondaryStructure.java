@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @author Anthony Bradley
  *
  */
-@FeatureProvider(provides = { DSSPSecondaryStructure.class, GenericSecondaryStructure.class }, priority = 200)
+@FeatureProvider(provides = { DSSPSecondaryStructure.class, GenericSecondaryStructure.class })
 public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(DictionaryOfProteinSecondaryStructure.class);
     /**

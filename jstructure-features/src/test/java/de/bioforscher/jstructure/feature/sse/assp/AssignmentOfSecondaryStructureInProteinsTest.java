@@ -48,7 +48,7 @@ public class AssignmentOfSecondaryStructureInProteinsTest {
         // ASSP assigns 3 states to each amino acid in a stretch
         protein.aminoAcids()
                 .forEach(aminoAcid -> {
-                    String chainId = aminoAcid.getParentChain().getChainId().getChainId();
+                    String chainId = aminoAcid.getParentChain().getChainIdentifier().getChainId();
                     int residueNumber = aminoAcid.getResidueIdentifier().getResidueNumber();
                     ASSPSecondaryStructure asspSecondaryStructure = aminoAcid.getFeatureContainer().getFeature(ASSPSecondaryStructure.class);
 

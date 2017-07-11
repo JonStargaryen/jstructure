@@ -34,7 +34,7 @@ class AtomRecordProvider {
         Group parentGroup = atom.getParentGroup();
         Chain parentChain = parentGroup.getParentChain();
         //TODO check - needed?
-        String chainId = parentChain.getChainId() != null ? parentChain.getChainId().getChainId() : Chain.UNKNOWN_CHAIN.getChainId().getChainId();
+        String chainId = parentChain.getChainIdentifier() != null ? parentChain.getChainIdentifier().getChainId() : Chain.UNKNOWN_CHAIN.getChainIdentifier().getChainId();
         String record = isHetAtm(parentGroup) ? HETATM_PREFIX : ATOM_PREFIX;
         // format output ...
         String resName = parentGroup.getThreeLetterCode();

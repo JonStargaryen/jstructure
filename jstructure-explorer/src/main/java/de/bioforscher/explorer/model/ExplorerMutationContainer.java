@@ -27,10 +27,10 @@ public class ExplorerMutationContainer {
         Group originalGroup = originalProtein.select().residueNumber(pos).asGroup();
 
         //TODO pattern to query here
-//        String originalPlipXmlContent = PLIPRestServiceQuery.getPlipResults(originalGroup.getParentChain().getParentProtein().getName().split("_")[0], originalGroup.getParentChain().getChainId());
+//        String originalPlipXmlContent = PLIPRestServiceQuery.getPlipResults(originalGroup.getParentChain().getParentProtein().getName().split("_")[0], originalGroup.getParentChain().getChainIdentifier());
 //        List<PLIPInteraction> originalPlipInteractions = PLIPParser.parse(originalGroup.getParentChain(), originalPlipXmlContent);
 //
-//        String mutatedPlipXmlContent = PLIPRestServiceQuery.getPlipResults(mutatedProtein.getName().split("_")[0], mutatedProtein.getChains().get(0).getChainId());
+//        String mutatedPlipXmlContent = PLIPRestServiceQuery.getPlipResults(mutatedProtein.getName().split("_")[0], mutatedProtein.getChains().get(0).getChainIdentifier());
 //        List<PLIPInteraction> mutatedPlipInteractions = PLIPParser.parse(mutatedProtein.getChains().get(0), mutatedPlipXmlContent);
 
         Chain originalGroups = (Chain) originalProtein.select()
@@ -46,8 +46,8 @@ public class ExplorerMutationContainer {
 
         renumberSubStructures(originalGroups, mutatedGroups);
 
-        this.original = new ExplorerMutationEnvironment(originalGroups, originalExplorerChain, originalProtein.getPdbId().getFullName());
-        this.mutation = new ExplorerMutationEnvironment(mutatedGroups, mutatedExplorerChain, mutatedProtein.getPdbId().getFullName());
+        this.original = new ExplorerMutationEnvironment(originalGroups, originalExplorerChain, originalProtein.getProteinIdentifier().getFullName());
+        this.mutation = new ExplorerMutationEnvironment(mutatedGroups, mutatedExplorerChain, mutatedProtein.getProteinIdentifier().getFullName());
     }
 
     private void renumberSubStructures(Chain... groups) {

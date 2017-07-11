@@ -26,7 +26,7 @@ import static de.bioforscher.jstructure.feature.sse.SecondaryStructureElement.*;
  * @see <a href="http://nucleix.mbu.iisc.ac.in/assp/algorithm.html">http://nucleix.mbu.iisc.ac.in/assp/algorithm.html</a>
  * Created by bittrich on 6/28/17.
  */
-@FeatureProvider(provides = { GenericSecondaryStructure.class, ASSPSecondaryStructure.class })
+@FeatureProvider(provides = { GenericSecondaryStructure.class, ASSPSecondaryStructure.class }, priority = 200)
 public class AssignmentOfSecondaryStructureInProteins extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AssignmentOfSecondaryStructureInProteins.class);
 

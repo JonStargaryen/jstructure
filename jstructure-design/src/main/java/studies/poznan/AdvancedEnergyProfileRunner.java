@@ -45,12 +45,12 @@ public class AdvancedEnergyProfileRunner {
         return "too few command-line arguments" + System.lineSeparator() +
                 "the jar provides 3 modes to handle energy profiles, the last argument is always the output file's destination:" + System.lineSeparator() +
                 "\tcalculate an energy profile for a given structure" + System.lineSeparator() +
-                "\tpredict an energy profile for a given sequence or structure (solely using its sequence)" + System.lineSeparator() +
+                "\tgetMutationEffectPrediction an energy profile for a given sequence or structure (solely using its sequence)" + System.lineSeparator() +
                 "\talign two energy profiles" + System.lineSeparator() +
                 "/path/to/file.pdb /path/to/output.ep - calculate the energy profile and write the output to the specified path" + System.lineSeparator() +
-                "MILIAQERTW... /path/to/output.ep - predict the energy profile for the given sequence" + System.lineSeparator() +
+                "MILIAQERTW... /path/to/output.ep - getMutationEffectPrediction the energy profile for the given sequence" + System.lineSeparator() +
                 "/path/to/file1.pdb /path/to/file2.pdb /path/to/output.epa - calculate and align both energy profiles, write results" + System.lineSeparator() +
-                "/path/to/file.pdb MILIAQERTW... /path/to/output.epa - calculate/predict energy profile and align";
+                "/path/to/file.pdb MILIAQERTW... /path/to/output.epa - calculate/getMutationEffectPrediction energy profile and align";
     }
 
     private static Builder builder() {

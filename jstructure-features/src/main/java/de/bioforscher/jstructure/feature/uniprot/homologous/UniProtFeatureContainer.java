@@ -6,6 +6,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Information obtained by a UniProt mapping to homologous protein chains.
@@ -25,5 +26,13 @@ public class UniProtFeatureContainer extends FeatureContainerEntry {
 
     public Map<String, Feature> getFeatures() {
         return features;
+    }
+
+    @Override
+    public String toString() {
+        return features.entrySet()
+                .stream()
+                .map(entry -> "@" + entry.getKey() + ": " + entry.getValue())
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 }

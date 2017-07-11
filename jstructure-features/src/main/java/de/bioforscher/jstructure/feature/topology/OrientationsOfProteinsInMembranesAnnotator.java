@@ -34,7 +34,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
 
     @Override
     protected void processInternally(Protein protein) {
-        Document document = getDocument(protein.getPdbId().getPdbId());
+        Document document = getDocument(protein.getProteinIdentifier().getPdbId());
         processInternally(protein, document, true);
     }
 
@@ -132,7 +132,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                     .forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new Topology(this,
                             membraneContainer.isTransmembraneGroup(aminoAcid))));
         } catch (Exception e) {
-            logger.warn("OPM parsing for {} failed", protein.getPdbId().getFullName());
+            logger.warn("OPM parsing for {} failed", protein.getProteinIdentifier().getFullName());
             // sometimes it is the html's fault
 //            System.err.println(document.html());
             throw new ComputationException("failed to fetch or parse OPM file", e);

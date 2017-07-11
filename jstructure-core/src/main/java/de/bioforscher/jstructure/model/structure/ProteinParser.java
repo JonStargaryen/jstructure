@@ -85,8 +85,8 @@ public class ProteinParser {
     }
 
     private boolean idIsMissing() {
-        return protein.getPdbId() == null || protein.getPdbId().getPdbId() == null ||
-                protein.getPdbId().getPdbId().isEmpty() || protein.getPdbId().equals(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
+        return protein.getProteinIdentifier() == null || protein.getProteinIdentifier().getPdbId() == null ||
+                protein.getProteinIdentifier().getPdbId().isEmpty() || protein.getProteinIdentifier().equals(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
     }
 
     private void parseLineChecked(String line) {
@@ -175,11 +175,11 @@ public class ProteinParser {
 
             String alternativeLocationIndicator = line.substring(16, 17).trim();
             String pdbName = line.substring(17, 20).trim();
-            ChainIdentifier chainId = IdentifierFactory.createChainIdentifier(protein.getPdbId(), line.substring(21, 22));
+            ChainIdentifier chainId = IdentifierFactory.createChainIdentifier(protein.getProteinIdentifier(), line.substring(21, 22));
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
             String insertionCode = line.substring(26, 27).trim();
 
-            if(currentChain == null || !currentChain.getChainId().equals(chainId)) {
+            if(currentChain == null || !currentChain.getChainIdentifier().equals(chainId)) {
                 Optional<Chain> selectedChain = protein.select()
                         .chainName(chainId.getChainId())
                         .asOptionalChain();
@@ -195,10 +195,10 @@ public class ProteinParser {
 
             if(currentGroup == null || currentGroup.getResidueIdentifier().getResidueNumber() != resNum ||
                     !currentGroup.getResidueIdentifier().getInsertionCode().equals(insertionCode) ||
-                    !currentGroup.getParentChain().getChainId().equals(chainId)) {
+                    !currentGroup.getParentChain().getChainIdentifier().equals(chainId)) {
                     // residue changed - create new group object and set reference
                     currentGroup = createGroup(pdbName, IdentifierFactory.createResidueIdentifier(resNum, insertionCode),
-                            terminatedChains.contains(currentChain));
+                            terminatedChains.contains(currentChain), minimalParsing);
                     currentChain.addGroup(currentGroup);
             }
 
@@ -246,11 +246,12 @@ public class ProteinParser {
         if(line.startsWith(END_MODEL_PREFIX)) {
             //TODO handling of multiple models
             passedFirstModel = true;
-            logger.debug("skipping models for {}", protein.getPdbId().getFullName());
+            logger.debug("skipping models for {}", protein.getProteinIdentifier().getFullName());
         }
     }
 
-    private Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+    //TODO move to better position or make accessible in a more reasonable way - maybe move to AminoAcid.Family
+    public static Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand, boolean minimalParsing) {
         GroupPrototypeParser groupPrototypeParser = minimalParsing ? GroupPrototypeParser.getFastInstance() : GroupPrototypeParser.getInstance();
         GroupPrototype prototype = groupPrototypeParser.getPrototype(pdbName);
 

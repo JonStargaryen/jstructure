@@ -46,7 +46,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     @Override
     protected void processInternally(Protein protein) {
         try {
-            Document document = downloadXml(protein.getPdbId().getPdbId());
+            Document document = downloadXml(protein.getProteinIdentifier().getPdbId());
             protein.chainsWithAminoAcids()
                     .forEach(chain -> processInternally(document, chain));
         } catch (NullPointerException e) {
@@ -57,19 +57,19 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     private void processInternally(Document document, Chain chain) {
         chain.aminoAcids().forEach(group -> {
             ResidueMapping mapping = mapGroup(document,
-                    chain.getChainId().getChainId(),
+                    chain.getChainIdentifier().getChainId(),
                     group.getResidueIdentifier().getResidueNumber());
             group.getFeatureContainer().addFeature(mapping);
         });
 
-        String pdbId = chain.getParentProtein().getPdbId().getPdbId();
+        String pdbId = chain.getParentProtein().getProteinIdentifier().getPdbId();
         String[] ecMappingString = getLinesForPdbId(ENZYME_MAPPING, pdbId)
-                .filter(split -> split[1].equals(chain.getChainId().getChainId()))
+                .filter(split -> split[1].equals(chain.getChainIdentifier().getChainId()))
                 .findFirst()
                 .orElse(UNKNOWN_ENZYME_MAPPING);
 
         String[] pfamMappingString = getLinesForPdbId(PFAM_MAPPING, pdbId)
-                .filter(split -> split[1].equals(chain.getChainId().getChainId()))
+                .filter(split -> split[1].equals(chain.getChainIdentifier().getChainId()))
                 .findFirst()
                 .orElse(UNKNOWN_PFAM_MAPPING);
 

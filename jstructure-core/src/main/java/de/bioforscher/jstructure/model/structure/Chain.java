@@ -76,7 +76,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
      * Returns the unique name of this chain.
      * @return a {@link ChainIdentifier}
      */
-    public ChainIdentifier getChainId() {
+    public ChainIdentifier getChainIdentifier() {
         return chainId;
     }
 

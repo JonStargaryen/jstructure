@@ -14,7 +14,9 @@ import java.util.List;
 public class UniProtBlastQueryTest {
     @Test
     public void shouldRunBlastQuery() {
-        List<UniProtHit> hits = new UniProtHomologyAnnotator().runUniProtBlastService("MES00005665499\n" +
+        UniProtHomologyAnnotator annotator = new UniProtHomologyAnnotator();
+        annotator.uniProtBlastService.start();
+        List<UniProtHit> hits = annotator.runUniProtBlastService("MES00005665499\n" +
                 "MSNHGFAYFFTSYQSLSLDSSSPPPSPHPRAHASSRFPPRARAVASFHTSCKMARTKQTA\n" +
                 "RKSTGGKAPRKQLATKAARKSAPATGGVKKPHRYRPGTVALREIRKYQKSTELLIRKLPF\n" +
                 "QRLVREIAQDFKTDLRFQSSAVLALQEASEAYLVGLFEDTNLCAIHAKRVTIMPKDVQLA\n" +
@@ -25,5 +27,6 @@ public class UniProtBlastQueryTest {
                 .map(entry -> entry.getPrimaryUniProtAccession() + " " + entry.getFeatures(FeatureType.MUTAGEN).size() +
                         " mutations " + entry.getFeatures(FeatureType.VARIANT).size() + " variants")
                 .forEach(System.out::println);
+        annotator.uniProtBlastService.stop();
     }
 }

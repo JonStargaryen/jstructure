@@ -32,7 +32,7 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFea
                     .forEach(this::assignNeutralState);
 
             // create temp file next to executable
-            String pdbId = protein.getPdbId().getFullName();
+            String pdbId = protein.getProteinIdentifier().getFullName();
             String filename = pdbId + ".pdb";
             Path tmpPath = ASSP_DIRECTORY.resolve(filename);
             Files.write(tmpPath, protein.getPdbRepresentation().getBytes());

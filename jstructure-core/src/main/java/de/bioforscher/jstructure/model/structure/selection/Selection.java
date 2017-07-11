@@ -523,7 +523,7 @@ public class Selection {
 
         public ChainSelection chainName(String... chainNames) {
             registerChainPredicate(chain -> Stream.of(chainNames)
-                    .anyMatch(chainName -> chainName.equals(chain.getChainId().getChainId())), "chain names: " + Arrays.toString(chainNames));
+                    .anyMatch(chainName -> chainName.equals(chain.getChainIdentifier().getChainId())), "chain names: " + Arrays.toString(chainNames));
             return this;
         }
     }

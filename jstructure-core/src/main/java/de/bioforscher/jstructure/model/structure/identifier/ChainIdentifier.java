@@ -19,7 +19,7 @@ public class ChainIdentifier {
      * The identifier of the parent of this container.
      * @return e.g. '1brr'
      */
-    public ProteinIdentifier getPdbId() {
+    public ProteinIdentifier getProteinIdentifier() {
         return pdbId;
     }
 

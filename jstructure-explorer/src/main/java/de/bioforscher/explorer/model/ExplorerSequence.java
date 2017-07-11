@@ -15,7 +15,7 @@ public class ExplorerSequence {
     }
 
     public ExplorerSequence(Chain chain) {
-        this.id = chain.getChainId().getFullName();
+        this.id = chain.getChainIdentifier().getFullName();
         this.title = chain.getParentProtein().getTitle();
         this.sequence = chain.getAminoAcidSequence();
         try {

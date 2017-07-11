@@ -57,7 +57,7 @@ public class MembraneConstants extends StudyConstants {
             // tied to residues
             SECONDARY_STRUCTURE_ANNOTATOR.process(protein);
             // assigns container directly to chain
-            PLIP_ANNOTATOR.process(chain, Jsoup.parse(MembraneConstants.PDBTM_PLIP_PATH.resolve(chain.getChainId().getFullName() + ".xml").toFile(), "UTF-8"));
+            PLIP_ANNOTATOR.process(chain, Jsoup.parse(MembraneConstants.PDBTM_PLIP_PATH.resolve(chain.getChainIdentifier().getFullName() + ".xml").toFile(), "UTF-8"));
             // tied to the protein
             ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR.process(protein, Jsoup.parse(MembraneConstants.PDBTM_OPM_PATH.resolve(pdbId + ".xml").toFile(), "UTF-8"));
             // tied to protein

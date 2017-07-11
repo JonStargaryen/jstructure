@@ -81,7 +81,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
      * The name of this structure as <tt>PDB</tt> id (or the parsed file's name as fallback).
      * @return the id of this protein
      */
-    public ProteinIdentifier getPdbId() {
+    public ProteinIdentifier getProteinIdentifier() {
         return pdbId;
     }
 

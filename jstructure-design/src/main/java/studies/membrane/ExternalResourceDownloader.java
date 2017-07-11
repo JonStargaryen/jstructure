@@ -66,14 +66,14 @@ public class ExternalResourceDownloader {
                 });
 
         // fetch OPM files
-        Document opmDocument = OrientationsOfProteinsInMembranesAnnotator.getDocument(protein.getPdbId().getPdbId());
-        StudyConstants.write(MembraneConstants.PDBTM_OPM_PATH.resolve(protein.getPdbId().getPdbId() + ".xml"), opmDocument.html());
+        Document opmDocument = OrientationsOfProteinsInMembranesAnnotator.getDocument(protein.getProteinIdentifier().getPdbId());
+        StudyConstants.write(MembraneConstants.PDBTM_OPM_PATH.resolve(protein.getProteinIdentifier().getPdbId() + ".xml"), opmDocument.html());
 
         // fetch PLIP results
         try {
             protein.chains().forEach(chain -> {
-                Document plipDocument = PLIPRestServiceQuery.getDocument(chain.getChainId());
-                StudyConstants.write(MembraneConstants.PDBTM_PLIP_PATH.resolve(chain.getChainId().getFullName() + ".xml"), plipDocument.html());
+                Document plipDocument = PLIPRestServiceQuery.getDocument(chain.getChainIdentifier());
+                StudyConstants.write(MembraneConstants.PDBTM_PLIP_PATH.resolve(chain.getChainIdentifier().getFullName() + ".xml"), plipDocument.html());
             });
         } catch (UncheckedIOException e) {
             e.getCause().printStackTrace();

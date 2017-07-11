@@ -40,7 +40,7 @@ public class T025_HelixDistribution {
     }
 
     private static String composeLine(Fragment<AminoAcid> aminoAcidFragment) {
-        String id = aminoAcidFragment.getElement(0).getParentChain().getChainId() + "-" + aminoAcidFragment.getElement(0).getResidueIdentifier().getResidueNumber() + "-" + aminoAcidFragment.getElement(aminoAcidFragment.getElements().size() - 1).getResidueIdentifier().getResidueNumber();
+        String id = aminoAcidFragment.getElement(0).getParentChain().getChainIdentifier() + "-" + aminoAcidFragment.getElement(0).getResidueIdentifier().getResidueNumber() + "-" + aminoAcidFragment.getElement(aminoAcidFragment.getElements().size() - 1).getResidueIdentifier().getResidueNumber();
         String secondaryStructure = aminoAcidFragment.getElement(0).getFeatureContainer().getFeature(GenericSecondaryStructure.class).getSecondaryStructure().name();
         String sequence = aminoAcidFragment.getElements()
                 .stream()

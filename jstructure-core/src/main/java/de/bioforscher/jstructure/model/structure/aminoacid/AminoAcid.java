@@ -210,6 +210,19 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                     // canonical amino acids are the first 20 of the enum - TODO not the nicest way, UnknownAminoAcid is a StandardAminoAcid however
                     .limit(20);
         }
+
+        /**
+         * Convenience method to retrieve the one-letter-code (as normally you cannot be sure of a group to have an olc,
+         * but for entries of this enum we are certain.
+         * @return this amino acid's one-letter-code
+         */
+        public String getOneLetterCode() {
+            return groupPrototype.getOneLetterCode().get();
+        }
+
+        public String getThreeLetterCode() {
+            return groupPrototype.getThreeLetterCode();
+        }
     }
 
     private Atom n;
