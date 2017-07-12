@@ -14,7 +14,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.mutation.MutationEffectPrediction;
+import de.bioforscher.jstructure.mutation.MutationJob;
 import de.bioforscher.jstructure.mutation.MutationEffectPredictionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,13 +55,13 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     }
 
     @Override
-    public MutationEffectPrediction getMutationEffectPrediction(String identifier, String sequence) throws ExecutionException {
+    public MutationJob getMutationEffectPrediction(String identifier, String sequence) throws ExecutionException {
         logger.info("starting new job '{}' with sequence {}", identifier, sequence);
-        MutationEffectPrediction mutationEffectPrediction = new MutationEffectPredictionImpl(identifier, sequence);
+        MutationJob mutationJob = new MutationJobImpl(identifier, sequence);
 
-        createMultiSequenceAlignment(mutationEffectPrediction);
+        createMultiSequenceAlignment(mutationJob);
 
-        return mutationEffectPrediction;
+        return mutationJob;
     }
 
     /**
@@ -69,19 +69,19 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      * all UniProt sequences returned. Of those entries all associated protein chains in the PDB will be fetched and
      * annotated with features. All those sequence (query, UniProt sequences and those of the PDB chains) will lastly be
      * aligned using ClustalOmega to achieve a unified numbering of all residues.
-     * @param mutationEffectPrediction the container to manipulate
+     * @param mutationJob the container to manipulate
      */
-    void createMultiSequenceAlignment(MutationEffectPrediction mutationEffectPrediction) throws ExecutionException {
+    void createMultiSequenceAlignment(MutationJob mutationJob) throws ExecutionException {
         // create wrapping pseudo-instances
-        Protein queryProtein = mutationEffectPrediction.getQueryProtein();
-        Chain queryChain = mutationEffectPrediction.getQueryChain();
+        Protein queryProtein = mutationJob.getQueryProtein();
+        Chain queryChain = mutationJob.getQueryChain();
 
         // execute BLAST
         uniProtHomologyAnnotator.process(queryProtein);
 
         // link associated UniProt entries
         UniProtHomologousEntryContainer homologousEntryContainer = queryChain.getFeatureContainer().getFeature(UniProtHomologousEntryContainer.class);
-        mutationEffectPrediction.setHomologousEntryContainer(homologousEntryContainer);
+        mutationJob.setHomologousEntryContainer(homologousEntryContainer);
 
         // retrieve homologous protein structures
         Map<ProteinIdentifier, Protein> proteinMap = homologousEntryContainer.getHomologousChains()
@@ -93,16 +93,16 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 .stream()
                 .map(chainIdentifier -> proteinMap.get(chainIdentifier.getProteinIdentifier()).select().chainName(chainIdentifier.getChainId()).asChain())
                 .collect(Collectors.toList());
-        mutationEffectPrediction.setHomologousPdbChains(homologousChains);
+        mutationJob.setHomologousPdbChains(homologousChains);
 
         // assign reference structure TODO select reasonable
         Chain referenceChain = homologousChains.get(0);
-        mutationEffectPrediction.setReferenceChain(referenceChain);
-        mutationEffectPrediction.setReferenceProtein(referenceChain.getParentProtein());
+        mutationJob.setReferenceChain(referenceChain);
+        mutationJob.setReferenceProtein(referenceChain.getParentProtein());
 
         // execute ClustalOmega on all sequences
         List<String> sequences = new ArrayList<>();
-        sequences.add(">" + QUERY_ID + System.lineSeparator() + mutationEffectPrediction.getQuerySequence());
+        sequences.add(">" + QUERY_ID + System.lineSeparator() + mutationJob.getQuerySequence());
         homologousEntryContainer.getUniProtHits()
                 .stream()
                 .map(UniProtHit::getEntry)
@@ -115,7 +115,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
 
         // renumber everything with respect to the query sequence
         renumber(queryChain, alignmentMap.get(QUERY_ID));
-        mutationEffectPrediction.getHomologousPdbChains().forEach(chain -> renumber(chain, alignmentMap.get(chain.getChainIdentifier().getFullName())));
+        mutationJob.getHomologousPdbChains().forEach(chain -> renumber(chain, alignmentMap.get(chain.getChainIdentifier().getFullName())));
     }
 
     private void renumber(Chain chain, String alignmentString) {
@@ -128,6 +128,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 continue;
             }
             AminoAcid aminoAcid = aminoAcids.get(consumedAminoAcidsInChain);
+            consumedAminoAcidsInChain++;
             // renumber to position in alignment string (+1 for classic Java offset)
             aminoAcid.setResidueIdentifier(IdentifierFactory.createResidueIdentifier(sequencePosition + 1));
         }

@@ -16,6 +16,7 @@
     <logger name="org.apache.axiom" level="WARN" />
     <logger name="httpclient.wire" level="WARN" />
     <logger name="org.reflections" level="OFF" />
+    <logger name="org.biojava" level="OFF" />
     <logger name="de.bioforscher.singa" level="OFF" />
     <logger name="de.bioforscher.mmm" level="INFO" />
 </configuration>

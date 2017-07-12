@@ -28,7 +28,7 @@ class MolecularMinerBridge {
      * @return the instance to-be-created wrapped as Future object
      * @throws ExecutionException thrown upon wrong configuration or internal exceptions
      */
-    public static Future<ItemsetMinerRunner> submitJob(Path structurePath, Path outputPath) throws ExecutionException {
+    static Future<ItemsetMinerRunner> submitJob(Path structurePath, Path outputPath) throws ExecutionException {
         try {
             ItemsetMinerConfiguration<String> configuration = createConfiguration(structurePath, outputPath);
             return executorService.submit(() -> new ItemsetMinerRunner(configuration));

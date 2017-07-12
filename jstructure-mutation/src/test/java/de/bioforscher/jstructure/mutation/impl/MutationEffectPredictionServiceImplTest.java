@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.mutation.impl;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.mutation.MutationEffectPrediction;
+import de.bioforscher.jstructure.mutation.MutationJob;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,33 +27,33 @@ public class MutationEffectPredictionServiceImplTest {
 
     @Test
     public void shouldBlastForHomologousSequenceAndStructures() throws ExecutionException {
-        MutationEffectPrediction mutationEffectPrediction = new MutationEffectPredictionImpl("CYC32_DESDN",
+        MutationJob mutationJob = new MutationJobImpl("CYC32_DESDN",
                 "ETFEIPESVTMSPKQFEGYTPKKGDVTFNHASHMDIACQQCHHTVPDTYTIESCMTEGCHDNIKERTEISSVYRTFHTTKDSEKSCVGCHRELKRQGPSDAPLACNSCHVQ");
-        mutationEffectPredictor.createMultiSequenceAlignment(mutationEffectPrediction);
+        mutationEffectPredictor.createMultiSequenceAlignment(mutationJob);
 
         System.out.println("homologous sequences:");
-        System.out.println(mutationEffectPrediction.getHomologousEntryContainer()
+        System.out.println(mutationJob.getHomologousEntryContainer()
                 .getUniProtEntries()
                 .stream()
                 .map(UniProtEntry::getPrimaryUniProtAccession)
                 .map(PrimaryUniProtAccession::getValue)
                 .collect(Collectors.toList()));
-        Assert.assertTrue(mutationEffectPrediction.getHomologousEntryContainer().getUniProtEntries().size() >= 8);
+        Assert.assertTrue(mutationJob.getHomologousEntryContainer().getUniProtEntries().size() >= 8);
 
         System.out.println("homologous pdb chains:");
-        System.out.println(mutationEffectPrediction.getHomologousPdbChains()
+        System.out.println(mutationJob.getHomologousPdbChains()
                 .stream()
                 .map(Chain::getChainIdentifier)
                 .map(ChainIdentifier::getFullName)
                 .collect(Collectors.toList()));
-        Assert.assertTrue(mutationEffectPrediction.getHomologousPdbChains().size() > 0);
+        Assert.assertTrue(mutationJob.getHomologousPdbChains().size() > 0);
     }
 
     @Test
     public void shouldExtractFragmentsAndRunItemsetMiner() throws ExecutionException {
-        MutationEffectPrediction mutationEffectPrediction = new MutationEffectPredictionImpl("CYC32_DESDN",
+        MutationJob mutationJob = new MutationJobImpl("CYC32_DESDN",
                 "ETFEIPESVTMSPKQFEGYTPKKGDVTFNHASHMDIACQQCHHTVPDTYTIESCMTEGCHDNIKERTEISSVYRTFHTTKDSEKSCVGCHRELKRQGPSDAPLACNSCHVQ");
-        mutationEffectPredictor.createMultiSequenceAlignment(mutationEffectPrediction);
-        mutationEffectPrediction.predictMutationEffect(50, AminoAcid.Family.ALANINE);
+        mutationEffectPredictor.createMultiSequenceAlignment(mutationJob);
+        mutationJob.predictMutationEffect(50, AminoAcid.Family.ALANINE);
     }
 }

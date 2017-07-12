@@ -12,7 +12,7 @@ import java.util.Map;
  * The data structure of predicted mutation effects.
  * Created by bittrich on 7/11/17.
  */
-public interface MutationEffectPrediction {
+public interface MutationJob {
     String getIdentifier();
 
     String getQuerySequence();

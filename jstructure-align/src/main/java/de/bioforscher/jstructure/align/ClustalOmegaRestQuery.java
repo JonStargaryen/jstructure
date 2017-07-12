@@ -41,8 +41,9 @@ public class ClustalOmegaRestQuery {
      */
     public Map<String, String> process(List<String> sequences) throws ExecutionException {
         sequences.forEach(sequence -> {
-            if(!sequence.contains(">") || LINE_PATTERN.matcher(sequence).find()) {
-                throw new IllegalArgumentException("sequence must be in FASTA format - found: '" + sequence + "'");
+            if(!sequence.startsWith(">")) {
+                throw new IllegalArgumentException("sequence must be in FASTA format - found:" + System.lineSeparator()
+                        + sequence);
             }
         });
 
@@ -73,7 +74,7 @@ public class ClustalOmegaRestQuery {
                         // split alignment at newlines
                         String[] split = LINE_PATTERN.split(line);
                         // substring to drop FASTA-character
-                        alignment.put(split[0].substring(1),
+                        alignment.put(split[0],
                                 // skip id and join all other lines
                                 Stream.of(split).skip(1).collect(Collectors.joining()));
                     });

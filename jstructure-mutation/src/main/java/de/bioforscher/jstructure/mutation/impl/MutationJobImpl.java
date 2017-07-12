@@ -6,15 +6,14 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.mutation.MutationEffectPrediction;
+import de.bioforscher.jstructure.mutation.MutationJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,8 +24,8 @@ import java.util.stream.Collectors;
  * The implementation of the data structure.
  * Created by bittrich on 7/11/17.
  */
-class MutationEffectPredictionImpl implements MutationEffectPrediction {
-    private static final Logger logger = LoggerFactory.getLogger(MutationEffectPredictionImpl.class);
+class MutationJobImpl implements MutationJob {
+    private static final Logger logger = LoggerFactory.getLogger(MutationJobImpl.class);
     private static final double INTERACTION_CUTOFF = 8.0;
     private static final Path MOLECULAR_MINER_WORKING_PATH = Paths.get("/tmp/mmm/");
 
@@ -61,7 +60,7 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
      */
     private Map<String, String> alignmentMap;
 
-    MutationEffectPredictionImpl(String identifier, String querySequence) {
+    MutationJobImpl(String identifier, String querySequence) {
         this.identifier = identifier;
         this.querySequence = querySequence;
         this.queryProtein = createProtein(identifier, querySequence);
@@ -165,9 +164,10 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
     }
 
     private List<List<Group>> extractStructureFragments(int position) {
-        logger.info("extracting structural environments at {} with {} A cutoff", position, INTERACTION_CUTOFF);
+        int renumberedPosition = queryChain.getGroups().get(position - 1).getResidueIdentifier().getResidueNumber();
+        logger.info("extracting structural environments at {} (renumbered: {}) with {} A cutoff", position, renumberedPosition, INTERACTION_CUTOFF);
         return homologousPdbChains.stream()
-                .map(chain -> extractStructureFragment(chain, /*position*/50))
+                .map(chain -> extractStructureFragment(chain, renumberedPosition))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -195,12 +195,26 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
         Path structurePath = basePath.resolve("structures");
         Path outputPath = basePath.resolve("mmm-out");
         logger.info("writing structural fragments to {}", structurePath);
+
+        // ensure directories are created and empty
+        try {
+            if(Files.exists(basePath)) {
+                deleteDirectory(basePath);
+            }
+            Files.createDirectories(basePath);
+            if (!Files.exists(structurePath)) {
+                Files.createDirectories(structurePath);
+            }
+            if(!Files.exists(outputPath)) {
+                Files.createDirectories(outputPath);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
         // write all fragments to tmp dir
         environments.forEach(environment -> {
             try {
-                if(!Files.exists(structurePath)) {
-                    Files.createDirectories(structurePath);
-                }
                 ChainIdentifier chainIdentifier = environment.get(0).getParentChain().getChainIdentifier();
                 String pdbId = chainIdentifier.getFullName();
                 Files.write(structurePath.resolve(pdbId + ".pdb"),
@@ -223,5 +237,21 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void deleteDirectory(Path directory) throws IOException {
+        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 }
