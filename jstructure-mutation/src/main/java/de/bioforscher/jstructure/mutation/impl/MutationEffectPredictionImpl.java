@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -45,8 +46,8 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
     /**
      * The PDB-chain chosen as reference. Does provide features and coordinates.
      */
-//    private final Protein referenceProtein;
-//    private final Chain referenceChain;
+    private Protein referenceProtein;
+    private Chain referenceChain;
     /**
      * Access to the BLAST alignment and all hits and the data of the respective UniProt entries.
      */
@@ -55,6 +56,10 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
      * All similar structures in the PDB (likely to contain the reference structure again). Provide features.
      */
     private List<Chain> homologousPdbChains;
+    /**
+     * The alignment map (id, alignmentString) provides the MSA for the querySequence and all PDB chains.
+     */
+    private Map<String, String> alignmentMap;
 
     MutationEffectPredictionImpl(String identifier, String querySequence) {
         this.identifier = identifier;
@@ -120,6 +125,36 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
     @Override
     public List<Chain> getHomologousPdbChains() {
         return homologousPdbChains;
+    }
+
+    @Override
+    public Protein getReferenceProtein() {
+        return referenceProtein;
+    }
+
+    @Override
+    public void setReferenceProtein(Protein referenceProtein) {
+        this.referenceProtein = referenceProtein;
+    }
+
+    @Override
+    public Chain getReferenceChain() {
+        return referenceChain;
+    }
+
+    @Override
+    public void setReferenceChain(Chain referenceChain) {
+        this.referenceChain = referenceChain;
+    }
+
+    @Override
+    public Map<String, String> getAlignmentMap() {
+        return alignmentMap;
+    }
+
+    @Override
+    public void setAlignmentMap(Map<String, String> alignmentMap) {
+        this.alignmentMap = alignmentMap;
     }
 
     @Override

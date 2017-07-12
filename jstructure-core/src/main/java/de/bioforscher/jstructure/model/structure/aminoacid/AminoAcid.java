@@ -1,9 +1,6 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 import java.util.Optional;
@@ -55,7 +52,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         return !isBackboneAtom(atom);
     }
 
-    public enum Family {
+    public enum Family implements GroupFamily {
         ALANINE(Alanine.class,
                 Alanine.GROUP_PROTOTYPE,
                 121.0,
@@ -169,10 +166,12 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             this.gutteridgeGrouping = gutteridgeGrouping;
         }
 
+        @Override
         public Class<? extends AminoAcid> getRepresentingClass() {
             return representingClass;
         }
 
+        @Override
         public GroupPrototype getGroupPrototype() {
             return groupPrototype;
         }
@@ -185,7 +184,13 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             return gutteridgeGrouping;
         }
 
-        public AminoAcid createAminoAcid(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+        @Override
+        public Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+            return createAminoAcid(pdbName, residueIdentifier, ligand);
+        }
+
+        public static AminoAcid createAminoAcid(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+            Class<? extends AminoAcid> representingClass = resolveThreeLetterCode(pdbName).representingClass;
             // use special constructor for UnknownAminoAcid
             if(representingClass.isAssignableFrom(UnknownAminoAcid.class)) {
                 return new UnknownAminoAcid(pdbName, residueIdentifier, ligand);
@@ -203,7 +208,6 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                     .filter(aminoAcid -> oneLetterCode.equalsIgnoreCase(aminoAcid.getOneLetterCode()))
                     .findFirst()
                     .orElse(Family.UNKNOWN_AMINO_ACID);
-//                    .orElseThrow(() -> new NoSuchElementException("'" + oneLetterCode + "' is no valid amino acid one-letter-code"));
         }
 
         public static Family resolveThreeLetterCode(String threeLetterCode) {
@@ -211,7 +215,6 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                     .filter(aminoAcid -> threeLetterCode.equalsIgnoreCase(aminoAcid.getThreeLetterCode()))
                     .findFirst()
                     .orElse(Family.UNKNOWN_AMINO_ACID);
-//                    .orElseThrow(() -> new NoSuchElementException("'" + threeLetterCode + "' is no valid amino acid three-letter-code"));
         }
 
         public static Family resolveGroupPrototype(GroupPrototype groupPrototype) {
@@ -244,10 +247,10 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             return groupPrototype.getOneLetterCode().get();
         }
 
+        @Override
         public String getThreeLetterCode() {
             return groupPrototype.getThreeLetterCode();
         }
-
     }
 
     private Atom n;

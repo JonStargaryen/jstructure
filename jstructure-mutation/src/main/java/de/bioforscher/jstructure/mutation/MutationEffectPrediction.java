@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The data structure of predicted mutation effects.
@@ -27,6 +28,18 @@ public interface MutationEffectPrediction {
     void setHomologousPdbChains(List<Chain> homologousPdbChains);
 
     List<Chain> getHomologousPdbChains();
+
+    Protein getReferenceProtein();
+
+    void setReferenceProtein(Protein referenceProtein);
+
+    Chain getReferenceChain();
+
+    void setReferenceChain(Chain referenceChain);
+
+    Map<String, String> getAlignmentMap();
+
+    void setAlignmentMap(Map<String, String> alignmentMap);
 
     boolean predictMutationEffect(int position, AminoAcid.Family targetAminoAcid);
 }

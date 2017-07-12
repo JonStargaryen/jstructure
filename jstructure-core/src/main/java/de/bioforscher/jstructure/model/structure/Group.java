@@ -80,8 +80,18 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return threeLetterCode;
     }
 
+    /**
+     * Package-private method to set this group's three-letter-code. Normally this is inferred from the provided group
+     * prototype, but this may lead to consistency when dealing with unknown ligands whose name was actually parsed from
+     * the PDB file.
+     * @param threeLetterCode the three-letter-code forced on this group
+     */
     void setThreeLetterCode(String threeLetterCode) {
         this.threeLetterCode = threeLetterCode;
+    }
+
+    public void setResidueIdentifier(ResidueIdentifier residueIdentifier) {
+        this.residueIdentifier = residueIdentifier;
     }
 
     public ResidueIdentifier getResidueIdentifier() {

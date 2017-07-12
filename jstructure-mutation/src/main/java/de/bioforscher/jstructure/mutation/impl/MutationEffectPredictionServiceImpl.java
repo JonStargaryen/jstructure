@@ -10,7 +10,9 @@ import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnot
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.mutation.MutationEffectPrediction;
 import de.bioforscher.jstructure.mutation.MutationEffectPredictionService;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
  */
 public class MutationEffectPredictionServiceImpl implements MutationEffectPredictionService {
     private static final Logger logger = LoggerFactory.getLogger(MutationEffectPredictionServiceImpl.class);
+    private static final String QUERY_ID = "query";
     private final UniProtHomologyAnnotator uniProtHomologyAnnotator;
     private final AccessibleSurfaceAreaCalculator accessibleSurfaceAreaCalculator;
     private final EnergyProfileCalculator energyProfileCalculator;
@@ -70,14 +73,14 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      */
     void createMultiSequenceAlignment(MutationEffectPrediction mutationEffectPrediction) throws ExecutionException {
         // create wrapping pseudo-instances
-        Protein protein = mutationEffectPrediction.getQueryProtein();
-        Chain chain = mutationEffectPrediction.getQueryChain();
+        Protein queryProtein = mutationEffectPrediction.getQueryProtein();
+        Chain queryChain = mutationEffectPrediction.getQueryChain();
 
         // execute BLAST
-        uniProtHomologyAnnotator.process(protein);
+        uniProtHomologyAnnotator.process(queryProtein);
 
         // link associated UniProt entries
-        UniProtHomologousEntryContainer homologousEntryContainer = chain.getFeatureContainer().getFeature(UniProtHomologousEntryContainer.class);
+        UniProtHomologousEntryContainer homologousEntryContainer = queryChain.getFeatureContainer().getFeature(UniProtHomologousEntryContainer.class);
         mutationEffectPrediction.setHomologousEntryContainer(homologousEntryContainer);
 
         // retrieve homologous protein structures
@@ -92,21 +95,42 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 .collect(Collectors.toList());
         mutationEffectPrediction.setHomologousPdbChains(homologousChains);
 
+        // assign reference structure TODO select reasonable
+        Chain referenceChain = homologousChains.get(0);
+        mutationEffectPrediction.setReferenceChain(referenceChain);
+        mutationEffectPrediction.setReferenceProtein(referenceChain.getParentProtein());
+
         // execute ClustalOmega on all sequences
         List<String> sequences = new ArrayList<>();
-        sequences.add(">query" + System.lineSeparator() + mutationEffectPrediction.getQuerySequence());
+        sequences.add(">" + QUERY_ID + System.lineSeparator() + mutationEffectPrediction.getQuerySequence());
         homologousEntryContainer.getUniProtHits()
                 .stream()
                 .map(UniProtHit::getEntry)
                 .map(entry -> ">" + entry.getPrimaryUniProtAccession().getValue() + System.lineSeparator() + entry.getSequence().getValue())
                 .forEach(sequences::add);
         homologousChains.stream()
-                .map(c -> ">" + c.getChainIdentifier().getFullName() + System.lineSeparator() + c.getAminoAcidSequence())
+                .map(chain -> ">" + chain.getChainIdentifier().getFullName() + System.lineSeparator() + chain.getAminoAcidSequence())
                 .forEach(sequences::add);
-        String alignmentResult = clustalOmegaQuery.process(sequences);
+        Map<String, String> alignmentMap = clustalOmegaQuery.process(sequences);
 
         // renumber everything with respect to the query sequence
-        //TODO impl
+        renumber(queryChain, alignmentMap.get(QUERY_ID));
+        mutationEffectPrediction.getHomologousPdbChains().forEach(chain -> renumber(chain, alignmentMap.get(chain.getChainIdentifier().getFullName())));
+    }
+
+    private void renumber(Chain chain, String alignmentString) {
+        int alignmentLength = alignmentString.length();
+        int consumedAminoAcidsInChain = 0;
+        List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+        for(int sequencePosition = 0; sequencePosition < alignmentLength; sequencePosition++) {
+            char characterInAlignment = alignmentString.charAt(sequencePosition);
+            if(characterInAlignment == '-') {
+                continue;
+            }
+            AminoAcid aminoAcid = aminoAcids.get(consumedAminoAcidsInChain);
+            // renumber to position in alignment string (+1 for classic Java offset)
+            aminoAcid.setResidueIdentifier(IdentifierFactory.createResidueIdentifier(sequencePosition + 1));
+        }
     }
 
     /**
@@ -120,6 +144,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         accessibleSurfaceAreaCalculator.process(protein);
         energyProfileCalculator.process(protein);
         loopFractionCalculator.process(protein);
+
         plipAnnotator.process(protein);
 
         return protein;

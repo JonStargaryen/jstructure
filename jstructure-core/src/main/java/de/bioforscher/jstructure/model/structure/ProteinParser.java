@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -258,12 +259,13 @@ public class ProteinParser {
         // it is an amino acid
         if(prototype.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING || prototype.getPolymerType() ==
                 GroupPrototype.PolymerType.PEPTIDE_LIKE) {
-            return AminoAcid.Family.resolveThreeLetterCode(pdbName).createAminoAcid(pdbName, residueIdentifier, ligand);
+            return AminoAcid.Family.createAminoAcid(pdbName, residueIdentifier, ligand);
         }
 
         // it is a nucleotide
+        //TODO potentially more polymer types for nucleotides
         if(prototype.getPolymerType() == GroupPrototype.PolymerType.NA_LINKING) {
-            //TODO impl
+            return Nucleotide.Family.createNucleotide(pdbName, residueIdentifier, ligand);
         }
 
         // it is neither

@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -59,6 +60,92 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
     Nucleotide(GroupPrototype groupPrototype,
               ResidueIdentifier residueIdentifier) {
         this(groupPrototype, residueIdentifier, false);
+    }
+
+    public enum Family implements GroupFamily {
+        ADENOSINE(Adenosine.class,
+                Adenosine.GROUP_PROTOTYPE),
+        CYTIDINE(Cytidine.class,
+                Cytidine.GROUP_PROTOTYPE),
+        DEOXYADENOSINE(Deoxyadenosine.class,
+                Deoxyadenosine.GROUP_PROTOTYPE),
+        DEOXYCYTIDINE(Deoxycytidine.class,
+                Deoxycytidine.GROUP_PROTOTYPE),
+        DEOXYGUANOSINE(Deoxyguanosine.class,
+                Deoxyguanosine.GROUP_PROTOTYPE),
+        GUANOSINE(Guanosine.class,
+                Guanosine.GROUP_PROTOTYPE),
+        THYMIDINE(Thymidine.class,
+                Thymidine.GROUP_PROTOTYPE),
+        URIDINE(Uridine.class,
+                Uridine.GROUP_PROTOTYPE),
+        UNKNOWN_NUCLEOTIDE(UnknownNucleotide.class,
+                UnknownNucleotide.GROUP_PROTOTYPE);
+
+        private Class<? extends Nucleotide> representingClass;
+        private GroupPrototype groupPrototype;
+
+        Family(Class<? extends Nucleotide> representingClass,
+               GroupPrototype groupPrototype) {
+            this.representingClass = representingClass;
+            this.groupPrototype = groupPrototype;
+        }
+
+        @Override
+        public Class<? extends Nucleotide> getRepresentingClass() {
+            return representingClass;
+        }
+
+        @Override
+        public GroupPrototype getGroupPrototype() {
+            return groupPrototype;
+        }
+
+        @Override
+        public Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+            return createNucleotide(pdbName, residueIdentifier, ligand);
+        }
+
+        public static Nucleotide createNucleotide(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+            Class<? extends Nucleotide> representingClass = resolveThreeLetterCode(pdbName).representingClass;
+            // use special constructor for UnknownNucleotide
+            if(representingClass.isAssignableFrom(UnknownNucleotide.class)) {
+                return new UnknownNucleotide(pdbName, residueIdentifier, ligand);
+            } else {
+                try {
+                    return representingClass.getConstructor(ResidueIdentifier.class, boolean.class).newInstance(residueIdentifier, ligand);
+                } catch (Exception e) {
+                    throw new RuntimeException("creation of Nucleotide instance failed", e);
+                }
+            }
+        }
+
+        public static Nucleotide.Family resolveThreeLetterCode(String threeLetterCode) {
+            return Stream.of(Nucleotide.Family.values())
+                    .filter(nucleotide -> threeLetterCode.equalsIgnoreCase(nucleotide.getThreeLetterCode()))
+                    .findFirst()
+                    .orElse(Nucleotide.Family.UNKNOWN_NUCLEOTIDE);
+        }
+
+        public static Nucleotide.Family resolveGroupPrototype(GroupPrototype groupPrototype) {
+            GroupPrototype.PolymerType polymerType = groupPrototype.getPolymerType();
+            if(groupPrototype.getPolymerType() != GroupPrototype.PolymerType.NA_LINKING) {
+                throw new UnsupportedOperationException("method only supported for nucleotides - group '" +
+                        groupPrototype.getThreeLetterCode() + "' has polymer type: " + polymerType);
+            }
+
+            return Stream.of(Nucleotide.Family.values())
+                    .filter(nucleotide -> groupPrototype.equals(nucleotide.getGroupPrototype()))
+                    .findFirst()
+                    .orElse(UNKNOWN_NUCLEOTIDE);
+        }
+
+        //TODO retrieval functions for DNA-/RNA-bases etc
+
+        @Override
+        public String getThreeLetterCode() {
+            return groupPrototype.getThreeLetterCode();
+        }
     }
 
     @Override
