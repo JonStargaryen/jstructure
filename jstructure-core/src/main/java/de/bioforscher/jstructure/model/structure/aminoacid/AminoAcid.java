@@ -1,9 +1,11 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -183,11 +185,33 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             return gutteridgeGrouping;
         }
 
+        public AminoAcid createAminoAcid(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
+            // use special constructor for UnknownAminoAcid
+            if(representingClass.isAssignableFrom(UnknownAminoAcid.class)) {
+                return new UnknownAminoAcid(pdbName, residueIdentifier, ligand);
+            } else {
+                try {
+                    return representingClass.getConstructor(ResidueIdentifier.class, boolean.class).newInstance(residueIdentifier, ligand);
+                } catch (Exception e) {
+                    throw new RuntimeException("creation of AminoAcid instance failed", e);
+                }
+            }
+        }
+
         public static Family resolveOneLetterCode(String oneLetterCode) {
             return Stream.of(Family.values())
-                    .filter(aminoAcid -> oneLetterCode.equalsIgnoreCase(aminoAcid.getGroupPrototype().getOneLetterCode().get()))
+                    .filter(aminoAcid -> oneLetterCode.equalsIgnoreCase(aminoAcid.getOneLetterCode()))
                     .findFirst()
-                    .orElseThrow(() -> new NoSuchElementException("'" + oneLetterCode + "' is no valid amino acid one-letter-code"));
+                    .orElse(Family.UNKNOWN_AMINO_ACID);
+//                    .orElseThrow(() -> new NoSuchElementException("'" + oneLetterCode + "' is no valid amino acid one-letter-code"));
+        }
+
+        public static Family resolveThreeLetterCode(String threeLetterCode) {
+            return Stream.of(Family.values())
+                    .filter(aminoAcid -> threeLetterCode.equalsIgnoreCase(aminoAcid.getThreeLetterCode()))
+                    .findFirst()
+                    .orElse(Family.UNKNOWN_AMINO_ACID);
+//                    .orElseThrow(() -> new NoSuchElementException("'" + threeLetterCode + "' is no valid amino acid three-letter-code"));
         }
 
         public static Family resolveGroupPrototype(GroupPrototype groupPrototype) {
@@ -223,6 +247,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         public String getThreeLetterCode() {
             return groupPrototype.getThreeLetterCode();
         }
+
     }
 
     private Atom n;

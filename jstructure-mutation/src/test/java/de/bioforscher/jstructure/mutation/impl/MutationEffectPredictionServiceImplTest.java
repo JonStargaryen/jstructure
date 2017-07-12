@@ -10,6 +10,7 @@ import org.junit.Test;
 import uk.ac.ebi.kraken.interfaces.uniprot.PrimaryUniProtAccession;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
@@ -25,10 +26,10 @@ public class MutationEffectPredictionServiceImplTest {
     }
 
     @Test
-    public void shouldBlastForHomologousSequenceAndStructures() {
+    public void shouldBlastForHomologousSequenceAndStructures() throws ExecutionException {
         MutationEffectPrediction mutationEffectPrediction = new MutationEffectPredictionImpl("CYC32_DESDN",
                 "ETFEIPESVTMSPKQFEGYTPKKGDVTFNHASHMDIACQQCHHTVPDTYTIESCMTEGCHDNIKERTEISSVYRTFHTTKDSEKSCVGCHRELKRQGPSDAPLACNSCHVQ");
-        mutationEffectPredictor.executeBlastQuery(mutationEffectPrediction);
+        mutationEffectPredictor.createMultiSequenceAlignment(mutationEffectPrediction);
 
         System.out.println("homologous sequences:");
         System.out.println(mutationEffectPrediction.getHomologousEntryContainer()
@@ -49,10 +50,10 @@ public class MutationEffectPredictionServiceImplTest {
     }
 
     @Test
-    public void shouldExtractFragmentsAndRunItemsetMiner() {
+    public void shouldExtractFragmentsAndRunItemsetMiner() throws ExecutionException {
         MutationEffectPrediction mutationEffectPrediction = new MutationEffectPredictionImpl("CYC32_DESDN",
                 "ETFEIPESVTMSPKQFEGYTPKKGDVTFNHASHMDIACQQCHHTVPDTYTIESCMTEGCHDNIKERTEISSVYRTFHTTKDSEKSCVGCHRELKRQGPSDAPLACNSCHVQ");
-        mutationEffectPredictor.executeBlastQuery(mutationEffectPrediction);
+        mutationEffectPredictor.createMultiSequenceAlignment(mutationEffectPrediction);
         mutationEffectPrediction.predictMutationEffect(50, AminoAcid.Family.ALANINE);
     }
 }

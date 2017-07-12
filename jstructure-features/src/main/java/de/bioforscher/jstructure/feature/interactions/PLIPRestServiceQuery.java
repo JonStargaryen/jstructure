@@ -27,6 +27,7 @@ public class PLIPRestServiceQuery {
 //            String line = Files.readAllLines(Paths.get(REST_USER_PASSWORD_PATH)).get(0);
             String line = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("plip_credentials.txt"))).readLine();
             secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
+            logger.info("PLIP Service is running against: {} - authentication provided", BASE_URL);
         } catch (IOException e) {
             throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
         }
@@ -63,7 +64,7 @@ public class PLIPRestServiceQuery {
      * @throws IOException thrown when the service cannot be reached, authentication fails or the query is not supported
      */
     static Document getDocument(URL url) throws IOException {
-        logger.info("querying PLIP-rest-service for {}", url.toString());
+        logger.debug("querying PLIP-rest-service for {}", url.toString());
         URLConnection connection = url.openConnection();
         connection.setRequestProperty("Authorization", "Basic " + secret);
         connection.connect();

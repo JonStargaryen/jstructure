@@ -257,56 +257,8 @@ public class ProteinParser {
 
         // it is an amino acid
         if(prototype.getPolymerType() == GroupPrototype.PolymerType.PEPTIDE_LINKING || prototype.getPolymerType() ==
-                GroupPrototype.PolymerType.PEPTIDE_LIKE)
-        switch(pdbName.toUpperCase()) {
-            case Alanine.THREE_LETTER_CODE:
-                return new Alanine(residueIdentifier, ligand);
-            case Arginine.THREE_LETTER_CODE:
-                return new Arginine(residueIdentifier, ligand);
-            case Asparagine.THREE_LETTER_CODE:
-                return new Asparagine(residueIdentifier, ligand);
-            case AsparticAcid.THREE_LETTER_CODE:
-                return new AsparticAcid(residueIdentifier, ligand);
-            case Cysteine.THREE_LETTER_CODE:
-                return new Cysteine(residueIdentifier, ligand);
-            case GlutamicAcid.THREE_LETTER_CODE:
-                return new GlutamicAcid(residueIdentifier, ligand);
-            case Glutamine.THREE_LETTER_CODE:
-                return new Glutamine(residueIdentifier, ligand);
-            case Glycine.THREE_LETTER_CODE:
-                return new Glycine(residueIdentifier, ligand);
-            case Histidine.THREE_LETTER_CODE:
-                return new Histidine(residueIdentifier, ligand);
-            case Isoleucine.THREE_LETTER_CODE:
-                return new Isoleucine(residueIdentifier, ligand);
-            case Leucine.THREE_LETTER_CODE:
-                return new Leucine(residueIdentifier, ligand);
-            case Lysine.THREE_LETTER_CODE:
-                return new Lysine(residueIdentifier, ligand);
-            case Methionine.THREE_LETTER_CODE:
-                return new Methionine(residueIdentifier, ligand);
-            case Phenylalanine.THREE_LETTER_CODE:
-                return new Phenylalanine(residueIdentifier, ligand);
-            case Proline.THREE_LETTER_CODE:
-                return new Proline(residueIdentifier, ligand);
-            case Pyrrolysine.THREE_LETTER_CODE:
-                return new Pyrrolysine(residueIdentifier, ligand);
-            case Selenocysteine.THREE_LETTER_CODE:
-                return new Selenocysteine(residueIdentifier, ligand);
-            case Selenomethionine.THREE_LETTER_CODE:
-                return new Selenomethionine(residueIdentifier, ligand);
-            case Serine.THREE_LETTER_CODE:
-                return new Serine(residueIdentifier, ligand);
-            case Threonine.THREE_LETTER_CODE:
-                return new Threonine(residueIdentifier, ligand);
-            case Tryptophan.THREE_LETTER_CODE:
-                return new Tryptophan(residueIdentifier, ligand);
-            case Tyrosine.THREE_LETTER_CODE:
-                return new Tyrosine(residueIdentifier, ligand);
-            case Valine.THREE_LETTER_CODE:
-                return new Valine(residueIdentifier, ligand);
-            default:
-                return new UnknownAminoAcid(pdbName, residueIdentifier, ligand);
+                GroupPrototype.PolymerType.PEPTIDE_LIKE) {
+            return AminoAcid.Family.resolveThreeLetterCode(pdbName).createAminoAcid(pdbName, residueIdentifier, ligand);
         }
 
         // it is a nucleotide

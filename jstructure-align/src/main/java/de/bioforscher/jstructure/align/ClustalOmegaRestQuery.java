@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * Queries the REST interface of ebi to run clustal omega.
+ * TODO wrap in services
  * Created by bittrich on 7/11/17.
  */
 public class ClustalOmegaRestQuery {
@@ -22,8 +23,12 @@ public class ClustalOmegaRestQuery {
     private static final String STATUS_URL = BASE_URL + "status/%s";
     private static final String RESULT_URL = BASE_URL + "result/%s/aln-fasta";
 
+    public ClustalOmegaRestQuery() {
+        logger.info("ClustalOmega Service is running against {}", RUN_URL);
+    }
+
     public String process(List<String> sequences) throws ExecutionException {
-        logger.info("creating multi-sequence alignment by clustal omega for {} proteins", sequences.size());
+        logger.info("creating multi-sequence alignment by clustal omega for {} sequences", sequences.size());
         try {
             Document answer = Jsoup.connect(RUN_URL)
                     .data("sequence", composeSequenceString(sequences))

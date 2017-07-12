@@ -29,20 +29,46 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
     private static final double INTERACTION_CUTOFF = 8.0;
     private static final Path MOLECULAR_MINER_WORKING_PATH = Paths.get("/tmp/mmm/");
 
+    /**
+     * The name of this job.
+     */
     private final String identifier;
+    /**
+     * The query sequence which was used to create this job.
+     */
     private final String querySequence;
-    private final Protein protein;
-    private final Chain chain;
+    /**
+     * The query sequence wrapped as Protein and Chain object. Does not provide features or coordinates.
+     */
+    private final Protein queryProtein;
+    private final Chain queryChain;
+    /**
+     * The PDB-chain chosen as reference. Does provide features and coordinates.
+     */
+//    private final Protein referenceProtein;
+//    private final Chain referenceChain;
+    /**
+     * Access to the BLAST alignment and all hits and the data of the respective UniProt entries.
+     */
     private UniProtHomologousEntryContainer homologousEntryContainer;
+    /**
+     * All similar structures in the PDB (likely to contain the reference structure again). Provide features.
+     */
     private List<Chain> homologousPdbChains;
 
     MutationEffectPredictionImpl(String identifier, String querySequence) {
         this.identifier = identifier;
         this.querySequence = querySequence;
-        this.protein = createProtein(identifier, querySequence);
-        this.chain = protein.getChains().get(0);
+        this.queryProtein = createProtein(identifier, querySequence);
+        this.queryChain = queryProtein.getChains().get(0);
     }
 
+    /**
+     * Creates a pseudo protein wrapping only the sequence.
+     * @param identifier the name
+     * @param sequence the sequence of groups to create
+     * @return the hollow instance of a protein
+     */
     private Protein createProtein(String identifier, String sequence) {
         ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier("", identifier);
         Protein protein = new Protein(proteinIdentifier);
@@ -67,13 +93,13 @@ class MutationEffectPredictionImpl implements MutationEffectPrediction {
     }
 
     @Override
-    public Protein getProtein() {
-        return protein;
+    public Protein getQueryProtein() {
+        return queryProtein;
     }
 
     @Override
-    public Chain getChain() {
-        return chain;
+    public Chain getQueryChain() {
+        return queryChain;
     }
 
     @Override

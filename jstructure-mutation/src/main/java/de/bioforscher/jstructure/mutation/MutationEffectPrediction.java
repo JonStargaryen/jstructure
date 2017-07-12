@@ -16,9 +16,9 @@ public interface MutationEffectPrediction {
 
     String getQuerySequence();
 
-    Protein getProtein();
+    Protein getQueryProtein();
 
-    Chain getChain();
+    Chain getQueryChain();
 
     void setHomologousEntryContainer(UniProtHomologousEntryContainer feature);
 
