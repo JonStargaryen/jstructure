@@ -72,8 +72,6 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         // reference parent
         this.parentChain = group.parentChain;
         this.identifier = group.identifier;
-        // set reference to feature map
-        setFeatureContainer(group.getFeatureContainer());
     }
 
     public String getThreeLetterCode() {

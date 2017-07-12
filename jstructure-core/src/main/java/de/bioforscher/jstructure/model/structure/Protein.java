@@ -43,7 +43,6 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
                 .collect(Collectors.toList());
         this.chains.forEach(chain -> chain.setParentProtein(this));
         this.identifier = protein.identifier;
-        setFeatureContainer(protein.getFeatureContainer());
     }
 
     public Selection.ChainSelection select() {

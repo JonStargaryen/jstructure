@@ -2,13 +2,16 @@ package de.bioforscher.jstructure.model.structure.identifier;
 
 import de.bioforscher.jstructure.model.structure.Group;
 
+import java.util.Comparator;
+
 /**
  * Represents the numbering of {@link Group} instances within a protein chain.
- * TODO reference to parent ChainIdentifer?
  * TODO support for residue ranges?
  * Created by S on 25.05.2017.
  */
 public class ResidueIdentifier {
+    public static final Comparator<? super ResidueIdentifier> RESIDUE_IDENTIFIER_COMPARATOR = Comparator.comparingInt(ResidueIdentifier::getResidueNumber);
+    public static final Comparator<? super Group> GROUP_COMPARATOR = Comparator.comparingInt(group -> group.getResidueIdentifier().getResidueNumber());
     private int residueNumber;
     private String insertionCode;
 

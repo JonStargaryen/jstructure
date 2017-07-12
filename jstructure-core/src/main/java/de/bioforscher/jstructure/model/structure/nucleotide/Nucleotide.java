@@ -101,11 +101,6 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
             return groupPrototype;
         }
 
-        @Override
-        public Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
-            return createNucleotide(pdbName, residueIdentifier, ligand);
-        }
-
         public static Nucleotide createNucleotide(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
             Class<? extends Nucleotide> representingClass = resolveThreeLetterCode(pdbName).representingClass;
             // use special constructor for UnknownNucleotide

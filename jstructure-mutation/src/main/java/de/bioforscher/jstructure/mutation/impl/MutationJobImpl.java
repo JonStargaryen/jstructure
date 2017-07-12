@@ -73,7 +73,7 @@ class MutationJobImpl implements MutationJob {
      * @param sequence the sequence of groups to create
      * @return the hollow instance of a protein
      */
-    private Protein createProtein(String identifier, String sequence) {
+    static Protein createProtein(String identifier, String sequence) {
         ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier("", identifier);
         Protein protein = new Protein(proteinIdentifier);
         Chain chain = new Chain(IdentifierFactory.createChainIdentifier(proteinIdentifier, "X"));
@@ -157,26 +157,72 @@ class MutationJobImpl implements MutationJob {
     }
 
     @Override
+    public List<SequenceConservationProfile> getSequenceConservationProfile() {
+        return referenceChain.aminoAcids()
+                .map(AminoAcid::getFeatureContainer)
+                .map(featureContainer -> featureContainer.getFeature(SequenceConservationProfile.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public boolean predictMutationEffect(int position, AminoAcid.Family targetAminoAcid) {
-        List<List<Group>> environments = extractStructureFragments(position);
-        executeMolecularMinerJob(environments);
+        AminoAcid originalAminoAcid = (AminoAcid) queryChain.getGroups().get(position - 1);
+        int renumberedPosition = originalAminoAcid.getResidueIdentifier().getResidueNumber();
+        logger.info("evaluating mutation effect {}->{} at position {} (renumbered: {})",
+                originalAminoAcid.getOneLetterCode(),
+                targetAminoAcid.getOneLetterCode(),
+                position,
+                renumberedPosition);
+
+        // create mutated protein
+        Protein mutatedProtein = mutateResidue(position, targetAminoAcid);
+        Chain mutatedChain = mutatedProtein.select()
+                .chainName(referenceChain.getChainIdentifier().getChainId())
+                .asChain();
+        AminoAcid mutatedAminoAcid = mutatedChain.select()
+                .residueNumber(position)
+                .asAminoAcid();
+
+        // extract environments
+        List<List<Group>> originalEnvironments = extractStructureFragments(homologousPdbChains, renumberedPosition);
+        List<Group> originalEnvironment = extractStructureFragment(referenceChain, renumberedPosition).get();
+        List<Group> mutatedEnvironment = extractStructureFragment(mutatedChain, renumberedPosition).get();
+
+        // run mmm
+//        executeMolecularMinerJob(originalEnvironments);
+
+        FeatureVector originalEnvironmentFeatureVector = new FeatureVector(originalEnvironment);
+        FeatureVector originalAminoAcidFeatureVector = new FeatureVector(originalAminoAcid);
+        FeatureVector mutatedEnvironmentFeatureVector = new FeatureVector(mutatedEnvironment);
+        FeatureVector mutatedAminoAcidFeatureVector = new FeatureVector(mutatedAminoAcid);
+        FeatureVector environmentDelta = new FeatureVector(originalEnvironmentFeatureVector, mutatedEnvironmentFeatureVector);
+        FeatureVector aminoAcidDelta = new FeatureVector(originalAminoAcidFeatureVector, mutatedAminoAcidFeatureVector);
+
+        //TODO resume by creating full-fledged feature vectors
+
         return false;
     }
 
-    private List<List<Group>> extractStructureFragments(int position) {
-        int renumberedPosition = queryChain.getGroups().get(position - 1).getResidueIdentifier().getResidueNumber();
-        logger.info("extracting structural environments at {} (renumbered: {}) with {} A cutoff", position, renumberedPosition, INTERACTION_CUTOFF);
-        return homologousPdbChains.stream()
+    private Protein mutateResidue(int renumberedPosition, AminoAcid.Family targetAminoAcid) {
+        ResidueMutatorServiceImpl residueMutatorService = new ResidueMutatorServiceImpl();
+        Protein mutatedProtein = residueMutatorService.mutateResidue(referenceProtein, referenceChain.getChainIdentifier().getChainId(), renumberedPosition, targetAminoAcid);
+        CommonFeatureAnnotator.annotateProtein(mutatedProtein);
+        return mutatedProtein;
+    }
+
+    private List<List<Group>> extractStructureFragments(List<Chain> chains, int renumberedPosition) {
+        logger.info("extracting structural environments {} A around renumbered position {}", INTERACTION_CUTOFF, renumberedPosition);
+        return chains.stream()
                 .map(chain -> extractStructureFragment(chain, renumberedPosition))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
     }
 
-    private Optional<List<Group>> extractStructureFragment(Chain chain, int position) {
+    private Optional<List<Group>> extractStructureFragment(Chain chain, int renumberedPosition) {
         try {
             Atom referenceAtom = chain.select()
-                    .residueNumber(position)
+                    .residueNumber(renumberedPosition)
                     .asAminoAcid()
                     .getCa();
             List<Group> groups = chain.select()

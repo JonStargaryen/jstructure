@@ -17,5 +17,5 @@ public interface MutationEffectPredictionService {
      * @param sequence the sequence to process
      * @throws ExecutionException when an internal task struggles to a degree compromising this task's integrity
      */
-    MutationJob getMutationEffectPrediction(String identifier, String sequence) throws ExecutionException;
+    MutationJob createMutationJob(String identifier, String sequence) throws ExecutionException;
 }

@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEnt
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.mutation.impl.SequenceConservationProfile;
 
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,8 @@ public interface MutationJob {
     Map<String, String> getAlignmentMap();
 
     void setAlignmentMap(Map<String, String> alignmentMap);
+
+    List<SequenceConservationProfile> getSequenceConservationProfile();
 
     boolean predictMutationEffect(int position, AminoAcid.Family targetAminoAcid);
 }

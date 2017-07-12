@@ -184,11 +184,6 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             return gutteridgeGrouping;
         }
 
-        @Override
-        public Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
-            return createAminoAcid(pdbName, residueIdentifier, ligand);
-        }
-
         public static AminoAcid createAminoAcid(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {
             Class<? extends AminoAcid> representingClass = resolveThreeLetterCode(pdbName).representingClass;
             // use special constructor for UnknownAminoAcid
@@ -201,6 +196,10 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                     throw new RuntimeException("creation of AminoAcid instance failed", e);
                 }
             }
+        }
+
+        public static Family resolveOneLetterCode(char oneLetterCode) {
+            return resolveOneLetterCode(String.valueOf(oneLetterCode));
         }
 
         public static Family resolveOneLetterCode(String oneLetterCode) {

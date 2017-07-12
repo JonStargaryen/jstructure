@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.model;
 
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Protein;
@@ -42,5 +45,26 @@ public class ModelIntegrityTest {
     public void testProteinCreateCopy() {
         ChainContainer proteinCopy = protein.createCopy();
         Assert.assertTrue(proteinCopy instanceof Protein);
+    }
+
+    @Test
+    public void shouldNotCopyFeatureMapEntriesDuringCreateCopy() {
+        protein.getFeatureContainer().addFeature(new AdditionalFeatureEntry(new AdditionalFeatureProvider()));
+        Assert.assertTrue(protein.getFeatureContainer().getFeatureOptional(AdditionalFeatureEntry.class).isPresent());
+        Assert.assertFalse(protein.createCopy().getFeatureContainer().getFeatureOptional(AdditionalFeatureEntry.class).isPresent());
+    }
+
+    public static class AdditionalFeatureEntry extends FeatureContainerEntry {
+        public AdditionalFeatureEntry(AbstractFeatureProvider featureProvider) {
+            super(featureProvider);
+        }
+    }
+
+    @FeatureProvider(provides = AdditionalFeatureEntry.class)
+    public static class AdditionalFeatureProvider extends AbstractFeatureProvider {
+        @Override
+        protected void processInternally(Protein protein) {
+
+        }
     }
 }

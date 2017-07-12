@@ -52,7 +52,6 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
         // reference parent
         this.parentProtein = chain.parentProtein;
         this.identifier = chain.identifier;
-        setFeatureContainer(chain.getFeatureContainer());
     }
 
     public Selection.GroupSelection select() {

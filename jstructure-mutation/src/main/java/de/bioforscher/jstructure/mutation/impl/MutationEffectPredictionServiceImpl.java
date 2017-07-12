@@ -1,10 +1,6 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.align.ClustalOmegaRestQuery;
-import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
-import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
-import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
-import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -14,8 +10,8 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.mutation.MutationJob;
 import de.bioforscher.jstructure.mutation.MutationEffectPredictionService;
+import de.bioforscher.jstructure.mutation.MutationJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.UniProtHit;
@@ -36,18 +32,11 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     private static final Logger logger = LoggerFactory.getLogger(MutationEffectPredictionServiceImpl.class);
     private static final String QUERY_ID = "query";
     private final UniProtHomologyAnnotator uniProtHomologyAnnotator;
-    private final AccessibleSurfaceAreaCalculator accessibleSurfaceAreaCalculator;
-    private final EnergyProfileCalculator energyProfileCalculator;
-    private final PLIPAnnotator plipAnnotator;
-    private final LoopFractionCalculator loopFractionCalculator;
+
     private final ClustalOmegaRestQuery clustalOmegaQuery;
 
     public MutationEffectPredictionServiceImpl() {
         this.uniProtHomologyAnnotator = new UniProtHomologyAnnotator();
-        this.accessibleSurfaceAreaCalculator = new AccessibleSurfaceAreaCalculator();
-        this.loopFractionCalculator = new LoopFractionCalculator();
-        this.plipAnnotator = new PLIPAnnotator();
-        this.energyProfileCalculator = new EnergyProfileCalculator();
         this.clustalOmegaQuery = new ClustalOmegaRestQuery();
 
         //TODO unify behaviour - global config?
@@ -55,7 +44,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     }
 
     @Override
-    public MutationJob getMutationEffectPrediction(String identifier, String sequence) throws ExecutionException {
+    public MutationJob createMutationJob(String identifier, String sequence) throws ExecutionException {
         logger.info("starting new job '{}' with sequence {}", identifier, sequence);
         MutationJob mutationJob = new MutationJobImpl(identifier, sequence);
 
@@ -95,7 +84,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 .collect(Collectors.toList());
         mutationJob.setHomologousPdbChains(homologousChains);
 
-        // assign reference structure TODO select reasonable
+        // assign reference structure TODO select more reasonable
         Chain referenceChain = homologousChains.get(0);
         mutationJob.setReferenceChain(referenceChain);
         mutationJob.setReferenceProtein(referenceChain.getParentProtein());
@@ -116,6 +105,9 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         // renumber everything with respect to the query sequence
         renumber(queryChain, alignmentMap.get(QUERY_ID));
         mutationJob.getHomologousPdbChains().forEach(chain -> renumber(chain, alignmentMap.get(chain.getChainIdentifier().getFullName())));
+
+        // create sequence conservation profile for each residue
+        SequenceConservationAnnotator.process(queryChain, alignmentMap);
     }
 
     private void renumber(Chain chain, String alignmentString) {
@@ -141,13 +133,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      */
     private Protein createProtein(ProteinIdentifier proteinIdentifier) {
         Protein protein = ProteinParser.localPdb(proteinIdentifier.getPdbId()).minimalParsing(true).parse();
-
-        accessibleSurfaceAreaCalculator.process(protein);
-        energyProfileCalculator.process(protein);
-        loopFractionCalculator.process(protein);
-
-        plipAnnotator.process(protein);
-
+        CommonFeatureAnnotator.annotateProtein(protein);
         return protein;
     }
 }

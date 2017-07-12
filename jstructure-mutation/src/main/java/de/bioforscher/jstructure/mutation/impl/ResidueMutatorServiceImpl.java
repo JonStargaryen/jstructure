@@ -2,29 +2,25 @@ package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
 import de.bioforscher.jstructure.align.StructureAligner;
-import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.mutation.ResidueMutatorService;
 
-import java.util.Comparator;
 import java.util.List;
 
 /**
- * Introduces a mutation for a given residue in a protein structure.
+ * Impl of the residue mutator.
  * Created by bittrich on 7/6/17.
  */
-class ResidueMutatorService {
-    /**
-     * Mutate a given position in a protein.
-     * @param originalProtein the original protein which will not be manipulated
-     * @param chainId the chainId of the mutation
-     * @param residueNumber the residueNumber of the mutation
-     * @param targetAminoAcid the desired target amino acid
-     * @return a new {@link Protein} instance featuring the mutation
-     */
-    public Protein mutate(Protein originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid) {
+public class ResidueMutatorServiceImpl implements ResidueMutatorService {
+    @Override
+    public Protein mutateResidue(Protein originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid) {
         try {
             GroupContainer originalResidueContainer = originalProtein.select()
                     .chainName(chainId)
@@ -43,8 +39,7 @@ class ResidueMutatorService {
                     .asGroup();
 
             // get prototype atoms from target amino acid - we need GroupContainer instances for the superimposition
-            Group mutatedResidue = targetAminoAcid.getRepresentingClass().getConstructor(ResidueIdentifier.class, boolean.class)
-                    .newInstance(originalGroup.getResidueIdentifier(), originalGroup.isLigand());
+            Group mutatedResidue = AminoAcid.Family.createAminoAcid(targetAminoAcid.getThreeLetterCode(), originalGroup.getResidueIdentifier(), originalGroup.isLigand());
 
             // assign prototype atoms
             targetAminoAcid.getGroupPrototype()
@@ -87,8 +82,7 @@ class ResidueMutatorService {
         for(Chain chain : protein.getChains()) {
             List<Group> groups = chain.getGroups();
             // sort groups by residue numbers
-            //TODO maybe provide standard comparator via ResidueIdentifier class
-            groups.sort(Comparator.comparingInt(group -> group.getResidueIdentifier().getResidueNumber()));
+            groups.sort(ResidueIdentifier.GROUP_COMPARATOR);
             for(Group group : groups) {
                 for(Atom atom : group.getAtoms()) {
                     atom.setPdbSerial(pdbSerial);
