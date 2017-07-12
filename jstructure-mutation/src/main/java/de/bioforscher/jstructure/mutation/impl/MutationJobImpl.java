@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.mutation.MutationDescriptor;
 import de.bioforscher.jstructure.mutation.MutationJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,7 +166,7 @@ class MutationJobImpl implements MutationJob {
     }
 
     @Override
-    public boolean predictMutationEffect(int position, AminoAcid.Family targetAminoAcid) {
+    public MutationDescriptor composeMutationDescriptor(int position, AminoAcid.Family targetAminoAcid) {
         AminoAcid originalAminoAcid = (AminoAcid) queryChain.getGroups().get(position - 1);
         int renumberedPosition = originalAminoAcid.getResidueIdentifier().getResidueNumber();
         logger.info("evaluating mutation effect {}->{} at position {} (renumbered: {})",
@@ -198,8 +199,19 @@ class MutationJobImpl implements MutationJob {
         FeatureVector environmentDelta = new FeatureVector(originalEnvironmentFeatureVector, mutatedEnvironmentFeatureVector);
         FeatureVector aminoAcidDelta = new FeatureVector(originalAminoAcidFeatureVector, mutatedAminoAcidFeatureVector);
 
-        //TODO resume by creating full-fledged feature vectors
+        return new MutationDescriptorImpl(identifier,
+                originalAminoAcid.getOneLetterCode() + position + mutatedAminoAcid.getOneLetterCode(),
+                originalAminoAcid,
+                mutatedAminoAcid,
+                aminoAcidDelta,
+                environmentDelta,
+                homologousEntryContainer.getUniProtEntries().size(),
+                homologousPdbChains.size());
+    }
 
+    @Override
+    public boolean predictMutationEffect(int position, AminoAcid.Family targetAminoAcid) {
+        MutationDescriptor mutationDescriptor = composeMutationDescriptor(position, targetAminoAcid);
         return false;
     }
 

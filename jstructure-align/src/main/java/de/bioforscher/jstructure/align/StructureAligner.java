@@ -54,7 +54,7 @@ public class StructureAligner {
         this.manipulationBehavior = builder.manipulationBehavior;
     }
 
-    public Alignment align() {
+    public StructureAlignment align() {
         // calculate centroids and center atoms
         double[] centroid1 = referenceSelectedAtoms.calculate().center().getValue();
         double[] centroid2 = querySelectedAtoms.calculate().center().getValue();
@@ -97,7 +97,7 @@ public class StructureAligner {
         }
 
         // return alignment
-        return new Alignment(referenceOriginal,
+        return new StructureAlignment(referenceOriginal,
                 queryOriginal,
                 query,
                 transformation,
@@ -183,7 +183,7 @@ public class StructureAligner {
             this.manipulationBehavior = manipulationBehaviorStep.manipulationBehavior;
         }
 
-        public Alignment align() {
+        public StructureAlignment align() {
             return new StructureAligner(this).align();
         }
     }

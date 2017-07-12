@@ -34,8 +34,6 @@ public interface AlignmentPolicy {
 
     //TODO validation behavior
 
-
-
     /**
      * Describes which atoms or groups are used (and in which way) to align both containers.
      */

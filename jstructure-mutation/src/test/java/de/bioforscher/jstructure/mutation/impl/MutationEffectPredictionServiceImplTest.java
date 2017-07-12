@@ -54,6 +54,6 @@ public class MutationEffectPredictionServiceImplTest {
         MutationJob mutationJob = new MutationJobImpl("CYC32_DESDN",
                 "ETFEIPESVTMSPKQFEGYTPKKGDVTFNHASHMDIACQQCHHTVPDTYTIESCMTEGCHDNIKERTEISSVYRTFHTTKDSEKSCVGCHRELKRQGPSDAPLACNSCHVQ");
         mutationEffectPredictor.createMultiSequenceAlignment(mutationJob);
-        mutationJob.predictMutationEffect(50, AminoAcid.Family.ALANINE);
+        System.out.println(mutationJob.composeMutationDescriptor(73, AminoAcid.Family.ALANINE));
     }
 }

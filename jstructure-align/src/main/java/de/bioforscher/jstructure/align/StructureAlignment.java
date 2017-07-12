@@ -7,18 +7,18 @@ import de.bioforscher.jstructure.model.structure.container.GroupContainer;
  * The result of an alignment.
  * Created by bittrich on 6/19/17.
  */
-public class Alignment {
+public class StructureAlignment {
     private final GroupContainer originalReference;
     private final GroupContainer originalQuery;
     private final GroupContainer alignedQuery;
     private final Transformation transformation;
     private final double alignmentScore;
 
-    Alignment(GroupContainer originalReference,
-              GroupContainer originalQuery,
-              GroupContainer alignedQuery,
-              Transformation transformation,
-              double alignmentScore) {
+    StructureAlignment(GroupContainer originalReference,
+                       GroupContainer originalQuery,
+                       GroupContainer alignedQuery,
+                       Transformation transformation,
+                       double alignmentScore) {
         this.originalReference = originalReference;
         this.originalQuery = originalQuery;
         this.alignedQuery = alignedQuery;

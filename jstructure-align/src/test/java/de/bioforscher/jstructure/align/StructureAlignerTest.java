@@ -95,7 +95,7 @@ public class StructureAlignerTest {
     @Test
     public void shouldAlignArbitraryPoints() {
         // calculate alignment
-        Alignment alignmentResult = StructureAligner.builder(container1, container2)
+        StructureAlignment alignmentResult = StructureAligner.builder(container1, container2)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
@@ -108,7 +108,7 @@ public class StructureAlignerTest {
     @Test
     public void shouldAlignAnotherSetOfArbitraryPoints() {
         // calculate alignment
-        Alignment alignmentResult = StructureAligner.builder(container3, container4)
+        StructureAlignment alignmentResult = StructureAligner.builder(container3, container4)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
@@ -127,7 +127,7 @@ public class StructureAlignerTest {
     public void shouldNotManipulateCoordinatesCopy() {
         String initialCoordinates1 = container1.getPdbRepresentation();
         String initialCoordinates2 = container2.getPdbRepresentation();
-        Alignment alignmentResult = StructureAligner.builder(container1, container2)
+        StructureAlignment alignmentResult = StructureAligner.builder(container1, container2)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
@@ -139,7 +139,7 @@ public class StructureAlignerTest {
 
     @Test
     public void shouldResultInPerfectAlignment() {
-        Alignment alignmentResult = StructureAligner.builder(protein1acj, protein1acj)
+        StructureAlignment alignmentResult = StructureAligner.builder(protein1acj, protein1acj)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
@@ -153,7 +153,7 @@ public class StructureAlignerTest {
         double[] translation = new double[] { 10, 20, 30 };
         protein1acjCopy.calculate().transform(translation);
 
-        Alignment alignmentResult = StructureAligner.builder(protein1acj, protein1acjCopy)
+        StructureAlignment alignmentResult = StructureAligner.builder(protein1acj, protein1acjCopy)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();

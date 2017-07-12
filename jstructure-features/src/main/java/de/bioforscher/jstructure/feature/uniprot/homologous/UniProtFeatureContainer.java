@@ -3,9 +3,9 @@ package de.bioforscher.jstructure.feature.uniprot.homologous;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
+import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * Created by bittrich on 7/10/17.
  */
 public class UniProtFeatureContainer extends FeatureContainerEntry {
-    private final Map<String, Feature> features;
+    private final Map<String, List<Feature>> features;
 
     public UniProtFeatureContainer(AbstractFeatureProvider featureProvider) {
         super(featureProvider);
@@ -21,11 +21,24 @@ public class UniProtFeatureContainer extends FeatureContainerEntry {
     }
 
     public void addFeature(String accession, Feature feature) {
-        features.put(accession, feature);
+        if(features.containsKey(accession)) {
+            features.put(accession, new ArrayList<>());
+        }
+        List<Feature> featureList = features.get(accession);
+        featureList.add(feature);
     }
 
-    public Map<String, Feature> getFeatures() {
+    public Map<String, List<Feature>> getFeatureMap() {
         return features;
+    }
+
+    public List<Feature> getFeatures(FeatureType... featureTypes) {
+        List<FeatureType> featureTypeList = Arrays.asList(featureTypes);
+        return features.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(feature -> featureTypeList.contains(feature.getType()))
+                .collect(Collectors.toList());
     }
 
     @Override

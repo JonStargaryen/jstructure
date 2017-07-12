@@ -1,5 +1,7 @@
-package de.bioforscher.jstructure.align;
+package de.bioforscher.jstructure.align.impl;
 
+import de.bioforscher.jstructure.align.AlignmentException;
+import de.bioforscher.jstructure.align.MultipleSequenceAligner;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -17,10 +18,9 @@ import java.util.stream.Stream;
 
 /**
  * Queries the REST interface of ebi to run clustal omega.
- * TODO wrap in services
  * Created by bittrich on 7/11/17.
  */
-public class ClustalOmegaRestQuery {
+public class ClustalOmegaRestQuery implements MultipleSequenceAligner {
     private static final Logger logger = LoggerFactory.getLogger(ClustalOmegaRestQuery.class);
     private static final String BASE_URL = "http://www.ebi.ac.uk/Tools/services/rest/clustalo/";
     private static final String RUN_URL = BASE_URL + "run/";
@@ -33,24 +33,19 @@ public class ClustalOmegaRestQuery {
         logger.info("ClustalOmega Service is running against {}", RUN_URL);
     }
 
-    /**
-     * Computes a multiple-sequence alignment for a given collection of sequences.
-     * @param sequences the input sequences - expected to be protein sequence in FASTA format
-     * @return a map with the id as key and the aligned sequence as value
-     * @throws ExecutionException upon failed execution
-     */
-    public Map<String, String> process(List<String> sequences) throws ExecutionException {
-        sequences.forEach(sequence -> {
+    @Override
+    public Map<String, String> process(List<String> fastaSequences) throws AlignmentException {
+        fastaSequences.forEach(sequence -> {
             if(!sequence.startsWith(">")) {
                 throw new IllegalArgumentException("sequence must be in FASTA format - found:" + System.lineSeparator()
                         + sequence);
             }
         });
 
-        logger.info("creating multi-sequence alignment by clustal omega for {} protein sequences", sequences.size());
+        logger.info("creating multi-sequence alignment by clustal omega for {} protein sequences", fastaSequences.size());
         try {
             Document answer = Jsoup.connect(RUN_URL)
-                    .data("sequence", composeSequenceString(sequences))
+                    .data("sequence", composeSequenceString(fastaSequences))
                     .ignoreHttpErrors(true)
                     //TODO remove
                     .data("email", "bittrich@hs-mittweida.de")
@@ -81,7 +76,7 @@ public class ClustalOmegaRestQuery {
 
             return alignment;
         } catch (InterruptedException | IOException | RuntimeException e) {
-            throw new ExecutionException(e);
+            throw new AlignmentException(e);
         }
     }
 

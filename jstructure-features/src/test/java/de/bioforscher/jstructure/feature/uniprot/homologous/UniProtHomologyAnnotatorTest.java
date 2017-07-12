@@ -7,12 +7,11 @@ import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureSequence;
+import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.MutagenFeature;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -34,25 +33,17 @@ public class UniProtHomologyAnnotatorTest {
         uniProtHomologyAnnotator.process(protein);
         uniProtHomologyAnnotator.uniProtBlastService.stop();
 
-        List<Map.Entry<String, Feature>> mutagenFeatures = protein.chainsWithAminoAcids()
+        List<MutagenFeature> mutagenFeatures = protein.chainsWithAminoAcids()
                 .flatMap(Chain::aminoAcids)
-                .filter(aminoAcid -> aminoAcid.getFeatureContainer()
-                        .getFeature(UniProtFeatureContainer.class)
-                        .getFeatures()
-                        .values()
-                        .stream()
-                        .anyMatch(feature -> feature instanceof MutagenFeature))
                 .flatMap(aminoAcid -> aminoAcid.getFeatureContainer()
                         .getFeature(UniProtFeatureContainer.class)
-                        .getFeatures()
-                        .entrySet()
-                        .stream()
-                        .filter(entry -> entry.getValue() instanceof MutagenFeature))
+                        .getFeatures(FeatureType.MUTAGEN)
+                        .stream())
+                .filter(MutagenFeature.class::isInstance)
+                .map(MutagenFeature.class::cast)
                 .collect(Collectors.toList());
         Assert.assertFalse("did not find any mutagen features", mutagenFeatures.isEmpty());
-        mutagenFeatures.forEach(entry -> {
-            System.out.println("source: " + entry.getKey());
-            MutagenFeature mutagenFeature = (MutagenFeature) entry.getValue();
+        mutagenFeatures.forEach(mutagenFeature -> {
             System.out.println(mutagenFeature.getMutagenReport().getValue());
             System.out.println(mutagenFeature.getOriginalSequence().getValue() + " -> " +
                     mutagenFeature.getAlternativeSequences()

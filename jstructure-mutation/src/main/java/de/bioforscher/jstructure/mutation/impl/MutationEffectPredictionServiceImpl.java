@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.align.ClustalOmegaRestQuery;
+import de.bioforscher.jstructure.align.impl.ClustalOmegaRestQuery;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator;
 import de.bioforscher.jstructure.model.structure.Chain;

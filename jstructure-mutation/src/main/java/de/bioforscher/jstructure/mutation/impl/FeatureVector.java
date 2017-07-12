@@ -6,13 +6,17 @@ import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
 import de.bioforscher.jstructure.model.structure.Group;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Describes properties on either a single amino acid or those of its environment.
  * Created by bittrich on 7/12/17.
  */
 class FeatureVector {
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####", new DecimalFormatSymbols(Locale.US));
     private double rasa;
     private double energy;
     private double loopFraction;
@@ -58,5 +62,10 @@ class FeatureVector {
         this.loopFraction += featureVector.loopFraction;
         this.ligandContacts += featureVector.ligandContacts;
         //TODO more features
+    }
+
+    public String toArffString() {
+        return DECIMAL_FORMAT.format(rasa) + "," + DECIMAL_FORMAT.format(energy) + "," +
+                DECIMAL_FORMAT.format(loopFraction) + "," + DECIMAL_FORMAT.format(ligandContacts);
     }
 }

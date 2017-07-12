@@ -44,5 +44,7 @@ public interface MutationJob {
 
     List<SequenceConservationProfile> getSequenceConservationProfile();
 
+    MutationDescriptor composeMutationDescriptor(int position, AminoAcid.Family targetAminoAcid);
+
     boolean predictMutationEffect(int position, AminoAcid.Family targetAminoAcid);
 }
