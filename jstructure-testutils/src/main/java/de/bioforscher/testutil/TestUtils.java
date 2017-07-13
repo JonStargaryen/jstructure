@@ -1,6 +1,10 @@
 package de.bioforscher.testutil;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,6 +55,19 @@ public class TestUtils {
                             .collect(Collectors.toList());
                 }
             }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static Path downloadPdbId(Path targetDirectory, String pdbId) {
+        try {
+            Path targetPath = targetDirectory.resolve(pdbId + ".pdb");
+            URL url = new URL("https://files.rcsb.org/download/" + pdbId.toUpperCase() + ".pdb");
+            ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+            FileOutputStream fos = new FileOutputStream(targetPath.toFile());
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            return targetPath;
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

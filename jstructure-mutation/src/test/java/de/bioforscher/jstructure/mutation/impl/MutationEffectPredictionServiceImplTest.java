@@ -119,12 +119,7 @@ public class MutationEffectPredictionServiceImplTest {
         boolean writeHeader = !Files.exists(outputPath);
         FileWriter fileWriter = new FileWriter(outputPath.toFile(), true);
         if(writeHeader) {
-            fileWriter.append("@RELATION mutation").append(System.lineSeparator());
-            fileWriter.append("@ATTRIBUTE chainId        STRING").append(System.lineSeparator());
-            fileWriter.append("@ATTRIBUTE mutation       STRING").append(System.lineSeparator());
-            fileWriter.append("@ATTRIBUTE energy1        NUMERIC").append(System.lineSeparator());
-            fileWriter.append("@ATTRIBUTE class          {effect,tolerated}").append(System.lineSeparator());
-            fileWriter.append("@DATA").append(System.lineSeparator());
+            fileWriter.append(getHeaderSchaefer2012());
         }
 
         chainMap.keySet()
@@ -217,5 +212,50 @@ public class MutationEffectPredictionServiceImplTest {
             logger.warn("failed to handle line {}", Arrays.toString(line), e);
             return Optional.empty();
         }
+    }
+
+    @Test
+    @Ignore
+    public void printHeaderSchaefer2012() {
+        System.out.println(getHeaderSchaefer2012());
+    }
+
+    private String getHeaderSchaefer2012() {
+        return "@RELATION mutation" + System.lineSeparator() +
+                "@ATTRIBUTE chainId        STRING" + System.lineSeparator() +
+                "@ATTRIBUTE mutation       STRING" + System.lineSeparator() +
+                "@ATTRIBUTE oldFunctional  NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE newFunctional  NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE gutterChanged  NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE aaMaxRasaDelta NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutationFrq    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutationObs    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE deletionFrq    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE deletionObs    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutToSimGutFrq NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutToSimGutObs NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutToTargetFrq NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutToTargetObs NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE bindSiteFrq    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE bindSiteObs    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE interesSiteFrq NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE interesSiteObs NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutagenFrq     NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE mutagenObs     NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE variantFrq     NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE variantObs     NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE disulfFrq      NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE disulfObs      NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE disulfCapLost  NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE envRasaDelta   NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE envEnerDelta   NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE envLigConDelta NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE envLoopDelta   NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE aaRasaDelta    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE aaEnerDelta    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE aaLigConDelta  NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE aaLoopDelta    NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE class          {effect,tolerated}" + System.lineSeparator() +
+                "@DATA" + System.lineSeparator();
     }
 }

@@ -93,6 +93,7 @@
         <module>../jstructure-testutils</module>
         <module>../jstructure-features</module>
         <module>../jstructure-mutation</module>
+        <module>../jstructure-mmm-bridge</module>
     </modules>
 
     <properties>

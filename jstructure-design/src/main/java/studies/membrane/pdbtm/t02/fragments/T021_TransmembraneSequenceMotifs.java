@@ -1,8 +1,9 @@
 package studies.membrane.pdbtm.t02.fragments;
 
-import de.bioforscher.jstructure.align.impl.StructureAlignmentResultImpl;
 import de.bioforscher.jstructure.align.AlignmentPolicy;
-import de.bioforscher.jstructure.align.StructureAligner;
+import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.StructureAlignmentResult;
+import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
@@ -100,10 +101,10 @@ public class T021_TransmembraneSequenceMotifs {
                         reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
-        StructureAlignmentResultImpl alignment = StructureAligner.builder(reference, fragment)
+        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(reference, fragment)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsComparableBackboneAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
-                .align();
+                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+        StructureAlignmentResult alignment = new SingleValueDecompositionAligner().align(query);
 
         List<Atom> sequenceMotifAtoms = fragment.atoms()
                 .collect(Collectors.toList());

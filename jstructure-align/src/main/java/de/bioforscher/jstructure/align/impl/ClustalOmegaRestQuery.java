@@ -86,12 +86,11 @@ public class ClustalOmegaRestQuery implements MultipleSequenceAligner {
 
         // error case
         if(!status.equals("RUNNING") && !status.equals("FINISHED")) {
-            //TODO consistent error handling
             throw new AlignmentException("job did not run or finish");
         }
 
         if(!status.equals("FINISHED")) {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(5);
             waitForResults(jobId);
         }
     }

@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
+import de.bioforscher.jstructure.mmm.impl.MacromolecularMinerBridgeImpl;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
@@ -314,7 +315,7 @@ class MutationJobImpl implements MutationJob {
         // start mining process
         try {
             logger.info("starting molecular miner thread");
-            MolecularMinerBridge.submitJob(structurePath, outputPath).get();
+            new MacromolecularMinerBridgeImpl().submitStandardJob(structurePath, outputPath).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
