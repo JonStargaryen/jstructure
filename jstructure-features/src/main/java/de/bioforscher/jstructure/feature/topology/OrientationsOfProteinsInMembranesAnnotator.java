@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
-import de.bioforscher.jstructure.align.StructureAligner;
+import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
 import de.bioforscher.jstructure.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
@@ -93,10 +94,10 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                         // superimpose opm protein onto instance of the original protein
                         //TODO this alignment is by no means perfect, but works for a first glance
                         //TODO alpha-carbon-only option
-                        StructureAligner.builder(protein, opmProtein)
+                        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(protein, opmProtein)
                                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsAlphaCarbonsTolerant)
-                                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
-                                .align()
+                                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                        new SingleValueDecompositionAligner().align(query)
                                 .getTransformation()
                                 .transform(opmProtein);
 

@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
-import de.bioforscher.jstructure.align.StructureAligner;
+import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -19,6 +20,12 @@ import java.util.List;
  * Created by bittrich on 7/6/17.
  */
 public class ResidueMutatorServiceImpl implements ResidueMutatorService {
+    private final SingleValueDecompositionAligner singleValueDecompositionAligner;
+
+    public ResidueMutatorServiceImpl() {
+        this.singleValueDecompositionAligner = new SingleValueDecompositionAligner();
+    }
+
     @Override
     public Protein mutateResidue(Protein originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid) {
         try {
@@ -54,10 +61,10 @@ public class ResidueMutatorServiceImpl implements ResidueMutatorService {
             Chain mutatedResidueContainer = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
             mutatedResidueContainer.addGroup(mutatedResidue);
             // transform coordinates
-            StructureAligner.builder(originalResidueContainer, mutatedResidueContainer)
+            StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(originalResidueContainer, mutatedResidueContainer)
                     .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                    .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
-                    .align()
+                    .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+            singleValueDecompositionAligner.align(query)
                     .getTransformation()
                     .transform(mutatedResidue);
 

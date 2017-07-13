@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Rules for alignments.
+ * Rules for structural alignments.
  * Created by bittrich on 6/19/17.
  */
 public interface AlignmentPolicy {

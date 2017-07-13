@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.align.impl;
 
 import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.MultipleSequenceAligner;
+import de.bioforscher.jstructure.align.MultipleSequenceAlignmentResult;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class ClustalOmegaRestQuery implements MultipleSequenceAligner {
     }
 
     @Override
-    public Map<String, String> process(List<String> fastaSequences) throws AlignmentException {
+    public MultipleSequenceAlignmentResult align(List<String> fastaSequences) throws AlignmentException {
         fastaSequences.forEach(sequence -> {
             if(!sequence.startsWith(">")) {
                 throw new IllegalArgumentException("sequence must be in FASTA format - found:" + System.lineSeparator()
@@ -42,7 +43,7 @@ public class ClustalOmegaRestQuery implements MultipleSequenceAligner {
             }
         });
 
-        logger.info("creating multi-sequence alignment by clustal omega for {} protein sequences", fastaSequences.size());
+        logger.info("creating multi-sequence alignment by ClustalOmega for {} protein sequences", fastaSequences.size());
         try {
             Document answer = Jsoup.connect(RUN_URL)
                     .data("sequence", composeSequenceString(fastaSequences))
@@ -74,7 +75,7 @@ public class ClustalOmegaRestQuery implements MultipleSequenceAligner {
                                 Stream.of(split).skip(1).collect(Collectors.joining()));
                     });
 
-            return alignment;
+            return new MultipleSequenceAlignmentResultImpl(alignment);
         } catch (InterruptedException | IOException | RuntimeException e) {
             throw new AlignmentException(e);
         }
@@ -86,7 +87,7 @@ public class ClustalOmegaRestQuery implements MultipleSequenceAligner {
         // error case
         if(!status.equals("RUNNING") && !status.equals("FINISHED")) {
             //TODO consistent error handling
-            throw new RuntimeException("job did not run or finish");
+            throw new AlignmentException("job did not run or finish");
         }
 
         if(!status.equals("FINISHED")) {

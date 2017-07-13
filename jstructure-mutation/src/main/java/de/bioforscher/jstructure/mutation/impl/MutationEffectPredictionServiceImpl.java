@@ -100,7 +100,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         homologousChains.stream()
                 .map(chain -> ">" + chain.getChainIdentifier().getFullName() + System.lineSeparator() + chain.getAminoAcidSequence())
                 .forEach(sequences::add);
-        Map<String, String> alignmentMap = clustalOmegaQuery.process(sequences);
+        Map<String, String> alignmentMap = clustalOmegaQuery.align(sequences).getAlignedSequences();
 
         // renumber everything with respect to the query sequence
         renumber(queryChain, alignmentMap.get(QUERY_ID));

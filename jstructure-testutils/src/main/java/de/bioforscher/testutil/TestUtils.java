@@ -14,6 +14,24 @@ public class TestUtils {
     public static final double[] ZERO_VECTOR = new double[] { 0, 0, 0 };
     public static final double TOLERANT_ERROR_MARGIN = 0.001;
 
+    public enum SupportedProtein {
+        PDB_1ACJ,
+        PDB_1BRR
+    }
+
+    /**
+     * Fast access to protein instance to be used by tests.
+     * Usage:
+     * <code>Protein protein = ProteinParser.source(getProteinInputStream(PDB_1BRR))
+     *                                      .minimalParsing(true)
+     *                                      .parse()</code>
+     * @param supportedProtein
+     * @return
+     */
+    public static InputStream getProteinInputStream(SupportedProtein supportedProtein) {
+        return getResourceAsInputStream("pdb/" + supportedProtein.name().split("_")[1] + ".pdb");
+    }
+
     public static InputStream getResourceAsInputStream(String filename) {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();
         Objects.requireNonNull(ccl);

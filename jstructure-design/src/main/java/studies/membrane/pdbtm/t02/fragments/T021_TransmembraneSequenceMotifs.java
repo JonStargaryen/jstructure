@@ -1,6 +1,6 @@
 package studies.membrane.pdbtm.t02.fragments;
 
-import de.bioforscher.jstructure.align.StructureAlignment;
+import de.bioforscher.jstructure.align.impl.StructureAlignmentResultImpl;
 import de.bioforscher.jstructure.align.AlignmentPolicy;
 import de.bioforscher.jstructure.align.StructureAligner;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
@@ -100,7 +100,7 @@ public class T021_TransmembraneSequenceMotifs {
                         reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
-        StructureAlignment alignment = StructureAligner.builder(reference, fragment)
+        StructureAlignmentResultImpl alignment = StructureAligner.builder(reference, fragment)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsComparableBackboneAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY)
                 .align();
