@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.mutation.impl;
 
+import de.bioforscher.jstructure.StandardNumberFormat;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
@@ -8,6 +9,9 @@ import de.bioforscher.jstructure.mutation.MutationDescriptor;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 /**
  * Wraps all gathered information for a mutation.
@@ -37,14 +41,14 @@ public class MutationDescriptorImpl implements MutationDescriptor {
     /*
      description of the original residue + environment without any comparison on mutated site
      */
-    private final boolean anyMutationObserved;
     private final double anyMutationFrequency;
-    private final boolean deletionObserved;
+    private final boolean anyMutationObserved;
     private final double deletionFrequency;
-    private final boolean mutationToSimilarGutteridgeObserved;
+    private final boolean deletionObserved;
     private final double mutationToSimilarGutteridgeFrequency;
-    private final boolean mutationToTargetObserved;
+    private final boolean mutationToSimilarGutteridgeObserved;
     private final double mutationToTargetFrequency;
+    private final boolean mutationToTargetObserved;
     private final double bindingSiteFrequency;
     private final boolean bindingSiteObserved;
     private final double siteOfInterestFrequency;
@@ -56,6 +60,15 @@ public class MutationDescriptorImpl implements MutationDescriptor {
     private final double disulfidFrequency;
     private final boolean disulfidObserved;
     private final boolean disulfidCapabilitiesLost;
+
+    /*
+     environment delta
+     */
+    private final FeatureVector environmentDelta;
+    /*
+     amino acid delta
+     */
+    private final FeatureVector aminoAcidDelta;
 
     public MutationDescriptorImpl(String sequenceIdentifier,
                                   String mutationDescription,
@@ -127,5 +140,216 @@ public class MutationDescriptorImpl implements MutationDescriptor {
         this.disulfidFrequency = featureContainer.getFeatures(FeatureType.DISULFID).size() / sequenceCount;
         this.disulfidObserved = disulfidFrequency > 0;
         this.disulfidCapabilitiesLost = originalAminoAcidFamily == AminoAcid.Family.CYSTEINE && mutatedAminoAcidFamily != AminoAcid.Family.CYSTEINE;
+
+        this.environmentDelta = environmentDelta;
+        this.aminoAcidDelta = aminoAcidDelta;
+    }
+
+    public String getSequenceIdentifier() {
+        return sequenceIdentifier;
+    }
+
+    public String getMutationDescription() {
+        return mutationDescription;
+    }
+
+    public GroupPrototype.GutteridgeGrouping getOriginalGutteridge() {
+        return originalGutteridge;
+    }
+
+    public GroupPrototype.GutteridgeGrouping getMutatedGutteridge() {
+        return mutatedGutteridge;
+    }
+
+    public boolean isOriginalAminoAcidFunctional() {
+        return originalAminoAcidFunctional;
+    }
+
+    public boolean isMutatedAminoAcidFunctional() {
+        return mutatedAminoAcidFunctional;
+    }
+
+    public boolean isMutationChangedGutteridge() {
+        return mutationChangedGutteridge;
+    }
+
+    public double getMaximumAccessibleSurfaceAreaDelta() {
+        return maximumAccessibleSurfaceAreaDelta;
+    }
+
+    public boolean isAnyMutationObserved() {
+        return anyMutationObserved;
+    }
+
+    public double getAnyMutationFrequency() {
+        return anyMutationFrequency;
+    }
+
+    public boolean isDeletionObserved() {
+        return deletionObserved;
+    }
+
+    public double getDeletionFrequency() {
+        return deletionFrequency;
+    }
+
+    public boolean isMutationToSimilarGutteridgeObserved() {
+        return mutationToSimilarGutteridgeObserved;
+    }
+
+    public double getMutationToSimilarGutteridgeFrequency() {
+        return mutationToSimilarGutteridgeFrequency;
+    }
+
+    public boolean isMutationToTargetObserved() {
+        return mutationToTargetObserved;
+    }
+
+    public double getMutationToTargetFrequency() {
+        return mutationToTargetFrequency;
+    }
+
+    public double getBindingSiteFrequency() {
+        return bindingSiteFrequency;
+    }
+
+    public boolean isBindingSiteObserved() {
+        return bindingSiteObserved;
+    }
+
+    public double getSiteOfInterestFrequency() {
+        return siteOfInterestFrequency;
+    }
+
+    public boolean isSiteOfInterestObserved() {
+        return siteOfInterestObserved;
+    }
+
+    public double getMutagenFrequency() {
+        return mutagenFrequency;
+    }
+
+    public boolean isMutagenObserved() {
+        return mutagenObserved;
+    }
+
+    public double getVariantFrequency() {
+        return variantFrequency;
+    }
+
+    public boolean isVariantObserved() {
+        return variantObserved;
+    }
+
+    public double getDisulfidFrequency() {
+        return disulfidFrequency;
+    }
+
+    public boolean isDisulfidObserved() {
+        return disulfidObserved;
+    }
+
+    public boolean isDisulfidCapabilitiesLost() {
+        return disulfidCapabilitiesLost;
+    }
+
+    public FeatureVector getEnvironmentDelta() {
+        return environmentDelta;
+    }
+
+    public double getEnvironmentDeltaRasa() {
+        return environmentDelta.getRasa();
+    }
+
+    public double getEnvironmentDeltaEnergy() {
+        return environmentDelta.getEnergy();
+    }
+
+    public double getEnvironmentDeltaLigandContacts() {
+        return environmentDelta.getLigandContacts();
+    }
+
+    public double getEnvironmentDeltaLoopFraction() {
+        return environmentDelta.getLoopFraction();
+    }
+
+    public FeatureVector getAminoAcidDelta() {
+        return aminoAcidDelta;
+    }
+
+    public double getAminoAcidDeltaRasa() {
+        return aminoAcidDelta.getRasa();
+    }
+
+    public double getAminoAcidDeltaEnergy() {
+        return aminoAcidDelta.getEnergy();
+    }
+
+    public double getAminoAcidDeltaLigandContacts() {
+        return aminoAcidDelta.getLigandContacts();
+    }
+
+    public double getAminoAcidDeltaLoopFraction() {
+        return aminoAcidDelta.getLoopFraction();
+    }
+
+    public double[] asDoubleVector() {
+        return Stream.of(originalAminoAcidFunctional,
+                mutatedAminoAcidFunctional,
+                mutationChangedGutteridge,
+                maximumAccessibleSurfaceAreaDelta,
+                anyMutationFrequency,
+                anyMutationObserved,
+                deletionFrequency,
+                deletionObserved,
+                mutationToSimilarGutteridgeFrequency,
+                mutationToSimilarGutteridgeObserved,
+                mutationToTargetFrequency,
+                mutationToTargetObserved,
+                bindingSiteFrequency,
+                bindingSiteObserved,
+                siteOfInterestFrequency,
+                siteOfInterestObserved,
+                mutagenFrequency,
+                mutagenObserved,
+                variantFrequency,
+                variantObserved,
+                disulfidFrequency,
+                disulfidObserved,
+                disulfidCapabilitiesLost,
+                environmentDelta.getRasa(),
+                environmentDelta.getEnergy(),
+                environmentDelta.getLigandContacts(),
+                environmentDelta.getLoopFraction(),
+                aminoAcidDelta.getRasa(),
+                aminoAcidDelta.getEnergy(),
+                aminoAcidDelta.getLigandContacts(),
+                aminoAcidDelta.getLoopFraction())
+                .mapToDouble(this::mapToDouble)
+                .toArray();
+    }
+
+    private double mapToDouble(Object object) {
+        if(object instanceof Boolean) {
+            return (Boolean) object ? 1.0 : 0.0;
+        }
+        if(object instanceof Number) {
+            return ((Number) object).doubleValue();
+        }
+        throw new IllegalArgumentException("object is of unexpected class '" + object.getClass().getSimpleName() + "'");
+    }
+
+    @Override
+    public String asArffString() {
+        return sequenceIdentifier + "," +
+                mutationDescription + "," +
+                DoubleStream.of(asDoubleVector())
+                .mapToObj(StandardNumberFormat::format)
+                .collect(Collectors.joining(","));
+    }
+
+    @Override
+    public String toString() {
+        return asArffString();
     }
 }

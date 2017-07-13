@@ -20,6 +20,6 @@ class CommonFeatureAnnotator {
         accessibleSurfaceAreaCalculator.process(protein);
         energyProfileCalculator.process(protein);
         loopFractionCalculator.process(protein);
-        plipAnnotator.process(protein);
+//        plipAnnotator.process(protein);
     }
 }

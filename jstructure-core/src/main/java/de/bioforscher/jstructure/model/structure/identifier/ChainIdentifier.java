@@ -1,12 +1,12 @@
 package de.bioforscher.jstructure.model.structure.identifier;
 
 /**
- * Represents the name/id of a protein chain.
+ * Represents the name/id of a protein chain. Instances of this class are immutable.
  * Created by bittrich on 4/27/17.
  */
 public class ChainIdentifier {
-    private ProteinIdentifier pdbId;
-    private String chainId;
+    private final ProteinIdentifier pdbId;
+    private final String chainId;
 
     public static final ChainIdentifier UNKNOWN_CHAIN_ID = IdentifierFactory.createChainIdentifier(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "X");
 

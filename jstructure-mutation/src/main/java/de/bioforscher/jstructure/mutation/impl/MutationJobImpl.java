@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.mutation.MutationDescriptor;
 import de.bioforscher.jstructure.mutation.MutationJob;
 import org.slf4j.Logger;
@@ -61,11 +62,18 @@ class MutationJobImpl implements MutationJob {
      */
     private Map<String, String> alignmentMap;
 
-    MutationJobImpl(String identifier, String querySequence) {
+    MutationJobImpl(String identifier, String querySequence, Chain referenceChain) {
+        logger.info("creating job {} with sequence: {}", identifier, querySequence);
         this.identifier = identifier;
         this.querySequence = querySequence;
         this.queryProtein = createProtein(identifier, querySequence);
         this.queryChain = queryProtein.getChains().get(0);
+        this.referenceChain = referenceChain;
+        this.referenceProtein = referenceChain.getParentProtein();
+    }
+
+    MutationJobImpl(String identifier, String querySequence) {
+        this(identifier, querySequence, null);
     }
 
     /**
@@ -181,11 +189,11 @@ class MutationJobImpl implements MutationJob {
                 .chainName(referenceChain.getChainIdentifier().getChainId())
                 .asChain();
         AminoAcid mutatedAminoAcid = mutatedChain.select()
-                .residueNumber(position)
+                .residueNumber(renumberedPosition)
                 .asAminoAcid();
 
         // extract environments
-        List<List<Group>> originalEnvironments = extractStructureFragments(homologousPdbChains, renumberedPosition);
+//        List<List<Group>> originalEnvironments = extractStructureFragments(homologousPdbChains, renumberedPosition);
         List<Group> originalEnvironment = extractStructureFragment(referenceChain, renumberedPosition).get();
         List<Group> mutatedEnvironment = extractStructureFragment(mutatedChain, renumberedPosition).get();
 
@@ -193,7 +201,7 @@ class MutationJobImpl implements MutationJob {
 //        executeMolecularMinerJob(originalEnvironments);
 
         FeatureVector originalEnvironmentFeatureVector = new FeatureVector(originalEnvironment);
-        FeatureVector originalAminoAcidFeatureVector = new FeatureVector(originalAminoAcid);
+        FeatureVector originalAminoAcidFeatureVector = new FeatureVector(referenceChain.select().residueNumber(renumberedPosition).asGroup());
         FeatureVector mutatedEnvironmentFeatureVector = new FeatureVector(mutatedEnvironment);
         FeatureVector mutatedAminoAcidFeatureVector = new FeatureVector(mutatedAminoAcid);
         FeatureVector environmentDelta = new FeatureVector(originalEnvironmentFeatureVector, mutatedEnvironmentFeatureVector);
@@ -215,10 +223,25 @@ class MutationJobImpl implements MutationJob {
         return false;
     }
 
-    private Protein mutateResidue(int renumberedPosition, AminoAcid.Family targetAminoAcid) {
+    private Protein mutateResidue(int originalPosition, AminoAcid.Family targetAminoAcid) {
         ResidueMutatorServiceImpl residueMutatorService = new ResidueMutatorServiceImpl();
-        Protein mutatedProtein = residueMutatorService.mutateResidue(referenceProtein, referenceChain.getChainIdentifier().getChainId(), renumberedPosition, targetAminoAcid);
+        // we need to create and compute everything on a protein with original numbering
+        Protein originalReferenceProtein = ProteinParser.localPdb(referenceProtein.getProteinIdentifier().getPdbId())
+                .minimalParsing(true)
+                .parse();
+        Protein mutatedProtein = residueMutatorService.mutateResidue(originalReferenceProtein,
+                referenceChain.getChainIdentifier().getChainId(),
+                originalPosition,
+                targetAminoAcid);
+        // compute features
         CommonFeatureAnnotator.annotateProtein(mutatedProtein);
+
+        // renumber mutated instance in the same way as the original reference
+        for(int groupIndex = 0; groupIndex < referenceProtein.getGroups().size(); groupIndex++) {
+            ResidueIdentifier renumberedResidueIdentifier = referenceProtein.getGroups().get(groupIndex).getResidueIdentifier();
+            mutatedProtein.getGroups().get(groupIndex).setResidueIdentifier(renumberedResidueIdentifier);
+        }
+
         return mutatedProtein;
     }
 

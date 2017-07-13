@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.mutation.impl;
 import de.bioforscher.jstructure.align.impl.ClustalOmegaRestQuery;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator;
+import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
@@ -20,8 +21,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +33,6 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     private static final Logger logger = LoggerFactory.getLogger(MutationEffectPredictionServiceImpl.class);
     private static final String QUERY_ID = "query";
     private final UniProtHomologyAnnotator uniProtHomologyAnnotator;
-
     private final ClustalOmegaRestQuery clustalOmegaQuery;
 
     public MutationEffectPredictionServiceImpl() {
@@ -60,7 +60,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      * aligned using ClustalOmega to achieve a unified numbering of all residues.
      * @param mutationJob the container to manipulate
      */
-    void createMultiSequenceAlignment(MutationJob mutationJob) throws ExecutionException {
+    void createMultiSequenceAlignment(MutationJob mutationJob) {
         // create wrapping pseudo-instances
         Protein queryProtein = mutationJob.getQueryProtein();
         Chain queryChain = mutationJob.getQueryChain();
@@ -77,17 +77,20 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 .stream()
                 .map(ChainIdentifier::getProteinIdentifier)
                 .distinct()
-                .collect(Collectors.toMap(Function.identity(), this::createProtein));
+                .map(proteinIdentifier -> new Pair<>(proteinIdentifier, createProtein(proteinIdentifier)))
+                .filter(pair -> pair.getRight().isPresent())
+                .map(pair -> new Pair<>(pair.getLeft(), pair.getRight().get()))
+                .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
+        // if structure was provided, annotate it with features
+        if(mutationJob.getReferenceChain() != null) {
+            CommonFeatureAnnotator.annotateProtein(mutationJob.getReferenceProtein());
+        }
         List<Chain> homologousChains = homologousEntryContainer.getHomologousChains()
                 .stream()
                 .map(chainIdentifier -> proteinMap.get(chainIdentifier.getProteinIdentifier()).select().chainName(chainIdentifier.getChainId()).asChain())
                 .collect(Collectors.toList());
         mutationJob.setHomologousPdbChains(homologousChains);
-
-        // assign reference structure TODO select more reasonable
-        Chain referenceChain = homologousChains.get(0);
-        mutationJob.setReferenceChain(referenceChain);
-        mutationJob.setReferenceProtein(referenceChain.getParentProtein());
+        logger.info("{} structure hits: {}", homologousChains.size(), homologousChains.stream().map(Chain::getChainIdentifier).collect(Collectors.toList()));
 
         // execute ClustalOmega on all sequences
         List<String> sequences = new ArrayList<>();
@@ -104,10 +107,27 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
 
         // renumber everything with respect to the query sequence
         renumber(queryChain, alignmentMap.get(QUERY_ID));
+        // if structure was provided, renumber that too
+        if(mutationJob.getReferenceChain() != null) {
+            renumber(mutationJob.getReferenceChain(), alignmentMap.get(QUERY_ID));
+        }
         mutationJob.getHomologousPdbChains().forEach(chain -> renumber(chain, alignmentMap.get(chain.getChainIdentifier().getFullName())));
 
         // create sequence conservation profile for each residue
         SequenceConservationAnnotator.process(queryChain, alignmentMap);
+
+        // assign reference structure
+        if(homologousChains.size() > 0) {
+            // only needed when based on sequence and no structure is available
+            if(mutationJob.getReferenceChain() == null) {
+                // TODO select more reasonable
+                Chain referenceChain = homologousChains.get(0);
+                mutationJob.setReferenceChain(referenceChain);
+                mutationJob.setReferenceProtein(referenceChain.getParentProtein());
+            }
+        } else {
+            logger.warn("no structure hits for {}", mutationJob.getIdentifier());
+        }
     }
 
     private void renumber(Chain chain, String alignmentString) {
@@ -131,9 +151,15 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      * @param proteinIdentifier the identifier to process
      * @return the created and annotated instance
      */
-    private Protein createProtein(ProteinIdentifier proteinIdentifier) {
-        Protein protein = ProteinParser.localPdb(proteinIdentifier.getPdbId()).minimalParsing(true).parse();
-        CommonFeatureAnnotator.annotateProtein(protein);
-        return protein;
+    private Optional<Protein> createProtein(ProteinIdentifier proteinIdentifier) {
+        try {
+            Protein protein = ProteinParser.localPdb(proteinIdentifier.getPdbId())
+                    .minimalParsing(true)
+                    .parse();
+            CommonFeatureAnnotator.annotateProtein(protein);
+            return Optional.of(protein);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

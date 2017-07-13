@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.feature.uniprot.homologous;
 
+import de.bioforscher.jstructure.feature.uniprot.UniProtBridge;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -7,12 +8,11 @@ import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.kraken.interfaces.common.Value;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureLocation;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.MutagenFeature;
-import uk.ac.ebi.uniprot.dataservice.client.Client;
-import uk.ac.ebi.uniprot.dataservice.client.ServiceFactory;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.*;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.AlignmentCutoffOption;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.DatabaseOption;
@@ -37,15 +37,11 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
     final UniProtBlastService uniProtBlastService;
 
     public UniProtHomologyAnnotator() {
-        ServiceFactory serviceFactoryInstance = Client.getServiceFactoryInstance();
-        uniProtBlastService = serviceFactoryInstance.getUniProtBlastService();
-        uniProtBlastService.start();
+        uniProtBlastService = UniProtBridge.getInstance().getUniProtBlastService();
     }
 
     @Override
     protected void processInternally(Protein protein) {
-        //TODO statelessness and co
-        //TODO start/stop of service
         protein.chainsWithAminoAcids()
                 .forEach(this::processInternally);
     }
@@ -58,7 +54,7 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
                 .map(AminoAcid::getFeatureContainer)
                 .forEach(featureContainer -> featureContainer.addFeature(new UniProtFeatureContainer(this)));
 
-        logger.info("submitting blast query");
+        logger.debug("submitting blast query");
         logger.debug("sequence{}>{}{}{}", System.lineSeparator(), chain.getChainIdentifier(), System.lineSeparator(), sequence);
         List<UniProtHit> uniProtHits = runUniProtBlastService(sequence);
         UniProtHomologousEntryContainer uniProtHomologousEntryContainer = new UniProtHomologousEntryContainer(this,
@@ -69,7 +65,7 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
         for (UniProtHit uniProtHit : uniProtHits) {
             UniProtEntry uniProtEntry = uniProtHit.getEntry();
             String accession = uniProtEntry.getPrimaryUniProtAccession().getValue();
-            logger.info("processing hit {}", accession);
+            logger.debug("processing hit {}", accession);
             Collection<Feature> features = uniProtEntry.getFeatures();
 
             Alignment alignment = uniProtHit.getSummary().getAlignments().get(0);
@@ -109,6 +105,8 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
                 }
             }
         }
+
+        logger.info("{} sequence hits: {}", uniProtHits.size(), uniProtHits.stream().map(UniProtHit::getEntry).map(UniProtEntry::getPrimaryUniProtAccession).map(Value::getValue).collect(Collectors.toList()));
     }
 
     private Optional<AminoAcid> getSafely(List<AminoAcid> aminoAcids, int index) {
@@ -152,7 +150,6 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
     List<UniProtHit> runUniProtBlastService(String querySequence) {
         return runUniProtBlastService(querySequence,
                 DatabaseOption.SWISSPROT,
-                //TODO ponder on cutoff
                 AlignmentCutoffOption.ONE_THOUSAND,
                 ExpectationOption.ONE_EXPONENT_MINUS_FOUR);
     }
@@ -173,7 +170,7 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
         try {
             // blocks until result arrives
             BlastResult<UniProtHit> blastResult = resultFuture.get();
-            logger.info("Number of blast hits: " + blastResult.getNumberOfHits());
+            logger.debug("Number of blast hits: " + blastResult.getNumberOfHits());
             // populate result list
             blastResult.hits().forEach(hits::add);
         } catch (ExecutionException e) {

@@ -283,6 +283,7 @@ public class ProteinParser {
     //TODO the local pdb approach handling is horrible
     //TODO traverse-all function for local pdb
     public static OptionalSteps localPdb(String pdbId) {
+        pdbId = pdbId.toLowerCase();
         String middle = pdbId.substring(1, 3);
         try {
             Path pdbDirectory = OptionalSteps.localPdbDirectory;

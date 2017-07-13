@@ -5,18 +5,15 @@ import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Describes properties on either a single amino acid or those of its environment.
  * Created by bittrich on 7/12/17.
  */
 class FeatureVector {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####", new DecimalFormatSymbols(Locale.US));
     private double rasa;
     private double energy;
     private double loopFraction;
@@ -24,16 +21,21 @@ class FeatureVector {
     //TODO more features
 
     FeatureVector(Group group) {
-        FeatureContainer featureContainer = group.getFeatureContainer();
-        this.rasa = featureContainer.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea();
-        this.energy = featureContainer.getFeature(EnergyProfile.class).getSolvationEnergy();
-        this.loopFraction = featureContainer.getFeature(LoopFraction.class).getLoopFraction();
-        this.ligandContacts = LigandContactScreener.determineNumberOfLigandContacts(group);
-        //TODO more features
+        try {
+            FeatureContainer featureContainer = group.getFeatureContainer();
+            this.rasa = featureContainer.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea();
+            this.energy = featureContainer.getFeature(EnergyProfile.class).getSolvationEnergy();
+            this.loopFraction = featureContainer.getFeature(LoopFraction.class).getLoopFraction();
+            this.ligandContacts = LigandContactScreener.determineNumberOfLigandContacts(group);
+            //TODO more features
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     FeatureVector(List<Group> groups) {
         groups.stream()
+                .filter(AminoAcid.class::isInstance)
                 .map(FeatureVector::new)
                 .forEach(this::consume);
         this.rasa /= groups.size();
@@ -64,8 +66,29 @@ class FeatureVector {
         //TODO more features
     }
 
-    public String toArffString() {
-        return DECIMAL_FORMAT.format(rasa) + "," + DECIMAL_FORMAT.format(energy) + "," +
-                DECIMAL_FORMAT.format(loopFraction) + "," + DECIMAL_FORMAT.format(ligandContacts);
+    public double getRasa() {
+        return rasa;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public double getLoopFraction() {
+        return loopFraction;
+    }
+
+    public double getLigandContacts() {
+        return ligandContacts;
+    }
+
+    @Override
+    public String toString() {
+        return "FeatureVector{" +
+                "rasa=" + rasa +
+                ", energy=" + energy +
+                ", loopFraction=" + loopFraction +
+                ", ligandContacts=" + ligandContacts +
+                '}';
     }
 }

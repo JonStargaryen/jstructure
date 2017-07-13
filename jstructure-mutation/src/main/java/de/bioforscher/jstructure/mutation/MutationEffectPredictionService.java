@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.mutation;
 
-import de.bioforscher.jstructure.mutation.impl.MutationEffectPredictionServiceImpl;
-
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -9,8 +7,6 @@ import java.util.concurrent.ExecutionException;
  * Created by bittrich on 7/11/17.
  */
 public interface MutationEffectPredictionService {
-    MutationEffectPredictionService INSTANCE = new MutationEffectPredictionServiceImpl();
-
     /**
      * Create the object to predict the effect of a mutation for a given sequence.
      * @param identifier this job's name

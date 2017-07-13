@@ -5,7 +5,8 @@ import java.util.stream.Stream;
 
 /**
  * Represents the name/id of a protein. Either a standard PDB-id or a more complex name such as a filename or added
- * information. PDB-ids will internally always be represented by lowercase strings.
+ * information. PDB-ids will internally always be represented by lowercase strings. Instances of this class are
+ * immutable.
  * Created by bittrich on 4/27/17.
  */
 public class ProteinIdentifier {

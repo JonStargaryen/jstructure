@@ -5,4 +5,5 @@ package de.bioforscher.jstructure.mutation;
  * Created by bittrich on 7/12/17.
  */
 public interface MutationDescriptor {
+    String asArffString();
 }
