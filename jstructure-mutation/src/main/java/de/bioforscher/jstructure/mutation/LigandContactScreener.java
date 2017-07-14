@@ -8,10 +8,6 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
  * Created by bittrich on 7/13/17.
  */
 public interface LigandContactScreener {
-    double DEFAULT_INTERACTION_CUTOFF = 4.0;
-
-    double getInteractionCutoff();
-
     /**
      * Determines the number of ligands in spatial proximity of an amino acid.
      * @param protein the container to search in

@@ -106,7 +106,7 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
             }
         }
 
-        logger.info("{} sequence hits: {}", uniProtHits.size(), uniProtHits.stream().map(UniProtHit::getEntry).map(UniProtEntry::getPrimaryUniProtAccession).map(Value::getValue).collect(Collectors.toList()));
+        logger.debug("{} sequence hits: {}", uniProtHits.size(), uniProtHits.stream().map(UniProtHit::getEntry).map(UniProtEntry::getPrimaryUniProtAccession).map(Value::getValue).collect(Collectors.toList()));
     }
 
     private Optional<AminoAcid> getSafely(List<AminoAcid> aminoAcids, int index) {

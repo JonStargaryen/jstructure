@@ -9,6 +9,8 @@ import de.bioforscher.jstructure.mutation.LigandContactScreener;
  * Created by bittrich on 7/13/17.
  */
 public class LigandContactScreenerImpl implements LigandContactScreener {
+    private static final double DEFAULT_INTERACTION_CUTOFF = 4.0;
+
     private final double interactionCutoff;
 
     public LigandContactScreenerImpl(double interactionCutoff) {
@@ -19,7 +21,10 @@ public class LigandContactScreenerImpl implements LigandContactScreener {
         this(DEFAULT_INTERACTION_CUTOFF);
     }
 
-    @Override
+    /**
+     * The interaction cutoff which was used to determine residue contacts.
+     * @return the distance in A
+     */
     public double getInteractionCutoff() {
         return interactionCutoff;
     }

@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
  * The implementation of the mutation effect prediction pipeline.
  * Created by bittrich on 7/11/17.
  */
+@Deprecated
 public class MutationEffectPredictionServiceImpl implements MutationEffectPredictionService {
     private static final Logger logger = LoggerFactory.getLogger(MutationEffectPredictionServiceImpl.class);
     private static final String QUERY_ID = "query";

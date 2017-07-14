@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
  * The wrapping class which implements the workflow to predict the effect of mutations.
  * Created by bittrich on 7/11/17.
  */
+@Deprecated
 public interface MutationEffectPredictionService {
     /**
      * Create the object to predict the effect of a mutation for a given sequence.

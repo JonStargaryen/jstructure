@@ -380,7 +380,7 @@ public class ProteinParser {
                     Path pdbDirectory = OptionalSteps.localPdbDirectory;
                     try {
                         if (pdbDirectory != null && Files.isDirectory(pdbDirectory)) {
-                            logger.info("using local PDB to provide {}", pdbId);
+                            logger.debug("using local PDB to provide {}", pdbId);
                             // use local PDB if setup
                             pdbId = pdbId.toLowerCase();
                             String middle = pdbId.substring(1, 3);

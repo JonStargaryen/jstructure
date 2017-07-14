@@ -1,6 +1,6 @@
-package de.bioforscher.jstructure.mutation;
+package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.mutation.impl.SimpleMutatorServiceImpl;
+import de.bioforscher.jstructure.mutation.MutatorService;
 
 /**
  * Creates the data structure to predict the effect of a mutation.

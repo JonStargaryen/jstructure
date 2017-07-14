@@ -140,6 +140,7 @@ public class MutationEffectPredictionServiceImplTest {
 
     private Stream<String> handleSequenceBin(Map<String, List<String[]>> sequenceMap, String id) {
         try {
+            // old sequence identifiers can be retrieved via http://www.uniprot.org/uniprot/%s.fasta
             String sequence = uniProtService.getEntries(UniProtQueryBuilder.id(id)).getFirstResult().getSequence().getValue();
 
             MutationJob mutationJob = new MutationJobImpl(id, sequence);

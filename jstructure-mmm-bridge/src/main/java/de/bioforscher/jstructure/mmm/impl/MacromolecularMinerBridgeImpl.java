@@ -91,7 +91,7 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
             separationMetricConfiguration.setMorseShape(0.2);
             configuration.addExtractionDependentMetricConfiguration(separationMetricConfiguration);
 
-            //TODO a way to change the minimal support
+            ((SupportMetricConfiguration<String>) configuration.getSimpleMetricConfigurations().get(0)).setMinimalSupport(0.5);
 
             return configuration;
         }
