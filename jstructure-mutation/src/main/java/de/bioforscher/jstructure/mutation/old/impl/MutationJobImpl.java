@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.mmm.impl.MacromolecularMinerBridgeImpl;
@@ -8,8 +8,8 @@ import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
-import de.bioforscher.jstructure.mutation.MutationDescriptor;
-import de.bioforscher.jstructure.mutation.MutationJob;
+import de.bioforscher.jstructure.mutation.old.MutationDescriptor;
+import de.bioforscher.jstructure.mutation.old.MutationJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -227,7 +227,7 @@ class MutationJobImpl implements MutationJob {
     private Protein mutateResidue(int originalPosition, AminoAcid.Family targetAminoAcid) {
         ResidueMutatorServiceImpl residueMutatorService = new ResidueMutatorServiceImpl();
         // we need to create and compute everything on a protein with original numbering
-        Protein originalReferenceProtein = ProteinParser.localPdb(referenceProtein.getProteinIdentifier().getPdbId())
+        Protein originalReferenceProtein = ProteinParser.source(referenceProtein.getProteinIdentifier().getPdbId())
                 .minimalParsing(true)
                 .parse();
         Protein mutatedProtein = residueMutatorService.mutateResidue(originalReferenceProtein,

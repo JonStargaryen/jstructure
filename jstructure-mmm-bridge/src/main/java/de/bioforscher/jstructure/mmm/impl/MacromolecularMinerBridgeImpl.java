@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.mmm.impl;
 
 import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
-import de.bioforscher.jstructure.mmm.StructureConservationProfile;
+import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.mmm.ItemsetMiner;
 import de.bioforscher.mmm.ItemsetMinerRunner;
 import de.bioforscher.mmm.io.DataPointReaderConfiguration;
 import de.bioforscher.mmm.model.ItemsetComparatorType;
@@ -25,6 +26,12 @@ import java.util.concurrent.CompletableFuture;
  * Created by bittrich on 7/13/17.
  */
 public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge {
+    private final StructureConversationCalculatorImpl structureConservationCalculator;
+
+    public MacromolecularMinerBridgeImpl() {
+        this.structureConservationCalculator = new StructureConversationCalculatorImpl();
+    }
+
     @Override
     public ItemsetMinerConfiguration<String> getStandardConfiguration(Path structurePath, Path outputPath) {
         ItemsetMinerConfiguration<String> configuration = new ItemsetMinerConfiguration<>();
@@ -43,7 +50,7 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
         configuration.setDataPointEnricher(new IntraChainInteractionEnricher());
 
         SupportMetricConfiguration<String> simpleMetrics = new SupportMetricConfiguration<>();
-        simpleMetrics.setMinimalSupport(0.6);
+        simpleMetrics.setMinimalSupport(0.8);
         configuration.addSimpleMetricConfiguration(simpleMetrics);
 
         CohesionMetricConfiguration<String> extractionMetric = new CohesionMetricConfiguration<>();
@@ -84,6 +91,8 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
             separationMetricConfiguration.setMorseShape(0.2);
             configuration.addExtractionDependentMetricConfiguration(separationMetricConfiguration);
 
+            //TODO a way to change the minimal support
+
             return configuration;
         }
     }
@@ -102,19 +111,18 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
     }
 
     @Override
-    public CompletableFuture<StructureConservationProfile> getConservationProfile(Path structurePath) {
+    public CompletableFuture<Protein> getConservationProfile(Path structurePath, Protein referenceProtein) {
         try {
             Path outputPath = Files.createTempDirectory("mmm-out");
             return submitJob(getConservationProfileConfiguration(structurePath, outputPath))
-                    .thenApply(this::extractConservationProfile);
+                    .thenApply(ItemsetMinerRunner::getItemsetMiner)
+                    .thenApply(ItemsetMiner::getTotalExtractedItemsets)
+                    .thenApply(extractedItemsets -> {
+                        structureConservationCalculator.extractConservationProfile(extractedItemsets, referenceProtein);
+                        return referenceProtein;
+                    });
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    @Override
-    public StructureConservationProfile extractConservationProfile(ItemsetMinerRunner itemsetMinerRunner) {
-        //TODO impl
-        return null;
     }
 }

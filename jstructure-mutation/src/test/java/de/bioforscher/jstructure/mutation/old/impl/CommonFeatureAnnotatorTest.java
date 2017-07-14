@@ -1,13 +1,11 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.mutation.ResidueMutatorService;
+import de.bioforscher.jstructure.mutation.old.ResidueMutatorService;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.nio.file.Paths;
 
 /**
  * Test integration of {@link ResidueMutatorService} and {@link CommonFeatureAnnotator}.
@@ -19,14 +17,13 @@ public class CommonFeatureAnnotatorTest {
     @Before
     public void setup() {
         residueMutatorService = new ResidueMutatorServiceImpl();
-        ProteinParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
     }
 
     @Test
     public void shouldAnnotateMutatedProtein() {
         String chainId = "A";
         int position = 73;
-        Protein protein = ProteinParser.localPdb("1aqe")
+        Protein protein = ProteinParser.source("1aqe")
                 .minimalParsing(true)
                 .parse();
         Protein mutatedProtein = residueMutatorService.mutateResidue(protein, chainId, position, AminoAcid.Family.GLUTAMIC_ACID);

@@ -71,6 +71,7 @@ public class Protein extends AbstractFeatureable implements ChainContainer, Feat
     /**
      * The number of groups associated to this protein.
      * @return the number of amino acids, hetatms and nucleotids
+     * TODO make function tied to containers?
      */
     public int getSize() {
         return (int) groups().count();

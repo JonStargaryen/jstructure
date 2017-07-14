@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
@@ -33,17 +32,14 @@ public class ProteinParserTest {
      */
     private static final String NON_STANDARD_PDB_ID = "1dw9";
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldFailWhenLocalPdbDirectoryIsNotSet() {
-        ProteinParser.OptionalSteps.setLocalPdbDirectory(null);
-        ProteinParser.localPdb("10gs");
-    }
-
     @Test
     public void shouldUseLocalPdbDirectory() {
         ProteinParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
-        Protein protein = ProteinParser.localPdb("10gs").minimalParsing(true).parse();
+        Protein protein = ProteinParser.source("10gs")
+                .minimalParsing(true)
+                .parse();
         System.out.println(protein);
+        Assert.fail("reimpl: test cannot decide where the file came from");
     }
 
     @Test
@@ -83,6 +79,19 @@ public class ProteinParserTest {
     @Test
     public void shouldParseNonStandardAminoAcid() {
         ProteinParser.source(TestUtils.getResourceAsInputStream(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb")).parse();
+    }
+
+    @Test
+    public void shouldRetrieveAminoAcidSequenceOfAllChains() {
+        Protein protein = ProteinParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_5OAZ))
+                .minimalParsing(true)
+                .parse();
+        String sequence = protein.getAminoAcidSequence();
+        long numberOfGroups = protein.chains()
+                .flatMap(Chain::groups)
+                .filter(Group::isAminoAcid)
+                .count();
+        Assert.assertEquals("sequence string is not of expected size", numberOfGroups, sequence.length());
     }
 
     @Test

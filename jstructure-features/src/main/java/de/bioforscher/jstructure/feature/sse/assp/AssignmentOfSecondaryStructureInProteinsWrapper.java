@@ -31,7 +31,7 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFea
             protein.aminoAcids()
                     .forEach(this::assignNeutralState);
 
-            // create temp file next to executable
+            // create temp file next to executable as expected by ASSP
             String pdbId = protein.getProteinIdentifier().getFullName();
             String filename = pdbId + ".pdb";
             Path tmpPath = ASSP_DIRECTORY.resolve(filename);

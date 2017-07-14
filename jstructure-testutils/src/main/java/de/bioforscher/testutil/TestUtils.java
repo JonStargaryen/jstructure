@@ -20,7 +20,11 @@ public class TestUtils {
 
     public enum SupportedProtein {
         PDB_1ACJ,
-        PDB_1BRR
+        PDB_1AEY,
+        PDB_1BRR,
+        PDB_1CYO,
+        PDB_2LZM,
+        PDB_5OAZ
     }
 
     /**
@@ -29,8 +33,8 @@ public class TestUtils {
      * <code>Protein protein = ProteinParser.source(getProteinInputStream(PDB_1BRR))
      *                                      .minimalParsing(true)
      *                                      .parse()</code>
-     * @param supportedProtein
-     * @return
+     * @param supportedProtein the protein's enum entry
+     * @return an input stream of that pdb file's content
      */
     public static InputStream getProteinInputStream(SupportedProtein supportedProtein) {
         return getResourceAsInputStream("pdb/" + supportedProtein.name().split("_")[1] + ".pdb");

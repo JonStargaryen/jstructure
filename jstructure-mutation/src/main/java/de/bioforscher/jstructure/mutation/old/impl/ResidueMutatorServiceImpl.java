@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
 import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
@@ -11,7 +11,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
-import de.bioforscher.jstructure.mutation.ResidueMutatorService;
+import de.bioforscher.jstructure.mutation.old.ResidueMutatorService;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ import java.util.List;
  * Impl of the residue mutator.
  * Created by bittrich on 7/6/17.
  */
+@Deprecated
 public class ResidueMutatorServiceImpl implements ResidueMutatorService {
     private final SingleValueDecompositionAligner singleValueDecompositionAligner;
 

@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.align.impl.ClustalOmegaRestQuery;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
@@ -11,8 +11,8 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.mutation.MutationEffectPredictionService;
-import de.bioforscher.jstructure.mutation.MutationJob;
+import de.bioforscher.jstructure.mutation.old.MutationEffectPredictionService;
+import de.bioforscher.jstructure.mutation.old.MutationJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.UniProtHit;
@@ -153,7 +153,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      */
     private Optional<Protein> createProtein(ProteinIdentifier proteinIdentifier) {
         try {
-            Protein protein = ProteinParser.localPdb(proteinIdentifier.getPdbId())
+            Protein protein = ProteinParser.source(proteinIdentifier.getPdbId())
                     .minimalParsing(true)
                     .parse();
             CommonFeatureAnnotator.annotateProtein(protein);

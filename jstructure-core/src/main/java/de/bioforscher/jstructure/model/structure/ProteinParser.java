@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.structure.aminoacid.*;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -280,23 +281,6 @@ public class ProteinParser {
         return protein;
     }
 
-    //TODO the local pdb approach handling is horrible
-    //TODO traverse-all function for local pdb
-    public static OptionalSteps localPdb(String pdbId) {
-        pdbId = pdbId.toLowerCase();
-        String middle = pdbId.substring(1, 3);
-        try {
-            Path pdbDirectory = OptionalSteps.localPdbDirectory;
-            if(pdbDirectory == null || !Files.isDirectory(pdbDirectory)) {
-                throw new IllegalArgumentException("local pdb directory '" + pdbDirectory + "' is not set or not valid - use ProteinParser.OptionalSteps.setLocalPdbDirectory to set up");
-            }
-            InputStream inputStream = Files.newInputStream(pdbDirectory.resolve(middle).resolve("pdb" + pdbId + ".ent.gz"));
-            return new OptionalSteps(new GZIPInputStream(inputStream)).hintProteinName(IdentifierFactory.createProteinIdentifier(pdbId));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
     public static OptionalSteps source(InputStream inputStream) {
         return new OptionalSteps(inputStream);
     }
@@ -321,7 +305,8 @@ public class ProteinParser {
         boolean minimalParsing = false;
         ProteinIdentifier forceProteinName;
         ProteinIdentifier hintProteinName;
-        private static Path localPdbDirectory;
+        //TODO remove or place in global config
+        private static Path localPdbDirectory = Paths.get("/home/bittrich/pdb/");
         private static final int DEFAULT_CACHE_SIZE = 1000;
 
         public static void setLocalPdbDirectory(Path localPdbDirectory) {
@@ -392,7 +377,22 @@ public class ProteinParser {
         public Protein parse() {
             try {
                 if (pdbId != null) {
-                    this.inputStream = new URL(String.format(PDB_FETCH_URL, pdbId)).openStream();
+                    Path pdbDirectory = OptionalSteps.localPdbDirectory;
+                    try {
+                        if (pdbDirectory != null && Files.isDirectory(pdbDirectory)) {
+                            logger.info("using local PDB to provide {}", pdbId);
+                            // use local PDB if setup
+                            pdbId = pdbId.toLowerCase();
+                            String middle = pdbId.substring(1, 3);
+                            this.inputStream = new GZIPInputStream(Files.newInputStream(pdbDirectory.resolve(middle).resolve("pdb" + pdbId + ".ent.gz")));
+                        }
+                    } catch (IOException e) {
+                        logger.warn("did not find file {} in local PDB at {}", pdbId, pdbDirectory, e);
+                    }
+                    if(this.inputStream == null) {
+                        // no local PDB found - fetch from www
+                        this.inputStream = new URL(String.format(PDB_FETCH_URL, pdbId)).openStream();
+                    }
                 }
 
                 if (path != null) {

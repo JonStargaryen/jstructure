@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;

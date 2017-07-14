@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation;
+package de.bioforscher.jstructure.mutation.old;
 
 /**
  * Describes the properties of a mutated amino acid.

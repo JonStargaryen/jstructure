@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;

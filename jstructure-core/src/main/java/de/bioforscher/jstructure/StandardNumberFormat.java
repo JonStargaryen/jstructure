@@ -9,7 +9,7 @@ import java.util.Locale;
  * Created by bittrich on 7/13/17.
  */
 public class StandardNumberFormat {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.###", new DecimalFormatSymbols(Locale.US));
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####", new DecimalFormatSymbols(Locale.US));
 
     public static DecimalFormat getInstance() {
         return DECIMAL_FORMAT;

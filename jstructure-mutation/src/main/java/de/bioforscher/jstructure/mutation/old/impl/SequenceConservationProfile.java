@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
@@ -10,6 +10,7 @@ import java.util.Map;
  * The sequence conservation profile for a given amino acid.
  * Created by bittrich on 7/12/17.
  */
+@Deprecated
 public class SequenceConservationProfile extends FeatureContainerEntry {
     private final Map<AminoAcid.Family, Double> frequenceTable;
     private final double deletionFrequency;

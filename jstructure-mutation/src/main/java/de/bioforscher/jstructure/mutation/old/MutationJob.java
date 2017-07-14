@@ -1,10 +1,10 @@
-package de.bioforscher.jstructure.mutation;
+package de.bioforscher.jstructure.mutation.old;
 
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.mutation.impl.SequenceConservationProfile;
+import de.bioforscher.jstructure.mutation.old.impl.SequenceConservationProfile;
 
 import java.util.List;
 import java.util.Map;

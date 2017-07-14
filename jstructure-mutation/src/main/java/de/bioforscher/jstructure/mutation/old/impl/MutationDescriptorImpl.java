@@ -1,11 +1,11 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.StandardNumberFormat;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.mutation.MutationDescriptor;
+import de.bioforscher.jstructure.mutation.old.MutationDescriptor;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
 import java.util.Map;

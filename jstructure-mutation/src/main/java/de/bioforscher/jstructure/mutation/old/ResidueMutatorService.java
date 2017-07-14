@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation;
+package de.bioforscher.jstructure.mutation.old;
 
 import de.bioforscher.jstructure.model.structure.Protein;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -7,6 +7,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
  * Introduces a mutation for a given residue in a protein structure.
  * Created by bittrich on 7/12/17.
  */
+@Deprecated
 public interface ResidueMutatorService {
     /**
      * Mutate a given position in a protein.

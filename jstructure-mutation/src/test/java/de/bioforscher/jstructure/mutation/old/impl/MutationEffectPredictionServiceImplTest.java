@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mutation.impl;
+package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.feature.uniprot.UniProtBridge;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
@@ -6,8 +6,8 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.ProteinParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.mutation.MutationDescriptor;
-import de.bioforscher.jstructure.mutation.MutationJob;
+import de.bioforscher.jstructure.mutation.old.MutationDescriptor;
+import de.bioforscher.jstructure.mutation.old.MutationJob;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -165,7 +165,7 @@ public class MutationEffectPredictionServiceImplTest {
 
     private Stream<String> handleStructureBin(Map<String, List<String[]>> chainMap, String id) {
         try {
-            Chain chain = ProteinParser.localPdb(id.substring(0, 4))
+            Chain chain = ProteinParser.source(id.substring(0, 4))
                     .minimalParsing(true)
                     .parse()
                     .select()

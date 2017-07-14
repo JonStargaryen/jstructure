@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.mutation.SequenceConservationCalculator;
+import de.bioforscher.jstructure.mutation.SequenceConservationProfile;
 
 import java.util.Map;
 import java.util.Optional;
@@ -10,11 +12,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * A custom feature provider which annotates the sequence conservation profile for each amino acid.
- * Created by bittrich on 7/12/17.
+ * Implementation of the sequence conservation calculator.
+ * Created by bittrich on 7/13/17.
  */
-class SequenceConservationAnnotator {
-    static void process(Chain chain, Map<String, String> alignmentMap) {
+public class SequenceConservationCalculatorImpl implements SequenceConservationCalculator {
+    @Override
+    public void extractConservationProfile(Map<String, String> alignmentMap, Chain chain) {
         int alignmentLength = alignmentMap.values().stream().findFirst().get().length();
         double frequencyIncrease = 1 / (double) alignmentMap.size();
 
@@ -45,7 +48,7 @@ class SequenceConservationAnnotator {
                 frequencyTable.put(aminoAcid, frequencyTable.get(aminoAcid) + frequencyIncrease);
             }
 
-            SequenceConservationProfile sequenceConservationProfile = new SequenceConservationProfile(null, frequencyTable, deletionFrequency);
+            SequenceConservationProfile sequenceConservationProfile = new SequenceConservationProfile(frequencyTable, deletionFrequency);
             aminoAcidOptional.get().getFeatureContainer().addFeature(sequenceConservationProfile);
         }
     }
