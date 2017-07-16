@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -15,12 +15,8 @@ public class Methionine extends AminoAcid implements StandardAminoAcid {
     private Atom sd;
     private Atom ce;
 
-    public Methionine(Methionine methionine) {
-        super(methionine);
-//        this.cb = new Atom(methionine.cb);
-//        this.cg = new Atom(methionine.cg);
-//        this.sd = new Atom(methionine.sd);
-//        this.ce = new Atom(methionine.ce);
+    Methionine(Methionine methionine, boolean deep) {
+        super(methionine, deep);
     }
 
     public Methionine(ResidueIdentifier residueIdentifier,

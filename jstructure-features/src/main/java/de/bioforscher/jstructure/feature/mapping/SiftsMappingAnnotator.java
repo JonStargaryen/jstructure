@@ -1,10 +1,10 @@
 package de.bioforscher.jstructure.feature.mapping;
 
-import de.bioforscher.jstructure.feature.ComputationException;
+import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,7 +44,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
     private static final String[] UNKNOWN_PFAM_MAPPING = new String[] { UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING };
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         try {
             Document document = downloadXml(protein.getProteinIdentifier().getPdbId());
             protein.chainsWithAminoAcids()
@@ -62,7 +62,7 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
             group.getFeatureContainer().addFeature(mapping);
         });
 
-        String pdbId = chain.getParentProtein().getProteinIdentifier().getPdbId();
+        String pdbId = chain.getParentStructure().getProteinIdentifier().getPdbId();
         String[] ecMappingString = getLinesForPdbId(ENZYME_MAPPING, pdbId)
                 .filter(split -> split[1].equals(chain.getChainIdentifier().getChainId()))
                 .findFirst()

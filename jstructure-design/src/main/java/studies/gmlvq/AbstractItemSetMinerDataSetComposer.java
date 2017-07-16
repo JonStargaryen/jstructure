@@ -8,8 +8,8 @@ import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -129,7 +129,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
         }
         try {
             System.out.println(lines);
-            Protein protein = ProteinParser.source(lines.get(0).split("_")[0]).parse();
+            Structure protein = StructureParser.source(lines.get(0).split("_")[0]).parse();
             // calculate features
             featureProviders.forEach(featureProvider -> featureProvider.process(protein));
 
@@ -146,7 +146,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
         }
     }
 
-    private String handleLine(Protein protein, String line, boolean functional) {
+    private String handleLine(Structure protein, String line, boolean functional) {
         try {
             String[] sectionSplit = line.split("_");
 
@@ -176,7 +176,7 @@ public abstract class AbstractItemSetMinerDataSetComposer {
                 composeInteractionString(container, group);
     }
 
-    private Group extractResidue(Protein protein, String residueSection) {
+    private Group extractResidue(Structure protein, String residueSection) {
         String[] split = residueSection.split("-");
         Group group = protein
                 .select()

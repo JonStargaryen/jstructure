@@ -26,24 +26,25 @@ public class SingleValueDecompositionAligner implements StructureAligner {
     private static final Logger logger = LoggerFactory.getLogger(SingleValueDecompositionAligner.class);
 
     @Override
-    public StructureAlignmentResult align(StructureAlignmentBuilder.StructureAlignmentStep builder) throws AlignmentException {
+    public StructureAlignmentResult align(StructureAlignmentQuery structureAlignmentQuery) throws AlignmentException {
         try {
-            GroupContainer referenceOriginal = builder.getReference();
-            GroupContainer queryOriginal = builder.getQuery();
+            GroupContainer referenceOriginal = structureAlignmentQuery.getReference();
+            GroupContainer queryOriginal = structureAlignmentQuery.getQuery();
 
-            GroupContainer reference = referenceOriginal.createCopy();
-            GroupContainer query = queryOriginal.createCopy();
+            GroupContainer reference = referenceOriginal.atoms().collect(StructureCollectors.toIsolatedStructure());
+            GroupContainer query = queryOriginal.atoms().collect(StructureCollectors.toIsolatedStructure());
 
             // determine mapping
-            List<Pair<Atom, Atom>> atomMapping = builder.getAtomMapping().determineAtomMapping(reference, query);
+            List<Pair<Atom, Atom>> atomMapping = structureAlignmentQuery.getAtomMapping().determineAtomMapping(reference, query);
+            //TODO get rid of double clone - also breaks code as Selected-instances must be able to manipulate original instances
             AtomContainer referenceSelectedAtoms = atomMapping.stream()
                     .map(Pair::getLeft)
-                    .collect(StructureCollectors.toAtomContainer());
+                    .collect(StructureCollectors.toIsolatedStructure());
             AtomContainer querySelectedAtoms = atomMapping.stream()
                     .map(Pair::getRight)
-                    .collect(StructureCollectors.toAtomContainer());
+                    .collect(StructureCollectors.toIsolatedStructure());
 
-            AlignmentPolicy.ManipulationBehavior manipulationBehavior = builder.getManipulationBehavior();
+            AlignmentPolicy.ManipulationBehavior manipulationBehavior = structureAlignmentQuery.getManipulationBehavior();
 
             // calculate centroids and center atoms
             double[] centroid1 = referenceSelectedAtoms.calculate().center().getValue();
@@ -68,13 +69,16 @@ public class SingleValueDecompositionAligner implements StructureAligner {
             double[][] rotation = rotationMatrix.getData();
 
             // calculate translation
-            double[] translation = LinearAlgebra.on(centroid1).subtract(LinearAlgebra.on(centroid2).multiply(rotation)).getValue();
+            double[] translation = LinearAlgebra.on(centroid1)
+                    .subtract(LinearAlgebra.on(centroid2)
+                            .multiply(rotation))
+                    .getValue();
 
             logger.trace("rotation matrix\n{}\ntranslation vector\n{}", Arrays.deepToString(rotationMatrix.getData()),
                     Arrays.toString(translation));
 
-        /* transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are already
-        * centered and calculate RMSD */
+            // transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are
+            // already centered and calculate RMSD
             querySelectedAtoms.calculate().transform(new Transformation(rotation));
             double rmsd = calculateRmsd(atomMapping);
 

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mmm.impl;
 
 import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.mmm.ItemsetMiner;
 import de.bioforscher.mmm.ItemsetMinerRunner;
 import de.bioforscher.mmm.io.DataPointReaderConfiguration;
@@ -75,26 +75,24 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
 
     @Override
     public ItemsetMinerConfiguration<String> getConservationProfileConfiguration(Path structurePath, Path outputPath) {
-        {
-            ItemsetMinerConfiguration<String> configuration = getStandardConfiguration(structurePath, outputPath);
+        ItemsetMinerConfiguration<String> configuration = getStandardConfiguration(structurePath, outputPath);
 
-            // mine on functional groups
+        // mine on functional groups
 //        configuration.setMappingRule(new FunctionalGroupsMappingRule());
-            // mine on gutteridge-mapped amino acids
-            configuration.setMappingRule(new ChemicalGroupsMappingRule());
+        // mine on gutteridge-mapped amino acids
+        configuration.setMappingRule(new ChemicalGroupsMappingRule());
 
-            // force a certain sequence separation
-            SeparationMetricConfiguration<String> separationMetricConfiguration = new SeparationMetricConfiguration<>();
-            separationMetricConfiguration.setMaximalSeparation(50);
-            separationMetricConfiguration.setOptimalSeparation(5);
-            separationMetricConfiguration.setMorseWellDepth(500);
-            separationMetricConfiguration.setMorseShape(0.2);
-            configuration.addExtractionDependentMetricConfiguration(separationMetricConfiguration);
+        // force a certain sequence separation
+        SeparationMetricConfiguration<String> separationMetricConfiguration = new SeparationMetricConfiguration<>();
+        separationMetricConfiguration.setMaximalSeparation(50);
+        separationMetricConfiguration.setOptimalSeparation(5);
+        separationMetricConfiguration.setMorseWellDepth(500);
+        separationMetricConfiguration.setMorseShape(0.2);
+        configuration.addExtractionDependentMetricConfiguration(separationMetricConfiguration);
 
-            ((SupportMetricConfiguration<String>) configuration.getSimpleMetricConfigurations().get(0)).setMinimalSupport(0.5);
+        ((SupportMetricConfiguration<String>) configuration.getSimpleMetricConfigurations().get(0)).setMinimalSupport(0.5);
 
-            return configuration;
-        }
+        return configuration;
     }
 
     @Override
@@ -111,7 +109,7 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
     }
 
     @Override
-    public CompletableFuture<Protein> getConservationProfile(Path structurePath, Protein referenceProtein) {
+    public CompletableFuture<Structure> getConservationProfile(Path structurePath, Structure referenceProtein) {
         try {
             Path outputPath = Files.createTempDirectory("mmm-out");
             return submitJob(getConservationProfileConfiguration(structurePath, outputPath))

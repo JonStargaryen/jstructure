@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.LigandContactScreener;
 import de.bioforscher.testutil.TestUtils;
@@ -15,14 +15,14 @@ import org.junit.Test;
  */
 public class LigandContactScreenerImplTest {
     private LigandContactScreener ligandContactScreener;
-    private Protein protein;
+    private Structure protein;
     private AminoAcid aminoAcidNextToLigand;
     private AminoAcid aminoAcidNextToWater;
 
     @Before
     public void setup() {
         ligandContactScreener = new LigandContactScreenerImpl();
-        protein = ProteinParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
         aminoAcidNextToLigand = protein.select()

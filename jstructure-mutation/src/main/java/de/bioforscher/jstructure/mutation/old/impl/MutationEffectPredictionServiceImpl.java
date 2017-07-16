@@ -4,13 +4,12 @@ import de.bioforscher.jstructure.align.impl.ClustalOmegaRestQuery;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator;
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.mutation.old.MutationEffectPredictionService;
 import de.bioforscher.jstructure.mutation.old.MutationJob;
 import org.slf4j.Logger;
@@ -41,7 +40,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         this.clustalOmegaQuery = new ClustalOmegaRestQuery();
 
         //TODO unify behaviour - global config?
-        ProteinParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
+        StructureParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
     }
 
     @Override
@@ -63,7 +62,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      */
     void createMultiSequenceAlignment(MutationJob mutationJob) {
         // create wrapping pseudo-instances
-        Protein queryProtein = mutationJob.getQueryProtein();
+        Structure queryProtein = mutationJob.getQueryProtein();
         Chain queryChain = mutationJob.getQueryChain();
 
         // execute BLAST
@@ -74,7 +73,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         mutationJob.setHomologousEntryContainer(homologousEntryContainer);
 
         // retrieve homologous protein structures
-        Map<ProteinIdentifier, Protein> proteinMap = homologousEntryContainer.getHomologousChains()
+        Map<ProteinIdentifier, Structure> proteinMap = homologousEntryContainer.getHomologousChains()
                 .stream()
                 .map(ChainIdentifier::getProteinIdentifier)
                 .distinct()
@@ -124,7 +123,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 // TODO select more reasonable
                 Chain referenceChain = homologousChains.get(0);
                 mutationJob.setReferenceChain(referenceChain);
-                mutationJob.setReferenceProtein(referenceChain.getParentProtein());
+                mutationJob.setReferenceProtein(referenceChain.getParentStructure());
             }
         } else {
             logger.warn("no structure hits for {}", mutationJob.getIdentifier());
@@ -143,7 +142,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
             AminoAcid aminoAcid = aminoAcids.get(consumedAminoAcidsInChain);
             consumedAminoAcidsInChain++;
             // renumber to position in alignment string (+1 for classic Java offset)
-            aminoAcid.setResidueIdentifier(IdentifierFactory.createResidueIdentifier(sequencePosition + 1));
+//            aminoAcid.setResidueIdentifier(IdentifierFactory.createResidueIdentifier(sequencePosition + 1));
         }
     }
 
@@ -152,9 +151,9 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      * @param proteinIdentifier the identifier to process
      * @return the created and annotated instance
      */
-    private Optional<Protein> createProtein(ProteinIdentifier proteinIdentifier) {
+    private Optional<Structure> createProtein(ProteinIdentifier proteinIdentifier) {
         try {
-            Protein protein = ProteinParser.source(proteinIdentifier.getPdbId())
+            Structure protein = StructureParser.source(proteinIdentifier.getPdbId())
                     .minimalParsing(true)
                     .parse();
             CommonFeatureAnnotator.annotateProtein(protein);

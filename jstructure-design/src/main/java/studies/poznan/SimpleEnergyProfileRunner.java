@@ -3,8 +3,8 @@ package studies.poznan;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class SimpleEnergyProfileRunner {
 
         try {
             // read and parse protein
-            Protein protein = ProteinParser.source(Paths.get(inputPath)).parse();
+            Structure protein = StructureParser.source(Paths.get(inputPath)).parse();
 
             // calculate energy profile
             featureProvider.process(protein);

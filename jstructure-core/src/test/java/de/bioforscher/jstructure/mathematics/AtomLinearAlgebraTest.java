@@ -2,8 +2,8 @@ package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,11 +17,13 @@ import java.util.Arrays;
  * Created by bittrich on 5/23/17.
  */
 public class AtomLinearAlgebraTest {
-    private Protein protein;
+    private Structure protein;
 
     @Before
     public void setup() throws IOException {
-        protein = ProteinParser.source("1acj").parse();
+        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+                .minimalParsing(true)
+                .parse();
     }
 
     @Test
@@ -33,15 +35,26 @@ public class AtomLinearAlgebraTest {
 
     @Test
     public void centerOfMass() throws Exception {
-        //TODO impl
+        Assert.assertArrayEquals("center of mass does not match expectation",
+                new double[] { 4.7529, 65.5514, 56.9086 },
+                protein.calculate().centerOfMass().getValue(),
+                TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void centroid() throws Exception {
+        Assert.assertArrayEquals("centroid does not match expectation",
+                new double[] { 4.7625, 65.5635, 56.8967 },
+                protein.calculate().centroid().getValue(),
+                TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void maximalExtent() throws Exception {
+        Assert.assertEquals("maximal extent does not match expectation",
+                41.148,
+                protein.calculate().maximalExtent(),
+                TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test

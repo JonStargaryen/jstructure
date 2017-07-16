@@ -7,11 +7,11 @@ import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import studies.StudyConstants;
@@ -37,7 +37,7 @@ public class S01_ClassifyKinksOnAhahDataSet {
             PLIPInteractionContainer.class)
             .map(FeatureProviderRegistry::resolve)
             .collect(Collectors.toList());
-    private static Map<String, Optional<Protein>> proteinMap;
+    private static Map<String, Optional<Structure>> proteinMap;
 
     public static void main(String[] args) {
         proteinMap = StudyConstants.lines(StudyConstants.AHAH_DATA_SET)
@@ -82,7 +82,7 @@ public class S01_ClassifyKinksOnAhahDataSet {
             String[] commaSplit = line.split(",");
             String[] idSplit = commaSplit[0].split("_");
 
-            Protein protein = proteinMap.get(idSplit[0]).get();
+            Structure protein = proteinMap.get(idSplit[0]).get();
             Chain chain = protein.select()
                     .chainName(idSplit[1])
                     .asChain();
@@ -90,7 +90,7 @@ public class S01_ClassifyKinksOnAhahDataSet {
             GroupContainer groups = chain.select()
                     .aminoAcids()
                     .residueNumber(range)
-                    .asGroupContainer();
+                    .asIsolatedStructure();
             double size = groups.aminoAcids().count();
 
             double averageEnergy = groups.aminoAcids()
@@ -219,10 +219,10 @@ public class S01_ClassifyKinksOnAhahDataSet {
         }
     }
 
-    private static Optional<Protein> handlePdbId(String pdbId) {
+    private static Optional<Structure> handlePdbId(String pdbId) {
         try {
             logger.info("fetching and annotating {}", pdbId);
-            Protein protein = ProteinParser.source(pdbId).parse();
+            Structure protein = StructureParser.source(pdbId).parse();
             featureProviders.forEach(featureProvider -> featureProvider.process(protein));
             return Optional.of(protein);
         } catch (Exception e) {

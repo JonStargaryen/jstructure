@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class ScwrlMutatorServiceImplTest {
     private ScwrlMutatorServiceImpl scwrlMutatorService;
     private String pdbId;
-    private Protein protein;
+    private Structure protein;
     private String chainId;
     private int residueNumber;
     private AminoAcid aminoAcidToMutate;
@@ -29,7 +29,7 @@ public class ScwrlMutatorServiceImplTest {
     public void setup() {
         scwrlMutatorService = new ScwrlMutatorServiceImpl();
         pdbId = "5oaz";
-        protein = ProteinParser.source(pdbId)
+        protein = StructureParser.source(pdbId)
                 .minimalParsing(true)
                 .parse();
         chainId = "A";
@@ -44,7 +44,10 @@ public class ScwrlMutatorServiceImplTest {
     @Test
     @Ignore
     public void shouldIntroduceMutation() throws IOException {
-        Protein mutatedProtein = scwrlMutatorService.mutateAminoAcid(protein, aminoAcidToMutate, targetAminoAcid);
+        Structure mutatedProtein = scwrlMutatorService.mutateAminoAcid(protein,
+                aminoAcidToMutate.getParentChain().getChainIdentifier(),
+                aminoAcidToMutate.getResidueIdentifier(),
+                targetAminoAcid);
         //TODO global test dirs
         Files.write(Paths.get("/home/bittrich/Downloads/original.pdb"), protein.getPdbRepresentation().getBytes());
         Files.write(Paths.get("/home/bittrich/Downloads/mutated.pdb"), mutatedProtein.getPdbRepresentation().getBytes());
@@ -56,6 +59,8 @@ public class ScwrlMutatorServiceImplTest {
         String mutatedSequence = scwrlMutatorService.composeMutateScwrlSequence(protein, aminoAcidToMutate, targetAminoAcid);
         System.out.println(originalSequence);
         System.out.println(mutatedSequence);
-        Assert.assertEquals("swrcl sequence did not match expectation", "dpnlfvalydfvasgdntAsitkgeklrvlgynhngewceaqtkngqgwvpsnyitpvnlfvalydfvasgdntlsitkgeklrvlgynhngewceaqtkngqgwvpsnyitpvn", mutatedSequence);
+        Assert.assertEquals("swrcl sequence did not match expectation",
+                "dpnlfvalydfvasgdntAsitkgeklrvlgynhngewceaqtkngqgwvpsnyitpvnlfvalydfvasgdntlsitkgeklrvlgynhngewceaqtkngqgwvpsnyitpvn",
+                mutatedSequence);
     }
 }

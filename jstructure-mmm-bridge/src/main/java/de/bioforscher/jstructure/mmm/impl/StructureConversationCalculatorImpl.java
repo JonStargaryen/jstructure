@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.mmm.impl;
 
 import de.bioforscher.jstructure.mmm.StructureConservationProfile;
 import de.bioforscher.jstructure.mmm.StructureConversationCalculator;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.mmm.model.Itemset;
 import de.bioforscher.singa.chemistry.physical.model.LeafIdentifier;
@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public class StructureConversationCalculatorImpl implements StructureConversationCalculator {
     @Override
-    public void extractConservationProfile(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, Protein protein) {
+    public void extractConservationProfile(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, Structure protein) {
         protein.aminoAcids()
                 .forEach(aminoAcid -> {
                     double score = computeConservationScore(extractedItemsets, aminoAcid);
@@ -27,7 +27,7 @@ public class StructureConversationCalculatorImpl implements StructureConversatio
     }
 
     private double computeConservationScore(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, AminoAcid aminoAcid) {
-        String pdbId = aminoAcid.getParentChain().getParentProtein().getProteinIdentifier().getPdbId();
+        String pdbId = aminoAcid.getParentChain().getParentStructure().getProteinIdentifier().getPdbId();
         String chainId = aminoAcid.getParentChain().getChainIdentifier().getChainId();
         int residueNumber = aminoAcid.getResidueIdentifier().getResidueNumber();
 

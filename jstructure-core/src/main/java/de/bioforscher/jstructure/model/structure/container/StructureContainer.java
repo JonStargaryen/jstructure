@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.container;
 
-import de.bioforscher.jstructure.model.Identifiable;
+import de.bioforscher.jstructure.model.Copyable;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.Featureable;
 import de.bioforscher.jstructure.model.structure.AtomRecordWriter;
@@ -16,6 +16,8 @@ import de.bioforscher.jstructure.model.structure.Group;
  * clearAtoms connection between a set of atoms.
  * Created by S on 02.10.2016.
  */
-public interface StructureContainer extends Featureable, AtomRecordWriter, Identifiable {
+public interface StructureContainer extends Featureable, AtomRecordWriter, Copyable {
+    String getIdentifier();
 
+    void setIdentifier(String identifier);
 }

@@ -7,7 +7,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.stream.Collectors;
@@ -49,7 +49,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
     }
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         assignRawLoopFraction(protein);
         smoothLoopFraction(protein);
     }
@@ -59,7 +59,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
      * value with sequential neighbors in a window of size 9.
      * @param protein the container to processUniProtId
      */
-    private void smoothLoopFraction(Protein protein) {
+    private void smoothLoopFraction(Structure protein) {
         protein.chains()
                 .filter(chain -> chain.aminoAcids().count() > WINDOW_SIZE)
                 .forEach(this::smoothLoopFraction);
@@ -111,7 +111,7 @@ public class LoopFractionCalculator extends AbstractFeatureProvider {
      * Assigns the raw loop fraction, i.e. 1 if loop and 0 otherwise.
      * @param protein the container to processUniProtId
      */
-    private void assignRawLoopFraction(Protein protein) {
+    private void assignRawLoopFraction(Structure protein) {
         protein.aminoAcids()
                 .forEach(this::assignRawLoopFraction);
     }

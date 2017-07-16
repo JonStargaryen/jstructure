@@ -1,9 +1,9 @@
 package de.bioforscher.jstructure.feature.uniprot.homologous;
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class UniProtHomologyAnnotatorTest {
 
     @Test
     public void shouldInferInformationFromHomologousProteins() {
-        Protein protein = ProteinParser.source("2ts1").parse();
+        Structure protein = StructureParser.source("2ts1").parse();
         uniProtHomologyAnnotator.uniProtBlastService.start();
         uniProtHomologyAnnotator.process(protein);
         uniProtHomologyAnnotator.uniProtBlastService.stop();

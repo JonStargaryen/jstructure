@@ -15,6 +15,4 @@ public class IntegerRange extends Pair<Integer, Integer> {
     public String toString() {
         return "Range [" + getLeft() + ", " + getRight() + "]";
     }
-
-
 }

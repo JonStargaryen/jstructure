@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -14,11 +14,8 @@ public class Valine extends AminoAcid implements StandardAminoAcid {
     private Atom cg1;
     private Atom cg2;
 
-    public Valine(Valine valine) {
-        super(valine);
-//        this.cb = new Atom(valine.cb);
-//        this.cg1 = new Atom(valine.cg1);
-//        this.cg2 = new Atom(valine.cg2);
+    Valine(Valine valine, boolean deep) {
+        super(valine, deep);
     }
 
     public Valine(ResidueIdentifier residueIdentifier,

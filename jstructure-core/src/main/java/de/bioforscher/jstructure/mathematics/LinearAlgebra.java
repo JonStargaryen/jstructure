@@ -6,6 +6,8 @@ import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 import javax.annotation.concurrent.ThreadSafe;
 
+import static de.bioforscher.jstructure.StandardFormat.format;
+
 /**
  * This class provides access to basic linear algebraic operations on either <code>double[]</code> or model instances
  * providing fields with e.g. coordinates. Instances are immutable.
@@ -210,6 +212,11 @@ public class LinearAlgebra {
 
         public PrimitiveDoubleArrayLinearAlgebra vectorProduct(PrimitiveDoubleArrayLinearAlgebra secondVector) {
             return vectorProduct(secondVector.getValue());
+        }
+
+        @Override
+        public String toString() {
+            return "[" + format(x) + ", " + format(y) + ", " + format(z) + "]";
         }
     }
 

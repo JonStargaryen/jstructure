@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.function.Consumer;
@@ -61,7 +61,7 @@ public class StatisticsCollector {
             SequenceMotifContainer sequenceMotifContainer = plipInteraction
                     .getPartner1()
                     .getParentChain()
-                    .getParentProtein()
+                    .getParentStructure()
                     .getFeatureContainer()
                     .getFeature(SequenceMotifContainer.class);
 
@@ -171,7 +171,7 @@ public class StatisticsCollector {
         @Override
         public void accept(AminoAcid aminoAcid) {
             Chain chain = aminoAcid.getParentChain();
-            Protein protein = chain.getParentProtein();
+            Structure protein = chain.getParentStructure();
             DSSPSecondaryStructure secondaryStructure = aminoAcid.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
             PLIPInteractionContainer plipInteractionContainer = chain.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
             MembraneContainer membraneContainer = protein.getFeatureContainer().getFeature(MembraneContainer.class);

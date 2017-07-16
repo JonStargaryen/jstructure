@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -15,12 +15,8 @@ public class Asparagine extends AminoAcid implements StandardAminoAcid {
     private Atom od1;
     private Atom nd2;
 
-    public Asparagine(Asparagine asparagine) {
-        super(asparagine);
-//        this.cb = new Atom(asparagine.cb);
-//        this.cg = new Atom(asparagine.cg);
-//        this.od1 = new Atom(asparagine.od1);
-//        this.nd2 = new Atom(asparagine.nd2);
+    Asparagine(Asparagine asparagine, boolean deep) {
+        super(asparagine, deep);
     }
 
     public Asparagine(ResidueIdentifier residueIdentifier,

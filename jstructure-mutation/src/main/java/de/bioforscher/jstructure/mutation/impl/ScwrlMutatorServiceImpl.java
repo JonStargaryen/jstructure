@@ -1,7 +1,9 @@
 package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.MutatorService;
 
@@ -20,8 +22,16 @@ public class ScwrlMutatorServiceImpl implements MutatorService {
     private static final String SCWRL_COMMAND = SCWRL_DIRECTORY.resolve("Scwrl4").toFile().getAbsolutePath();
 
     @Override
-    public Protein mutateAminoAcid(Protein originalProtein, AminoAcid aminoAcidToMutate, AminoAcid.Family targetAminoAcid) {
+    public Structure mutateAminoAcid(Structure originalProtein,
+                                     ChainIdentifier chainIdentifier,
+                                     ResidueIdentifier residueIdentifier,
+                                     AminoAcid.Family targetAminoAcid) {
         try {
+            AminoAcid aminoAcidToMutate = originalProtein.select()
+                    .chainName(chainIdentifier.getChainId())
+                    .residueNumber(residueIdentifier.getResidueNumber())
+                    .asAminoAcid();
+
             Path tmpDirectory = Files.createTempDirectory("scwrl");
 
             // write structure file to tmp
@@ -45,7 +55,7 @@ public class ScwrlMutatorServiceImpl implements MutatorService {
 
             processBuilder.start().waitFor();
 
-            return ProteinParser.source(outputPath).parse();
+            return StructureParser.source(outputPath).parse();
         } catch (Exception e) {
             //TODO error-handling
             throw new RuntimeException(e);
@@ -72,7 +82,7 @@ public class ScwrlMutatorServiceImpl implements MutatorService {
      * @param targetAminoAcid the target of this mutation
      * @return the sequence used as input for scwrl
      */
-    public String composeMutateScwrlSequence(Protein originalProtein, AminoAcid aminoAcidToMutate, AminoAcid.Family targetAminoAcid) {
+    public String composeMutateScwrlSequence(Structure originalProtein, AminoAcid aminoAcidToMutate, AminoAcid.Family targetAminoAcid) {
         return originalProtein.aminoAcids()
                 .map(aminoAcid -> {
                     if(aminoAcidToMutate == aminoAcid) {

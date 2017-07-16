@@ -2,8 +2,8 @@ package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
@@ -20,7 +20,7 @@ public class SimpleMutatorServiceImplTest {
         int position = 27;
         AminoAcid.Family target = AminoAcid.Family.ALANINE;
 
-        Protein protein = ProteinParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_2LZM))
+        Structure protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_2LZM))
                 .minimalParsing(true)
                 .parse();
         AminoAcid originalAminoAcid = protein.select()
@@ -28,7 +28,10 @@ public class SimpleMutatorServiceImplTest {
                 .residueNumber(position)
                 .asAminoAcid();
 
-        Protein mutatedProtein = new SimpleMutatorServiceImpl().mutateAminoAcid(protein, originalAminoAcid, target);
+        Structure mutatedProtein = new SimpleMutatorServiceImpl().mutateAminoAcid(protein,
+                originalAminoAcid.getParentChain().getChainIdentifier(),
+                originalAminoAcid.getResidueIdentifier(),
+                target);
 
         AminoAcid mutatedGroup = mutatedProtein.select()
                 .chainName(chainId)

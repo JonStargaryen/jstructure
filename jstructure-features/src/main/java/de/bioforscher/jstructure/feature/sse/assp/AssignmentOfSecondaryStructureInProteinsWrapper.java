@@ -1,13 +1,13 @@
 package de.bioforscher.jstructure.feature.sse.assp;
 
-import de.bioforscher.jstructure.feature.ComputationException;
+import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 
@@ -26,7 +26,7 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFea
     private static final Path ASSP_DIRECTORY = Paths.get("/usr/local/bin/assp/");
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         try {
             protein.aminoAcids()
                     .forEach(this::assignNeutralState);
@@ -64,7 +64,7 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFea
         aminoAcid.getFeatureContainer().addFeature(new GenericSecondaryStructure(this, SecondaryStructureElement.COIL));
     }
 
-    private void handleLine(Protein protein, String line) {
+    private void handleLine(Structure protein, String line) {
         line = line.replaceAll("\\s+", " ");
         String[] split = line.split(" ");
 

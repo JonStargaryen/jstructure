@@ -38,7 +38,7 @@ public class FeatureContainer {
     /**
      * The safe way to access particular features, identified by its entry type.
      * @param contentClass the class of the content of interest
-     * @param <C>
+     * @param <C> the class of the expected content
      * @return the <b>first</b> relevant, wrapped as {@link Optional}
      */
     public <C extends FeatureContainerEntry> Optional<C> getFeatureOptional(Class<C> contentClass) {

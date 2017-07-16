@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.interactions;
 
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.junit.Test;
 
 /**
@@ -14,7 +14,7 @@ public class PLIPParserTest {
     public void shouldAnnotateProtein() {
         String pdbId = "1brr";
         String chainId = "A";
-        Chain chain = ProteinParser.source(pdbId).parse()
+        Chain chain = StructureParser.source(pdbId).parse()
                 .select()
                 .chainName(chainId)
                 .asChain();

@@ -4,12 +4,11 @@ import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifContainer;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.feature.sse.assp.ASSPSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.assp.AssignmentOfSecondaryStructureInProteins;
 import de.bioforscher.jstructure.feature.topology.Topology;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.jsoup.Jsoup;
 import studies.membrane.MembraneConstants;
 
@@ -30,6 +29,7 @@ import java.util.stream.Stream;
  *
  * Created by bittrich on 7/5/17.
  */
+@Deprecated
 public class T024_LinkSequenceMotifsToSecondaryStructureElements {
     static final Path OUTPUT_PATH = MembraneConstants.PDBTM_FRAGMENTS_TM_BY_SEQUENCE_MOTIF_PATH.resolve("sse.tsv");
 
@@ -66,14 +66,14 @@ public class T024_LinkSequenceMotifsToSecondaryStructureElements {
             System.out.println("fetching " + id);
             String pdbId = id.split("_")[0];
             String chainId = id.split("_")[1];
-            Protein protein = ProteinParser.source(MembraneConstants.PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
+            Structure protein = StructureParser.source(MembraneConstants.PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
                     .minimalParsing(true)
                     .parse();
             Chain chain = protein.select()
                     .chainName(chainId)
                     .asChain();
 
-            new AssignmentOfSecondaryStructureInProteins().process(protein);
+//            new AssignmentOfSecondaryStructureInProteins().process(protein);
 //            MembraneConstants.SECONDARY_STRUCTURE_ANNOTATOR.process(protein);
             MembraneConstants.ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR.process(protein, Jsoup.parse(MembraneConstants.PDBTM_OPM_PATH.resolve(pdbId + ".xml").toFile(), "UTF-8"));
             MembraneConstants.SEQUENCE_MOTIF_ANNOTATOR.process(protein);

@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mmm;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.mmm.ItemsetMinerRunner;
 import de.bioforscher.mmm.model.configurations.ItemsetMinerConfiguration;
 
@@ -39,5 +39,5 @@ public interface MacromolecularMinerBridge {
      */
     CompletableFuture<ItemsetMinerRunner> submitJob(ItemsetMinerConfiguration<String> itemsetMinerConfiguration);
 
-    CompletableFuture<Protein> getConservationProfile(Path structurePath, Protein referenceProtein);
+    CompletableFuture<Structure> getConservationProfile(Path structurePath, Structure referenceProtein);
 }

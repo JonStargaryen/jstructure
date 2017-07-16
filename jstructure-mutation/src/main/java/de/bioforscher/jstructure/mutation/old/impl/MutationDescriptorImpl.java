@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mutation.old.impl;
 
-import de.bioforscher.jstructure.StandardNumberFormat;
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
@@ -344,7 +344,7 @@ public class MutationDescriptorImpl implements MutationDescriptor {
         return sequenceIdentifier + "," +
                 mutationDescription + "," +
                 DoubleStream.of(asDoubleVector())
-                .mapToObj(StandardNumberFormat::format)
+                .mapToObj(StandardFormat::format)
                 .collect(Collectors.joining(","));
     }
 

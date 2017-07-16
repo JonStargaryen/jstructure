@@ -2,25 +2,23 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Calculable;
+import de.bioforscher.jstructure.model.Copyable;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.StructureContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
 /**
- * The most fine-grained element describing a {@link Protein}.
+ * The most fine-grained element describing a {@link Structure}.
  * Created by S on 27.09.2016.
  */
 public class Atom extends AbstractFeatureable implements AtomRecordWriter, CoordinateProvider, StructureContainer,
-        Calculable<LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra> {
-    private static final Logger logger = LoggerFactory.getLogger(Atom.class);
-    public static final float DEFAULT_BFACTOR = 100.0f;
-    public static final float DEFAULT_OCCUPANCY = 1.0f;
-    public static final String ATOM_PREFIX = "ATOM  ";
-    public static final String HETATM_PREFIX = "HETATM";
+        Calculable<LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra>, Copyable {
+    static final float DEFAULT_BFACTOR = 100.0f;
+    static final float DEFAULT_OCCUPANCY = 1.0f;
+    static final String ATOM_PREFIX = "ATOM  ";
+    static final String HETATM_PREFIX = "HETATM";
 
     private Element element;
     private String name;
@@ -79,8 +77,12 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
 
         public Atom build() {
             this.virtual = pdbSerial == 0;
-            if(!virtual && name == null) {
-                throw new IllegalArgumentException("no atom name provided for non-virtual atom with pdbSerial " + pdbSerial);
+            if(name == null) {
+                if(!virtual) {
+                    throw new IllegalArgumentException("no atom name provided for non-virtual atom with pdbSerial " + pdbSerial);
+                } else {
+                    name = element.name();
+                }
             }
             return new Atom(this);
         }
@@ -88,19 +90,20 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
 
     /**
      * Copy constructor.
-     * @param atom the original instance
      */
-    public Atom(Atom atom) {
+    Atom(Atom atom, boolean deep) {
         this.element = atom.element;
         this.name = atom.name;
         this.pdbSerial = atom.pdbSerial;
         this.coordinates = Arrays.copyOf(atom.coordinates, 3);
-        this.parentGroup = atom.parentGroup;
         this.occupancy = atom.occupancy;
         this.bfactor = atom.bfactor;
         this.virtual = atom.virtual;
         this.alternativeLocation = atom.alternativeLocation;
         this.identifier = atom.identifier;
+        if(deep) {
+            this.parentGroup = atom.parentGroup;
+        }
     }
 
     Atom(AtomBuilder atomBuilder) {
@@ -158,7 +161,8 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     }
 
     /**
-     * Returns the {@link Group} this atom is associated to.
+     * Returns the {@link Group} this atom is associated to. If none was set, this group points to the
+     * {@link Group#UNKNOWN_GROUP}, but the unknown group has no knowledge of the existence of this object.
      * @return the parent container
      */
     public Group getParentGroup() {
@@ -167,17 +171,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
 
     @Override
     public String getPdbRepresentation() {
-        try {
-            String pdbRecord = AtomRecordProvider.toPDBString(this);
-            if (pdbRecord.length() == 0) {
-                logger.warn("malformed ATOM record {}", toString());
-            }
-            return pdbRecord;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            //TODO replace with actual fallback - will fail for virtual atoms without parent references
-            return toString();
-        }
+        return AtomRecordProvider.toPdbString(this);
     }
 
     @Override
@@ -247,5 +241,15 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     @Override
     public LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra calculate() {
         return LinearAlgebra.on(this);
+    }
+
+    @Override
+    public Atom createDeepCopy() {
+        return new Atom(this, true);
+    }
+
+    @Override
+    public Atom createShallowCopy() {
+        return new Atom(this, false);
     }
 }

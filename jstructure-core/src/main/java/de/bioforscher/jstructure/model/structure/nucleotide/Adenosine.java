@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -16,8 +16,8 @@ public class Adenosine extends Nucleotide implements StandardNucleotide {
     private Atom n7;
     private Atom n6;
 
-    public Adenosine(Adenosine adenosine) {
-        super(adenosine);
+    Adenosine(Adenosine adenosine, boolean deep) {
+        super(adenosine, deep);
     }
 
     public Adenosine(ResidueIdentifier residueIdentifier,

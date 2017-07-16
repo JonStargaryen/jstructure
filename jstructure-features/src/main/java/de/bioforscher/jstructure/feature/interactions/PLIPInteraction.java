@@ -1,10 +1,10 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.feature.ComputationException;
+import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.nodes.Element;
 
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  */
 public abstract class PLIPInteraction {
     private static final String TRUE_FLAG = "True";
-    private Protein protein;
+    private Structure protein;
     Group partner1;
     Group partner2;
     private Element describingElement;
@@ -37,7 +37,7 @@ public abstract class PLIPInteraction {
     PLIPInteraction(Group group, Element describingElement) {
         this.partner1 = group;
         this.describingElement = describingElement;
-        this.protein = partner1.getParentChain().getParentProtein();
+        this.protein = partner1.getParentChain().getParentStructure();
         Element ligcoo = describingElement.getElementsByTag("ligcoo").first();
         Element protcoo = describingElement.getElementsByTag("protcoo").first();
         // element could describe metal complex where coordinate entries are named differently

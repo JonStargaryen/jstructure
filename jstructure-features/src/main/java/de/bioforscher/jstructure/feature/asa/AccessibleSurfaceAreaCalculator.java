@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * <p>Computes the accessible surface area of each getResidue in a {@link Protein}.</p>
+ * <p>Computes the accessible surface area of each getResidue in a {@link Structure}.</p>
  *
  * <p>Wide parts are BioJava code. Original BioJava doc:</p>
  * <pre>Class to calculate Accessible Surface Areas based on
@@ -90,7 +90,7 @@ public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
     }
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         List<Atom> nonHydrogenAtoms = protein.select()
                 .aminoAcids()
                 .nonHydrogenAtoms()

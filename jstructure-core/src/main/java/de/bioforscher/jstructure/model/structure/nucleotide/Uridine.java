@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -14,8 +14,8 @@ public class Uridine extends Nucleotide implements StandardNucleotide {
     private Atom o2;
     private Atom o4;
 
-    public Uridine(Uridine uridine) {
-        super(uridine);
+    Uridine(Uridine uridine, boolean deep) {
+        super(uridine, deep);
     }
 
     public Uridine(ResidueIdentifier residueIdentifier,

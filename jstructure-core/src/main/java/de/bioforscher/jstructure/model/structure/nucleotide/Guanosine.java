@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -17,8 +17,8 @@ public class Guanosine extends Nucleotide implements StandardNucleotide {
     private Atom o6;
     private Atom n2;
 
-    public Guanosine(Guanosine guanosine) {
-        super(guanosine);
+    Guanosine(Guanosine guanosine, boolean deep) {
+        super(guanosine, deep);
     }
 
     public Guanosine(ResidueIdentifier residueIdentifier,

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 import java.util.Optional;
 import java.util.Set;
@@ -233,7 +233,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
 
         public static Stream<AminoAcid.Family> canonicalAminoAcids() {
             return Stream.of(values())
-                    // canonical amino acids are the first 20 of the enum - TODO not the nicest way, UnknownAminoAcid is a StandardAminoAcid however
+                    // canonical amino acids are the first 20 of the enum
                     .limit(20);
         }
 
@@ -258,8 +258,8 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     private Atom o;
     private Atom h;
 
-    AminoAcid(AminoAcid aminoAcid) {
-        super(aminoAcid);
+    AminoAcid(AminoAcid aminoAcid, boolean deep) {
+        super(aminoAcid, deep);
         atoms().forEach(this::addAtomInternal);
     }
 

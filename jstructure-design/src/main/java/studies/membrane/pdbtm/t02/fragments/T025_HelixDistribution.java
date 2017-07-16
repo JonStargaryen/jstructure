@@ -11,9 +11,9 @@ import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.jsoup.Jsoup;
 import studies.membrane.MembraneConstants;
 
@@ -98,7 +98,7 @@ public class T025_HelixDistribution {
             System.out.println("processing " + id);
             String pdbId = id.split("_")[0];
             String chainId = id.split("_")[1];
-            Protein protein = ProteinParser.source(MembraneConstants.PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
+            Structure protein = StructureParser.source(MembraneConstants.PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
                     .minimalParsing(true)
                     .parse();
             Chain chain = protein.select()

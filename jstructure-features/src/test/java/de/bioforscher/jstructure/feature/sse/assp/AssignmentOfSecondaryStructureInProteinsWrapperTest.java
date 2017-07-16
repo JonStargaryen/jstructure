@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.feature.sse.assp;
 
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.junit.Test;
 
 /**
@@ -12,7 +12,7 @@ import org.junit.Test;
 public class AssignmentOfSecondaryStructureInProteinsWrapperTest {
     @Test
     public void shouldExecuteASSP() {
-        Protein protein = ProteinParser.source("2jho").parse();
+        Structure protein = StructureParser.source("2jho").parse();
         new AssignmentOfSecondaryStructureInProteinsWrapper().process(protein);
         protein.aminoAcids()
                 .forEach(aminoAcid -> System.out.println(aminoAcid.getIdentifier() + " " +

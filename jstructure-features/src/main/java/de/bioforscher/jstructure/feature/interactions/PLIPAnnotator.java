@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import org.jsoup.nodes.Document;
 
 import java.util.Collection;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @FeatureProvider(provides = PLIPInteractionContainer.class)
 public class PLIPAnnotator extends AbstractFeatureProvider {
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         protein.chainsWithAminoAcids()
                 .parallel()
                 .forEach(chain -> process(chain, PLIPRestServiceQuery.getDocument(chain.getChainIdentifier())));

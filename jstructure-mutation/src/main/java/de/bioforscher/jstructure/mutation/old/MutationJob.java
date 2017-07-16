@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.mutation.old;
 
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEntryContainer;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.old.impl.SequenceConservationProfile;
 
@@ -18,7 +18,7 @@ public interface MutationJob {
 
     String getQuerySequence();
 
-    Protein getQueryProtein();
+    Structure getQueryProtein();
 
     Chain getQueryChain();
 
@@ -30,9 +30,9 @@ public interface MutationJob {
 
     List<Chain> getHomologousPdbChains();
 
-    Protein getReferenceProtein();
+    Structure getReferenceProtein();
 
-    void setReferenceProtein(Protein referenceProtein);
+    void setReferenceProtein(Structure referenceProtein);
 
     Chain getReferenceChain();
 

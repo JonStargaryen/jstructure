@@ -1,16 +1,16 @@
 package de.bioforscher.jstructure.mutation.old.impl;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
-import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.StructureAlignmentQuery;
 import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.mutation.old.ResidueMutatorService;
 
 import java.util.List;
@@ -28,16 +28,16 @@ public class ResidueMutatorServiceImpl implements ResidueMutatorService {
     }
 
     @Override
-    public Protein mutateResidue(Protein originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid) {
+    public Structure mutateResidue(Structure originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid) {
         try {
             GroupContainer originalResidueContainer = originalProtein.select()
                     .chainName(chainId)
                     .residueNumber(residueNumber)
-                    .asGroupContainer();
+                    .asIsolatedStructure();
             Group originalGroup = originalResidueContainer.getGroups().get(0);
 
             // deep-copy original protein
-            Protein mutatedProtein = new Protein(originalProtein);
+            Structure mutatedProtein = originalProtein.createDeepCopy();
             // select chain to mutate
             Chain mutatedChain = mutatedProtein.select()
                     .chainName(chainId)
@@ -56,13 +56,13 @@ public class ResidueMutatorServiceImpl implements ResidueMutatorService {
                     // ignore hydrogen atoms and terminal oxygen
                     .filter(atom -> atom.getElement().isHeavyAtom() && !atom.getName().equals("OXT"))
                     // clone atoms, so that original atoms are by no means compromised
-                    .map(Atom::new)
+                    .map(Atom::createDeepCopy)
                     .forEach(mutatedResidue::addAtom);
 
-            Chain mutatedResidueContainer = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
+            Chain mutatedResidueContainer = new Chain(ChainIdentifier.UNKNOWN_CHAIN_IDENTIFIER);
             mutatedResidueContainer.addGroup(mutatedResidue);
             // transform coordinates
-            StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(originalResidueContainer, mutatedResidueContainer)
+            StructureAlignmentQuery query = StructureAlignmentQuery.of(originalResidueContainer, mutatedResidueContainer)
                     .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                     .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
             singleValueDecompositionAligner.align(query)
@@ -85,7 +85,7 @@ public class ResidueMutatorServiceImpl implements ResidueMutatorService {
         }
     }
 
-    private void renumber(Protein protein) {
+    private void renumber(Structure protein) {
         int pdbSerial = 1;
         for(Chain chain : protein.getChains()) {
             List<Group> groups = chain.getGroups();

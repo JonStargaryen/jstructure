@@ -2,7 +2,9 @@ package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Water;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,14 +39,37 @@ public interface GroupContainer extends AtomContainer {
                 .map(AminoAcid.class::cast);
     }
 
+    default Stream<Group> ligands() {
+        return groups()
+                .filter(Group::isLigand);
+    }
+
+    default Stream<Nucleotide> nucleotides() {
+        return groups()
+                .filter(Group::isNucleotide)
+                .map(Nucleotide.class::cast);
+    }
+
+    default Stream<Water> waters() {
+        return groups()
+                .filter(Group::isWater)
+                .map(Water.class::cast);
+    }
+
     default String getAminoAcidSequence() {
         return aminoAcids()
                 .map(AminoAcid::getOneLetterCode)
                 .collect(Collectors.joining());
     }
 
-    @Override
-    default GroupContainer createCopy() {
-        return (GroupContainer) AtomContainer.super.createCopy();
+    default String getNucleotideSequence() {
+        return nucleotides()
+                .map(Nucleotide::getOneLetterCode)
+                .collect(Collectors.joining());
     }
+
+//    @Override
+//    default GroupContainer createDeepCopy() {
+//        return (GroupContainer) AtomContainer.super.createDeepCopy();
+//    }
 }

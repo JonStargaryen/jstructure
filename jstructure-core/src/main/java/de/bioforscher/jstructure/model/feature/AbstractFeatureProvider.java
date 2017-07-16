@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.feature;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ public abstract class AbstractFeatureProvider {
      * Runs the computations implemented by this feature provider and assigns the results to the given container.
      * @param protein the container to processUniProtId
      */
-    public void process(Protein protein) {
+    public void process(Structure protein) {
         FeatureProvider annotation = getClass().getDeclaredAnnotation(FeatureProvider.class);
         // additional features must be computed beforehand
         if (!Arrays.equals(annotation.requires(), new String[0])) {
@@ -68,7 +68,7 @@ public abstract class AbstractFeatureProvider {
      * there is a need to clean-up some variables etc in the container.
      * @param protein the container to clean
      */
-    protected void postprocessInternally(Protein protein) {
+    protected void postprocessInternally(Structure protein) {
 
     }
 
@@ -96,5 +96,5 @@ public abstract class AbstractFeatureProvider {
         }
     }
 
-    protected abstract void processInternally(Protein protein);
+    protected abstract void processInternally(Structure protein);
 }

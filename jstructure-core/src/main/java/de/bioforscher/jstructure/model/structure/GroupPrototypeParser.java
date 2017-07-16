@@ -102,7 +102,7 @@ public class GroupPrototypeParser {
                 .first()
                 .attr("id");
 
-        List<Atom> prototypeAtoms;
+        List<Atom> prototypeAtoms = new ArrayList<>();
         try {
             prototypeAtoms = document.getElementsByTag("PDBx:chem_comp_atomCategory")
                     .first()
@@ -112,7 +112,6 @@ public class GroupPrototypeParser {
                     .collect(Collectors.toList());
         } catch (NullPointerException e) {
             // occurs for the unknown ligand ('UNL') which does not provide any prototype atoms
-            prototypeAtoms = new ArrayList<>();
         }
 
         return new GroupPrototype(id,

@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class SequenceMotifAnnotator extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         SequenceMotifContainer globalList = new SequenceMotifContainer(this);
 
         protein.chainsWithAminoAcids()

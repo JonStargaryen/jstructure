@@ -11,6 +11,8 @@ public class AminoAcidFamilyTest {
     @Test
     public void shouldResolveOneLetterCodeCorrectly() {
         // olc 'M' is used by methionine and selenomethionine
-        Assert.assertEquals("resolving of one-letter-codes corrupted", AminoAcid.Family.METHIONINE, AminoAcid.Family.resolveOneLetterCode("M"));
+        Assert.assertEquals("resolving of one-letter-codes corrupted",
+                AminoAcid.Family.METHIONINE,
+                AminoAcid.Family.resolveOneLetterCode("M"));
     }
 }

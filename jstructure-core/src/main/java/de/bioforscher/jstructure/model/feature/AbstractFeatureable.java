@@ -18,6 +18,10 @@ public class AbstractFeatureable {
         return featureContainer;
     }
 
+    public <C extends FeatureContainerEntry> C getFeature(Class<C> contentClass) {
+        return featureContainer.getFeature(contentClass);
+    }
+
     public void setFeatureContainer(FeatureContainer featureContainer) {
         this.featureContainer = featureContainer;
     }

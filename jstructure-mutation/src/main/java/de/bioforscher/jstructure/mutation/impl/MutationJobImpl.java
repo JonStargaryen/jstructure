@@ -1,11 +1,11 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.mutation.MutationJob;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ import java.util.UUID;
 public class MutationJobImpl implements MutationJob {
     private final String jobName;
     private final UUID uuid;
-    private final LocalDateTime creationTime;
+    private final LocalDate creationTime;
     private final Chain originalChain;
     private final Chain referenceChain;
     private List<UniProtEntry> homologousSequences;
@@ -26,11 +26,11 @@ public class MutationJobImpl implements MutationJob {
                            Chain originalChain) {
         this.jobName = jobName;
         this.uuid = UUID.randomUUID();
-        this.creationTime = LocalDateTime.now();
+        this.creationTime = LocalDate.now();
         this.originalChain = originalChain;
         // deep-clone original chain - ignore feature map entries - ignore all other chains
-        Chain clonedChain = (Chain) originalChain.createCopy();
-        Protein protein = new Protein(clonedChain.getChainIdentifier().getProteinIdentifier());
+        Chain clonedChain = originalChain.createDeepCopy();
+        Structure protein = new Structure(clonedChain.getChainIdentifier().getProteinIdentifier());
         protein.addChain(clonedChain);
         this.referenceChain = clonedChain;
     }
@@ -46,7 +46,7 @@ public class MutationJobImpl implements MutationJob {
     }
 
     @Override
-    public LocalDateTime getCreationTime() {
+    public LocalDate getCreationTime() {
         return creationTime;
     }
 
@@ -60,7 +60,7 @@ public class MutationJobImpl implements MutationJob {
         return referenceChain;
     }
 
-    public void setHomologousSequences(List<UniProtEntry> homologousSequences) {
+    void setHomologousSequences(List<UniProtEntry> homologousSequences) {
         this.homologousSequences = homologousSequences;
     }
 
@@ -69,7 +69,7 @@ public class MutationJobImpl implements MutationJob {
         return homologousSequences;
     }
 
-    public void setHomologousPdbChains(List<Chain> homologousPdbChains) {
+    void setHomologousPdbChains(List<Chain> homologousPdbChains) {
         this.homologousPdbChains = homologousPdbChains;
     }
 

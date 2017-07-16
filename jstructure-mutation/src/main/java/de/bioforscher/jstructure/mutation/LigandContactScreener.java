@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mutation;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 /**
@@ -14,5 +14,5 @@ public interface LigandContactScreener {
      * @param aminoAcid the peculiar amino acid
      * @return the number of observed contacts within a given cutoff
      */
-    int determineNumberOfLigandContacts(Protein protein, AminoAcid aminoAcid);
+    int determineNumberOfLigandContacts(Structure protein, AminoAcid aminoAcid);
 }

@@ -55,16 +55,25 @@ public class PrimitiveDoubleArrayLinearAlgebraTest {
     @Test
     public void dotProduct() throws Exception {
         // orthogonal vectors => 0.0
-        Assert.assertEquals(0.0, LinearAlgebra.on(orthogonalVector1).dotProduct(orthogonalVector2), 0.0);
+        Assert.assertEquals("dot product of orthogonal vectors should be 0.0",
+                0.0,
+                LinearAlgebra.on(orthogonalVector1).dotProduct(orthogonalVector2),
+                0.0);
     }
 
     @Test
     public void normalize() throws Exception {
-        Assert.assertEquals(1.0, LinearAlgebra.on(vector1).normalize().norm(), 0.0);
+        Assert.assertEquals("norm of norm vector should be 1.0",
+                1.0,
+                LinearAlgebra.on(vector1).normalize().norm(),
+                0.0);
     }
 
     @Test
     public void vectorProduct() throws Exception {
-        //TODO impl
+        Assert.assertArrayEquals("vector product does not match expectation",
+                new double[] { -7, 5, -1 },
+                LinearAlgebra.on(vector1).vectorProduct(vector2).getValue(),
+                0.0);
     }
 }

@@ -1,8 +1,9 @@
 package de.bioforscher.jstructure.mutation;
 
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 /**
  * Predicts the effect of a given mutation in the context of a protein structure.
@@ -12,6 +13,7 @@ public interface MutationEffectPredictionService {
     MutationJob createMutationJob(String jobName, Chain referenceChain);
 
     MutationFeatureVector createMutationFeatureVector(MutationJob mutationJob,
-                                                      ResidueIdentifier residueIdentifierToMutate,
+                                                      ChainIdentifier chainIdentifier,
+                                                      ResidueIdentifier residueToMutate,
                                                       AminoAcid.Family mutationTarget);
 }

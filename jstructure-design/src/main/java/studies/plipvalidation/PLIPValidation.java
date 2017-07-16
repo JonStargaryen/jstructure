@@ -7,9 +7,9 @@ import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondarySt
 import de.bioforscher.jstructure.model.feature.FeatureContainer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
 
 /**
  * Created by bittrich on 6/29/17.
@@ -20,7 +20,7 @@ public class PLIPValidation {
     }
 
     private static void process(String pdbId) {
-        Protein protein = ProteinParser.source(pdbId).parse();
+        Structure protein = StructureParser.source(pdbId).parse();
 
         try {
             new DictionaryOfProteinSecondaryStructure().process(protein);

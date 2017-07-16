@@ -1,6 +1,8 @@
 package de.bioforscher.jstructure.mutation;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 /**
@@ -16,9 +18,13 @@ public interface MutatorService {
     /**
      * Mutate a given position in a protein.
      * @param originalProtein the original protein which will not be manipulated
-     * @param aminoAcidToMutate the amino acid to mutate
+     * @param chainIdentifier the chain where the mutation shall be introduced
+     * @param residueToMutate the amino acid to mutate
      * @param targetAminoAcid the desired target amino acid
-     * @return a new {@link Protein} instance featuring the mutation
+     * @return a new {@link Structure} instance featuring the mutation
      */
-    Protein mutateAminoAcid(Protein originalProtein, AminoAcid aminoAcidToMutate, AminoAcid.Family targetAminoAcid);
+    Structure mutateAminoAcid(Structure originalProtein,
+                              ChainIdentifier chainIdentifier,
+                              ResidueIdentifier residueToMutate,
+                              AminoAcid.Family targetAminoAcid);
 }

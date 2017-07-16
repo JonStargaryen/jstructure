@@ -2,11 +2,13 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -14,11 +16,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * The abstract representation of a group within a molecular structure. Some group implementations provide explicit
+ * The generic representation of a group within a molecular structure. Some group implementations provide explicit
  * functions to retrieve specific atom. They are registered automatically during parsing. The atom registered first will
  * always be kept even when e.g. multiple alpha carbons would be provided for an amino acid. Also, these methods may
  * return null, when the corresponding atom was not provided by a PDB file. These methods are used to speed up access
- * to atoms as a more convenient, but slower alternative use the {@link Selection} implementation accessible by
+ * to atoms as to a more convenient, but slower alternative in the {@link Selection} implementation accessible by
  * {@link Group#select()}.
  * Created by bittrich on 5/24/17.
  */
@@ -26,7 +28,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     /**
      * reference to an undefined group - this is used by atoms without explicit parent reference
      */
-    static final Group UNKNOWN_GROUP = new Group("UNK",
+    public static final Group UNKNOWN_GROUP = new Group("UNK",
             IdentifierFactory.createResidueIdentifier(0),
             false);
     public static final Set<String> HYDROGEN_NAMES = Stream.of("H", "D", "T").collect(Collectors.toSet());
@@ -56,22 +58,23 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         this.groupPrototype = groupPrototype;
         this.ligand = ligand;
         this.atoms = new ArrayList<>();
-        this.parentChain = Chain.UNKNOWN_CHAIN;
     }
 
-    public Group(Group group) {
+    protected Group(Group group, boolean deep) {
         this.threeLetterCode = group.threeLetterCode;
         this.residueIdentifier = group.residueIdentifier;
         this.groupPrototype = group.groupPrototype;
         this.ligand = group.ligand;
-        // deep clone entries
-        this.atoms = group.atoms()
-                .map(Atom::new)
-                .collect(Collectors.toList());
-        this.atoms().forEach(atom -> atom.setParentGroup(this));
-        // reference parent
-        this.parentChain = group.parentChain;
         this.identifier = group.identifier;
+        if(deep) {
+            this.atoms = group.atoms()
+                    .map(Atom::createDeepCopy)
+                    .collect(Collectors.toList());
+            this.atoms().forEach(atom -> atom.setParentGroup(this));
+            this.parentChain = group.parentChain;
+        } else {
+            this.atoms = new ArrayList<>();
+        }
     }
 
     public String getThreeLetterCode() {
@@ -86,10 +89,6 @@ public class Group extends AbstractFeatureable implements AtomContainer {
      */
     void setThreeLetterCode(String threeLetterCode) {
         this.threeLetterCode = threeLetterCode;
-    }
-
-    public void setResidueIdentifier(ResidueIdentifier residueIdentifier) {
-        this.residueIdentifier = residueIdentifier;
     }
 
     public ResidueIdentifier getResidueIdentifier() {
@@ -139,7 +138,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
      * @param atom the atom to be handled - identified by its name, assigned to a particular field of the child class
      */
     protected void addAtomInternal(Atom atom) {
-        //TODO this could be realized by reflection
+
     }
 
     protected static GroupPrototype createPrototypeInstance(String id) {
@@ -147,7 +146,8 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     }
 
     /**
-     * Returns the {@link Chain} this getResidue is associated to.
+     * Returns the {@link Chain} this getResidue is associated to. If none was set, this group points to the
+     * {@link Chain#UNKNOWN_CHAIN}, but the unknown chain has no knowledge of the existence of this object.
      * @return the parent container
      */
     public Chain getParentChain() {
@@ -183,5 +183,25 @@ public class Group extends AbstractFeatureable implements AtomContainer {
     @Override
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @Override
+    public Group createDeepCopy() {
+        return callCopyConstructor(true);
+    }
+
+    @Override
+    public Group createShallowCopy() {
+        return callCopyConstructor(false);
+    }
+
+    private Group callCopyConstructor(boolean deep) {
+        try {
+            Constructor<? extends Group> constructor = getClass().getDeclaredConstructor(getClass(), boolean.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(this, deep);
+        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 }

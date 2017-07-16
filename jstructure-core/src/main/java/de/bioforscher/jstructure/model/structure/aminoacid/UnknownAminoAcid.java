@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -13,10 +13,8 @@ public class UnknownAminoAcid extends AminoAcid implements StandardAminoAcid {
     private Atom cb;
     private Atom cg;
 
-    public UnknownAminoAcid(UnknownAminoAcid unknownAminoAcid) {
-        super(unknownAminoAcid);
-        this.cb = unknownAminoAcid.cb;
-        this.cg = unknownAminoAcid.cg;
+    UnknownAminoAcid(UnknownAminoAcid unknownAminoAcid, boolean deep) {
+        super(unknownAminoAcid, deep);
     }
 
     public UnknownAminoAcid(String threeLetterCode,

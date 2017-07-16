@@ -1,7 +1,9 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
+import de.bioforscher.testutil.TestUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,24 +14,31 @@ import java.io.IOException;
  * Created by S on 24.10.2016.
  */
 public class SequenceMotifAnnotatorTest {
-    private Protein protein1acj;
+    private Structure protein;
 
     @Before
     public void setup() throws IOException {
-        protein1acj = ProteinParser.source("1acj").parse();
+        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+                .minimalParsing(true)
+                .parse();
     }
 
     @Test
     public void shouldAnnotateSequenceMotifs() {
-
-// TODO need sophisticated tests
         SequenceMotifAnnotator sequenceMotifAnnotator = new SequenceMotifAnnotator();
-        sequenceMotifAnnotator.process(protein1acj);
-//        Selection.on(protein1acj)
-//                .aminoAcids()
-//                .asFilteredGroups()
-//                .map(residue -> residue.getFeature(List.class,
-//                        SequenceMotifAnnotator.SEQUENCE_MOTIF))
-//                .forEach(System.out::println);
+        sequenceMotifAnnotator.process(protein);
+        protein.aminoAcids()
+                .forEach(aminoAcid -> Assert.assertNotNull(aminoAcid.getFeature(SequenceMotifContainer.class)));
+        SequenceMotifContainer container = protein.getFeature(SequenceMotifContainer.class);
+        Assert.assertEquals("GG4 count does not match", 5, count(container, SequenceMotifDefinition.GG4));
+        Assert.assertEquals("AL6 count does not match", 2, count(container, SequenceMotifDefinition.AL6));
+        Assert.assertEquals("IL4 count does not match", 1, count(container, SequenceMotifDefinition.IL4));
+    }
+
+    private long count(SequenceMotifContainer sequenceMotifContainer, SequenceMotifDefinition sequenceMotifDefinition) {
+        return sequenceMotifContainer.getSequenceMotifs()
+                .stream()
+                .filter(sequenceMotif -> sequenceMotif.getMotifDefinition() == sequenceMotifDefinition)
+                .count();
     }
 }

@@ -1,19 +1,20 @@
 package studies.membrane.pdbtm.t02.fragments;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
-import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.StructureAlignmentQuery;
 import de.bioforscher.jstructure.align.StructureAlignmentResult;
 import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.motif.SequenceMotif;
 import de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import studies.membrane.MembraneConstants;
@@ -85,8 +86,8 @@ public class T021_TransmembraneSequenceMotifs {
         Path sequenceMotifOutputPath = sequenceMotifDirectory.resolve(filename);
 
         // if map does not contain reference already: make the current sequence motif reference
-        GroupContainer fragment = sequenceMotif.getAminoAcids().stream()
-                .collect(StructureCollectors.toGroupContainer());
+        Structure fragment = sequenceMotif.getAminoAcids().stream()
+                .collect(StructureCollectors.toIsolatedStructure());
         fragment.setIdentifier(id);
         if(!referenceMotifs.containsKey(sequenceMotif.getMotifDefinition())) {
             referenceMotifs.put(sequenceMotif.getMotifDefinition(), fragment);
@@ -101,7 +102,7 @@ public class T021_TransmembraneSequenceMotifs {
                         reference.getAtoms().get(0).getParentGroup().getIdentifier() + "-" +
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(reference, fragment)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(reference, fragment)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsComparableBackboneAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignment = new SingleValueDecompositionAligner().align(query);
@@ -129,7 +130,7 @@ public class T021_TransmembraneSequenceMotifs {
                 .map(PLIPInteraction::getAtomRepresentation)
                 .forEach(interactionGroup::addAtom);
         // employ transformation on whole fragment including interactions
-        GroupContainer alignedFragment = fragment.createCopy();
+        GroupContainer alignedFragment = fragment.createDeepCopy();
         alignment.getTransformation().transform(alignedFragment);
         alignment.getTransformation().transform(interactionGroup);
 

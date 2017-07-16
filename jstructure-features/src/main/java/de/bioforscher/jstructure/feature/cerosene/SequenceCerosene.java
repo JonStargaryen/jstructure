@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 
 import java.util.stream.IntStream;
 
@@ -23,7 +23,7 @@ public class SequenceCerosene extends AbstractFeatureProvider {
     private static final double[] SUMMAND = { 127, 127, 127 };
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         final double[] centroid = protein.calculate().centroid().getValue();
         final double rawMaximalExtent = protein.calculate().maximalExtent();
         final double maximalExtent = rawMaximalExtent < 23.0 ? 23.0 : rawMaximalExtent;
@@ -38,7 +38,7 @@ public class SequenceCerosene extends AbstractFeatureProvider {
                 });
     }
 
-    static double maximalExtent(Protein protein, double[] centroid) {
+    static double maximalExtent(Structure protein, double[] centroid) {
         return protein.atoms()
                 .map(Atom::getCoordinates)
                 .map(coordinates -> LinearAlgebra.on(coordinates).subtract(centroid).getValue())

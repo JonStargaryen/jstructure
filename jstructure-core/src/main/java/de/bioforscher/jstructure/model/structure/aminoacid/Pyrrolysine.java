@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -24,21 +24,8 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
     private Atom cg;
     private Atom cb;
 
-    public Pyrrolysine(Pyrrolysine pyrrolysine) {
-        super(pyrrolysine);
-//        this.cb2 = new Atom(pyrrolysine.cb2);
-//        this.cg2 = new Atom(pyrrolysine.cg2);
-//        this.cd2 = new Atom(pyrrolysine.cd2);
-//        this.ce2 = new Atom(pyrrolysine.ce2);
-//        this.n2 = new Atom(pyrrolysine.n2);
-//        this.ca2 = new Atom(pyrrolysine.ca2);
-//        this.c2 = new Atom(pyrrolysine.c2);
-//        this.o2 = new Atom(pyrrolysine.o2);
-//        this.nz = new Atom(pyrrolysine.nz);
-//        this.ce = new Atom(pyrrolysine.ce);
-//        this.cd = new Atom(pyrrolysine.cd);
-//        this.cg = new Atom(pyrrolysine.cg);
-//        this.cb = new Atom(pyrrolysine.cb);
+    Pyrrolysine(Pyrrolysine pyrrolysine, boolean deep) {
+        super(pyrrolysine, deep);
     }
 
     public Pyrrolysine(ResidueIdentifier residueIdentifier, boolean ligand) {

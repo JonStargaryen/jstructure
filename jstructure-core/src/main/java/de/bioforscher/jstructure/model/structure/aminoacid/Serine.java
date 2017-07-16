@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -13,10 +13,8 @@ public class Serine extends AminoAcid implements StandardAminoAcid {
     private Atom cb;
     private Atom og;
 
-    public Serine(Serine serine) {
-        super(serine);
-//        this.cb = new Atom(serine.cb);
-//        this.og = new Atom(serine.og);
+    Serine(Serine serine, boolean deep) {
+        super(serine, deep);
     }
 
     public Serine(ResidueIdentifier residueIdentifier,

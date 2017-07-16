@@ -20,6 +20,7 @@ public class TestUtils {
 
     public enum SupportedProtein {
         PDB_1ACJ,
+        PDB_1AR1,
         PDB_1AEY,
         PDB_1BRR,
         PDB_1CYO,
@@ -44,7 +45,7 @@ public class TestUtils {
         ClassLoader ccl = Thread.currentThread().getContextClassLoader();
         Objects.requireNonNull(ccl);
         InputStream is = ccl.getResourceAsStream(filename);
-        return Objects.requireNonNull(is);
+        return Objects.requireNonNull(is, "could not acquire inputstream of resource '" + filename + "'");
     }
 
     public static Stream<String> getResourceAsStream(String filename) {

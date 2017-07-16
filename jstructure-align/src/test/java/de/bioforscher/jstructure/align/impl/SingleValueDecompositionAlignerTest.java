@@ -2,13 +2,13 @@ package de.bioforscher.jstructure.align.impl;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
 import de.bioforscher.jstructure.align.StructureAligner;
-import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.StructureAlignmentQuery;
 import de.bioforscher.jstructure.align.StructureAlignmentResult;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  */
 public class SingleValueDecompositionAlignerTest {
     private StructureAligner structureAligner;
-    private Protein protein1acj;
+    private Structure protein1acj;
     private GroupContainer container1;
     private GroupContainer container2;
     private GroupContainer container3;
@@ -32,9 +32,10 @@ public class SingleValueDecompositionAlignerTest {
     @Before
     public void setup() {
         structureAligner = new SingleValueDecompositionAligner();
-        protein1acj = ProteinParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1BRR))
+        protein1acj = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
+
         Group his1 = createGroup("HIS", 1);
         Group asp1 = createGroup("ASP", 2);
         Group ser1 = createGroup("SER", 3);
@@ -47,7 +48,7 @@ public class SingleValueDecompositionAlignerTest {
         ser1.addAtom(Atom.builder(Element.C, new double[] { 5.547, 0.158, 42.050 })
                 .name("CA")
                 .build());
-        container1 = Stream.of(his1, asp1, ser1).collect(StructureCollectors.toGroupContainer());
+        container1 = Stream.of(his1, asp1, ser1).collect(StructureCollectors.toIsolatedStructure());
 
         Group his2 = createGroup("HIS", 1);
         Group asp2 = createGroup("ASP", 2);
@@ -61,7 +62,7 @@ public class SingleValueDecompositionAlignerTest {
         ser2.addAtom(Atom.builder(Element.C, new double[] { 12.080, 12.645, -7.073 })
                 .name("CA")
                 .build());
-        container2 = Stream.of(his2, asp2, ser2).collect(StructureCollectors.toGroupContainer());
+        container2 = Stream.of(his2, asp2, ser2).collect(StructureCollectors.toIsolatedStructure());
 
         Group ala3 = createGroup("HIS", 1);
         Group his3 = createGroup("ASP", 2);
@@ -75,7 +76,7 @@ public class SingleValueDecompositionAlignerTest {
         cys3.addAtom(Atom.builder(Element.C, new double[] { 6.021, 74.874, 17.385 })
                 .name("CA")
                 .build());
-        container3 = Stream.of(ala3, his3, cys3).collect(StructureCollectors.toGroupContainer());
+        container3 = Stream.of(ala3, his3, cys3).collect(StructureCollectors.toIsolatedStructure());
 
         Group ala4 = createGroup("HIS", 1);
         Group his4 = createGroup("ASP", 2);
@@ -89,7 +90,7 @@ public class SingleValueDecompositionAlignerTest {
         cys4.addAtom(Atom.builder(Element.C, new double[] { 6.020, 74.873, 17.386 })
                 .name("CA")
                 .build());
-        container4 = Stream.of(ala4, his4, cys4).collect(StructureCollectors.toGroupContainer());
+        container4 = Stream.of(ala4, his4, cys4).collect(StructureCollectors.toIsolatedStructure());
     }
 
     private Group createGroup(String aminoAcidName, int residueNumber) {
@@ -101,20 +102,21 @@ public class SingleValueDecompositionAlignerTest {
     @Test
     public void shouldAlignArbitraryPoints() {
         // calculate alignment
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(container1, container2)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(container1, container2)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
-        System.out.println(Arrays.toString(alignmentResult.getTransformation().getTranslation()));
-        System.out.println(Arrays.deepToString(alignmentResult.getTransformation().getRotation()));
-        System.out.println("rmsd " + alignmentResult.getAlignmentScore());
-        Assert.assertEquals(0.19986, alignmentResult.getAlignmentScore(), TestUtils.TOLERANT_ERROR_MARGIN);
+
+        Assert.assertEquals("rmsd did not match expectation",
+                0.19986,
+                alignmentResult.getAlignmentScore(),
+                TestUtils.TOLERANT_ERROR_MARGIN);
     }
 
     @Test
     public void shouldAlignAnotherSetOfArbitraryPoints() {
         // calculate alignment
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(container3, container4)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(container3, container4)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
@@ -128,7 +130,7 @@ public class SingleValueDecompositionAlignerTest {
     public void shouldManipulateCoordinatesInplace() {
         double[] translation = new double[]{ 10, 10, 10 };
         double[] originalCentroid = protein1acj.calculate().centroid().getValue();
-        Protein copy = (Protein) protein1acj.createCopy();
+        Structure copy = protein1acj.createDeepCopy();
         copy.calculate().transform(translation);
 
         // assert the original coordinates where not manipulated
@@ -137,7 +139,7 @@ public class SingleValueDecompositionAlignerTest {
         double[] translatedCentroid = copy.calculate().centroid().getValue();
         Assert.assertTrue(LinearAlgebra.on(originalCentroid).distance(translatedCentroid) > 10);
 
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(container1, container2)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(container1, container2)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.INPLACE);
         structureAligner.align(query);
@@ -149,7 +151,7 @@ public class SingleValueDecompositionAlignerTest {
     public void shouldNotManipulateCoordinatesCopy() {
         String initialCoordinates1 = container1.getPdbRepresentation();
         String initialCoordinates2 = container2.getPdbRepresentation();
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(container1, container2)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(container1, container2)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
@@ -161,7 +163,7 @@ public class SingleValueDecompositionAlignerTest {
 
     @Test
     public void shouldResultInPerfectAlignment() {
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(protein1acj, protein1acj)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(protein1acj, protein1acj)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
@@ -171,25 +173,29 @@ public class SingleValueDecompositionAlignerTest {
 
     @Test
     public void shouldResultInPerfectAlignmentForTransformedCopy() {
-        Protein protein1acjCopy = (Protein) protein1acj.createCopy();
+        Structure protein1acjCopy = protein1acj.createDeepCopy();
         double[] translation = new double[] { 10, 20, 30 };
         protein1acjCopy.calculate().transform(translation);
 
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(protein1acj, protein1acjCopy)
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(protein1acj, protein1acjCopy)
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
-        Assert.assertEquals(0.0, alignmentResult.getAlignmentScore(), 0.001);
-        Assert.assertArrayEquals(alignmentResult.getTransformation().getTranslation(), LinearAlgebra.on(translation).multiply(-1.0).getValue(), 0.001);
+
+        Assert.assertEquals(0.0,
+                alignmentResult.getAlignmentScore(),
+                0.001);
+        Assert.assertArrayEquals(alignmentResult.getTransformation().getTranslation(),
+                LinearAlgebra.on(translation).multiply(-1.0).getValue(), 0.001);
     }
 
     @Test
     public void shouldAlignSyntheticContainers() {
-        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(protein1acj.select()
+        StructureAlignmentQuery query = StructureAlignmentQuery.of(protein1acj.select()
                 .aminoAcids()
-                .asGroupContainer(), protein1acj.select()
+                .asIsolatedStructure(), protein1acj.select()
                 .aminoAcids()
-                .asGroupContainer())
+                .asIsolatedStructure())
                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);

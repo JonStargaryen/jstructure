@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -17,14 +17,8 @@ public class Histidine extends AminoAcid implements StandardAminoAcid {
     private Atom ce1;
     private Atom ne2;
 
-    public Histidine(Histidine histidine) {
-        super(histidine);
-//        this.cb = new Atom(histidine.cb);
-//        this.cg = new Atom(histidine.cg);
-//        this.nd1 = new Atom(histidine.nd1);
-//        this.cd2 = new Atom(histidine.cd2);
-//        this.ce1 = new Atom(histidine.ce1);
-//        this.ne2 = new Atom(histidine.ne2);
+    Histidine(Histidine histidine, boolean deep) {
+        super(histidine, deep);
     }
 
     public Histidine(ResidueIdentifier residueIdentifier,

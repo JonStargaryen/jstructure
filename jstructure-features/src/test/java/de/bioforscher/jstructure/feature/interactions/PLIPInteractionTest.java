@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.testutil.TestUtils;
 import org.jsoup.Jsoup;
 import org.junit.Assert;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class PLIPInteractionTest {
     @Test
     public void shouldDistinguishBetweenBackboneAndSideChainInteractions() throws IOException {
-        Protein protein = ProteinParser.source("1ar1").parse();
+        Structure protein = StructureParser.source("1ar1").parse();
         Chain chain = protein.select()
                 .chainName("A")
                 .asChain();

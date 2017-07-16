@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -15,8 +15,8 @@ public class Deoxyadenosine extends Nucleotide implements StandardNucleotide {
     private Atom n7;
     private Atom n6;
 
-    public Deoxyadenosine(Deoxyadenosine deoxyadenosine) {
-        super(deoxyadenosine);
+    Deoxyadenosine(Deoxyadenosine deoxyadenosine, boolean deep) {
+        super(deoxyadenosine, deep);
     }
 
     public Deoxyadenosine(ResidueIdentifier residueIdentifier,

@@ -2,8 +2,8 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
 import java.util.ArrayList;
@@ -11,47 +11,47 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The container element representing a {@link Protein} getChain. Is composed of {@link Group} objects.
+ * The container element representing a {@link Structure} chain. Is composed of {@link Group} objects.
  * Created by S on 27.09.2016.
  */
 public class Chain extends AbstractFeatureable implements GroupContainer {
     /**
      * reference to an undefined chain - this is used by groups without explicit parent reference
      */
-    static final Chain UNKNOWN_CHAIN = new Chain(ChainIdentifier.UNKNOWN_CHAIN_ID);
+    public static final Chain UNKNOWN_CHAIN = new Chain(ChainIdentifier.UNKNOWN_CHAIN_IDENTIFIER);
 
     private List<Group> groups;
     /**
-     * The unique getChain name. Usually one character, e.g. 'A'.
+     * The unique chain name. Usually one character, e.g. 'A'.
      */
-    private ChainIdentifier chainId;
+    private ChainIdentifier chainIdentifier;
     /**
      * Handle to the containing element.
      */
-    private Protein parentProtein;
+    private Structure parentStructure;
     private String identifier;
 
     /**
      * Constructor for chain objects.
-     * @param chainId the unique name of this chain
+     * @param chainIdentifier the unique name of this chain
      */
-    public Chain(ChainIdentifier chainId) {
-        this.chainId = chainId;
+    public Chain(ChainIdentifier chainIdentifier) {
+        this.chainIdentifier = chainIdentifier;
         this.groups = new ArrayList<>();
     }
 
-    public Chain(Chain chain) {
-        // deep clone entries
-        this.groups = chain.groups()
-                .map(Group::createCopy)
-                // returns instance as plain container instance
-                .map(Group.class::cast)
-                .collect(Collectors.toList());
-        this.groups.forEach(group -> group.setParentChain(this));
-        this.chainId = chain.chainId;
-        // reference parent
-        this.parentProtein = chain.parentProtein;
+    Chain(Chain chain, boolean deep) {
+        this.chainIdentifier = chain.chainIdentifier;
         this.identifier = chain.identifier;
+        if(deep) {
+            this.groups = chain.groups()
+                    .map(Group::createDeepCopy)
+                    .collect(Collectors.toList());
+            this.groups.forEach(group -> group.setParentChain(this));
+            this.parentStructure = chain.parentStructure;
+        } else {
+            this.groups = new ArrayList<>();
+        }
     }
 
     public Selection.GroupSelection select() {
@@ -64,7 +64,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
 
     /**
      * Registers a child. This object will assign a reference to itself to the getResidue.
-     * @param group the getResidue to processUniProtId
+     * @param group the residue to process
      */
     public void addGroup(Group group) {
         getGroups().add(group);
@@ -76,28 +76,39 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
      * @return a {@link ChainIdentifier}
      */
     public ChainIdentifier getChainIdentifier() {
-        return chainId;
+        return chainIdentifier;
     }
 
     /**
      * Package-private method to set the parent reference.
-     * @param parentProtein the parent
+     * @param parentStructure the parent
      */
-    void setParentProtein(Protein parentProtein) {
-        this.parentProtein = parentProtein;
+    void setParentStructure(Structure parentStructure) {
+        this.parentStructure = parentStructure;
     }
 
     /**
-     * Returns the {@link Protein} this chain is associated to.
+     * Returns the {@link Structure} this chain is associated to. If none was set, this chain points to the
+     * {@link Structure#UNKNOWN_STRUCTURE}, but the unknown structure has no knowledge of the existence of this object.
      * @return the parent container
      */
-    public Protein getParentProtein() {
-        return parentProtein != null ? parentProtein : Protein.UNKNOWN_PROTEIN;
+    public Structure getParentStructure() {
+        return parentStructure != null ? parentStructure : Structure.UNKNOWN_STRUCTURE;
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + " '" + getIdentifier() + "' groups='" + getGroups().size() + "'";
+    }
+
+    @Override
+    public String getIdentifier() {
+        return identifier == null ? chainIdentifier.getFullName() : identifier;
+    }
+
+    @Override
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     @Override
@@ -111,12 +122,12 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     }
 
     @Override
-    public String getIdentifier() {
-        return identifier == null ? chainId.getFullName() : identifier;
+    public Chain createDeepCopy() {
+        return new Chain(this, true);
     }
 
     @Override
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public Chain createShallowCopy() {
+        return new Chain(this, false);
     }
 }

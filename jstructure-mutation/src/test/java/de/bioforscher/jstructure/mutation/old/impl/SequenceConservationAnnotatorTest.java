@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
  * Test for the sequence conservation annotator.
  * Created by bittrich on 7/12/17.
  */
+@Deprecated
 public class SequenceConservationAnnotatorTest {
     private Chain chain;
     private Map<String, String> alignmentMap;

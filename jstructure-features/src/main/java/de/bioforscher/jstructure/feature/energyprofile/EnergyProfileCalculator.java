@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * References:<br />
  * <ul>
  *     <li>F. Heinke and D. Labudde. MembraneContainer protein stability analyses by means of protein energy profiles in case of nephrogenic diabetes insipidus. Comput Math Methods Med, 2012:790281, February 2012.</li>
- *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of MembraneContainer Protein Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
+ *     <li>F. Heinke, A. Tuukkanen, and D. Labudde. Analysis of MembraneContainer Structure Stability in Diabetes insipidus. InTech, 2011, Edited by Kyuzi Kamoi,ISBN: 978-953-307-367-5,DOI: 10.5772/22258</li>
  *     <li>F. Heinke and D. Labudde. Predicting functionality of the non-expressed putative human OHCU decarboxylase by means of novel protein energy profile-based methods. Conference proceedings of 13. Nachwuchswissenschaftlerkonferenz, April 2012.</li>
  *     <li>F. Heinke, D. Stockmann, S. Schildbach, M. Langer and D. Labudde. eProS - A Bioinformatics Knowledgebase, Toolbox and Database for Characterizing Protein Function. BDAS 2015.</li>
  * </ul>
@@ -51,7 +51,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
     }
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         final double squaredDistanceCutoff = DEFAULT_INTERACTION_CUTOFF * DEFAULT_INTERACTION_CUTOFF;
         final List<AminoAcid> aminoAcids = protein.aminoAcids()
                 .collect(Collectors.toList());
@@ -96,8 +96,7 @@ public class EnergyProfileCalculator extends AbstractFeatureProvider {
             return preferenceMap.get(threeLetterCode);
         }
 
-        //TODO handling of fallback
-        // modified/non-standard - move to fallback
+        // modified/non-standard - move to fallback - try annotated parent compound - else use plain ALA
         String fallback = group.getGroupPrototype()
                 .getParentCompound()
                 .orElse("ALA");

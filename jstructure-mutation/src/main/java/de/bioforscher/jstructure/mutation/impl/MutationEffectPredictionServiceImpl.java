@@ -9,27 +9,22 @@ import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEnt
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator;
 import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
 import de.bioforscher.jstructure.mmm.impl.MacromolecularMinerBridgeImpl;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.*;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.mutation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.kraken.interfaces.common.Value;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,7 +95,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         logger.info("[{}] executing BLAST query with sequence {}",
                 uuid,
                 sequence);
-        uniProtHomologyAnnotator.process(mutationJob.getReferenceChain().getParentProtein());
+        uniProtHomologyAnnotator.process(mutationJob.getReferenceChain().getParentStructure());
 
         // fetch homologous UniProt entries
         UniProtHomologousEntryContainer uniProtHomologousEntryContainer = mutationJob.getReferenceChain().getFeatureContainer().getFeature(UniProtHomologousEntryContainer.class);
@@ -143,6 +138,27 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         // create multiple-sequence alignment of everything
         renumberSequences(mutationJob);
 
+        // compute sequence conservation profile
+
+        // compute structure conservation profile
+        try {
+            // write temporary structures
+            Path structurePath = Files.createTempDirectory("mmm-in");
+            Iterator<Chain> iterator = getStreamOfAllChains(mutationJob).iterator();
+            while(iterator.hasNext()) {
+                Chain chain = iterator.next();
+                Files.write(structurePath.resolve(chain.getChainIdentifier().getFullName() + ".pdb"),
+                        (chain.getPdbRepresentation()).getBytes());
+            }
+            // profile is assigned to reference chain
+            macromolecularMinerBridge.getConservationProfile(structurePath, mutationJob.getReferenceChain().getParentStructure()).get();
+        } catch (Exception e) {
+            logger.error("[{}] could not write structures",
+                    uuid,
+                    e);
+            throw new ComputationException(e);
+        }
+
         return mutationJob;
     }
 
@@ -183,7 +199,8 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                             AminoAcid aminoAcid = aminoAcids.get(consumedAminoAcidsInChain);
                             consumedAminoAcidsInChain++;
                             // renumber to position in alignment string (+1 for classic Java offset)
-                            aminoAcid.setResidueIdentifier(IdentifierFactory.createResidueIdentifier(sequencePosition + 1));
+                            //TODO use featureContainerEntry
+//                            aminoAcid.setResidueIdentifier(IdentifierFactory.createResidueIdentifier(sequencePosition + 1));
                         } catch (Exception e) {
                             // missing amino acids or premature end of List
                         }
@@ -216,7 +233,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      */
     private Optional<Exception> annotateChainAndReportPotentialException(Chain chain, AbstractFeatureProvider featureProvider) {
         try {
-            featureProvider.process(chain.getParentProtein());
+            featureProvider.process(chain.getParentStructure());
             return Optional.empty();
         } catch (Exception e) {
             return Optional.of(e);
@@ -272,13 +289,13 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
 
     private Optional<Chain> fetchProteinChain(ChainIdentifier chainIdentifier, String uuid) {
         try {
-            Protein originalProtein = ProteinParser.source(chainIdentifier.getProteinIdentifier().getPdbId())
+            Structure originalProtein = StructureParser.source(chainIdentifier.getProteinIdentifier().getPdbId())
                     .minimalParsing(true)
                     .parse();
             Chain isolatedChain = originalProtein.select()
                     .chainName(chainIdentifier.getChainId())
                     .asChain();
-            Protein isolatedProtein = new Protein(isolatedChain.getChainIdentifier().getProteinIdentifier());
+            Structure isolatedProtein = new Structure(isolatedChain.getChainIdentifier().getProteinIdentifier());
             // will set the parent reference to the isolated chain
             isolatedProtein.addChain(isolatedChain);
             return Optional.of(isolatedChain);
@@ -292,7 +309,28 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     }
 
     @Override
-    public MutationFeatureVector createMutationFeatureVector(MutationJob mutationJob, ResidueIdentifier residueIdentifierToMutate, AminoAcid.Family mutationTarget) {
+    public MutationFeatureVector createMutationFeatureVector(MutationJob mutationJob,
+                                                             ChainIdentifier chainIdentifier,
+                                                             ResidueIdentifier residueIdentifierToMutate,
+                                                             AminoAcid.Family mutationTarget) {
+        // original data
+        Chain originalChain = mutationJob.getReferenceChain();
+        AminoAcid originalAminoAcid = originalChain.select()
+                .residueIdentifier(residueIdentifierToMutate)
+                .asAminoAcid();
+
+        // mutated data
+        Structure mutatedProtein = mutatorService.mutateAminoAcid(mutationJob.getReferenceChain().getParentStructure(),
+                chainIdentifier,
+                residueIdentifierToMutate,
+                mutationTarget);
+        Chain mutatedChain = mutatedProtein.select()
+                .chainIdentifier(chainIdentifier)
+                .asChain();
+        AminoAcid mutatedAminoAcid = mutatedChain.select()
+                .residueIdentifier(residueIdentifierToMutate)
+                .asAminoAcid();
+
         return null;
     }
 }

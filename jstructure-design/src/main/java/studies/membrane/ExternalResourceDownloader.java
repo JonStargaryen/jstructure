@@ -2,11 +2,8 @@ package studies.membrane;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPRestServiceQuery;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.GroupPrototypeParser;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.jsoup.nodes.Document;
 import studies.StudyConstants;
 
@@ -44,7 +41,7 @@ public class ExternalResourceDownloader {
         }
 
         // load protein, calculate features
-        Protein protein = ProteinParser.source(pdbId).parse();
+        Structure protein = StructureParser.source(pdbId).parse();
 
         // download ligand files
         protein.select()

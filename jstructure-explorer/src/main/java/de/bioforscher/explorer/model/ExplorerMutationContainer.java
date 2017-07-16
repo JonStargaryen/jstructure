@@ -5,7 +5,7 @@ import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -23,31 +23,31 @@ public class ExplorerMutationContainer {
 
     }
 
-    public ExplorerMutationContainer(Protein originalProtein, ExplorerChain originalExplorerChain, Protein mutatedProtein, ExplorerChain mutatedExplorerChain, int pos) {
+    public ExplorerMutationContainer(Structure originalProtein, ExplorerChain originalExplorerChain, Structure mutatedProtein, ExplorerChain mutatedExplorerChain, int pos) {
         Group originalGroup = originalProtein.select().residueNumber(pos).asGroup();
 
         //TODO pattern to query here
-//        String originalPlipXmlContent = PLIPRestServiceQuery.getPlipResults(originalGroup.getParentChain().getParentProtein().getName().split("_")[0], originalGroup.getParentChain().getChainIdentifier());
+//        String originalPlipXmlContent = PLIPRestServiceQuery.getPlipResults(originalGroup.getParentChain().getParentStructure().getName().split("_")[0], originalGroup.getParentChain().getChainIdentifier());
 //        List<PLIPInteraction> originalPlipInteractions = PLIPParser.parse(originalGroup.getParentChain(), originalPlipXmlContent);
 //
 //        String mutatedPlipXmlContent = PLIPRestServiceQuery.getPlipResults(mutatedProtein.getName().split("_")[0], mutatedProtein.getChains().get(0).getChainIdentifier());
 //        List<PLIPInteraction> mutatedPlipInteractions = PLIPParser.parse(mutatedProtein.getChains().get(0), mutatedPlipXmlContent);
 
-        Chain originalGroups = (Chain) originalProtein.select()
+        Structure originalGroups = originalProtein.select()
                 .customGroupPredicate(aminoAcid -> around(originalGroup, aminoAcid))
 //                .customGroupPredicate(aminoAcid -> interacts(originalPlipInteractions, originalGroup, aminoAcid))
-                .asGroupContainer();
-        Chain mutatedGroups = (Chain) mutatedProtein.select()
+                .asIsolatedStructure();
+        Structure mutatedGroups = mutatedProtein.select()
                 .customGroupPredicate(aminoAcid -> around(originalGroup, aminoAcid))
 //                .customGroupPredicate(aminoAcid -> interacts(mutatedPlipInteractions, originalGroup, aminoAcid))
-                .asGroupContainer();
+                .asIsolatedStructure();
 
         //TODO fetch other homologous environments, align them
 
-        renumberSubStructures(originalGroups, mutatedGroups);
+//        renumberSubStructures(originalGroups, mutatedGroups);
 
-        this.original = new ExplorerMutationEnvironment(originalGroups, originalExplorerChain, originalProtein.getProteinIdentifier().getFullName());
-        this.mutation = new ExplorerMutationEnvironment(mutatedGroups, mutatedExplorerChain, mutatedProtein.getProteinIdentifier().getFullName());
+//        this.original = new ExplorerMutationEnvironment(originalGroups, originalExplorerChain, originalProtein.getProteinIdentifier().getFullName());
+//        this.mutation = new ExplorerMutationEnvironment(mutatedGroups, mutatedExplorerChain, mutatedProtein.getProteinIdentifier().getFullName());
     }
 
     private void renumberSubStructures(Chain... groups) {

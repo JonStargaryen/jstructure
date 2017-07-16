@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.motif;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,6 @@ package de.bioforscher.explorer.model;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.uniprot.old.*;
 import de.bioforscher.jstructure.mathematics.Transformation;
 import de.bioforscher.jstructure.model.structure.Chain;
 
@@ -29,13 +28,13 @@ public class ExplorerChain {
     private List<ExplorerInteraction> saltBridges;
     private List<ExplorerInteraction> waterBridges;
     /* UniProt data */
-    private List<UniProtActiveSite> active;
-    private List<UniProtDisulfideBond> disulfide;
-    private List<UniProtMutagenesisSite> mutagenesis;
-    private List<UniProtAminoAcidModification> ptm;
-    private List<UniProtSecondaryStructureElement> sse;
-    private List<UniProtTransmembraneRegion> tm;
-    private List<UniProtNaturalVariant> variants;
+//    private List<UniProtActiveSite> active;
+//    private List<UniProtDisulfideBond> disulfide;
+//    private List<UniProtMutagenesisSite> mutagenesis;
+//    private List<UniProtAminoAcidModification> ptm;
+//    private List<UniProtSecondaryStructureElement> sse;
+//    private List<UniProtTransmembraneRegion> tm;
+//    private List<UniProtNaturalVariant> variants;
 
     public ExplorerChain() {
     }
@@ -79,24 +78,24 @@ public class ExplorerChain {
             this.isPlip = false;
         }
 
-        try {
-            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeatureContainer().getFeature(UniProtAnnotationContainer.class);
-            this.active = uniProtAnnotationContainer.getActiveSites();
-            this.disulfide = uniProtAnnotationContainer.getDisulfideBonds();
-            this.mutagenesis = uniProtAnnotationContainer.getMutagenesisSites();
-            this.ptm = uniProtAnnotationContainer.getAminoAcidModifications();
-            this.sse = uniProtAnnotationContainer.getSecondaryStructureElements();
-            this.tm = uniProtAnnotationContainer.getTransmembraneRegions();
-            this.variants = uniProtAnnotationContainer.getNaturalVariants();
-        } catch (NullPointerException e) {
-            this.active = new ArrayList<>();
-            this.disulfide = new ArrayList<>();
-            this.mutagenesis = new ArrayList<>();
-            this.ptm = new ArrayList<>();
-            this.sse = new ArrayList<>();
-            this.tm = new ArrayList<>();
-            this.variants = new ArrayList<>();
-        }
+//        try {
+//            UniProtAnnotationContainer uniProtAnnotationContainer = chain.getFeatureContainer().getFeature(UniProtAnnotationContainer.class);
+//            this.active = uniProtAnnotationContainer.getActiveSites();
+//            this.disulfide = uniProtAnnotationContainer.getDisulfideBonds();
+//            this.mutagenesis = uniProtAnnotationContainer.getMutagenesisSites();
+//            this.ptm = uniProtAnnotationContainer.getAminoAcidModifications();
+//            this.sse = uniProtAnnotationContainer.getSecondaryStructureElements();
+//            this.tm = uniProtAnnotationContainer.getTransmembraneRegions();
+//            this.variants = uniProtAnnotationContainer.getNaturalVariants();
+//        } catch (NullPointerException e) {
+//            this.active = new ArrayList<>();
+//            this.disulfide = new ArrayList<>();
+//            this.mutagenesis = new ArrayList<>();
+//            this.ptm = new ArrayList<>();
+//            this.sse = new ArrayList<>();
+//            this.tm = new ArrayList<>();
+//            this.variants = new ArrayList<>();
+//        }
     }
 
     private List<ExplorerInteraction> convert(List<? extends PLIPInteraction> interactions,
@@ -168,31 +167,31 @@ public class ExplorerChain {
         return groups;
     }
 
-    public List<UniProtActiveSite> getActive() {
-        return active;
-    }
-
-    public List<UniProtDisulfideBond> getDisulfide() {
-        return disulfide;
-    }
-
-    public List<UniProtMutagenesisSite> getMutagenesis() {
-        return mutagenesis;
-    }
-
-    public List<UniProtAminoAcidModification> getPtm() {
-        return ptm;
-    }
-
-    public List<UniProtSecondaryStructureElement> getSse() {
-        return sse;
-    }
-
-    public List<UniProtTransmembraneRegion> getTm() {
-        return tm;
-    }
-
-    public List<UniProtNaturalVariant> getVariants() {
-        return variants;
-    }
+//    public List<UniProtActiveSite> getActive() {
+//        return active;
+//    }
+//
+//    public List<UniProtDisulfideBond> getDisulfide() {
+//        return disulfide;
+//    }
+//
+//    public List<UniProtMutagenesisSite> getMutagenesis() {
+//        return mutagenesis;
+//    }
+//
+//    public List<UniProtAminoAcidModification> getPtm() {
+//        return ptm;
+//    }
+//
+//    public List<UniProtSecondaryStructureElement> getSse() {
+//        return sse;
+//    }
+//
+//    public List<UniProtTransmembraneRegion> getTm() {
+//        return tm;
+//    }
+//
+//    public List<UniProtNaturalVariant> getVariants() {
+//        return variants;
+//    }
 }

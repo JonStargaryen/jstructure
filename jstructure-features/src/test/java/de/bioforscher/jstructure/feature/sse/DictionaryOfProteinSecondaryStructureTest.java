@@ -2,11 +2,10 @@ package de.bioforscher.jstructure.feature.sse;
 
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.biojava.nbio.structure.Group;
 import org.biojava.nbio.structure.GroupType;
-import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureException;
 import org.biojava.nbio.structure.io.PDBFileReader;
 import org.biojava.nbio.structure.secstruc.SecStrucCalc;
@@ -34,7 +33,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
 
     @Test
     public void shouldClearPseudoAtomsAfterRun() {
-        Protein protein = ProteinParser.source(ID).parse();
+        Structure protein = StructureParser.source(ID).parse();
         featureProvider.process(protein);
         boolean containsPseudoHydrogenLine = protein.getPdbRepresentation().contains("ATOM      0  H");
         Assert.assertFalse("pseudo-atoms were not removed!", containsPseudoHydrogenLine);
@@ -43,7 +42,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
     @Test
     public void testTorsionAngleComputationForResiduesInDifferentChains() {
         // should ignore amino acids in different chains
-        featureProvider.process(ProteinParser.source("4cqn").parse());
+        featureProvider.process(StructureParser.source("4cqn").parse());
     }
 
     @Test
@@ -70,7 +69,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
 
     private String getSecondaryStructureAnnotation(String id) {
         // load structure
-        Protein protein = ProteinParser.source(id).parse();
+        Structure protein = StructureParser.source(id).parse();
         // assign states
         featureProvider.process(protein);
 
@@ -85,7 +84,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
 
     private String getDSSPAnnotatedStructure(String id) throws IOException, StructureException {
         // load structure
-        Structure protein = new PDBFileReader().getStructureById(id);
+        org.biojava.nbio.structure.Structure protein = new PDBFileReader().getStructureById(id);
         // assign states
         new SecStrucCalc().calculate(protein, true);
 

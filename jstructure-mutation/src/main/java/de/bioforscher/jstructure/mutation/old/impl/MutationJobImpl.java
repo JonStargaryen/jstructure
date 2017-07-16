@@ -4,10 +4,10 @@ import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologousEnt
 import de.bioforscher.jstructure.mmm.impl.MacromolecularMinerBridgeImpl;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.mutation.old.MutationDescriptor;
 import de.bioforscher.jstructure.mutation.old.MutationJob;
 import org.slf4j.Logger;
@@ -43,12 +43,12 @@ class MutationJobImpl implements MutationJob {
     /**
      * The query sequence wrapped as Protein and Chain object. Does not provide features or coordinates.
      */
-    private final Protein queryProtein;
+    private final Structure queryProtein;
     private final Chain queryChain;
     /**
      * The PDB-chain chosen as reference. Does provide features and coordinates.
      */
-    private Protein referenceProtein;
+    private Structure referenceProtein;
     private Chain referenceChain;
     /**
      * Access to the BLAST alignment and all hits and the data of the respective UniProt entries.
@@ -70,7 +70,7 @@ class MutationJobImpl implements MutationJob {
         this.queryProtein = createProtein(identifier, querySequence);
         this.queryChain = queryProtein.getChains().get(0);
         this.referenceChain = referenceChain;
-        this.referenceProtein = referenceChain.getParentProtein();
+        this.referenceProtein = referenceChain.getParentStructure();
     }
 
     MutationJobImpl(String identifier, String querySequence) {
@@ -83,13 +83,13 @@ class MutationJobImpl implements MutationJob {
      * @param sequence the sequence of groups to create
      * @return the hollow instance of a protein
      */
-    static Protein createProtein(String identifier, String sequence) {
+    static Structure createProtein(String identifier, String sequence) {
         ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier("", identifier);
-        Protein protein = new Protein(proteinIdentifier);
+        Structure protein = new Structure(proteinIdentifier);
         Chain chain = new Chain(IdentifierFactory.createChainIdentifier(proteinIdentifier, "X"));
         for(int residueNumber = 1; residueNumber <= sequence.length(); residueNumber++) {
             String threeLetterCode = AminoAcid.Family.resolveOneLetterCode(sequence.substring(residueNumber - 1, residueNumber)).getThreeLetterCode();
-            AminoAcid aminoAcid = (AminoAcid) ProteinParser.createGroup(threeLetterCode, IdentifierFactory.createResidueIdentifier(residueNumber,  ""), false, false);
+            AminoAcid aminoAcid = (AminoAcid) StructureParser.createGroup(threeLetterCode, IdentifierFactory.createResidueIdentifier(residueNumber,  ""), false, false);
             chain.addGroup(aminoAcid);
         }
         protein.addChain(chain);
@@ -107,7 +107,7 @@ class MutationJobImpl implements MutationJob {
     }
 
     @Override
-    public Protein getQueryProtein() {
+    public Structure getQueryProtein() {
         return queryProtein;
     }
 
@@ -137,12 +137,12 @@ class MutationJobImpl implements MutationJob {
     }
 
     @Override
-    public Protein getReferenceProtein() {
+    public Structure getReferenceProtein() {
         return referenceProtein;
     }
 
     @Override
-    public void setReferenceProtein(Protein referenceProtein) {
+    public void setReferenceProtein(Structure referenceProtein) {
         this.referenceProtein = referenceProtein;
     }
 
@@ -185,7 +185,7 @@ class MutationJobImpl implements MutationJob {
                 renumberedPosition);
 
         // create mutated protein
-        Protein mutatedProtein = mutateResidue(position, targetAminoAcid);
+        Structure mutatedProtein = mutateResidue(position, targetAminoAcid);
         Chain mutatedChain = mutatedProtein.select()
                 .chainName(referenceChain.getChainIdentifier().getChainId())
                 .asChain();
@@ -224,13 +224,13 @@ class MutationJobImpl implements MutationJob {
         return false;
     }
 
-    private Protein mutateResidue(int originalPosition, AminoAcid.Family targetAminoAcid) {
+    private Structure mutateResidue(int originalPosition, AminoAcid.Family targetAminoAcid) {
         ResidueMutatorServiceImpl residueMutatorService = new ResidueMutatorServiceImpl();
         // we need to create and compute everything on a protein with original numbering
-        Protein originalReferenceProtein = ProteinParser.source(referenceProtein.getProteinIdentifier().getPdbId())
+        Structure originalReferenceProtein = StructureParser.source(referenceProtein.getProteinIdentifier().getPdbId())
                 .minimalParsing(true)
                 .parse();
-        Protein mutatedProtein = residueMutatorService.mutateResidue(originalReferenceProtein,
+        Structure mutatedProtein = residueMutatorService.mutateResidue(originalReferenceProtein,
                 referenceChain.getChainIdentifier().getChainId(),
                 originalPosition,
                 targetAminoAcid);
@@ -240,7 +240,7 @@ class MutationJobImpl implements MutationJob {
         // renumber mutated instance in the same way as the original reference
         for(int groupIndex = 0; groupIndex < referenceProtein.getGroups().size(); groupIndex++) {
             ResidueIdentifier renumberedResidueIdentifier = referenceProtein.getGroups().get(groupIndex).getResidueIdentifier();
-            mutatedProtein.getGroups().get(groupIndex).setResidueIdentifier(renumberedResidueIdentifier);
+//            mutatedProtein.getGroups().get(groupIndex).setResidueIdentifier(renumberedResidueIdentifier);
         }
 
         return mutatedProtein;

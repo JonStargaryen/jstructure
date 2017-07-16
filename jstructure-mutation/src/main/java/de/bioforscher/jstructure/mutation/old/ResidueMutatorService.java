@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mutation.old;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 /**
@@ -15,7 +15,7 @@ public interface ResidueMutatorService {
      * @param chainId the chainId of the mutation
      * @param residueNumber the residueNumber of the mutation
      * @param targetAminoAcid the desired target amino acid
-     * @return a new {@link Protein} instance featuring the mutation
+     * @return a new {@link Structure} instance featuring the mutation
      */
-    Protein mutateResidue(Protein originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid);
+    Structure mutateResidue(Structure originalProtein, String chainId, int residueNumber, AminoAcid.Family targetAminoAcid);
 }

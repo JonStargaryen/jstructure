@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -14,11 +14,8 @@ public class Threonine extends AminoAcid implements StandardAminoAcid {
     private Atom og1;
     private Atom cg2;
 
-    public Threonine(Threonine threonine) {
-        super(threonine);
-//        this.cb = new Atom(threonine.cb);
-//        this.og1 = new Atom(threonine.og1);
-//        this.cg2 = new Atom(threonine.cg2);
+    Threonine(Threonine threonine, boolean deep) {
+        super(threonine, deep);
     }
 
     public Threonine(ResidueIdentifier residueIdentifier,

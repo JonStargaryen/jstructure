@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model;
 
 /**
- * Implementation of a unordered pair of equal objects. No ordering is assumed, however, as the entries can be of
+ * Implementation of a unordered pair of objects. No ordering is assumed, however, as the entries can be of
  * different content types, one is referred to as left and the other as right entry.
  * @param <L> the content type of the left element
  * @param <R> the content type of the right element
@@ -33,12 +33,11 @@ public class Pair<L, R> {
     }
 
     /**
-     * Tests whether an object is an entry of this pair.
+     * Tests whether an object is an entry of this pair by employing {@link Object#equals(Object)}.
      * @param object the instance to check
      * @return true if either of this pair's entries equals the given object
      */
     public boolean contains(Object object) {
-        //TODO contract which Object#equals() is employed, does the reference have to be identical or mere content?
         return left.equals(object) || right.equals(object);
     }
 

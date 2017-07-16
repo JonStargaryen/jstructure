@@ -1,7 +1,7 @@
 package studies.poznan;
 
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -42,7 +42,7 @@ public class SimpleEnergyProfileRunnerTest {
 
         ids.forEach(id -> {
             System.out.println(id);
-            Protein protein = ProteinParser.source(id).parse();
+            Structure protein = StructureParser.source(id).parse();
             try {
                 String basePath = "/home/bittrich/energyprofiles/";
                 Path pdbFile = Paths.get(basePath + id + ".pdb");

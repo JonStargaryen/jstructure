@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -18,15 +18,8 @@ public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
     private Atom ce2;
     private Atom cz;
 
-    public Phenylalanine(Phenylalanine phenylalanine) {
-        super(phenylalanine);
-//        this.cb = new Atom(phenylalanine.cb);
-//        this.cg = new Atom(phenylalanine.cg);
-//        this.cd1 = new Atom(phenylalanine.cd1);
-//        this.cd2 = new Atom(phenylalanine.cd2);
-//        this.ce1 = new Atom(phenylalanine.ce1);
-//        this.ce2 = new Atom(phenylalanine.ce2);
-//        this.cz = new Atom(phenylalanine.cz);
+    Phenylalanine(Phenylalanine phenylalanine, boolean deep) {
+        super(phenylalanine, deep);
     }
 
     public Phenylalanine(ResidueIdentifier residueIdentifier,

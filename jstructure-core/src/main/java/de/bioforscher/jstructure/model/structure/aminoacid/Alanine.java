@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -12,9 +12,8 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
     private Atom cb;
 
-    public Alanine(Alanine alanine) {
-        super(alanine);
-//        this.cb = new Atom(alanine.cb);
+    Alanine(Alanine alanine, boolean deep) {
+        super(alanine, deep);
     }
 
     public Alanine(ResidueIdentifier residueIdentifier,

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.motif;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 
 import java.util.List;
 import java.util.stream.Collectors;

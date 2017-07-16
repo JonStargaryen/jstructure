@@ -6,11 +6,11 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -125,7 +125,7 @@ public class AdvancedEnergyProfileRunner {
 
     static class ProteinContainer {
         Path pathToPdbFile;
-        Protein protein;
+        Structure protein;
 
         List<Double> getEnergyProfile() {
             return protein.aminoAcids()
@@ -139,13 +139,13 @@ public class AdvancedEnergyProfileRunner {
 
         ProteinContainer(Path pathToPdbFile) {
             this.pathToPdbFile = pathToPdbFile;
-            this.protein = ProteinParser.source(pathToPdbFile).parse();
+            this.protein = StructureParser.source(pathToPdbFile).parse();
             Builder.energyProfileCalculator.process(protein);
         }
 
         ProteinContainer(String sequence) {
-            this.protein = new Protein(ProteinIdentifier.UNKNOWN_PROTEIN_ID);
-            Chain chain = new Chain(IdentifierFactory.createChainIdentifier(ProteinIdentifier.UNKNOWN_PROTEIN_ID, "A"));
+            this.protein = new Structure(ProteinIdentifier.UNKNOWN_PROTEIN_IDENTIFIER);
+            Chain chain = new Chain(IdentifierFactory.createChainIdentifier(ProteinIdentifier.UNKNOWN_PROTEIN_IDENTIFIER, "A"));
             this.protein.addChain(chain);
             for(int resNum = 1; resNum <= sequence.length(); resNum++) {
                 String aminoAcidName = String.valueOf(sequence.charAt(resNum - 1));
@@ -163,7 +163,7 @@ public class AdvancedEnergyProfileRunner {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000",
             DecimalFormatSymbols.getInstance(Locale.US));
 
-    static String composeOutput(Protein protein) {
+    static String composeOutput(Structure protein) {
         return protein.aminoAcids()
                 .map(AdvancedEnergyProfileRunner::composeOutputLine)
                 .collect(Collectors.joining(System.lineSeparator(),

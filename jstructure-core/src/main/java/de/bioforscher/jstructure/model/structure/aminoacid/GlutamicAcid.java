@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -16,13 +16,8 @@ public class GlutamicAcid extends AminoAcid implements StandardAminoAcid {
     private Atom oe1;
     private Atom oe2;
 
-    public GlutamicAcid(GlutamicAcid glutamicAcid) {
-        super(glutamicAcid);
-//        this.cb = new Atom(glutamicAcid.cb);
-//        this.cg = new Atom(glutamicAcid.cg);
-//        this.cd = new Atom(glutamicAcid.cd);
-//        this.oe1 =new Atom( glutamicAcid.oe1);
-//        this.oe2 = new Atom(glutamicAcid.oe2);
+    GlutamicAcid(GlutamicAcid glutamicAcid, boolean deep) {
+        super(glutamicAcid, deep);
     }
 
     public GlutamicAcid(ResidueIdentifier residueIdentifier,

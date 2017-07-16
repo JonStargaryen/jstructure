@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure;
 
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 /**
  * Represents water molecules.
@@ -10,6 +10,11 @@ public class Water extends Group {
     public static final String THREE_LETTER_CODE = "HOH";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
     private Atom o;
+
+    public Water(Water water, boolean deep) {
+        super(water, deep);
+        atoms().forEach(this::addAtomInternal);
+    }
 
     public Water(ResidueIdentifier residueIdentifier) {
         super(GROUP_PROTOTYPE,

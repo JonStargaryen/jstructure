@@ -16,7 +16,7 @@ public class ExplorerSequence {
 
     public ExplorerSequence(Chain chain) {
         this.id = chain.getChainIdentifier().getFullName();
-        this.title = chain.getParentProtein().getTitle();
+        this.title = chain.getParentStructure().getTitle();
         this.sequence = chain.getAminoAcidSequence();
         try {
             ChainMapping chainSiftsMapping = chain.getFeatureContainer().getFeature(ChainMapping.class);

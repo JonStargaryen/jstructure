@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.feature.mapping;
 
-import de.bioforscher.jstructure.feature.ComputationException;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.feature.ComputationException;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.testutil.TestUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +18,7 @@ public class SiftsMappingAnnotatorTest {
 
     @Test
     public void shouldMap4r3z_A() {
-        Protein protein = ProteinParser.source("4r3z")
+        Structure protein = StructureParser.source("4r3z")
                 .minimalParsing(true)
                 .parse();
         mappingAnnotator.process(protein);
@@ -34,7 +34,7 @@ public class SiftsMappingAnnotatorTest {
 
     @Test
     public void shouldMap1o0c_A() {
-        Protein protein = ProteinParser.source("1o0c")
+        Structure protein = StructureParser.source("1o0c")
                 .minimalParsing(true)
                 .parse();
         mappingAnnotator.process(protein);
@@ -50,20 +50,20 @@ public class SiftsMappingAnnotatorTest {
 
     @Test(expected = ComputationException.class)
     public void shouldFailForUnknownPdbId() {
-        Protein protein = ProteinParser.source(TestUtils.getResourceAsInputStream("uniprot/1bs2_A_renum.pdb"))
+        Structure protein = StructureParser.source(TestUtils.getResourceAsInputStream("uniprot/1bs2_A_renum.pdb"))
                 .parse();
         mappingAnnotator.process(protein);
     }
 
     @Test
     public void shouldHandle5tgl() {
-        Protein protein = ProteinParser.source("5tgl").parse();
+        Structure protein = StructureParser.source("5tgl").parse();
         mappingAnnotator.process(protein);
     }
 
     @Test
     public void shouldDetermineUniProtNumbering() {
-        Protein protein = ProteinParser.source("1acj").parse();
+        Structure protein = StructureParser.source("1acj").parse();
         mappingAnnotator.process(protein);
 
         ChainMapping chainSiftsMapping = protein.getChains().get(0).getFeatureContainer().getFeature(ChainMapping.class);

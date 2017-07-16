@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.LigandContactScreener;
 
@@ -30,7 +30,7 @@ public class LigandContactScreenerImpl implements LigandContactScreener {
     }
 
     @Override
-    public int determineNumberOfLigandContacts(Protein protein, AminoAcid aminoAcid) {
+    public int determineNumberOfLigandContacts(Structure protein, AminoAcid aminoAcid) {
         double[] coordinates = aminoAcid.calculate().center().getValue();
         return (int) protein
                 .select()

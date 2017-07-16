@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 
 /**
  * Annotate needed features in a standardized manner.
@@ -16,7 +16,7 @@ class CommonFeatureAnnotator {
     private static final LoopFractionCalculator loopFractionCalculator = new LoopFractionCalculator();
     private static final PLIPAnnotator plipAnnotator = new PLIPAnnotator();
 
-    static void annotateProtein(Protein protein) {
+    static void annotateProtein(Structure protein) {
         accessibleSurfaceAreaCalculator.process(protein);
         energyProfileCalculator.process(protein);
         loopFractionCalculator.process(protein);

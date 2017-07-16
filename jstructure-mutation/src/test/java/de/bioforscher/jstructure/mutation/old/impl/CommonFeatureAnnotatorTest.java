@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mutation.old.impl;
 
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.old.ResidueMutatorService;
 import org.junit.Before;
@@ -23,10 +23,10 @@ public class CommonFeatureAnnotatorTest {
     public void shouldAnnotateMutatedProtein() {
         String chainId = "A";
         int position = 73;
-        Protein protein = ProteinParser.source("1aqe")
+        Structure protein = StructureParser.source("1aqe")
                 .minimalParsing(true)
                 .parse();
-        Protein mutatedProtein = residueMutatorService.mutateResidue(protein, chainId, position, AminoAcid.Family.GLUTAMIC_ACID);
+        Structure mutatedProtein = residueMutatorService.mutateResidue(protein, chainId, position, AminoAcid.Family.GLUTAMIC_ACID);
         CommonFeatureAnnotator.annotateProtein(mutatedProtein);
 
         AminoAcid mutatedAminoAcid = mutatedProtein.select()

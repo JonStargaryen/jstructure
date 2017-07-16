@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.mutation.MutationEffectPredictionService;
 import de.bioforscher.jstructure.mutation.MutationJob;
 import org.junit.Assert;
@@ -19,7 +19,7 @@ public class MutationEffectPredictionServiceImplTest {
     @Before
     public void setup() {
         mutationEffectPredictionService = new MutationEffectPredictionServiceImpl();
-        referenceChain = ProteinParser.source("1BTA")
+        referenceChain = StructureParser.source("1BTA")
                 .minimalParsing(true)
                 .parse()
                 .select()

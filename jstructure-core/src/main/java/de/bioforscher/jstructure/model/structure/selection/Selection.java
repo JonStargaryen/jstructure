@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.model.structure.selection;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -55,7 +57,6 @@ public class Selection {
         List<Pair<Predicate<Group>, String>> groupPredicates;
         List<Pair<Predicate<Chain>, String>> chainPredicates;
         static final String CUSTOM_PREDICATE = "custom predicate";
-        boolean cloneRequested;
         String specifiedName;
         String parentContainerName;
         boolean negationMode;
@@ -70,16 +71,6 @@ public class Selection {
 
         public AtomSelection customAtomPredicate(Predicate<Atom> atomPredicate) {
             registerAtomPredicate(atomPredicate, CUSTOM_PREDICATE);
-            return this;
-        }
-
-        /**
-         * Request this selection to clone all returned elements so they can be manipulated independently of their
-         * original reference.
-         * @return the builder
-         */
-        public AtomSelection cloneElements() {
-            cloneRequested = true;
             return this;
         }
 
@@ -112,7 +103,7 @@ public class Selection {
             return this;
         }
 
-        void inferContainerName(StructureContainer container) {
+        void inferContainerName(AtomContainer container) {
             if(specifiedName != null) {
                 container.setIdentifier(specifiedName);
                 return;
@@ -143,23 +134,18 @@ public class Selection {
                 prefilteredAtomStream = atomContainer.atoms();
             }
 
-            Stream<Atom> filteredAtomStream = prefilteredAtomStream
+            return prefilteredAtomStream
                     .filter(Selection.compose(atomPredicates));
-            if(cloneRequested) {
-                return filteredAtomStream
-                        .map(Atom::new);
-            } else {
-                return filteredAtomStream;
-            }
         }
 
-        public AtomContainer asAtomContainer() {
-            AtomContainer container = asFilteredAtoms()
-                    .collect(StructureCollectors.toAtomContainer());
-
-            inferContainerName(container);
-
-            return container;
+        /**
+         * @see StructureCollectors#toIsolatedStructure() for documentation of this call's behaviour
+         */
+        public Structure asIsolatedStructure() {
+            Structure structure = asFilteredAtoms()
+                    .collect(StructureCollectors.toIsolatedStructure());
+            inferContainerName(structure);
+            return structure;
         }
 
         public Optional<Atom> asOptionalAtom() {
@@ -286,12 +272,6 @@ public class Selection {
         }
 
         @Override
-        public GroupSelection cloneElements() {
-            super.cloneElements();
-            return this;
-        }
-
-        @Override
         public GroupSelection nameContainer(String name) {
             super.nameContainer(name);
             return this;
@@ -320,23 +300,8 @@ public class Selection {
                         .flatMap(Chain::groups);
             }
 
-            Stream<Group> filteredGroupStream =  prefilteredGroupStream
+            return prefilteredGroupStream
                     .filter(Selection.compose(groupPredicates));
-            if(cloneRequested) {
-                return filteredGroupStream
-                        .map(Group::new);
-            } else {
-                return filteredGroupStream;
-            }
-        }
-
-        public GroupContainer asGroupContainer() {
-            GroupContainer container = asFilteredGroups()
-                    .collect(StructureCollectors.toGroupContainer());
-
-            inferContainerName(container);
-
-            return container;
         }
 
         public Optional<Group> asOptionalGroup() {
@@ -420,13 +385,17 @@ public class Selection {
             return this;
         }
 
-        //TODO support for insertion codes
-
         public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
                     .anyMatch(range -> group.getResidueIdentifier().getResidueNumber() >= range.getLeft() &&
                             group.getResidueIdentifier().getResidueNumber() <= range.getRight()),
                     "residue ranges: " + Arrays.toString(residueNumberRanges));
+            return this;
+        }
+
+        public GroupSelection residueIdentifier(ResidueIdentifier residueIdentifier) {
+            registerGroupPredicate(group -> group.getResidueIdentifier().equals(residueIdentifier),
+                    "residueIdentifier: " + residueIdentifier);
             return this;
         }
 
@@ -460,12 +429,6 @@ public class Selection {
         }
 
         @Override
-        public ChainSelection cloneElements() {
-            super.cloneElements();
-            return this;
-        }
-
-        @Override
         public ChainSelection nameContainer(String name) {
             super.nameContainer(name);
             return this;
@@ -485,23 +448,8 @@ public class Selection {
 
 
         public Stream<Chain> asFilteredChains() {
-            Stream<Chain> filteredChainStream = chainContainer.chains()
+            return chainContainer.chains()
                     .filter(Selection.compose(chainPredicates));
-            if(cloneRequested) {
-                return filteredChainStream
-                        .map(Chain::new);
-            } else {
-                return filteredChainStream;
-            }
-        }
-
-        public ChainContainer asChainContainer() {
-            ChainContainer container = asFilteredChains()
-                    .collect(StructureCollectors.toChainContainer());
-
-            inferContainerName(container);
-
-            return container;
         }
 
         public Optional<Chain> asOptionalChain() {
@@ -521,10 +469,30 @@ public class Selection {
             chainPredicates.add(new Pair<>(negationMode ? chainPredicate.negate() : chainPredicate, description));
         }
 
-        public ChainSelection chainName(String... chainNames) {
-            registerChainPredicate(chain -> Stream.of(chainNames)
-                    .anyMatch(chainName -> chainName.equals(chain.getChainIdentifier().getChainId())), "chain names: " + Arrays.toString(chainNames));
+        public ChainSelection chainName(String... chainIds) {
+            registerChainPredicate(chain -> Stream.of(chainIds)
+                    .anyMatch(chainName -> chainName.equals(chain.getChainIdentifier().getChainId())),
+                    "chain names: " + Arrays.toString(chainIds));
             return this;
+        }
+
+        public ChainSelection chainId(String chainId) {
+            registerChainPredicate(chain -> chain.getChainIdentifier().getChainId().equals(chainId),
+                    "chainId: " + chainId);
+            return this;
+        }
+
+        public ChainSelection chainIdentifier(ChainIdentifier chainIdentifier, ChainIdentifier furtherChainIdentifiers) {
+            Set<String> chainIds = Stream.of(chainIdentifier, furtherChainIdentifiers)
+                    .map(ChainIdentifier::getChainId)
+                    .collect(Collectors.toSet());
+            registerChainPredicate(chain -> chainIds.contains(chain.getChainIdentifier().getChainId()),
+                    "chainIds: " + chainIds);
+            return this;
+        }
+
+        public ChainSelection chainIdentifier(ChainIdentifier chainIdentifier) {
+            return chainId(chainIdentifier.getChainId());
         }
     }
 }

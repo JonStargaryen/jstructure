@@ -1,16 +1,16 @@
 package de.bioforscher.jstructure.feature.topology;
 
 import de.bioforscher.jstructure.align.AlignmentPolicy;
-import de.bioforscher.jstructure.align.StructureAlignmentBuilder;
+import de.bioforscher.jstructure.align.StructureAlignmentQuery;
 import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
-import de.bioforscher.jstructure.feature.ComputationException;
+import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,16 +34,16 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
     static final String SEARCH_URL = BASE_URL + "protein.php?search=";
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         Document document = getDocument(protein.getProteinIdentifier().getPdbId());
         processInternally(protein, document, true);
     }
 
-    public void process(Protein protein, Document document) {
+    public void process(Structure protein, Document document) {
         processInternally(protein, document, false);
     }
 
-    private void processInternally(Protein protein, Document document, boolean parseMembraneLayer) {
+    private void processInternally(Structure protein, Document document, boolean parseMembraneLayer) {
         try {
             MembraneContainer membraneContainer = new MembraneContainer(this);
             // extract general information - that is the first table
@@ -87,20 +87,19 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                                 .getBytes();
 
                         // parse protein
-                        Protein opmProtein = ProteinParser.source(new ByteArrayInputStream(bytes))
+                        Structure opmProtein = StructureParser.source(new ByteArrayInputStream(bytes))
                                 .forceProteinName(IdentifierFactory.createProteinIdentifier(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
                                 .parse();
 
                         // superimpose opm protein onto instance of the original protein
                         //TODO this alignment is by no means perfect, but works for a first glance
                         //TODO alpha-carbon-only option
-                        StructureAlignmentBuilder.StructureAlignmentStep query = StructureAlignmentBuilder.builder(protein, opmProtein)
+                        StructureAlignmentQuery query = StructureAlignmentQuery.of(protein, opmProtein)
                                 .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsAlphaCarbonsTolerant)
                                 .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
                         new SingleValueDecompositionAligner().align(query)
                                 .getTransformation()
                                 .transform(opmProtein);
-
 
                         // extract dummy atoms and move them to membraneContainer object
                         List<double[]> membraneAtoms = opmProtein.atoms()

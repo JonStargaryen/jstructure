@@ -17,7 +17,7 @@ public class T012_StatisticsByTopology {
                 .sequential()
                 .collect(Collectors.partitioningBy(aminoAcid -> aminoAcid
                         .getParentChain()
-                        .getParentProtein()
+                        .getParentStructure()
                         .getFeatureContainer()
                         .getFeature(MembraneContainer.class)
                         .isTransmembraneGroup(aminoAcid), StatisticsCollector.toAminoAcidSummary()));

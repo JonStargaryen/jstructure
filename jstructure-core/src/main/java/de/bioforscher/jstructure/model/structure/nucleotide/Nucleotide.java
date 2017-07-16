@@ -1,12 +1,13 @@
 package de.bioforscher.jstructure.model.structure.nucleotide;
 
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
+ * Representation of a nucleotide.
  * Created by bittrich on 5/30/17.
  */
 public abstract class Nucleotide extends Group implements StandardNucleotideIndicator {
@@ -31,8 +32,8 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
 
     //TODO grouping of atom names & family enum
 
-    Nucleotide(Nucleotide nucleotide) {
-        super(nucleotide);
+    Nucleotide(Nucleotide nucleotide, boolean deep) {
+        super(nucleotide, deep);
         atoms().forEach(this::addAtomInternal);
     }
 
@@ -115,6 +116,17 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
             }
         }
 
+        public static Nucleotide.Family resolveOneLetterCode(char oneLetterCode) {
+            return resolveOneLetterCode(String.valueOf(oneLetterCode));
+        }
+
+        public static Nucleotide.Family resolveOneLetterCode(String oneLetterCode) {
+            return Stream.of(Nucleotide.Family.values())
+                    .filter(nucleotide -> oneLetterCode.equalsIgnoreCase(nucleotide.getOneLetterCode()))
+                    .findFirst()
+                    .orElse(Family.UNKNOWN_NUCLEOTIDE);
+        }
+
         public static Nucleotide.Family resolveThreeLetterCode(String threeLetterCode) {
             return Stream.of(Nucleotide.Family.values())
                     .filter(nucleotide -> threeLetterCode.equalsIgnoreCase(nucleotide.getThreeLetterCode()))
@@ -137,10 +149,90 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
 
         //TODO retrieval functions for DNA-/RNA-bases etc
 
+        public String getOneLetterCode() {
+            return groupPrototype.getOneLetterCode().get();
+        }
+
         @Override
         public String getThreeLetterCode() {
             return groupPrototype.getThreeLetterCode();
         }
+    }
+
+    public Atom getOp3() {
+        return op3;
+    }
+
+    public Atom getP() {
+        return p;
+    }
+
+    public Atom getOp1() {
+        return op1;
+    }
+
+    public Atom getOp2() {
+        return op2;
+    }
+
+    public Atom getO5prime() {
+        return o5prime;
+    }
+
+    public Atom getC5prime() {
+        return c5prime;
+    }
+
+    public Atom getC4prime() {
+        return c4prime;
+    }
+
+    public Atom getO4prime() {
+        return o4prime;
+    }
+
+    public Atom getC3prime() {
+        return c3prime;
+    }
+
+    public Atom getO3prime() {
+        return o3prime;
+    }
+
+    public Atom getC2prime() {
+        return c2prime;
+    }
+
+    public Atom getC1prime() {
+        return c1prime;
+    }
+
+    public Atom getN1() {
+        return n1;
+    }
+
+    public Atom getC2() {
+        return c2;
+    }
+
+    public Atom getN3() {
+        return n3;
+    }
+
+    public Atom getC4() {
+        return c4;
+    }
+
+    public Atom getC5() {
+        return c5;
+    }
+
+    public Atom getC6() {
+        return c6;
+    }
+
+    public String getOneLetterCode() {
+        return getGroupPrototype().getOneLetterCode().orElse("?");
     }
 
     @Override

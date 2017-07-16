@@ -8,10 +8,10 @@ import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.structure.identifier.ProteinIdentifier;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class FingerPrintDataSetComposer {
             .map(FeatureProviderRegistry::resolve)
             .collect(Collectors.toList());
     private ProteinIdentifier lastProteinIdentifier = null;
-    private Protein lastProtein = null;
+    private Structure lastProtein = null;
     private static final double MINIMAL_PERCENTAGE = 0.25;
     private static final int MAX_SIZE = 1000;
 
@@ -148,7 +148,7 @@ public class FingerPrintDataSetComposer {
 
             String[] sectionSplit = filename.split("_");
             ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier(filename.split("_")[0]);
-            Protein protein;
+            Structure protein;
             if(proteinIdentifier.equals(lastProteinIdentifier)) {
                 protein = lastProtein;
                 if(lastProtein == null) {
@@ -157,7 +157,7 @@ public class FingerPrintDataSetComposer {
             } else {
                 lastProteinIdentifier = proteinIdentifier;
                 try {
-                    protein = ProteinParser.source(proteinIdentifier.getPdbId()).parse();
+                    protein = StructureParser.source(proteinIdentifier.getPdbId()).parse();
                     featureProviders.forEach(featureProvider -> featureProvider.process(protein));
                     lastProtein = protein;
                 } catch (Exception e) {
@@ -194,7 +194,7 @@ public class FingerPrintDataSetComposer {
                 composeInteractionString(container, group);
     }
 
-    private Group extractResidue(Protein protein, String residueSection) {
+    private Group extractResidue(Structure protein, String residueSection) {
         String[] split = residueSection.split("-");
         Group group = protein
                 .select()

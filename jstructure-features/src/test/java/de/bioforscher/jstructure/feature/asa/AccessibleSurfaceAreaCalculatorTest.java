@@ -2,9 +2,8 @@ package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
-import org.biojava.nbio.structure.Structure;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.biojava.nbio.structure.StructureException;
 import org.biojava.nbio.structure.asa.AsaCalculator;
 import org.biojava.nbio.structure.asa.GroupAsa;
@@ -38,7 +37,7 @@ public class AccessibleSurfaceAreaCalculatorTest {
 
     private static List<Double> getJStructureASA(String id) {
         // load structure
-        Protein protein = ProteinParser.source(id).parse();
+        Structure protein = StructureParser.source(id).parse();
         // assign states
         FeatureProviderRegistry.resolve(AccessibleSurfaceArea.class).process(protein);
 
@@ -50,7 +49,7 @@ public class AccessibleSurfaceAreaCalculatorTest {
 
     private static List<Double> getBioJavaASA(String id) throws IOException, StructureException {
         // load structure
-        Structure protein = new PDBFileReader().getStructureById(id);
+        org.biojava.nbio.structure.Structure protein = new PDBFileReader().getStructureById(id);
 
         AsaCalculator groupAsas = new AsaCalculator(protein,
                 AsaCalculator.DEFAULT_PROBE_SIZE,

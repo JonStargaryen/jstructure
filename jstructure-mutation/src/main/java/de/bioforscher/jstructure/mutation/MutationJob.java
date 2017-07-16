@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.mutation;
 import de.bioforscher.jstructure.model.structure.Chain;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,7 +30,7 @@ public interface MutationJob {
      *
      * @return
      */
-    LocalDateTime getCreationTime();
+    LocalDate getCreationTime();
 
     /**
      * The original chain which will not be manipulated.

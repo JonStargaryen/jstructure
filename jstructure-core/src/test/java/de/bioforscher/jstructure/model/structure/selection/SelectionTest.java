@@ -6,7 +6,8 @@ import de.bioforscher.jstructure.model.structure.aminoacid.Arginine;
 import de.bioforscher.jstructure.model.structure.aminoacid.Phenylalanine;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.StructureParser;
+import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,11 +21,13 @@ import java.util.stream.Collectors;
  * Created by S on 21.11.2016.
  */
 public class SelectionTest {
-    private Protein protein;
+    private Structure protein;
 
     @Before
     public void setup() {
-        protein = ProteinParser.source("1brr").parse();
+        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1BRR))
+                .minimalParsing(true)
+                .parse();
     }
 
     @Test
@@ -37,7 +40,7 @@ public class SelectionTest {
         groups.forEach(group -> Assert.assertTrue("group " + group + " of original selected stream is no amino acid, was " + group.getClass().getSimpleName(), group instanceof AminoAcid));
 
         GroupContainer container = groups.stream()
-                .collect(StructureCollectors.toGroupContainer());
+                .collect(StructureCollectors.toIsolatedStructure());
         container.groups().forEach(group -> Assert.assertTrue("group " + group + " of container stream is no amino acid, was " + group.getClass().getSimpleName(), group instanceof AminoAcid));
     }
 
@@ -48,7 +51,7 @@ public class SelectionTest {
                 .residueNumber(100)
                 .asOptionalGroup();
 
-        System.out.println(group.get().getParentChain().getParentProtein().getIdentifier());
+        System.out.println(group.get().getParentChain().getParentStructure().getIdentifier());
     }
 
     @Test
@@ -95,7 +98,7 @@ public class SelectionTest {
         GroupContainer argGroups = protein.select()
                 .chainName("B", "C")
                 .groupName(Arginine.THREE_LETTER_CODE)
-                .asGroupContainer();
+                .asIsolatedStructure();
         System.out.println(argGroups.getPdbRepresentation());
 
         // select hetatms in chain 'A'
@@ -103,7 +106,7 @@ public class SelectionTest {
         GroupContainer hets = protein.select()
                 .chainName("C")
                 .hetatms()
-                .asGroupContainer();
+                .asIsolatedStructure();
         // assert that any atoms where selected
         Assert.assertTrue(hets.getAtoms().size() > 0);
         System.out.println(hets.getPdbRepresentation());
@@ -116,7 +119,7 @@ public class SelectionTest {
                 .chainName("A", "C")
                 .groupName(Phenylalanine.THREE_LETTER_CODE)
                 .atomName(AminoAcid.ALPHA_CARBON_NAME, AminoAcid.BETA_CARBON_NAME)
-                .asAtomContainer();
+                .asIsolatedStructure();
         System.out.println(atoms.getPdbRepresentation());
     }
 
@@ -124,31 +127,34 @@ public class SelectionTest {
 
     @Test
     public void shouldNameContainer() {
-        GroupContainer container = protein.select()
+        Structure container = protein.select()
                 .aminoAcids()
                 .nameContainer(givenName)
-                .asGroupContainer();
+                .asIsolatedStructure();
 
-        Assert.assertTrue(container.getIdentifier().equals(givenName));
+        Assert.assertEquals("identifier not correctly inferred by selection",
+                givenName,
+                container.getIdentifier());
     }
 
     @Test
     public void shouldNameAfterParentContainer() {
-        GroupContainer parentContainer = protein.select()
-                .cloneElements()
+        Structure parentContainer = protein.select()
                 .nameContainer(givenName)
-                .asGroupContainer();
+                .asIsolatedStructure();
 
-        GroupContainer container = Selection.on(parentContainer)
+        Structure container = parentContainer.select()
                 .aminoAcids()
-                .asGroupContainer();
+                .asIsolatedStructure();
 
-        Assert.assertTrue(container.getIdentifier().equals(givenName));
+        Assert.assertEquals("identifier not correctly inferred by selection",
+                givenName,
+                container.getIdentifier());
     }
 
     @Test
     public void shouldFindSimilarNeighbors() {
-        Protein protein = ProteinParser.source("1acj").parse();
+        Structure protein = StructureParser.source("1acj").parse();
 
         Atom atom = protein.getAtoms().get(100);
         double probeDistance = 4;

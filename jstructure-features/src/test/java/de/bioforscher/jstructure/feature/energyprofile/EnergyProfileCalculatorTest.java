@@ -3,8 +3,8 @@ package de.bioforscher.jstructure.feature.energyprofile;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,7 +41,7 @@ public class EnergyProfileCalculatorTest {
     public void shouldComputeEnergyProfilesForAllStructures() throws IOException {
         // this takes ages
         ids.stream()
-                .map(path -> ProteinParser.source(path).parse())
+                .map(path -> StructureParser.source(path).parse())
                 .peek(System.out::println)
                 .forEach(protein -> {
                     featureProvider.process(protein);
@@ -57,25 +57,25 @@ public class EnergyProfileCalculatorTest {
 
     @Test
     public void shouldProcessStructureWithSelenomethionine() {
-        Protein protein = ProteinParser.source("3TQO").parse();
+        Structure protein = StructureParser.source("3TQO").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldProcessStructureWithMPH() {
-        Protein protein = ProteinParser.source("1P7P").parse();
+        Structure protein = StructureParser.source("1P7P").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldProcessStructure() {
-        Protein protein = ProteinParser.source("1ATI").parse();
+        Structure protein = StructureParser.source("1ATI").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldAgreeRegardingEnergyTerms() throws IOException {
-        Protein protein = ProteinParser.source("1bs2").parse();
+        Structure protein = StructureParser.source("1bs2").parse();
         featureProvider.process(protein);
 
         TestUtils.getResourceAsStream("energy/1bs2.ep2")

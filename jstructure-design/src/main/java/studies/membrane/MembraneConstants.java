@@ -11,9 +11,9 @@ import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
 import de.bioforscher.jstructure.feature.topology.Topology;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
 import org.jsoup.Jsoup;
 import studies.StudyConstants;
 
@@ -47,7 +47,7 @@ public class MembraneConstants extends StudyConstants {
             System.out.println("fetching " + id);
             String pdbId = id.split("_")[0];
             String chainId = id.split("_")[1];
-            Protein protein = ProteinParser.source(PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
+            Structure protein = StructureParser.source(PDBTM_PDB_PATH.resolve(pdbId + ".pdb"))
                     .minimalParsing(true)
                     .parse();
             Chain chain = protein.select()
@@ -92,7 +92,7 @@ public class MembraneConstants extends StudyConstants {
         public static Stream<AminoAcid> getAminoAcidsTransmembrane() {
             return getAminoAcids()
                     .filter(aminoAcid -> aminoAcid.getParentChain()
-                            .getParentProtein()
+                            .getParentStructure()
                             .getFeatureContainer()
                             .getFeature(MembraneContainer.class)
                             .isTransmembraneGroup(aminoAcid));
@@ -133,7 +133,7 @@ public class MembraneConstants extends StudyConstants {
             return getInteractionsTransmembrane()
                     // filter for interactions of different parts of transmembrane helices
                     .filter(plipInteraction -> {
-                        MembraneContainer membraneContainer = plipInteraction.getPartner1().getParentChain().getParentProtein().getFeatureContainer().getFeature(MembraneContainer.class);
+                        MembraneContainer membraneContainer = plipInteraction.getPartner1().getParentChain().getParentStructure().getFeatureContainer().getFeature(MembraneContainer.class);
                         return membraneContainer.getEmbeddingTransmembraneSegment(plipInteraction.getPartner1()) != membraneContainer.getEmbeddingTransmembraneSegment(plipInteraction.getPartner2());
                     });
         }

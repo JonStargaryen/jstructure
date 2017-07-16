@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * Annotates the secondary structure element of each getResidue in a
- * {@link Protein}.<br />
+ * {@link Structure}.<br />
  * This is BioJava-code which itself it strongly motivated by Kabsch & Sander's
  * DSSP.<br />
  * original doc:<br />
@@ -86,7 +86,7 @@ public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvid
     public static final double Q = -27888.0;
 
     @Override
-    protected void processInternally(Protein protein) {
+    protected void processInternally(Structure protein) {
         protein.chainsWithAminoAcids().forEach(this::processInternally);
     }
 
@@ -108,7 +108,7 @@ public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvid
     }
 
     @Override
-    protected void postprocessInternally(Protein protein) {
+    protected void postprocessInternally(Structure protein) {
         protein.aminoAcids().forEach(aminoAcid -> aminoAcid.getAtoms().removeIf(Atom::isVirtual));
     }
 

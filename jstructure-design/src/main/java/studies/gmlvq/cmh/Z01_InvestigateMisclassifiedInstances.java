@@ -1,11 +1,8 @@
 package studies.gmlvq.cmh;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
 import studies.StudyConstants;
 
 import java.io.IOException;
@@ -29,14 +26,14 @@ class Z01_InvestigateMisclassifiedInstances {
     }
 
     static class Instance {
-        Protein protein;
+        Structure protein;
         Group residue1, residue2, residue3;
         OptionalDouble minimalCopperDistance;
         boolean functional, containsCooper;
 
         Instance(String line) {
             String[] split = line.split(",\\s+")[1].split("_");
-            protein = ProteinParser.source(split[0]).parse();
+            protein = StructureParser.source(split[0]).parse();
 
             residue1 = protein.select()
                     .chainName(split[1].split("-")[0])
@@ -52,7 +49,7 @@ class Z01_InvestigateMisclassifiedInstances {
                     .asGroup();
 
             functional = !line.contains("non-");
-            AtomContainer coppers = protein.select().element(Element.Cu).asAtomContainer();
+            AtomContainer coppers = protein.select().element(Element.Cu).asIsolatedStructure();
             minimalCopperDistance = coppers.atoms()
                     .mapToDouble(atom -> Stream.of(residue1, residue2, residue3)
                             .map(residue -> residue.select().alphaCarbonAtoms().asAtom())

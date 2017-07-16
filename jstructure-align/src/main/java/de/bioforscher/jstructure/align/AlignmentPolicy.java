@@ -65,8 +65,8 @@ public interface AlignmentPolicy {
          * groups (e.g. Ala vs Ile), they must share at least 1 atom however.
          */
         AtomMapping aminoAcidsComparableAtomNames = (reference, query) -> {
-            GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toGroupContainer());
-            GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toGroupContainer());
+            GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toIsolatedStructure());
+            GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toIsolatedStructure());
             ensureMatchingGroupCount(referenceAminoAcids, queryAminoAcids);
             return IntStream.range(0, referenceAminoAcids.getGroups().size())
                     .mapToObj(index -> determineSharedAtoms(referenceAminoAcids.getGroups().get(index), queryAminoAcids.getGroups().get(index)))
@@ -75,8 +75,8 @@ public interface AlignmentPolicy {
         };
 
         AtomMapping aminoAcidsComparableBackboneAtomNames = (reference, query) -> {
-            GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toGroupContainer());
-            GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toGroupContainer());
+            GroupContainer referenceAminoAcids = reference.aminoAcids().collect(StructureCollectors.toIsolatedStructure());
+            GroupContainer queryAminoAcids = query.aminoAcids().collect(StructureCollectors.toIsolatedStructure());
             ensureMatchingGroupCount(referenceAminoAcids, queryAminoAcids);
             return IntStream.range(0, referenceAminoAcids.getGroups().size())
                     .mapToObj(index -> determineSharedBackboneAtoms(referenceAminoAcids.getGroups().get(index), queryAminoAcids.getGroups().get(index)))

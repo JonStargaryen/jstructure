@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.structure.Protein;
+import de.bioforscher.jstructure.model.structure.Structure;
 import org.junit.Test;
 
 /**
@@ -36,7 +36,7 @@ public class FeatureProviderTest {
     @FeatureProvider(provides = AdditionalFeatureEntry.class)
     public static class AdditionalFeatureProvider extends AbstractFeatureProvider {
         @Override
-        protected void processInternally(Protein protein) {
+        protected void processInternally(Structure protein) {
 
         }
     }

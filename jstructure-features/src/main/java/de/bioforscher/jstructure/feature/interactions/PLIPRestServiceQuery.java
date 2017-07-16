@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;

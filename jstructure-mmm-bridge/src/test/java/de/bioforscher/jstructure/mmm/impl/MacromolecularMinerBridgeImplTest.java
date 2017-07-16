@@ -1,10 +1,10 @@
 package de.bioforscher.jstructure.mmm.impl;
 
-import de.bioforscher.jstructure.StandardNumberFormat;
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
 import de.bioforscher.jstructure.mmm.StructureConservationProfile;
-import de.bioforscher.jstructure.model.structure.Protein;
-import de.bioforscher.jstructure.model.structure.ProteinParser;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -53,12 +53,12 @@ public class MacromolecularMinerBridgeImplTest {
     @Test
     @Ignore
     public void shouldMineConservationProfile() throws ExecutionException, InterruptedException {
-        Protein referenceProtein = ProteinParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1CYO))
+        Structure referenceProtein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1CYO))
                 .minimalParsing(true)
                 .parse();
         mmm.getConservationProfile(in, referenceProtein).get();
         referenceProtein.aminoAcids()
-                .map(aminoAcid -> aminoAcid.getIdentifier() + ": " + StandardNumberFormat.format(aminoAcid.getFeatureContainer().getFeature(StructureConservationProfile.class).getValue()))
+                .map(aminoAcid -> aminoAcid.getIdentifier() + ": " + StandardFormat.format(aminoAcid.getFeatureContainer().getFeature(StructureConservationProfile.class).getValue()))
                 .forEach(logger::info);
     }
 }

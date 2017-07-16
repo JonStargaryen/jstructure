@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -11,8 +11,8 @@ public class Glycine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "GLY";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
 
-    public Glycine(Glycine glycine) {
-        super(glycine);
+    Glycine(Glycine glycine, boolean deep) {
+        super(glycine, deep);
     }
 
     public Glycine(ResidueIdentifier residueIdentifier,

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
@@ -13,10 +13,8 @@ public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
     private Atom cb;
     private Atom se;
 
-    public Selenocysteine(Selenocysteine selenocysteine) {
-        super(selenocysteine);
-//        this.cb = new Atom(selenocysteine.cb);
-//        this.se = new Atom(selenocysteine.se);
+    Selenocysteine(Selenocysteine selenocysteine, boolean deep) {
+        super(selenocysteine, deep);
     }
 
     public Selenocysteine(ResidueIdentifier residueIdentifier,

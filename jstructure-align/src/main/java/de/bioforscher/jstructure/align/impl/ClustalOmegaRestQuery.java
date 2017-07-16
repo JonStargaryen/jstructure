@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
  * Queries the REST interface of ebi to run clustal omega.
  * Created by bittrich on 7/11/17.
  */
+@Deprecated
 public class ClustalOmegaRestQuery extends AbstractClustalOmega {
     private static final Logger logger = LoggerFactory.getLogger(ClustalOmegaRestQuery.class);
     private static final String BASE_URL = "http://www.ebi.ac.uk/Tools/services/rest/clustalo/";

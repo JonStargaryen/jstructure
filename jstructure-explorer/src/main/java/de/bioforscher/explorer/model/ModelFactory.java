@@ -1,6 +1,6 @@
 package de.bioforscher.explorer.model;
 
-import de.bioforscher.jstructure.model.structure.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +40,12 @@ public class ModelFactory {
 //        String representativeChainId = representativeId.split("_")[1];
 //
 //        // load all proteins - key: pdbId, value: instance of the whole protein
-//        Map<String, Protein> proteins = homologousChainIds.parallelStream()
+//        Map<String, Structure> proteins = homologousChainIds.parallelStream()
 //                .map(chainId -> chainId.split("_")[0].toLowerCase())
 //                .distinct()
 //                .peek(pdbId -> logger.info("[{}] fetching homologous protein {}", representativeId, pdbId))
 //                .collect(Collectors.toMap(Function.identity(),
-//                        pdbId -> ProteinParser.source(pdbId).forceProteinName(pdbId).parse()));
+//                        pdbId -> StructureParser.source(pdbId).forceProteinName(pdbId).parse()));
 //
 //        // annotate PLIP data
 //        proteins.values().parallelStream().forEach(asaCalculator::process);

@@ -30,11 +30,11 @@ class AtomRecordProvider {
         d2.setMaximumFractionDigits(2);
     }
 
-    static String toPDBString(Atom atom) {
+    static String toPdbString(Atom atom) {
         Group parentGroup = atom.getParentGroup();
         Chain parentChain = parentGroup.getParentChain();
-        //TODO check - needed?
-        String chainId = parentChain.getChainIdentifier() != null ? parentChain.getChainIdentifier().getChainId() : Chain.UNKNOWN_CHAIN.getChainIdentifier().getChainId();
+
+        String chainId = parentChain.getChainIdentifier().getChainId();
         String record = isHetAtm(parentGroup) ? HETATM_PREFIX : ATOM_PREFIX;
         // format output ...
         String resName = parentGroup.getThreeLetterCode();
@@ -83,7 +83,6 @@ class AtomRecordProvider {
     }
 
     private static boolean isHetAtm(Group parentGroup) {
-        //TODO is this check for HETATM annotation correct?
         return parentGroup.isLigand() || parentGroup instanceof NonStandardAminoAcid;
     }
 
