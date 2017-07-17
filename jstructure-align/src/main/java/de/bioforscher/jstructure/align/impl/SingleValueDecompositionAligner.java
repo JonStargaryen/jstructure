@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * A structure alignment algorithm based on SVD.
@@ -31,20 +32,15 @@ public class SingleValueDecompositionAligner implements StructureAligner {
             GroupContainer referenceOriginal = structureAlignmentQuery.getReference();
             GroupContainer queryOriginal = structureAlignmentQuery.getQuery();
 
-            GroupContainer reference = referenceOriginal.atoms().collect(StructureCollectors.toIsolatedStructure());
-            GroupContainer query = queryOriginal.atoms().collect(StructureCollectors.toIsolatedStructure());
-
             // determine mapping
-            List<Pair<Atom, Atom>> atomMapping = structureAlignmentQuery.getAtomMapping().determineAtomMapping(reference, query);
-            //TODO get rid of double clone - also breaks code as Selected-instances must be able to manipulate original instances
+            List<Pair<Atom, Atom>> atomMapping = structureAlignmentQuery.getAtomMapping()
+                    .determineAtomMapping(referenceOriginal, queryOriginal);
             AtomContainer referenceSelectedAtoms = atomMapping.stream()
                     .map(Pair::getLeft)
                     .collect(StructureCollectors.toIsolatedStructure());
             AtomContainer querySelectedAtoms = atomMapping.stream()
                     .map(Pair::getRight)
                     .collect(StructureCollectors.toIsolatedStructure());
-
-            AlignmentPolicy.ManipulationBehavior manipulationBehavior = structureAlignmentQuery.getManipulationBehavior();
 
             // calculate centroids and center atoms
             double[] centroid1 = referenceSelectedAtoms.calculate().center().getValue();
@@ -80,20 +76,18 @@ public class SingleValueDecompositionAligner implements StructureAligner {
             // transform 2nd atom select - employ neutral translation (3D vector of zeros), because the atoms are
             // already centered and calculate RMSD
             querySelectedAtoms.calculate().transform(new Transformation(rotation));
-            double rmsd = calculateRmsd(atomMapping);
+            double rmsd = calculateRmsd(referenceSelectedAtoms, querySelectedAtoms);
 
             Transformation transformation = new Transformation(translation, rotation);
             // superimpose query onto reference
-            query.calculate().transform(transformation);
-            if (manipulationBehavior == AlignmentPolicy.ManipulationBehavior.INPLACE) {
-                // if requested: do the same for the original query
-                queryOriginal.calculate().transform(transformation);
-            }
+            querySelectedAtoms.calculate().transform(transformation);
 
             // return alignment
             return new StructureAlignmentResultImpl(referenceOriginal,
                     queryOriginal,
-                    query,
+                    referenceSelectedAtoms,
+                    querySelectedAtoms,
+                    atomMapping,
                     transformation,
                     rmsd);
         } catch (Exception e) {
@@ -103,13 +97,15 @@ public class SingleValueDecompositionAligner implements StructureAligner {
 
     /**
      * Computes the root-mean square deviation between 2 sets of atoms.
-     * @param atomMapping the rule how atoms were paired
+     * @param reference container 1 - must arrange atoms in the exact same manner
+     * @param query container 2 - must arrange atoms in the exact same manner
      * @return the RMSD value of the alignment
      * @throws IllegalArgumentException if no matching atom pairs were provided
      */
-    private double calculateRmsd(List<Pair<Atom, Atom>> atomMapping) {
-        double msd = atomMapping.stream()
-                .mapToDouble(pair -> LinearAlgebra.on(pair.getLeft().getCoordinates()).distanceFast(pair.getRight().getCoordinates()))
+    private double calculateRmsd(AtomContainer reference, AtomContainer query) {
+        double msd = IntStream.range(0, reference.getAtoms().size())
+                .mapToDouble(atomIndex -> LinearAlgebra.on(reference.getAtoms().get(atomIndex))
+                        .distanceFast(query.getAtoms().get(atomIndex)))
                 .average()
                 .orElseThrow(() -> new IllegalArgumentException("cannot calculate rmsd for empty or non-intersecting containers"));
         return Math.sqrt(msd);

@@ -171,21 +171,4 @@ public interface AlignmentPolicy {
             }
         }
     }
-
-    /**
-     * Determines whether the original query will be manipulated or if a copy is created whose coordinates will be
-     * manipulated.
-     */
-    enum ManipulationBehavior {
-        /**
-         * Causes the original reference and query to be manipulated (i.e. centered and the query is rotated onto the
-         * reference).
-         */
-        INPLACE,
-        /**
-         * Creates copies of the provided reference and query and manipulates those entities. The original arguments will
-         * not be modified by any means.
-         */
-        COPY
-    }
 }

@@ -103,8 +103,7 @@ public class T021_TransmembraneSequenceMotifs {
                         reference.getAtoms().get(reference.getAtoms().size() - 1).getParentGroup().getIdentifier());
 
         StructureAlignmentQuery query = StructureAlignmentQuery.of(reference, fragment)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsComparableBackboneAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsComparableBackboneAtomNames);
         StructureAlignmentResult alignment = new SingleValueDecompositionAligner().align(query);
 
         List<Atom> sequenceMotifAtoms = fragment.atoms()

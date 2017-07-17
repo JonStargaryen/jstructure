@@ -108,9 +108,4 @@ public interface AtomContainer extends StructureContainer, Selectable,
                 .append(previousGroup.getResidueIdentifier().getInsertionCode())
                 .append(System.lineSeparator());
     }
-
-//    @Override
-//    default AtomContainer createDeepCopy() {
-//        return (AtomContainer) Copyable.super.createDeepCopy();
-//    }
 }

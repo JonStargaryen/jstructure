@@ -171,7 +171,8 @@ public class StructureParserTest {
 
         waters.forEach(group -> {
             Assert.assertTrue(group.isLigand());
-            Assert.assertTrue("water records ought to start with HETATM", group.getPdbRepresentation().startsWith(Atom.HETATM_PREFIX));
+            Assert.assertTrue("water records ought to start with HETATM",
+                    group.getPdbRepresentation().contains(Atom.HETATM_PREFIX));
         });
 
         Group arginineAsLigand = protein1bs2.select()

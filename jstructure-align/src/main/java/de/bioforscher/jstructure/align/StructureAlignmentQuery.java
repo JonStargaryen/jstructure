@@ -10,13 +10,11 @@ public class StructureAlignmentQuery {
     private final GroupContainer reference;
     private final GroupContainer query;
     private final AlignmentPolicy.AtomMapping atomMapping;
-    private final AlignmentPolicy.ManipulationBehavior manipulationBehavior;
 
-    private StructureAlignmentQuery(ManipulationBehaviorStep manipulationBehaviorStep) {
-        this.reference = manipulationBehaviorStep.reference;
-        this.query = manipulationBehaviorStep.query;
-        this.atomMapping = manipulationBehaviorStep.atomMapping;
-        this.manipulationBehavior = manipulationBehaviorStep.manipulationBehavior;
+    private StructureAlignmentQuery(MatchingBehaviorStep matchingBehaviorStep) {
+        this.reference = matchingBehaviorStep.reference;
+        this.query = matchingBehaviorStep.query;
+        this.atomMapping = matchingBehaviorStep.atomMapping;
     }
 
     public GroupContainer getReference() {
@@ -29,10 +27,6 @@ public class StructureAlignmentQuery {
 
     public AlignmentPolicy.AtomMapping getAtomMapping() {
         return atomMapping;
-    }
-
-    public AlignmentPolicy.ManipulationBehavior getManipulationBehavior() {
-        return manipulationBehavior;
     }
 
     public static MatchingBehaviorStep of(GroupContainer reference, GroupContainer query) {
@@ -49,26 +43,8 @@ public class StructureAlignmentQuery {
             this.query = query;
         }
 
-        public ManipulationBehaviorStep matchingBehavior(AlignmentPolicy.AtomMapping atomMapping) {
+        public StructureAlignmentQuery matchingBehavior(AlignmentPolicy.AtomMapping atomMapping) {
             this.atomMapping = atomMapping;
-            return new ManipulationBehaviorStep(this);
-        }
-    }
-
-    public static class ManipulationBehaviorStep {
-        final GroupContainer reference;
-        final GroupContainer query;
-        final AlignmentPolicy.AtomMapping atomMapping;
-        AlignmentPolicy.ManipulationBehavior manipulationBehavior;
-
-        ManipulationBehaviorStep(MatchingBehaviorStep matchingBehaviorStep) {
-            this.reference = matchingBehaviorStep.reference;
-            this.query = matchingBehaviorStep.query;
-            this.atomMapping = matchingBehaviorStep.atomMapping;
-        }
-
-        public StructureAlignmentQuery manipulationBehavior(AlignmentPolicy.ManipulationBehavior manipulationBehavior) {
-            this.manipulationBehavior = manipulationBehavior;
             return new StructureAlignmentQuery(this);
         }
     }

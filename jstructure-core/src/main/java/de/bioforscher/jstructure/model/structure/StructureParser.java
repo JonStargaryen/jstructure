@@ -133,6 +133,9 @@ public class StructureParser {
 
             try {
                 LocalDate depositionDate = LocalDate.parse(line.substring(50, 59).trim(), StandardFormat.getPdbDateFormatInstance());
+                if(depositionDate.isAfter(LocalDate.now())) {
+                    depositionDate = depositionDate.minusYears(100);
+                }
                 protein.setDepositionDate(depositionDate);
             } catch (Exception e) {
                 logger.warn("failed to parse depositionDate from line '{}'", line, e);

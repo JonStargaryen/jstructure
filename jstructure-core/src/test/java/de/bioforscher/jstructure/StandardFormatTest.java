@@ -18,6 +18,12 @@ public class StandardFormatTest {
 
     @Test
     public void shouldParseToPreviousCentury() {
-        Assert.fail("LocalDate of e.g. 93-JAN-01 is parsed to 2093-01-01");
+        LocalDate date = LocalDate.parse("01-JAN-93", StandardFormat.getPdbDateFormatInstance());
+        if(date.isAfter(LocalDate.now())) {
+            date = date.minusYears(100);
+        }
+        System.out.println(date);
+        Assert.assertTrue("LocalDate of e.g. 01-JAN-93 is parsed to 2093-01-01",
+                date.isBefore(LocalDate.now()));
     }
 }

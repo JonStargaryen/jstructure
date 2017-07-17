@@ -103,8 +103,7 @@ public class SingleValueDecompositionAlignerTest {
     public void shouldAlignArbitraryPoints() {
         // calculate alignment
         StructureAlignmentQuery query = StructureAlignmentQuery.of(container1, container2)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
 
         Assert.assertEquals("rmsd did not match expectation",
@@ -117,8 +116,7 @@ public class SingleValueDecompositionAlignerTest {
     public void shouldAlignAnotherSetOfArbitraryPoints() {
         // calculate alignment
         StructureAlignmentQuery query = StructureAlignmentQuery.of(container3, container4)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
         System.out.println(Arrays.toString(alignmentResult.getTransformation().getTranslation()));
         System.out.println(Arrays.deepToString(alignmentResult.getTransformation().getRotation()));
@@ -127,33 +125,11 @@ public class SingleValueDecompositionAlignerTest {
     }
 
     @Test
-    public void shouldManipulateCoordinatesInplace() {
-        double[] translation = new double[]{ 10, 10, 10 };
-        double[] originalCentroid = protein1acj.calculate().centroid().getValue();
-        Structure copy = protein1acj.createDeepCopy();
-        copy.calculate().transform(translation);
-
-        // assert the original coordinates where not manipulated
-        Assert.assertArrayEquals(originalCentroid, protein1acj.calculate().centroid().getValue(), 0.0);
-
-        double[] translatedCentroid = copy.calculate().centroid().getValue();
-        Assert.assertTrue(LinearAlgebra.on(originalCentroid).distance(translatedCentroid) > 10);
-
-        StructureAlignmentQuery query = StructureAlignmentQuery.of(container1, container2)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.INPLACE);
-        structureAligner.align(query);
-        // after alignment this centroids should not differ anymore
-        Assert.assertArrayEquals("operation did not happen in-place", originalCentroid, copy.calculate().centroid().getValue(), 0.0);
-    }
-
-    @Test
     public void shouldNotManipulateCoordinatesCopy() {
         String initialCoordinates1 = container1.getPdbRepresentation();
         String initialCoordinates2 = container2.getPdbRepresentation();
         StructureAlignmentQuery query = StructureAlignmentQuery.of(container1, container2)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
         // coordinates should not be changed by aligning
         Assert.assertNotEquals(initialCoordinates2, alignmentResult.getAlignedQuery().getPdbRepresentation());
@@ -164,8 +140,7 @@ public class SingleValueDecompositionAlignerTest {
     @Test
     public void shouldResultInPerfectAlignment() {
         StructureAlignmentQuery query = StructureAlignmentQuery.of(protein1acj, protein1acj)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
         Assert.assertEquals(0.0, alignmentResult.getAlignmentScore(), 0.001);
         Assert.assertArrayEquals(alignmentResult.getTransformation().getTranslation(), Transformation.NEUTRAL_TRANSLATION, 0.001);
@@ -178,8 +153,7 @@ public class SingleValueDecompositionAlignerTest {
         protein1acjCopy.calculate().transform(translation);
 
         StructureAlignmentQuery query = StructureAlignmentQuery.of(protein1acj, protein1acjCopy)
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
 
         Assert.assertEquals(0.0,
@@ -196,8 +170,7 @@ public class SingleValueDecompositionAlignerTest {
                 .asIsolatedStructure(), protein1acj.select()
                 .aminoAcids()
                 .asIsolatedStructure())
-                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
         StructureAlignmentResult alignmentResult = structureAligner.align(query);
         double rmsd = alignmentResult.getAlignmentScore();
         Assert.assertEquals(0.0, rmsd, TestUtils.TOLERANT_ERROR_MARGIN);

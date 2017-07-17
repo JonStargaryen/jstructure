@@ -95,8 +95,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureP
                         //TODO this alignment is by no means perfect, but works for a first glance
                         //TODO alpha-carbon-only option
                         StructureAlignmentQuery query = StructureAlignmentQuery.of(protein, opmProtein)
-                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsAlphaCarbonsTolerant)
-                                .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                                .matchingBehavior(AlignmentPolicy.MatchingBehavior.aminoAcidsAlphaCarbonsTolerant);
                         new SingleValueDecompositionAligner().align(query)
                                 .getTransformation()
                                 .transform(opmProtein);

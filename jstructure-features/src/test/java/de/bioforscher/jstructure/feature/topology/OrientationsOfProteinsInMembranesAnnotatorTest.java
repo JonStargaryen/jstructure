@@ -35,7 +35,8 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
         annotator.process(protein);
         MembraneContainer container = protein.getFeatureContainer().getFeature(MembraneContainer.class);
         Assert.assertEquals(0, container.getTransMembraneHelices().size());
-        Assert.assertTrue(container.getMembraneAtoms().size() > 0);
+        Assert.assertTrue("did not annotate any membrane layer atoms",
+                container.getMembraneAtoms().size() > 0);
     }
 
     @Test
@@ -61,11 +62,6 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
     public void shouldFetchResultsDirectly() throws IOException {
         Document document = OrientationsOfProteinsInMembranesAnnotator.getDocumentInternal(OrientationsOfProteinsInMembranesAnnotator.SEARCH_URL + "1m0l");
         Assert.assertTrue(document.text().startsWith("1m0l"));
-    }
-
-    @Test
-    public void shouldHandleTransMembraneProtein() {
-        annotator.process(protein);
     }
 
     @Test

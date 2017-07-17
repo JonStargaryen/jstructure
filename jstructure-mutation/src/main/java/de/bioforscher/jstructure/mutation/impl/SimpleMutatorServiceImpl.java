@@ -65,8 +65,7 @@ public class SimpleMutatorServiceImpl implements MutatorService {
             mutatedResidueContainer.addGroup(mutatedResidue);
             // transform coordinates
             StructureAlignmentQuery query = StructureAlignmentQuery.of(originalResidueContainer, mutatedResidueContainer)
-                    .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames)
-                    .manipulationBehavior(AlignmentPolicy.ManipulationBehavior.COPY);
+                    .matchingBehavior(AlignmentPolicy.MatchingBehavior.comparableAtomNames);
             singleValueDecompositionAligner.align(query)
                     .getTransformation()
                     .transform(mutatedResidue);

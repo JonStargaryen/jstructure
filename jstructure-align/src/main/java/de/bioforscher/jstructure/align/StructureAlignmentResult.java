@@ -1,7 +1,11 @@
 package de.bioforscher.jstructure.align;
 
 import de.bioforscher.jstructure.mathematics.Transformation;
-import de.bioforscher.jstructure.model.structure.container.GroupContainer;
+import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+
+import java.util.List;
 
 /**
  * The result of a structural alignment.
@@ -10,21 +14,29 @@ import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 public interface StructureAlignmentResult {
     /**
      * The group container used as reference in this alignment.
-     * @return the original reference as {@link GroupContainer}
+     * @return the original reference as {@link AtomContainer}
      */
-    GroupContainer getOriginalReference();
+    AtomContainer getOriginalReference();
 
     /**
      * The group container which was supposed to be aligned to the reference.
-     * @return the original query as {@link GroupContainer}
+     * @return the original query as {@link AtomContainer}
      */
-    GroupContainer getOriginalQuery();
+    AtomContainer getOriginalQuery();
+
+    /**
+     *
+     * @return
+     */
+    AtomContainer getAlignedReference();
 
     /**
      * The aligned query container - may be only a subset of entities from the original query.
-     * @return a manipulated {@link GroupContainer}
+     * @return a manipulated {@link AtomContainer}
      */
-    GroupContainer getAlignedQuery();
+    AtomContainer getAlignedQuery();
+
+    List<Pair<Atom, Atom>> getAtomPairing();
 
     /**
      * The transformation which can recreate this alignment.
