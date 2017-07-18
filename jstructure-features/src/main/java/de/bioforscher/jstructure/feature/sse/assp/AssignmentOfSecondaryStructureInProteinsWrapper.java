@@ -23,6 +23,9 @@ import java.nio.file.Paths;
  */
 @FeatureProvider(provides = { GenericSecondaryStructure.class }, priority = 50)
 public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFeatureProvider {
+    /**
+     * Tied to a specific directory as files should be placed next to executable.
+     */
     private static final Path ASSP_DIRECTORY = Paths.get("/usr/local/bin/assp/");
 
     @Override

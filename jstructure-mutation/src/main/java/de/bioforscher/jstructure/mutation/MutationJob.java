@@ -5,6 +5,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -55,4 +56,6 @@ public interface MutationJob {
      * @return
      */
     List<Chain> getHomologousPdbChains();
+
+    Map<String, String> getAlignmentMap();
 }

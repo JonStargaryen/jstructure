@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mmm;
 
-import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.mmm.model.Itemset;
 
 import java.util.List;
@@ -12,9 +12,9 @@ import java.util.Map;
  */
 public interface StructureConversationCalculator {
     /**
-     * Annotate a protein with {@link StructureConservationProfile} entries.
+     * Annotate a protein with a structural conservation profile.
      * @param extractedItemsets mmm results
-     * @param protein the protein the profile could be assigned to
+     * @param chain the chain of that the profile should be computed of
      */
-    void extractConservationProfile(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, Structure protein);
+    List<Double> extractConservationProfile(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, Chain chain);
 }

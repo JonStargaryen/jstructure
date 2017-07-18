@@ -9,7 +9,6 @@ import de.bioforscher.jstructure.mutation.MutatorService;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 /**
@@ -18,9 +17,6 @@ import java.util.stream.Collectors;
  * Created by bittrich on 7/14/17.
  */
 public class ScwrlMutatorServiceImpl implements MutatorService {
-    private static final Path SCWRL_DIRECTORY = Paths.get("/usr/local/bin/scwrl4/");
-    private static final String SCWRL_COMMAND = SCWRL_DIRECTORY.resolve("Scwrl4").toFile().getAbsolutePath();
-
     @Override
     public Structure mutateAminoAcid(Structure originalProtein,
                                      ChainIdentifier chainIdentifier,
@@ -45,7 +41,7 @@ public class ScwrlMutatorServiceImpl implements MutatorService {
             // expected output file
             Path outputPath = tmpDirectory.resolve("output.pdb");
 
-            ProcessBuilder processBuilder = new ProcessBuilder(SCWRL_COMMAND,
+            ProcessBuilder processBuilder = new ProcessBuilder("scwrl",
                     "-i",
                     structurePath.toFile().getAbsolutePath(),
                     "-o",

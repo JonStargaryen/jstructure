@@ -1,9 +1,7 @@
 package de.bioforscher.jstructure.mmm.impl;
 
-import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
-import de.bioforscher.jstructure.mmm.StructureConservationProfile;
-import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Before;
@@ -15,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
@@ -53,12 +52,19 @@ public class MacromolecularMinerBridgeImplTest {
     @Test
     @Ignore
     public void shouldMineConservationProfile() throws ExecutionException, InterruptedException {
-        Structure referenceProtein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1CYO))
+        Chain referenceChain = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1CYO))
                 .minimalParsing(true)
-                .parse();
-        mmm.getConservationProfile(in, referenceProtein).get();
-        referenceProtein.aminoAcids()
-                .map(aminoAcid -> aminoAcid.getIdentifier() + ": " + StandardFormat.format(aminoAcid.getFeatureContainer().getFeature(StructureConservationProfile.class).getValue()))
+                .parse()
+                .select()
+                .chainId("A")
+                .asIsolatedStructure()
+                .select()
+                .chainId("A")
+                .asChain();
+        List<Double> profile = mmm.getConservationProfile(in, referenceChain).get();
+        profile.stream()
+                .mapToDouble(d -> d)
+                .mapToObj(Double::toString)
                 .forEach(logger::info);
     }
 }

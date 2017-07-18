@@ -21,7 +21,7 @@ public class UniProtFeatureContainer extends FeatureContainerEntry {
     }
 
     public void addFeature(String accession, Feature feature) {
-        if(features.containsKey(accession)) {
+        if(!features.containsKey(accession)) {
             features.put(accession, new ArrayList<>());
         }
         List<Feature> featureList = features.get(accession);

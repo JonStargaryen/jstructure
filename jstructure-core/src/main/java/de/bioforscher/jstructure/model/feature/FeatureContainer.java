@@ -32,7 +32,7 @@ public class FeatureContainer {
     public <C extends FeatureContainerEntry> C getFeature(Class<C> contentClass) {
         return getFeatureOptional(contentClass)
                 .orElseThrow(() -> new NoSuchElementException("no feature entry for content class '" +
-                        contentClass.getSimpleName()));
+                        contentClass.getSimpleName() + "'"));
     }
 
     /**

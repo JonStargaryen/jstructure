@@ -7,6 +7,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -21,6 +22,7 @@ public class MutationJobImpl implements MutationJob {
     private final Chain referenceChain;
     private List<UniProtEntry> homologousSequences;
     private List<Chain> homologousPdbChains;
+    private Map<String, String> alignmentMap;
 
     public MutationJobImpl(String jobName,
                            Chain originalChain) {
@@ -76,5 +78,14 @@ public class MutationJobImpl implements MutationJob {
     @Override
     public List<Chain> getHomologousPdbChains() {
         return homologousPdbChains;
+    }
+
+    public void setAlignmentMap(Map<String, String> alignmentMap) {
+        this.alignmentMap = alignmentMap;
+    }
+
+    @Override
+    public Map<String, String> getAlignmentMap() {
+        return alignmentMap;
     }
 }

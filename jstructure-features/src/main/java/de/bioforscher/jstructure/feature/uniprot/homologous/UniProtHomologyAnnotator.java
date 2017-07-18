@@ -12,7 +12,6 @@ import uk.ac.ebi.kraken.interfaces.common.Value;
 import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureLocation;
-import uk.ac.ebi.kraken.interfaces.uniprot.features.MutagenFeature;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.*;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.AlignmentCutoffOption;
 import uk.ac.ebi.uniprot.dataservice.client.alignment.blast.input.DatabaseOption;
@@ -72,9 +71,9 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
             int querySequenceOffset = alignment.getStartQuerySeq() - 1;
             int matchSequenceOffset = alignment.getStartMatchSeq() - 1;
             for (Feature feature : features) {
-                if (!(feature instanceof MutagenFeature)) {
-                    continue;
-                }
+//                if (!(feature instanceof MutagenFeature)) {
+//                    continue;
+//                }
 
                 FeatureLocation featureLocation = feature.getFeatureLocation();
                 // nothing to do if start is unknown
@@ -106,7 +105,13 @@ public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
             }
         }
 
-        logger.debug("{} sequence hits: {}", uniProtHits.size(), uniProtHits.stream().map(UniProtHit::getEntry).map(UniProtEntry::getPrimaryUniProtAccession).map(Value::getValue).collect(Collectors.toList()));
+        logger.debug("{} sequence hits: {}",
+                uniProtHits.size(),
+                uniProtHits.stream()
+                        .map(UniProtHit::getEntry)
+                        .map(UniProtEntry::getPrimaryUniProtAccession)
+                        .map(Value::getValue)
+                        .collect(Collectors.toList()));
     }
 
     private Optional<AminoAcid> getSafely(List<AminoAcid> aminoAcids, int index) {

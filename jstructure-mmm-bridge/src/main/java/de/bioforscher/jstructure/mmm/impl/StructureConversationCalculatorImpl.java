@@ -1,8 +1,7 @@
 package de.bioforscher.jstructure.mmm.impl;
 
-import de.bioforscher.jstructure.mmm.StructureConservationProfile;
 import de.bioforscher.jstructure.mmm.StructureConversationCalculator;
-import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.mmm.model.Itemset;
 import de.bioforscher.singa.chemistry.physical.model.LeafIdentifier;
@@ -11,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * The implemenation of the structural conservation calculator.
@@ -18,12 +18,10 @@ import java.util.Optional;
  */
 public class StructureConversationCalculatorImpl implements StructureConversationCalculator {
     @Override
-    public void extractConservationProfile(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, Structure protein) {
-        protein.aminoAcids()
-                .forEach(aminoAcid -> {
-                    double score = computeConservationScore(extractedItemsets, aminoAcid);
-                    aminoAcid.getFeatureContainer().addFeature(new StructureConservationProfile(score));
-                });
+    public List<Double> extractConservationProfile(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, Chain chain) {
+        return chain.aminoAcids()
+                .map(aminoAcid -> computeConservationScore(extractedItemsets, aminoAcid))
+                .collect(Collectors.toList());
     }
 
     private double computeConservationScore(Map<Itemset<String>, List<Itemset<String>>> extractedItemsets, AminoAcid aminoAcid) {

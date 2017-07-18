@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.align.impl;
 import de.bioforscher.jstructure.align.MultipleSequenceAligner;
 import de.bioforscher.jstructure.align.MultipleSequenceAlignmentResult;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -18,7 +18,8 @@ abstract class AbstractClustalOmega implements MultipleSequenceAligner {
     private static final Pattern LINE_PATTERN = Pattern.compile("\\s+");
 
     MultipleSequenceAlignmentResult createMultipleSequenceAlignmentResult(String rawAlignmentString) {
-        Map<String, String> alignment = new HashMap<>();
+        // use LinkedHashMap to sort entries according their addition to the map
+        Map<String, String> alignment = new LinkedHashMap<>();
         SEQUENCE_PATTERN.splitAsStream(rawAlignmentString)
                 // skip first (empty) pair
                 .skip(1)

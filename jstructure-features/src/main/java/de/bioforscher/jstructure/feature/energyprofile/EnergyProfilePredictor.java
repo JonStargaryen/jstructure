@@ -79,6 +79,13 @@ public class EnergyProfilePredictor extends AbstractFeatureProvider {
         predictByEntropy(chain, entropies);
     }
 
+    public List<Integer> predictEnergyProfile(String sequence) {
+        return calculateEntropies(spacer + sequence + spacer).stream()
+                .map(this::getMaximalEntropy)
+                .map(maximalEntropy -> maximalEntropy.getIndex() - 1)
+                .collect(Collectors.toList());
+    }
+
     private void predictByEntropy(Chain chain, List<QuantileEntropySum[]> entropies) {
         List<Group> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
         for(int i = 0; i < entropies.size(); i++) {

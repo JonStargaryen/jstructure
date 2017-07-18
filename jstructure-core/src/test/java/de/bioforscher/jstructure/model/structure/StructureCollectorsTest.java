@@ -2,12 +2,13 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 /**
  * Test capabilities of the structure collectors.
@@ -78,12 +79,25 @@ public class StructureCollectorsTest {
 
     @Test
     public void shouldKeepStructureReferenceChain() throws Exception {
-        ChainContainer container = protein.chains()
+        Structure container = protein.chains()
                 .collect(StructureCollectors.toIsolatedStructure());
+        Assert.assertEquals("parent reference was lost",
+                "1brr",
+                container.getProteinIdentifier().getPdbId());
     }
 
     @Test
     public void shouldKeepOrdering() {
-        Assert.fail("impl a test to ensure toIsolatedStructure() orders chains, groups and atoms as before");
+        Structure copy = protein.select()
+                .aminoAcids()
+                .asIsolatedStructure();
+        List<Atom> atoms = copy.getAtoms();
+        //TODO test flawed
+        for(int i = 1; i < atoms.size(); i++) {
+            Atom a1 = atoms.get(i - 1);
+            Atom a2 = atoms.get(i);
+            Assert.assertTrue("copy is unordered " + a2.getParentGroup() + " " +  a2 + " and " + a1.getParentGroup() + " " + a1,
+                    a2.getPdbSerial() > a1.getPdbSerial());
+        }
     }
 }

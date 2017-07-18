@@ -280,8 +280,7 @@ public class StructureParser {
         }
     }
 
-    //TODO move to better position or make accessible in a more reasonable way - maybe move to AminoAcid.Family
-    public static Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand, boolean minimalParsing) {
+    private static Group createGroup(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand, boolean minimalParsing) {
         GroupPrototypeParser groupPrototypeParser = minimalParsing ? GroupPrototypeParser.getFastInstance() : GroupPrototypeParser.getInstance();
         GroupPrototype prototype = groupPrototypeParser.getPrototype(pdbName);
 
@@ -334,7 +333,7 @@ public class StructureParser {
         ProteinIdentifier forceProteinName;
         ProteinIdentifier hintProteinName;
         //TODO remove or place in global config
-        private static Path localPdbDirectory = Paths.get("/home/bittrich/pdb/");
+        private static Path localPdbDirectory = Paths.get("/var/local/pdb/");
         private static final int DEFAULT_CACHE_SIZE = 1000;
 
         public static void setLocalPdbDirectory(Path localPdbDirectory) {
@@ -415,7 +414,7 @@ public class StructureParser {
                             this.inputStream = new GZIPInputStream(Files.newInputStream(pdbDirectory.resolve(middle).resolve("pdb" + pdbId + ".ent.gz")));
                         }
                     } catch (IOException e) {
-                        logger.warn("did not find file {} in local PDB at {}", pdbId, pdbDirectory, e);
+//                        logger.warn("did not find file {} in local PDB at {}", pdbId, pdbDirectory, e);
                     }
                     if(this.inputStream == null) {
                         // no local PDB found - fetch from www

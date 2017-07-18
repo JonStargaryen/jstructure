@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 /**
  * The abstract representation of an amino acid.
  * max-ASA values from: http://dx.doi.org/10.1371/journal.pone.0080635
+ * frequencies from: Paula Yurkanis Bruice: Organic Chemistry. Pearson Education Inc., 2004, 4. Auflage, S. 960–962, ISBN 0-13-121730-5.
  * Created by bittrich on 5/24/17.
  */
 public abstract class AminoAcid extends Group implements StandardAminoAcidIndicator {
@@ -56,114 +57,141 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         ALANINE(Alanine.class,
                 Alanine.GROUP_PROTOTYPE,
                 121.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                9.0),
         ARGININE(Arginine.class,
                 Arginine.GROUP_PROTOTYPE,
                 265.0,
-                GroupPrototype.GutteridgeGrouping.GUANIDINIUM),
+                GroupPrototype.GutteridgeGrouping.GUANIDINIUM,
+                4.7),
         ASPARAGINE(Asparagine.class,
                 Asparagine.GROUP_PROTOTYPE,
                 187.0,
-                GroupPrototype.GutteridgeGrouping.AMIDE),
+                GroupPrototype.GutteridgeGrouping.AMIDE,
+                4.4),
         ASPARTIC_ACID(AsparticAcid.class,
                 AsparticAcid.GROUP_PROTOTYPE,
                 187.0,
-                GroupPrototype.GutteridgeGrouping.CARBOXYLATE),
+                GroupPrototype.GutteridgeGrouping.CARBOXYLATE,
+                5.5),
         CYSTEINE(Cysteine.class,
                 Cysteine.GROUP_PROTOTYPE,
                 148.0,
-                GroupPrototype.GutteridgeGrouping.THIOL),
+                GroupPrototype.GutteridgeGrouping.THIOL,
+                2.8),
         GLUTAMIC_ACID(GlutamicAcid.class,
                 GlutamicAcid.GROUP_PROTOTYPE,
                 214.0,
-                GroupPrototype.GutteridgeGrouping.AMIDE),
+                GroupPrototype.GutteridgeGrouping.AMIDE,
+                3.9),
         GLUTAMINE(Glutamine.class,
                 Glutamine.GROUP_PROTOTYPE,
                 214.0,
-                GroupPrototype.GutteridgeGrouping.CARBOXYLATE),
+                GroupPrototype.GutteridgeGrouping.CARBOXYLATE,
+                6.2),
         GLYCINE(Glycine.class,
                 Glycine.GROUP_PROTOTYPE,
                 97.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                7.5),
         HISTIDINE(Histidine.class,
                 Histidine.GROUP_PROTOTYPE,
                 216.0,
-                GroupPrototype.GutteridgeGrouping.IMIDAZOLE),
+                GroupPrototype.GutteridgeGrouping.IMIDAZOLE,
+                2.1),
         ISOLEUCINE(Isoleucine.class,
                 Isoleucine.GROUP_PROTOTYPE,
                 195.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                4.6),
         LEUCINE(Leucine.class,
                 Leucine.GROUP_PROTOTYPE,
                 191.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                7.5),
         LYSINE(Lysine.class,
                 Lysine.GROUP_PROTOTYPE,
                 230.0,
-                GroupPrototype.GutteridgeGrouping.AMINO),
+                GroupPrototype.GutteridgeGrouping.AMINO,
+                7.0),
         METHIONINE(Methionine.class,
                 Methionine.GROUP_PROTOTYPE,
                 203.0,
-                GroupPrototype.GutteridgeGrouping.THIOL),
+                GroupPrototype.GutteridgeGrouping.THIOL,
+                1.7),
         PHENYLALANINE(Phenylalanine.class,
                 Phenylalanine.GROUP_PROTOTYPE,
                 228.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                3.5),
         PROLINE(Proline.class,
                 Proline.GROUP_PROTOTYPE,
                 154.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                4.6),
         SERINE(Serine.class,
                 Serine.GROUP_PROTOTYPE,
                 143.0,
-                GroupPrototype.GutteridgeGrouping.HYDROXYL),
+                GroupPrototype.GutteridgeGrouping.HYDROXYL,
+                7.1),
         THREONINE(Threonine.class,
                 Threonine.GROUP_PROTOTYPE,
                 163.0,
-                GroupPrototype.GutteridgeGrouping.HYDROXYL),
+                GroupPrototype.GutteridgeGrouping.HYDROXYL,
+                6.0),
         TRYPTOPHAN(Tryptophan.class,
                 Tryptophan.GROUP_PROTOTYPE,
                 264.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                1.1),
         TYROSINE(Tyrosine.class,
                 Tyrosine.GROUP_PROTOTYPE,
                 255.0,
-                GroupPrototype.GutteridgeGrouping.HYDROXYL),
+                GroupPrototype.GutteridgeGrouping.HYDROXYL,
+                3.5),
         VALINE(Valine.class,
                 Valine.GROUP_PROTOTYPE,
                 165.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                6.9),
         UNKNOWN_AMINO_ACID(UnknownAminoAcid.class,
                 UnknownAminoAcid.GROUP_PROTOTYPE,
                 121.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                0.0),
         PYRROLYSINE(Pyrrolysine.class,
                 Pyrrolysine.GROUP_PROTOTYPE,
                 //TODO maximum asa value
                 154.0 + 230.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                0.0),
         SELENOCYSTEINE(Selenocysteine.class,
                 Selenocysteine.GROUP_PROTOTYPE,
                 148.0,
-                GroupPrototype.GutteridgeGrouping.NONE),
+                GroupPrototype.GutteridgeGrouping.NONE,
+                0.0),
         SELENOMETHIONINE(Selenomethionine.class,
                 Selenomethionine.GROUP_PROTOTYPE,
                 203.0,
-                GroupPrototype.GutteridgeGrouping.NONE);
+                GroupPrototype.GutteridgeGrouping.NONE,
+                0.0);
 
         private Class<? extends AminoAcid> representingClass;
         private GroupPrototype groupPrototype;
         private double maximumAccessibleSurfaceArea;
         private GroupPrototype.GutteridgeGrouping gutteridgeGrouping;
+        private double frequency;
 
         Family(Class<? extends AminoAcid> representingClass,
                GroupPrototype groupPrototype,
                double maximumAccessibleSurfaceArea,
-               GroupPrototype.GutteridgeGrouping gutteridgeGrouping) {
+               GroupPrototype.GutteridgeGrouping gutteridgeGrouping,
+               double frequency) {
             this.representingClass = representingClass;
             this.groupPrototype = groupPrototype;
             this.maximumAccessibleSurfaceArea = maximumAccessibleSurfaceArea;
             this.gutteridgeGrouping = gutteridgeGrouping;
+            this.frequency = frequency;
         }
 
         @Override
@@ -182,6 +210,10 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
 
         public GroupPrototype.GutteridgeGrouping getGutteridgeGrouping() {
             return gutteridgeGrouping;
+        }
+
+        public double getFrequency() {
+            return frequency;
         }
 
         public static AminoAcid createAminoAcid(String pdbName, ResidueIdentifier residueIdentifier, boolean ligand) {

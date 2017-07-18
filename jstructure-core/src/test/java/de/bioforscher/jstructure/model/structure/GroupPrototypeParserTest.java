@@ -29,10 +29,4 @@ public class GroupPrototypeParserTest {
     public void shouldHandleUnknownLigand() {
         System.out.println(GroupPrototypeParser.getInstance().getPrototype("UNL"));
     }
-
-    @Test
-    public void s3TAK() {
-        //TODO impl test for peculiar protein
-        System.out.println("3TAK");
-    }
 }

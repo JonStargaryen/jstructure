@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mmm.impl;
 
 import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
-import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.mmm.ItemsetMiner;
 import de.bioforscher.mmm.ItemsetMinerRunner;
 import de.bioforscher.mmm.io.DataPointReaderConfiguration;
@@ -11,7 +11,6 @@ import de.bioforscher.mmm.model.configurations.metrics.CohesionMetricConfigurati
 import de.bioforscher.mmm.model.configurations.metrics.ConsensusMetricConfiguration;
 import de.bioforscher.mmm.model.configurations.metrics.SeparationMetricConfiguration;
 import de.bioforscher.mmm.model.configurations.metrics.SupportMetricConfiguration;
-import de.bioforscher.mmm.model.enrichment.IntraChainInteractionEnricher;
 import de.bioforscher.mmm.model.mapping.rules.ChemicalGroupsMappingRule;
 import de.bioforscher.singa.chemistry.physical.model.StructuralEntityFilter;
 
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -47,7 +47,8 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
         dataPointReaderConfiguration.setParseWater(false);
         configuration.setDataPointReaderConfiguration(dataPointReaderConfiguration);
 
-        configuration.setDataPointEnricher(new IntraChainInteractionEnricher());
+        //TODO enable again
+//        configuration.setDataPointEnricher(new IntraChainInteractionEnricher());
 
         SupportMetricConfiguration<String> simpleMetrics = new SupportMetricConfiguration<>();
         simpleMetrics.setMinimalSupport(0.8);
@@ -109,16 +110,13 @@ public class MacromolecularMinerBridgeImpl implements MacromolecularMinerBridge 
     }
 
     @Override
-    public CompletableFuture<Structure> getConservationProfile(Path structurePath, Structure referenceProtein) {
+    public CompletableFuture<List<Double>> getConservationProfile(Path structurePath, Chain referenceChain) {
         try {
             Path outputPath = Files.createTempDirectory("mmm-out");
             return submitJob(getConservationProfileConfiguration(structurePath, outputPath))
                     .thenApply(ItemsetMinerRunner::getItemsetMiner)
                     .thenApply(ItemsetMiner::getTotalExtractedItemsets)
-                    .thenApply(extractedItemsets -> {
-                        structureConservationCalculator.extractConservationProfile(extractedItemsets, referenceProtein);
-                        return referenceProtein;
-                    });
+                    .thenApply(extractedItemsets -> structureConservationCalculator.extractConservationProfile(extractedItemsets, referenceChain));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
