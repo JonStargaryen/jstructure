@@ -1,21 +1,27 @@
 package de.bioforscher.jstructure.align.impl;
 
 import de.bioforscher.jstructure.align.AlignmentException;
+import de.bioforscher.jstructure.align.MultipleSequenceAligner;
 import de.bioforscher.jstructure.align.MultipleSequenceAlignmentResult;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Employs a local clustal omega executable to run the alignment.
  * Created by bittrich on 7/14/17.
  */
-public class ClustalOmegaWrapper extends AbstractClustalOmega {
+public class ClustalOmegaWrapper implements MultipleSequenceAligner {
+    private static final Pattern SEQUENCE_PATTERN = Pattern.compile(">");
+    private static final Pattern LINE_PATTERN = Pattern.compile("\\s+");
     private static final String CLUSTALOMEGA_COMMAND = "clustalo";
 
-    @Override
     public MultipleSequenceAlignmentResult align(List<String> fastaSequences) throws AlignmentException {
         try {
             Path tmpDirectory = Files.createTempDirectory("clustalomega");
@@ -40,5 +46,23 @@ public class ClustalOmegaWrapper extends AbstractClustalOmega {
         } catch (Exception e) {
             throw new AlignmentException(e);
         }
+    }
+
+    private MultipleSequenceAlignmentResult createMultipleSequenceAlignmentResult(String rawAlignmentString) {
+        // use LinkedHashMap to sort entries according their addition to the map
+        Map<String, String> alignment = new LinkedHashMap<>();
+        SEQUENCE_PATTERN.splitAsStream(rawAlignmentString)
+                // skip first (empty) pair
+                .skip(1)
+                .forEach(line -> {
+                    // split alignment at newlines
+                    String[] split = LINE_PATTERN.split(line);
+                    // substring to drop FASTA-character
+                    alignment.put(split[0],
+                            // skip id and join all other lines
+                            Stream.of(split).skip(1).collect(Collectors.joining()));
+                });
+
+        return new MultipleSequenceAlignmentResultImpl(alignment);
     }
 }

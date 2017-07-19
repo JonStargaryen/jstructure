@@ -26,7 +26,8 @@ import java.util.stream.Stream;
 public class EnergyProfilePredictor extends AbstractFeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfilePredictor.class);
     private static final int WINDOW_SIZE = 3;
-    private static final double[] QUANTIL_ENERGIES = { -1.17, -5.24, -13.3, -27.33 };
+    public static final double[] QUANTIL_BOUNDARIES = { -3.17, -8.10, -19.65 };
+    public static final double[] QUANTIL_ENERGIES = { -1.17, -5.24, -13.3, -27.33 };
     private static final String BASE_PATH = "energyprofile/";
     private static final String OCCURRENCE_GLOBULAR_PATH = BASE_PATH + "egor-occurrence-globular.dat";
     private static final String PAIRINGS_GLOBULAR_PATH = BASE_PATH + "egor-pairings-globular.dat";
@@ -60,6 +61,18 @@ public class EnergyProfilePredictor extends AbstractFeatureProvider {
         return IntStream.range(1, 6)
                 .boxed()
                 .collect(Collectors.toMap(Function.identity(), i -> Integer.valueOf(split[i])));
+    }
+
+    public static double mapEnergyToQuantil(double energy) {
+        if (energy > QUANTIL_BOUNDARIES[0]) {
+            return QUANTIL_ENERGIES[0];
+        } else if(energy > QUANTIL_BOUNDARIES[1]) {
+            return QUANTIL_ENERGIES[1];
+        } else if(energy > QUANTIL_BOUNDARIES[2]) {
+            return QUANTIL_ENERGIES[2];
+        } else {
+            return QUANTIL_ENERGIES[3];
+        }
     }
 
     @Override

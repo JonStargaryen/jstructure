@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.align.impl.ClustalOmegaWrapper;
 import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformation;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.uniprot.UniProtBridge;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
@@ -134,7 +135,9 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
             List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());
             for (int i = 0; i < aminoAcids.size(); i++) {
                 try {
-                    aminoAcids.get(i).getFeatureContainer().addFeature(new LocalBlastWrapper.PSSMInformation(psiBlastResult.getExchanges().get(i), psiBlastResult.getInformation().get(i)));
+                    aminoAcids.get(i).getFeatureContainer().addFeature(new EvolutionaryInformation(null,
+                            psiBlastResult.getExchanges().get(i),
+                            psiBlastResult.getInformation().get(i)));
                 } catch (IndexOutOfBoundsException e) {
                     // happens when no homologs where found in PSI-BLAST run
                 }

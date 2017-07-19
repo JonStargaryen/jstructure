@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.StandardFormat;
-import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
+import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformation;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
@@ -87,11 +87,11 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         this.energyConservationScore = conservationProfile.getEnergeticalConservation();
 
         // PSSM related values
-        Optional<LocalBlastWrapper.PSSMInformation> featureOptional = originalAminoAcid.getFeatureContainer().getFeatureOptional(LocalBlastWrapper.PSSMInformation.class);
-        this.exchangeScore = featureOptional.map(LocalBlastWrapper.PSSMInformation::getExchangeScores)
+        Optional<EvolutionaryInformation> featureOptional = originalAminoAcid.getFeatureContainer().getFeatureOptional(EvolutionaryInformation.class);
+        this.exchangeScore = featureOptional.map(EvolutionaryInformation::getExchangeScores)
                 .map(scores -> scores.get(AminoAcid.Family.resolveGroupPrototype(originalAminoAcid.getGroupPrototype())))
                 .orElse(0.0);
-        this.evolutionaryInformation = featureOptional.map(LocalBlastWrapper.PSSMInformation::getInformation).orElse(0.0);
+        this.evolutionaryInformation = featureOptional.map(EvolutionaryInformation::getInformation).orElse(0.0);
 
         // generic information derived from the nature of the mutation
         GroupPrototype originalPrototype = originalAminoAcid.getGroupPrototype();

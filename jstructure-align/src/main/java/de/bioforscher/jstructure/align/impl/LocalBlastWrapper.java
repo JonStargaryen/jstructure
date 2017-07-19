@@ -1,13 +1,15 @@
 package de.bioforscher.jstructure.align.impl;
 
 import de.bioforscher.jstructure.align.AlignmentException;
-import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -108,7 +110,7 @@ public class LocalBlastWrapper {
                     .collect(Collectors.toList());
             this.exchanges = new ArrayList<>();
             for(double[] array : rawPssm) {
-                Map<AminoAcid.Family, Double> line = new HashMap<>();
+                Map<AminoAcid.Family, Double> line = new EnumMap<>(AminoAcid.Family.class);
                 for(int i = 0; i < 20; i++) {
                     line.put(KEY_SET.get(i), array[i]);
                 }
@@ -126,25 +128,6 @@ public class LocalBlastWrapper {
 
         public List<Map<AminoAcid.Family, Double>> getExchanges() {
             return exchanges;
-        }
-    }
-
-    public static class PSSMInformation extends FeatureContainerEntry {
-        private final Map<AminoAcid.Family, Double> exchangeScores;
-        private final double information;
-
-        public PSSMInformation(Map<AminoAcid.Family, Double> exchangeScores, double information) {
-            super(null);
-            this.exchangeScores = exchangeScores;
-            this.information = information;
-        }
-
-        public Map<AminoAcid.Family, Double> getExchangeScores() {
-            return exchangeScores;
-        }
-
-        public double getInformation() {
-            return information;
         }
     }
 }
