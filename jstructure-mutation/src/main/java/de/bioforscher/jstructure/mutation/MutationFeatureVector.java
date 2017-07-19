@@ -5,5 +5,7 @@ package de.bioforscher.jstructure.mutation;
  * Created by bittrich on 7/13/17.
  */
 public interface MutationFeatureVector {
+    String toDoubleString();
 
+    String getMutationIdentifier();
 }

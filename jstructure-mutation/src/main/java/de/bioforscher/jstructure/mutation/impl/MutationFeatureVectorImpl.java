@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
@@ -15,6 +16,7 @@ import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
@@ -32,6 +34,9 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
     private final double sequenceConservationScore;
     private final double energyConservationScore;
 
+    private final double exchangeScore;
+    private final double evolutionaryInformation;
+
     private final double maximumAccessibleSurfaceAreaDelta;
     private final double pKaDelta;
     private final boolean gutteridgeChanged;
@@ -41,6 +46,11 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
     private final double mutagenFrequency;
     private final double variantFrequency;
     private final double disulfidFrequency;
+
+    private final double energy;
+    private final double ligandContacts;
+    private final double loopFraction;
+    private final double rasa;
 
     private final double energyAminoAcidDelta;
     private final double energyEnvironmentDelta;
@@ -61,12 +71,13 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
                                      List<AminoAcid> originalEnvironment,
                                      List<AminoAcid> mutatedEnvironment,
 
+                                     MutationEffectPredictionServiceImpl.PhysicochemicalFeatureVector fvOriginalAminoAcid,
+
                                      MutationEffectPredictionServiceImpl.DeltaPhysicochemicalFeatureVector dfvAminoAcid,
                                      MutationEffectPredictionServiceImpl.DeltaPhysicochemicalFeatureVector dfvEnvironment) {
         // general information
         this.mutationJob = mutationJob;
-        this.mutationIdentifier = chainIdentifier.getChainId() + "_" +
-                originalAminoAcid.getOneLetterCode() +
+        this.mutationIdentifier = originalAminoAcid.getOneLetterCode() +
                 residueIdentifierToMutate.getResidueNumber() +
                 mutatedAminoAcid.getOneLetterCode();
 
@@ -74,6 +85,13 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         ConservationProfile conservationProfile = originalAminoAcid.getFeature(ConservationProfile.class);
         this.sequenceConservationScore = conservationProfile.getSequentialConservation();
         this.energyConservationScore = conservationProfile.getEnergeticalConservation();
+
+        // PSSM related values
+        Optional<LocalBlastWrapper.PSSMInformation> featureOptional = originalAminoAcid.getFeatureContainer().getFeatureOptional(LocalBlastWrapper.PSSMInformation.class);
+        this.exchangeScore = featureOptional.map(LocalBlastWrapper.PSSMInformation::getExchangeScores)
+                .map(scores -> scores.get(AminoAcid.Family.resolveGroupPrototype(originalAminoAcid.getGroupPrototype())))
+                .orElse(0.0);
+        this.evolutionaryInformation = featureOptional.map(LocalBlastWrapper.PSSMInformation::getInformation).orElse(0.0);
 
         // generic information derived from the nature of the mutation
         GroupPrototype originalPrototype = originalAminoAcid.getGroupPrototype();
@@ -118,6 +136,12 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
                 .mapToInt(container -> container.getFeatures(FeatureType.DISULFID).size())
                 .sum() / uniProtNormalization;
 
+        // features of the original amino acid
+        this.energy = fvOriginalAminoAcid.getEnergy();
+        this.ligandContacts = fvOriginalAminoAcid.getLigandContacts();
+        this.loopFraction = fvOriginalAminoAcid.getLoopFraction();
+        this.rasa = fvOriginalAminoAcid.getRasa();
+
         // information derived from the structural environment
         this.energyAminoAcidDelta = dfvAminoAcid.getEnergy();
         this.energyEnvironmentDelta = dfvEnvironment.getEnergy();
@@ -139,6 +163,13 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
                 .toArray();
     }
 
+    @Override
+    public String toDoubleString() {
+        return DoubleStream.of(toDoubleArray())
+                .mapToObj(StandardFormat::format)
+                .collect(Collectors.joining(","));
+    }
+
     public static String toPartialHeader() {
         return Stream.of(MutationFeatureVectorImpl.class.getDeclaredMethods())
                 .filter(method -> method.getName().startsWith("get") || method.getName().startsWith("is"))
@@ -155,7 +186,7 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
     public String toString() {
         return mutationJob.getJobName() + "," +
                 mutationIdentifier + "," +
-                DoubleStream.of(toDoubleArray()).mapToObj(StandardFormat::format).collect(Collectors.joining(","));
+                toDoubleString();
 
     }
 
@@ -183,6 +214,7 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         return mutationJob;
     }
 
+    @Override
     public String getMutationIdentifier() {
         return mutationIdentifier;
     }
@@ -193,6 +225,14 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
 
     public double getEnergyConservationScore() {
         return energyConservationScore;
+    }
+
+    public double getExchangeScore() {
+        return exchangeScore;
+    }
+
+    public double getEvolutionaryInformation() {
+        return evolutionaryInformation;
     }
 
     public double getMaximumAccessibleSurfaceAreaDelta() {
@@ -225,6 +265,22 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
 
     public double getDisulfidFrequency() {
         return disulfidFrequency;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public double getLigandContacts() {
+        return ligandContacts;
+    }
+
+    public double getLoopFraction() {
+        return loopFraction;
+    }
+
+    public double getRasa() {
+        return rasa;
     }
 
     public double getEnergyAminoAcidDelta() {

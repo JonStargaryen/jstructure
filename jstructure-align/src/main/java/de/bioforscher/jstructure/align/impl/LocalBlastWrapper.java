@@ -2,13 +2,15 @@ package de.bioforscher.jstructure.align.impl;
 
 import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
-import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -34,7 +36,6 @@ public class LocalBlastWrapper {
             ProcessBuilder processBuilder = new ProcessBuilder("psiblast",
                     "-db",
                     "/var/local/blastdb/swissprot",
-//                    "/var/local/blastdb/nr",
                     "-query",
                     sequencePath.toFile().getAbsolutePath(),
                     "-evalue",
@@ -77,51 +78,73 @@ public class LocalBlastWrapper {
                 .collect(Collectors.toList());
     }
 
-    List<Double> parseMatrixFile(Path file) throws IOException {
+    List<double[]> parseMatrixFile(Path file) throws IOException {
         return parseMatrixFile(Files.lines(file));
     }
 
-    List<Double> parseMatrixFile(Stream<String> fileStream) {
+    List<double[]> parseMatrixFile(Stream<String> fileStream) {
         return fileStream.filter(line -> line.length() == 181)
                 .map(line -> line.split("\\s+"))
-                .map(split -> split[43])
-                .map(Double::valueOf)
+                .map(split -> Stream.concat(IntStream.range(3, 23).boxed(), Stream.of(43))
+                        .mapToDouble(position -> Double.valueOf(split[position]))
+                        .toArray())
                 .collect(Collectors.toList());
     }
 
     public static class PsiBlastResult {
+        private static final String AMINO_ACID_HEADER = "A   R   N   D   C   Q   E   G   H   I   L   K   M   F   P   S   T   W   Y   V";
+        private static final Pattern PATTERN = Pattern.compile("\\s+");
+        private static final List<AminoAcid.Family> KEY_SET = PATTERN.splitAsStream(AMINO_ACID_HEADER)
+                .map(AminoAcid.Family::resolveOneLetterCode)
+                .collect(Collectors.toList());
         private final List<String> accessions;
-        private final List<Double> conservation;
+        private final List<Double> information;
+        private final List<Map<AminoAcid.Family, Double>> exchanges;
 
-        public PsiBlastResult(List<String> accessions, List<Double> conservation) {
+        public PsiBlastResult(List<String> accessions, List<double[]> rawPssm) {
             this.accessions = accessions;
-            this.conservation = conservation;
+            this.information = rawPssm.stream()
+                    .map(array -> array[20])
+                    .collect(Collectors.toList());
+            this.exchanges = new ArrayList<>();
+            for(double[] array : rawPssm) {
+                Map<AminoAcid.Family, Double> line = new HashMap<>();
+                for(int i = 0; i < 20; i++) {
+                    line.put(KEY_SET.get(i), array[i]);
+                }
+                exchanges.add(line);
+            }
         }
 
         public List<String> getAccessions() {
             return accessions;
         }
 
-        public List<Double> getConservation() {
-            return conservation;
+        public List<Double> getInformation() {
+            return information;
+        }
+
+        public List<Map<AminoAcid.Family, Double>> getExchanges() {
+            return exchanges;
         }
     }
 
-    public static class PSSMConservationScore extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {
-        private final double score;
+    public static class PSSMInformation extends FeatureContainerEntry {
+        private final Map<AminoAcid.Family, Double> exchangeScores;
+        private final double information;
 
-        public PSSMConservationScore(double score) {
+        public PSSMInformation(Map<AminoAcid.Family, Double> exchangeScores, double information) {
             super(null);
-            this.score = score;
+            this.exchangeScores = exchangeScores;
+            this.information = information;
         }
 
-        @Override
-        public Double getValue() {
-            return score;
+        public Map<AminoAcid.Family, Double> getExchangeScores() {
+            return exchangeScores;
         }
 
-        public double getScore() {
-            return score;
+        public double getInformation() {
+            return information;
         }
     }
 }

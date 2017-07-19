@@ -112,6 +112,7 @@ public class MutationIntegrationTest {
             ResidueIdentifier residueIdentifier = IdentifierFactory.createResidueIdentifier(Integer.valueOf(mutantLine[1]));
             AminoAcid.Family targetAminoAcid = AminoAcid.Family.resolveOneLetterCode(mutantLine[2]);
             double ddG = Double.valueOf(mutantLine[3]);
+            double prediction = Double.valueOf(mutantLine[4]);
             String classLabel = Math.abs(ddG) > 1.0 ? "effect" : "tolerated";
 
             // create feature vector for this particularized mutation
@@ -120,7 +121,13 @@ public class MutationIntegrationTest {
                     residueIdentifier,
                     targetAminoAcid);
 
-            return Optional.of(mutationEffectVector.toString() + "," + classLabel);
+            return Optional.of(mutationJob.getJobName() + "," +
+                    mutationEffectVector.getMutationIdentifier() + "," +
+                    ddG + "," +
+                    prediction + "," +
+                    mutationJob.getHomologousSequences().size() + "," +
+                    mutationJob.getHomologousPdbChains().size() + "," +
+                    mutationEffectVector.toDoubleString() + "," + classLabel);
         } catch (Exception e) {
             return Optional.empty();
         }
@@ -130,6 +137,10 @@ public class MutationIntegrationTest {
         return "@RELATION mutation" + System.lineSeparator() +
                 "@ATTRIBUTE chainId        STRING" + System.lineSeparator() +
                 "@ATTRIBUTE mutation       STRING" + System.lineSeparator() +
+                "@ATTRIBUTE ddG            NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE prediction     NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE sequences      NUMERIC" + System.lineSeparator() +
+                "@ATTRIBUTE structures     NUMERIC" + System.lineSeparator() +
                 MutationFeatureVectorImpl.toPartialHeader() + System.lineSeparator() +
                 "@ATTRIBUTE class          {effect,tolerated}" + System.lineSeparator() +
                 "@DATA" + System.lineSeparator();
