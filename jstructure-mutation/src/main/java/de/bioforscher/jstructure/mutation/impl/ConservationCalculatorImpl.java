@@ -42,8 +42,6 @@ public class ConservationCalculatorImpl implements ConservationCalculator {
     @Override
     public void extractConservationProfile(MutationJob mutationJob) {
         try {
-            logger.info("[{}] computing conservation profile",
-                    mutationJob.getUuid());
             // write temporary structures
             Path structurePath = Files.createTempDirectory("mmm-in");
             Iterator<Chain> iterator = Stream.concat(Stream.of(mutationJob.getReferenceChain()),
@@ -53,13 +51,23 @@ public class ConservationCalculatorImpl implements ConservationCalculator {
                 Files.write(structurePath.resolve(chain.getChainIdentifier().getFullName() + ".pdb"),
                         (chain.getPdbRepresentation()).getBytes());
             }
+
             // profile is assigned to reference chain
+            logger.info("[{}] computing structure conservation profile by {}",
+                    mutationJob.getUuid(),
+                    macromolecularMinerBridge.getClass().getSimpleName());
             List<Double> structureScores = macromolecularMinerBridge.getConservationProfile(structurePath, mutationJob.getReferenceChain()).get();
 
             String sequenceAlignmentString = composeSequenceAlignmentString(mutationJob);
+            logger.info("[{}] computing sequence conservation profile by {}",
+                    mutationJob.getUuid(),
+                    rate4siteWrapper.getClass().getSimpleName());
             List<Double> sequenceScores = rate4siteWrapper.executeCommand(sequenceAlignmentString);
 
             String energyAlignmentString = composeEnergyAlignmentString(mutationJob);
+            logger.info("[{}] computing energy conservation profile by {}",
+                    mutationJob.getUuid(),
+                    rate4siteWrapper.getClass().getSimpleName());
             List<Double> energyScores = rate4siteWrapper.executeCommand(energyAlignmentString);
 
             List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());

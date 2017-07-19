@@ -14,10 +14,10 @@ import org.junit.Test;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,47 +47,58 @@ public class MutationIntegrationTest {
         Path outputPath = Paths.get("/home/bittrich/schaefer2012-structure.arff");
         boolean writeHeader = !Files.exists(outputPath);
         FileWriter fileWriter = new FileWriter(outputPath.toFile(), true);
+        List<String> handledBins = new ArrayList<>();
         if (writeHeader) {
             String header = getHeaderSchaefer2012Stability();
             fileWriter.append(header);
             System.out.println("writing header:" + System.lineSeparator() + System.lineSeparator() + header);
+        } else {
+            handledBins = Files.lines(outputPath)
+                    .filter(line -> !line.startsWith("@"))
+                    .map(line -> line.split(",")[0])
+                    .collect(Collectors.toList());
         }
 
         // handle individual sequence bins
-        sequenceMap.entrySet().forEach(group -> handleMutantLineGroup(group, fileWriter));
+        List<String> finalHandledBins = handledBins;
+        sequenceMap.entrySet().forEach(group -> handleMutantLineGroup(group, fileWriter, finalHandledBins));
     }
 
-    private void handleMutantLineGroup(Map.Entry<String, List<String[]>> entry, FileWriter fileWriter) {
+    private void handleMutantLineGroup(Map.Entry<String, List<String[]>> entry, FileWriter fileWriter, List<String> finalHandledBins) {
         String jobName = entry.getKey();
+        // skip already processed jobs
+        if(finalHandledBins.contains(jobName)) {
+            return;
+        }
         String pdbId = jobName.substring(0, 4);
         String chainId = jobName.substring(4);
 
-        // dropping other chains for consistent computation
-        Structure protein = StructureParser.source(pdbId)
-                .minimalParsing(true)
-                .parse()
-                .select()
-                .chainId(chainId)
-                .asIsolatedStructure();
-        Chain chain = protein.select()
-                .chainName(chainId)
-                .asChain();
-
-        // create global mutation job instance shared by all entries of this bin
-        MutationJob mutationJob = mutationEffectPredictionService.createMutationJob(jobName, chain);
-
-        String partialOutput = entry.getValue().stream()
-                .map(mutantLine -> handleMutantLine(mutationJob, mutantLine))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .peek(System.out::println)
-                .collect(Collectors.joining(System.lineSeparator()));
-
         try {
+            // dropping other chains for consistent computation
+            Structure protein = StructureParser.source(pdbId)
+                    .minimalParsing(true)
+                    .parse()
+                    .select()
+                    .chainId(chainId)
+                    .asIsolatedStructure();
+            Chain chain = protein.select()
+                    .chainName(chainId)
+                    .asChain();
+
+            // create global mutation job instance shared by all entries of this bin
+            MutationJob mutationJob = mutationEffectPredictionService.createMutationJob(jobName, chain);
+
+            String partialOutput = entry.getValue().stream()
+                    .map(mutantLine -> handleMutantLine(mutationJob, mutantLine))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .peek(System.out::println)
+                    .collect(Collectors.joining(System.lineSeparator()));
+
             fileWriter.write(partialOutput);
             fileWriter.flush();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

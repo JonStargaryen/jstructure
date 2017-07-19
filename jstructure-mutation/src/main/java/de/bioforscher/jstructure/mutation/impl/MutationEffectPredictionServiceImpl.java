@@ -152,9 +152,19 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         mutationJob.setHomologousSequences(uniProtEntries);
 
         // assign PSSM conservation score to each amino acid
-        List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());
-        for(int i = 0; i < aminoAcids.size(); i++) {
-            aminoAcids.get(i).getFeatureContainer().addFeature(new LocalBlastWrapper.PSSMConservationScore(psiBlastResult.getConservation().get(i)));
+        try {
+            List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());
+            for (int i = 0; i < aminoAcids.size(); i++) {
+                double score = 1.0;
+                try {
+                    score = psiBlastResult.getConservation().get(i);
+                } catch (IndexOutOfBoundsException e) {
+                    // happens when no homologs where found in PSI-BLAST run
+                }
+                aminoAcids.get(i).getFeatureContainer().addFeature(new LocalBlastWrapper.PSSMConservationScore(score));
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
         }
 
         // validate number of homologous sequences
