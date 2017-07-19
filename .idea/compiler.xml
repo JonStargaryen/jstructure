@@ -15,7 +15,6 @@
         <module name="jstructure-design" />
         <module name="jstructure-explorer" />
         <module name="jstructure-features" />
-        <module name="jstructure-mmm-bridge" />
         <module name="jstructure-mutation" />
         <module name="jstructure-testutils" />
       </profile>

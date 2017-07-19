@@ -1,11 +1,11 @@
 package de.bioforscher.jstructure.mutation.impl;
 
-import de.bioforscher.jstructure.feature.energyprofile.EnergyProfilePredictor;
-import de.bioforscher.jstructure.mmm.MacromolecularMinerBridge;
-import de.bioforscher.jstructure.mmm.impl.MacromolecularMinerBridgeImpl;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.ConservationCalculator;
 import de.bioforscher.jstructure.mutation.ConservationProfile;
@@ -19,7 +19,6 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -30,13 +29,11 @@ import java.util.stream.Stream;
 public class ConservationCalculatorImpl implements ConservationCalculator {
     private static final Logger logger = LoggerFactory.getLogger(ConservationCalculatorImpl.class);
     private final Rate4SiteWrapper rate4siteWrapper;
-    private final MacromolecularMinerBridge macromolecularMinerBridge;
-    private final EnergyProfilePredictor energyProfilePredictor;
+    private final EnergyProfileCalculator energyProfileCalculator;
 
     public ConservationCalculatorImpl() {
         this.rate4siteWrapper = new Rate4SiteWrapper();
-        this.macromolecularMinerBridge = new MacromolecularMinerBridgeImpl();
-        this.energyProfilePredictor = new EnergyProfilePredictor();
+        this.energyProfileCalculator = new EnergyProfileCalculator();
     }
 
     @Override
@@ -53,11 +50,6 @@ public class ConservationCalculatorImpl implements ConservationCalculator {
             }
 
             // profile is assigned to reference chain
-            logger.info("[{}] computing structure conservation profile by {}",
-                    mutationJob.getUuid(),
-                    macromolecularMinerBridge.getClass().getSimpleName());
-            List<Double> structureScores = macromolecularMinerBridge.getConservationProfile(structurePath, mutationJob.getReferenceChain()).get();
-
             String sequenceAlignmentString = composeSequenceAlignmentString(mutationJob);
             logger.info("[{}] computing sequence conservation profile by {}",
                     mutationJob.getUuid(),
@@ -77,14 +69,12 @@ public class ConservationCalculatorImpl implements ConservationCalculator {
 
             for(int i = 0; i < aminoAcids.size(); i++) {
                 double sequenceScore = sequenceScores.get(i);
-                double structureScore = structureScores.get(i);
                 double energyScore = energyScores.get(i);
 
                 aminoAcids.get(i).getFeatureContainer().addFeature(new ConservationProfile(sequenceScore,
-                        structureScore,
                         energyScore));
             }
-        } catch (IOException | InterruptedException | ExecutionException e) {
+        } catch (IOException | InterruptedException e) {
             logger.warn("[{}] encountered exception during conservation profile computation",
                     mutationJob.getUuid(),
                     e);
@@ -101,17 +91,23 @@ public class ConservationCalculatorImpl implements ConservationCalculator {
 
     private String composeEnergyAlignmentString(MutationJob mutationJob) {
         return mutationJob.getAlignmentMap().entrySet().stream()
-                .filter(entry -> !entry.getKey().contains("_") || entry.getKey().equals(mutationJob.getReferenceChain().getChainIdentifier().getFullName()))
-                .map(this::predictEnergyProfile)
+                .filter(entry -> entry.getKey().contains("_"))
+                .map(entry -> predictEnergyProfile(mutationJob, entry))
                 .map(pair-> ">" + pair.getLeft() + System.lineSeparator() + pair.getRight())
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    private Pair<String, String> predictEnergyProfile(Map.Entry<String, String> entry) {
+    private Pair<String, String> predictEnergyProfile(MutationJob mutationJob, Map.Entry<String, String> entry) {
         String alignment = entry.getValue();
-        String extractedSequence = alignment.replace("-", "");
-        List<String> profile = energyProfilePredictor.predictEnergyProfile(extractedSequence)
-                .stream()
+        Structure protein = Stream.concat(Stream.of(mutationJob.getReferenceChain()), mutationJob.getHomologousPdbChains().stream())
+                .filter(chain -> chain.getChainIdentifier().getFullName().equalsIgnoreCase(entry.getKey()))
+                .findFirst()
+                .get()
+                .getParentStructure();
+        energyProfileCalculator.process(protein);
+        List<String> profile = protein.aminoAcids()
+                .map(aminoAcid -> aminoAcid.getFeature(EnergyProfile.class))
+                .map(EnergyProfile::getSolvationEnergy)
                 .map(this::mapToDiscreteAlphabet)
                 .collect(Collectors.toList());
 
@@ -138,5 +134,18 @@ public class ConservationCalculatorImpl implements ConservationCalculator {
 
     private String mapToDiscreteAlphabet(int i) {
         return REPRESENTATION[i];
+    }
+
+    private String mapToDiscreteAlphabet(double energy) {
+//        QUANTIL_ENERGIES = { -1.17, -5.24, -13.3, -27.33 };
+        if(energy > 0.5 * (-1.17 + -5.24)) {
+            return "A";
+        } else if(energy > 0.5 * (-5.24 + -13.3)) {
+            return "C";
+        } else if(energy > 0.5 * (-13.3 + -27.33)) {
+            return "G";
+        } else {
+            return "T";
+        }
     }
 }

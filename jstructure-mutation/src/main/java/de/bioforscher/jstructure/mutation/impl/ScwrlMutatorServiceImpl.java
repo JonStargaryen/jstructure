@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.mutation.impl;
 
+import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -54,7 +55,7 @@ public class ScwrlMutatorServiceImpl implements MutatorService {
             return StructureParser.source(outputPath).parse();
         } catch (Exception e) {
             //TODO error-handling
-            throw new RuntimeException(e);
+            throw new ComputationException(e);
         }
     }
 

@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.StandardFormat;
-import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
@@ -16,10 +15,8 @@ import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -28,21 +25,15 @@ import java.util.stream.Stream;
  */
 public class MutationFeatureVectorImpl implements MutationFeatureVector {
     private static final Logger logger = LoggerFactory.getLogger(MutationFeatureVectorImpl.class);
-    /**
-     * How many amino acids evaluated to both sides of the mutation site.
-     */
-    private static final int SEQUENCE_ENVIRONMENT_SIZE = 3;
 
     private final MutationJob mutationJob;
     private final String mutationIdentifier;
 
-    private final double pssmScore;
     private final double sequenceConservationScore;
-    private final double structureConservationScore;
     private final double energyConservationScore;
 
     private final double maximumAccessibleSurfaceAreaDelta;
-//    private final double pKaDelta;
+    private final double pKaDelta;
     private final boolean gutteridgeChanged;
 
     private final double functionalGutteridge;
@@ -67,10 +58,8 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
                                      AminoAcid originalAminoAcid,
                                      AminoAcid mutatedAminoAcid,
 
-//                                     MutationEffectPredictionServiceImpl.PhysicochemicalFeatureVector fvOriginalAminoAcid,
-//                                     MutationEffectPredictionServiceImpl.PhysicochemicalFeatureVector fvMutatedAminoAcid,
-//                                     MutationEffectPredictionServiceImpl.PhysicochemicalFeatureVector fvOriginalEnvironment,
-//                                     MutationEffectPredictionServiceImpl.PhysicochemicalFeatureVector fvMutatedEnvironment,
+                                     List<AminoAcid> originalEnvironment,
+                                     List<AminoAcid> mutatedEnvironment,
 
                                      MutationEffectPredictionServiceImpl.DeltaPhysicochemicalFeatureVector dfvAminoAcid,
                                      MutationEffectPredictionServiceImpl.DeltaPhysicochemicalFeatureVector dfvEnvironment) {
@@ -82,10 +71,8 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
                 mutatedAminoAcid.getOneLetterCode();
 
         // global information such as conservation scores
-        this.pssmScore = originalAminoAcid.getFeature(LocalBlastWrapper.PSSMConservationScore.class).getScore();
         ConservationProfile conservationProfile = originalAminoAcid.getFeature(ConservationProfile.class);
         this.sequenceConservationScore = conservationProfile.getSequentialConservation();
-        this.structureConservationScore = conservationProfile.getStructuralConservation();
         this.energyConservationScore = conservationProfile.getEnergeticalConservation();
 
         // generic information derived from the nature of the mutation
@@ -93,23 +80,18 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         GroupPrototype mutatedPrototype = mutatedAminoAcid.getGroupPrototype();
         this.maximumAccessibleSurfaceAreaDelta = originalPrototype.getMaximumAccessibleSurfaceArea()
                 - mutatedPrototype.getMaximumAccessibleSurfaceArea();
-//        this.pKaDelta = 0.0; //TODO impl?
+        this.pKaDelta = originalPrototype.getIsoelectricPoint()
+                - mutatedPrototype.getIsoelectricPoint();
         this.gutteridgeChanged = originalPrototype.getGutteridgeGrouping() != mutatedPrototype.getGutteridgeGrouping();
 
         // information derived from the sequential environment
-        List<AminoAcid> sequenceEnvironment = IntStream.range(0, 2 * SEQUENCE_ENVIRONMENT_SIZE + 1 + 1)
-                .map(offset -> offset - SEQUENCE_ENVIRONMENT_SIZE)
-                .mapToObj(originalAminoAcid::getAminoAcidWithOffset)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-        double environmentSize = sequenceEnvironment.size();
-        List<UniProtFeatureContainer> uniProtFeatureContainers = sequenceEnvironment.stream()
+        double environmentSize = originalEnvironment.size();
+        List<UniProtFeatureContainer> uniProtFeatureContainers = originalEnvironment.stream()
                 .map(aminoAcid -> aminoAcid.getFeature(UniProtFeatureContainer.class))
                 .collect(Collectors.toList());
 
         // fraction of amino acids with functional Gutteridge grouping
-        this.functionalGutteridge = sequenceEnvironment.stream()
+        this.functionalGutteridge = originalEnvironment.stream()
                 .map(AminoAcid::getGroupPrototype)
                 .map(GroupPrototype::getGutteridgeGrouping)
                 .filter(gutteridgeGrouping -> gutteridgeGrouping != GroupPrototype.GutteridgeGrouping.NONE)
@@ -205,16 +187,8 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         return mutationIdentifier;
     }
 
-    public double getPssmScore() {
-        return pssmScore;
-    }
-
     public double getSequenceConservationScore() {
         return sequenceConservationScore;
-    }
-
-    public double getStructureConservationScore() {
-        return structureConservationScore;
     }
 
     public double getEnergyConservationScore() {
@@ -231,6 +205,10 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
 
     public double getFunctionalGutteridge() {
         return functionalGutteridge;
+    }
+
+    public double getpKaDelta() {
+        return pKaDelta;
     }
 
     public double getBindingSiteFrequency() {

@@ -44,13 +44,13 @@ public class MutationIntegrationTest {
                 .collect(Collectors.groupingBy(split -> split[0]));
 
         // write header if needed, otherwise append file
-        Path outputPath = Paths.get("/home/bittrich/schaefer2012-structure.arff");
+        Path outputPath = Paths.get("/home/bittrich/schaefer2012-structure-sphere.arff");
         boolean writeHeader = !Files.exists(outputPath);
         FileWriter fileWriter = new FileWriter(outputPath.toFile(), true);
         List<String> handledBins = new ArrayList<>();
         if (writeHeader) {
             String header = getHeaderSchaefer2012Stability();
-            fileWriter.append(header);
+            fileWriter.write(header);
             System.out.println("writing header:" + System.lineSeparator() + System.lineSeparator() + header);
         } else {
             handledBins = Files.lines(outputPath)
@@ -92,8 +92,12 @@ public class MutationIntegrationTest {
                     .map(mutantLine -> handleMutantLine(mutationJob, mutantLine))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .peek(System.out::println)
-                    .collect(Collectors.joining(System.lineSeparator()));
+                    .collect(Collectors.joining(System.lineSeparator(),
+                            "",
+                            System.lineSeparator()));
+
+            System.out.println();
+            System.out.println(partialOutput);
 
             fileWriter.write(partialOutput);
             fileWriter.flush();
@@ -118,7 +122,6 @@ public class MutationIntegrationTest {
 
             return Optional.of(mutationEffectVector.toString() + "," + classLabel);
         } catch (Exception e) {
-            e.printStackTrace();
             return Optional.empty();
         }
     }

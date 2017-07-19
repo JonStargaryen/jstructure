@@ -8,7 +8,10 @@ import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.uniprot.UniProtBridge;
 import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
-import de.bioforscher.jstructure.model.feature.*;
+import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
@@ -18,6 +21,7 @@ import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.mutation.*;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.kraken.interfaces.common.Value;
@@ -30,6 +34,8 @@ import uk.ac.ebi.uniprot.dataservice.client.uniprot.UniProtQueryBuilder;
 import uk.ac.ebi.uniprot.dataservice.client.uniprot.UniProtService;
 import uk.ac.ebi.uniprot.dataservice.query.Query;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -52,7 +58,6 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     private final LigandContactScreener ligandContactScreener;
     private final MutatorService mutatorService;
     private final ConservationCalculator conservationCalculator;
-//    private final UniProtHomologyAnnotator uniProtHomologyAnnotator;
     private final UniProtService uniProtService;
     private final AbstractFeatureProvider accessibleSurfaceCalculator;
     private final AbstractFeatureProvider energyProfileCalculator;
@@ -76,7 +81,6 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         this.ligandContactScreener = ligandContactScreener;
         this.mutatorService = mutatorService;
         this.conservationCalculator = conservationCalculator;
-//        this.uniProtHomologyAnnotator = new UniProtHomologyAnnotator();
         this.uniProtService = UniProtBridge.getInstance().getUniProtService();
         this.accessibleSurfaceCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceArea.class);
         this.energyProfileCalculator = FeatureProviderRegistry.resolve(EnergyProfile.class);
@@ -105,34 +109,8 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
             //TODO decide to what degree exceptions here will compromise the job
         }
 
-        // execute BLAST query against SWISS-PROT
+        // execute PSI-BLAST query against SWISS-PROT
         String sequence = mutationJob.getReferenceChain().getAminoAcidSequence();
-//        logger.info("[{}] executing BLAST query with sequence {}",
-//                uuid,
-//                sequence);
-//        uniProtHomologyAnnotator.process(mutationJob.getReferenceChain().getParentStructure());
-//
-//        // fetch homologous UniProt entries
-//        UniProtHomologousEntryContainer uniProtHomologousEntryContainer = mutationJob.getReferenceChain().getFeature(UniProtHomologousEntryContainer.class);
-//        mutationJob.setHomologousSequences(uniProtHomologousEntryContainer.getUniProtEntries());
-//        logger.info("[{}] homologous sequences {}",
-//                uuid,
-//                uniProtHomologousEntryContainer.getUniProtEntries()
-//                .stream()
-//                .map(UniProtEntry::getPrimaryUniProtAccession)
-//                .map(Value::getValue)
-//                .collect(Collectors.toList()));
-//
-//        // fetch homologous PDB entries
-//        List<Chain> homologousPdbChains = uniProtHomologousEntryContainer.getHomologousChains()
-//                .stream()
-//                // ignore the reference chain itself
-//                .filter(chainIdentifier -> !chainIdentifier.equals(mutationJob.getReferenceChain().getChainIdentifier()))
-//                .map(chainIdentifier -> fetchProteinChain(chainIdentifier, uuid))
-//                .filter(Optional::isPresent)
-//                .map(Optional::get)
-//                .collect(Collectors.toList());
-
         logger.info("[{}] executing PSI-BLAST query with sequence {}",
                 uuid,
                 sequence);
@@ -151,21 +129,21 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 .collect(Collectors.toList()));
         mutationJob.setHomologousSequences(uniProtEntries);
 
-        // assign PSSM conservation score to each amino acid
-        try {
-            List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());
-            for (int i = 0; i < aminoAcids.size(); i++) {
-                double score = 1.0;
-                try {
-                    score = psiBlastResult.getConservation().get(i);
-                } catch (IndexOutOfBoundsException e) {
-                    // happens when no homologs where found in PSI-BLAST run
-                }
-                aminoAcids.get(i).getFeatureContainer().addFeature(new LocalBlastWrapper.PSSMConservationScore(score));
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
+//        // assign PSSM conservation score to each amino acid
+//        try {
+//            List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());
+//            for (int i = 0; i < aminoAcids.size(); i++) {
+//                double score = 1.0;
+//                try {
+//                    score = psiBlastResult.getConservation().get(i);
+//                } catch (IndexOutOfBoundsException e) {
+//                    // happens when no homologs where found in PSI-BLAST run
+//                }
+//                aminoAcids.get(i).getFeatureContainer().addFeature(new LocalBlastWrapper.PSSMConservationScore(score));
+//            }
+//        } catch (Exception e) {
+//            throw new IllegalArgumentException(e);
+//        }
 
         // validate number of homologous sequences
         if(uniProtEntries.isEmpty()) {
@@ -173,6 +151,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         }
 
         List<ChainIdentifier> homologousChains = uniProtEntries.stream()
+                // take all referenced chains
                 .map(uniProtEntry -> uniProtEntry.getDatabaseCrossReferences(DatabaseType.PDB))
                 .flatMap(Collection::stream)
                 .flatMap(databaseCrossReference -> {
@@ -184,6 +163,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 })
                 .distinct()
                 .collect(Collectors.toList());
+        homologousChains = removeRedundancy(homologousChains);
 
         //TODO remove redundancy by pdb-clustering
         // fetch homologous PDB entries
@@ -225,6 +205,27 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         conservationCalculator.extractConservationProfile(mutationJob);
 
         return mutationJob;
+    }
+
+    private List<ChainIdentifier> removeRedundancy(List<ChainIdentifier> homologousChains) {
+        return homologousChains.stream()
+                .map(chainIdentifier -> {
+                    String url = "https://www.rcsb.org/pdb/rest/sequenceCluster?cluster=95&structureId=" +
+                            chainIdentifier.getProteinIdentifier().getPdbId() + "." + chainIdentifier.getChainId();
+                    try {
+                        String[] representative = Jsoup.connect(url)
+                                .get()
+                                .getElementsByTag("pdbChain")
+                                .first()
+                                .attr("name")
+                                .split("\\.");
+                        return IdentifierFactory.createChainIdentifier(representative[0], representative[1]);
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
+                })
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private Optional<UniProtEntry> getUniProtEntry(String accession) {
@@ -531,6 +532,9 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                 originalAminoAcid,
                 mutatedAminoAcid,
 
+                originalEnvironment,
+                mutatedEnvironment,
+
                 // feature vectors
 //                fvOriginalAminoAcid,
 //                fvMutatedAminoAcid,
@@ -539,7 +543,8 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
 
                 // delta vectors
                 dfvAminoAcid,
-                dfvEnvironment);
+                dfvEnvironment
+        );
     }
 
     /**

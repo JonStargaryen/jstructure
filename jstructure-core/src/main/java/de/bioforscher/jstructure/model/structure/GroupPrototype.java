@@ -110,6 +110,10 @@ public class GroupPrototype {
         return AminoAcid.Family.resolveGroupPrototype(this).getGutteridgeGrouping();
     }
 
+    public double getIsoelectricPoint() {
+        return AminoAcid.Family.resolveGroupPrototype(this).getIsoelectricPoint();
+    }
+
     @Override
     public String toString() {
         return "GroupPrototype{" +

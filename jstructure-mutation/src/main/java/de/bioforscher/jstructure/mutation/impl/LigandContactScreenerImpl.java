@@ -9,7 +9,7 @@ import de.bioforscher.jstructure.mutation.LigandContactScreener;
  * Created by bittrich on 7/13/17.
  */
 public class LigandContactScreenerImpl implements LigandContactScreener {
-    private static final double DEFAULT_INTERACTION_CUTOFF = 4.0;
+    private static final double DEFAULT_INTERACTION_CUTOFF = 8.0;
 
     private final double interactionCutoff;
 
