@@ -2,17 +2,14 @@ package de.bioforscher.jstructure.mutation.impl;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformation;
-import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.mutation.ConservationProfile;
 import de.bioforscher.jstructure.mutation.MutationFeatureVector;
 import de.bioforscher.jstructure.mutation.MutationJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureType;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -30,9 +27,7 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
 
     private final MutationJob mutationJob;
     private final String mutationIdentifier;
-
-    private final double sequenceConservationScore;
-    private final double energyConservationScore;
+    private final String originalGutteridge;
 
     private final double exchangeScore;
     private final double evolutionaryInformation;
@@ -42,20 +37,13 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
     private final boolean gutteridgeChanged;
 
     private final double functionalGutteridge;
-    private final double bindingSiteFrequency;
-    private final double mutagenFrequency;
-    private final double variantFrequency;
-    private final double disulfidFrequency;
 
     private final double energy;
-    private final double ligandContacts;
     private final double loopFraction;
     private final double rasa;
 
     private final double energyAminoAcidDelta;
     private final double energyEnvironmentDelta;
-    private final double ligandContactsAminoAcidDelta;
-    private final double ligandContactsEnvironmentDelta;
     private final double loopFractionAminoAcidDelta;
     private final double loopFractionEnvironmentDelta;
     private final double rasaAminoAcidDelta;
@@ -80,11 +68,7 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         this.mutationIdentifier = originalAminoAcid.getOneLetterCode() +
                 residueIdentifierToMutate.getResidueNumber() +
                 mutatedAminoAcid.getOneLetterCode();
-
-        // global information such as conservation scores
-        ConservationProfile conservationProfile = originalAminoAcid.getFeature(ConservationProfile.class);
-        this.sequenceConservationScore = conservationProfile.getSequentialConservation();
-        this.energyConservationScore = conservationProfile.getEnergeticalConservation();
+        this.originalGutteridge = originalAminoAcid.getGroupPrototype().getGutteridgeGrouping().name();
 
         // PSSM related values
         Optional<EvolutionaryInformation> featureOptional = originalAminoAcid.getFeatureContainer().getFeatureOptional(EvolutionaryInformation.class);
@@ -104,9 +88,6 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
 
         // information derived from the sequential environment
         double environmentSize = originalEnvironment.size();
-        List<UniProtFeatureContainer> uniProtFeatureContainers = originalEnvironment.stream()
-                .map(aminoAcid -> aminoAcid.getFeature(UniProtFeatureContainer.class))
-                .collect(Collectors.toList());
 
         // fraction of amino acids with functional Gutteridge grouping
         this.functionalGutteridge = originalEnvironment.stream()
@@ -115,38 +96,14 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
                 .filter(gutteridgeGrouping -> gutteridgeGrouping != GroupPrototype.GutteridgeGrouping.NONE)
                 .count() / environmentSize;
 
-        // fraction of how often certain UniProt features where annotated for homologous - normalized by #groups * #homologousSequences
-        double uniProtNormalization = environmentSize * mutationJob.getHomologousSequences().size();
-        this.bindingSiteFrequency = uniProtFeatureContainers.stream()
-                .mapToInt(container -> container.getFeatures(FeatureType.CA_BIND,
-                        FeatureType.ZN_FING,
-                        FeatureType.DNA_BIND,
-                        FeatureType.NP_BIND,
-                        FeatureType.METAL,
-                        FeatureType.BINDING,
-                        FeatureType.LIPID).size())
-                .sum() / uniProtNormalization;
-        this.mutagenFrequency = uniProtFeatureContainers.stream()
-                .mapToInt(container -> container.getFeatures(FeatureType.MUTAGEN).size())
-                .sum() / uniProtNormalization;
-        this.variantFrequency = uniProtFeatureContainers.stream()
-                .mapToInt(container -> container.getFeatures(FeatureType.VARIANT).size())
-                .sum() / uniProtNormalization;
-        this.disulfidFrequency = uniProtFeatureContainers.stream()
-                .mapToInt(container -> container.getFeatures(FeatureType.DISULFID).size())
-                .sum() / uniProtNormalization;
-
         // features of the original amino acid
         this.energy = fvOriginalAminoAcid.getEnergy();
-        this.ligandContacts = fvOriginalAminoAcid.getLigandContacts();
         this.loopFraction = fvOriginalAminoAcid.getLoopFraction();
         this.rasa = fvOriginalAminoAcid.getRasa();
 
         // information derived from the structural environment
         this.energyAminoAcidDelta = dfvAminoAcid.getEnergy();
         this.energyEnvironmentDelta = dfvEnvironment.getEnergy();
-        this.ligandContactsAminoAcidDelta = dfvAminoAcid.getLigandContacts();
-        this.ligandContactsEnvironmentDelta = dfvEnvironment.getLigandContacts();
         this.loopFractionAminoAcidDelta = dfvAminoAcid.getLoopFraction();
         this.loopFractionEnvironmentDelta = dfvAminoAcid.getLoopFraction();
         this.rasaAminoAcidDelta = dfvAminoAcid.getRasa();
@@ -186,6 +143,7 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
     public String toString() {
         return mutationJob.getJobName() + "," +
                 mutationIdentifier + "," +
+                originalGutteridge + "," +
                 toDoubleString();
 
     }
@@ -219,14 +177,6 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         return mutationIdentifier;
     }
 
-    public double getSequenceConservationScore() {
-        return sequenceConservationScore;
-    }
-
-    public double getEnergyConservationScore() {
-        return energyConservationScore;
-    }
-
     public double getExchangeScore() {
         return exchangeScore;
     }
@@ -251,28 +201,8 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
         return pKaDelta;
     }
 
-    public double getBindingSiteFrequency() {
-        return bindingSiteFrequency;
-    }
-
-    public double getMutagenFrequency() {
-        return mutagenFrequency;
-    }
-
-    public double getVariantFrequency() {
-        return variantFrequency;
-    }
-
-    public double getDisulfidFrequency() {
-        return disulfidFrequency;
-    }
-
     public double getEnergy() {
         return energy;
-    }
-
-    public double getLigandContacts() {
-        return ligandContacts;
     }
 
     public double getLoopFraction() {
@@ -289,14 +219,6 @@ public class MutationFeatureVectorImpl implements MutationFeatureVector {
 
     public double getEnergyEnvironmentDelta() {
         return energyEnvironmentDelta;
-    }
-
-    public double getLigandContactsAminoAcidDelta() {
-        return ligandContactsAminoAcidDelta;
-    }
-
-    public double getLigandContactsEnvironmentDelta() {
-        return ligandContactsEnvironmentDelta;
     }
 
     public double getLoopFractionAminoAcidDelta() {

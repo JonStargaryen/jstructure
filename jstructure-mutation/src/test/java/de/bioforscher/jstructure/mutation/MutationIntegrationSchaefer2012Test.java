@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * Test the complex interactions of this module's classes. Should run the test datasets.
  * Created by bittrich on 7/17/17.
  */
-public class MutationIntegrationTest {
+public class MutationIntegrationSchaefer2012Test {
     private MutationEffectPredictionService mutationEffectPredictionService;
 
     @Before
@@ -86,7 +86,7 @@ public class MutationIntegrationTest {
                     .asChain();
 
             // create global mutation job instance shared by all entries of this bin
-            MutationJob mutationJob = mutationEffectPredictionService.createMutationJob(jobName, chain);
+            MutationJob mutationJob = mutationEffectPredictionService.createMutationJob(jobName, chain, null);
 
             String partialOutput = entry.getValue().stream()
                     .map(mutantLine -> handleMutantLine(mutationJob, mutantLine))

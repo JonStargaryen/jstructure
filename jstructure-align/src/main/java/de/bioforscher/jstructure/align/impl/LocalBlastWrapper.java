@@ -20,13 +20,7 @@ import java.util.stream.Stream;
  * Created by bittrich on 7/18/17.
  */
 public class LocalBlastWrapper {
-    /**
-     * Execute a PSI-BLAST run using the <code>nr</code> database.
-     *
-     * <pre>original: blastpgp -d [nr database] -i [target FASTA sequence] -e 1e-10 -J t -u 1 -j 3
-     * 'translated': psiblast -db nr -query /path/file -evalue 1e-10 -num_iterations 3 -outfmt 6</pre>
-     */
-    public PsiBlastResult executePsiBlastRun(String fastaSequence) {
+    public PsiBlastResult executePsiBlast(String fastaSequence, String database) {
         try {
             Path tmpDirectory = Files.createTempDirectory("psiblast");
             Path sequencePath = tmpDirectory.resolve("query.fsa");
@@ -37,13 +31,13 @@ public class LocalBlastWrapper {
 
             ProcessBuilder processBuilder = new ProcessBuilder("psiblast",
                     "-db",
-                    "/var/local/blastdb/swissprot",
+                    "/var/local/blastdb/" + database,
                     "-query",
                     sequencePath.toFile().getAbsolutePath(),
                     "-evalue",
-                    "1e-10",
+                    "0.01",
                     "-num_iterations",
-                    "3",
+                    "5",
                     "-num_threads",
                     String.valueOf(Math.max((int) (0.5 * Runtime.getRuntime().availableProcessors()), 1)),
                     "-outfmt",
@@ -54,7 +48,7 @@ public class LocalBlastWrapper {
                     matrixPath.toFile().getAbsolutePath());
 
             processBuilder.start().waitFor();
-            PsiBlastResult result = new PsiBlastResult(parseResultFile(outputPath), parseMatrixFile(matrixPath));
+            PsiBlastResult result = composePsiBlastResult(outputPath, matrixPath);
 
             Files.delete(sequencePath);
             Files.delete(outputPath);
@@ -64,6 +58,22 @@ public class LocalBlastWrapper {
         } catch (Exception e) {
             throw new AlignmentException(e);
         }
+    }
+
+    public PsiBlastResult executePsiBlastSwissProt(String fastaSequence) {
+        return executePsiBlast(fastaSequence, "swissprot");
+    }
+
+    public PsiBlastResult executePsiBlastUniref50(String fastaSequence) {
+        return executePsiBlast(fastaSequence, "uniref50");
+    }
+
+    public PsiBlastResult composePsiBlastResult(Path outputPath, Path matrixPath) throws IOException {
+        return new PsiBlastResult(parseResultFile(outputPath), parseMatrixFile(matrixPath));
+    }
+
+    public PsiBlastResult composePsiBlastResult(Stream<String> outputStream, Stream<String> matrixStream) {
+        return new PsiBlastResult(parseResultFile(outputStream), parseMatrixFile(matrixStream));
     }
 
     List<String> parseResultFile(Path file) throws IOException {

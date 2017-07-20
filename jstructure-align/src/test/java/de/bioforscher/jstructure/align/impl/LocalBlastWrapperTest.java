@@ -24,7 +24,7 @@ public class LocalBlastWrapperTest {
 
     @Test
     public void shouldExecutePsiBlast() {
-        LocalBlastWrapper.PsiBlastResult result = blastWrapper.executePsiBlastRun(sequence);
+        LocalBlastWrapper.PsiBlastResult result = blastWrapper.executePsiBlastUniref50(sequence);
         Assert.assertFalse(result.getAccessions().isEmpty());
         Assert.assertFalse(result.getInformation().isEmpty());
         Assert.assertEquals("number of conservation scores does not match",

@@ -19,4 +19,10 @@
     <logger name="org.biojava" level="OFF" />
     <logger name="de.bioforscher.singa" level="WARN" />
     <logger name="de.bioforscher.mmm" level="WARN" />
+
+    <logger name="org.springframework" level="INFO" />
+    <logger name="de.bioforscher.explorer" level="INFO" />
+    <logger name="org.jboss" level="INFO" />
+    <logger name="org.hibernate" level="INFO" />
+    <logger name="org.mongodb.driver.cluster" level="INFO" />
 </configuration>

@@ -25,4 +25,8 @@ public class EvolutionaryInformation extends FeatureContainerEntry {
     public double getInformation() {
         return information;
     }
+
+    public double getEvolutionaryPenality(AminoAcid.Family original, AminoAcid.Family mutation) {
+        return exchangeScores.get(original) - exchangeScores.get(mutation);
+    }
 }

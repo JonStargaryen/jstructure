@@ -5,39 +5,26 @@ import de.bioforscher.jstructure.align.impl.ClustalOmegaWrapper;
 import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
-import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformation;
+import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformationCalculator;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
-import de.bioforscher.jstructure.feature.uniprot.UniProtBridge;
-import de.bioforscher.jstructure.feature.uniprot.homologous.UniProtFeatureContainer;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
-import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
-import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.mutation.*;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import de.bioforscher.jstructure.mutation.MutationEffectPredictionService;
+import de.bioforscher.jstructure.mutation.MutationFeatureVector;
+import de.bioforscher.jstructure.mutation.MutationJob;
+import de.bioforscher.jstructure.mutation.MutatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.ac.ebi.kraken.interfaces.common.Value;
-import uk.ac.ebi.kraken.interfaces.uniprot.DatabaseType;
-import uk.ac.ebi.kraken.interfaces.uniprot.UniProtEntry;
-import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
-import uk.ac.ebi.kraken.interfaces.uniprot.features.FeatureLocation;
-import uk.ac.ebi.uniprot.dataservice.client.QueryResult;
-import uk.ac.ebi.uniprot.dataservice.client.uniprot.UniProtQueryBuilder;
-import uk.ac.ebi.uniprot.dataservice.client.uniprot.UniProtService;
-import uk.ac.ebi.uniprot.dataservice.query.Query;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -55,52 +42,46 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     private static final double AMINO_ACID_ENVIRONMENT_SIZE = 8.0;
 
     private final LocalBlastWrapper localBlastWrapper;
+    private final EvolutionaryInformationCalculator evolutionaryInformationCalculator;
     private final MultipleSequenceAligner multipleSequenceAligner;
-    private final LigandContactScreener ligandContactScreener;
     private final MutatorService mutatorService;
-    private final ConservationCalculator conservationCalculator;
-    private final UniProtService uniProtService;
     private final AbstractFeatureProvider accessibleSurfaceCalculator;
     private final AbstractFeatureProvider energyProfileCalculator;
     private final AbstractFeatureProvider loopFractionCalculator;
 
     public MutationEffectPredictionServiceImpl() {
         this(new LocalBlastWrapper(),
+                new EvolutionaryInformationCalculator(),
                 new ClustalOmegaWrapper(),
-                new LigandContactScreenerImpl(),
-                new ScwrlMutatorServiceImpl(),
-                new ConservationCalculatorImpl());
+                new ScwrlMutatorServiceImpl());
     }
 
     public MutationEffectPredictionServiceImpl(LocalBlastWrapper localBlastWrapper,
+                                               EvolutionaryInformationCalculator evolutionaryInformationCalculator,
                                                MultipleSequenceAligner multipleSequenceAligner,
-                                               LigandContactScreener ligandContactScreener,
-                                               MutatorService mutatorService,
-                                               ConservationCalculator conservationCalculator) {
+                                               MutatorService mutatorService) {
         this.localBlastWrapper = localBlastWrapper;
+        this.evolutionaryInformationCalculator = evolutionaryInformationCalculator;
         this.multipleSequenceAligner = multipleSequenceAligner;
-        this.ligandContactScreener = ligandContactScreener;
         this.mutatorService = mutatorService;
-        this.conservationCalculator = conservationCalculator;
-        this.uniProtService = UniProtBridge.getInstance().getUniProtService();
         this.accessibleSurfaceCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceArea.class);
         this.energyProfileCalculator = FeatureProviderRegistry.resolve(EnergyProfile.class);
         this.loopFractionCalculator = FeatureProviderRegistry.resolve(LoopFraction.class);
     }
 
     @Override
-    public MutationJob createMutationJob(String jobName, Chain referenceChain) {
+    public MutationJob createMutationJob(String jobName, Chain referenceChain, LocalBlastWrapper.PsiBlastResult uniref50result) {
         MutationJobImpl mutationJob = new MutationJobImpl(jobName, referenceChain);
         String uuid = mutationJob.getUuid().toString();
         logger.info("[{}] started job '{}' with reference chain '{}' at {}",
-                uuid,
                 mutationJob.getJobName(),
+                uuid,
                 mutationJob.getReferenceChain().getChainIdentifier().getFullName(),
                 mutationJob.getCreationTime());
 
         // compute features of reference chain, track exceptions to enable fail-fast behaviour
         logger.info("[{}] computing features for reference chain",
-                mutationJob.getUuid());
+                mutationJob.getJobName());
         List<Exception> exceptionsDuringReferenceChainAnnotation = annotateChainAndReportExceptions(mutationJob.getReferenceChain());
         if(exceptionsDuringReferenceChainAnnotation.size() > 0) {
             exceptionsDuringReferenceChainAnnotation
@@ -110,293 +91,273 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
             //TODO decide to what degree exceptions here will compromise the job
         }
 
-        // execute PSI-BLAST query against SWISS-PROT
-        String sequence = mutationJob.getReferenceChain().getAminoAcidSequence();
-        logger.info("[{}] executing PSI-BLAST query with sequence {}",
-                uuid,
-                sequence);
-        LocalBlastWrapper.PsiBlastResult psiBlastResult = localBlastWrapper.executePsiBlastRun(">query" + System.lineSeparator() + sequence);
-        List<UniProtEntry> uniProtEntries = psiBlastResult.getAccessions()
-                .stream()
-                .map(this::getUniProtEntry)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-        logger.info("[{}] homologous sequences {}",
-                uuid,
-                uniProtEntries.stream()
-                .map(UniProtEntry::getPrimaryUniProtAccession)
-                .map(Value::getValue)
-                .collect(Collectors.toList()));
-        mutationJob.setHomologousSequences(uniProtEntries);
-
         // assign PSSM conservation score to each amino acid
-        try {
-            List<AminoAcid> aminoAcids = mutationJob.getReferenceChain().aminoAcids().collect(Collectors.toList());
-            for (int i = 0; i < aminoAcids.size(); i++) {
-                try {
-                    aminoAcids.get(i).getFeatureContainer().addFeature(new EvolutionaryInformation(null,
-                            psiBlastResult.getExchanges().get(i),
-                            psiBlastResult.getInformation().get(i)));
-                } catch (IndexOutOfBoundsException e) {
-                    // happens when no homologs where found in PSI-BLAST run
-                }
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException(e);
-        }
+        evolutionaryInformationCalculator.assignPsiBlastResultToChain(referenceChain, uniref50result);
 
-        // validate number of homologous sequences
-        if(uniProtEntries.isEmpty()) {
-            throw new IllegalArgumentException("could not find any sequence homologs");
-        }
-
-        List<ChainIdentifier> homologousChains = uniProtEntries.stream()
-                // take all referenced chains
-                .map(uniProtEntry -> uniProtEntry.getDatabaseCrossReferences(DatabaseType.PDB))
-                .flatMap(Collection::stream)
-                .flatMap(databaseCrossReference -> {
-                    //TODO could use range which also available in the format fourth -> "A=321-419"
-                    String[] split = databaseCrossReference.getFourth().getValue().split("=");
-                    // some entries reference multiple chains separated by '/'
-                    return CHAIN_PATTERN.splitAsStream(split[0])
-                            .map(chainId -> IdentifierFactory.createChainIdentifier(databaseCrossReference.getPrimaryId().getValue(), chainId));
-                })
-                .distinct()
-                .collect(Collectors.toList());
-        logger.info("[{}] homologous structure candidates: {}",
-                uuid,
-                homologousChains);
-        homologousChains = removeRedundancy(homologousChains);
-
-        //TODO remove redundancy by pdb-clustering
-        // fetch homologous PDB entries
-        List<Chain> homologousPdbChains = homologousChains.stream()
-                // ignore the reference chain itself
-                .filter(chainIdentifier -> !chainIdentifier.equals(mutationJob.getReferenceChain().getChainIdentifier()))
-                .map(chainIdentifier -> fetchProteinChain(chainIdentifier, uuid))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
-
-        // compute feature for homologous chains - remove compromised entries
-        logger.info("[{}] computing features for homologous chains",
-                uuid);
-        List<Chain> homologousChainsWhoseAnnotationFailed = homologousPdbChains.stream()
-                .filter(chain -> annotateChainAndReportExceptions(chain).size() > 0)
-                .collect(Collectors.toList());
-        homologousChainsWhoseAnnotationFailed.forEach(chain -> logger.warn("[{}] feature annotation failed for homologous chain {}",
-                mutationJob.getUuid(),
-                chain.getChainIdentifier().getFullName()));
-        homologousPdbChains.removeAll(homologousChainsWhoseAnnotationFailed);
-        logger.info("[{}] homologous PDB chains {}",
-                uuid,
-                homologousPdbChains
-                        .stream()
-                        .map(Chain::getChainIdentifier)
-                        .map(ChainIdentifier::getFullName)
-                        .collect(Collectors.toList()));
-        mutationJob.setHomologousPdbChains(homologousPdbChains);
-
-        // validate number of homologous structure
-        if(homologousChains.isEmpty()) {
-            throw new IllegalArgumentException("could not find any structural homologs");
-        }
-
-        // create multiple-sequence alignment of everything
-        renumberSequences(mutationJob);
-
-        conservationCalculator.extractConservationProfile(mutationJob);
+//        // execute PSI-BLAST query against SWISS-PROT
+//        String sequence = mutationJob.getReferenceChain().getAminoAcidSequence();
+//        logger.info("[{}] executing PSI-BLAST query against SWISS-PROT with sequence {}",
+//                mutationJob.getJobName(),
+//                sequence);
+//        LocalBlastWrapper.PsiBlastResult swissprotResult = localBlastWrapper.executePsiBlastSwissProt(">query" + System.lineSeparator() + sequence);
+//
+//        List<UniProtEntry> uniProtEntries = swissprotResult.getAccessions()
+//                .stream()
+//                .map(this::getUniProtEntry)
+//                .filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .collect(Collectors.toList());
+//        logger.info("[{}] homologous sequences {}",
+//                mutationJob.getJobName(),
+//                uniProtEntries.stream()
+//                .map(UniProtEntry::getPrimaryUniProtAccession)
+//                .map(Value::getValue)
+//                .collect(Collectors.toList()));
+//        mutationJob.setHomologousSequences(uniProtEntries);
+//
+//        // validate number of homologous sequences
+//        if(uniProtEntries.isEmpty()) {
+//            throw new IllegalArgumentException("could not find any sequence homologs");
+//        }
+//
+//        List<ChainIdentifier> homologousChains = uniProtEntries.stream()
+//                // take all referenced chains
+//                .map(uniProtEntry -> uniProtEntry.getDatabaseCrossReferences(DatabaseType.PDB))
+//                .flatMap(Collection::stream)
+//                .flatMap(databaseCrossReference -> {
+//                    //TODO could use range which also available in the format fourth -> "A=321-419"
+//                    String[] split = databaseCrossReference.getFourth().getValue().split("=");
+//                    // some entries reference multiple chains separated by '/'
+//                    return CHAIN_PATTERN.splitAsStream(split[0])
+//                            .map(chainId -> IdentifierFactory.createChainIdentifier(databaseCrossReference.getPrimaryId().getValue(), chainId));
+//                })
+//                .distinct()
+//                .collect(Collectors.toList());
+//        logger.info("[{}] homologous structure candidates: {}",
+//                uuid,
+//                homologousChains);
+//        homologousChains = removeRedundancy(homologousChains);
+//
+//        // fetch homologous PDB entries
+//        List<Chain> homologousPdbChains = homologousChains.stream()
+//                // ignore the reference chain itself
+//                .filter(chainIdentifier -> !chainIdentifier.equals(mutationJob.getReferenceChain().getChainIdentifier()))
+//                .map(chainIdentifier -> fetchProteinChain(chainIdentifier, mutationJob.getJobName()))
+//                .filter(Optional::isPresent)
+//                .map(Optional::get)
+//                .collect(Collectors.toList());
+//
+//        // compute feature for homologous chains - remove compromised entries
+//        logger.info("[{}] computing features for homologous chains",
+//                mutationJob.getJobName());
+//        List<Chain> homologousChainsWhoseAnnotationFailed = homologousPdbChains.stream()
+//                .filter(chain -> annotateChainAndReportExceptions(chain).size() > 0)
+//                .collect(Collectors.toList());
+//        homologousChainsWhoseAnnotationFailed.forEach(chain -> logger.warn("[{}] feature annotation failed for homologous chain {}",
+//                mutationJob.getJobName(),
+//                chain.getChainIdentifier().getFullName()));
+//        homologousPdbChains.removeAll(homologousChainsWhoseAnnotationFailed);
+//        logger.info("[{}] homologous PDB chains {}",
+//                mutationJob.getJobName(),
+//                homologousPdbChains
+//                        .stream()
+//                        .map(Chain::getChainIdentifier)
+//                        .map(ChainIdentifier::getFullName)
+//                        .collect(Collectors.toList()));
+//        mutationJob.setHomologousPdbChains(homologousPdbChains);
+//
+//        // create multiple-sequence alignment of everything
+//        renumberSequences(mutationJob);
 
         return mutationJob;
     }
 
-    private List<ChainIdentifier> removeRedundancy(List<ChainIdentifier> homologousChains) {
-        Map<ChainIdentifier, ChainIdentifier> processedChainIdentifiers = new HashMap<>();
-        List<ChainIdentifier> selectedChainIdentifiers = new ArrayList<>();
-
-        for(ChainIdentifier chainIdentifier : homologousChains) {
-            // already processed
-            if(processedChainIdentifiers.containsKey(chainIdentifier)) {
-                ChainIdentifier selectedChainIdentifier = processedChainIdentifiers.get(chainIdentifier);
-                if(selectedChainIdentifier.equals(chainIdentifier)) {
-                    selectedChainIdentifiers.add(chainIdentifier);
-                }
-                continue;
-            }
-
-            String url = "https://www.rcsb.org/pdb/rest/sequenceCluster?cluster=95&structureId=" +
-                            chainIdentifier.getProteinIdentifier().getPdbId() + "." + chainIdentifier.getChainId();
-            try {
-                Elements cluster = Jsoup.connect(url)
-                        .get()
-                        .getElementsByTag("pdbChain");
-                String[] representativeSplit = cluster
-                        .first()
-                        .attr("name")
-                        .split("\\.");
-                ChainIdentifier representative = IdentifierFactory.createChainIdentifier(representativeSplit[0],
-                        representativeSplit[1]);
-                for (Element element : cluster) {
-                    String[] elementSplit = element.attr("name")
-                            .split("\\.");
-                    processedChainIdentifiers.put(IdentifierFactory.createChainIdentifier(elementSplit[0],
-                            elementSplit[1]), representative);
-                }
-
-                if(representative.equals(chainIdentifier)) {
-                    selectedChainIdentifiers.add(chainIdentifier);
-                }
-            } catch (Exception e) {
-//                logger.warn("[] failed to fetch sequence cluster for {} from pdb",
-//                        chainIdentifier);
-            }
-        }
-        if(selectedChainIdentifiers.isEmpty()) {
-            return homologousChains;
-        }
-        return selectedChainIdentifiers;
-    }
-
-    private Optional<UniProtEntry> getUniProtEntry(String accession) {
-        try {
-            Query query = UniProtQueryBuilder.accession(accession);
-            QueryResult<UniProtEntry> result = uniProtService.getEntries(query);
-            return Optional.of(result.getFirstResult());
-        } catch (Exception e) {
-            logger.warn("could not retrieve UniProt entry for {}",
-                    accession,
-                    e);
-            return Optional.empty();
-        }
-    }
-
-    private void renumberSequences(MutationJobImpl mutationJob) {
-        // execute ClustalOmega on all sequences
-        List<String> sequences = new ArrayList<>();
-        Chain referenceChain = mutationJob.getReferenceChain();
-
-        sequences.add(">" + referenceChain.getChainIdentifier().getFullName() + System.lineSeparator() + referenceChain.getAminoAcidSequence());
-        mutationJob.getHomologousSequences()
-                .stream()
-                .map(entry -> ">" + entry.getPrimaryUniProtAccession().getValue() + System.lineSeparator() + entry.getSequence().getValue())
-                .forEach(sequences::add);
-        mutationJob.getHomologousPdbChains()
-                .stream()
-                .map(chain -> ">" + chain.getChainIdentifier().getFullName() + System.lineSeparator() + chain.getAminoAcidSequence())
-                .forEach(sequences::add);
-
-        logger.info("[{}] executing multiple-sequence alignment on {} sequence by {}",
-                mutationJob.getUuid(),
-                sequences.size(),
-                multipleSequenceAligner.getClass().getSimpleName());
-        Map<String, String> alignmentMap = multipleSequenceAligner.align(sequences).getAlignedSequences();
-        logger.info("[{}] renumbering sequences",
-                mutationJob.getUuid());
-        getStreamOfAllChains(mutationJob)
-                .forEach(chain -> {
-                    String alignmentString = alignmentMap.get(chain.getChainIdentifier().getFullName());
-                    int alignmentLength = alignmentString.length();
-                    int consumedAminoAcidsInChain = 0;
-                    List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-                    for(int sequencePosition = 0; sequencePosition < alignmentLength; sequencePosition++) {
-                        try {
-                            char characterInAlignment = alignmentString.charAt(sequencePosition);
-                            if (characterInAlignment == '-') {
-                                continue;
-                            }
-                            AminoAcid aminoAcid = aminoAcids.get(consumedAminoAcidsInChain);
-                            consumedAminoAcidsInChain++;
-                            // renumber to position in alignment string (+1 for classic Java offset)
-                            aminoAcid.getFeatureContainer().addFeature(new RenumberedResidueNumber(sequencePosition + 1));
-                        } catch (Exception e) {
-                            // missing amino acids or premature end of List
-                        }
-                    }
-                });
-
-        mutationJob.setAlignmentMap(alignmentMap);
-
-        // map UniProt features onto reference sequence
-        annotateReferenceChainWithUniProtFeatures(referenceChain, mutationJob);
-    }
-
-    private void annotateReferenceChainWithUniProtFeatures(Chain referenceChain, MutationJob mutationJob) {
-        Map<String, String> alignmentMap = mutationJob.getAlignmentMap();
-        String referenceChainAlignmentString = alignmentMap.get(referenceChain.getChainIdentifier().getFullName());
-        List<AminoAcid> aminoAcids = referenceChain.aminoAcids().collect(Collectors.toList());
-        // initialize all amino acids as empty annotations
-        aminoAcids.forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new UniProtFeatureContainer(null)));
-
-        mutationJob.getHomologousSequences()
-                .forEach(uniProtEntry -> {
-                    String accession = uniProtEntry.getPrimaryUniProtAccession().getValue();
-                    String uniProtEntryAlignmentString = alignmentMap.get(accession);
-
-                    for(int alignmentStringIndex = 0; alignmentStringIndex < referenceChainAlignmentString.length(); alignmentStringIndex++) {
-                        char referenceChar = referenceChainAlignmentString.charAt(alignmentStringIndex);
-                        // continue if gap in reference sequence
-                        if(referenceChar == '-') {
-                            continue;
-                        }
-
-                        String matchSequence = uniProtEntryAlignmentString.substring(0, alignmentStringIndex);
-                        int matchGaps = countGaps(matchSequence);
-                        int positionInMatchSequence = alignmentStringIndex + 1 - matchGaps;
-
-                        List<Feature> features = getFeaturesForCurrentPosition(uniProtEntry, positionInMatchSequence);
-                        // continue if no feature at current position of match
-                        if(features.isEmpty()) {
-                            continue;
-                        }
-
-                        // operate on partial string, ignore last position for now
-                        String referenceSequence = referenceChainAlignmentString.substring(0, alignmentStringIndex);
-                        int referenceGaps = countGaps(referenceSequence);
-                        int positionInReferenceSequence = alignmentStringIndex + 1 - referenceGaps;
-
-                        Optional<AminoAcid> aminoAcidOptional = getSafely(aminoAcids, positionInReferenceSequence - 1);
-                        if(aminoAcidOptional.isPresent()) {
-                            UniProtFeatureContainer featureContainer = aminoAcidOptional.get()
-                                    .getFeatureContainer()
-                                    .getFeature(UniProtFeatureContainer.class);
-                            features.forEach(feature -> featureContainer.addFeature(accession, feature));
-                        }
-                    }
-                });
-    }
-
-    private Optional<AminoAcid> getSafely(List<AminoAcid> aminoAcids, int index) {
-        try {
-            return Optional.of(aminoAcids.get(index));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return Optional.empty();
-        }
-    }
-
-    private List<Feature> getFeaturesForCurrentPosition(UniProtEntry uniProtEntry, int positionInMatchSequence) {
-        return uniProtEntry.getFeatures()
-                .stream()
-                .filter(feature -> featureEmbedsCurrentPosition(feature, positionInMatchSequence))
-                .collect(Collectors.toList());
-    }
-
-    private boolean featureEmbedsCurrentPosition(Feature feature, int position) {
-        FeatureLocation featureLocation = feature.getFeatureLocation();
-        int start = featureLocation.getStart();
-        int end = (featureLocation.isEndAvailable() ? featureLocation.getEnd() : start);
-        return start <= position && position <= end;
-    }
-
-    private int countGaps(String sequence) {
-        int count = 0;
-        for(int i = 0; i < sequence.length(); i++) {
-            if(sequence.charAt(i) == '-') {
-                count++;
-            }
-        }
-        return count;
-    }
+//    private List<ChainIdentifier> removeRedundancy(List<ChainIdentifier> homologousChains) {
+//        Map<ChainIdentifier, ChainIdentifier> processedChainIdentifiers = new HashMap<>();
+//        List<ChainIdentifier> selectedChainIdentifiers = new ArrayList<>();
+//
+//        for(ChainIdentifier chainIdentifier : homologousChains) {
+//            // already processed
+//            if(processedChainIdentifiers.containsKey(chainIdentifier)) {
+//                ChainIdentifier selectedChainIdentifier = processedChainIdentifiers.get(chainIdentifier);
+//                if(selectedChainIdentifier.equals(chainIdentifier)) {
+//                    selectedChainIdentifiers.add(chainIdentifier);
+//                }
+//                continue;
+//            }
+//
+//            String url = "https://www.rcsb.org/pdb/rest/sequenceCluster?cluster=95&structureId=" +
+//                            chainIdentifier.getProteinIdentifier().getPdbId() + "." + chainIdentifier.getChainId();
+//            try {
+//                Elements cluster = Jsoup.connect(url)
+//                        .get()
+//                        .getElementsByTag("pdbChain");
+//                String[] representativeSplit = cluster
+//                        .first()
+//                        .attr("name")
+//                        .split("\\.");
+//                ChainIdentifier representative = IdentifierFactory.createChainIdentifier(representativeSplit[0],
+//                        representativeSplit[1]);
+//                for (Element element : cluster) {
+//                    String[] elementSplit = element.attr("name")
+//                            .split("\\.");
+//                    processedChainIdentifiers.put(IdentifierFactory.createChainIdentifier(elementSplit[0],
+//                            elementSplit[1]), representative);
+//                }
+//
+//                if(representative.equals(chainIdentifier)) {
+//                    selectedChainIdentifiers.add(chainIdentifier);
+//                }
+//            } catch (Exception e) {
+////                logger.warn("[] failed to fetch sequence cluster for {} from pdb",
+////                        chainIdentifier);
+//            }
+//        }
+//        if(selectedChainIdentifiers.isEmpty()) {
+//            return homologousChains;
+//        }
+//        return selectedChainIdentifiers;
+//    }
+//
+//    private Optional<UniProtEntry> getUniProtEntry(String accession) {
+//        try {
+//            Query query = UniProtQueryBuilder.accession(accession);
+//            QueryResult<UniProtEntry> result = uniProtService.getEntries(query);
+//            return Optional.of(result.getFirstResult());
+//        } catch (Exception e) {
+//            logger.warn("could not retrieve UniProt entry for {}",
+//                    accession,
+//                    e);
+//            return Optional.empty();
+//        }
+//    }
+//
+//    private void renumberSequences(MutationJobImpl mutationJob) {
+//        // execute ClustalOmega on all sequences
+//        List<String> sequences = new ArrayList<>();
+//        Chain referenceChain = mutationJob.getReferenceChain();
+//
+//        sequences.add(">" + referenceChain.getChainIdentifier().getFullName() + System.lineSeparator() + referenceChain.getAminoAcidSequence());
+//        mutationJob.getHomologousSequences()
+//                .stream()
+//                .map(entry -> ">" + entry.getPrimaryUniProtAccession().getValue() + System.lineSeparator() + entry.getSequence().getValue())
+//                .forEach(sequences::add);
+//        mutationJob.getHomologousPdbChains()
+//                .stream()
+//                .map(chain -> ">" + chain.getChainIdentifier().getFullName() + System.lineSeparator() + chain.getAminoAcidSequence())
+//                .forEach(sequences::add);
+//
+//        logger.info("[{}] executing multiple-sequence alignment on {} sequence by {}",
+//                mutationJob.getJobName(),
+//                sequences.size(),
+//                multipleSequenceAligner.getClass().getSimpleName());
+//        Map<String, String> alignmentMap = multipleSequenceAligner.align(sequences).getAlignedSequences();
+//        logger.info("[{}] renumbering sequences",
+//                mutationJob.getJobName());
+//        getStreamOfAllChains(mutationJob)
+//                .forEach(chain -> {
+//                    String alignmentString = alignmentMap.get(chain.getChainIdentifier().getFullName());
+//                    int alignmentLength = alignmentString.length();
+//                    int consumedAminoAcidsInChain = 0;
+//                    List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+//                    for(int sequencePosition = 0; sequencePosition < alignmentLength; sequencePosition++) {
+//                        try {
+//                            char characterInAlignment = alignmentString.charAt(sequencePosition);
+//                            if (characterInAlignment == '-') {
+//                                continue;
+//                            }
+//                            AminoAcid aminoAcid = aminoAcids.get(consumedAminoAcidsInChain);
+//                            consumedAminoAcidsInChain++;
+//                            // renumber to position in alignment string (+1 for classic Java offset)
+//                            aminoAcid.getFeatureContainer().addFeature(new RenumberedResidueNumber(sequencePosition + 1));
+//                        } catch (Exception e) {
+//                            // missing amino acids or premature end of List
+//                        }
+//                    }
+//                });
+//
+//        mutationJob.setAlignmentMap(alignmentMap);
+//
+//        // map UniProt features onto reference sequence
+//        annotateReferenceChainWithUniProtFeatures(referenceChain, mutationJob);
+//    }
+//
+//    private void annotateReferenceChainWithUniProtFeatures(Chain referenceChain, MutationJob mutationJob) {
+//        Map<String, String> alignmentMap = mutationJob.getAlignmentMap();
+//        String referenceChainAlignmentString = alignmentMap.get(referenceChain.getChainIdentifier().getFullName());
+//        List<AminoAcid> aminoAcids = referenceChain.aminoAcids().collect(Collectors.toList());
+//        // initialize all amino acids as empty annotations
+//        aminoAcids.forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new UniProtFeatureContainer(null)));
+//
+//        mutationJob.getHomologousSequences()
+//                .forEach(uniProtEntry -> {
+//                    String accession = uniProtEntry.getPrimaryUniProtAccession().getValue();
+//                    String uniProtEntryAlignmentString = alignmentMap.get(accession);
+//
+//                    for(int alignmentStringIndex = 0; alignmentStringIndex < referenceChainAlignmentString.length(); alignmentStringIndex++) {
+//                        char referenceChar = referenceChainAlignmentString.charAt(alignmentStringIndex);
+//                        // continue if gap in reference sequence
+//                        if(referenceChar == '-') {
+//                            continue;
+//                        }
+//
+//                        String matchSequence = uniProtEntryAlignmentString.substring(0, alignmentStringIndex);
+//                        int matchGaps = countGaps(matchSequence);
+//                        int positionInMatchSequence = alignmentStringIndex + 1 - matchGaps;
+//
+//                        List<Feature> features = getFeaturesForCurrentPosition(uniProtEntry, positionInMatchSequence);
+//                        // continue if no feature at current position of match
+//                        if(features.isEmpty()) {
+//                            continue;
+//                        }
+//
+//                        // operate on partial string, ignore last position for now
+//                        String referenceSequence = referenceChainAlignmentString.substring(0, alignmentStringIndex);
+//                        int referenceGaps = countGaps(referenceSequence);
+//                        int positionInReferenceSequence = alignmentStringIndex + 1 - referenceGaps;
+//
+//                        Optional<AminoAcid> aminoAcidOptional = getSafely(aminoAcids, positionInReferenceSequence - 1);
+//                        if(aminoAcidOptional.isPresent()) {
+//                            UniProtFeatureContainer featureContainer = aminoAcidOptional.get()
+//                                    .getFeatureContainer()
+//                                    .getFeature(UniProtFeatureContainer.class);
+//                            features.forEach(feature -> featureContainer.addFeature(accession, feature));
+//                        }
+//                    }
+//                });
+//    }
+//
+//    private Optional<AminoAcid> getSafely(List<AminoAcid> aminoAcids, int index) {
+//        try {
+//            return Optional.of(aminoAcids.get(index));
+//        } catch (ArrayIndexOutOfBoundsException e) {
+//            return Optional.empty();
+//        }
+//    }
+//
+//    private List<Feature> getFeaturesForCurrentPosition(UniProtEntry uniProtEntry, int positionInMatchSequence) {
+//        return uniProtEntry.getFeatures()
+//                .stream()
+//                .filter(feature -> featureEmbedsCurrentPosition(feature, positionInMatchSequence))
+//                .collect(Collectors.toList());
+//    }
+//
+//    private boolean featureEmbedsCurrentPosition(Feature feature, int position) {
+//        FeatureLocation featureLocation = feature.getFeatureLocation();
+//        int start = featureLocation.getStart();
+//        int end = (featureLocation.isEndAvailable() ? featureLocation.getEnd() : start);
+//        return start <= position && position <= end;
+//    }
+//
+//    private int countGaps(String sequence) {
+//        int count = 0;
+//        for(int i = 0; i < sequence.length(); i++) {
+//            if(sequence.charAt(i) == '-') {
+//                count++;
+//            }
+//        }
+//        return count;
+//    }
 
     /**
      * Tries to annotate a chain given a defined set of features. The behaviour is that all providers will get their try
@@ -430,73 +391,73 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         }
     }
 
-    /**
-     * Convenience function to get access to all chains of a container.
-     * @param mutationJob the container
-     * @return all {@link Chain} instances associated with it - essentially just the reference and all homologous concat
-     */
-    private Stream<Chain> getStreamOfAllChains(MutationJob mutationJob) {
-        return Stream.concat(Stream.of(mutationJob.getReferenceChain()), mutationJob.getHomologousPdbChains().stream());
-    }
-
-    /**
-     * Internal class to handle the renumbering without compromising the original numbering.
-     */
-    public static class RenumberedResidueNumber extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Integer> {
-        private final int renumberedResidueNumber;
-
-        public RenumberedResidueNumber(int renumberedResidueNumber) {
-            super(null);
-            this.renumberedResidueNumber = renumberedResidueNumber;
-        }
-
-        public int getRenumberedResidueNumber() {
-            return renumberedResidueNumber;
-        }
-
-        @Override
-        public Integer getValue() {
-            return renumberedResidueNumber;
-        }
-
-        /**
-         * Convenience function to retrieve a particular amino acid by its renumbered identifier.
-         * @param chain the chain to search in
-         * @param renumberedResidueNumber the renumbered value the amino acid is supposed to feature
-         * @return a optional containing a value when a suitable amino acid was found
-         */
-        public static Optional<AminoAcid> getAminoAcidByRenumberedResidueNumber(Chain chain, int renumberedResidueNumber) {
-            return chain.aminoAcids()
-                    .filter(aminoAcid -> aminoAcid.getFeatureContainer()
-                            .getFeatureOptional(RenumberedResidueNumber.class)
-                            .map(RenumberedResidueNumber::getRenumberedResidueNumber)
-                            .map(rrr -> rrr == renumberedResidueNumber)
-                            // return false when operation failed
-                            .orElse(false))
-                    .findFirst();
-        }
-    }
-
-    private Optional<Chain> fetchProteinChain(ChainIdentifier chainIdentifier, String uuid) {
-        try {
-            Structure originalProtein = StructureParser.source(chainIdentifier.getProteinIdentifier().getPdbId())
-                    .minimalParsing(true)
-                    .parse();
-            Chain isolatedChain = originalProtein.select()
-                    .chainName(chainIdentifier.getChainId())
-                    .asChain();
-            Structure isolatedProtein = new Structure(isolatedChain.getChainIdentifier().getProteinIdentifier());
-            // will set the parent reference to the isolated chain
-            isolatedProtein.addChain(isolatedChain);
-            return Optional.of(isolatedChain);
-        } catch (Exception e) {
-            logger.info("[{}] failed to fetch protein '{}'",
-                    uuid,
-                    chainIdentifier.getFullName(),
-                    e);
-            return Optional.empty();
-        }
-    }
+//    /**
+//     * Convenience function to get access to all chains of a container.
+//     * @param mutationJob the container
+//     * @return all {@link Chain} instances associated with it - essentially just the reference and all homologous concat
+//     */
+//    private Stream<Chain> getStreamOfAllChains(MutationJob mutationJob) {
+//        return Stream.concat(Stream.of(mutationJob.getReferenceChain()), mutationJob.getHomologousPdbChains().stream());
+//    }
+//
+//    /**
+//     * Internal class to handle the renumbering without compromising the original numbering.
+//     */
+//    public static class RenumberedResidueNumber extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Integer> {
+//        private final int renumberedResidueNumber;
+//
+//        public RenumberedResidueNumber(int renumberedResidueNumber) {
+//            super(null);
+//            this.renumberedResidueNumber = renumberedResidueNumber;
+//        }
+//
+//        public int getRenumberedResidueNumber() {
+//            return renumberedResidueNumber;
+//        }
+//
+//        @Override
+//        public Integer getValue() {
+//            return renumberedResidueNumber;
+//        }
+//
+//        /**
+//         * Convenience function to retrieve a particular amino acid by its renumbered identifier.
+//         * @param chain the chain to search in
+//         * @param renumberedResidueNumber the renumbered value the amino acid is supposed to feature
+//         * @return a optional containing a value when a suitable amino acid was found
+//         */
+//        public static Optional<AminoAcid> getAminoAcidByRenumberedResidueNumber(Chain chain, int renumberedResidueNumber) {
+//            return chain.aminoAcids()
+//                    .filter(aminoAcid -> aminoAcid.getFeatureContainer()
+//                            .getFeatureOptional(RenumberedResidueNumber.class)
+//                            .map(RenumberedResidueNumber::getRenumberedResidueNumber)
+//                            .map(rrr -> rrr == renumberedResidueNumber)
+//                            // return false when operation failed
+//                            .orElse(false))
+//                    .findFirst();
+//        }
+//    }
+//
+//    private Optional<Chain> fetchProteinChain(ChainIdentifier chainIdentifier, String jobName) {
+//        try {
+//            Structure originalProtein = StructureParser.source(chainIdentifier.getProteinIdentifier().getPdbId())
+//                    .minimalParsing(true)
+//                    .parse();
+//            Chain isolatedChain = originalProtein.select()
+//                    .chainName(chainIdentifier.getChainId())
+//                    .asChain();
+//            Structure isolatedProtein = new Structure(isolatedChain.getChainIdentifier().getProteinIdentifier());
+//            // will set the parent reference to the isolated chain
+//            isolatedProtein.addChain(isolatedChain);
+//            return Optional.of(isolatedChain);
+//        } catch (Exception e) {
+//            logger.info("[{}] failed to fetch protein '{}'",
+//                    jobName,
+//                    chainIdentifier.getFullName(),
+//                    e);
+//            return Optional.empty();
+//        }
+//    }
 
     @Override
     public MutationFeatureVector createMutationFeatureVector(MutationJob mutationJob,
@@ -525,7 +486,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         List<Exception> exceptions = annotateChainAndReportExceptions(mutatedChain);
         if(!exceptions.isEmpty()) {
             exceptions.forEach(ex -> logger.warn("[{}] exception during feature annotation of of mutated protein {}{}{}",
-                    mutationJob.getUuid(),
+                    mutationJob.getJobName(),
                     originalAminoAcid.getOneLetterCode(),
                     residueIdentifierToMutate.getResidueNumber(),
                     mutatedAminoAcid.getOneLetterCode(),
@@ -533,21 +494,21 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         }
 
         logger.info("[{}] creating feature vector for {}: {}{}{}",
-                mutationJob.getUuid(),
+                mutationJob.getJobName(),
                 chainIdentifier.getFullName(),
                 originalAminoAcid.getOneLetterCode(),
                 residueIdentifierToMutate.getResidueNumber(),
                 mutatedAminoAcid.getOneLetterCode());
 
         // extract environments
-        List<AminoAcid> originalEnvironment = extractEnvironment(mutationJob.getUuid(), originalAminoAcid);
-        List<AminoAcid> mutatedEnvironment = extractEnvironment(mutationJob.getUuid(), mutatedAminoAcid);
+        List<AminoAcid> originalEnvironment = extractEnvironment(originalAminoAcid, mutationJob.getJobName());
+        List<AminoAcid> mutatedEnvironment = extractEnvironment(mutatedAminoAcid, mutationJob.getJobName());
 
         // compute feature vectors
-        PhysicochemicalFeatureVector fvOriginalAminoAcid = new PhysicochemicalFeatureVector(ligandContactScreener, originalAminoAcid);
-        PhysicochemicalFeatureVector fvMutatedAminoAcid = new PhysicochemicalFeatureVector(ligandContactScreener, mutatedAminoAcid);
-        PhysicochemicalFeatureVector fvOriginalEnvironment = new PhysicochemicalFeatureVector(ligandContactScreener, originalEnvironment);
-        PhysicochemicalFeatureVector fvMutatedEnvironment = new PhysicochemicalFeatureVector(ligandContactScreener, mutatedEnvironment);
+        PhysicochemicalFeatureVector fvOriginalAminoAcid = new PhysicochemicalFeatureVector(originalAminoAcid);
+        PhysicochemicalFeatureVector fvMutatedAminoAcid = new PhysicochemicalFeatureVector(mutatedAminoAcid);
+        PhysicochemicalFeatureVector fvOriginalEnvironment = new PhysicochemicalFeatureVector(originalEnvironment);
+        PhysicochemicalFeatureVector fvMutatedEnvironment = new PhysicochemicalFeatureVector(mutatedEnvironment);
 
         // compute delta
         DeltaPhysicochemicalFeatureVector dfvAminoAcid = new DeltaPhysicochemicalFeatureVector(fvOriginalAminoAcid, fvMutatedAminoAcid);
@@ -581,11 +542,11 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
 
     /**
      * Extracts the environment (i.e. all amino acids of this chain at most 8 A away) and reports them as list.
-     * @param uuid the id of this job
      * @param aminoAcid the amino acid to investigate
+     * @param jobName the job's name
      * @return a collection of all surrounding amino acids
      */
-    private List<AminoAcid> extractEnvironment(UUID uuid, AminoAcid aminoAcid) {
+    private List<AminoAcid> extractEnvironment(AminoAcid aminoAcid, String jobName) {
         try {
             Atom referenceAtom = aminoAcid.getCa();
             return aminoAcid.getParentChain().select()
@@ -596,7 +557,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.warn("could not extract environment around {}",
-                    uuid,
+                    jobName,
                     aminoAcid,
                     e);
             return new ArrayList<>();
@@ -610,28 +571,24 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         protected double rasa;
         protected double loopFraction;
         protected double energy;
-        protected double ligandContacts;
 
         protected PhysicochemicalFeatureVector() {
 
         }
 
-        PhysicochemicalFeatureVector(LigandContactScreener ligandContactScreener, List<AminoAcid> aminoAcids) {
-            this(ligandContactScreener,
-                    aminoAcids.stream(),
+        PhysicochemicalFeatureVector(List<AminoAcid> aminoAcids) {
+            this(aminoAcids.stream(),
                     aminoAcids.size(),
                     aminoAcids.get(0).getParentChain().getParentStructure());
         }
 
-        PhysicochemicalFeatureVector(LigandContactScreener ligandContactScreener, AminoAcid... aminoAcids) {
-            this(ligandContactScreener,
-                    Stream.of(aminoAcids),
+        PhysicochemicalFeatureVector(AminoAcid... aminoAcids) {
+            this(Stream.of(aminoAcids),
                     aminoAcids.length,
                     aminoAcids[0].getParentChain().getParentStructure());
         }
 
-        private PhysicochemicalFeatureVector(LigandContactScreener ligandContactScreener,
-                                             Stream<AminoAcid> aminoAcidStream,
+        private PhysicochemicalFeatureVector(Stream<AminoAcid> aminoAcidStream,
                                              double numberOfAminoAcids,
                                              Structure structure) {
             aminoAcidStream
@@ -639,7 +596,6 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
                         rasa += aminoAcid.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea() / numberOfAminoAcids;
                         loopFraction += aminoAcid.getFeature(LoopFraction.class).getLoopFraction() / numberOfAminoAcids;
                         energy += aminoAcid.getFeature(EnergyProfile.class).getSolvationEnergy() / numberOfAminoAcids;
-                        ligandContacts += ligandContactScreener.determineNumberOfLigandContacts(structure, aminoAcid);
                     });
         }
 
@@ -654,10 +610,6 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         public double getEnergy() {
             return energy;
         }
-
-        public double getLigandContacts() {
-            return ligandContacts;
-        }
     }
 
     /**
@@ -668,7 +620,6 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
             this.rasa = original.rasa - mutated.rasa;
             this.loopFraction = original.loopFraction - mutated.loopFraction;
             this.energy = original.energy - mutated.energy;
-            this.ligandContacts = original.ligandContacts - mutated.ligandContacts;
         }
     }
 }

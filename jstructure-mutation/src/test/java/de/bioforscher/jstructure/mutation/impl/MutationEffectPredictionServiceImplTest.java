@@ -29,7 +29,9 @@ public class MutationEffectPredictionServiceImplTest {
 
     @Test
     public void shouldCreateMutationJob() {
-        MutationJob mutationJob = mutationEffectPredictionService.createMutationJob("test-job", referenceChain);
+        MutationJob mutationJob = mutationEffectPredictionService.createMutationJob("test-job",
+                referenceChain,
+                null);
         Assert.assertNotNull(mutationJob);
     }
 }
