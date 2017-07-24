@@ -18,6 +18,6 @@ public class PLIPParserTest {
                 .select()
                 .chainName(chainId)
                 .asChain();
-        PLIPParser.parse(chain, PLIPRestServiceQuery.getDocument(pdbId, chainId));
+        PLIPParser.parse(chain, PLIPRestServiceQuery.getIntraMolecularDocument(pdbId, chainId));
     }
 }

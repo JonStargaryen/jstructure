@@ -69,7 +69,7 @@ public class ExternalResourceDownloader {
         // fetch PLIP results
         try {
             protein.chains().forEach(chain -> {
-                Document plipDocument = PLIPRestServiceQuery.getDocument(chain.getChainIdentifier());
+                Document plipDocument = PLIPRestServiceQuery.getIntraMolecularDocument(chain.getChainIdentifier());
                 StudyConstants.write(MembraneConstants.PDBTM_PLIP_PATH.resolve(chain.getChainIdentifier().getFullName() + ".xml"), plipDocument.html());
             });
         } catch (UncheckedIOException e) {

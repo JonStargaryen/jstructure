@@ -1,6 +1,6 @@
 package studies.plipvalidation;
 
-import de.bioforscher.jstructure.feature.interactions.PLIPAnnotator;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
@@ -24,7 +24,7 @@ public class PLIPValidation {
 
         try {
             new DictionaryOfProteinSecondaryStructure().process(protein);
-            new PLIPAnnotator().process(protein);
+            new PLIPIntraMolecularAnnotator().process(protein);
 
             for (Chain chain : protein.getChains()) {
                 for (Group group : chain.getGroups()) {

@@ -10,8 +10,8 @@ import java.io.IOException;
  * Test the PLIP annotator.
  * Created by bittrich on 2/9/17.
  */
-public class PLIPAnnotatorTest {
-    private PLIPAnnotator plipAnnotator = new PLIPAnnotator();
+public class PLIPIntraMolecularAnnotatorTest {
+    private PLIPIntraMolecularAnnotator plipAnnotator = new PLIPIntraMolecularAnnotator();
 
     @Test
     public void shouldAnnotateSingleProtein() throws IOException {
