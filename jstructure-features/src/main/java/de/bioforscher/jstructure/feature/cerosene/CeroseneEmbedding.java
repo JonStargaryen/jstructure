@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.cerosene;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 
 /**
@@ -11,7 +11,7 @@ public class CeroseneEmbedding extends FeatureContainerEntry {
     private final double[] rgb;
     private final double[] hsv;
 
-    CeroseneEmbedding(AbstractFeatureProvider featureProvider, double[] rgb, double[] hsv) {
+    CeroseneEmbedding(FeatureProvider featureProvider, double[] rgb, double[] hsv) {
         super(featureProvider);
         this.rgb = rgb;
         this.hsv = hsv;

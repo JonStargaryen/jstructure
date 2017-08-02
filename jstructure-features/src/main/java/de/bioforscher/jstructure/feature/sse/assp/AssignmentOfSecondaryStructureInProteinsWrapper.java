@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.feature.sse.assp;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -21,8 +20,8 @@ import java.nio.file.Paths;
  * face that it writes temporary files to a working directory - when protein names equal, multiple threads could infer.
  * Created by bittrich on 7/5/17.
  */
-@FeatureProvider(provides = { GenericSecondaryStructure.class }, priority = 50)
-public class AssignmentOfSecondaryStructureInProteinsWrapper extends AbstractFeatureProvider {
+//@FeatureProvider(provides = { GenericSecondaryStructure.class }, priority = 50)
+public class AssignmentOfSecondaryStructureInProteinsWrapper extends FeatureProvider {
     /**
      * Tied to a specific directory as files should be placed next to executable.
      */

@@ -7,7 +7,12 @@ import de.bioforscher.testutil.TestUtils;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Test the SIFTS-mapping.
@@ -93,5 +98,15 @@ public class SiftsMappingAnnotatorTest {
         Document document = mappingAnnotator.downloadXml("1acj");
         ResidueMapping uniProtResidueNumber = mappingAnnotator.mapGroup(document, "A", 4);
         Assert.assertEquals("25", uniProtResidueNumber.getUniProtResidueNumber());
+    }
+
+    @Ignore
+    @Test
+    public void testWhetherOneChainCanMapToMultipleEcNumbers() {
+        Map<String, List<String>> map = SiftsMappingAnnotator.getLines(SiftsMappingAnnotator.ENZYME_MAPPING)
+                .collect(Collectors.groupingBy(line -> line.split(",")[0] + "_" + line.split(",")[1]));
+        map.entrySet().stream()
+                .filter(entry -> entry.getValue().size() != 1)
+                .forEach(System.out::println);
     }
 }

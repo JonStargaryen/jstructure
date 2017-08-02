@@ -1,16 +1,19 @@
 package studies.gmlvq.fingerprint;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
+import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +38,10 @@ public class FingerPrintDataSetComposer {
     private static final String DECOY = "decoy";
     private static final String FINGERPRINT = "fingerprint";
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
-    private static final List<AbstractFeatureProvider> featureProviders = Stream.of(AccessibleSurfaceArea.class,
-            LoopFraction.class,
-            EnergyProfile.class,
-            PLIPInteractionContainer.class)
-            .map(FeatureProviderRegistry::resolve)
+    private static final List<FeatureProvider> featureProviders = Stream.of(new AccessibleSurfaceAreaCalculator(),
+            new LoopFractionCalculator(),
+            new EnergyProfileCalculator(),
+            new PLIPIntraMolecularAnnotator())
             .collect(Collectors.toList());
     private ProteinIdentifier lastProteinIdentifier = null;
     private Structure lastProtein = null;

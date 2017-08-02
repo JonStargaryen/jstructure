@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -33,8 +32,8 @@ import java.util.stream.Collectors;
  * TODO implement routine for trans-membrane proteins
  * Created by bittrich on 12/15/16.
  */
-@FeatureProvider(provides = EnergyProfile.class)
-public class EnergyProfileCalculator extends AbstractFeatureProvider {
+//@FeatureProvider(provides = EnergyProfile.class)
+public class EnergyProfileCalculator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculator.class);
     /**
      * 2 residues are considered to be in contact, when the euclidean distance of their beta-carbons is below 8.0 A.

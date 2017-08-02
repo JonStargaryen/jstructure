@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.mapping;
 
 import de.bioforscher.jstructure.model.feature.ComputationException;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,16 +28,16 @@ import java.util.zip.GZIPInputStream;
  * Retrieves cross-database mappings for residues and chains using the Sifts-project.
  * Created by bittrich on 5/17/17.
  */
-@FeatureProvider(provides = { ResidueMapping.class, ChainMapping.class })
-public class SiftsMappingAnnotator extends AbstractFeatureProvider {
+//@FeatureProvider(provides = { ResidueMapping.class, ChainMapping.class })
+public class SiftsMappingAnnotator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SiftsMappingAnnotator.class);
 
     // the SIFTS-web-resource
     private static final String XML_FETCH_URL = "ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/split_xml/%s/%s.xml.gz";
     // local resources
     private static final String SIFTS_DIR = "sifts/";
-    private static final String ENZYME_MAPPING = SIFTS_DIR + "pdb_chain_enzyme.csv";
-    private static final String PFAM_MAPPING = SIFTS_DIR + "pdb_chain_pfam.csv";
+    static final String ENZYME_MAPPING = SIFTS_DIR + "pdb_chain_enzyme.csv";
+    static final String PFAM_MAPPING = SIFTS_DIR + "pdb_chain_pfam.csv";
 
     private static final String UNKNOWN_MAPPING = "?";
     private static final String[] UNKNOWN_ENZYME_MAPPING = new String[] { UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING, UNKNOWN_MAPPING };
@@ -98,13 +98,20 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
         chain.getFeatureContainer().addFeature(new ChainMapping(this, uniProtId, ecMappingString[3], pfamMappingString[3]));
     }
 
-    private static Stream<String> getLines(String path) {
+    static Stream<String> getLines(String path) {
         return getResourceAsStream(path)
                 .filter(line -> !line.startsWith("#") && !line.startsWith("PDB"));
     }
 
     public static Stream<String[]> getLinesForPdbId(String pdbId) {
         return getLinesForPdbId(PFAM_MAPPING, pdbId);
+    }
+
+    public static Optional<String[]> getEnzymeLineForPdbId(String pdbId, String chainId) {
+        return getLines(ENZYME_MAPPING)
+                .map(line -> line.split(","))
+                .filter(split -> split[0].equalsIgnoreCase(pdbId) && split[1].equals(chainId))
+                .findFirst();
     }
 
     public static Stream<String[]> getLinesForUniProtId(String uniProtId) {
@@ -117,6 +124,12 @@ public class SiftsMappingAnnotator extends AbstractFeatureProvider {
         return getLines(PFAM_MAPPING)
                 .map(line -> line.split(","))
                 .filter(split -> split[3].equals(pfamId));
+    }
+
+    public static Stream<String[]> getLinesForEc(String ecNumber) {
+        return getLines(ENZYME_MAPPING)
+                .map(line -> line.split(","))
+                .filter(split -> split[3].equals(ecNumber));
     }
 
     private static Stream<String[]> getLinesForPdbId(String path, String pdbId) {

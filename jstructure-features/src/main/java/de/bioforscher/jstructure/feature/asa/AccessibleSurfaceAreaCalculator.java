@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Element;
@@ -33,8 +32,8 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pr>
  * @author duarte_j
  */
-@FeatureProvider(provides = { AccessibleSurfaceArea.class, AtomRadius.class})
-public class AccessibleSurfaceAreaCalculator extends AbstractFeatureProvider {
+//@FeatureProvider(provides = { AccessibleSurfaceArea.class, AtomRadius.class})
+public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     private static final String ATOM_RADIUS = "ATOM_RADIUS";
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same

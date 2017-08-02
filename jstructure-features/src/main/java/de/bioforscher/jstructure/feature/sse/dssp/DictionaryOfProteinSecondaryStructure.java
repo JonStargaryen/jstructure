@@ -1,13 +1,11 @@
 package de.bioforscher.jstructure.feature.sse.dssp;
 
-import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.TorsionAngles;
 import de.bioforscher.jstructure.model.Combinatorics;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -42,8 +40,7 @@ import java.util.stream.Collectors;
  * @author Anthony Bradley
  *
  */
-@FeatureProvider(provides = { DSSPSecondaryStructure.class, GenericSecondaryStructure.class })
-public class DictionaryOfProteinSecondaryStructure extends AbstractFeatureProvider {
+public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(DictionaryOfProteinSecondaryStructure.class);
     /**
      * DSSP assigns helices one getResidue shorter at each end, because the

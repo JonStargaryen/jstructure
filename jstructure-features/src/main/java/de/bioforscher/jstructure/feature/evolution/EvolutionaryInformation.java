@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.evolution;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
@@ -10,7 +10,7 @@ public class EvolutionaryInformation extends FeatureContainerEntry {
     private final Map<AminoAcid.Family, Double> exchangeScores;
     private final double information;
 
-    public EvolutionaryInformation(AbstractFeatureProvider featureProvider,
+    public EvolutionaryInformation(FeatureProvider featureProvider,
                                    Map<AminoAcid.Family, Double> exchangeScores,
                                    double information) {
         super(featureProvider);

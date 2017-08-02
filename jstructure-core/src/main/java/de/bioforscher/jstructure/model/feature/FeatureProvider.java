@@ -1,45 +1,80 @@
 package de.bioforscher.jstructure.model.feature;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import de.bioforscher.jstructure.model.structure.Structure;
+
+import java.io.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Annotation of an algorithm which can calculate features and write them to the feature map of a {@link Featureable}.
- * Created by S on 02.10.2016.
+ * The abstract implementation of each {@link FeatureProvider}. Feature provider implementations are expected to be
+ * stateless.
+ * TODO a register function which fills each featureMap with the provided keys of this provider, thus multiple predictors could be employed concurrently
+ * TODO strict mode flag
+ * TODO indicate where the results are attached to - on atom level? residues? chains? whole protein? a mix?
+ *  Created by S on 16.01.2017.
  */
-@Retention(RetentionPolicy.RUNTIME)
-public @interface FeatureProvider {
-    int DEFAULT_PRIORITY = 100;
-
-    FeatureOrigin origin() default FeatureOrigin.ANNOTATION;
-
+public abstract class FeatureProvider {
     /**
-     * The priority of this feature provider which can be used to assign an ordering on which implementation is employed
-     * to calculate certain features. Override this method to assign custom priorities.
-     * @return this feature providers priority
+     * Runs the computations implemented by this feature provider and assigns the results to the given container.
+     * @param structure the container to process
      */
-    int priority() default DEFAULT_PRIORITY;
+    public void process(Structure structure) {
+        preprocessInternally(structure);
 
-    /**
-     * All features provided by the implementing class. This list should contain at least 1 element.
-     * @return all features provided by this implemented
-     */
-    Class<? extends FeatureContainerEntry>[] provides();
+        // delegate to concrete implementation
+        processInternally(structure);
 
-    /**
-     * Access to all required features which need to be present in order for the computation about to happen to succeed.
-     * E.g., the computation of something like the loop fraction requires the previous calculation/annotation of all
-     * secondary structure information. By resolving these dependencies, the {@link AbstractFeatureProvider} will try to
-     * calculate all requirements beforehand automatically. This list can be empty.
-     * @return all features needed for the computation implemented by this provider
-     */
-    Class<? extends FeatureContainerEntry>[] requires() default {};
+        // 'hook' to postprocessing routine, empty by default but can be overridden by implementations if needed
+        postprocessInternally(structure);
 
-    /**
-     * The possible feature types - predictions and annotations.
-     */
-    enum FeatureOrigin {
-        ANNOTATION,
-        PREDICTION
+        // registered the computed feature entry class
+        provides().forEach(structure::registerFeature);
     }
+
+    protected List<Class<? extends FeatureContainerEntry>> provides() {
+        return Collections.emptyList();
+    }
+
+    private void preprocessInternally(Structure structure) {
+
+    }
+
+    /**
+     * Some postprocess method with will be executed on the container after the computation has finished. Override when
+     * there is a need to clean-up some variables etc in the container.
+     * @param structure the container to clean
+     */
+    protected void postprocessInternally(Structure structure) {
+
+    }
+
+    protected static InputStream getResourceAsInputStream(String filename) {
+        ClassLoader ccl = Thread.currentThread().getContextClassLoader();
+        Objects.requireNonNull(ccl);
+        InputStream is = ccl.getResourceAsStream(filename);
+        return Objects.requireNonNull(is);
+    }
+
+    protected static Stream<String> getResourceAsStream(String filename) {
+        return getResourceAsLines(filename).stream();
+    }
+
+    protected static List<String> getResourceAsLines(String filename) {
+        try {
+            try (InputStreamReader inputStreamReader = new InputStreamReader(getResourceAsInputStream(filename))) {
+                try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                    return bufferedReader.lines()
+                            .collect(Collectors.toList());
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    protected abstract void processInternally(Structure structure);
 }

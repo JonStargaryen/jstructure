@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.sse;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 
 /**
@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 public class GenericSecondaryStructure extends FeatureContainerEntry {
     protected SecondaryStructureElement secondaryStructure;
 
-    public GenericSecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
+    public GenericSecondaryStructure(FeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
         super(featureProvider);
         this.secondaryStructure = secondaryStructure;
     }

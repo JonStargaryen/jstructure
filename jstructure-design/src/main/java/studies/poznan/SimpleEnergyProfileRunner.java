@@ -1,8 +1,7 @@
 package studies.poznan;
 
-import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ import java.nio.file.Paths;
  */
 public class SimpleEnergyProfileRunner {
     private static final Logger logger = LoggerFactory.getLogger(SimpleEnergyProfileRunner.class);
-    private static final AbstractFeatureProvider featureProvider = FeatureProviderRegistry.resolve(EnergyProfile.class);
+    private static final FeatureProvider featureProvider = new EnergyProfileCalculator();
 
     public static void main(String... args) {
         if(args.length != 1 && args.length != 2) {

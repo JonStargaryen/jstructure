@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 public class PLIPRestServiceQuery {
     private static final Logger logger = LoggerFactory.getLogger(PLIPRestServiceQuery.class);
-    static final String BASE_URL = "https://biosciences.hs-mittweida.de/plip/interaction/calculate/protein";
+    static final String BASE_URL = "https://biosciences.hs-mittweida.de/plip/interaction/plain/";
     static String secret;
 
     static {
@@ -37,20 +37,9 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    static Document getIntraMolecularDocument(String pdbId, String chainId, int residueNumber) {
-        try {
-            return getIntraMolecularDocument(new URL(BASE_URL + pdbId + "/" + chainId + "/" + residueNumber));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
     public static Document getIntraMolecularDocument(ChainIdentifier chainIdentifier) {
-        try {
-            return getIntraMolecularDocument(new URL(BASE_URL + "plain/" + chainIdentifier.getProteinIdentifier().getPdbId() + "/" + chainIdentifier.getChainId()));
-        } catch (IOException e) {
-            throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
-        }
+        return getIntraMolecularDocument(chainIdentifier.getProteinIdentifier().getPdbId(),
+                chainIdentifier.getChainId());
     }
 
     static Document getLigandDocument(Chain chain) {
@@ -69,7 +58,7 @@ public class PLIPRestServiceQuery {
 
     static Document getIntraMolecularDocument(String pdbId, String chainId) {
         try {
-            return getIntraMolecularDocument(new URL(BASE_URL + "plain/" + pdbId + "/" + chainId));
+            return getIntraMolecularDocument(new URL(BASE_URL + pdbId + "/" + chainId));
         } catch (IOException e) {
             throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }

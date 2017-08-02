@@ -6,7 +6,7 @@ package de.bioforscher.jstructure.model.feature;
  * functionality of the container from other methods directly linked to an entity.
  * Created by bittrich on 5/17/17.
  */
-public class AbstractFeatureable {
+public class AbstractFeatureable implements Featureable{
     private FeatureContainer featureContainer;
 
     protected AbstractFeatureable() {
@@ -14,14 +14,17 @@ public class AbstractFeatureable {
         featureContainer.addFeature(new FeatureContainerRoot.GlobalFeatureContainer());
     }
 
+    @Override
     public FeatureContainer getFeatureContainer() {
         return featureContainer;
     }
 
+    @Override
     public <C extends FeatureContainerEntry> C getFeature(Class<C> contentClass) {
         return featureContainer.getFeature(contentClass);
     }
 
+    @Override
     public void setFeatureContainer(FeatureContainer featureContainer) {
         this.featureContainer = featureContainer;
     }

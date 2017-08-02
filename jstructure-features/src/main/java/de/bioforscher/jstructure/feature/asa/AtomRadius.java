@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.asa;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 
@@ -11,7 +11,7 @@ import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 public class AtomRadius extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {
     private final double radius;
 
-    AtomRadius(AbstractFeatureProvider featureProvider, double radius) {
+    AtomRadius(FeatureProvider featureProvider, double radius) {
         super(featureProvider);
         this.radius = radius;
     }

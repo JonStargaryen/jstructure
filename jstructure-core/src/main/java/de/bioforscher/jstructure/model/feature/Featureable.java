@@ -6,4 +6,8 @@ package de.bioforscher.jstructure.model.feature;
  */
 public interface Featureable {
     FeatureContainer getFeatureContainer();
+
+    <C extends FeatureContainerEntry> C getFeature(Class<C> contentClass);
+
+    void setFeatureContainer(FeatureContainer featureContainer);
 }

@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class SequenceMotifContainer extends FeatureContainerEntry {
     private List<SequenceMotif> sequenceMotifs;
 
-    private SequenceMotifContainer(AbstractFeatureProvider featureProvider, List<SequenceMotif> sequenceMotifs) {
+    private SequenceMotifContainer(FeatureProvider featureProvider, List<SequenceMotif> sequenceMotifs) {
         super(featureProvider);
         this.sequenceMotifs = sequenceMotifs;
     }
 
-    SequenceMotifContainer(AbstractFeatureProvider featureProvider) {
+    SequenceMotifContainer(FeatureProvider featureProvider) {
         super(featureProvider);
         this.sequenceMotifs = new ArrayList<>();
     }

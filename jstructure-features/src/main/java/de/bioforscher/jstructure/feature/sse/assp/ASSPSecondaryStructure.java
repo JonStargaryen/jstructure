@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.feature.sse.assp;
 
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -33,7 +33,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     private int stretchId;
     private String finalCharacteristic;
 
-    ASSPSecondaryStructure(AbstractFeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
+    ASSPSecondaryStructure(FeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
         super(featureProvider, secondaryStructure);
     }
 

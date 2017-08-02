@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 
 /**
@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 public class Topology extends FeatureContainerEntry {
     private final boolean transmembrane;
 
-    public Topology(AbstractFeatureProvider featureProvider, boolean transmembrane) {
+    public Topology(FeatureProvider featureProvider, boolean transmembrane) {
         super(featureProvider);
         this.transmembrane = transmembrane;
     }

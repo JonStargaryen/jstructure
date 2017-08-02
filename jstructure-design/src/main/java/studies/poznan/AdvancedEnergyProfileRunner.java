@@ -2,15 +2,16 @@ package studies.poznan;
 
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileAligner;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfilePredictor;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
-import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -58,8 +59,8 @@ public class AdvancedEnergyProfileRunner {
     }
 
     static class Builder {
-        private static final AbstractFeatureProvider energyProfileCalculator = FeatureProviderRegistry.resolveAnnotator(EnergyProfile.class);
-        private static final AbstractFeatureProvider energyProfilePredictor = FeatureProviderRegistry.resolvePredictor(EnergyProfile.class);
+        private static final FeatureProvider energyProfileCalculator = new EnergyProfileCalculator();
+        private static final FeatureProvider energyProfilePredictor = new EnergyProfilePredictor();
         private static final EnergyProfileAligner energyProfileAligner = new EnergyProfileAligner();
         private ProteinContainer proteinContainer1;
         private ProteinContainer proteinContainer2;

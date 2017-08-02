@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -15,12 +14,12 @@ import org.junit.Test;
  */
 public class EnergyProfilePredictorTest {
     private Structure protein;
-    private AbstractFeatureProvider energyProfilePredictor;
+    private FeatureProvider energyProfilePredictor;
 
     @Before
     public void setup() {
         protein = StructureParser.source("1brr").parse();
-        energyProfilePredictor = FeatureProviderRegistry.resolvePredictor(EnergyProfile.class);
+        energyProfilePredictor = new EnergyProfilePredictor();
     }
 
     @Test

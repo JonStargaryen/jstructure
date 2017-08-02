@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -10,9 +9,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@FeatureProvider(provides = PLIPInteractionContainer.class, priority = 200)
+//@FeatureProvider(provides = PLIPInteractionContainer.class, priority = 200)
 //TODO infers with other annotator for intra-molecular interactions
-public class PLIPLigandAnnotator extends AbstractFeatureProvider {
+public class PLIPLigandAnnotator extends FeatureProvider {
     @Override
     protected void processInternally(Structure protein) {
         protein.chainsWithAminoAcids()

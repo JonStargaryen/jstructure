@@ -7,17 +7,17 @@ package de.bioforscher.jstructure.model.feature;
  * Created by S on 28.04.2017.
  */
 public class FeatureContainerEntry {
-    private final AbstractFeatureProvider featureProvider;
+    private final FeatureProvider featureProvider;
 
     /**
      * The standard constructor for new feature map entries.
      * @param featureProvider the provider which created this feature - may be <code>null</code>, however it is strongly
-     *                        advised to provide this information for full-fledged {@link AbstractFeatureProvider}
+     *                        advised to provide this information for full-fledged {@link FeatureProvider}
      *                        implementations (the use case it have different implementations annotating the same
      *                        feature by different means, by providing this generator information entries of the same
      *                        content class can be distinguished)
      */
-    public FeatureContainerEntry(AbstractFeatureProvider featureProvider) {
+    public FeatureContainerEntry(FeatureProvider featureProvider) {
         this.featureProvider = featureProvider;
     }
 
@@ -25,7 +25,7 @@ public class FeatureContainerEntry {
      * Access to the feature provider which was used to calculate this entry.
      * @return the instance which was used to calculate this entry
      */
-    public AbstractFeatureProvider getFeatureProvider() {
+    public FeatureProvider getFeatureProvider() {
         return featureProvider;
     }
 }

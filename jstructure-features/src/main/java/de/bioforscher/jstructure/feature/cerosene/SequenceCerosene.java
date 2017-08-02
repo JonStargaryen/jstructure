@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.cerosene;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -18,8 +17,8 @@ import java.util.stream.IntStream;
  * SequenceCEROSENE: a computational method and web server to visualize spatial residue neighborhoods at the sequence level.
  * Florian Heinke, Sebastian Bittrich, Florian Kaiser and Dirk Labudde. BioData Mining 2016 9:6. 10.1186/s13040-016-0083-7
  */
-@FeatureProvider(provides = { CeroseneEmbedding.class })
-public class SequenceCerosene extends AbstractFeatureProvider {
+//@FeatureProvider(provides = { CeroseneEmbedding.class })
+public class SequenceCerosene extends FeatureProvider {
     private static final double[] SUMMAND = { 127, 127, 127 };
 
     @Override

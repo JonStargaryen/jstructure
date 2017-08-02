@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
 
@@ -11,7 +11,7 @@ import de.bioforscher.jstructure.model.structure.Group;
 public class EnergyProfile extends FeatureContainerEntry {
     private final double solvationEnergy;
 
-    EnergyProfile(AbstractFeatureProvider featureProvider, double solvationEnergy) {
+    EnergyProfile(FeatureProvider featureProvider, double solvationEnergy) {
         super(featureProvider);
         this.solvationEnergy = solvationEnergy;
     }

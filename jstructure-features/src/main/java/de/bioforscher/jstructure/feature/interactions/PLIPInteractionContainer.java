@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.Featureable;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -24,7 +24,7 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
     private final List<SaltBridge> saltBridges;
     private final List<WaterBridge> waterBridges;
 
-    PLIPInteractionContainer(AbstractFeatureProvider featureProvider, List<PLIPInteraction> plipInteractions) {
+    PLIPInteractionContainer(FeatureProvider featureProvider, List<PLIPInteraction> plipInteractions) {
         super(featureProvider);
         halogenBonds = filterInteractions(plipInteractions, HalogenBond.class);
         hydrogenBonds = filterInteractions(plipInteractions, HydrogenBond.class);

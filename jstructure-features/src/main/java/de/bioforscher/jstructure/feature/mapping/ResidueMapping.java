@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.mapping;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 
 /**
@@ -12,13 +12,13 @@ public class ResidueMapping extends FeatureContainerEntry {
     private final String uniProtResidueNumber;
     private final String uniProtId;
 
-    ResidueMapping(AbstractFeatureProvider featureProvider, String uniProtResidueNumber, String dbAccessionId) {
+    ResidueMapping(FeatureProvider featureProvider, String uniProtResidueNumber, String dbAccessionId) {
         super(featureProvider);
         this.uniProtResidueNumber = uniProtResidueNumber;
         this.uniProtId = dbAccessionId;
     }
 
-    public ResidueMapping(AbstractFeatureProvider featureProvider) {
+    public ResidueMapping(FeatureProvider featureProvider) {
         this(featureProvider, UNKNOWN_MAPPING, UNKNOWN_MAPPING);
     }
 

@@ -1,8 +1,7 @@
 package de.bioforscher.jstructure.model;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.Alanine;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
@@ -127,13 +126,12 @@ public class CopyableTest {
     }
 
     public static class AdditionalFeatureEntry extends FeatureContainerEntry {
-        public AdditionalFeatureEntry(AbstractFeatureProvider featureProvider) {
+        public AdditionalFeatureEntry(FeatureProvider featureProvider) {
             super(featureProvider);
         }
     }
 
-    @FeatureProvider(provides = AdditionalFeatureEntry.class)
-    public static class AdditionalFeatureProvider extends AbstractFeatureProvider {
+    public static class AdditionalFeatureProvider extends FeatureProvider {
         @Override
         protected void processInternally(Structure protein) {
 

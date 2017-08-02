@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.mapping;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 
 /**
@@ -13,7 +13,7 @@ public class ChainMapping extends FeatureContainerEntry {
     private final String ecNumber;
     private final String pfamId;
 
-    ChainMapping(AbstractFeatureProvider featureProvider, String uniProtId, String ecNumber, String pfamId) {
+    ChainMapping(FeatureProvider featureProvider, String uniProtId, String ecNumber, String pfamId) {
         super(featureProvider);
         this.uniProtId = uniProtId;
         this.ecNumber = ecNumber;

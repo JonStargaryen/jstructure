@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.feature.motif;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -14,8 +13,8 @@ import java.util.stream.Collectors;
  * Searches for sequence fragments matching any {@link SequenceMotifDefinition} and reports hits.
  * Created by S on 02.10.2016.
  */
-@FeatureProvider(provides = SequenceMotifContainer.class)
-public class SequenceMotifAnnotator extends AbstractFeatureProvider {
+//@FeatureProvider(provides = SequenceMotifContainer.class)
+public class SequenceMotifAnnotator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
 
     @Override

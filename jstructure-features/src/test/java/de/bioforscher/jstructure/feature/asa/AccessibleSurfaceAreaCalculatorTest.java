@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.model.Combinatorics;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.biojava.nbio.structure.StructureException;
@@ -39,7 +38,7 @@ public class AccessibleSurfaceAreaCalculatorTest {
         // load structure
         Structure protein = StructureParser.source(id).parse();
         // assign states
-        FeatureProviderRegistry.resolve(AccessibleSurfaceArea.class).process(protein);
+        new AccessibleSurfaceAreaCalculator().process(protein);
 
         // return complete DSSP annotation string from jstructrue
         return protein.aminoAcids()

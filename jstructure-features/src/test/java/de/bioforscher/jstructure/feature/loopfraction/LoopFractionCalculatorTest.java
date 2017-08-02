@@ -2,8 +2,7 @@ package de.bioforscher.jstructure.feature.loopfraction;
 
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.junit.Assert;
@@ -16,12 +15,12 @@ import org.junit.Test;
  */
 public class LoopFractionCalculatorTest {
     private Structure protein;
-    private AbstractFeatureProvider featureProvider;
+    private FeatureProvider featureProvider;
 
     @Before
     public void setup() {
         protein = StructureParser.source("1acj").parse();
-        featureProvider = FeatureProviderRegistry.resolve(LoopFraction.class);
+        featureProvider = new LoopFractionCalculator();
     }
 
     @Test

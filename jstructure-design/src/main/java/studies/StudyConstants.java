@@ -1,5 +1,6 @@
 package studies;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -74,5 +75,13 @@ public class StudyConstants {
 
     public static String format(Object object) {
         return DECIMAL_FORMAT.format(object);
+    }
+
+    public static BufferedWriter newBufferedWriter(Path outputPath) {
+        try {
+            return Files.newBufferedWriter(outputPath);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.align.AlignmentPolicy;
 import de.bioforscher.jstructure.align.StructureAlignmentQuery;
 import de.bioforscher.jstructure.align.impl.SingleValueDecompositionAligner;
 import de.bioforscher.jstructure.model.feature.ComputationException;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -26,9 +25,9 @@ import java.util.stream.Collectors;
 /**
  * Access to the internet resource of the OPM.
  * Created by bittrich on 5/17/17.
- */
-@FeatureProvider(provides = { MembraneContainer.class, Topology.class })
-public class OrientationsOfProteinsInMembranesAnnotator extends AbstractFeatureProvider {
+// */
+//@FeatureProvider(provides = { MembraneContainer.class, Topology.class })
+public class OrientationsOfProteinsInMembranesAnnotator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(OrientationsOfProteinsInMembranesAnnotator.class);
     private static final String BASE_URL = "http://opm.phar.umich.edu/";
     static final String SEARCH_URL = BASE_URL + "protein.php?search=";

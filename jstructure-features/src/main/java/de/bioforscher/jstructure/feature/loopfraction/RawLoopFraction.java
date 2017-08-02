@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 
@@ -11,7 +11,7 @@ import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 public class RawLoopFraction extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {
     private final double rawLoopFraction;
 
-    RawLoopFraction(AbstractFeatureProvider featureProvider, double rawLoopFraciton) {
+    RawLoopFraction(FeatureProvider featureProvider, double rawLoopFraciton) {
         super(featureProvider);
         this.rawLoopFraction = rawLoopFraciton;
     }

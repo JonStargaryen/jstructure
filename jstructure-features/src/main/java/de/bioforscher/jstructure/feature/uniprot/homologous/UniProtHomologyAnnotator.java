@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.uniprot.homologous;
 
 import de.bioforscher.jstructure.feature.uniprot.UniProtBridge;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -30,8 +29,8 @@ import java.util.stream.IntStream;
  * Annotates a chain with all information available via UniProt entries of (potentially) homologous proteins.
  * Created by bittrich on 7/10/17.
  */
-@FeatureProvider(provides = { UniProtHomologousEntryContainer.class, UniProtFeatureContainer.class })
-public class UniProtHomologyAnnotator extends AbstractFeatureProvider {
+//@FeatureProvider(provides = { UniProtHomologousEntryContainer.class, UniProtFeatureContainer.class })
+public class UniProtHomologyAnnotator extends FeatureProvider {
     private static final Logger logger  = LoggerFactory.getLogger(UniProtHomologyAnnotator.class);
     final UniProtBlastService uniProtBlastService;
 

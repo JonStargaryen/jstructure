@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.uniprot.homologous;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
@@ -23,7 +23,7 @@ public class UniProtHomologousEntryContainer extends FeatureContainerEntry {
     private final List<ChainIdentifier> homologousChains;
     private static final Pattern CHAIN_PATTERN = Pattern.compile("/");
 
-    public UniProtHomologousEntryContainer(AbstractFeatureProvider featureProvider, List<UniProtHit> uniProtHits) {
+    public UniProtHomologousEntryContainer(FeatureProvider featureProvider, List<UniProtHit> uniProtHits) {
         super(featureProvider);
         this.uniProtHits = uniProtHits;
         this.uniProtEntries = uniProtHits.stream()

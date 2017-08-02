@@ -4,11 +4,13 @@ import de.bioforscher.jstructure.align.MultipleSequenceAligner;
 import de.bioforscher.jstructure.align.impl.ClustalOmegaWrapper;
 import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformationCalculator;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Atom;
@@ -45,9 +47,9 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
     private final EvolutionaryInformationCalculator evolutionaryInformationCalculator;
     private final MultipleSequenceAligner multipleSequenceAligner;
     private final MutatorService mutatorService;
-    private final AbstractFeatureProvider accessibleSurfaceCalculator;
-    private final AbstractFeatureProvider energyProfileCalculator;
-    private final AbstractFeatureProvider loopFractionCalculator;
+    private final FeatureProvider accessibleSurfaceCalculator;
+    private final FeatureProvider energyProfileCalculator;
+    private final FeatureProvider loopFractionCalculator;
 
     public MutationEffectPredictionServiceImpl() {
         this(new LocalBlastWrapper(),
@@ -64,9 +66,9 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
         this.evolutionaryInformationCalculator = evolutionaryInformationCalculator;
         this.multipleSequenceAligner = multipleSequenceAligner;
         this.mutatorService = mutatorService;
-        this.accessibleSurfaceCalculator = FeatureProviderRegistry.resolve(AccessibleSurfaceArea.class);
-        this.energyProfileCalculator = FeatureProviderRegistry.resolve(EnergyProfile.class);
-        this.loopFractionCalculator = FeatureProviderRegistry.resolve(LoopFraction.class);
+        this.accessibleSurfaceCalculator = new AccessibleSurfaceAreaCalculator();
+        this.energyProfileCalculator = new EnergyProfileCalculator();
+        this.loopFractionCalculator = new LoopFractionCalculator();
     }
 
     @Override
@@ -382,7 +384,7 @@ public class MutationEffectPredictionServiceImpl implements MutationEffectPredic
      * @param featureProvider the feature provider to employ
      * @return an optional containing an exception if one arose during computation
      */
-    private Optional<Exception> annotateChainAndReportPotentialException(Chain chain, AbstractFeatureProvider featureProvider) {
+    private Optional<Exception> annotateChainAndReportPotentialException(Chain chain, FeatureProvider featureProvider) {
         try {
             featureProvider.process(chain.getParentStructure());
             return Optional.empty();

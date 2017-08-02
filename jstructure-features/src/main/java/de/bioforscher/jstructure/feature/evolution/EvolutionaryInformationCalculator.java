@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.evolution;
 
 import de.bioforscher.jstructure.align.impl.LocalBlastWrapper;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -11,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@FeatureProvider(provides = EvolutionaryInformation.class)
-public class EvolutionaryInformationCalculator extends AbstractFeatureProvider {
+//@FeatureProvider(provides = EvolutionaryInformation.class)
+public class EvolutionaryInformationCalculator extends FeatureProvider {
     private final LocalBlastWrapper localBlastWrapper;
 
     public EvolutionaryInformationCalculator() {

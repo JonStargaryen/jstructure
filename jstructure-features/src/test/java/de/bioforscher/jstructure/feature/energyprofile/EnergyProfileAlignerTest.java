@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.junit.Assert;
@@ -21,7 +20,7 @@ public class EnergyProfileAlignerTest {
     public void setup() {
         protein1acj = StructureParser.source("1acj").parse();
         protein1brr = StructureParser.source("1brr").parse();
-        AbstractFeatureProvider energyProfileCalculator = FeatureProviderRegistry.resolve(EnergyProfile.class);
+        FeatureProvider energyProfileCalculator = new EnergyProfileCalculator();
         energyProfileCalculator.process(protein1acj);
         energyProfileCalculator.process(protein1brr);
         energyProfileAligner = new EnergyProfileAligner();

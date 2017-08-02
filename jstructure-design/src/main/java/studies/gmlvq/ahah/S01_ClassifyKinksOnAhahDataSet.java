@@ -1,11 +1,13 @@
 package studies.gmlvq.ahah;
 
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
-import de.bioforscher.jstructure.model.feature.FeatureProviderRegistry;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -32,10 +34,9 @@ import java.util.stream.Stream;
 public class S01_ClassifyKinksOnAhahDataSet {
     private static final Logger logger = LoggerFactory.getLogger(S01_ClassifyKinksOnAhahDataSet.class);
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####");
-    private static final List<AbstractFeatureProvider> featureProviders = Stream.of(AccessibleSurfaceArea.class,
-            EnergyProfile.class,
-            PLIPInteractionContainer.class)
-            .map(FeatureProviderRegistry::resolve)
+    private static final List<FeatureProvider> featureProviders = Stream.of(new AccessibleSurfaceAreaCalculator(),
+            new EnergyProfileCalculator(),
+            new PLIPIntraMolecularAnnotator())
             .collect(Collectors.toList());
     private static Map<String, Optional<Structure>> proteinMap;
 

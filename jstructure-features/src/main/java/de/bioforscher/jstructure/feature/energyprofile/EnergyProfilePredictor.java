@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -22,8 +21,8 @@ import java.util.stream.Stream;
  * Created by S on 20.01.2017.
  * @author originally written by Florian Heinke
  */
-@FeatureProvider(provides = EnergyProfile.class, origin = FeatureProvider.FeatureOrigin.PREDICTION, priority = 200)
-public class EnergyProfilePredictor extends AbstractFeatureProvider {
+//@FeatureProvider(provides = EnergyProfile.class, origin = FeatureProvider.FeatureOrigin.PREDICTION, priority = 200)
+public class EnergyProfilePredictor extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfilePredictor.class);
     private static final int WINDOW_SIZE = 3;
     public static final double[] QUANTIL_BOUNDARIES = { -3.17, -8.10, -19.65 };

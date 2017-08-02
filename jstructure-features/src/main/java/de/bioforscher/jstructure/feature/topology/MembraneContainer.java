@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.model.feature.AbstractFeatureProvider;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
@@ -21,7 +21,7 @@ public class MembraneContainer extends FeatureContainerEntry {
     private String deltaGTransfer;
     private String topology;
 
-    MembraneContainer(AbstractFeatureProvider featureProvider) {
+    MembraneContainer(FeatureProvider featureProvider) {
         super(featureProvider);
     }
 
