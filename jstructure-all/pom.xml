@@ -94,6 +94,8 @@
         <module>../jstructure-features</module>
         <module>../jstructure-mutation</module>
         <module>../jstructure-mmm-bridge</module>
+        <module>../jstructure-membrane-topology</module>
+        <module>../jstructure-membrane</module>
     </modules>
 
     <properties>
