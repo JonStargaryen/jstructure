@@ -37,7 +37,8 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    public static Document getIntraMolecularDocument(ChainIdentifier chainIdentifier) {
+    public static Document getIntraMolecularDocument(Chain chain) {
+        ChainIdentifier chainIdentifier = chain.getChainIdentifier();
         return getIntraMolecularDocument(chainIdentifier.getProteinIdentifier().getPdbId(),
                 chainIdentifier.getChainId());
     }

@@ -22,10 +22,14 @@ public class MembraneConstants {
     public static final Path PHD_DIRECTORY = GIT_DIRECTORY.resolve("phd_sb_repo");
     public static final Path DATA_DIRECTORY = PHD_DIRECTORY.resolve("data");
     public static final Path DATASETS_DIRECTORY = DATA_DIRECTORY.resolve("datasets");
-    public static final Path PDBTM_ALPHA_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("pdbtm_alpha");
-    public static final Path PDBTM_ALPHA_DATASET_PDB_DIRECTORY = PDBTM_ALPHA_DATASET_DIRECTORY.resolve("pdb");
-    public static final Path PDBTM_BETA_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("pdbtm_beta");
-    public static final Path PDBTM_BETA_DATASET_PDB_DIRECTORY = PDBTM_BETA_DATASET_DIRECTORY.resolve("pdb");
+    public static final Path PDBTM_NR_ALPHA_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("pdbtm_nr_alpha");
+    public static final Path PDBTM_NR_ALPHA_DATASET_PDB_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("pdb");
+    public static final Path PDBTM_NR_ALPHA_DATASET_OPM_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("opm");
+    public static final Path PDBTM_NR_ALPHA_DATASET_PLIP_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("plip");
+    public static final Path PDBTM_NR_BETA_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("pdbtm_nr_beta");
+    public static final Path PDBTM_NR_BETA_DATASET_PDB_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("pdb");
+    public static final Path PDBTM_NR_BETA_DATASET_OPM_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("opm");
+    public static final Path PDBTM_NR_BETA_DATASET_PLIP_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("plip");
 
     public static Stream<String> lines(Path path) {
         try {
@@ -38,6 +42,14 @@ public class MembraneConstants {
     public static Stream<String> lines(String url) {
         try {
             return new BufferedReader(new InputStreamReader(new URL(url).openStream())).lines();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static Stream<Path> list(Path path) {
+        try {
+            return Files.list(path);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

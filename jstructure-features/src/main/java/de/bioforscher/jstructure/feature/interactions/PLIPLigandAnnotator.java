@@ -27,12 +27,16 @@ public class PLIPLigandAnnotator extends FeatureProvider {
         protein.getFeatureContainer().addFeature(new PLIPInteractionContainer(this, plipInteractions));
     }
 
+    public static Document getDocument(Chain chain) {
+        return PLIPRestServiceQuery.getLigandDocument(chain);
+    }
+
     private PLIPInteractionContainer processInternally(Chain chain, Document document) {
         return new PLIPInteractionContainer(this, PLIPLigandParser.parse(chain, document));
     }
 
     private void processInternally(Chain chain) {
-        Document document = PLIPRestServiceQuery.getLigandDocument(chain);
+        Document document = getDocument(chain);
         PLIPInteractionContainer container = processInternally(chain, document);
         chain.getFeatureContainer().addFeature(container);
         chain.aminoAcids()
