@@ -134,4 +134,17 @@ public class IdentifierFactory {
                     "contains a underscore _ which is used to separate the chain identifer from the pdbId");
         }
     }
+
+    public static ResidueIdentifier createResidueIdentifier(String residueNumberString) {
+        try {
+            // plain number
+            return createResidueIdentifier(Integer.valueOf(residueNumberString));
+        } catch (NumberFormatException e) {
+            // has insertion code
+            //TODO could use check for valid residue number pattern
+            int splitPoint = residueNumberString.length() - 1;
+            return createResidueIdentifier(Integer.valueOf(residueNumberString.substring(0, splitPoint)),
+                    residueNumberString.substring(splitPoint));
+        }
+    }
 }
