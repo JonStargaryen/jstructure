@@ -34,6 +34,7 @@
       <module name="jstructure-membrane-topology" target="1.8" />
       <module name="jstructure-mmm-bridge" target="1.8" />
       <module name="jstructure-mutation" target="1.8" />
+      <module name="jstructure-site" target="1.8" />
       <module name="jstructure-testutils" target="1.8" />
       <module name="jstructurestudies" target="1.8" />
       <module name="membrane" target="1.5" />

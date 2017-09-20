@@ -29,6 +29,7 @@ public class StructureAlignmentQuery {
         return atomMapping;
     }
 
+    //TODO needs support for AtomContainers/individual groups
     public static MatchingBehaviorStep of(GroupContainer reference, GroupContainer query) {
         return new MatchingBehaviorStep(reference, query);
     }

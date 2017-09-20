@@ -22,6 +22,8 @@ public class MembraneConstants {
     public static final Path PHD_DIRECTORY = GIT_DIRECTORY.resolve("phd_sb_repo");
     public static final Path DATA_DIRECTORY = PHD_DIRECTORY.resolve("data");
     public static final Path DATASETS_DIRECTORY = DATA_DIRECTORY.resolve("datasets");
+    // test performance and optimal setup of module annotation
+    public static final Path MODULARITY_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("modularity");
     public static final Path PDBTM_NR_ALPHA_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("pdbtm_nr_alpha");
     public static final Path PDBTM_NR_ALPHA_DATASET_PDB_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("pdb");
     public static final Path PDBTM_NR_ALPHA_DATASET_OPM_DIRECTORY = PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("opm");

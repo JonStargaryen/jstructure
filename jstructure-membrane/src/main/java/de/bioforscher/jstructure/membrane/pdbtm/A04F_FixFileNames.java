@@ -7,12 +7,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Fixes wrong file names (which were introduced by shitty batch-scripting).
  */
-public class A04_FixFileNames {
-    private static final Logger logger = LoggerFactory.getLogger(A04_FixFileNames.class);
+public class A04F_FixFileNames {
+    private static final Logger logger = LoggerFactory.getLogger(A04F_FixFileNames.class);
 
     public static void main(String[] args) {
         MembraneConstants.list(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("network"))
@@ -25,7 +26,7 @@ public class A04_FixFileNames {
                         logger.info("renaming {} to {}",
                                 filename,
                                 correctFilename);
-                        Files.move(path, path.getParent().resolve(correctFilename));
+                        Files.move(path, path.getParent().resolve(correctFilename), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e) {
                         throw new UncheckedIOException(e);
                     }

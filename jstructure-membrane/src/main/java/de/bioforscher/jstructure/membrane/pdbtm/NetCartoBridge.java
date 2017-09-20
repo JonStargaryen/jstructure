@@ -37,7 +37,7 @@ public class NetCartoBridge {
             "roles.dat").collect(Collectors.toList());
     private final Path workingDirectory;
 
-    NetCartoBridge(Path workingDirectory) {
+    public NetCartoBridge(Path workingDirectory) {
         this.workingDirectory = workingDirectory;
 
         MembraneConstants.list(workingDirectory)

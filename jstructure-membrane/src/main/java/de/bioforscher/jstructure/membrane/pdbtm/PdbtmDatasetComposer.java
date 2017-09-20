@@ -25,7 +25,7 @@ public class PdbtmDatasetComposer {
     private static final Logger logger = LoggerFactory.getLogger(PdbtmDatasetComposer.class);
     private final Path outputPath;
 
-    PdbtmDatasetComposer(String fetchUrl, Path outputPath) {
+    public PdbtmDatasetComposer(String fetchUrl, Path outputPath) {
         this.outputPath = outputPath;
         String selectedIds = MembraneConstants.lines(fetchUrl)
                 .filter(this::handlePdbId)
@@ -33,10 +33,22 @@ public class PdbtmDatasetComposer {
         MembraneConstants.write(this.outputPath.resolve("ids.list"), selectedIds);
     }
 
-    private boolean handlePdbId(String chainId) {
+    public PdbtmDatasetComposer(Path outputPath) {
+        this.outputPath = outputPath;
+        String selectedIds = MembraneConstants.lines(outputPath.resolve("ids.list"))
+                .filter(chainId -> handlePdbId(chainId, false))
+                .collect(Collectors.joining(System.lineSeparator()));
+        // overwrite list
+        MembraneConstants.write(this.outputPath.resolve("ids.list"), selectedIds);
+    }
+
+    private boolean handlePdbId(String chainId, boolean parseOpm) {
         try {
             String pdbId = chainId.split("_")[0];
             String chainIdentifier = chainId.split("_")[1];
+            logger.info("handling {} - parsing OPM: {}",
+                    chainId,
+                    parseOpm);
             Structure structure = StructureParser.source(pdbId).minimalParsing(true).parse();
             Optional<Chain> chain = structure.select()
                     .chainId(chainIdentifier)
@@ -48,15 +60,20 @@ public class PdbtmDatasetComposer {
             }
 
             // check if OPM document can be retrieved
-            Document opmDocument = OrientationsOfProteinsInMembranesAnnotator.getDocument(pdbId);
+            Document opmDocument = null;
+            if(parseOpm) {
+                OrientationsOfProteinsInMembranesAnnotator.getDocument(pdbId);
+            }
 
             // check for PLIP data
             Document plipDocument = PLIPIntraMolecularAnnotator.getDocument(chain.get());
 
             MembraneConstants.write(outputPath.resolve("pdb").resolve(pdbId + ".pdb"),
                     structure.getPdbRepresentation());
-            MembraneConstants.write(outputPath.resolve("opm").resolve(pdbId + ".opm"),
-                    opmDocument.html());
+            if(parseOpm) {
+                MembraneConstants.write(outputPath.resolve("opm").resolve(pdbId + ".opm"),
+                        opmDocument.html());
+            }
             MembraneConstants.write(outputPath.resolve("plip").resolve(chain.get().getChainIdentifier().getFullName() + ".plip"),
                     plipDocument.html());
 
@@ -76,5 +93,9 @@ public class PdbtmDatasetComposer {
                     e);
         }
         return false;
+    }
+
+    private boolean handlePdbId(String chainId) {
+        return handlePdbId(chainId, false);
     }
 }

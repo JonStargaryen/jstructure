@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -50,7 +49,7 @@ public class PLIPRestServiceQuery {
             Files.write(structureFilePath, chain.getPdbRepresentation().getBytes());
 
             // submit PLIP POST query
-            PlipPostRequest plipPostRequest = new PlipPostRequest(BASE_URL, secret, structureFilePath);
+            PLIPPostRequest plipPostRequest = new PLIPPostRequest("https://biosciences.hs-mittweida.de/plip/interaction/calculate/protein", secret, structureFilePath);
             return Jsoup.parse(plipPostRequest.getResultXml());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -85,18 +84,18 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    static class PlipPostRequest {
-        private static final Logger logger = LoggerFactory.getLogger(PlipPostRequest.class);
+    static class PLIPPostRequest {
+//        private static final Logger logger = LoggerFactory.getLogger(PLIPPostRequest.class);
         private final String credentials;
         private final Path pdbFilePath;
         private String plipUrl;
         private String resultXml;
 
-        PlipPostRequest(String plipUrl, String credentials, Path pdbFilePath) throws IOException {
+        PLIPPostRequest(String plipUrl, String credentials, Path pdbFilePath) throws IOException {
             this.plipUrl = plipUrl;
             this.credentials = credentials;
             this.pdbFilePath = pdbFilePath;
-            logger.info("creating PLIP POST for PDB file {}", pdbFilePath);
+//            logger.info("creating PLIP POST for PDB file {}", pdbFilePath);
             this.doPlipPost();
         }
 
@@ -121,8 +120,8 @@ public class PLIPRestServiceQuery {
             output.flush();
             writer.append(crlf).flush();
             writer.append("--").append(boundary).append("--").append(crlf).flush();
-            int responseCode = ((HttpURLConnection)connection).getResponseCode();
-            logger.info("PLIP REST service response code is " + responseCode);
+//            int responseCode = ((HttpURLConnection)connection).getResponseCode();
+//            logger.info("PLIP REST service response code is " + responseCode);
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder response = new StringBuilder();
 

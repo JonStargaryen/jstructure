@@ -80,7 +80,7 @@ public class GroupPrototypeParser {
         GroupPrototype.PolymerType polymerType = document.getElementsByTag("PDBx:type")
                 .stream()
                 .map(Element::text)
-                .map(this::mapToPolymerType)
+                .map(text -> mapToPolymerType(text, id))
                 .findFirst()
                 .orElseThrow(() -> new ParsingException("definition file for '" + id + "' did not contain type tag"));
 
@@ -135,8 +135,8 @@ public class GroupPrototypeParser {
                 .build();
     }
 
-    private GroupPrototype.PolymerType mapToPolymerType(String polymerType) {
-        if(polymerType.contains("peptide linking")) {
+    private GroupPrototype.PolymerType mapToPolymerType(String polymerType, String id) {
+        if(polymerType.contains("peptide linking") || (polymerType.contains("peptide") && polymerType.contains("linking"))) {
             return GroupPrototype.PolymerType.PEPTIDE_LINKING;
         }
         if(polymerType.contains("non-polymer")) {
@@ -154,7 +154,7 @@ public class GroupPrototypeParser {
         if(polymerType.contains("peptide") && polymerType.contains("terminus")) {
             return GroupPrototype.PolymerType.PEPTIDE_TERMINUS;
         }
-        throw new ParsingException(polymerType + " is an unknown polymer type");
+        throw new ParsingException("'" + polymerType + "' is an unknown polymer type for '" + id + "'");
     }
 
     private GroupPrototype createPrototype(String id) {

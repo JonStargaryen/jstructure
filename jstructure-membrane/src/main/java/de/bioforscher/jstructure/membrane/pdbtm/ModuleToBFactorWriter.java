@@ -20,19 +20,21 @@ public class ModuleToBFactorWriter {
     private final Path networkPath;
     private final Path bfactorPath;
 
-    ModuleToBFactorWriter(Path datasetPath) {
+    public ModuleToBFactorWriter(Path datasetPath) {
         this.pdbPath = datasetPath.resolve("pdb");
         this.networkPath = datasetPath.resolve("network");
         this.bfactorPath = networkPath.resolve("bfactor");
 
-        MembraneConstants.lines(datasetPath.resolve("ids.list"))
-                .forEach(this::handleId);
+        MembraneConstants.list(networkPath)
+                .filter(path -> path.toFile().getName().endsWith(".modules.dat"))
+                .forEach(this::handleFile);
     }
 
-    private void handleId(String id) {
-        logger.info("handling {}", id);
-        String pdbId = id.split("_")[0];
-        String chainId = id.split("_")[1];
+    private void handleFile(Path path) {
+        String name = path.toFile().getName();
+        logger.info("handling {}", name);
+        String pdbId = name.split("_")[0];
+        String chainId = name.split("_")[1];
 
         Structure chain = StructureParser.source(pdbPath.resolve(pdbId + ".pdb"))
                 .minimalParsing(true)
@@ -44,7 +46,14 @@ public class ModuleToBFactorWriter {
         // set bfactor to default case - i.e. no module assigned
         chain.atoms().forEach(atom -> atom.setBfactor(0));
 
-        MembraneConstants.lines(networkPath.resolve(id + "_plip.modules.dat"))
+        // fix 09/20/17: ignore modules < 10 nodes, use fraction to represent clusters (enables globally comparable coloring)
+        int numberOfSignificantModules = (int) MembraneConstants.lines(path)
+                .filter(line -> !line.startsWith("#"))
+                .filter(line -> line.split("---")[1].trim().split("\\s+").length > 9)
+                .count();
+        int[] processedClusters = { 0 };
+
+        MembraneConstants.lines(path)
                 .filter(line -> !line.startsWith("#"))
                 .forEach(line -> {
                     int moduleNumber = Integer.valueOf(line.split("\\s+")[0]);
@@ -56,17 +65,65 @@ public class ModuleToBFactorWriter {
                             moduleNumber,
                             residueIdentifiers);
 
+                    if(residueIdentifiers.size() < 10) {
+                        logger.info("skipping sparsely populated module");
+                        return;
+                    }
+
+                    processedClusters[0]++;
+
                     for(ResidueIdentifier residueIdentifier : residueIdentifiers) {
                         Group group = chain.select()
                                 .residueIdentifier(residueIdentifier)
                                 .asGroup();
-                        group.atoms().forEach(atom -> atom.setBfactor(moduleNumber));
+                        group.atoms().forEach(atom -> atom.setBfactor((float) processedClusters[0] / (float) numberOfSignificantModules));
                     }
                 });
 
         // write manipulated structure
-        Path outputPath = bfactorPath.resolve(id + ".pdb");
+        Path outputPath = bfactorPath.resolve(name + ".pdb");
         logger.info("writing output file {}", outputPath);
         MembraneConstants.write(outputPath, chain.getPdbRepresentation());
     }
+
+//    private void handleId(String id) {
+//        logger.info("handling {}", id);
+//        String pdbId = id.split("_")[0];
+//        String chainId = id.split("_")[1];
+//
+//        Structure chain = StructureParser.source(pdbPath.resolve(pdbId + ".pdb"))
+//                .minimalParsing(true)
+//                .parse()
+//                .select()
+//                .chainId(chainId)
+//                .asIsolatedStructure();
+//
+//        // set bfactor to default case - i.e. no module assigned
+//        chain.atoms().forEach(atom -> atom.setBfactor(0));
+//
+//        MembraneConstants.lines(networkPath.resolve(id + "_plip.modules.dat"))
+//                .filter(line -> !line.startsWith("#"))
+//                .forEach(line -> {
+//                    int moduleNumber = Integer.valueOf(line.split("\\s+")[0]);
+//                    List<ResidueIdentifier> residueIdentifiers = Pattern.compile("\\s+")
+//                            .splitAsStream(line.split("---")[1].trim())
+//                            .map(IdentifierFactory::createResidueIdentifier)
+//                            .collect(Collectors.toList());
+//                    logger.info("module '{}' contains nodes: {}",
+//                            moduleNumber,
+//                            residueIdentifiers);
+//
+//                    for(ResidueIdentifier residueIdentifier : residueIdentifiers) {
+//                        Group group = chain.select()
+//                                .residueIdentifier(residueIdentifier)
+//                                .asGroup();
+//                        group.atoms().forEach(atom -> atom.setBfactor(moduleNumber));
+//                    }
+//                });
+//
+//        // write manipulated structure
+//        Path outputPath = bfactorPath.resolve(id + ".pdb");
+//        logger.info("writing output file {}", outputPath);
+//        MembraneConstants.write(outputPath, chain.getPdbRepresentation());
+//    }
 }

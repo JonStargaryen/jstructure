@@ -35,7 +35,7 @@ public class NetworkExtractor {
     private final Path plipPath;
     private final Path networkPath;
 
-    NetworkExtractor(Path datasetPath) {
+    public NetworkExtractor(Path datasetPath) {
         this.plipIntraMolecularAnnotator = new PLIPIntraMolecularAnnotator();
         this.listPath = datasetPath.resolve("ids.list");
         this.pdbPath = datasetPath.resolve("pdb");
@@ -61,11 +61,14 @@ public class NetworkExtractor {
 
         // extract network files
         Pair<String, String> naiveNetworks = getNaiveNetwork(chain);
+//        MembraneConstants.write(networkPath.resolve(id + "_strict_nc.dat"), naiveNetworks.getLeft());
+//        MembraneConstants.write(networkPath.resolve(id + "_generous_nc.dat"), naiveNetworks.getRight());
         MembraneConstants.write(networkPath.resolve(id + "_strict.dat"), naiveNetworks.getLeft());
         MembraneConstants.write(networkPath.resolve(id + "_generous.dat"), naiveNetworks.getRight());
 
         String document = MembraneConstants.lines(plipPath.resolve(id + ".plip")).collect(Collectors.joining(System.lineSeparator()));
         MembraneConstants.write(networkPath.resolve(id + "_plip.dat"), getPlipNetwork(chain, document));
+//        MembraneConstants.write(networkPath.resolve(id + "_plip_nc.dat"), getPlipNetwork(chain, document));
     }
 
     private String getPlipNetwork(Chain chain, String document) {
@@ -82,6 +85,7 @@ public class NetworkExtractor {
             for(int j = i + 1; j < aminoAcids.size(); j++) {
                 AminoAcid aminoAcid2 = aminoAcids.get(j);
                 if(j == i + 1) {
+                    // comment next line to ignore consecutive amino acids
                     contacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
                     continue;
                 }
@@ -114,6 +118,7 @@ public class NetworkExtractor {
             for(int j = i + 1; j < aminoAcids.size(); j++) {
                 AminoAcid aminoAcid2 = aminoAcids.get(j);
                 if(j == i + 1) {
+                    // comment next two lines to ignore consecutive amino acids
                     generousContacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
                     strictContacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
                     continue;
