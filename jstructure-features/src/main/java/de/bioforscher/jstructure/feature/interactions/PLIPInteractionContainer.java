@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 public class PLIPInteractionContainer extends FeatureContainerEntry {
     private final List<HalogenBond> halogenBonds;
     private final List<HydrogenBond> hydrogenBonds;
+    private final List<HydrophobicInteraction> hydrophobicInteractions;
     private final List<MetalComplex> metalComplexes;
     private final List<PiCationInteraction> piCationInteractions;
     private final List<PiStacking> piStackings;
@@ -28,6 +29,7 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
         super(featureProvider);
         halogenBonds = filterInteractions(plipInteractions, HalogenBond.class);
         hydrogenBonds = filterInteractions(plipInteractions, HydrogenBond.class);
+        hydrophobicInteractions = filterInteractions(plipInteractions, HydrophobicInteraction.class);
         metalComplexes = filterInteractions(plipInteractions, MetalComplex.class);
         piCationInteractions = filterInteractions(plipInteractions, PiCationInteraction.class);
         piStackings = filterInteractions(plipInteractions, PiStacking.class);
@@ -43,7 +45,7 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
     }
 
     public List<PLIPInteraction> getInteractions() {
-        return Stream.of(halogenBonds, hydrogenBonds, metalComplexes, piCationInteractions,
+        return Stream.of(halogenBonds, hydrogenBonds, hydrophobicInteractions, metalComplexes, piCationInteractions,
                 piStackings, saltBridges, waterBridges)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
@@ -73,6 +75,10 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
 
     public List<HydrogenBond> getHydrogenBonds() {
         return hydrogenBonds;
+    }
+
+    public List<HydrophobicInteraction> getHydrophobicInteractions() {
+        return hydrophobicInteractions;
     }
 
     public List<MetalComplex> getMetalComplexes() {
