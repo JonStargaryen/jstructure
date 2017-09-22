@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.pdbtm;
+package de.bioforscher.jstructure.membrane.modularity.pdbtm;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import org.slf4j.Logger;

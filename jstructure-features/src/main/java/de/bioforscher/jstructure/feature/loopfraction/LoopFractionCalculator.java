@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
-import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.SetOperations;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -66,7 +66,7 @@ public class LoopFractionCalculator extends FeatureProvider {
 
     private void smoothLoopFraction(Chain chain) {
         // smooth values for all groups with the complete set of neighbors
-        Combinatorics.fragmentsOf(chain.aminoAcids()
+        SetOperations.fragmentsOf(chain.aminoAcids()
                         .collect(Collectors.toList()), WINDOW_SIZE)
                 .forEach(this::smoothLoopFraction);
 

@@ -1,9 +1,9 @@
-package de.bioforscher.jstructure.membrane.foldons.netcarto;
+package de.bioforscher.jstructure.membrane.modularity;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
-import de.bioforscher.jstructure.membrane.pdbtm.ModuleToBFactorWriter;
-import de.bioforscher.jstructure.membrane.pdbtm.NetworkExtractor;
-import de.bioforscher.jstructure.membrane.pdbtm.PdbtmDatasetComposer;
+import de.bioforscher.jstructure.membrane.modularity.pdbtm.ModuleToBFactorWriter;
+import de.bioforscher.jstructure.membrane.modularity.pdbtm.NetworkExtractor;
+import de.bioforscher.jstructure.membrane.modularity.pdbtm.PdbtmDatasetComposer;
 
 import java.nio.file.Path;
 
@@ -18,7 +18,7 @@ import java.nio.file.Path;
  * Available structures:
  * <ul>
  *     <li>Englander, 2014 -> Hu, 2013: Ribonuclease H (PDB: 1f21_A)</li>
- *     <li>Englander, 2014 -> Roder, 1988 -> Takano, 1981: Cyt c (PDB: 3cyt_I ?)</li>
+ *     <li>Englander, 2014 -> Roder, 1988 -> Takano, 1981, Bai, 1995: Cyt c (PDB: 3cyt_I ?)</li>
  *     <li>Hleap, 2013: Niemann-Pick disease, type C1 protein (PDB: 3gkh_A)</li>
  *     <li>Hleap, 2013: Isoamylase (PDB: 1bf2_A)</li>
  * </ul>

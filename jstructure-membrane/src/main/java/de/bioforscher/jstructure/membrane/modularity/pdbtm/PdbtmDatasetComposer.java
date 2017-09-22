@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.pdbtm;
+package de.bioforscher.jstructure.membrane.modularity.pdbtm;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;

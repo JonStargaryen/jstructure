@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.pdbtm;
+package de.bioforscher.jstructure.membrane.modularity.pdbtm;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import org.slf4j.Logger;
@@ -18,6 +18,8 @@ public class A04F_FixFileNames {
     public static void main(String[] args) {
         MembraneConstants.list(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("network"))
                 .filter(path -> path.toFile().getName().contains("_plip.dat."))
+//        MembraneConstants.list(MembraneConstants.MODULARITY_DATASET_DIRECTORY.resolve("network"))
+//                .filter(path -> path.toFile().getName().contains(".dat."))
                 .forEach(path -> {
                     try {
                         String filename = path.toFile().getName();

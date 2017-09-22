@@ -1,9 +1,9 @@
-package de.bioforscher.jstructure.membrane.pdbtm;
+package de.bioforscher.jstructure.membrane.modularity.pdbtm;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
-import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.SetOperations;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 
 /**
  * Execute the NetCarlo-algorithm on a dataset.
- *
- * TODO exclude consecutive positions?
- * TODO add hydrophobic interactions?
+ * TODO can multiple links between nodes emulate a connections strength? i.e. hbonds > hydrophobic interactions
  */
 public class NetworkExtractor {
     private static final Logger logger = LoggerFactory.getLogger(NetworkExtractor.class);
@@ -125,13 +123,13 @@ public class NetworkExtractor {
                 }
 
                 List<Atom> atoms2 = aminoAcid2.getAtoms();
-                if(Combinatorics.cartesianProductOf(atoms1, atoms2).anyMatch(this::isGenerousNaiveContact)) {
+                if(SetOperations.cartesianProductOf(atoms1, atoms2).anyMatch(this::isGenerousNaiveContact)) {
                     generousContacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
                 } else {
                     // if generous threshold is not met, the strict one can neither
                     continue;
                 }
-                if(Combinatorics.cartesianProductOf(atoms1, atoms2).anyMatch(this::isStrictNaiveContact)) {
+                if(SetOperations.cartesianProductOf(atoms1, atoms2).anyMatch(this::isStrictNaiveContact)) {
                     strictContacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
                 }
             }

@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.sse.dssp;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.TorsionAngles;
-import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.SetOperations;
 import de.bioforscher.jstructure.model.Fragment;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
@@ -801,7 +801,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
      * methods allow to resolve their location.
      */
     private void calculateHAtoms(List<AminoAcid> residues) {
-        Combinatorics.fragmentsOf(residues, 2)
+        SetOperations.fragmentsOf(residues, 2)
                 .filter(this::lacksBackboneHydrogen)
                 .forEach(this::calcSimpleH);
     }

@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.asa;
 
-import de.bioforscher.jstructure.model.Combinatorics;
+import de.bioforscher.jstructure.model.SetOperations;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.biojava.nbio.structure.StructureException;
@@ -29,7 +29,7 @@ public class AccessibleSurfaceAreaCalculatorTest {
         List<Double> jstructureASA = getJStructureASA(id);
         List<Double> biojavaASA = getBioJavaASA(id);
 
-        Combinatorics.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
+        SetOperations.sequentialPairsOf(jstructureASA, biojavaASA).forEach(doublePair ->
                 Assert.assertEquals("asa values do not match", doublePair.getLeft(), doublePair.getRight(), 0.001)
         );
     }

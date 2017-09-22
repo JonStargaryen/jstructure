@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.model;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -9,9 +11,20 @@ import java.util.stream.Stream;
  * Access to combinatoric capabilities such as constructing {@link Fragment} or {@link Pair} objects.
  * Created by S on 15.11.2016.
  */
-public class Combinatorics {
-    private Combinatorics() {
+public class SetOperations {
+    private SetOperations() {
         // deny instantiation
+    }
+
+    public static <T> Set<T> union(final Collection<T> collection1, final Collection<T> collection2) {
+        return Stream.concat(collection1.stream(), collection2.stream())
+                .collect(Collectors.toSet());
+    }
+
+    public static <T> Set<T> intersection(final Collection<T> collection1, final Collection<T> collection2) {
+        return collection1.stream()
+                .filter(collection2::contains)
+                .collect(Collectors.toSet());
     }
 
     /**
