@@ -17,10 +17,10 @@ import java.nio.file.Path;
  *
  * Available structures:
  * <ul>
+ *     <li>Hleap, 2013: Isoamylase (PDB: 1bf2_A)</li>
  *     <li>Englander, 2014 -> Hu, 2013: Ribonuclease H (PDB: 1f21_A)</li>
  *     <li>Englander, 2014 -> Roder, 1988 -> Takano, 1981, Bai, 1995: Cyt c (PDB: 3cyt_I ?)</li>
  *     <li>Hleap, 2013: Niemann-Pick disease, type C1 protein (PDB: 3gkh_A)</li>
- *     <li>Hleap, 2013: Isoamylase (PDB: 1bf2_A)</li>
  * </ul>
  */
 public class NetCartoValidation {

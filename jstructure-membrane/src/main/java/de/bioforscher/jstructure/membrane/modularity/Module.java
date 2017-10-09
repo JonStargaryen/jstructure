@@ -7,10 +7,16 @@ import java.util.List;
  * amino acids and the contract, that for a chain each amino acid can only be assigned to one module.
  */
 public class Module {
+    private final String id;
     private final List<String> nodeNames;
 
-    public Module(List<String> nodeNames) {
+    public Module(String id, List<String> nodeNames) {
+        this.id = id;
         this.nodeNames = nodeNames;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public List<String> getNodeNames() {
