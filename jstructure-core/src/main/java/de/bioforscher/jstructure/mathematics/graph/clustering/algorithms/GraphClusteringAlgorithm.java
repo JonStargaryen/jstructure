@@ -1,10 +1,8 @@
 package de.bioforscher.jstructure.mathematics.graph.clustering.algorithms;
 
 import de.bioforscher.jstructure.mathematics.graph.Graph;
-import de.bioforscher.jstructure.mathematics.graph.clustering.Module;
-
-import java.util.List;
+import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 
 public interface GraphClusteringAlgorithm {
-    <E> List<Module<E>> clusterGraph(Graph<E> graph);
+    <N> PartitionedGraph<N> clusterGraph(Graph<N> graph);
 }

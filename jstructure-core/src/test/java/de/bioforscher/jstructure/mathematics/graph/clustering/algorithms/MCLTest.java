@@ -2,12 +2,11 @@ package de.bioforscher.jstructure.mathematics.graph.clustering.algorithms;
 
 import de.bioforscher.jstructure.mathematics.graph.Edge;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
-import de.bioforscher.jstructure.mathematics.graph.clustering.Module;
+import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,13 +55,6 @@ public class MCLTest {
     }
 
     @Test
-    public void testEqualsOnModules() {
-        Module<String> m1 = new Module<>("1", graph);
-        Module<String> m2 = new Module<>("2", graph);
-        Assert.assertTrue(mcl.isDuplicate(m1, m2));
-    }
-
-    @Test
     public void shouldReportIdentity() {
         Assert.assertTrue(mcl.numberEqual(1, 1, 4));
         Assert.assertTrue(mcl.numberEqual(0.999999, 1, 4));
@@ -85,16 +77,16 @@ public class MCLTest {
                 MCL.DEFAULT_MAX_ITERATIONS,
                 Edge::getWeight);
 
-        List<Module<String>> clustering = mcl.clusterGraph(graph);
+        PartitionedGraph<String> clustering = mcl.clusterGraph(graph);
 
         Assert.assertEquals("cluster size does not match expectation",
                 2,
-                clustering.size());
-        Assert.assertTrue(clustering.get(0).containsNode(cat));
-        Assert.assertTrue(clustering.get(0).containsNode(hat));
-        Assert.assertTrue(clustering.get(0).containsNode(bat));
-        Assert.assertTrue(clustering.get(1).containsNode(bit));
-        Assert.assertTrue(clustering.get(1).containsNode(hit));
-        Assert.assertTrue(clustering.get(1).containsNode(fit));
+                clustering.getNumberOfModules());
+        Assert.assertTrue("clustering compromised", clustering.getModules().get(0).containsNode(cat));
+        Assert.assertTrue("clustering compromised", clustering.getModules().get(0).containsNode(hat));
+        Assert.assertTrue("clustering compromised", clustering.getModules().get(0).containsNode(bat));
+        Assert.assertTrue("clustering compromised", clustering.getModules().get(1).containsNode(bit));
+        Assert.assertTrue("clustering compromised", clustering.getModules().get(1).containsNode(hit));
+        Assert.assertTrue("clustering compromised", clustering.getModules().get(1).containsNode(fit));
     }
 }

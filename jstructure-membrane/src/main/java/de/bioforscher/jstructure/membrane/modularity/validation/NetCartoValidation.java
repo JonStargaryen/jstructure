@@ -1,9 +1,9 @@
-package de.bioforscher.jstructure.membrane.modularity;
+package de.bioforscher.jstructure.membrane.modularity.validation;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.modularity.pdbtm.ModuleToBFactorWriter;
 import de.bioforscher.jstructure.membrane.modularity.pdbtm.NetworkExtractor;
-import de.bioforscher.jstructure.membrane.modularity.pdbtm.PdbtmDatasetComposer;
+import de.bioforscher.jstructure.membrane.DatasetComposer;
 
 import java.nio.file.Path;
 
@@ -11,8 +11,8 @@ import java.nio.file.Path;
  * Compare NetCarto modules and parameters with experimental data to ensure a valid setup.
  * Especially wants to check:
  * <ul>
- *     <li>the best contact definition: PLIP, 0.6 A (Krishnan, 2007), 1.0 A (Khan, 2015)</li>
- *     <li>whether consecutive amino acids should be linked explicitly</li>
+ *     <li>the best contact definition: PLIP, 0.6 A (Krishnan, 2007), 1.0 A (Khan, 2015) --> use PLIP</li>
+ *     <li>whether consecutive amino acids should be linked explicitly --> true</li>
  * </ul>
  *
  * Available structures:
@@ -28,7 +28,7 @@ public class NetCartoValidation {
         Path dataset = MembraneConstants.MODULARITY_DATASET_DIRECTORY;
 
         // create dataset files from definition file
-        new PdbtmDatasetComposer(dataset);
+        new DatasetComposer(dataset);
 
         new NetworkExtractor(dataset);
 

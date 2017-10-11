@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.mathematics.graph.clustering.algorithms;
 
 import de.bioforscher.jstructure.mathematics.graph.Edge;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
+import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.clustering.Module;
 
 import java.util.*;
@@ -42,7 +43,7 @@ public class MCL implements GraphClusteringAlgorithm {
     }
 
     @Override
-    public <N> List<Module<N>> clusterGraph(Graph<N> graph) {
+    public <N> PartitionedGraph<N> clusterGraph(Graph<N> graph) {
         List<N> nodes = graph.getNodes();
         List<Edge<N>> edges = graph.getEdges();
 
@@ -58,8 +59,7 @@ public class MCL implements GraphClusteringAlgorithm {
         double[] M = new double[n2];
         double[] _M;
 
-        for (int e = 0; e < edges.size(); e++) {
-            Edge<N> edge = edges.get(e);
+        for (Edge<N> edge : edges) {
             int i = id2Position.get(edge.getLeft());
             int j = id2Position.get(edge.getRight());
 
@@ -97,14 +97,10 @@ public class MCL implements GraphClusteringAlgorithm {
             iterations++;
         }
 
-        List<Module<N>> clusters = assign(M, n, nodes);
-
-//        clusters = removeDuplicates(clusters);
-
-        return clusters;
+        return assign(M, n, graph);
     }
 
-    private <N> List<Module<N>> assign(double[] M, int n, List<N> nodes) {
+    private <N> PartitionedGraph<N> assign(double[] M, int n, Graph<N> graph) {
         List<Module<N>> clusters = new ArrayList<>();
 
         for (int i = 0; i < n; i++) {
@@ -112,7 +108,7 @@ public class MCL implements GraphClusteringAlgorithm {
             for (int j = 0; j < n; j++) {
                 // Row-wise attractors and elements that they attract belong in same cluster
                 if(Math.round(M[i * n + j] * 1000) / 1000 > 0) {
-                    cluster.add(nodes.get(j));
+                    cluster.add(graph.getNodes().get(j));
                 }
             }
 
@@ -121,24 +117,7 @@ public class MCL implements GraphClusteringAlgorithm {
             }
         }
 
-        return clusters;
-    }
-
-    private <N> List<Module<N>> removeDuplicates(List<Module<N>> clusters) {
-        List<Module<N>> filteredClusters = new ArrayList<>();
-        for (int i = 0; i < clusters.size(); i++) {
-            for (int j = 0; j < clusters.size(); j++) {
-                if(i == j || !isDuplicate(clusters.get(i), clusters.get(j))) {
-                    filteredClusters.add(clusters.get(j));
-                }
-            }
-        }
-        return filteredClusters;
-    }
-
-    <E> boolean isDuplicate(Module<E> module1, Module<E> module2) {
-        //TODO check
-        return module1.getNodes().equals(module2.getNodes());
+        return new PartitionedGraph<>(graph, clusters);
     }
 
     private boolean hasConverged(double[] M, double[] _M, int n2, int roundFactor) {

@@ -19,4 +19,6 @@ public class Edge<N> extends Pair<N, N> {
     public double getWeight() {
         return weight;
     }
+
+    //TODO a way to associated data could be needed in the future
 }

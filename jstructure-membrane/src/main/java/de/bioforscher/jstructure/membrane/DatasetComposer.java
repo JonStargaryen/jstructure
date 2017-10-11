@@ -1,8 +1,7 @@
-package de.bioforscher.jstructure.membrane.modularity.pdbtm;
+package de.bioforscher.jstructure.membrane;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
-import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -21,11 +20,11 @@ import java.util.stream.Collectors;
  * chain is present in the PDB, otherwise the chain is ignored and will not be present in the local list. Same is true
  * for the OPM and PLIP data. Everything ought to be sane for a chain to be added to the dataset.
  */
-public class PdbtmDatasetComposer {
-    private static final Logger logger = LoggerFactory.getLogger(PdbtmDatasetComposer.class);
+public class DatasetComposer {
+    private static final Logger logger = LoggerFactory.getLogger(DatasetComposer.class);
     private final Path outputPath;
 
-    public PdbtmDatasetComposer(String fetchUrl, Path outputPath) {
+    public DatasetComposer(String fetchUrl, Path outputPath) {
         this.outputPath = outputPath;
         String selectedIds = MembraneConstants.lines(fetchUrl)
                 .filter(this::handlePdbId)
@@ -33,7 +32,7 @@ public class PdbtmDatasetComposer {
         MembraneConstants.write(this.outputPath.resolve("ids.list"), selectedIds);
     }
 
-    public PdbtmDatasetComposer(Path outputPath) {
+    public DatasetComposer(Path outputPath) {
         this.outputPath = outputPath;
         String selectedIds = MembraneConstants.lines(outputPath.resolve("ids.list"))
                 .filter(chainId -> handlePdbId(chainId, false))

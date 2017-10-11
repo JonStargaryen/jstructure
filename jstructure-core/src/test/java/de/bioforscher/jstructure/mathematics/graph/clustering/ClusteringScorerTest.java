@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.mathematics.graph.clustering;
 
 import de.bioforscher.jstructure.mathematics.graph.Graph;
+import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Before;
@@ -13,11 +14,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ClusteringScorerTest {
-    private Pair<List<Module<String>>, List<Module<String>>> _syn1;
-    private Pair<List<Module<String>>, List<Module<String>>> _1bf2;
-    private Pair<List<Module<String>>, List<Module<String>>> _1f21;
-    private Pair<List<Module<String>>, List<Module<String>>> _3cyt;
-    private Pair<List<Module<String>>, List<Module<String>>> _3gkh;
+    private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _syn1;
+    private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _1bf2;
+    private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _1f21;
+    private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _3cyt;
+    private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _3gkh;
 
     @Before
     public void setup() {
@@ -49,31 +50,41 @@ public class ClusteringScorerTest {
                 createClusterFromModulesDat(TestUtils.getResourceAsLines("modularity/3gkh_A_plip.modules.dat")));
     }
 
-    private List<Module<String>> createClusterFromModulesDat(List<String> lines) {
-        return lines.stream()
-                .filter(line -> !line.startsWith("#"))
-                .map(line -> new Module<>(line.split("\\s+")[0],
-                        new Graph<>(Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
-                                .collect(Collectors.toList()), new ArrayList<>())))
-                .collect(Collectors.toList());
+    private PartitionedGraph<String> createClusterFromModulesDat(List<String> lines) {
+        List<String> nodes = new ArrayList<>();
+        List<Module<String>> modules = new ArrayList<>();
+
+        for(String line : lines) {
+            if(line.startsWith("#")) {
+                continue;
+            }
+            Module<String> module = new Module<>(line.split("\\s+")[0],
+                    new Graph<>(Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
+                            .collect(Collectors.toList()), new ArrayList<>()));
+            modules.add(module);
+            nodes.addAll(module.getNodes());
+        }
+
+        return new PartitionedGraph<>(new Graph<>(nodes, new ArrayList<>()), modules);
     }
 
-    private List<Module<String>> createClusterManually(String... ranges) {
+    private PartitionedGraph<String> createClusterManually(String... ranges) {
+        List<String> nodes = new ArrayList<>();
         List<Module<String>> modules = new ArrayList<>();
         for(String range : ranges) {
             String id = range.split(":")[0];
             String rawRanges = range.split(":")[1];
 
-            List<String> nodes = Pattern.compile(",").splitAsStream(rawRanges)
+            List<String> n = Pattern.compile(",").splitAsStream(rawRanges)
                     .map(rawRange -> rawRange.split("-"))
                     .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1)
                             .mapToObj(String::valueOf))
                     .collect(Collectors.toList());
-
-            modules.add(new Module<>(id, new Graph<>(nodes, new ArrayList<>())));
+            nodes.addAll(n);
+            modules.add(new Module<>(id, new Graph<>(n, new ArrayList<>())));
         }
 
-        return modules;
+        return new PartitionedGraph<>(new Graph<>(nodes, new ArrayList<>()), modules);
     }
 
     @Test

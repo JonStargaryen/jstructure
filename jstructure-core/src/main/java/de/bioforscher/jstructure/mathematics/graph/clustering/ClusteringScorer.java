@@ -1,10 +1,10 @@
 package de.bioforscher.jstructure.mathematics.graph.clustering;
 
+import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.model.SetOperations;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,18 +13,25 @@ import java.util.stream.Stream;
  * reference: Wagner and Wagner, 2007 - Comparing Clusterings - An Overview
  */
 public class ClusteringScorer {
-    public static <N> double naiveScore(List<Module<N>> clustering1, List<Module<N>> clustering2) {
+    /**
+     * Related to Meila-Heckerman- and Maximum-Match-Measure.
+     * @param clustering1
+     * @param clustering2
+     * @param <N>
+     * @return
+     */
+    public static <N> double naiveScore(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {
         // determine more refined clustering
-        List<Module<N>> fineClustering = clustering2.size() > clustering1.size() ? clustering2 : clustering1;
-        List<Module<N>> coarseClustering = clustering2.size() > clustering1.size() ? clustering1 : clustering2;
+        PartitionedGraph<N> fineClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering2 : clustering1;
+        PartitionedGraph<N>  coarseClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering1 : clustering2;
 
         // determine total number of elements
-        int totalNumberOfElements = extractNodes(fineClustering, coarseClustering).size();
+        int totalNumberOfElements = extractAllReferencedNodes(fineClustering, coarseClustering).size();
 
         // for each of fine clusters
-        return fineClustering.stream()
+        return fineClustering.getModules().stream()
                 // determine maximum number of shared elements with a coarse set
-                .mapToInt(fineModule -> coarseClustering.stream()
+                .mapToInt(fineModule -> coarseClustering.getModules().stream()
                         .map(coarseModule -> SetOperations.intersection(fineModule.getNodes(), coarseModule.getNodes()))
                         .mapToInt(Collection::size)
                         .max()
@@ -32,16 +39,16 @@ public class ClusteringScorer {
                 .sum() / (double) totalNumberOfElements;
     }
 
-    public static <N> double chiSquaredCoefficient(List<Module<N>> clustering1, List<Module<N>> clustering2) {
+    public static <N> double chiSquaredCoefficient(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {
         double chi = 0;
-        int totalNumberOfElements = extractNodes(clustering1, clustering2).size();
+        int totalNumberOfElements = extractAllReferencedNodes(clustering1, clustering2).size();
 
-        for(int i = 0; i < clustering1.size(); i++) {
-            Module<N> module1 = clustering1.get(i);
+        for(int i = 0; i < clustering1.getNumberOfModules(); i++) {
+            Module<N> module1 = clustering1.getModules().get(i);
             int size1 = module1.getNumberOfNodes();
 
-            for(int j = 0; j < clustering2.size(); j++) {
-                Module<N> module2 = clustering2.get(j);
+            for(int j = 0; j < clustering2.getNumberOfModules(); j++) {
+                Module<N> module2 = clustering2.getModules().get(j);
                 int size2 = module2.getNumberOfNodes();
 
                 double eij = (size1 * size2) / (double) totalNumberOfElements;
@@ -55,8 +62,8 @@ public class ClusteringScorer {
         return chi;
     }
 
-    public static <N> double randIndex(List<Module<N>> clustering1, List<Module<N>> clustering2) {
-        List<N> nodes = extractNodes(clustering1, clustering2);
+    public static <N> double randIndex(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {
+        List<N> nodes = extractAllReferencedNodes(clustering1, clustering2);
         int totalNumberOfElements = nodes.size();
 
         int n11 = 0; // in same cluster in both solutions
@@ -64,12 +71,12 @@ public class ClusteringScorer {
 
         for(int i = 0; i < nodes.size() - 1; i++) {
             N node1 = nodes.get(i);
-            Optional<Module<N>> module11 = findModuleOfNode(node1, clustering1);
-            Optional<Module<N>> module12 = findModuleOfNode(node1, clustering2);
+            Module module11 = clustering1.getModuleOf(node1);
+            Module module12 = clustering2.getModuleOf(node1);
             for(int j = i + 1; j < nodes.size(); j++) {
                 N node2 = nodes.get(j);
-                Optional<Module<N>> module21 = findModuleOfNode(node2, clustering1);
-                Optional<Module<N>> module22 = findModuleOfNode(node2, clustering2);
+                Module module21 = clustering1.getModuleOf(node2);
+                Module module22 = clustering2.getModuleOf(node2);
 
                 // same module in both solutions
                 if(module11.equals(module21) && module21.equals(module22)) {
@@ -83,16 +90,9 @@ public class ClusteringScorer {
         return 2 * (n11 + n00) / (double) (totalNumberOfElements * (totalNumberOfElements - 1));
     }
 
-    private static <N> Optional<Module<N>> findModuleOfNode(N node, List<Module<N>> clustering) {
-        return clustering.stream()
-                .filter(module -> module.containsNode(node))
-                .findFirst();
-    }
-
-    private static <N> List<N> extractNodes(List<Module<N>> clustering1, List<Module<N>> clustering2) {
+    private static <N> List<N> extractAllReferencedNodes(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {
         return Stream.of(clustering1, clustering2)
-                .flatMap(Collection::stream)
-                .map(Module::getNodes)
+                .map(PartitionedGraph::getNodes)
                 .flatMap(Collection::stream)
                 .distinct()
                 .collect(Collectors.toList());

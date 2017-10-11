@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 public interface AtomContainer extends StructureContainer, Selectable,
         Calculable<LinearAlgebra.AtomContainerLinearAlgebra> {
     /**
-     * Never manipulate the returned collection as it is not guaranteed the actually modify the internal list(s).
+     * Never manipulate the returned collection as it is not guaranteed to actually modify the internal list(s).
      * @return all associated atoms
      */
     List<Atom> getAtoms();

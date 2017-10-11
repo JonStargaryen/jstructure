@@ -1,20 +1,17 @@
 package de.bioforscher.jstructure.membrane.modularity.pdbtm;
 
-import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
-import de.bioforscher.jstructure.model.SetOperations;
+import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
 import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.model.SetOperations;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -27,15 +24,12 @@ public class NetworkExtractor {
     private static final Logger logger = LoggerFactory.getLogger(NetworkExtractor.class);
     private static final double STRICT_NAIVE_DISTANCE_CUTOFF = 0.6;
     private static final double GENEROUS_NAIVE_DISTANCE_CUTOFF = 1.0;
-    private final PLIPIntraMolecularAnnotator plipIntraMolecularAnnotator;
-    private final Path listPath;
     private final Path pdbPath;
     private final Path plipPath;
     private final Path networkPath;
 
     public NetworkExtractor(Path datasetPath) {
-        this.plipIntraMolecularAnnotator = new PLIPIntraMolecularAnnotator();
-        this.listPath = datasetPath.resolve("ids.list");
+        Path listPath = datasetPath.resolve("ids.list");
         this.pdbPath = datasetPath.resolve("pdb");
         this.plipPath = datasetPath.resolve("plip");
         this.networkPath = datasetPath.resolve("network");
@@ -70,32 +64,7 @@ public class NetworkExtractor {
     }
 
     private String getPlipNetwork(Chain chain, String document) {
-        plipIntraMolecularAnnotator.process(chain, Jsoup.parse(document));
-
-        List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-        StringJoiner contacts = new StringJoiner(System.lineSeparator());
-
-        for(int i = 0; i < aminoAcids.size() - 1; i++) {
-            AminoAcid aminoAcid1 = aminoAcids.get(i);
-            PLIPInteractionContainer interactions1 = aminoAcid1.getFeature(PLIPInteractionContainer.class);
-
-            for(int j = i + 1; j < aminoAcids.size(); j++) {
-                AminoAcid aminoAcid2 = aminoAcids.get(j);
-                if(j == i + 1) {
-                    // comment next line to ignore consecutive amino acids
-                    contacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
-                    continue;
-                }
-
-                PLIPInteractionContainer interactions2 = aminoAcid2.getFeature(PLIPInteractionContainer.class);
-
-                if(!Collections.disjoint(interactions1.getInteractions(), interactions2.getInteractions())) {
-                    contacts.add(aminoAcid1.getResidueIdentifier() + " " + aminoAcid2.getResidueIdentifier());
-                }
-            }
-        }
-
-        return contacts.toString();
+        return GraphFactory.createGraphFromPlipDocument(chain, document).toNetCartoString();
     }
 
     /**
