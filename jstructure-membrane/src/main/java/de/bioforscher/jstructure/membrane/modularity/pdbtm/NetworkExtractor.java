@@ -75,7 +75,6 @@ public class NetworkExtractor {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
         StringJoiner contacts = new StringJoiner(System.lineSeparator());
 
-        // russian way of doing both thresholds in the same run as calculation is somewhat taxing
         for(int i = 0; i < aminoAcids.size() - 1; i++) {
             AminoAcid aminoAcid1 = aminoAcids.get(i);
             PLIPInteractionContainer interactions1 = aminoAcid1.getFeature(PLIPInteractionContainer.class);

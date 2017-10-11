@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * Access to combinatoric capabilities such as constructing {@link Fragment} or {@link Pair} objects.
+ * Access to combinatorial capabilities such as constructing {@link Fragment} or {@link Pair} objects.
  * Created by S on 15.11.2016.
  */
 public class SetOperations {
@@ -21,10 +21,23 @@ public class SetOperations {
                 .collect(Collectors.toSet());
     }
 
+    public static <T> int sizeOfUnion(Collection<T> collection1, Collection<T> collection2) {
+        return (int) Stream.concat(collection1.stream(), collection2.stream())
+                .distinct()
+                .count();
+    }
+
     public static <T> Set<T> intersection(final Collection<T> collection1, final Collection<T> collection2) {
         return collection1.stream()
                 .filter(collection2::contains)
                 .collect(Collectors.toSet());
+    }
+
+    public static <T> int sizeOfInteraction(Collection<T> collection1, Collection<T> collection2) {
+        return (int) collection1.stream()
+                .filter(collection2::contains)
+                .distinct()
+                .count();
     }
 
     /**

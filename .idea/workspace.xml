@@ -2,16 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/1bf2_A_plip.modules.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/1f21_A_plip.modules.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/3cyt_I_plip.modules.dat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/3gkh_A_plip.modules.dat" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/3cyt_I_generous.modules.dat" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Edge.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Graph.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/Module.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/GraphClusteringAlgorithm.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCL.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/ClusteringScorerTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCLTest.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/Module.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorer.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/ClusteringScorer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/1bf2_A_plip.modules.dat" afterPath="$PROJECT_DIR$/jstructure-core/src/test/resources/modularity/1bf2_A_plip.modules.dat" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/1f21_A_plip.modules.dat" afterPath="$PROJECT_DIR$/jstructure-core/src/test/resources/modularity/1f21_A_plip.modules.dat" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/3cyt_I_plip.modules.dat" afterPath="$PROJECT_DIR$/jstructure-core/src/test/resources/modularity/3cyt_I_plip.modules.dat" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/3gkh_A_plip.modules.dat" afterPath="$PROJECT_DIR$/jstructure-core/src/test/resources/modularity/3gkh_A_plip.modules.dat" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorer.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/Module.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/Module.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/NetCartoValidation.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/NetCartoValidation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetworkExtractor.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetworkExtractor.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -69,6 +76,9 @@
     <SUITE FILE_PATH="coverage/jstructure$MembraneProteinExplorerApplication.coverage" NAME="MembraneProteinExplorerApplication Coverage Results" MODIFIED="1487763550357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>de.bioforscher.explorer.*</FILTER>
     </SUITE>
+    <SUITE FILE_PATH="coverage/jstructure$MCLTest_shouldRunMCL.coverage" NAME="MCLTest.shouldRunMCL Coverage Results" MODIFIED="1507645904132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.*</FILTER>
+    </SUITE>
     <SUITE FILE_PATH="coverage/jstructure$EnergyProfileCalculatorTest.coverage" NAME="EnergyProfileCalculatorTest Coverage Results" MODIFIED="1496055994613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>de.bioforscher.jstructure.feature.energyprofile.*</FILTER>
     </SUITE>
@@ -111,21 +121,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ClusteringScorer.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorer.java">
+      <file leaf-file-name="MCLTest.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCLTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="21" column="89" lean-forward="false" selection-start-line="21" selection-start-column="89" selection-end-line="21" selection-end-column="89" />
-              <folding />
+            <state relative-caret-position="972">
+              <caret line="54" column="25" lean-forward="true" selection-start-line="54" selection-start-column="25" selection-end-line="54" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClusteringScorerTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java">
+      <file leaf-file-name="MCL.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCL.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+            <state relative-caret-position="-234">
+              <caret line="11" column="93" lean-forward="false" selection-start-line="11" selection-start-column="93" selection-end-line="11" selection-end-column="93" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SetOperations.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="15" column="29" lean-forward="true" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -198,21 +222,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/evolution/EvolutionaryInformationCalculator.java" />
-        <option value="$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/LocalBlastWrapper.java" />
-        <option value="$PROJECT_DIR$/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/ConservationProfile.java" />
-        <option value="$PROJECT_DIR$/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/ConservationCalculatorImpl.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/resources/logback.xml" />
-        <option value="$PROJECT_DIR$/jstructure-mutation/src/test/resources/kronke2016/kronke2016.arff" />
-        <option value="$PROJECT_DIR$/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/MutationEffectPredictionServiceImpl.java" />
-        <option value="$PROJECT_DIR$/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/MutationFeatureVectorImpl.java" />
-        <option value="$PROJECT_DIR$/jstructure-mutation/src/test/java/de/bioforscher/jstructure/mutation/MutationIntegrationKronke2012Test.java" />
-        <option value="$PROJECT_DIR$/jstructure-design/src/main/resources/aars/ids.list" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPParser.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPLigandAnnotator.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPLigandParser.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/interactions/PLIPLigandAnnotatorTest.java" />
         <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/aars/S01_ComposeAarsTrpTyrDataset.java" />
         <option value="$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/aars/S02_ValidateDateset.java" />
         <option value="$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java" />
@@ -240,15 +249,30 @@
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/NetworkExtractor.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldons/netcarto/NetCartoValidation.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetworkExtractor.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Combinatorics.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/A04F_FixFileNames.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/NetCartoValidation.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/Module.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetworkExtractor.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Graph.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/graph/Graph.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/algorithms/MCL.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/algorithms/Module.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/algorithms/GraphClusteringAlgorithm.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/algorithms/MCL.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Module.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorer.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/Module.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/ClusteringScorer.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/ClusteringScorerTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Node.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Graph.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Edge.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCL.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCLTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java" />
       </list>
     </option>
   </component>
@@ -280,9 +304,10 @@
     <option name="skipTests" value="true" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="2" />
-    <option name="width" value="3440" />
-    <option name="height" value="1438" />
+    <option name="x" value="4" />
+    <option name="y" value="6" />
+    <option name="width" value="1714" />
+    <option name="height" value="1430" />
   </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
@@ -304,92 +329,21 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="membrane" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="modularity" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="modularity" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="modularity" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -415,40 +369,22 @@
     <property name="RequestMappingsPanelOrder2" value="2" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="de.bioforscher.jstructure.mutation.impl" />
-      <recent name="de.bioforscher.jstructure.mmm.impl" />
-      <recent name="de.bioforscher.jstructure.mmm" />
-      <recent name="de.bioforscher.jstructure.mutation" />
-      <recent name="de.bioforscher.jstructure.model.structure.nucleotide" />
-    </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms" />
+      <recent name="de.bioforscher.jstructure.mathematics.graph.clustering" />
       <recent name="de.bioforscher.jstructure.membrane.modularity" />
       <recent name="de.bioforscher.jstructure.feature.interactions" />
       <recent name="de.bioforscher.jstructure.mutation.impl" />
-      <recent name="de.bioforscher.jstructure.align.impl" />
-      <recent name="de.bioforscher.jstructure.mutation" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="de.bioforscher.jstructure.mathematics" />
       <recent name="de.bioforscher.jstructure.model.identifier" />
       <recent name="de.bioforscher.jstructure.model" />
       <recent name="de.bioforscher.jstructure.mutation.impl" />
       <recent name="de.bioforscher.jstructure.mutation" />
-      <recent name="de.bioforscher.jstructure.model.structure.identifier" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity" />
-      <recent name="$PROJECT_DIR$/jstructure-mutation/src/test/resources/kronke2016" />
-      <recent name="C:\Users\S\git\jstructure\jstructure-testutils\src\main\resources\pdb" />
-      <recent name="$PROJECT_DIR$/jstructure-mmm-bridge/lib" />
-      <recent name="$PROJECT_DIR$/jstructure-mutation/lib" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="de.bioforscher.testutil" />
-      <recent name="de.bioforscher.jstructure.parser" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/jstructure-align/src/test/resources" />
@@ -456,6 +392,24 @@
       <recent name="$PROJECT_DIR$/jstructure-core/src/main/resources" />
       <recent name="$PROJECT_DIR$/jstructure-all/src/main/resources" />
       <recent name="$PROJECT_DIR$/jstructure-core/src/main/resources/prototype" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/jstructure-core/src/test/resources" />
+      <recent name="$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity" />
+      <recent name="$PROJECT_DIR$/jstructure-mutation/src/test/resources/kronke2016" />
+      <recent name="C:\Users\S\git\jstructure\jstructure-testutils\src\main\resources\pdb" />
+      <recent name="$PROJECT_DIR$/jstructure-mmm-bridge/lib" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="de.bioforscher.testutil" />
+      <recent name="de.bioforscher.jstructure.parser" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="de.bioforscher.jstructure.mutation.impl" />
+      <recent name="de.bioforscher.jstructure.mmm.impl" />
+      <recent name="de.bioforscher.jstructure.mmm" />
+      <recent name="de.bioforscher.jstructure.mutation" />
+      <recent name="de.bioforscher.jstructure.model.structure.nucleotide" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -470,38 +424,19 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.ClusteringScorerTest">
-    <configuration name="A04F_FixFileNames" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.MCLTest">
+    <configuration name="ClusteringScorerTest (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.modularity.pdbtm.*" />
+          <option name="PATTERN" value="de.bioforscher.jstructure.mathematics.graph.clustering.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.modularity.pdbtm.A04F_FixFileNames" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <module name="jstructure-core" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="jstructure-membrane" />
-      <envs />
-    </configuration>
-    <configuration name="ClusteringScorerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.modularity.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-membrane" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.membrane.modularity" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.modularity.ClusteringScorerTest" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.ClusteringScorerTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -515,10 +450,10 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="ClusteringScorerTest.shouldComputeChiSquaredCoefficient" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="ClusteringScorerTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.modularity.*" />
+          <option name="PATTERN" value="de.bioforscher.jstructure.mathematics.graph.clustering.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -527,33 +462,8 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.membrane.modularity" />
       <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.modularity.ClusteringScorerTest" />
-      <option name="METHOD_NAME" value="shouldComputeChiSquaredCoefficient" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration name="ClusteringScorerTest.shouldComputeRandIndex" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.modularity.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-membrane" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.membrane.modularity" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.modularity.ClusteringScorerTest" />
-      <option name="METHOD_NAME" value="shouldComputeRandIndex" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
@@ -577,24 +487,80 @@
       <module name="jstructure-explorer" />
       <envs />
     </configuration>
-    <configuration name="NetCartoValidation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="MCLTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.foldons.netcarto.*" />
+          <option name="PATTERN" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.foldons.netcarto.NetCartoValidation" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <module name="jstructure-core" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.MCLTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <option name="ENV_VARIABLES" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="jstructure-membrane" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
       <envs />
+      <patterns />
+    </configuration>
+    <configuration name="MCLTest.shouldRunMCL" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="jstructure-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.MCLTest" />
+      <option name="METHOD_NAME" value="shouldRunMCL" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="MCLTest.testEqualsOnModules" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="jstructure-core" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.MCLTest" />
+      <option name="METHOD_NAME" value="testEqualsOnModules" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
     </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
@@ -1115,19 +1081,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="1" class="java.lang.String" itemvalue="Application.NetCartoValidation" />
-      <item index="2" class="java.lang.String" itemvalue="Application.A04F_FixFileNames" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest.shouldComputeChiSquaredCoefficient" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest.shouldComputeRandIndex" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest (1)" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.MCLTest" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.MCLTest.shouldRunMCL" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.MCLTest.testEqualsOnModules" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest.shouldComputeRandIndex" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest.shouldComputeChiSquaredCoefficient" />
-        <item index="3" class="java.lang.String" itemvalue="Application.A04F_FixFileNames" />
-        <item index="4" class="java.lang.String" itemvalue="Application.NetCartoValidation" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.MCLTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.MCLTest.shouldRunMCL" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.MCLTest.testEqualsOnModules" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest (1)" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.ClusteringScorerTest" />
       </list>
     </recent_temporary>
   </component>
@@ -1280,14 +1246,9 @@
       <workItem from="1506349546056" duration="458000" />
       <workItem from="1506352132191" duration="57000" />
       <workItem from="1507531456849" duration="7684000" />
-      <workItem from="1507560764942" duration="851000" />
-    </task>
-    <task id="LOCAL-00108" summary="fixes slight bug of PLIP&#10;statistics with grouping by and for interacting helix amino acids">
-      <created>1496927842525</created>
-      <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
-      <option name="project" value="LOCAL" />
-      <updated>1496927842525</updated>
+      <workItem from="1507560764942" duration="4328000" />
+      <workItem from="1507622916929" duration="6611000" />
+      <workItem from="1507637325435" duration="7853000" />
     </task>
     <task id="LOCAL-00109" summary="updates the way the interacting atoms are determined&#10;composed single execution class for general statistical analysis">
       <created>1497010443020</created>
@@ -1625,43 +1586,50 @@
       <option name="project" value="LOCAL" />
       <updated>1506083443164</updated>
     </task>
-    <option name="localTasksCounter" value="157" />
+    <task id="LOCAL-00157" summary="improves calculation of clustering-comparison scores&#10;&#10;bugfixes&#10;rand index&#10;pattern to define modules&#10;added experimental module definition from literature">
+      <created>1507561659174</created>
+      <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
+      <option name="project" value="LOCAL" />
+      <updated>1507561659175</updated>
+    </task>
+    <option name="localTasksCounter" value="158" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ClusteringScorerTest - 2017.10.09 at 17h 00m 37s.xml">
-      <configuration name="ClusteringScorerTest" configurationId="JUnit" />
+    <history-entry file="MCLTest - 2017.10.11 at 09h 32m 58s.xml">
+      <configuration name="MCLTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest - 2017.10.09 at 17h 00m 46s.xml">
-      <configuration name="ClusteringScorerTest" configurationId="JUnit" />
+    <history-entry file="MCLTest_shouldRunMCL - 2017.10.11 at 09h 28m 54s.xml">
+      <configuration name="MCLTest.shouldRunMCL" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest - 2017.10.09 at 17h 03m 11s.xml">
-      <configuration name="ClusteringScorerTest" configurationId="JUnit" />
+    <history-entry file="MCLTest_shouldRunMCL - 2017.10.11 at 09h 29m 39s.xml">
+      <configuration name="MCLTest.shouldRunMCL" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest - 2017.10.09 at 17h 03m 50s.xml">
-      <configuration name="ClusteringScorerTest" configurationId="JUnit" />
+    <history-entry file="MCLTest_shouldRunMCL - 2017.10.11 at 09h 29m 51s.xml">
+      <configuration name="MCLTest.shouldRunMCL" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest - 2017.10.09 at 17h 03m 57s.xml">
-      <configuration name="ClusteringScorerTest" configurationId="JUnit" />
+    <history-entry file="MCLTest_shouldRunMCL - 2017.10.11 at 09h 32m 50s.xml">
+      <configuration name="MCLTest.shouldRunMCL" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest - 2017.10.09 at 17h 06m 06s.xml">
-      <configuration name="ClusteringScorerTest" configurationId="JUnit" />
+    <history-entry file="MCLTest_shouldRunMCL - 2017.10.11 at 09h 32m 52s.xml">
+      <configuration name="MCLTest.shouldRunMCL" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest_shouldComputeChiSquaredCoefficient - 2017.10.09 at 15h 55m 32s.xml">
-      <configuration name="ClusteringScorerTest.shouldComputeChiSquaredCoefficient" configurationId="JUnit" />
+    <history-entry file="MCLTest_shouldRunMCL - 2017.10.11 at 09h 32m 55s.xml">
+      <configuration name="MCLTest.shouldRunMCL" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClusteringScorerTest_shouldComputeRandIndex - 2017.10.09 at 17h 02m 01s.xml">
-      <configuration name="ClusteringScorerTest.shouldComputeRandIndex" configurationId="JUnit" />
+    <history-entry file="MCLTest_testEqualsOnModules - 2017.10.11 at 09h 26m 56s.xml">
+      <configuration name="MCLTest.testEqualsOnModules" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="de_bioforscher_jstructure_feature_interactions_in_jstructure-features - 2017.09.21 at 15h 59m 40s.xml">
-      <configuration name="de.bioforscher.jstructure.feature.interactions in jstructure-features" configurationId="JUnit" />
+    <history-entry file="MCLTest_testEqualsOnModules - 2017.10.11 at 09h 28m 10s.xml">
+      <configuration name="MCLTest.testEqualsOnModules" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="de_bioforscher_jstructure_feature_interactions_in_jstructure-features - 2017.09.21 at 16h 06m 41s.xml">
-      <configuration name="de.bioforscher.jstructure.feature.interactions in jstructure-features" configurationId="JUnit" />
+    <history-entry file="MCLTest_testEqualsOnModules - 2017.10.11 at 09h 28m 26s.xml">
+      <configuration name="MCLTest.testEqualsOnModules" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1957836000" />
+    <option name="totallyTimeSpent" value="1975777000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1673,7 +1641,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="2" width="3440" height="1438" extended-state="0" />
+    <frame x="4" y="6" width="1714" height="1430" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1681,14 +1649,15 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42220545" sideWeight="0.39699823" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46289212" sideWeight="0.44957983" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16266507" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3741445" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3787299" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32833132" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23643868" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2917167" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893157" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12149533" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1696,7 +1665,7 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46007603" sideWeight="0.49159664" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46289212" sideWeight="0.55042017" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1706,7 +1675,6 @@
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="100" y="49" width="1480" height="821" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32833132" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3227633" sideWeight="0.4861945" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1781,7 +1749,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="basal support for local pdb mirrors" />
     <MESSAGE value="stub for the mutation project" />
     <MESSAGE value="integration of UniProtJAPI, mapping to homologous sequences" />
     <MESSAGE value="moved from log4j to logback" />
@@ -1806,7 +1773,8 @@
     <MESSAGE value="fixes modularity visualization&#10;&#10;ignores now sparsely populated modules&#10;consistent bfactor assignment for global comparability&#10;support for naming by custom contact definition schemes" />
     <MESSAGE value="readds support for hydrophobic PLIP-interactions" />
     <MESSAGE value="adds calculation of clustering-comparison scores&#10;&#10;naive score&#10;chi-squared coefficient" />
-    <option name="LAST_COMMIT_MESSAGE" value="adds calculation of clustering-comparison scores&#10;&#10;naive score&#10;chi-squared coefficient" />
+    <MESSAGE value="improves calculation of clustering-comparison scores&#10;&#10;bugfixes&#10;rand index&#10;pattern to define modules&#10;added experimental module definition from literature" />
+    <option name="LAST_COMMIT_MESSAGE" value="improves calculation of clustering-comparison scores&#10;&#10;bugfixes&#10;rand index&#10;pattern to define modules&#10;added experimental module definition from literature" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1818,7 +1786,7 @@
           <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="453" />
+      <option name="time" value="467" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1827,57 +1795,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/StudyConstants.java" />
-    <entry file="file://$PROJECT_DIR$/jstructure-design/src/main/java/studies/gmlvq/csa/S11_ComposeCsaArffs.java" />
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane-topology/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-all/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="57" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="20" column="70" lean-forward="false" selection-start-line="20" selection-start-column="70" selection-end-line="20" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/ChainContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="12" column="49" lean-forward="false" selection-start-line="12" selection-start-column="49" selection-end-line="12" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/GroupContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="16" column="50" lean-forward="false" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/AtomContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="21" column="52" lean-forward="false" selection-start-line="21" selection-start-column="52" selection-end-line="21" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/StructureContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="18" column="66" lean-forward="false" selection-start-line="18" selection-start-column="66" selection-end-line="18" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/AtomRecordWriter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1899,13 +1816,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="60" column="46" lean-forward="false" selection-start-line="60" selection-start-column="46" selection-end-line="60" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetCartoBridge.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="53" column="41" lean-forward="true" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
         </state>
       </provider>
     </entry>
@@ -2042,20 +1952,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetworkExtractor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="28" column="16" lean-forward="false" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="25" column="46" lean-forward="true" selection-start-line="25" selection-start-column="46" selection-end-line="25" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/StructureParserTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
@@ -2089,7 +1985,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="17" column="36" lean-forward="false" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2114,43 +2009,123 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/Module.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-          <folding>
-            <element signature="e#570#571#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/NetCartoValidation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="21" column="64" lean-forward="false" selection-start-line="21" selection-start-column="64" selection-end-line="21" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/1bf2_A_plip.modules.dat" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/algorithms/MCL.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetCartoBridge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="39" column="50" lean-forward="true" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/NetworkExtractor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="85" column="49" lean-forward="false" selection-start-line="85" selection-start-column="49" selection-end-line="85" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/resources/modularity/1bf2_A_plip.modules.dat">
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/resources/modularity/1bf2_A_plip.modules.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="0" column="24" lean-forward="false" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorerTest.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+        <state relative-caret-position="36">
+          <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/ClusteringScorer.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/GraphClusteringAlgorithm.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="21" column="89" lean-forward="false" selection-start-line="21" selection-start-column="89" selection-end-line="21" selection-end-column="89" />
+        <state relative-caret-position="90">
+          <caret line="8" column="53" lean-forward="false" selection-start-line="8" selection-start-column="53" selection-end-line="8" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/Module.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="32" lean-forward="true" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/ClusteringScorerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="23" column="63" lean-forward="false" selection-start-line="23" selection-start-column="63" selection-end-line="23" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/ClusteringScorer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Edge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="37" lean-forward="true" selection-start-line="10" selection-start-column="37" selection-end-line="10" selection-end-column="37" />
+          <folding>
+            <element signature="e#256#257#0" expanded="true" />
+            <element signature="e#300#301#0" expanded="true" />
+            <element signature="e#438#439#0" expanded="true" />
+            <element signature="e#467#468#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Graph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="26" column="27" lean-forward="false" selection-start-line="26" selection-start-column="27" selection-end-line="26" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCLTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="972">
+          <caret line="54" column="25" lean-forward="true" selection-start-line="54" selection-start-column="25" selection-end-line="54" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/clustering/algorithms/MCL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-234">
+          <caret line="11" column="93" lean-forward="false" selection-start-line="11" selection-start-column="93" selection-end-line="11" selection-end-column="93" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="15" column="29" lean-forward="true" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -2208,7 +2183,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>jstructure-mutation</last-edited>
+          <last-edited>jstructure-features</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
