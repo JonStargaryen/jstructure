@@ -83,6 +83,12 @@ public class MetalComplex extends PLIPInteraction {
     }
 
     @Override
+    public double getEnergyContribution() {
+        //TODO validate, find reference
+        return 7 *  4.184;
+    }
+
+    @Override
     boolean isSane() {
         return atom1 != null && atom2 != null;
     }

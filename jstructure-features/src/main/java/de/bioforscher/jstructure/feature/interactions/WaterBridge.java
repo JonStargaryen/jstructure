@@ -71,6 +71,12 @@ public class WaterBridge extends PLIPInteraction {
     }
 
     @Override
+    public double getEnergyContribution() {
+        // see https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2144129/pdf/10548043.pdf
+        return 7.4 * 4.184;
+    }
+
+    @Override
     boolean isSane() {
         return atom1 != null && atom2 != null;
     }

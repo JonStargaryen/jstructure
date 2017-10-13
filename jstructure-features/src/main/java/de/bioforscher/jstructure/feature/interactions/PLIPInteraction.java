@@ -137,6 +137,12 @@ public abstract class PLIPInteraction {
 
     abstract boolean isSane();
 
+    /**
+     * Reports the energy contribution of this interaction in kJ/mol. Most values are from [Salentin, 2015].
+     * @return
+     */
+    public abstract double getEnergyContribution();
+
     boolean isSane(List<Atom> atoms) {
         return !atoms.isEmpty();
     }

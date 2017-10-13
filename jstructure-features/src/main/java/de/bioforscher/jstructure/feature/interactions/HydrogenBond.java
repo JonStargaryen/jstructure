@@ -71,6 +71,11 @@ public class HydrogenBond extends PLIPInteraction {
     }
 
     @Override
+    public double getEnergyContribution() {
+        return 25;
+    }
+
+    @Override
     boolean isSane() {
         return acceptor != null && donor != null;
     }

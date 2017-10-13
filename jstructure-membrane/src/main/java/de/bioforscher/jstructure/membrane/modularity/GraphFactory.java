@@ -137,6 +137,10 @@ public class GraphFactory {
             List<AminoAcid> aminoAcids = new ArrayList<>();
             List<Module<AminoAcid>> modules = new ArrayList<>();
             for(String range : lines) {
+                if(range.startsWith("#")) {
+                    continue;
+                }
+
                 String id = range.split(":")[0];
                 String rawRanges = range.split(":")[1];
 
