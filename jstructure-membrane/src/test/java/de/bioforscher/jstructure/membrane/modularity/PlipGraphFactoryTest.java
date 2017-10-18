@@ -22,7 +22,7 @@ public class PlipGraphFactoryTest {
 
         String document = TestUtils.getResourceAsStream("plip/3o0r_B.plip")
                 .collect(Collectors.joining(System.lineSeparator()));
-        Graph<AminoAcid> graph = GraphFactory.createGraphFromPlipDocument(chain, document);
+        Graph<AminoAcid> graph = GraphFactory.createWeightedGraphFromPlipDocument(chain, document);
 
         System.out.println(new MCL().clusterGraph(graph).getPyMolString());
     }

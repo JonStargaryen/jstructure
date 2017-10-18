@@ -64,7 +64,7 @@ public class NetworkExtractor {
     }
 
     private String getPlipNetwork(Chain chain, String document) {
-        return GraphFactory.createGraphFromPlipDocument(chain, document).toNetCartoString();
+        return GraphFactory.createWeightedGraphFromPlipDocument(chain, document).toNetCartoString();
     }
 
     /**

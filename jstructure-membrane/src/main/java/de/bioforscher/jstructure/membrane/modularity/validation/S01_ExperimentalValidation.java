@@ -16,23 +16,25 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * Compare experimental, NetCarto and MCL results by varying scores.
- */
-public class CommunityDetectionComparison {
-    private static final Logger logger = LoggerFactory.getLogger(CommunityDetectionComparison.class);
+public class S01_ExperimentalValidation {
+    private static final Logger logger = LoggerFactory.getLogger(S01_ExperimentalValidation.class);
 
     public static void main(String[] args) {
         Path dataset = MembraneConstants.MODULARITY_DATASET_DIRECTORY;
 
         String output = MembraneConstants.lines(dataset.resolve("ids.list"))
+                .limit(1)
                 .map(id -> handleId(dataset, id))
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "num_exp," +
-                                "num_netcarto,netcarto_randindex,netcarto_naivescore,netcarto_logchisquared," +
+                        "size,mod_num_exp," +
+                                "mod_num_sse,sse_fm," +
                                 getInflationValueRange()
-                                        .mapToObj(inflation -> "mcl_" + inflation)
-                                        .map(inflation -> "num_" + inflation + "," + inflation + "_randindex," + inflation + "_naivescore," + inflation + "_logchisquared")
+                                        .mapToObj(inflation -> "wmcl_" + inflation)
+                                        .map(inflation -> "mod_num_" + inflation + "," + inflation + "_fm")
+                                        .collect(Collectors.joining(",")) + "," +
+                                getInflationValueRange()
+                                        .mapToObj(inflation -> "uwmcl_" + inflation)
+                                        .map(inflation -> "mod_num_" + inflation + "," + inflation + "_fm")
                                         .collect(Collectors.joining(",")) + System.lineSeparator(),
                         ""));
 
@@ -56,9 +58,10 @@ public class CommunityDetectionComparison {
 
         PartitionedGraph<AminoAcid> experimental = GraphFactory.createPartitionedGraphFromDefinitionFile(chain,
                 dataset.resolve("exp").resolve(id + ".exp"));
-        PartitionedGraph<AminoAcid> netCarto = GraphFactory.createPartitionedGraphFromNetCartoFile(chain,
-                dataset.resolve("network").resolve(id + "_plip.modules.dat"));
-        Map<Integer, PartitionedGraph<AminoAcid>> mclResults = getInflationValueRange()
+        PartitionedGraph<AminoAcid> secondaryStructure = GraphFactory.createPartitionedGraphFromSecondaryStructureElements(chain);
+        System.out.println(experimental.getDefinitionString());
+        System.out.println(secondaryStructure.getDefinitionString());
+        Map<Integer, PartitionedGraph<AminoAcid>> weightedMclResults = getInflationValueRange()
                 .boxed()
                 .collect(Collectors.toMap(Function.identity(),
                         inflation -> {
@@ -66,15 +69,31 @@ public class CommunityDetectionComparison {
                             logger.info("sampling graph of {} at inflation {}",
                                     chain.getChainIdentifier(),
                                     i);
-                            return GraphFactory.createPartitionedGraphFromMCL(chain,
+                            return GraphFactory.createPartionedGraphFromWeightedPlipData(chain,
+                                    dataset.resolve("plip").resolve(id + ".plip"),
+                                    i);
+                        }));
+        Map<Integer, PartitionedGraph<AminoAcid>> unweightedMclResults = getInflationValueRange()
+                .boxed()
+                .collect(Collectors.toMap(Function.identity(),
+                        inflation -> {
+                            double i = inflation / (double) 10;
+                            logger.info("sampling graph of {} at inflation {}",
+                                    chain.getChainIdentifier(),
+                                    i);
+                            return GraphFactory.createPartitionedGraphFromUnweightedPlipData(chain,
                                     dataset.resolve("plip").resolve(id + ".plip"),
                                     i);
                         }));
 
-        return experimental.getNumberOfModules() + "," +
-                composeScoreString(experimental, netCarto) + "," +
+        return chain.aminoAcids().count() + "," + experimental.getNumberOfModules() + "," +
+                composeScoreString(experimental, secondaryStructure) + "," +
                 getInflationValueRange()
-                        .mapToObj(mclResults::get)
+                        .mapToObj(weightedMclResults::get)
+                        .map(mclResult -> composeScoreString(experimental, mclResult))
+                        .collect(Collectors.joining(",")) + "," +
+                getInflationValueRange()
+                        .mapToObj(unweightedMclResults::get)
                         .map(mclResult -> composeScoreString(experimental, mclResult))
                         .collect(Collectors.joining(","));
     }
@@ -84,10 +103,10 @@ public class CommunityDetectionComparison {
         return IntStream.range(12, 21);
     }
 
-    private static String composeScoreString(PartitionedGraph<AminoAcid> partitionedGraph1, PartitionedGraph<AminoAcid> partitionedGraph2) {
-        return partitionedGraph2.getNumberOfModules() + "," +
-                ClusteringScorer.randIndex(partitionedGraph1, partitionedGraph2) + "," +
-                ClusteringScorer.naiveScore(partitionedGraph1, partitionedGraph2) + "," +
-                Math.log(ClusteringScorer.chiSquaredCoefficient(partitionedGraph1, partitionedGraph2));
+    private static String composeScoreString(PartitionedGraph<AminoAcid> reference, PartitionedGraph<AminoAcid> clustering) {
+        return clustering.getNumberOfModules() + "," +
+                ClusteringScorer.fowlkesMallowsIndex(reference, clustering) /*+ "," +
+                ClusteringScorer.naiveScore(reference, clustering) + "," +
+                Math.log(ClusteringScorer.chiSquaredCoefficient(reference, clustering))*/;
     }
 }

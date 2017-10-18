@@ -6,7 +6,7 @@ import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.clustering.Module;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 /**
  * Implemented from Stijn van Dongen's (author of MCL algorithm) documentation: http://micans.org/mcl/
@@ -18,15 +18,15 @@ public class MCL implements GraphClusteringAlgorithm {
     public static final double DEFAULT_INFLATE_FACTOR = 2;
     public static final double DEFAULT_MULT_FACTOR = 1;
     public static final double DEFAULT_MAX_ITERATIONS = 20;
-    public static final Function<Edge, Double> DEFAULT_SIMILARITY_FUNCTION = pair -> 1.0;
+    public static final ToDoubleFunction<Edge> DEFAULT_SIMILARITY_FUNCTION = Edge::getWeight;
 
     private final double expandFactor;
     private final double inflateFactor;
     private final double multFactor;
     private final double maxIterations;
-    private final Function<Edge, Double> similarityFunction;
+    private final ToDoubleFunction<Edge> similarityFunction;
 
-    public MCL(double expandFactor, double inflateFactor, double multFactor, double maxIterations, Function<Edge, Double> similarityFunction) {
+    public MCL(double expandFactor, double inflateFactor, double multFactor, double maxIterations, ToDoubleFunction<Edge> similarityFunction) {
         this.expandFactor = expandFactor;
         this.inflateFactor = inflateFactor;
         this.multFactor = multFactor;
@@ -194,6 +194,6 @@ public class MCL implements GraphClusteringAlgorithm {
     }
 
     private <N> double getSimilarity(Edge<N> edge) {
-        return similarityFunction.apply(edge);
+        return similarityFunction.applyAsDouble(edge);
     }
 }

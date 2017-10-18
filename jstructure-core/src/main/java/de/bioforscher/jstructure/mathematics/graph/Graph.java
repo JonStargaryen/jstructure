@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.mathematics.graph;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,11 @@ public class Graph<N> {
     public Graph(Graph<N> graph) {
         this.nodes = graph.nodes;
         this.edges = graph.edges;
+    }
+
+    public Graph(List<N> nodes) {
+        this.nodes = nodes;
+        this.edges = new ArrayList<>();
     }
 
     public Graph(List<N> nodes, List<Edge<N>> edges) {

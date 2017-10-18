@@ -23,7 +23,7 @@ public class ClusteringScorer {
     public static <N> double naiveScore(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {
         // determine more refined clustering
         PartitionedGraph<N> fineClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering2 : clustering1;
-        PartitionedGraph<N>  coarseClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering1 : clustering2;
+        PartitionedGraph<N> coarseClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering1 : clustering2;
 
         // determine total number of elements
         int totalNumberOfElements = extractAllReferencedNodes(fineClustering, coarseClustering).size();
@@ -60,6 +60,39 @@ public class ClusteringScorer {
         }
 
         return chi;
+    }
+
+    public static <N> double fowlkesMallowsIndex(PartitionedGraph<N> reference, PartitionedGraph<N> clustering) {
+        List<N> nodes = extractAllReferencedNodes(reference, clustering);
+        int totalNumberOfElements = nodes.size();
+
+        int n00 = 0;
+        int n01 = 0;
+        int n10 = 0;
+        int n11 = 0;
+
+        for (int i = 0; i < nodes.size() - 1; i++) {
+            N node1 = nodes.get(i);
+            Module referenceModule1 = reference.getModuleOf(node1);
+            Module clusteringModule1 = clustering.getModuleOf(node1);
+            for (int j = i + 1; j < nodes.size(); j++) {
+                N node2 = nodes.get(j);
+                Module referenceModule2 = reference.getModuleOf(node2);
+                Module clusteringModule2 = clustering.getModuleOf(node2);
+
+                if(referenceModule1.equals(referenceModule2) && clusteringModule1.equals(clusteringModule2)) {
+                    n11++;
+                } else if(!referenceModule1.equals(referenceModule2) && !clusteringModule1.equals(clusteringModule2)) {
+                    n00++;
+                } else if(referenceModule1.equals(referenceModule2) && !clusteringModule1.equals(clusteringModule2)) {
+                    n10++;
+                } else {
+                    n01++;
+                }
+            }
+        }
+
+        return n11 / Math.sqrt((n11 + n10) * (n11 + n01));
     }
 
     public static <N> double randIndex(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {

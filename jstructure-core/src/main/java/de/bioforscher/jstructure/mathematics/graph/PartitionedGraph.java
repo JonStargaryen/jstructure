@@ -3,9 +3,7 @@ package de.bioforscher.jstructure.mathematics.graph;
 import de.bioforscher.jstructure.mathematics.graph.clustering.Module;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,6 +33,10 @@ public class PartitionedGraph<N> extends Graph<N> {
             "[171,165,109], " +
             "[206,134,145]").collect(Collectors.toList());
 
+    public PartitionedGraph(List<N> nodes, List<Module<N>> modules) {
+        this(new Graph<>(nodes), modules);
+    }
+
     public PartitionedGraph(Graph<N> graph, List<Module<N>> modules) {
         super(graph);
         this.modules = modules;
@@ -61,6 +63,51 @@ public class PartitionedGraph<N> extends Graph<N> {
         return modules.stream()
                 .map(Module::getIdentifier)
                 .collect(Collectors.toList());
+    }
+
+    public String getDefinitionString() {
+        N firstNode = getNodes().get(0);
+        //TODO quick-and-dirty implementation with horrible 'design' - breaks like instantly
+        if(!(firstNode instanceof AminoAcid)) {
+            throw new UnsupportedOperationException("operation only supported for protein structure graphs");
+        }
+
+        Map<Module, List<N>> map = getNodes().stream()
+                .collect(Collectors.groupingBy(this::getModuleOf));
+
+        return map.entrySet().stream()
+                .map(this::composeDefinitionString)
+                .collect(Collectors.joining(System.lineSeparator()));
+    }
+
+    private String composeDefinitionString(Map.Entry<Module, List<N>> entry) {
+        Module<AminoAcid> module = (Module<AminoAcid>) entry.getKey();
+        String id = module.getIdentifier();
+
+        List<AminoAcid> aminoAcids = entry.getValue().stream()
+                .map(AminoAcid.class::cast)
+                .collect(Collectors.toList());
+
+        StringJoiner ranges = new StringJoiner(",");
+        String currentRange = "";
+        String lastId = "";
+        for(AminoAcid aminoAcid : aminoAcids) {
+            String currentId = aminoAcid.getResidueIdentifier().toString();
+            Optional<AminoAcid> previousAminoAcid = aminoAcid.getPreviousAminoAcid();
+            if(!previousAminoAcid.isPresent() || !module.containsNode(previousAminoAcid.get())) {
+                if (!currentRange.equals("")) {
+                    // terminate last range record if something was observed before
+                    currentRange = currentRange + "-" + lastId;
+                    ranges.add(currentRange);
+                }
+                currentRange = currentId;
+            }
+
+            lastId = currentId;
+        }
+        ranges.add(currentRange + "-" + lastId);
+
+        return id + ":" + ranges.toString();
     }
 
     public String getPyMolString() {
