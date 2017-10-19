@@ -1,8 +1,7 @@
-package de.bioforscher.jstructure.mathematics.graph.clustering;
+package de.bioforscher.jstructure.mathematics.graph.partitioning;
 
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,14 +11,9 @@ import java.util.List;
 public class Module<N> extends Graph<N> {
     private final String id;
 
-    public Module(String id, Graph<N> subgraph) {
-        super(subgraph);
-        this.id = id;
-        new ArrayList<>();
-    }
-
     public Module(String id, List<N> nodes) {
-        this(id, new Graph<>(nodes));
+        super(new Graph<>(nodes));
+        this.id = id;
     }
 
     public String getIdentifier() {

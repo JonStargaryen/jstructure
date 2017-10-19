@@ -56,11 +56,6 @@ public class HalogenBond extends PLIPInteraction {
     }
 
     @Override
-    public double getEnergyContribution() {
-        return 8;
-    }
-
-    @Override
     boolean isSane() {
         return acceptor != null && donor != null;
     }

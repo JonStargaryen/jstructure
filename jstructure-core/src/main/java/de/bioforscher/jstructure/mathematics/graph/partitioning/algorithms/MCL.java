@@ -1,9 +1,9 @@
-package de.bioforscher.jstructure.mathematics.graph.clustering.algorithms;
+package de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms;
 
 import de.bioforscher.jstructure.mathematics.graph.Edge;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
-import de.bioforscher.jstructure.mathematics.graph.clustering.Module;
+import de.bioforscher.jstructure.mathematics.graph.partitioning.Module;
 
 import java.util.*;
 import java.util.function.ToDoubleFunction;
@@ -13,7 +13,7 @@ import java.util.function.ToDoubleFunction;
  * lecture notes: https://www.cs.ucsb.edu/~xyan/classes/CS595D-2009winter/MCL_Presentation2.pdf
  * and cytoscape's JS port: https://github.com/cytoscape/cytoscape.js-markov-cluster/blob/master/cytoscape-markov-cluster.js
  */
-public class MCL implements GraphClusteringAlgorithm {
+public class MCL implements GraphPartitioningAlgorithm {
     public static final double DEFAULT_EXPAND_FACTOR = 2;
     public static final double DEFAULT_INFLATE_FACTOR = 2;
     public static final double DEFAULT_MULT_FACTOR = 1;
@@ -43,7 +43,7 @@ public class MCL implements GraphClusteringAlgorithm {
     }
 
     @Override
-    public <N> PartitionedGraph<N> clusterGraph(Graph<N> graph) {
+    public <N> PartitionedGraph<N> partitionGraph(Graph<N> graph) {
         List<N> nodes = graph.getNodes();
         List<Edge<N>> edges = graph.getEdges();
 
@@ -113,7 +113,7 @@ public class MCL implements GraphClusteringAlgorithm {
             }
 
             if(!cluster.isEmpty()) {
-                clusters.add(new Module<>(String.valueOf(clusters.size() + 1), new Graph<>(cluster, new ArrayList<>())));
+                clusters.add(new Module<>(String.valueOf(clusters.size() + 1), cluster));
             }
         }
 

@@ -1,9 +1,10 @@
 package de.bioforscher.jstructure.membrane.modularity.validation;
 
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
-import de.bioforscher.jstructure.mathematics.graph.clustering.ClusteringScorer;
+import de.bioforscher.jstructure.mathematics.graph.partitioning.PartitioningScorer;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
+import de.bioforscher.jstructure.membrane.modularity.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -23,17 +24,16 @@ public class S01_ExperimentalValidation {
         Path dataset = MembraneConstants.MODULARITY_DATASET_DIRECTORY;
 
         String output = MembraneConstants.lines(dataset.resolve("ids.list"))
-                .limit(1)
                 .map(id -> handleId(dataset, id))
                 .collect(Collectors.joining(System.lineSeparator(),
                         "size,mod_num_exp," +
                                 "mod_num_sse,sse_fm," +
                                 getInflationValueRange()
-                                        .mapToObj(inflation -> "wmcl_" + inflation)
+                                        .mapToObj(inflation -> "wplip_" + inflation)
                                         .map(inflation -> "mod_num_" + inflation + "," + inflation + "_fm")
                                         .collect(Collectors.joining(",")) + "," +
                                 getInflationValueRange()
-                                        .mapToObj(inflation -> "uwmcl_" + inflation)
+                                        .mapToObj(inflation -> "uplip_" + inflation)
                                         .map(inflation -> "mod_num_" + inflation + "," + inflation + "_fm")
                                         .collect(Collectors.joining(",")) + System.lineSeparator(),
                         ""));
@@ -59,8 +59,10 @@ public class S01_ExperimentalValidation {
         PartitionedGraph<AminoAcid> experimental = GraphFactory.createPartitionedGraphFromDefinitionFile(chain,
                 dataset.resolve("exp").resolve(id + ".exp"));
         PartitionedGraph<AminoAcid> secondaryStructure = GraphFactory.createPartitionedGraphFromSecondaryStructureElements(chain);
-        System.out.println(experimental.getDefinitionString());
-        System.out.println(secondaryStructure.getDefinitionString());
+        System.out.println("experimental:");
+        System.out.println(GraphVisualizer.composeDefinitionString(experimental));
+        System.out.println("sse:");
+        System.out.println(GraphVisualizer.composeDefinitionString(secondaryStructure));
         Map<Integer, PartitionedGraph<AminoAcid>> weightedMclResults = getInflationValueRange()
                 .boxed()
                 .collect(Collectors.toMap(Function.identity(),
@@ -69,9 +71,13 @@ public class S01_ExperimentalValidation {
                             logger.info("sampling graph of {} at inflation {}",
                                     chain.getChainIdentifier(),
                                     i);
-                            return GraphFactory.createPartionedGraphFromWeightedPlipData(chain,
+                            PartitionedGraph<AminoAcid> graph = GraphFactory.createPartitionedGraphFromPlipData(chain,
                                     dataset.resolve("plip").resolve(id + ".plip"),
-                                    i);
+                                    i,
+                                    GraphFactory.WeightingScheme.CLASSIFIED);
+                            System.out.println("wplip-" + i);
+                            System.out.println(GraphVisualizer.composeDefinitionString(graph));
+                            return graph;
                         }));
         Map<Integer, PartitionedGraph<AminoAcid>> unweightedMclResults = getInflationValueRange()
                 .boxed()
@@ -81,9 +87,13 @@ public class S01_ExperimentalValidation {
                             logger.info("sampling graph of {} at inflation {}",
                                     chain.getChainIdentifier(),
                                     i);
-                            return GraphFactory.createPartitionedGraphFromUnweightedPlipData(chain,
+                            PartitionedGraph<AminoAcid> graph = GraphFactory.createPartitionedGraphFromPlipData(chain,
                                     dataset.resolve("plip").resolve(id + ".plip"),
-                                    i);
+                                    i,
+                                    GraphFactory.WeightingScheme.UNWEIGHTED);
+                            System.out.println("uplip-" + i);
+                            System.out.println(GraphVisualizer.composeDefinitionString(graph));
+                            return graph;
                         }));
 
         return chain.aminoAcids().count() + "," + experimental.getNumberOfModules() + "," +
@@ -105,8 +115,8 @@ public class S01_ExperimentalValidation {
 
     private static String composeScoreString(PartitionedGraph<AminoAcid> reference, PartitionedGraph<AminoAcid> clustering) {
         return clustering.getNumberOfModules() + "," +
-                ClusteringScorer.fowlkesMallowsIndex(reference, clustering) /*+ "," +
-                ClusteringScorer.naiveScore(reference, clustering) + "," +
-                Math.log(ClusteringScorer.chiSquaredCoefficient(reference, clustering))*/;
+                PartitioningScorer.fowlkesMallowsIndex(reference, clustering) /*+ "," +
+                PartitioningScorer.naiveScore(reference, partitioning) + "," +
+                Math.log(PartitioningScorer.chiSquaredCoefficient(reference, partitioning))*/;
     }
 }

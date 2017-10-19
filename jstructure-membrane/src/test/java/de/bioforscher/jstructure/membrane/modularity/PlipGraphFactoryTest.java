@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.membrane.modularity;
 
-import de.bioforscher.jstructure.mathematics.graph.Graph;
-import de.bioforscher.jstructure.mathematics.graph.clustering.algorithms.MCL;
+import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -22,8 +21,11 @@ public class PlipGraphFactoryTest {
 
         String document = TestUtils.getResourceAsStream("plip/3o0r_B.plip")
                 .collect(Collectors.joining(System.lineSeparator()));
-        Graph<AminoAcid> graph = GraphFactory.createWeightedGraphFromPlipDocument(chain, document);
+        PartitionedGraph<AminoAcid> graph = GraphFactory.createPartitionedGraphFromPlipData(chain,
+                document,
+                2.0,
+                GraphFactory.WeightingScheme.UNWEIGHTED);
 
-        System.out.println(new MCL().clusterGraph(graph).getPyMolString());
+        System.out.println(GraphVisualizer.getPyMolString(graph));
     }
 }

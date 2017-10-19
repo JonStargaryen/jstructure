@@ -1,10 +1,7 @@
 package de.bioforscher.jstructure.mathematics.graph;
 
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * A really basic implementation of a graph.
@@ -29,6 +26,12 @@ public class Graph<N> {
         this.edges = edges;
     }
 
+    public int getDegreeOf(N node) {
+        return (int) edges.stream()
+                .filter(edge -> edge.contains(node))
+                .count();
+    }
+
     public boolean containsNode(N node) {
         return nodes.contains(node);
     }
@@ -47,25 +50,5 @@ public class Graph<N> {
 
     public List<Edge<N>> getEdges() {
         return edges;
-    }
-
-    /**
-     * Returns the NetCarto representation of this graph. I.e. a list of edges in the format:
-     * <pre>
-     *     nodeName1 nodeName2
-     * </pre>
-     * @return
-     */
-    public String toNetCartoString() {
-        return edges.stream()
-                .map(edge -> determineNodeName(edge.getLeft()) + " " + determineNodeName(edge.getRight()))
-                .collect(Collectors.joining(System.lineSeparator()));
-    }
-
-    private String determineNodeName(N node) {
-        if(node instanceof AminoAcid) {
-            return ((AminoAcid) node).getResidueIdentifier().toString();
-        }
-        return node.toString();
     }
 }

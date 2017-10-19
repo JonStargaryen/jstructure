@@ -35,12 +35,6 @@ public class HydrophobicInteraction extends PLIPInteraction {
     }
 
     @Override
-    public double getEnergyContribution() {
-        // see: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3086625/
-        return 1.1 * 4.184;
-    }
-
-    @Override
     boolean isSane() {
         return atom1 != null && atom2 != null;
     }

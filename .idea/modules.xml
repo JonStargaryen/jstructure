@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/jstructure-core/jstructure-core.iml" filepath="$PROJECT_DIR$/jstructure-core/jstructure-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-features/jstructure-features.iml" filepath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-membrane/jstructure-membrane.iml" filepath="$PROJECT_DIR$/jstructure-membrane/jstructure-membrane.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jstructure-membrane-topology/jstructure-membrane-topology.iml" filepath="$PROJECT_DIR$/jstructure-membrane-topology/jstructure-membrane-topology.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" filepath="$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" />
     </modules>
   </component>

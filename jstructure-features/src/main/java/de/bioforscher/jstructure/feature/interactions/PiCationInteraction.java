@@ -69,11 +69,6 @@ public class PiCationInteraction extends PLIPInteraction {
     }
 
     @Override
-    public double getEnergyContribution() {
-        return 13;
-    }
-
-    @Override
     boolean isSane() {
         return isSane(atoms1) && isSane(atoms2);
     }

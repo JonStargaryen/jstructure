@@ -34,6 +34,7 @@ public class MembraneConstants {
     public static final Path PDBTM_NR_BETA_DATASET_OPM_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("opm");
     public static final Path PDBTM_NR_BETA_DATASET_PLIP_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("plip");
     public static final Path PDBTM_NR_BETA_DATASET_NETWORK_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("network");
+    public static final Path FOLDING_CORES_DIRECTORY = DATASETS_DIRECTORY.resolve("foldingcores");
 
     public static Stream<String> lines(Path path) {
         try {

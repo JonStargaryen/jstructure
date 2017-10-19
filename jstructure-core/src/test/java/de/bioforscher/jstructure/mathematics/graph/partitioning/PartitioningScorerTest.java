@@ -1,9 +1,10 @@
-package de.bioforscher.jstructure.mathematics.graph.clustering;
+package de.bioforscher.jstructure.mathematics.graph.partitioning;
 
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.model.Pair;
 import de.bioforscher.testutil.TestUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ClusteringScorerTest {
+public class PartitioningScorerTest {
     private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _syn1;
     private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _1bf2;
     private Pair<PartitionedGraph<String>, PartitionedGraph<String>> _1f21;
@@ -59,8 +60,8 @@ public class ClusteringScorerTest {
                 continue;
             }
             Module<String> module = new Module<>(line.split("\\s+")[0],
-                    new Graph<>(Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
-                            .collect(Collectors.toList()), new ArrayList<>()));
+                    Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
+                            .collect(Collectors.toList()));
             modules.add(module);
             nodes.addAll(module.getNodes());
         }
@@ -81,7 +82,7 @@ public class ClusteringScorerTest {
                             .mapToObj(String::valueOf))
                     .collect(Collectors.toList());
             nodes.addAll(n);
-            modules.add(new Module<>(id, new Graph<>(n, new ArrayList<>())));
+            modules.add(new Module<>(id, n));
         }
 
         return new PartitionedGraph<>(new Graph<>(nodes, new ArrayList<>()), modules);
@@ -89,28 +90,49 @@ public class ClusteringScorerTest {
 
     @Test
     public void shouldComputeChiSquaredCoefficient() {
-        System.out.println("[syn1] chi-squared: " + ClusteringScorer.chiSquaredCoefficient(_syn1.getLeft(), _syn1.getRight()));
-        System.out.println("[1bf2] chi-squared: " + ClusteringScorer.chiSquaredCoefficient(_1bf2.getLeft(), _1bf2.getRight()));
-        System.out.println("[1f21] chi-squared: " + ClusteringScorer.chiSquaredCoefficient(_1f21.getLeft(), _1f21.getRight()));
-        System.out.println("[3cyt] chi-squared: " + ClusteringScorer.chiSquaredCoefficient(_3cyt.getLeft(), _3cyt.getRight()));
-        System.out.println("[3gkh] chi-squared: " + ClusteringScorer.chiSquaredCoefficient(_3gkh.getLeft(), _3gkh.getRight()));
+        System.out.println("[syn1] chi-squared: " + PartitioningScorer.chiSquaredCoefficient(_syn1.getLeft(), _syn1.getRight()));
+        System.out.println("[1bf2] chi-squared: " + PartitioningScorer.chiSquaredCoefficient(_1bf2.getLeft(), _1bf2.getRight()));
+        System.out.println("[1f21] chi-squared: " + PartitioningScorer.chiSquaredCoefficient(_1f21.getLeft(), _1f21.getRight()));
+        System.out.println("[3cyt] chi-squared: " + PartitioningScorer.chiSquaredCoefficient(_3cyt.getLeft(), _3cyt.getRight()));
+        System.out.println("[3gkh] chi-squared: " + PartitioningScorer.chiSquaredCoefficient(_3gkh.getLeft(), _3gkh.getRight()));
     }
 
     @Test
     public void shouldComputeNaiveScore() {
-        System.out.println("[syn1] naive score: " + ClusteringScorer.naiveScore(_syn1.getLeft(), _syn1.getRight()));
-        System.out.println("[1bf2] naive score: " + ClusteringScorer.naiveScore(_1bf2.getLeft(), _1bf2.getRight()));
-        System.out.println("[1f21] naive score: " + ClusteringScorer.naiveScore(_1f21.getLeft(), _1f21.getRight()));
-        System.out.println("[3cyt] naive score: " + ClusteringScorer.naiveScore(_3cyt.getLeft(), _3cyt.getRight()));
-        System.out.println("[3gkh] naive score: " + ClusteringScorer.naiveScore(_3gkh.getLeft(), _3gkh.getRight()));
+        Assert.assertEquals("score should be 1 for identical partitioning",
+                1.0,
+                PartitioningScorer.naiveScore(_syn1.getLeft(), _syn1.getLeft()),
+                TestUtils.TOLERANT_ERROR_MARGIN);
+        System.out.println("[syn1] naive score: " + PartitioningScorer.naiveScore(_syn1.getLeft(), _syn1.getRight()));
+        System.out.println("[1bf2] naive score: " + PartitioningScorer.naiveScore(_1bf2.getLeft(), _1bf2.getRight()));
+        System.out.println("[1f21] naive score: " + PartitioningScorer.naiveScore(_1f21.getLeft(), _1f21.getRight()));
+        System.out.println("[3cyt] naive score: " + PartitioningScorer.naiveScore(_3cyt.getLeft(), _3cyt.getRight()));
+        System.out.println("[3gkh] naive score: " + PartitioningScorer.naiveScore(_3gkh.getLeft(), _3gkh.getRight()));
     }
 
     @Test
     public void shouldComputeRandIndex() {
-        System.out.println("[syn1] rand-index: " + ClusteringScorer.randIndex(_syn1.getLeft(), _syn1.getRight()));
-        System.out.println("[1bf2] rand-index: " + ClusteringScorer.randIndex(_1bf2.getLeft(), _1bf2.getRight()));
-        System.out.println("[1f21] rand-index: " + ClusteringScorer.randIndex(_1f21.getLeft(), _1f21.getRight()));
-        System.out.println("[3cyt] rand-index: " + ClusteringScorer.randIndex(_3cyt.getLeft(), _3cyt.getRight()));
-        System.out.println("[3gkh] rand-index: " + ClusteringScorer.randIndex(_3gkh.getLeft(), _3gkh.getRight()));
+        Assert.assertEquals("score should be 1 for identical partitioning",
+                1.0,
+                PartitioningScorer.randIndex(_syn1.getLeft(), _syn1.getLeft()),
+                TestUtils.TOLERANT_ERROR_MARGIN);
+        System.out.println("[syn1] rand-index: " + PartitioningScorer.randIndex(_syn1.getLeft(), _syn1.getRight()));
+        System.out.println("[1bf2] rand-index: " + PartitioningScorer.randIndex(_1bf2.getLeft(), _1bf2.getRight()));
+        System.out.println("[1f21] rand-index: " + PartitioningScorer.randIndex(_1f21.getLeft(), _1f21.getRight()));
+        System.out.println("[3cyt] rand-index: " + PartitioningScorer.randIndex(_3cyt.getLeft(), _3cyt.getRight()));
+        System.out.println("[3gkh] rand-index: " + PartitioningScorer.randIndex(_3gkh.getLeft(), _3gkh.getRight()));
+    }
+
+    @Test
+    public void shouldComputeFowlkesMalllowsIndex() {
+        Assert.assertEquals("score should be 1 for identical partitioning",
+            1.0,
+            PartitioningScorer.fowlkesMallowsIndex(_syn1.getLeft(), _syn1.getLeft()),
+            TestUtils.TOLERANT_ERROR_MARGIN);
+        System.out.println("[syn1] fowlkes-mallows-index: " + PartitioningScorer.fowlkesMallowsIndex(_syn1.getLeft(), _syn1.getRight()));
+        System.out.println("[1bf2] fowlkes-mallows-index: " + PartitioningScorer.fowlkesMallowsIndex(_1bf2.getLeft(), _1bf2.getRight()));
+        System.out.println("[1f21] fowlkes-mallows-index: " + PartitioningScorer.fowlkesMallowsIndex(_1f21.getLeft(), _1f21.getRight()));
+        System.out.println("[3cyt] fowlkes-mallows-index: " + PartitioningScorer.fowlkesMallowsIndex(_3cyt.getLeft(), _3cyt.getRight()));
+        System.out.println("[3gkh] fowlkes-mallows-index: " + PartitioningScorer.fowlkesMallowsIndex(_3gkh.getLeft(), _3gkh.getRight()));
     }
 }

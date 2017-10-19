@@ -1,18 +1,41 @@
-package de.bioforscher.jstructure.mathematics.graph.clustering;
+package de.bioforscher.jstructure.mathematics.graph.partitioning;
 
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.model.SetOperations;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Compares the similarity of two clustering solutions.
+ * Compares the similarity of two partitioning solutions.
  * reference: Wagner and Wagner, 2007 - Comparing Clusterings - An Overview
  */
-public class ClusteringScorer {
+public class PartitioningScorer {
+    /**
+     *
+     * reference: Guimera and Amaral, 2005
+     * @param partitionedGraph
+     * @param <N>
+     * @return
+     */
+    public static <N> double modularityScore(PartitionedGraph<N> partitionedGraph) {
+        double modularityScore = 0;
+        double numberOfEdges = partitionedGraph.getEdges().size();
+        for(Module<N> module : partitionedGraph.getModules()) {
+            int sumOfDegrees = module.getNodes().stream()
+                    .mapToInt(partitionedGraph::getDegreeOf)
+                    .sum();
+            long numberOfIntraModuleEdges = partitionedGraph.getEdges().stream()
+                    .filter(edge -> module.containsNode(edge.getLeft()) && module.containsNode(edge.getRight()))
+                    .count();
+            modularityScore += numberOfIntraModuleEdges / numberOfEdges - sumOfDegrees * sumOfDegrees / (2 * numberOfEdges);
+        }
+        return modularityScore;
+    }
+
     /**
      * Related to Meila-Heckerman- and Maximum-Match-Measure.
      * @param clustering1
@@ -21,7 +44,7 @@ public class ClusteringScorer {
      * @return
      */
     public static <N> double naiveScore(PartitionedGraph<N> clustering1, PartitionedGraph<N> clustering2) {
-        // determine more refined clustering
+        // determine more refined partitioning
         PartitionedGraph<N> fineClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering2 : clustering1;
         PartitionedGraph<N> coarseClustering = clustering2.getNumberOfModules() > clustering1.getNumberOfModules() ? clustering1 : clustering2;
 
@@ -64,7 +87,7 @@ public class ClusteringScorer {
 
     public static <N> double fowlkesMallowsIndex(PartitionedGraph<N> reference, PartitionedGraph<N> clustering) {
         List<N> nodes = extractAllReferencedNodes(reference, clustering);
-        int totalNumberOfElements = nodes.size();
+//        int totalNumberOfElements = nodes.size();
 
         int n00 = 0;
         int n01 = 0;
@@ -73,12 +96,12 @@ public class ClusteringScorer {
 
         for (int i = 0; i < nodes.size() - 1; i++) {
             N node1 = nodes.get(i);
-            Module referenceModule1 = reference.getModuleOf(node1);
-            Module clusteringModule1 = clustering.getModuleOf(node1);
+            Optional<Module<N>> referenceModule1 = reference.getModuleOf(node1);
+            Optional<Module<N>> clusteringModule1 = clustering.getModuleOf(node1);
             for (int j = i + 1; j < nodes.size(); j++) {
                 N node2 = nodes.get(j);
-                Module referenceModule2 = reference.getModuleOf(node2);
-                Module clusteringModule2 = clustering.getModuleOf(node2);
+                Optional<Module<N>> referenceModule2 = reference.getModuleOf(node2);
+                Optional<Module<N>> clusteringModule2 = clustering.getModuleOf(node2);
 
                 if(referenceModule1.equals(referenceModule2) && clusteringModule1.equals(clusteringModule2)) {
                     n11++;
@@ -104,12 +127,12 @@ public class ClusteringScorer {
 
         for(int i = 0; i < nodes.size() - 1; i++) {
             N node1 = nodes.get(i);
-            Module module11 = clustering1.getModuleOf(node1);
-            Module module12 = clustering2.getModuleOf(node1);
+            Optional<Module<N>> module11 = clustering1.getModuleOf(node1);
+            Optional<Module<N>> module12 = clustering2.getModuleOf(node1);
             for(int j = i + 1; j < nodes.size(); j++) {
                 N node2 = nodes.get(j);
-                Module module21 = clustering1.getModuleOf(node2);
-                Module module22 = clustering2.getModuleOf(node2);
+                Optional<Module<N>> module21 = clustering1.getModuleOf(node2);
+                Optional<Module<N>> module22 = clustering2.getModuleOf(node2);
 
                 // same module in both solutions
                 if(module11.equals(module21) && module21.equals(module22)) {

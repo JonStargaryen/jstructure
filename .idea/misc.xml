@@ -51,6 +51,7 @@
         <option value="$PROJECT_DIR$/jstructure-all/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-design/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-explorer/pom.xml" />
+        <option value="$PROJECT_DIR$/jstructure-membrane-topology/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-mmm-bridge/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-mutation/pom.xml" />
         <option value="$PROJECT_DIR$/membrane-explorer/pom.xml" />

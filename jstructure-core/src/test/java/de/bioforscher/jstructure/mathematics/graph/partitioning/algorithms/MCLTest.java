@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.mathematics.graph.clustering.algorithms;
+package de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms;
 
 import de.bioforscher.jstructure.mathematics.graph.Edge;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
@@ -77,16 +77,16 @@ public class MCLTest {
                 MCL.DEFAULT_MAX_ITERATIONS,
                 Edge::getWeight);
 
-        PartitionedGraph<String> clustering = mcl.clusterGraph(graph);
+        PartitionedGraph<String> clustering = mcl.partitionGraph(graph);
 
         Assert.assertEquals("cluster size does not match expectation",
                 2,
                 clustering.getNumberOfModules());
-        Assert.assertTrue("clustering compromised", clustering.getModules().get(0).containsNode(cat));
-        Assert.assertTrue("clustering compromised", clustering.getModules().get(0).containsNode(hat));
-        Assert.assertTrue("clustering compromised", clustering.getModules().get(0).containsNode(bat));
-        Assert.assertTrue("clustering compromised", clustering.getModules().get(1).containsNode(bit));
-        Assert.assertTrue("clustering compromised", clustering.getModules().get(1).containsNode(hit));
-        Assert.assertTrue("clustering compromised", clustering.getModules().get(1).containsNode(fit));
+        Assert.assertTrue("partitioning compromised", clustering.getModules().get(0).containsNode(cat));
+        Assert.assertTrue("partitioning compromised", clustering.getModules().get(0).containsNode(hat));
+        Assert.assertTrue("partitioning compromised", clustering.getModules().get(0).containsNode(bat));
+        Assert.assertTrue("partitioning compromised", clustering.getModules().get(1).containsNode(bit));
+        Assert.assertTrue("partitioning compromised", clustering.getModules().get(1).containsNode(hit));
+        Assert.assertTrue("partitioning compromised", clustering.getModules().get(1).containsNode(fit));
     }
 }

@@ -44,7 +44,7 @@ public class DatasetComposer {
     private boolean handlePdbId(String chainId, boolean parseOpm) {
         try {
             String pdbId = chainId.split("_")[0];
-            String chainIdentifier = chainId.split("_")[1];
+            String chainIdentifier = chainId.split("_")[1].substring(0, 1);
             logger.info("handling {} - parsing OPM: {}",
                     chainId,
                     parseOpm);
