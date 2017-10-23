@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.modularity.foldingcores;
+package de.bioforscher.jstructure.membrane.modularity.foldingcores.interactiontypes;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;

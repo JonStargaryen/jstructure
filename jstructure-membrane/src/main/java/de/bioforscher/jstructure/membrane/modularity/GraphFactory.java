@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 import java.util.regex.Pattern;
@@ -213,6 +214,31 @@ public class GraphFactory {
         return mcl.partitionGraph(graph);
     }
 
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Graph<AminoAcid> graph, Path definitionFile) {
+        try {
+            List<String> lines = Files.readAllLines(definitionFile);
+            List<Module<AminoAcid>> modules = new ArrayList<>();
+            for(String range : lines) {
+                if(range.startsWith("#")) {
+                    continue;
+                }
+
+                String id = range.split(":")[0];
+                String rawRanges = range.split(":")[1];
+
+                List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
+                        .map(rawRange -> rawRange.split("-"))
+                        .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
+                        .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().orElseThrow(() -> new NoSuchElementException("did not find " + residueNumber)))
+                        .collect(Collectors.toList());
+                modules.add(new Module<>(id, nodes));
+            }
+
+            return new PartitionedGraph<>(graph, modules);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Chain chain, Path definitionFile) {
         logger.info("partitioning {} using definition file {}",

@@ -23,17 +23,29 @@ public class PartitioningScorer {
      */
     public static <N> double modularityScore(PartitionedGraph<N> partitionedGraph) {
         double modularityScore = 0;
-        double numberOfEdges = partitionedGraph.getEdges().size();
         for(Module<N> module : partitionedGraph.getModules()) {
-            int sumOfDegrees = module.getNodes().stream()
-                    .mapToInt(partitionedGraph::getDegreeOf)
-                    .sum();
-            long numberOfIntraModuleEdges = partitionedGraph.getEdges().stream()
-                    .filter(edge -> module.containsNode(edge.getLeft()) && module.containsNode(edge.getRight()))
-                    .count();
-            modularityScore += numberOfIntraModuleEdges / numberOfEdges - sumOfDegrees * sumOfDegrees / (2 * numberOfEdges);
+            modularityScore += modularityScore(partitionedGraph, module);
         }
         return modularityScore;
+    }
+
+    /**
+     * Scores an individual module in the context of the whole graph.
+     * @param partitionedGraph
+     * @param module
+     * @param <N>
+     * @return
+     */
+    public static <N> double modularityScore(PartitionedGraph<N> partitionedGraph, Module<N> module) {
+        double numberOfEdges = partitionedGraph.getEdges().size();
+        int sumOfDegrees = module.getNodes().stream()
+                .mapToInt(partitionedGraph::getDegreeOf)
+                .sum();
+        long numberOfIntraModuleEdges = partitionedGraph.getEdges().stream()
+                .filter(edge -> module.containsNode(edge.getLeft()) && module.containsNode(edge.getRight()))
+                .count();
+        double exp = sumOfDegrees / (2 * numberOfEdges);
+        return numberOfIntraModuleEdges / numberOfEdges - exp * exp;
     }
 
     /**
