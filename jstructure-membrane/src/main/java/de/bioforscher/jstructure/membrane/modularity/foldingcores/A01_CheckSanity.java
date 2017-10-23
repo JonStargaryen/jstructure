@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.membrane.modularity.foldingcores;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 
 import java.nio.file.Path;
 
@@ -15,7 +16,7 @@ public class A01_CheckSanity {
     }
 
     private static void checkSanity(String line) {
-//        System.out.println(line);
+        System.out.println(line);
         String pdbId = line.split(",")[0];
         int numberOfEarlyFoldingResidues = Integer.valueOf(line.split(",")[1]);
 
@@ -34,5 +35,20 @@ public class A01_CheckSanity {
         if(numberOfEarlyFoldingResidues != obs) {
             System.err.println(pdbId + " - " + start2FoldFilePath.toFile().getName() +  " - expected: " + numberOfEarlyFoldingResidues + " - found: " + obs);
         }
+
+        String chainId = MembraneConstants.lines(start2FoldFilePath)
+                .filter(l -> l.startsWith("#pdb"))
+                .map(l -> l.split(":")[1])
+                .findFirst()
+                .get()
+                .split("_")[1];
+
+        // check for correctness of chain annotation
+        StructureParser.source(pdbId)
+                .minimalParsing(true)
+                .parse()
+                .select()
+                .chainId(chainId)
+                .asChain();
     }
 }
