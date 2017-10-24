@@ -21,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.ToDoubleFunction;
 import java.util.regex.Pattern;
@@ -229,7 +228,7 @@ public class GraphFactory {
                 List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
                         .map(rawRange -> rawRange.split("-"))
                         .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
-                        .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().orElseThrow(() -> new NoSuchElementException("did not find " + residueNumber)))
+                        .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().get())
                         .collect(Collectors.toList());
                 modules.add(new Module<>(id, nodes));
             }

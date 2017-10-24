@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
@@ -19,6 +20,7 @@ import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
@@ -26,7 +28,8 @@ import java.util.stream.Collectors;
  */
 public class A01_PrintModularityScoresOfFoldons {
     public static void main(String[] args) {
-        System.out.println("order;size;intra;inter;score;loop;asa;ep");
+        //TODO DynaMine scores?
+        System.out.println("order;size;intra;inter;avg_degree;score;avg_loop;avg_asa;avg_ep;max_plip;min_ep");
         MembraneConstants.list(MembraneConstants.FOLDING_CORES_DIRECTORY.resolve("order"))
                 .forEach(A01_PrintModularityScoresOfFoldons::handleFile);
     }
@@ -66,6 +69,10 @@ public class A01_PrintModularityScoresOfFoldons {
                         partitionedGraph.getEdges().stream()
                                 .filter(edge -> (module.containsNode(edge.getLeft()) && !module.containsNode(edge.getRight())) || (!module.containsNode(edge.getLeft()) && module.containsNode(edge.getRight())))
                                 .count()+ ";" +
+                        StandardFormat.format(module.getNodes().stream()
+                                .mapToInt(graph::getDegreeOf)
+                                .average()
+                                .getAsDouble()) + ";" +
                         StandardFormat.format(PartitioningScorer.modularityScore(partitionedGraph, module)) + ";" +
                         StandardFormat.format(module.getNodes().stream()
                                 .map(aminoAcid -> aminoAcid.getFeature(LoopFraction.class))
@@ -81,6 +88,17 @@ public class A01_PrintModularityScoresOfFoldons {
                                 .map(aminoAcid -> aminoAcid.getFeature(EnergyProfile.class))
                                 .mapToDouble(EnergyProfile::getSolvationEnergy)
                                 .average()
+                                .getAsDouble()) + ";" +
+                        StandardFormat.format(module.getNodes().stream()
+                                .map(aminoAcid -> aminoAcid.getFeature(PLIPInteractionContainer.class))
+                                .map(PLIPInteractionContainer::getInteractions)
+                                .mapToInt(Collection::size)
+                                .max()
+                                .getAsInt()) + ";" +
+                        StandardFormat.format(module.getNodes().stream()
+                                .map(aminoAcid -> aminoAcid.getFeature(EnergyProfile.class))
+                                .mapToDouble(EnergyProfile::getSolvationEnergy)
+                                .min()
                                 .getAsDouble()))
                 .forEach(System.out::println);
     }
