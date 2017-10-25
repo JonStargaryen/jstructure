@@ -1,8 +1,11 @@
-package de.bioforscher.jstructure.membrane.modularity;
+package de.bioforscher.jstructure.membrane.modularity.visualization;
 
-import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.Module;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.*;
@@ -33,13 +36,15 @@ public class GraphVisualizer {
             "[171,165,109], " +
             "[206,134,145]").collect(Collectors.toList());
 
-    public static String compose(PartitionedGraph<AminoAcid> graph) {
-        boolean hasSecondaryStructureAnnotated = graph.getNodes()
-                .get(0)
-                .getFeatureContainer()
-                .getFeatureOptional(GenericSecondaryStructure.class).isPresent();
+    public static String composeJsonRepresentation(Chain chain,
+                                                   PartitionedGraph<AminoAcid> experimentalData,
+                                                   Map<String, PartitionedGraph<AminoAcid>> inSilicoData) throws JsonProcessingException {
+        // annotate secondary structure elements
+        new DictionaryOfProteinSecondaryStructure().process(chain.getParentStructure());
 
-        return "";
+        return new ObjectMapper().writeValueAsString(new JsonChain(chain,
+                experimentalData,
+                inSilicoData));
     }
 
     public static String composeDefinitionString(PartitionedGraph<AminoAcid> graph) {

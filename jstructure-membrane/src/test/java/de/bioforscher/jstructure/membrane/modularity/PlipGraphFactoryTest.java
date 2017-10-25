@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.membrane.modularity;
 
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
+import de.bioforscher.jstructure.membrane.modularity.visualization.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;

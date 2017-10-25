@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.PartitioningScorer;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
-import de.bioforscher.jstructure.membrane.modularity.GraphVisualizer;
+import de.bioforscher.jstructure.membrane.modularity.visualization.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;

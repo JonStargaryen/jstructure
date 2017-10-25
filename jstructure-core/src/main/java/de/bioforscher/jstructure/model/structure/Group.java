@@ -91,8 +91,23 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         this.threeLetterCode = threeLetterCode;
     }
 
+    /**
+     * Returns the residue identifier of this group, i.e. the synthesis of residue number and potential insertion code.
+     * This is the naming used in the PDB format and the preferred and stable way to select individual residues. For the
+     * numbering in the internal data structure use {@link #getResidueIndex()}.
+     * @return the object describing this residue's identifier
+     */
     public ResidueIdentifier getResidueIdentifier() {
         return residueIdentifier;
+    }
+
+    /**
+     * Returns the index of this group in the parent chain. This is the plain representation of the ordering in the
+     * underlying data structure. For identifiers in the PDB format use {@link #getResidueIdentifier()}.
+     * @return the index of this residue in the parent chain, starting with 0
+     */
+    public int getResidueIndex() {
+        return parentChain.getGroups().indexOf(this);
     }
 
     public GroupPrototype getGroupPrototype() {

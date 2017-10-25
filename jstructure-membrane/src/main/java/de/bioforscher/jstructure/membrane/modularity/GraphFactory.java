@@ -131,6 +131,32 @@ public class GraphFactory {
         return new Graph<>(aminoAcids, interactions);
     }
 
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Chain chain, List<String> netCartoDocument) {
+        List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+        List<Module<AminoAcid>> modules = netCartoDocument.stream()
+                .filter(line -> !line.startsWith("#"))
+                .map(line -> new Module<>(line.split(" ")[0], Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
+                        .mapToInt(Integer::valueOf)
+                        .mapToObj(residueNumber -> chain.select()
+                                .aminoAcids()
+                                .residueNumber(residueNumber)
+                                .asOptionalAminoAcid())
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+
+        return new PartitionedGraph<>(new Graph<>(aminoAcids), modules);
+    }
+
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Chain chain, Path netCartoFile) {
+        try {
+            return createPartitionedGraphFromNetCartoFile(chain, Files.readAllLines(netCartoFile));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     public static PartitionedGraph<AminoAcid> createPartitionedGraphFromSecondaryStructureElements(Chain chain) {
         logger.info("partitioning {} using secondary structure elements",
                 chain.getChainIdentifier());
@@ -216,27 +242,31 @@ public class GraphFactory {
     public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Graph<AminoAcid> graph, Path definitionFile) {
         try {
             List<String> lines = Files.readAllLines(definitionFile);
-            List<Module<AminoAcid>> modules = new ArrayList<>();
-            for(String range : lines) {
-                if(range.startsWith("#")) {
-                    continue;
-                }
-
-                String id = range.split(":")[0];
-                String rawRanges = range.split(":")[1];
-
-                List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
-                        .map(rawRange -> rawRange.split("-"))
-                        .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
-                        .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().get())
-                        .collect(Collectors.toList());
-                modules.add(new Module<>(id, nodes));
-            }
-
-            return new PartitionedGraph<>(graph, modules);
+            return createPartitionedGraphFromDefinitionFile(graph, lines);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Graph<AminoAcid> graph, List<String> plipDocument) {
+        List<Module<AminoAcid>> modules = new ArrayList<>();
+        for(String range : plipDocument) {
+            if(range.startsWith("#")) {
+                continue;
+            }
+
+            String id = range.split(":")[0];
+            String rawRanges = range.split(":")[1];
+
+            List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
+                    .map(rawRange -> rawRange.split("-"))
+                    .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
+                    .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().get())
+                    .collect(Collectors.toList());
+            modules.add(new Module<>(id, nodes));
+        }
+
+        return new PartitionedGraph<>(graph, modules);
     }
 
     public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Chain chain, Path definitionFile) {
@@ -245,30 +275,36 @@ public class GraphFactory {
                 definitionFile);
         try {
             List<String> lines = Files.readAllLines(definitionFile);
-            List<AminoAcid> aminoAcids = new ArrayList<>();
-            List<Module<AminoAcid>> modules = new ArrayList<>();
-            for(String range : lines) {
-                if(range.startsWith("#")) {
-                    continue;
-                }
-
-                String id = range.split(":")[0];
-                String rawRanges = range.split(":")[1];
-
-                List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
-                        .map(rawRange -> rawRange.split("-"))
-                        .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
-                        .map(residueNumber -> chain.select().residueNumber(residueNumber).asAminoAcid())
-                        .collect(Collectors.toList());
-                aminoAcids.addAll(nodes);
-                modules.add(new Module<>(id, nodes));
-            }
-
-            List<Edge<AminoAcid>> edges = createEdgesNaively(modules);
-
-            return new PartitionedGraph<>(new Graph<>(aminoAcids, edges), modules);
+            return createPartitionedGraphFromDefinitionFile(chain, lines);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Chain chain, List<String> definitionDocument) {
+        List<AminoAcid> aminoAcids = new ArrayList<>();
+        List<Module<AminoAcid>> modules = new ArrayList<>();
+        for(String range : definitionDocument) {
+            if(range.startsWith("#")) {
+                continue;
+            }
+
+            String id = range.split(":")[0];
+            String rawRanges = range.split(":")[1];
+
+            List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
+                    .map(rawRange -> rawRange.split("-"))
+                    .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
+                    .map(residueNumber -> chain.select().aminoAcids().residueNumber(residueNumber).asOptionalAminoAcid())
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+            aminoAcids.addAll(nodes);
+            modules.add(new Module<>(id, nodes));
+        }
+
+        List<Edge<AminoAcid>> edges = createEdgesNaively(modules);
+
+        return new PartitionedGraph<>(new Graph<>(aminoAcids, edges), modules);
     }
 }
