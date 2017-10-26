@@ -37,27 +37,37 @@ public class GraphFactory {
     public enum WeightingScheme {
         UNWEIGHTED(interaction -> 1.0),
         CLASSIFIED(interaction -> {
-            if(interaction instanceof HalogenBond) {
-                return 2;
-            } else if(interaction instanceof HydrogenBond) {
-                return 3;
+            if(interaction instanceof HydrogenBond) {
+                return 10;
             } else if(interaction instanceof HydrophobicInteraction) {
-                return 1;
-            } else if(interaction instanceof MetalComplex) {
-                return 3;
-            } else if(interaction instanceof PiCationInteraction) {
                 return 2;
-            } else if(interaction instanceof PiStacking) {
-                return 2;
-            } else if(interaction instanceof SaltBridge) {
-                return 2;
-            } else if(interaction instanceof WaterBridge) {
-                return 3;
             } else {
-                // covalent bond
-                return 4;
+                // covalent bond or any of the freak interactions
+                return 5;
             }
         }),
+//        CLASSIFIED(interaction -> {
+//            if(interaction instanceof HalogenBond) {
+//                return 2;
+//            } else if(interaction instanceof HydrogenBond) {
+//                return 3;
+//            } else if(interaction instanceof HydrophobicInteraction) {
+//                return 1;
+//            } else if(interaction instanceof MetalComplex) {
+//                return 3;
+//            } else if(interaction instanceof PiCationInteraction) {
+//                return 2;
+//            } else if(interaction instanceof PiStacking) {
+//                return 2;
+//            } else if(interaction instanceof SaltBridge) {
+//                return 2;
+//            } else if(interaction instanceof WaterBridge) {
+//                return 3;
+//            } else {
+//                // covalent bond
+//                return 4;
+//            }
+//        }),
         ENERGETIC(interaction -> {
             if(interaction instanceof HalogenBond) {
                 return 8;
@@ -131,27 +141,26 @@ public class GraphFactory {
         return new Graph<>(aminoAcids, interactions);
     }
 
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Chain chain, List<String> netCartoDocument) {
-        List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Graph<AminoAcid> graph, List<String> netCartoDocument) {
         List<Module<AminoAcid>> modules = netCartoDocument.stream()
                 .filter(line -> !line.startsWith("#"))
                 .map(line -> new Module<>(line.split(" ")[0], Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
                         .mapToInt(Integer::valueOf)
-                        .mapToObj(residueNumber -> chain.select()
-                                .aminoAcids()
-                                .residueNumber(residueNumber)
-                                .asOptionalAminoAcid())
+                        .mapToObj(residueNumber -> graph.getNodes()
+                                .stream()
+                                .filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber)
+                                .findFirst())
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .collect(Collectors.toList())))
                 .collect(Collectors.toList());
 
-        return new PartitionedGraph<>(new Graph<>(aminoAcids), modules);
+        return new PartitionedGraph<>(graph, modules);
     }
 
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Chain chain, Path netCartoFile) {
+    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Graph<AminoAcid> graph, Path netCartoFile) {
         try {
-            return createPartitionedGraphFromNetCartoFile(chain, Files.readAllLines(netCartoFile));
+            return createPartitionedGraphFromNetCartoFile(graph, Files.readAllLines(netCartoFile));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

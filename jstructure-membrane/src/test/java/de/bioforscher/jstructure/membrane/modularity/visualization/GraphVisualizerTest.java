@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.membrane.modularity.visualization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -42,31 +43,53 @@ public class GraphVisualizerTest {
                 .chainName(chainId)
                 .asChain();
 
-        List<String> expLines = TestUtils.getResourceAsLines("exp/1f21_A.exp");
+        List<AminoAcid> earlyFoldingResidues = TestUtils.getResourceAsStream("start2fold/" + id + ".residues")
+                .filter(line -> !line.startsWith("#"))
+                .filter(line -> line.endsWith("EARLY"))
+                .map(line -> line.split(";")[0])
+                .mapToInt(Integer::valueOf)
+                .mapToObj(resNum -> chain.select()
+                        .aminoAcids()
+                        .residueNumber(resNum)
+                        .asAminoAcid())
+                .collect(Collectors.toList());
+
+        List<Double> dynamine = TestUtils.getResourceAsStream("dynamine/" + id + ".pred")
+                .filter(line -> line.contains("\t"))
+                .map(line -> line.split("\t")[1])
+                .mapToDouble(Double::valueOf)
+                .boxed()
+                .collect(Collectors.toList());
+        List<Double> efoldmine = TestUtils.getResourceAsStream("efoldmine/" + id + ".pred")
+                .mapToDouble(Double::valueOf)
+                .boxed()
+                .collect(Collectors.toList());
+
+        List<String> expLines = TestUtils.getResourceAsLines("exp/" + id + ".exp");
+
+        String plipDocument = TestUtils.getResourceAsStream("plip/" + id + ".plip")
+                .collect(Collectors.joining(System.lineSeparator()));
+        Graph<AminoAcid> graph = GraphFactory.createGraphFromPlipDocument(chain, plipDocument, GraphFactory.WeightingScheme.CLASSIFIED);
+
         PartitionedGraph<AminoAcid> exp = GraphFactory.createPartitionedGraphFromDefinitionFile(chain, expLines);
         Map<String, PartitionedGraph<AminoAcid>> inSilicoData = new TreeMap<>();
 
-        inSilicoData.put("netcarto", GraphFactory.createPartitionedGraphFromNetCartoFile(chain, TestUtils.getResourceAsLines("netcarto/1f21_A_plip.modules.dat")));
-        String plipDocument = TestUtils.getResourceAsStream("plip/1f21_A.plip")
-                .collect(Collectors.joining(System.lineSeparator()));
+        inSilicoData.put("NetCarto", GraphFactory.createPartitionedGraphFromNetCartoFile(graph, TestUtils.getResourceAsLines("netcarto/" + id + "_plip.modules.dat")));
 
-        for(double inflation = 1.2; inflation <= 2.05; inflation = inflation + 0.05) {
+        for(double inflation = 1.2; inflation <= /*2.01*/ 1.21; inflation = inflation + 0.05) {
             int i = (int) Math.round(inflation * 100);
             System.out.println(i);
-            inSilicoData.put("unw-" + i, GraphFactory.createPartitionedGraphFromPlipData(chain,
-                    plipDocument,
-                    inflation,
-                    GraphFactory.WeightingScheme.UNWEIGHTED));
             inSilicoData.put("cla-" + i, GraphFactory.createPartitionedGraphFromPlipData(chain,
                     plipDocument,
                     inflation,
                     GraphFactory.WeightingScheme.CLASSIFIED));
-            inSilicoData.put("ene-" + i, GraphFactory.createPartitionedGraphFromPlipData(chain,
-                    plipDocument,
-                    inflation,
-                    GraphFactory.WeightingScheme.ENERGETIC));
         }
 
-        System.out.println(GraphVisualizer.composeJsonRepresentation(chain, exp, inSilicoData));
+        System.out.println(GraphVisualizer.composeJsonRepresentation(chain,
+                earlyFoldingResidues,
+                dynamine,
+                efoldmine,
+                exp,
+                inSilicoData));
     }
 }

@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.membrane.modularity.visualization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.Module;
@@ -37,12 +39,20 @@ public class GraphVisualizer {
             "[206,134,145]").collect(Collectors.toList());
 
     public static String composeJsonRepresentation(Chain chain,
+                                                   List<AminoAcid> earlyFoldingResidues,
+                                                   List<Double> dynamineScores,
+                                                   List<Double> efoldmineScores,
                                                    PartitionedGraph<AminoAcid> experimentalData,
                                                    Map<String, PartitionedGraph<AminoAcid>> inSilicoData) throws JsonProcessingException {
         // annotate secondary structure elements
         new DictionaryOfProteinSecondaryStructure().process(chain.getParentStructure());
+        new EnergyProfileCalculator().process(chain.getParentStructure());
+        new AccessibleSurfaceAreaCalculator().process(chain.getParentStructure());
 
         return new ObjectMapper().writeValueAsString(new JsonChain(chain,
+                earlyFoldingResidues,
+                dynamineScores,
+                efoldmineScores,
                 experimentalData,
                 inSilicoData));
     }

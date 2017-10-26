@@ -35,6 +35,7 @@ public class MembraneConstants {
     public static final Path PDBTM_NR_BETA_DATASET_PLIP_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("plip");
     public static final Path PDBTM_NR_BETA_DATASET_NETWORK_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("network");
     public static final Path FOLDING_CORES_DIRECTORY = DATASETS_DIRECTORY.resolve("foldingcores");
+    public static final Path DIVISION_DIRECTORY = DATASETS_DIRECTORY.resolve("division");
 
     public static Stream<String> lines(Path path) {
         try {
@@ -82,6 +83,14 @@ public class MembraneConstants {
             } catch (IOException e) {
                 throw new UncheckedIOException(e);
             }
+        }
+    }
+
+    public static void move(Path inPath, Path outPath) {
+        try {
+            Files.move(inPath, outPath);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 }
