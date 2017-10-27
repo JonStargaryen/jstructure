@@ -135,6 +135,11 @@ public class IdentifierFactory {
         }
     }
 
+    /**
+     * Parses residue identifiers with potential insertion codes. E.g., will handle '95' as well as '95A' and map them
+     * to residue number 95 respectively reside number 95 with insertion code A.
+     * @return the {@link ResidueIdentifier} instance
+     */
     public static ResidueIdentifier createResidueIdentifier(String residueNumberString) {
         try {
             // plain number
