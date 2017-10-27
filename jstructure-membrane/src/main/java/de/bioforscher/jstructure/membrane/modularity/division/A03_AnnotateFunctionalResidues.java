@@ -56,7 +56,7 @@ public class A03_AnnotateFunctionalResidues {
 
             ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR.process(structure);
             chain.getFeature(MembraneContainer.class)
-                    .getTransMembraneHelices()
+                    .getTransMembraneSubunits()
                     .stream()
                     .forEach(System.out::println);
 

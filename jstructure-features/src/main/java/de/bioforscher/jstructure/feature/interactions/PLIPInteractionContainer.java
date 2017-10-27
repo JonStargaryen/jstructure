@@ -107,4 +107,10 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
                 .collect(Collectors.toList());
         return new PLIPInteractionContainer(getFeatureProvider(), filteredInteractions);
     }
+
+    public boolean areInContact(Group group1, Group group2) {
+        return getInteractions().stream()
+                .anyMatch(plipInteraction -> (plipInteraction.getPartner1().equals(group1) && plipInteraction.getPartner2().equals(group2)) ||
+                        (plipInteraction.getPartner2().equals(group1) && plipInteraction.getPartner1().equals(group2)));
+    }
 }

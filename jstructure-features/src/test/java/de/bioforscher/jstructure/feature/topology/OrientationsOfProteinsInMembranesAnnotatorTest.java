@@ -34,7 +34,7 @@ public class OrientationsOfProteinsInMembranesAnnotatorTest {
         Structure protein = StructureParser.source(id).parse();
         annotator.process(protein);
         MembraneContainer container = protein.getFeatureContainer().getFeature(MembraneContainer.class);
-        Assert.assertEquals(0, container.getTransMembraneHelices().size());
+        Assert.assertEquals(0, container.getTransMembraneSubunits().size());
         Assert.assertTrue("did not annotate any membrane layer atoms",
                 container.getMembraneAtoms().size() > 0);
     }

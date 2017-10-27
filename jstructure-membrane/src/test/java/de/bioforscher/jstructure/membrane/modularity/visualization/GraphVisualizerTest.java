@@ -1,17 +1,21 @@
 package de.bioforscher.jstructure.membrane.modularity.visualization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
+import de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL;
 import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.testutil.TestUtils;
+import org.jsoup.Jsoup;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -65,24 +69,22 @@ public class GraphVisualizerTest {
                 .boxed()
                 .collect(Collectors.toList());
 
-        List<String> expLines = TestUtils.getResourceAsLines("exp/" + id + ".exp");
+        InputStream expLines = TestUtils.getResourceAsInputStream("exp/" + id + ".exp");
 
         String plipDocument = TestUtils.getResourceAsStream("plip/" + id + ".plip")
                 .collect(Collectors.joining(System.lineSeparator()));
-        Graph<AminoAcid> graph = GraphFactory.createGraphFromPlipDocument(chain, plipDocument, GraphFactory.WeightingScheme.CLASSIFIED);
+        new PLIPIntraMolecularAnnotator().process(chain, Jsoup.parse(plipDocument));
+        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2014);
 
-        PartitionedGraph<AminoAcid> exp = GraphFactory.createPartitionedGraphFromDefinitionFile(chain, expLines);
+        PartitionedGraph<AminoAcid> exp = GraphFactory.Partitioned.fromDefinitionFile(graph, expLines);
         Map<String, PartitionedGraph<AminoAcid>> inSilicoData = new TreeMap<>();
 
-        inSilicoData.put("NetCarto", GraphFactory.createPartitionedGraphFromNetCartoFile(graph, TestUtils.getResourceAsLines("netcarto/" + id + "_plip.modules.dat")));
+        inSilicoData.put("NetCarto", GraphFactory.Partitioned.fromNetCartoFile(graph, TestUtils.getResourceAsInputStream("netcarto/" + id + "_plip.modules.dat")));
 
         for(double inflation = 1.2; inflation <= /*2.01*/ 1.21; inflation = inflation + 0.05) {
             int i = (int) Math.round(inflation * 100);
             System.out.println(i);
-            inSilicoData.put("cla-" + i, GraphFactory.createPartitionedGraphFromPlipData(chain,
-                    plipDocument,
-                    inflation,
-                    GraphFactory.WeightingScheme.CLASSIFIED));
+            inSilicoData.put("cla-" + i, GraphFactory.Partitioned.fromMCL(graph, MCL.DEFAULT_EXPAND_FACTOR, inflation));
         }
 
         System.out.println(GraphVisualizer.composeJsonRepresentation(chain,

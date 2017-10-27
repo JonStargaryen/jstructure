@@ -1,13 +1,17 @@
 package de.bioforscher.jstructure.membrane.modularity.validation;
 
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
+import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.PartitioningScorer;
+import de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
 import de.bioforscher.jstructure.membrane.modularity.visualization.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,9 +60,13 @@ public class S01_ExperimentalValidation {
                 .chainName(chainId)
                 .asChain();
 
-        PartitionedGraph<AminoAcid> experimental = GraphFactory.createPartitionedGraphFromDefinitionFile(chain,
+        String plipDocument = MembraneConstants.lines(dataset.resolve("plip").resolve(id + ".plip"))
+                .collect(Collectors.joining(System.lineSeparator()));
+        new PLIPIntraMolecularAnnotator().process(chain, Jsoup.parse(plipDocument));
+        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2014);
+        PartitionedGraph<AminoAcid> experimental = GraphFactory.Partitioned.fromDefinitionFile(graph,
                 dataset.resolve("exp").resolve(id + ".exp"));
-        PartitionedGraph<AminoAcid> secondaryStructure = GraphFactory.createPartitionedGraphFromSecondaryStructureElements(chain);
+        PartitionedGraph<AminoAcid> secondaryStructure = GraphFactory.Partitioned.fromSecondaryStructureElements(graph);
         System.out.println("experimental:");
         System.out.println(GraphVisualizer.composeDefinitionString(experimental));
         System.out.println("sse:");
@@ -71,29 +79,10 @@ public class S01_ExperimentalValidation {
                             logger.info("sampling graph of {} at inflation {}",
                                     chain.getChainIdentifier(),
                                     i);
-                            PartitionedGraph<AminoAcid> graph = GraphFactory.createPartitionedGraphFromPlipData(chain,
-                                    dataset.resolve("plip").resolve(id + ".plip"),
-                                    i,
-                                    GraphFactory.WeightingScheme.CLASSIFIED);
+                            PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.Partitioned.fromMCL(graph, MCL.DEFAULT_EXPAND_FACTOR, i);
                             System.out.println("wplip-" + i);
-                            System.out.println(GraphVisualizer.composeDefinitionString(graph));
-                            return graph;
-                        }));
-        Map<Integer, PartitionedGraph<AminoAcid>> unweightedMclResults = getInflationValueRange()
-                .boxed()
-                .collect(Collectors.toMap(Function.identity(),
-                        inflation -> {
-                            double i = inflation / (double) 10;
-                            logger.info("sampling graph of {} at inflation {}",
-                                    chain.getChainIdentifier(),
-                                    i);
-                            PartitionedGraph<AminoAcid> graph = GraphFactory.createPartitionedGraphFromPlipData(chain,
-                                    dataset.resolve("plip").resolve(id + ".plip"),
-                                    i,
-                                    GraphFactory.WeightingScheme.UNWEIGHTED);
-                            System.out.println("uplip-" + i);
-                            System.out.println(GraphVisualizer.composeDefinitionString(graph));
-                            return graph;
+                            System.out.println(GraphVisualizer.composeDefinitionString(partitionedGraph));
+                            return partitionedGraph;
                         }));
 
         return chain.aminoAcids().count() + "," + experimental.getNumberOfModules() + "," +
@@ -101,11 +90,11 @@ public class S01_ExperimentalValidation {
                 getInflationValueRange()
                         .mapToObj(weightedMclResults::get)
                         .map(mclResult -> composeScoreString(experimental, mclResult))
-                        .collect(Collectors.joining(",")) + "," +
+                        .collect(Collectors.joining(",")) /*+ "," +
                 getInflationValueRange()
                         .mapToObj(unweightedMclResults::get)
                         .map(mclResult -> composeScoreString(experimental, mclResult))
-                        .collect(Collectors.joining(","));
+                        .collect(Collectors.joining(","))*/;
     }
 
     private static IntStream getInflationValueRange() {

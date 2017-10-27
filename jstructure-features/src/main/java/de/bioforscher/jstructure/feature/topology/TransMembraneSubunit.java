@@ -62,4 +62,13 @@ public class TransMembraneSubunit {
     public List<IntegerRange> getSegments() {
         return segments;
     }
+
+    @Override
+    public String toString() {
+        return "TransMembraneSubunit{" +
+                "chainId='" + chainId + '\'' +
+                ", tilt='" + tilt + '\'' +
+                ", segments=" + segments +
+                '}';
+    }
 }

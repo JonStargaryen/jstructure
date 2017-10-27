@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.membrane.modularity;
 
-import de.bioforscher.jstructure.feature.interactions.*;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.mathematics.graph.Edge;
@@ -10,19 +10,16 @@ import de.bioforscher.jstructure.mathematics.graph.partitioning.Module;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL;
 import de.bioforscher.jstructure.model.SetOperations;
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import org.jsoup.Jsoup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.ToDoubleFunction;
+import java.util.function.BiPredicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -31,21 +28,22 @@ import java.util.stream.IntStream;
  * Constructs graph representations of protein chains.
  */
 public class GraphFactory {
-    private static final Logger logger = LoggerFactory.getLogger(GraphFactory.class);
-    private static final PLIPIntraMolecularAnnotator plipIntraMolecularAnnotator = new PLIPIntraMolecularAnnotator();
+    private static final double COVALENT_BOND_WEIGHT = 10;
+    private static final double SELF_LOOP_WEIGHT = 10;
+    private static final double CONTACT_WEIGHT = 5;
 
-    public enum WeightingScheme {
-        UNWEIGHTED(interaction -> 1.0),
-        CLASSIFIED(interaction -> {
-            if(interaction instanceof HydrogenBond) {
-                return 10;
-            } else if(interaction instanceof HydrophobicInteraction) {
-                return 2;
-            } else {
-                // covalent bond or any of the freak interactions
-                return 5;
-            }
-        }),
+//    public enum WeightingScheme {
+//        UNWEIGHTED(interaction -> 1.0),
+//        CLASSIFIED(interaction -> {
+//            if(interaction instanceof HydrogenBond) {
+//                return 5;
+//            } else if(interaction instanceof HydrophobicInteraction) {
+//                return 2;
+//            } else {
+//                // covalent bond or any of the freak interactions
+//                return 10;
+//            }
+//        }),
 //        CLASSIFIED(interaction -> {
 //            if(interaction instanceof HalogenBond) {
 //                return 2;
@@ -68,252 +66,207 @@ public class GraphFactory {
 //                return 4;
 //            }
 //        }),
-        ENERGETIC(interaction -> {
-            if(interaction instanceof HalogenBond) {
-                return 8;
-            } else if(interaction instanceof HydrogenBond) {
-                return 25;
-            } else if(interaction instanceof HydrophobicInteraction) {
-                // see: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3086625/
-                return 1.1 * 4.184;
-            } else if(interaction instanceof MetalComplex) {
-                //TODO validate, find reference
-                return 7 *  4.184;
-            } else if(interaction instanceof PiCationInteraction) {
-                return 13;
-            } else if(interaction instanceof PiStacking) {
-                return ((PiStacking) interaction).getType().equals("T") ? 11 : 8;
-            } else if(interaction instanceof SaltBridge) {
-                return 8;
-            } else if(interaction instanceof WaterBridge) {
-                // see https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2144129/pdf/10548043.pdf
-                return 7.4 * 4.184;
-            } else {
-                // covalent bond
-                return 40;
-            }
-        });
+//        ENERGETIC(interaction -> {
+//            if(interaction instanceof HalogenBond) {
+//                return 8;
+//            } else if(interaction instanceof HydrogenBond) {
+//                return 25;
+//            } else if(interaction instanceof HydrophobicInteraction) {
+//                // see: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3086625/
+//                return 1.1 * 4.184;
+//            } else if(interaction instanceof MetalComplex) {
+//                //TODO validate, find reference
+//                return 7 *  4.184;
+//            } else if(interaction instanceof PiCationInteraction) {
+//                return 13;
+//            } else if(interaction instanceof PiStacking) {
+//                return ((PiStacking) interaction).getType().equals("T") ? 11 : 8;
+//            } else if(interaction instanceof SaltBridge) {
+//                return 8;
+//            } else if(interaction instanceof WaterBridge) {
+//                // see https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2144129/pdf/10548043.pdf
+//                return 7.4 * 4.184;
+//            } else {
+//                // covalent bond
+//                return 40;
+//            }
+//        });
+//
+//        private final ToDoubleFunction<PLIPInteraction> weightingFunction;
+//
+//        WeightingScheme(ToDoubleFunction<PLIPInteraction> weightingFunction) {
+//            this.weightingFunction = weightingFunction;
+//        }
+//
+//        public double getWeight(PLIPInteraction plipInteraction) {
+//            return weightingFunction.applyAsDouble(plipInteraction);
+//        }
+//
+//        public double getCovalentWeight() {
+//            return getWeight(null);
+//        }
+//    }
 
-        private final ToDoubleFunction<PLIPInteraction> weightingFunction;
+    public enum InteractionScheme {
+        KRISHNAN2007((aminoAcid1, aminoAcid2) -> SetOperations.cartesianProductOf(aminoAcid1.getAtoms(), aminoAcid2.getAtoms())
+                .anyMatch(pair -> pair.getLeft().calculate().distance(pair.getRight()) <
+                        pair.getLeft().getElement().getVDWRadius() + pair.getRight().getElement().getVDWRadius() + 1.0)),
+        KHAN2015((aminoAcid1, aminoAcid2) -> SetOperations.cartesianProductOf(aminoAcid1.getAtoms(), aminoAcid2.getAtoms())
+                .anyMatch(pair -> pair.getLeft().calculate().distance(pair.getRight()) <
+                        pair.getLeft().getElement().getVDWRadius() + pair.getRight().getElement().getVDWRadius() + 0.6)),
+        HLEAP2013((aminoAcid1, aminoAcid2) -> SetOperations.cartesianProductOf(aminoAcid1.getAtoms(), aminoAcid2.getAtoms())
+                .anyMatch(pair -> pair.getLeft().calculate().distanceFast(pair.getRight()) < 4.5 * 4.5)),
+        FISCHER2000((aminoAcid1, aminoAcid2) -> SetOperations.cartesianProductOf(aminoAcid1.getAtoms(), aminoAcid2.getAtoms())
+                .anyMatch(pair -> pair.getLeft().calculate().distanceFast(pair.getRight()) < 4 * 4)),
+        CALPHA7((aminoAcid1, aminoAcid2) -> aminoAcid1.getCa().calculate()
+                .distanceFast(aminoAcid2.getCa()) < 7 * 7),
+        CALPHA8((aminoAcid1, aminoAcid2) -> aminoAcid1.getCa().calculate()
+                .distanceFast(aminoAcid2.getCa()) < 8 * 8),
+        SALENTIN2014((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
+                .areInContact(aminoAcid1, aminoAcid2));
 
-        WeightingScheme(ToDoubleFunction<PLIPInteraction> weightingFunction) {
-            this.weightingFunction = weightingFunction;
+        private final BiPredicate<AminoAcid, AminoAcid> criterion;
+
+        InteractionScheme(BiPredicate<AminoAcid, AminoAcid> criterion) {
+            this.criterion = criterion;
         }
 
-        public double getWeight(PLIPInteraction plipInteraction) {
-            return weightingFunction.applyAsDouble(plipInteraction);
-        }
-
-        public double getCovalentWeight() {
-            return getWeight(null);
+        public boolean areInContact(AminoAcid aminoAcid1, AminoAcid aminoAcid2) {
+            return criterion.test(aminoAcid1, aminoAcid2);
         }
     }
 
-    public static Graph<AminoAcid> createGraphFromPlipDocument(Chain chain, String plipDocument, WeightingScheme scheme) {
-        plipIntraMolecularAnnotator.process(chain, Jsoup.parse(plipDocument));
+    public static Graph<AminoAcid> createProteinGraph(Chain chain, InteractionScheme interactionScheme) {
+        // ensure PLIP data is present when needed
+        if (interactionScheme == InteractionScheme.SALENTIN2014) {
+            if(chain.getFeatureContainer().getFeatures().stream().noneMatch(PLIPInteractionContainer.class::isInstance)) {
+                throw new IllegalArgumentException("no plip intra-molecular interactions annotated - cannot graph representation");
+            }
+        }
 
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
         List<Edge<AminoAcid>> interactions = new ArrayList<>();
 
         for(int i = 0; i < aminoAcids.size() - 1; i++) {
             AminoAcid aminoAcid1 = aminoAcids.get(i);
-            PLIPInteractionContainer interactions1 = aminoAcid1.getFeature(PLIPInteractionContainer.class);
-
             for(int j = i + 1; j < aminoAcids.size(); j++) {
                 AminoAcid aminoAcid2 = aminoAcids.get(j);
                 if(j == i + 1) {
                     // comment next line to ignore consecutive amino acids
-                    interactions.add(new Edge<>(aminoAcid1, aminoAcid2, scheme.getCovalentWeight()));
+                    interactions.add(new Edge<>(aminoAcid1, aminoAcid2, COVALENT_BOND_WEIGHT));
                     continue;
                 }
 
-                PLIPInteractionContainer interactions2 = aminoAcid2.getFeature(PLIPInteractionContainer.class);
-
-                Optional<PLIPInteraction> potentialInteraction = interactions1.getInteractions()
-                        .stream()
-                        .filter(plipInteraction -> interactions2.getInteractions().contains(plipInteraction))
-                        .findFirst();
-                potentialInteraction.ifPresent(plipInteraction ->
-                        interactions.add(new Edge<>(aminoAcid1, aminoAcid2, scheme.getWeight(plipInteraction))));
+                if(interactionScheme.areInContact(aminoAcid1, aminoAcid2)) {
+                    interactions.add(new Edge<>(aminoAcid1, aminoAcid2, CONTACT_WEIGHT));
+                    //TODO reimpl weighting
+                }
             }
         }
 
         return new Graph<>(aminoAcids, interactions);
     }
 
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Graph<AminoAcid> graph, List<String> netCartoDocument) {
-        List<Module<AminoAcid>> modules = netCartoDocument.stream()
-                .filter(line -> !line.startsWith("#"))
-                .map(line -> new Module<>(line.split(" ")[0], Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
-                        .mapToInt(Integer::valueOf)
-                        .mapToObj(residueNumber -> graph.getNodes()
-                                .stream()
-                                .filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber)
-                                .findFirst())
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toList())))
-                .collect(Collectors.toList());
-
-        return new PartitionedGraph<>(graph, modules);
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromNetCartoFile(Graph<AminoAcid> graph, Path netCartoFile) {
-        try {
-            return createPartitionedGraphFromNetCartoFile(graph, Files.readAllLines(netCartoFile));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+    public static class Partitioned {
+        public static PartitionedGraph<AminoAcid> fromNetCartoFile(Graph<AminoAcid> graph, InputStream netCartoFile) {
+            List<Module<AminoAcid>> modules = new BufferedReader(new InputStreamReader(netCartoFile))
+                    .lines()
+                    .filter(line -> !line.startsWith("#"))
+                    .map(line -> new Module<>(line.split(" ")[0], Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
+                            .mapToInt(Integer::valueOf)
+                            .mapToObj(residueNumber -> graph.getNodes()
+                                    .stream()
+                                    .filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber)
+                                    .findFirst())
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .collect(Collectors.toList())))
+                    .collect(Collectors.toList());
+            return new PartitionedGraph<>(graph, modules);
         }
-    }
 
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromSecondaryStructureElements(Chain chain) {
-        logger.info("partitioning {} using secondary structure elements",
-                chain.getChainIdentifier());
-        // annotate using DSSP
-        new DictionaryOfProteinSecondaryStructure().process(chain.getParentStructure());
-
-        List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-        List<Module<AminoAcid>> modules = new ArrayList<>();
-        List<AminoAcid> currentModule = new ArrayList<>();
-        String lastSse = null;
-
-        for(AminoAcid aminoAcid : aminoAcids) {
-            String sse = aminoAcid.getFeature(DSSPSecondaryStructure.class)
-                    .getSecondaryStructure()
-                    .getReducedRepresentation();
-            // handle initial sse
-            if(lastSse == null) {
-                lastSse = sse;
+        public static PartitionedGraph<AminoAcid> fromNetCartoFile(Graph<AminoAcid> graph, Path netCartoFile) {
+            try {
+                return fromNetCartoFile(graph, Files.newInputStream(netCartoFile));
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
+        }
 
-            // we define modules as change of sse
-            if(sse.equals(lastSse)) {
-                // when it matches, append last module
-                currentModule.add(aminoAcid);
-            } else {
-                // if not: change sse, assign module and clear list
-                lastSse = sse;
-                if(!currentModule.isEmpty()) {
-                    modules.add(new Module<>(String.valueOf(modules.size() + 1), currentModule));
+        public static PartitionedGraph<AminoAcid> fromSecondaryStructureElements(Graph<AminoAcid> graph) {
+            Chain chain = graph.getNodes().get(0).getParentChain();
+            Structure structure = chain.getParentStructure();
+
+            new DictionaryOfProteinSecondaryStructure().process(chain.getParentStructure());
+
+            List<Module<AminoAcid>> modules = new ArrayList<>();
+            List<AminoAcid> currentModule = new ArrayList<>();
+            String lastSse = null;
+
+            for(AminoAcid aminoAcid : graph.getNodes()) {
+                String sse = aminoAcid.getFeature(DSSPSecondaryStructure.class)
+                        .getSecondaryStructure()
+                        .getReducedRepresentation();
+                // handle initial sse
+                if(lastSse == null) {
+                    lastSse = sse;
                 }
-                currentModule = new ArrayList<>();
-                currentModule.add(aminoAcid);
-            }
-        }
 
-        modules.add(new Module<>(String.valueOf(modules.size() + 1), currentModule));
-
-        // for each module: connect all contained nodes
-        List<Edge<AminoAcid>> edges = createEdgesNaively(modules);
-
-        return new PartitionedGraph<>(new Graph<>(aminoAcids, edges), modules);
-    }
-
-    private static List<Edge<AminoAcid>> createEdgesNaively(List<Module<AminoAcid>> modules) {
-        return modules.stream()
-                .flatMap(module -> SetOperations.uniquePairsOf(module.getNodes())
-                        .map(pair -> new Edge<>(pair.getLeft(), pair.getRight())))
-                .collect(Collectors.toList());
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromPlipData(Chain chain,
-                                                                                 String plipDocument,
-                                                                                 double inflation,
-                                                                                 WeightingScheme scheme) {
-        logger.info("partitioning {} using MCL on PLIP interactions with scheme {}",
-                chain.getChainIdentifier(),
-                scheme);
-        return createPartitionedGraphFromPlip(createGraphFromPlipDocument(chain, plipDocument, scheme), inflation);
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromPlipData(Chain chain,
-                                                                                 Path plipFile,
-                                                                                 double inflation,
-                                                                                 WeightingScheme scheme) {
-        try {
-            String plipDocument = Files.lines(plipFile).collect(Collectors.joining(System.lineSeparator()));
-            return createPartitionedGraphFromPlipData(chain, plipDocument, inflation, scheme);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    private static PartitionedGraph<AminoAcid> createPartitionedGraphFromPlip(Graph<AminoAcid> graph, double inflation) {
-        MCL mcl = new MCL(MCL.DEFAULT_EXPAND_FACTOR,
-                inflation,
-                MCL.DEFAULT_MULT_FACTOR,
-                MCL.DEFAULT_MAX_ITERATIONS,
-                MCL.DEFAULT_SIMILARITY_FUNCTION);
-
-        return mcl.partitionGraph(graph);
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Graph<AminoAcid> graph, Path definitionFile) {
-        try {
-            List<String> lines = Files.readAllLines(definitionFile);
-            return createPartitionedGraphFromDefinitionFile(graph, lines);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Graph<AminoAcid> graph, List<String> plipDocument) {
-        List<Module<AminoAcid>> modules = new ArrayList<>();
-        for(String range : plipDocument) {
-            if(range.startsWith("#")) {
-                continue;
+                // we define modules as change of sse
+                if(sse.equals(lastSse)) {
+                    // when it matches, append last module
+                    currentModule.add(aminoAcid);
+                } else {
+                    // if not: change sse, assign module and clear list
+                    lastSse = sse;
+                    if(!currentModule.isEmpty()) {
+                        modules.add(new Module<>(String.valueOf(modules.size() + 1), currentModule));
+                    }
+                    currentModule = new ArrayList<>();
+                    currentModule.add(aminoAcid);
+                }
             }
 
-            String id = range.split(":")[0];
-            String rawRanges = range.split(":")[1];
+            modules.add(new Module<>(String.valueOf(modules.size() + 1), currentModule));
 
-            List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
-                    .map(rawRange -> rawRange.split("-"))
-                    .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
-                    .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().get())
+            return new PartitionedGraph<>(graph, modules);
+        }
+
+        public static PartitionedGraph<AminoAcid> fromDefinitionFile(Graph<AminoAcid> graph, InputStream definitionFile) {
+            List<Module<AminoAcid>> modules = new BufferedReader(new InputStreamReader(definitionFile))
+                    .lines()
+                    .filter(line -> !line.startsWith("#"))
+                    .map(line -> {
+                        String id = line.split(":")[0];
+                        String rawRanges = line.split(":")[1];
+                        List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
+                                .map(rawRange -> rawRange.split("-"))
+                                .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
+                                .map(residueNumber -> graph.getNodes().stream().filter(node -> node.getResidueIdentifier().getResidueNumber() == residueNumber).findFirst().get())
+                                .collect(Collectors.toList());
+                        return new Module<>(id, nodes);
+                    })
                     .collect(Collectors.toList());
-            modules.add(new Module<>(id, nodes));
+
+            return new PartitionedGraph<>(graph, modules);
         }
 
-        return new PartitionedGraph<>(graph, modules);
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Chain chain, Path definitionFile) {
-        logger.info("partitioning {} using definition file {}",
-                chain.getChainIdentifier(),
-                definitionFile);
-        try {
-            List<String> lines = Files.readAllLines(definitionFile);
-            return createPartitionedGraphFromDefinitionFile(chain, lines);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static PartitionedGraph<AminoAcid> createPartitionedGraphFromDefinitionFile(Chain chain, List<String> definitionDocument) {
-        List<AminoAcid> aminoAcids = new ArrayList<>();
-        List<Module<AminoAcid>> modules = new ArrayList<>();
-        for(String range : definitionDocument) {
-            if(range.startsWith("#")) {
-                continue;
+        public static PartitionedGraph<AminoAcid> fromDefinitionFile(Graph<AminoAcid> graph, Path definitionFile) {
+            try {
+                return fromDefinitionFile(graph, Files.newInputStream(definitionFile));
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
             }
-
-            String id = range.split(":")[0];
-            String rawRanges = range.split(":")[1];
-
-            List<AminoAcid> nodes = Pattern.compile(",").splitAsStream(rawRanges)
-                    .map(rawRange -> rawRange.split("-"))
-                    .flatMap(rawRange -> IntStream.range(Integer.valueOf(rawRange[0]), Integer.valueOf(rawRange[1]) + 1).boxed())
-                    .map(residueNumber -> chain.select().aminoAcids().residueNumber(residueNumber).asOptionalAminoAcid())
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .collect(Collectors.toList());
-            aminoAcids.addAll(nodes);
-            modules.add(new Module<>(id, nodes));
         }
 
-        List<Edge<AminoAcid>> edges = createEdgesNaively(modules);
-
-        return new PartitionedGraph<>(new Graph<>(aminoAcids, edges), modules);
+        public static PartitionedGraph<AminoAcid> fromMCL(Graph<AminoAcid> graph,
+                                                          double expand,
+                                                          double inflation) {
+            return new MCL(expand,
+                    inflation,
+                    SELF_LOOP_WEIGHT,
+                    MCL.DEFAULT_MAX_ITERATIONS,
+                    MCL.DEFAULT_SIMILARITY_FUNCTION).partitionGraph(graph);
+        }
     }
 }

@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceAreaCalculator;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
@@ -18,6 +19,7 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import org.jsoup.Jsoup;
 
 import java.nio.file.Path;
 import java.util.Collection;
@@ -58,8 +60,9 @@ public class A01_PrintModularityScoresOfFoldons {
                 .resolve("plip")
                 .resolve(id + ".plip"))
                 .collect(Collectors.joining(System.lineSeparator()));
-        Graph<AminoAcid> graph = GraphFactory.createGraphFromPlipDocument(chain, plipDocument, GraphFactory.WeightingScheme.CLASSIFIED);
-        PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.createPartitionedGraphFromDefinitionFile(graph, path);
+        new PLIPIntraMolecularAnnotator().process(chain, Jsoup.parse(plipDocument));
+        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2014);
+        PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.Partitioned.fromDefinitionFile(graph, path);
         partitionedGraph.getModules().stream()
                 .map(module -> module.getIdentifier() + ";" +
                         module.getNodes().size() + ";" +

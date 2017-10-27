@@ -1,15 +1,20 @@
 package de.bioforscher.jstructure.membrane.modularity;
 
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
+import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
+import de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.modularity.visualization.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import org.jsoup.Jsoup;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 public class A01_WriteDefinitionFiles {
     public static void main(String[] args) {
@@ -37,31 +42,20 @@ public class A01_WriteDefinitionFiles {
                 .chainName(chainId)
                 .asChain();
 
-        PartitionedGraph<AminoAcid> exp = GraphFactory.createPartitionedGraphFromDefinitionFile(chain, path);
+        Path plipFile = plipPath.resolve(id + ".plip");
+        String plipDocument = MembraneConstants.lines(plipFile)
+                .collect(Collectors.joining(System.lineSeparator()));
+        new PLIPIntraMolecularAnnotator().process(chain, Jsoup.parse(plipDocument));
+        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2014);
+        PartitionedGraph<AminoAcid> exp = GraphFactory.Partitioned.fromDefinitionFile(graph, path);
         MembraneConstants.write(basePath.resolve(id + "_exp.mod"), GraphVisualizer.composeDefinitionString(exp));
 
         for(double inflation = 1.2; inflation <= 2.0; inflation = inflation + 0.05) {
             int i = (int) Math.round(inflation * 100);
             System.out.println(i);
-            Path plipFile = plipPath.resolve(id + ".plip");
-            PartitionedGraph<AminoAcid> unweightedGraph = GraphFactory.createPartitionedGraphFromPlipData(chain,
-                    plipFile,
-                    inflation,
-                    GraphFactory.WeightingScheme.UNWEIGHTED);
-            PartitionedGraph<AminoAcid> classifiedGraph = GraphFactory.createPartitionedGraphFromPlipData(chain,
-                    plipFile,
-                    inflation,
-                    GraphFactory.WeightingScheme.CLASSIFIED);
-            PartitionedGraph<AminoAcid> energeticGraph = GraphFactory.createPartitionedGraphFromPlipData(chain,
-                    plipFile,
-                    inflation,
-                    GraphFactory.WeightingScheme.ENERGETIC);
-            MembraneConstants.write(basePath.resolve(id + "_unweighted_" + i + ".mod"),
-                    GraphVisualizer.composeDefinitionString(unweightedGraph));
-            MembraneConstants.write(basePath.resolve(id + "_classified_" + i + ".mod"),
-                    GraphVisualizer.composeDefinitionString(classifiedGraph));
-            MembraneConstants.write(basePath.resolve(id + "_energetic_" + i + ".mod"),
-                    GraphVisualizer.composeDefinitionString(energeticGraph));
+            PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.Partitioned.fromMCL(graph, MCL.DEFAULT_EXPAND_FACTOR, inflation);
+            MembraneConstants.write(basePath.resolve(id + "_" + i + ".mod"),
+                    GraphVisualizer.composeDefinitionString(partitionedGraph));
         }
     }
 }

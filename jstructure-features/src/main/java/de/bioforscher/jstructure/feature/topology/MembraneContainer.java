@@ -37,7 +37,7 @@ public class MembraneContainer extends FeatureContainerEntry {
         this.membraneAtoms = membraneAtoms;
     }
 
-    public List<TransMembraneSubunit> getTransMembraneHelices() {
+    public List<TransMembraneSubunit> getTransMembraneSubunits() {
         return transMembraneHelices;
     }
 

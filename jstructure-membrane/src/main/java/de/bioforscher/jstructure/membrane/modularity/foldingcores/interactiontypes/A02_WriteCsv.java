@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.feature.rigidity.DynaMineBridge;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
-import de.bioforscher.jstructure.membrane.modularity.GraphFactory;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -58,7 +57,7 @@ public class A02_WriteCsv {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "pdb;chain;res;aa;sse;folds;halogen;hydrogen;hydrophobic;metal;picat;pistack;salt;water;total;plipenergy;energy;dynamine" + System.lineSeparator(),
+                        "pdb;chain;res;aa;sse;folds;halogen;hydrogen;hydrophobic;metal;picat;pistack;salt;water;total;energy;dynamine" + System.lineSeparator(),
                         ""));
 
         System.out.println(output);
@@ -123,9 +122,6 @@ public class A02_WriteCsv {
                             plipInteractionContainer.getSaltBridges().size() + ";" +
                             plipInteractionContainer.getWaterBridges().size() + ";" +
                             plipInteractionContainer.getInteractions().size() + ";" +
-                            StandardFormat.format(plipInteractionContainer.getInteractions().stream()
-                                    .mapToDouble(GraphFactory.WeightingScheme.ENERGETIC::getWeight)
-                                    .sum()) + ";" +
                             StandardFormat.format(aminoAcid.getFeature(EnergyProfile.class).getSolvationEnergy()) + ";" +
                             aminoAcid.getFeature(BackboneRigidity.class).getBackboneRigidity();
                     })
