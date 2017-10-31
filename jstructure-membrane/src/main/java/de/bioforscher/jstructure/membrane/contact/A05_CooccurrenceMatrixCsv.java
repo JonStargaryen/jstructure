@@ -31,10 +31,10 @@ public class A05_CooccurrenceMatrixCsv {
             new PLIPIntraMolecularAnnotator();
 
     public static void main(String[] args) {
-        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> map = new HashMap<>();
-        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> hydrogenbond = new HashMap<>();
-        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> hydrophobic = new HashMap<>();
-        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> occurrence = new HashMap<>();
+        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> map = new HashMap<>();
+        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> hydrogenbond = new HashMap<>();
+        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> hydrophobic = new HashMap<>();
+        Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> occurrence = new HashMap<>();
 
         MembraneConstants.lines(DIRECTORY.resolve("ids.list"))
                 .forEach(line -> {
@@ -66,7 +66,7 @@ public class A05_CooccurrenceMatrixCsv {
                                 chain.aminoAcids()
                                         // partner has to be TM and in different helix
                                         .filter(partner -> {
-                                            if(partner.getFeature(Topology.class).isTransmembrane()) {
+                                            if(!partner.getFeature(Topology.class).isTransmembrane()) {
                                                 return false;
                                             }
 
@@ -88,8 +88,8 @@ public class A05_CooccurrenceMatrixCsv {
                                             Pair<AminoAcid.Family, AminoAcid.Family> pair2 = pair1.flip();
 
                                             // 0.5 to compensate for symmetry
-                                            occurrence.merge(pair1, 0.5, Double::sum);
-                                            occurrence.merge(pair2, 0.5, Double::sum);
+                                            occurrence.merge(pair1, 1, Integer::sum);
+                                            occurrence.merge(pair2, 1, Integer::sum);
                                         });
 
                                 PLIPInteractionContainer interactionContainer = aminoAcid.getFeature(PLIPInteractionContainer.class);
@@ -104,60 +104,60 @@ public class A05_CooccurrenceMatrixCsv {
                                             Pair<AminoAcid.Family, AminoAcid.Family> pair2 = pair1.flip();
 
                                             // 0.5 to compensate for symmetry
-                                            map.merge(pair1, 0.5, Double::sum);
-                                            map.merge(pair2, 0.5, Double::sum);
+                                            map.merge(pair1, 1, Integer::sum);
+                                            map.merge(pair2, 1, Integer::sum);
 
                                             if(interaction instanceof HydrogenBond) {
-                                                hydrogenbond.merge(pair1, 0.5, Double::sum);
-                                                hydrogenbond.merge(pair2, 0.5, Double::sum);
+                                                hydrogenbond.merge(pair1, 1, Integer::sum);
+                                                hydrogenbond.merge(pair2, 1, Integer::sum);
                                             } else if(interaction instanceof HydrophobicInteraction) {
-                                                hydrophobic.merge(pair1, 0.5, Double::sum);
-                                                hydrophobic.merge(pair2, 0.5, Double::sum);
+                                                hydrophobic.merge(pair1, 1, Integer::sum);
+                                                hydrophobic.merge(pair2, 1, Integer::sum);
                                             }
                                         });
                             });
                 });
 
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact")
-                        .resolve("aminoacids-contacts.mat"),
+                        .resolve("aminoacids-contacts.tab"),
                 composeOutput(map));
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact")
-                        .resolve("aminoacids-hydrogenbonds.mat"),
+                        .resolve("aminoacids-hydrogenbonds.tab"),
                 composeOutput(hydrogenbond));
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact")
-                        .resolve("aminoacids-hydrophobic.mat"),
+                        .resolve("aminoacids-hydrophobic.tab"),
                 composeOutput(hydrophobic));
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact")
-                        .resolve("aminoacids-contacts-freq.mat"),
+                        .resolve("aminoacids-contacts-freq.tab"),
                 composeFrequencyOutput(map, occurrence));
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact")
-                        .resolve("aminoacids-hydrogenbonds-freq.mat"),
+                        .resolve("aminoacids-hydrogenbonds-freq.tab"),
                 composeFrequencyOutput(hydrogenbond, occurrence));
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact")
-                        .resolve("aminoacids-hydrophobic-freq.mat"),
+                        .resolve("aminoacids-hydrophobic-freq.tab"),
                 composeFrequencyOutput(hydrophobic, occurrence));
     }
 
-    private static String composeOutput(Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> map) {
+    private static String composeOutput(Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> map) {
         return "aa1;aa2;value" + System.lineSeparator() +
                 AminoAcid.Family.canonicalAminoAcids()
                 .flatMap(family1 -> AminoAcid.Family.canonicalAminoAcids()
                         .map(family2 -> new Pair<>(family1, family2)))
                 .map(pair -> pair.getLeft().getOneLetterCode() + ";" +
                         pair.getRight().getOneLetterCode() + ";" +
-                        StandardFormat.format(map.getOrDefault(pair, 0.0)))
+                        StandardFormat.format(0.5 * map.getOrDefault(pair, 0)))
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    private static String composeFrequencyOutput(Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> map,
-                                                 Map<Pair<AminoAcid.Family, AminoAcid.Family>, Double> occurrence) {
+    private static String composeFrequencyOutput(Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> map,
+                                                 Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> occurrence) {
         return "aa1;aa2;frequency" + System.lineSeparator() +
                 AminoAcid.Family.canonicalAminoAcids()
                         .flatMap(family1 -> AminoAcid.Family.canonicalAminoAcids()
                                 .map(family2 -> new Pair<>(family1, family2)))
                         .map(pair -> pair.getLeft().getOneLetterCode() + ";" +
                                 pair.getRight().getOneLetterCode() + ";" +
-                                StandardFormat.format(map.getOrDefault(pair, 0.0) / occurrence.getOrDefault(pair, 1.0)))
+                                StandardFormat.format(0.5 * 100 * (map.getOrDefault(pair, 0) / ((double) occurrence.getOrDefault(pair, 1)))))
                         .collect(Collectors.joining(System.lineSeparator()));
     }
 }
