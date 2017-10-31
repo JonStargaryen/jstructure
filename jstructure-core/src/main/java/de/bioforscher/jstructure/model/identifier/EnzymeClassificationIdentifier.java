@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.model.identifier;
 
-import java.util.regex.Pattern;
-
 /**
  * The enzyme classification representation.
  * Created by S on 14.07.2017.
@@ -19,7 +17,7 @@ public class EnzymeClassificationIdentifier extends AbstractIdentifier {
 
     @Override
     public String toString() {
-        return ecNumber;
+        return getEcNumber();
     }
 
     @Override

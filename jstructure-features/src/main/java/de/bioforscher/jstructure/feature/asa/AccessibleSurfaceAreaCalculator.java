@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * Static Accessibility" JMB (1971) 55:379-400</pr>
  * @author duarte_j
  */
-//@FeatureProvider(provides = { AccessibleSurfaceArea.class, AtomRadius.class})
 public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
     private static final String ATOM_RADIUS = "ATOM_RADIUS";
@@ -177,12 +176,12 @@ public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
      * @return all neighbored atoms
      */
     private List<Atom> findNeighbors(Atom referenceAtom, List<Atom> nonHydrogenAtoms) {
-        final double cutoff = probeSize + probeSize + referenceAtom.getFeatureContainer().getFeature(AtomRadius.class).getRadius();
+        final double cutoff = probeSize + probeSize + referenceAtom.getFeature(AtomRadius.class).getRadius();
 
         return nonHydrogenAtoms.stream()
                 .filter(atom -> !atom.equals(referenceAtom))
                 .filter(atom -> atom.calculate().distance(referenceAtom.getCoordinates()) < cutoff
-                        + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius())
+                        + atom.getFeature(AtomRadius.class).getRadius())
                 .collect(Collectors.toList());
     }
 
@@ -193,14 +192,14 @@ public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
      */
     private double calcSingleAsa(Atom atom, List<Atom> nonHydrogenAtoms) {
         List<Atom> neighborAtoms = findNeighbors(atom, nonHydrogenAtoms);
-        double radius = probeSize + atom.getFeatureContainer().getFeature(AtomRadius.class).getRadius();
+        double radius = probeSize + atom.getFeature(AtomRadius.class).getRadius();
         int accessiblePoints = 0;
 
         for (double[] point : spherePoints) {
             boolean isAccessible = true;
             double[] testPoint = LinearAlgebra.on(point).multiply(radius).add(atom.getCoordinates()).getValue();
             for(Atom neighborAtom : neighborAtoms) {
-                double neighborAtomRadius = neighborAtom.getFeatureContainer().getFeature(AtomRadius.class).getRadius() + probeSize;
+                double neighborAtomRadius = neighborAtom.getFeature(AtomRadius.class).getRadius() + probeSize;
                 double differenceSquared = LinearAlgebra.on(testPoint).distanceFast(neighborAtom.getCoordinates());
                 if (differenceSquared < neighborAtomRadius * neighborAtomRadius) {
                     isAccessible = false;

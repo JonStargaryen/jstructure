@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
  * Access to the internet resource of the OPM.
  * Created by bittrich on 5/17/17.
 // */
-//@FeatureProvider(provides = { MembraneContainer.class, Topology.class })
 public class OrientationsOfProteinsInMembranesAnnotator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(OrientationsOfProteinsInMembranesAnnotator.class);
     private static final String BASE_URL = "http://opm.phar.umich.edu/";

@@ -17,7 +17,7 @@ public class PLIPIntraMolecularAnnotatorTest {
     public void shouldAnnotateSingleProtein() throws IOException {
         Structure protein = StructureParser.source("4BPM").parse();
         plipAnnotator.process(protein);
-        PLIPInteractionContainer plipInteractionContainer = protein.getFeatureContainer().getFeature(PLIPInteractionContainer.class);
+        PLIPInteractionContainer plipInteractionContainer = protein.getFeature(PLIPInteractionContainer.class);
         plipInteractionContainer.getInteractions().forEach(System.out::println);
     }
 

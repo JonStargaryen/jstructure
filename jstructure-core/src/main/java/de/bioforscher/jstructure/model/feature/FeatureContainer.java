@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.model.feature;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,19 +19,6 @@ public class FeatureContainer {
 
     public void addFeature(FeatureContainerEntry entry) {
         features.add(entry);
-    }
-
-    /**
-     * Access particular features, identified by its content type.
-     * @param contentClass the class of the content of interest
-     * @param <C>
-     * @throws NoSuchElementException occurs when no entry is present
-     * @return the <b>first</b> relevant
-     */
-    public <C extends FeatureContainerEntry> C getFeature(Class<C> contentClass) {
-        return getFeatureOptional(contentClass)
-                .orElseThrow(() -> new NoSuchElementException("no feature entry for content class '" +
-                        contentClass.getSimpleName() + "'"));
     }
 
     /**

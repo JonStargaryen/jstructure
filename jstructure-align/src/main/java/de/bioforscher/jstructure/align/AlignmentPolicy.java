@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.align;
 
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;

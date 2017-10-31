@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -27,9 +27,9 @@ public class LoopFractionCalculatorTest {
     public void shouldComputeLoopFraction() {
         featureProvider.process(protein);
         protein.aminoAcids().forEach(group -> {
-            SecondaryStructureElement state = group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class).getSecondaryStructure();
+            SecondaryStructureType state = group.getFeature(DSSPSecondaryStructure.class).getSecondaryStructure();
             boolean isCoil = state.isCoilType();
-            double value = group.getFeatureContainer().getFeature(LoopFraction.class).getLoopFraction();
+            double value = group.getFeature(LoopFraction.class).getLoopFraction();
             System.out.println(group.getIdentifier() + "\t" + state.getOneLetterRepresentation() + "\t" + value);
             if(!isCoil) {
                 Assert.assertTrue(value < 1.0);

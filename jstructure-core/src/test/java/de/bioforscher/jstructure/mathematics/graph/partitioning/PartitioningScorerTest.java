@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.mathematics.graph.partitioning;
 
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -60,6 +60,7 @@ public class PartitioningScorerTest {
                 continue;
             }
             Module<String> module = new Module<>(line.split("\\s+")[0],
+                    new Graph<>(nodes, new ArrayList<>()),
                     Pattern.compile("\\s+").splitAsStream(line.split("---")[1].trim())
                             .collect(Collectors.toList()));
             modules.add(module);
@@ -82,7 +83,7 @@ public class PartitioningScorerTest {
                             .mapToObj(String::valueOf))
                     .collect(Collectors.toList());
             nodes.addAll(n);
-            modules.add(new Module<>(id, n));
+            modules.add(new Module<>(id, new Graph<>(nodes, new ArrayList<>()), n));
         }
 
         return new PartitionedGraph<>(new Graph<>(nodes, new ArrayList<>()), modules);

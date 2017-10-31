@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
-import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.structure.*;
 
 import java.util.Optional;
 import java.util.Set;
@@ -255,6 +255,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                 return new UnknownAminoAcid(pdbName, residueIdentifier, ligand);
             } else {
                 try {
+                    //TODO intellij warning even though constructor exists in implementing classes
                     return representingClass.getConstructor(ResidueIdentifier.class, boolean.class).newInstance(residueIdentifier, ligand);
                 } catch (Exception e) {
                     throw new RuntimeException("creation of AminoAcid instance failed", e);

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.container;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.model.Calculable;
+import de.bioforscher.jstructure.mathematics.Calculable;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;

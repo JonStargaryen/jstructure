@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.feature.uniprot.homologous;
 
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import uk.ac.ebi.kraken.interfaces.uniprot.features.Feature;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
  * Information obtained by a UniProt mapping to homologous protein chains.
  * Created by bittrich on 7/10/17.
  */
+@DefaultFeatureProvider(UniProtHomologyAnnotator.class)
 public class UniProtFeatureContainer extends FeatureContainerEntry {
     private final Map<String, List<Feature>> features;
 

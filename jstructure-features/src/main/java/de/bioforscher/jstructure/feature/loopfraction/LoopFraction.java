@@ -1,13 +1,15 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
-import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.SingleValueFeatureContainerEntry;
 
 /**
  * The smoothed loop fraction for groups.
  * Created by bittrich on 5/17/17.
  */
+@DefaultFeatureProvider(LoopFractionCalculator.class)
 public class LoopFraction extends FeatureContainerEntry implements SingleValueFeatureContainerEntry<Double> {
     private final double loopFraction;
 

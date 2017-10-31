@@ -15,7 +15,6 @@ public class PLIPLigandAnnotatorTest {
 
         PLIPInteractionContainer plipInteractionContainer = structure.getChains()
                 .get(0)
-                .getFeatureContainer()
                 .getFeature(PLIPInteractionContainer.class);
 
         Assert.assertFalse("did not annotate ligand interactions correctly",

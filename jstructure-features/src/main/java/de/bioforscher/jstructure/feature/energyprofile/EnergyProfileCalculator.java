@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * TODO implement routine for trans-membrane proteins
  * Created by bittrich on 12/15/16.
  */
-//@FeatureProvider(provides = EnergyProfile.class)
 public class EnergyProfileCalculator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfileCalculator.class);
     /**

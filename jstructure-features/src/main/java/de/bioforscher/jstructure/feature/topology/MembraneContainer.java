@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
  * Represents the membrane layer of proteins as a set of 2 layers of points.
  * Created by bittrich on 5/17/17.
  */
+@DefaultFeatureProvider(OrientationsOfProteinsInMembranesAnnotator.class)
 public class MembraneContainer extends FeatureContainerEntry {
     private List<double[]> membraneAtoms;
     private List<TransMembraneSubunit> transMembraneHelices;
@@ -84,7 +86,8 @@ public class MembraneContainer extends FeatureContainerEntry {
     public Optional<IntegerRange> getEmbeddingTransmembraneSegment(Group group) {
         int residueNumber = group.getResidueIdentifier().getResidueNumber();
         return transMembraneHelices.stream()
-                .filter(transMembraneSubunit -> transMembraneSubunit.getChainId().equals(group.getParentChain().getChainIdentifier().getChainId()))
+                //TODO OPM seems bugged as chainId is always reported in lower case
+                .filter(transMembraneSubunit -> transMembraneSubunit.getChainId().equalsIgnoreCase(group.getParentChain().getChainIdentifier().getChainId()))
                 .map(TransMembraneSubunit::getSegments)
                 .flatMap(Collection::stream)
                 .filter(range -> range.getLeft() <= residueNumber && range.getRight() >= residueNumber)

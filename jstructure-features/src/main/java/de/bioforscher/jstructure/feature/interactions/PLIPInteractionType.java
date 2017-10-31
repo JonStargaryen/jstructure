@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.feature.interactions;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
 /**
  * Enumerates all possible PLIP interaction types.
  * Created by bittrich on 2/15/17.
@@ -20,6 +23,12 @@ public enum PLIPInteractionType {
     PLIPInteractionType(String interactionTag, Class<? extends PLIPInteraction> describingClass) {
         this.interactionTag = interactionTag;
         this.describingClass = describingClass;
+    }
+
+    public static Optional<PLIPInteractionType> valueOf(Class<? extends PLIPInteraction> describingClass) {
+        return Stream.of(values())
+                .filter(interaction -> interaction.getDescribingClass().equals(describingClass))
+                .findFirst();
     }
 
     public String getInteractionTag() {

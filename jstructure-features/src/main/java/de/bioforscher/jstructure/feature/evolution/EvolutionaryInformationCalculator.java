@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//@FeatureProvider(provides = EvolutionaryInformation.class)
 public class EvolutionaryInformationCalculator extends FeatureProvider {
     private final LocalBlastWrapper localBlastWrapper;
 

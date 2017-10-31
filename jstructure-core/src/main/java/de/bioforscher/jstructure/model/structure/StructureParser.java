@@ -132,20 +132,37 @@ public class StructureParser {
             }
 
             try {
-                LocalDate depositionDate = LocalDate.parse(line.substring(50, 59).trim(), StandardFormat.getPdbDateFormatInstance());
+                LocalDate depositionDate = LocalDate.parse(line.substring(50, 59).trim(),
+                        StandardFormat.getPdbDateFormatInstance());
                 if(depositionDate.isAfter(LocalDate.now())) {
                     depositionDate = depositionDate.minusYears(100);
                 }
                 protein.setDepositionDate(depositionDate);
             } catch (Exception e) {
-                logger.warn("failed to parse depositionDate from line '{}'", line, e);
+                // potential legacy header: 'HEADER    MEMBRANE PROTEIN, TRANSPORT PROTEIN, SIG 20-JUN-16   5KK2             '
+                try {
+                    LocalDate depositionDate = LocalDate.parse(line.substring(51, 60).trim(),
+                            StandardFormat.getPdbDateFormatInstance());
+                    if(depositionDate.isAfter(LocalDate.now())) {
+                        depositionDate = depositionDate.minusYears(100);
+                    }
+                    protein.setDepositionDate(depositionDate);
+                } catch (Exception e2) {
+                    logger.warn("failed to parse depositionDate from line '{}'", line, e2);
+                }
             }
 
             try {
                 ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier(line.substring(62, 66));
                 protein.setProteinIdentifier(proteinIdentifier);
             } catch (Exception e) {
-                logger.warn("failed to parse the pdbId from line '{}'", line, e);
+                // potential legacy header: 'HEADER    MEMBRANE PROTEIN, TRANSPORT PROTEIN, SIG 20-JUN-16   5KK2
+                try {
+                    ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier(line.substring(63, 67));
+                    protein.setProteinIdentifier(proteinIdentifier);
+                } catch (Exception e2) {
+                    logger.warn("failed to parse the pdbId from line '{}'", line, e2);
+                }
             }
         }
 
@@ -294,6 +311,10 @@ public class StructureParser {
         //TODO potentially more polymer types for nucleotides
         if(prototype.getPolymerType() == GroupPrototype.PolymerType.NA_LINKING) {
             return Nucleotide.Family.createNucleotide(pdbName, residueIdentifier, ligand);
+        }
+
+        if(pdbName.equals(Water.THREE_LETTER_CODE)) {
+            return new Water(residueIdentifier);
         }
 
         // it is neither

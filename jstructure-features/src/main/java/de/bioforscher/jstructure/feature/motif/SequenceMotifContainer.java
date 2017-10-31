@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.feature.motif;
 
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  * A collection of all {@link SequenceMotif} instances associated to a given instance.
  * Created by bittrich on 5/17/17.
  */
+@DefaultFeatureProvider(SequenceMotifAnnotator.class)
 public class SequenceMotifContainer extends FeatureContainerEntry {
     private List<SequenceMotif> sequenceMotifs;
 

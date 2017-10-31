@@ -8,19 +8,24 @@ import java.util.Set;
  * capabilities to determine whether certain features are present or not.
  * Created by bittrich on 5/17/17.
  */
+@Deprecated
 public interface FeatureContainerRoot extends Featureable {
     default boolean featureIsPresent(Class<? extends FeatureContainerEntry> contentClass) {
+        //TODO need tests
         return getFeatureContainer()
-                .getFeature(GlobalFeatureContainer.class)
+                .getFeatureOptional(GlobalFeatureContainer.class)
+                .get()
                 .featureIsPresent(contentClass);
     }
 
     default void registerFeature(Class<? extends FeatureContainerEntry> contentClass) {
         getFeatureContainer()
-                .getFeature(GlobalFeatureContainer.class)
+                .getFeatureOptional(GlobalFeatureContainer.class)
+                .get()
                 .registerFeature(contentClass);
     }
 
+    @Deprecated
     class GlobalFeatureContainer extends FeatureContainerEntry {
         private Set<Class<? extends FeatureContainerEntry>> registeredEntries;
 

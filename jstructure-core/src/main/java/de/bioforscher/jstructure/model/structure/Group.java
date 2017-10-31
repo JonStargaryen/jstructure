@@ -169,6 +169,11 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return parentChain != null ? parentChain : Chain.UNKNOWN_CHAIN;
     }
 
+    @Override
+    public Structure getParentStructure() {
+        return getParentChain().getParentStructure();
+    }
+
     /**
      * Package-private method to set the parent reference.
      * @param parentChain the parent

@@ -11,6 +11,10 @@ public class ProteinFamilyIdentifier extends AbstractIdentifier {
         this.pfamId = pfamId;
     }
 
+    public String getPfamId() {
+        return pfamId;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (this == other) return true;
@@ -28,6 +32,6 @@ public class ProteinFamilyIdentifier extends AbstractIdentifier {
 
     @Override
     public String toString() {
-        return pfamId;
+        return getPfamId();
     }
 }

@@ -29,7 +29,6 @@ import java.util.stream.IntStream;
  * Annotates a chain with all information available via UniProt entries of (potentially) homologous proteins.
  * Created by bittrich on 7/10/17.
  */
-//@FeatureProvider(provides = { UniProtHomologousEntryContainer.class, UniProtFeatureContainer.class })
 public class UniProtHomologyAnnotator extends FeatureProvider {
     private static final Logger logger  = LoggerFactory.getLogger(UniProtHomologyAnnotator.class);
     final UniProtBlastService uniProtBlastService;
@@ -95,8 +94,7 @@ public class UniProtHomologyAnnotator extends FeatureProvider {
                             .mapToObj(position -> getSafely(aminoAcids, position))
                             .filter(Optional::isPresent)
                             .map(Optional::get)
-                            .map(AminoAcid::getFeatureContainer)
-                            .forEach(featureContainer -> featureContainer.getFeature(UniProtFeatureContainer.class)
+                            .forEach(aminoAcid -> aminoAcid.getFeature(UniProtFeatureContainer.class)
                                     .addFeature(accession, feature));
                 } catch (Exception e) {
                     // happens on regions not covered or present in the SEQRES but does not actually provide coordinates

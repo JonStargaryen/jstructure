@@ -35,8 +35,7 @@ public class UniProtHomologyAnnotatorTest {
 
         List<MutagenFeature> mutagenFeatures = protein.chainsWithAminoAcids()
                 .flatMap(Chain::aminoAcids)
-                .flatMap(aminoAcid -> aminoAcid.getFeatureContainer()
-                        .getFeature(UniProtFeatureContainer.class)
+                .flatMap(aminoAcid -> aminoAcid.getFeature(UniProtFeatureContainer.class)
                         .getFeatures(FeatureType.MUTAGEN)
                         .stream())
                 .filter(MutagenFeature.class::isInstance)
@@ -54,8 +53,7 @@ public class UniProtHomologyAnnotatorTest {
 
         System.out.println("homologous protein chains:");
         List<ChainIdentifier> chains = protein.chainsWithAminoAcids()
-                .flatMap(chain -> chain.getFeatureContainer()
-                        .getFeature(UniProtHomologousEntryContainer.class)
+                .flatMap(chain -> chain.getFeature(UniProtHomologousEntryContainer.class)
                         .getHomologousChains()
                         .stream())
                 .collect(Collectors.toList());

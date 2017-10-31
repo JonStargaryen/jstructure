@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.mathematics.Pair;
 
 /**
  * Represents a defined range of residues identified by their residue numbers. Both indices are inclusive.
@@ -14,5 +14,9 @@ public class IntegerRange extends Pair<Integer, Integer> {
     @Override
     public String toString() {
         return "Range [" + getLeft() + ", " + getRight() + "]";
+    }
+
+    public int getSize() {
+        return getRight() - getLeft() + 1;
     }
 }

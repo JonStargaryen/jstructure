@@ -1,5 +1,12 @@
 package de.bioforscher.jstructure.membrane;
 
+import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
+import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import de.bioforscher.jstructure.feature.topology.MembraneContainer;
+import de.bioforscher.jstructure.feature.topology.Topology;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +18,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -36,6 +44,7 @@ public class MembraneConstants {
     public static final Path PDBTM_NR_BETA_DATASET_NETWORK_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("network");
     public static final Path FOLDING_CORES_DIRECTORY = DATASETS_DIRECTORY.resolve("foldingcores");
     public static final Path DIVISION_DIRECTORY = DATASETS_DIRECTORY.resolve("division");
+    public static final int MINIMUM_HELIX_LENGTH = 15;
 
     public static Stream<String> lines(Path path) {
         try {
@@ -92,5 +101,42 @@ public class MembraneConstants {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    public static boolean isNtmHelixInteraction(PLIPInteraction plipInteraction) {
+        if(plipInteraction.getPartner1().getFeature(Topology.class).isTransmembrane() ||
+                plipInteraction.getPartner2().getFeature(Topology.class).isTransmembrane()) {
+            return false;
+        }
+
+        AminoAcid aminoAcid1 = (AminoAcid) plipInteraction.getPartner1();
+        AminoAcid aminoAcid2 = (AminoAcid) plipInteraction.getPartner2();
+
+
+        GenericSecondaryStructure.SecondaryStructureElement secondaryStructureElement1 =
+                aminoAcid1.getFeature(GenericSecondaryStructure.class).getSurroundingSecondaryStructureElement(aminoAcid1);
+        GenericSecondaryStructure.SecondaryStructureElement secondaryStructureElement2 =
+                aminoAcid2.getFeature(GenericSecondaryStructure.class).getSurroundingSecondaryStructureElement(aminoAcid2);
+
+        return secondaryStructureElement1.getReducedType().equals("H") &&
+                secondaryStructureElement2.getReducedType().equals("H") &&
+                secondaryStructureElement1.getSize() > MembraneConstants.MINIMUM_HELIX_LENGTH &&
+                secondaryStructureElement2.getSize() > MembraneConstants.MINIMUM_HELIX_LENGTH &&
+                !secondaryStructureElement1.equals(secondaryStructureElement2);
+
+    }
+
+    public static boolean isTmHelixInteraction(PLIPInteraction plipInteraction) {
+        if(!plipInteraction.getPartner1().getFeature(Topology.class).isTransmembrane() ||
+                !plipInteraction.getPartner2().getFeature(Topology.class).isTransmembrane()) {
+            return false;
+        }
+
+        Structure structure = plipInteraction.getPartner1().getParentStructure();
+        MembraneContainer membraneContainer = structure.getFeature(MembraneContainer.class);
+        Optional<IntegerRange> segment1 = membraneContainer.getEmbeddingTransmembraneSegment(plipInteraction.getPartner1());
+        Optional<IntegerRange> segment2 = membraneContainer.getEmbeddingTransmembraneSegment(plipInteraction.getPartner2());
+
+        return segment1.isPresent() && segment2.isPresent() && !segment1.equals(segment2);
     }
 }

@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
-import de.bioforscher.jstructure.model.feature.FeatureContainerRoot;
 import de.bioforscher.jstructure.model.identifier.ProteinIdentifier;
 import de.bioforscher.jstructure.model.structure.container.ChainContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
  * {@link Chain} objects.<br />
  * Created by S on 27.09.2016.
  */
-public class Structure extends AbstractFeatureable implements ChainContainer, FeatureContainerRoot {
+public class Structure extends AbstractFeatureable implements ChainContainer/*, FeatureContainerRoot*/ {
     /**
      * reference to an undefined protein - this is used by chains without explicit parent reference
      */
@@ -100,6 +99,11 @@ public class Structure extends AbstractFeatureable implements ChainContainer, Fe
      */
     void setProteinIdentifier(ProteinIdentifier pdbId) {
         this.proteinIdentifier = pdbId;
+    }
+
+    @Override
+    public Structure getParentStructure() {
+        return this;
     }
 
     /**

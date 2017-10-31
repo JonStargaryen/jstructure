@@ -3,7 +3,6 @@ package de.bioforscher.jstructure.model.feature;
 import de.bioforscher.jstructure.model.structure.Structure;
 
 import java.io.*;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,6 +22,7 @@ public abstract class FeatureProvider {
      * @param structure the container to process
      */
     public void process(Structure structure) {
+        // 'hook' to preprocessing routine, empty by default but can be overridden by implementations if needed
         preprocessInternally(structure);
 
         // delegate to concrete implementation
@@ -32,12 +32,12 @@ public abstract class FeatureProvider {
         postprocessInternally(structure);
 
         // registered the computed feature entry class
-        provides().forEach(structure::registerFeature);
+//        provides().forEach(structure::registerFeature);
     }
 
-    protected List<Class<? extends FeatureContainerEntry>> provides() {
-        return Collections.emptyList();
-    }
+//    protected List<Class<? extends FeatureContainerEntry>> provides() {
+//        return Collections.emptyList();
+//    }
 
     private void preprocessInternally(Structure structure) {
 

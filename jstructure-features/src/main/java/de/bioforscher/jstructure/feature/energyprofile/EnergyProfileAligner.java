@@ -245,6 +245,6 @@ public class EnergyProfileAligner {
      * @return its solvation energy value as double
      */
     private double getSolvationEnergy(Group group) {
-        return group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy();
+        return group.getFeature(EnergyProfile.class).getSolvationEnergy();
     }
 }

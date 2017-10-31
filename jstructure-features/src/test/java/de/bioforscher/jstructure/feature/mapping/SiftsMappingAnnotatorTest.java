@@ -30,7 +30,6 @@ public class SiftsMappingAnnotatorTest {
         ChainMapping chainMapping = protein.select()
                 .chainName("A")
                 .asChain()
-                .getFeatureContainer()
                 .getFeature(ChainMapping.class);
         Assert.assertEquals("PF01588", chainMapping.getPfamId());
         Assert.assertEquals("?", chainMapping.getEcNumber());
@@ -46,7 +45,6 @@ public class SiftsMappingAnnotatorTest {
         ChainMapping chainMapping = protein.select()
                 .chainName("A")
                 .asChain()
-                .getFeatureContainer()
                 .getFeature(ChainMapping.class);
         Assert.assertEquals("?", chainMapping.getPfamId());
         Assert.assertEquals("6.1.1.18", chainMapping.getEcNumber());
@@ -71,7 +69,7 @@ public class SiftsMappingAnnotatorTest {
         Structure protein = StructureParser.source("1acj").parse();
         mappingAnnotator.process(protein);
 
-        ChainMapping chainSiftsMapping = protein.getChains().get(0).getFeatureContainer().getFeature(ChainMapping.class);
+        ChainMapping chainSiftsMapping = protein.getChains().get(0).getFeature(ChainMapping.class);
         Assert.assertEquals("P04058", chainSiftsMapping.getUniProtId());
         Assert.assertEquals("3.1.1.7", chainSiftsMapping.getEcNumber());
         Assert.assertEquals("PF00135", chainSiftsMapping.getPfamId());

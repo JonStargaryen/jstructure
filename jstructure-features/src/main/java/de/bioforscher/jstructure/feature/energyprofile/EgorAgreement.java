@@ -1,7 +1,9 @@
 package de.bioforscher.jstructure.feature.energyprofile;
 
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 
+@DefaultFeatureProvider(EgorAgreementCalculator.class)
 public class EgorAgreement extends EnergyProfile {
     private final double egorPrediction;
     private final double egorAgreement;

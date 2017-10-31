@@ -1,11 +1,13 @@
 package de.bioforscher.jstructure.feature.evolution;
 
-import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.Map;
 
+@DefaultFeatureProvider(EvolutionaryInformationCalculator.class)
 public class EvolutionaryInformation extends FeatureContainerEntry {
     private final Map<AminoAcid.Family, Double> exchangeScores;
     private final double information;

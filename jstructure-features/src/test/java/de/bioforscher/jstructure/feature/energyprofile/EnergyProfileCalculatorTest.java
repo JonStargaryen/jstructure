@@ -46,8 +46,7 @@ public class EnergyProfileCalculatorTest {
                     featureProvider.process(protein);
 
                     System.out.println(protein.aminoAcids()
-                            .map(Group::getFeatureContainer)
-                            .map(container -> container.getFeature(EnergyProfile.class))
+                            .map(group -> group.getFeature(EnergyProfile.class))
                             .mapToDouble(EnergyProfile::getSolvationEnergy)
                             .mapToObj(decimalFormat::format)
                             .collect(Collectors.joining(", ", "energy values: ", "")));
@@ -88,7 +87,7 @@ public class EnergyProfileCalculatorTest {
 
                     Assert.assertEquals("energy values differ for " + group,
                             Double.valueOf(split[5]),
-                            group.getFeatureContainer().getFeature(EnergyProfile.class).getSolvationEnergy(),
+                            group.getFeature(EnergyProfile.class).getSolvationEnergy(),
                             0.001);
                 });
     }

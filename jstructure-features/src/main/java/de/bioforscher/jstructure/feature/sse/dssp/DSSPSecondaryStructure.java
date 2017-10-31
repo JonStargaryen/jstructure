@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.feature.sse.dssp;
 
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.Arrays;
  * @author Aleix Lafita
  *
  */
+@DefaultFeatureProvider(DictionaryOfProteinSecondaryStructure.class)
 public class DSSPSecondaryStructure extends GenericSecondaryStructure {
     private double phi;
     private double psi;
@@ -33,7 +35,7 @@ public class DSSPSecondaryStructure extends GenericSecondaryStructure {
     private BetaBridge bridge1;
     private BetaBridge bridge2;
 
-    DSSPSecondaryStructure(FeatureProvider featureProvider, SecondaryStructureElement ss) {
+    DSSPSecondaryStructure(FeatureProvider featureProvider, SecondaryStructureType ss) {
         super(featureProvider, ss);
 
         this.phi = 360;

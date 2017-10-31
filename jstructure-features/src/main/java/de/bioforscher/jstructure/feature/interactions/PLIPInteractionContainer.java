@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.feature.interactions;
 
-import de.bioforscher.jstructure.model.feature.FeatureProvider;
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.feature.Featureable;
 import de.bioforscher.jstructure.model.structure.Group;
 
@@ -15,6 +16,7 @@ import java.util.stream.Stream;
  * given {@link Featureable}.
  * Created by bittrich on 2/16/17.
  */
+@DefaultFeatureProvider(PLIPIntraMolecularAnnotator.class)
 public class PLIPInteractionContainer extends FeatureContainerEntry {
     private final List<HalogenBond> halogenBonds;
     private final List<HydrogenBond> hydrogenBonds;

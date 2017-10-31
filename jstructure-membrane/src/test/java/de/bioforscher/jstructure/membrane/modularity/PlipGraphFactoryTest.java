@@ -3,8 +3,9 @@ package de.bioforscher.jstructure.membrane.modularity;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
-import de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL;
-import de.bioforscher.jstructure.membrane.modularity.visualization.GraphVisualizer;
+import de.bioforscher.jstructure.mathematics.graph.partitioning.impl.MarkovClusteringAlgorithm;
+import de.bioforscher.jstructure.membrane.GraphFactory;
+import de.bioforscher.jstructure.membrane.visualization.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -27,8 +28,8 @@ public class PlipGraphFactoryTest {
         String document = TestUtils.getResourceAsStream("plip/3o0r_B.plip")
                 .collect(Collectors.joining(System.lineSeparator()));
         new PLIPIntraMolecularAnnotator().process(chain, Jsoup.parse(document));
-        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2014);
-        PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.Partitioned.fromMCL(graph, MCL.DEFAULT_EXPAND_FACTOR, 2.0);
+        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2015);
+        PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.Partitioned.fromMCL(graph, MarkovClusteringAlgorithm.DEFAULT_EXPAND_FACTOR, 2.0);
 
         System.out.println(GraphVisualizer.getPyMolString(partitionedGraph));
     }

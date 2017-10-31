@@ -7,7 +7,6 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.List;
 
-//@FeatureProvider(provides = EnergyProfile.class)
 public class EgorAgreementCalculator extends FeatureProvider {
     private final EnergyProfileCalculator energyProfileCalculator;
     private final EnergyProfilePredictor energyProfilePredictor;

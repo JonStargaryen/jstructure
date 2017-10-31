@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.align.impl;
 import de.bioforscher.jstructure.align.*;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Transformation;
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;

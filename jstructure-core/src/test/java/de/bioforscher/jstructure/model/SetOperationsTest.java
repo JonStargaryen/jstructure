@@ -1,5 +1,8 @@
 package de.bioforscher.jstructure.model;
 
+import de.bioforscher.jstructure.mathematics.Fragment;
+import de.bioforscher.jstructure.mathematics.Pair;
+import de.bioforscher.jstructure.mathematics.SetOperations;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

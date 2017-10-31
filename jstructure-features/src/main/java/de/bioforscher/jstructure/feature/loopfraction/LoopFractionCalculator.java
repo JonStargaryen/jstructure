@@ -1,8 +1,8 @@
 package de.bioforscher.jstructure.feature.loopfraction;
 
 import de.bioforscher.jstructure.feature.sse.dssp.DSSPSecondaryStructure;
-import de.bioforscher.jstructure.model.SetOperations;
-import de.bioforscher.jstructure.model.Fragment;
+import de.bioforscher.jstructure.mathematics.SetOperations;
+import de.bioforscher.jstructure.mathematics.Fragment;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -16,7 +16,6 @@ import java.util.stream.DoubleStream;
  * Computes the loop fraction of a protein.
  * Created by S on 16.01.2017.
  */
-//@FeatureProvider(provides = LoopFraction.class, requires = DSSPSecondaryStructure.class)
 public class LoopFractionCalculator extends FeatureProvider {
     private static final int WINDOW_SIZE = 9;
     private static final int WINDOW_MIDDLE_INDEX = (WINDOW_SIZE / 2) + 1;
@@ -79,7 +78,7 @@ public class LoopFractionCalculator extends FeatureProvider {
                             .aminoAcids()
                             .residueNumber(surroundingResidueNumbers(residueNumber))
                             .asFilteredGroups()
-                            .mapToDouble(surroundingGroup -> surroundingGroup.getFeatureContainer().getFeature(RawLoopFraction.class).getRawLoopFraction())
+                            .mapToDouble(surroundingGroup -> surroundingGroup.getFeature(RawLoopFraction.class).getRawLoopFraction())
                             .average()
                             .orElse(1.0);
                     group.getFeatureContainer().addFeature(new LoopFraction(this, smoothedValue));
@@ -101,7 +100,7 @@ public class LoopFractionCalculator extends FeatureProvider {
         double smoothedLoopFraction = 0;
 
         for(int i = 0; i < WINDOW_SIZE; i++) {
-            smoothedLoopFraction += weights[i] * fragment.getElement(i).getFeatureContainer().getFeature(RawLoopFraction.class).getRawLoopFraction();
+            smoothedLoopFraction += weights[i] * fragment.getElement(i).getFeature(RawLoopFraction.class).getRawLoopFraction();
         }
         middleGroup.getFeatureContainer().addFeature(new LoopFraction(this, smoothedLoopFraction));
     }
@@ -117,6 +116,6 @@ public class LoopFractionCalculator extends FeatureProvider {
 
     private void assignRawLoopFraction(Group group) {
         group.getFeatureContainer().addFeature(new RawLoopFraction(this,
-                group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class).getSecondaryStructure().isCoilType() ? 1.0 : 0.0));
+                group.getFeature(DSSPSecondaryStructure.class).getSecondaryStructure().isCoilType() ? 1.0 : 0.0));
     }
 }

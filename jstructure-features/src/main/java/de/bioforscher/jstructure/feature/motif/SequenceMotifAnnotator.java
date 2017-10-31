@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * Searches for sequence fragments matching any {@link SequenceMotifDefinition} and reports hits.
  * Created by S on 02.10.2016.
  */
-//@FeatureProvider(provides = SequenceMotifContainer.class)
 public class SequenceMotifAnnotator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SequenceMotifAnnotator.class);
 

@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//@FeatureProvider(provides = PLIPInteractionContainer.class, priority = 200)
 //TODO infers with other annotator for intra-molecular interactions
 public class PLIPLigandAnnotator extends FeatureProvider {
     @Override

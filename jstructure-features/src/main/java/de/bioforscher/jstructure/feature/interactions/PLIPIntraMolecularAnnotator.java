@@ -1,7 +1,6 @@
 package de.bioforscher.jstructure.feature.interactions;
 
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import org.jsoup.nodes.Document;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
  * Annotates residue-residue interactions within a protein.
  * Created by bittrich on 2/9/17.
  */
-//@FeatureProvider(provides = PLIPInteractionContainer.class)
 public class PLIPIntraMolecularAnnotator extends FeatureProvider {
     @Override
     protected void processInternally(Structure protein) {
@@ -23,8 +21,7 @@ public class PLIPIntraMolecularAnnotator extends FeatureProvider {
                 .forEach(chain -> process(chain, getDocument(chain)));
 
         List<PLIPInteraction> plipInteractions = protein.chainsWithAminoAcids()
-                .map(AbstractFeatureable::getFeatureContainer)
-                .map(featureContainer -> featureContainer.getFeature(PLIPInteractionContainer.class))
+                .map(chain -> chain.getFeature(PLIPInteractionContainer.class))
                 .map(PLIPInteractionContainer::getInteractions)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());

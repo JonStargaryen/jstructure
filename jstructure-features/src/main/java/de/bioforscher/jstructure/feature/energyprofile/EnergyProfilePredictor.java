@@ -21,7 +21,6 @@ import java.util.stream.Stream;
  * Created by S on 20.01.2017.
  * @author originally written by Florian Heinke
  */
-//@FeatureProvider(provides = EnergyProfile.class, origin = FeatureProvider.FeatureOrigin.PREDICTION, priority = 200)
 public class EnergyProfilePredictor extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(EnergyProfilePredictor.class);
     private static final int WINDOW_SIZE = 3;

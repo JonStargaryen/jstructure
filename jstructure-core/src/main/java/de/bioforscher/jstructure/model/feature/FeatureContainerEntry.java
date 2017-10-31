@@ -6,7 +6,7 @@ package de.bioforscher.jstructure.model.feature;
  * calculate it. By contract stored values are expected to be final.
  * Created by S on 28.04.2017.
  */
-public class FeatureContainerEntry {
+public abstract class FeatureContainerEntry {
     private final FeatureProvider featureProvider;
 
     /**

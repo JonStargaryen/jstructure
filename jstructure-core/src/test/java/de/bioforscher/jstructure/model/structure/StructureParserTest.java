@@ -34,6 +34,16 @@ public class StructureParserTest {
     private static final String NON_STANDARD_PDB_ID = "1dw9";
 
     @Test
+    public void shouldHandleLegacyHeaders() {
+        String pdbId = "2m7g";
+        Structure structure = StructureParser.source(pdbId)
+                .minimalParsing(true)
+                .parse();
+        Assert.assertEquals("pdbId does not match expectation", pdbId, structure.getProteinIdentifier().getPdbId());
+        Assert.assertEquals("date does not match", "2013-04-22", structure.getDepositionDate().toString());
+    }
+
+    @Test
     public void shouldFormatPdbHeaderCorrectly() {
         Structure protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1AR1))
                 .minimalParsing(true)

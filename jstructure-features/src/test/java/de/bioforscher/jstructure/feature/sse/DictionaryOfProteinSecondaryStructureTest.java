@@ -75,9 +75,9 @@ public class DictionaryOfProteinSecondaryStructureTest {
 
         // return complete DSSP annotation string from jstructrue
         return protein.aminoAcids()
-                .map(residue -> residue.getFeatureContainer().getFeature(DSSPSecondaryStructure.class))
+                .map(residue -> residue.getFeature(DSSPSecondaryStructure.class))
                 .map(DSSPSecondaryStructure::getSecondaryStructure)
-                .map(SecondaryStructureElement::getOneLetterRepresentation)
+                .map(SecondaryStructureType::getOneLetterRepresentation)
                 .map(character -> character.equals("c") ? " " : character)
                 .collect(Collectors.joining());
     }

@@ -1,11 +1,10 @@
 package de.bioforscher.jstructure.feature.sse.assp;
 
-import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
+import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
@@ -63,14 +62,14 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends FeatureProv
     }
 
     private void assignNeutralState(AminoAcid aminoAcid) {
-        aminoAcid.getFeatureContainer().addFeature(new GenericSecondaryStructure(this, SecondaryStructureElement.COIL));
+        aminoAcid.getFeatureContainer().addFeature(new GenericSecondaryStructure(this, SecondaryStructureType.COIL));
     }
 
     private void handleLine(Structure protein, String line) {
         line = line.replaceAll("\\s+", " ");
         String[] split = line.split(" ");
 
-        SecondaryStructureElement secondaryStructure = mapToSecondaryStructureElement(split[0]);
+        SecondaryStructureType secondaryStructure = mapToSecondaryStructureElement(split[0]);
 
         Chain chain = protein.select()
                 .chainName(split[3])
@@ -78,19 +77,18 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends FeatureProv
         chain.select()
                 .residueNumber(new IntegerRange(Integer.valueOf(split[4]), Integer.valueOf(split[7])))
                 .asFilteredGroups()
-                .map(Group::getFeatureContainer)
-                .map(featureContainer -> featureContainer.getFeature(GenericSecondaryStructure.class))
+                .map(group -> group.getFeature(GenericSecondaryStructure.class))
                 .forEach(ss -> ss.setSecondaryStructure(secondaryStructure));
     }
 
-    private SecondaryStructureElement mapToSecondaryStructureElement(String string) {
+    private SecondaryStructureType mapToSecondaryStructureElement(String string) {
         switch(string) {
             case "AlphaHelix":
-                return SecondaryStructureElement.ALPHA_HELIX;
+                return SecondaryStructureType.ALPHA_HELIX;
             case "ThreeHelix":
-                return SecondaryStructureElement.THREE_TEN_HELIX;
+                return SecondaryStructureType.THREE_TEN_HELIX;
             case "PiHelix":
-                return SecondaryStructureElement.PI_HELIX;
+                return SecondaryStructureType.PI_HELIX;
             default:
                 throw new IllegalArgumentException("unknown structure: " + string);
         }

@@ -16,8 +16,7 @@ public class AssignmentOfSecondaryStructureInProteinsWrapperTest {
         new AssignmentOfSecondaryStructureInProteinsWrapper().process(protein);
         protein.aminoAcids()
                 .forEach(aminoAcid -> System.out.println(aminoAcid.getIdentifier() + " " +
-                        aminoAcid.getFeatureContainer()
-                                .getFeature(GenericSecondaryStructure.class)
+                        aminoAcid.getFeature(GenericSecondaryStructure.class)
                                 .getSecondaryStructure()
                                 .getOneLetterRepresentation()));
     }

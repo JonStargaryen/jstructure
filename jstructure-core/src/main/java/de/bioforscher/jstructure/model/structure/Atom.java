@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.model.Calculable;
+import de.bioforscher.jstructure.mathematics.Calculable;
 import de.bioforscher.jstructure.model.Copyable;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
@@ -167,6 +167,11 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
      */
     public Group getParentGroup() {
         return parentGroup != null ? parentGroup : Group.UNKNOWN_GROUP;
+    }
+
+    @Override
+    public Structure getParentStructure() {
+        return getParentGroup().getParentChain().getParentStructure();
     }
 
     @Override

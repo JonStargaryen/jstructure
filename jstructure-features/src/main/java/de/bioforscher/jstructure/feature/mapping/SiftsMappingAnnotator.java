@@ -4,7 +4,6 @@ import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +27,6 @@ import java.util.zip.GZIPInputStream;
  * Retrieves cross-database mappings for residues and chains using the Sifts-project.
  * Created by bittrich on 5/17/17.
  */
-//@FeatureProvider(provides = { ResidueMapping.class, ChainMapping.class })
 public class SiftsMappingAnnotator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(SiftsMappingAnnotator.class);
 
@@ -82,8 +80,7 @@ public class SiftsMappingAnnotator extends FeatureProvider {
         } else {
             // nothing matched, use amino acid mapping instead
             Set<String> uniProtIds = chain.aminoAcids()
-                    .map(AminoAcid::getFeatureContainer)
-                    .map(featureContainer -> featureContainer.getFeature(ResidueMapping.class))
+                    .map(aminoAcid -> aminoAcid.getFeature(ResidueMapping.class))
                     .map(ResidueMapping::getUniProtId)
                     .filter(id -> id.length() > 1)
                     .collect(Collectors.toSet());

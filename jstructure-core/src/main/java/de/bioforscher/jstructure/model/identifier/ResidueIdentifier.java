@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 /**
  * Represents the numbering of {@link Group} instances within a protein chain. Instances of this class are immutable.
+ * impl notice: Does not contain chain or protein identifiers as instantiation would become way more complicated.
  * Created by S on 25.05.2017.
  */
 public class ResidueIdentifier extends AbstractIdentifier {

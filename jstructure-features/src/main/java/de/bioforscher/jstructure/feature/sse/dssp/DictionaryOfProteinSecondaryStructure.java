@@ -1,11 +1,11 @@
 package de.bioforscher.jstructure.feature.sse.dssp;
 
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.TorsionAngles;
-import de.bioforscher.jstructure.model.SetOperations;
-import de.bioforscher.jstructure.model.Fragment;
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.mathematics.SetOperations;
+import de.bioforscher.jstructure.mathematics.Fragment;
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -93,7 +93,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
         List<BetaBridge> bridges = new ArrayList<>();
         List<Ladder> ladders = new ArrayList<>();
         // init mapping as unassigned state (i.e. coil)
-        residues.forEach(r -> r.getFeatureContainer().addFeature(new DSSPSecondaryStructure(this, SecondaryStructureElement.COIL)));
+        residues.forEach(r -> r.getFeatureContainer().addFeature(new DSSPSecondaryStructure(this, SecondaryStructureType.COIL)));
 
         calculateHAtoms(residues);
         calculateHBonds(residues);
@@ -121,30 +121,30 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
     }
 
     private DSSPSecondaryStructure getState(Group group) {
-        return group.getFeatureContainer().getFeature(DSSPSecondaryStructure.class);
+        return group.getFeature(DSSPSecondaryStructure.class);
     }
 
     private void updateSheets(List<AminoAcid> residues, List<Ladder> ladders) {
         for(Ladder ladder : ladders){
             for (int lcount = ladder.getFrom(); lcount <= ladder.getTo(); lcount++) {
                 DSSPSecondaryStructure state = getState(residues.get(lcount));
-                SecondaryStructureElement stype = state.getSecondaryStructure();
+                SecondaryStructureType stype = state.getSecondaryStructure();
 
                 int diff = ladder.getFrom() - lcount;
                 int l2count = ladder.getLfrom() - diff ;
 
                 DSSPSecondaryStructure state2 = getState(residues.get(l2count));
-                SecondaryStructureElement stype2 = state2.getSecondaryStructure();
+                SecondaryStructureType stype2 = state2.getSecondaryStructure();
 
                 if(ladder.getFrom() != ladder.getTo()) {
-                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
-                    setSecStrucType(residues, l2count, SecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureType.EXTENDED);
+                    setSecStrucType(residues, l2count, SecondaryStructureType.EXTENDED);
                 } else {
-                    if(!stype.isHelixType() && (!stype.equals(SecondaryStructureElement.EXTENDED)))
-                        setSecStrucType(residues, lcount, SecondaryStructureElement.BRIDGE);
+                    if(!stype.isHelixType() && (!stype.equals(SecondaryStructureType.EXTENDED)))
+                        setSecStrucType(residues, lcount, SecondaryStructureType.BRIDGE);
 
-                    if(!stype2.isHelixType() && (!stype2.equals(SecondaryStructureElement.EXTENDED)))
-                        setSecStrucType(residues, l2count, SecondaryStructureElement.BRIDGE);
+                    if(!stype2.isHelixType() && (!stype2.equals(SecondaryStructureType.EXTENDED)))
+                        setSecStrucType(residues, l2count, SecondaryStructureType.BRIDGE);
                 }
             }
 
@@ -158,21 +158,21 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
             if (ladder.getBtype().equals(BridgeType.ANTIPARALLEL)) {
 				/* set one side */
                 for(int lcount = ladder.getFrom(); lcount <= conladder.getTo(); lcount++) {
-                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureType.EXTENDED);
                 }
 				/* set other side */
                 for (int lcount = conladder.getLto(); lcount <= ladder.getLfrom(); lcount++) {
-                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureType.EXTENDED);
                 }
 
             } else {
 				/* set one side */
                 for(int lcount = ladder.getFrom(); lcount <= conladder.getTo(); lcount++) {
-                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureType.EXTENDED);
                 }
 				/* set other side */
                 for(int lcount = ladder.getLfrom(); lcount <= conladder.getLto(); lcount++) {
-                    setSecStrucType(residues, lcount, SecondaryStructureElement.EXTENDED);
+                    setSecStrucType(residues, lcount, SecondaryStructureType.EXTENDED);
                 }
             }
         }
@@ -436,7 +436,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
 
                 // Angles = 360 should be discarded
                 if (angle > 70.0 && angle < 359.99) {
-                    setSecStrucType(residues, i, SecondaryStructureElement.BEND);
+                    setSecStrucType(residues, i, SecondaryStructureType.BEND);
                     state.setBend(true);
                 }
             } catch (NullPointerException e) {
@@ -447,15 +447,15 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
 
     private void buildHelices(List<AminoAcid> residues) {
         // Alpha-helix (i+4), 3-10-helix (i+3), Pi-helix (i+5)
-        checkSetHelix(residues, 4, SecondaryStructureElement.ALPHA_HELIX);
-        checkSetHelix(residues, 3, SecondaryStructureElement.THREE_TEN_HELIX);
-        checkSetHelix(residues, 5, SecondaryStructureElement.PI_HELIX);
+        checkSetHelix(residues, 4, SecondaryStructureType.ALPHA_HELIX);
+        checkSetHelix(residues, 3, SecondaryStructureType.THREE_TEN_HELIX);
+        checkSetHelix(residues, 5, SecondaryStructureType.PI_HELIX);
 
         checkSetTurns(residues);
     }
 
     private void checkSetTurns(List<AminoAcid> residues) {
-        SecondaryStructureElement type = SecondaryStructureElement.TURN;
+        SecondaryStructureType type = SecondaryStructureType.TURN;
 
         for(int idx = 0; idx < 3; idx++) {
             for(int i = 0; i < residues.size() - 1; i++) {
@@ -484,7 +484,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
      * @param pos the getResidue index to manipulate
      * @param type the type to assign
      */
-    private void setSecStrucType(List<AminoAcid> residues, int pos, SecondaryStructureElement type) {
+    private void setSecStrucType(List<AminoAcid> residues, int pos, SecondaryStructureType type) {
         DSSPSecondaryStructure ss = getState(residues.get(pos));
         // more favorable according to DSSP ranking
         if (type.compareTo(ss.getSecondaryStructure()) > 0) {
@@ -505,7 +505,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
      * @param n
      * @param type
      */
-    private void checkSetHelix(List<AminoAcid> residues, int n, SecondaryStructureElement type) {
+    private void checkSetHelix(List<AminoAcid> residues, int n, SecondaryStructureType type) {
         int idx = n - 3;
         logger.debug("Set helix {} {} {}", type, n, idx);
 

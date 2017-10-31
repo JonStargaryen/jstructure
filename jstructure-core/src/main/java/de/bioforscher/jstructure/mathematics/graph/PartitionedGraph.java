@@ -15,6 +15,7 @@ public class PartitionedGraph<N> extends Graph<N> {
         this.modules = modules;
     }
 
+
     public Optional<Module<N>> getModuleOf(N node) {
         return modules.stream()
                 .filter(module -> module.getNodes().contains(node))

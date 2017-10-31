@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.mathematics.graph.partitioning;
 
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
-import de.bioforscher.jstructure.model.SetOperations;
+import de.bioforscher.jstructure.mathematics.SetOperations;
 
 import java.util.Collection;
 import java.util.List;

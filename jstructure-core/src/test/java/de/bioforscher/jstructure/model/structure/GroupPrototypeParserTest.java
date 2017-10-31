@@ -29,4 +29,11 @@ public class GroupPrototypeParserTest {
     public void shouldHandleUnknownLigand() {
         System.out.println(GroupPrototypeParser.getInstance().getPrototype("UNL"));
     }
+
+    @Test
+    public void shouldHandleYCM() {
+        Assert.assertEquals("polymer type does not match",
+                GroupPrototype.PolymerType.PEPTIDE_LINKING,
+                GroupPrototypeParser.getInstance().getPrototype("YCM").getPolymerType());
+    }
 }

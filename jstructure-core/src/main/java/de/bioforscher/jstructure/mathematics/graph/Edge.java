@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.mathematics.graph;
 
-import de.bioforscher.jstructure.model.Pair;
+import de.bioforscher.jstructure.mathematics.Pair;
 
 public class Edge<N> extends Pair<N, N> {
     public static final double DEFAULT_WEIGHT = 1;

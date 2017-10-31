@@ -1,7 +1,8 @@
 package de.bioforscher.jstructure.feature.sse.assp;
 
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureElement;
+import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
+import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 
 import java.text.DecimalFormat;
@@ -12,6 +13,7 @@ import java.util.Locale;
  * The element dedicated to describe secondary structure elements assigned by ASSP.
  * Created by bittrich on 6/28/17.
  */
+@DefaultFeatureProvider(AssignmentOfSecondaryStructureInProteinsWrapper.class)
 public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.US));
     private double t;
@@ -33,7 +35,7 @@ public class ASSPSecondaryStructure extends GenericSecondaryStructure {
     private int stretchId;
     private String finalCharacteristic;
 
-    ASSPSecondaryStructure(FeatureProvider featureProvider, SecondaryStructureElement secondaryStructure) {
+    ASSPSecondaryStructure(FeatureProvider featureProvider, SecondaryStructureType secondaryStructure) {
         super(featureProvider, secondaryStructure);
     }
 

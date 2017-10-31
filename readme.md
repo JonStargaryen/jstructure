@@ -1,10 +1,10 @@
 # de.bioforscher.jstructure
 
-*de.bioforscher.jstructure* is a light-weight module for structural bioinformatics. It provides
-a stream-based API to work with protein structures in *PDB* format.
+*de.bioforscher.jstructure* is a light-weight library for structural bioinformatics. It provides
+a stream-based API to work with macromolecular structures in *PDB* format.
 
 ### Data Model
-*de.bioforscher.jstructure* hierarchy is close to that BioJava of: a `Protein` contains any
+*de.bioforscher.jstructure* hierarchy is close to that BioJava of: a `Structure` contains any
  number of `Chain` objects which contain any number of `Group` objects which
  contain any number of `Atom` objects. Each element of this hierarchy implements
  a `Container` interface, so it is possible to retrieve all registered children
@@ -23,64 +23,77 @@ a stream-based API to work with protein structures in *PDB* format.
  to return their *PDB* representation as an *ATOM* record (which depends
  information on the parent `Group` as well as the parent `Chain`). In
  consequence every element of the hierarchy can compose its *PDB* representation
- by gathering all *ATOM* records of all `Atom` objects associated to it. This
- functionality is specified by the `AtomRecordWriter` interface.
+ by gathering all *ATOM* records of all `Atom` objects associated to it.
  
- Each of these classes implements `FeatureContainer`, so arbitrary data can be
- attached to any one of them.
+ To any of these classes arbitrary data can be attached to.
+
+### Using The API
+        // fetch a structure or load from local PDB if setup
+        Structure structure = StructureParser.source("1brr").parse();
+        
+        // select a chain
+        Chain chainB = structure.select()
+                .chainId("B")
+                .asChain();
+
+        // or a residue
+        AminoAcid aminoAcid1 = chainB.select()
+                .residueNumber(60)
+                .asAminoAcid();
+        // and another one
+        AminoAcid aminoAcid2 = chainB.select()
+                .residueNumber(100)
+                .asAminoAcid();
+
+        // compute their distance
+        System.out.println("distance of " + aminoAcid1 + " and " + aminoAcid2 + ": " +
+                StandardFormat.format(aminoAcid1.calculate()
+                        .centroid()
+                        .distance(aminoAcid2.calculate()
+                                .centroid())));
+
+        // access amino acid-specific atoms
+        chainB.select()
+                .aminoAcids()
+                .groupName("TRP")
+                .asFilteredGroups()
+                .map(Tryptophan.class::cast)
+                .map(tryptophan -> tryptophan + " CG position: " +
+                        Arrays.toString(tryptophan.getCg().getCoordinates()))
+                .forEach(System.out::println);
+
+        // compute features on-the-fly and resolve dependencies
+        // e.g. assign some random value to each amino acid
+        structure.aminoAcids()
+                .forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new Feature(new Random().nextDouble())));
+
+        chainB.aminoAcids()
+                .map(aminoAcid -> aminoAcid + " random feature: " +
+                        StandardFormat.format(aminoAcid.getFeature(Feature.class).getValue()))
+                .forEach(System.out::println);
+
+        System.out.println("averages among chains:");
+        structure.chainsWithAminoAcids()
+                .map(chain -> chain.getChainIdentifier() + "'s average random feature: " +
+                        StandardFormat.format(chain.aminoAcids()
+                                .map(aminoAcid -> aminoAcid.getFeature(Feature.class))
+                                .mapToDouble(Feature::getValue)
+                                .average()
+                                .getAsDouble()))
+                .forEach(System.out::println);
 
 ### Feature Providers
 
-These `AbstractFeatureProvider` implementations are tracked in the `FeatureProviderRegistry`.
-This is useful respectively needed as the computation of some feature may require other
-features to be present beforehand. E.g., in order to calculate the membrane topology, the 
-accessible surface area has to be computed first. With this simple implementation of a 
-service registry, every implementation can get an instance of the appropriate classes to
-compute missing features on-the-fly without the the user having to remember all requirements
-while also not directly tying `AbstractFeatureProvider` instances together, but rather connecting
-them by the features they require and provide.
+Several `FeatureProvider` implementations are provided which allow the computation or 
+annotation of values such as secondary structure information, accessible surface area values,
+ membrane topology, evolutionary information or UniProt data.
+ 
+Dependencies between them are resolved automatically and the user can request features which
+will be computed on-the-fly, when they are not already present.
 
-### Using The API
-        // fetch/parse structure by id
-        Protein protein = ProteinParser.parseProteinById("1brr");
-        
-        // print coordinates of all alanines
-        Selection.on(protein)
-                .aminoAcids(AminoAcidFamily.ALANINE)
-                .asFilteredGroups()
-                .map(Group::composePDBRecord)
-                .forEach(System.out::println);
-        
-        // count all alanines
-        double alanineRatio = Selection.on(protein)
-                .aminoAcids(AminoAcidFamily.ALANINE)
-                .asFilteredGroups()
-                .count() / (double) protein.getSize() * 100.0;
-        
-        // store count
-        protein.setFeature("ALANINE_RATIO", alanineRatio);
-        
-        // retrieve it
-        System.out.printf("alanine ratio: %3.2f%%", protein.getFeatureAsDouble("ALANINE_RATIO"));
-        
-        
-        // compute the ASA by a suitable provider
-        FeatureProviderRegistry.resolve("ACCESSIBLE_SURFACE_AREA").process(protein);
-        
-        // print values
-        protein.aminoAcids()
-                .map(group -> group.getFeatureAsDouble("ACCESSIBLE_SURFACE_AREA"))
-                .forEach(System.out::println);
+### Alignments
 
-### The design Module
-
-The `design` package contains example classes on how to aggregate information and 
-store respectively analyze it.
-
-These classes are used to tweak the `core` package and spot shortcomings of the
-current design. Also they provide examples on how to employ the capabilities of it.
-Be aware, that at this point in time everything in all modules is suspect to drastic 
-changes as the library grows and requirements change.
+...
 
 ### Design guidelines
 * no public method takes `null` as argument, none will return `null`
