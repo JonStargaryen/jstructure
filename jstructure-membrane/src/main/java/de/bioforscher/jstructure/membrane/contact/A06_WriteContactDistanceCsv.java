@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class A0X_WriteContactCsv {
+/**
+ * Do interactions types differ in their distance? Well, they should for sure.
+ */
+public class A06_WriteContactDistanceCsv {
     private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR =
             new OrientationsOfProteinsInMembranesAnnotator();
     private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR =
@@ -35,17 +38,16 @@ public class A0X_WriteContactCsv {
         String header = "pdbId;chainId;res1;aa1;res2;aa2;topology;size1;size2;interaction;distance;rigidity1;rigidity2" + System.lineSeparator();
 
         String alpha = composeCsv(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY);
-        MembraneConstants.write(MembraneConstants.DATASETS_DIRECTORY.resolve("contact").resolve("alpha.csv"),
+        MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("contact").resolve("contact-distance.csv"),
                 header + alpha);
 
-//        String beta = composeCsv(MembraneConstants.PDBTM_NR_BETA_DATASET_DIRECTORY);
-//        MembraneConstants.write(MembraneConstants.DATASETS_DIRECTORY.resolve("contact").resolve("beta.csv"),
-//                header + beta);
+        String beta = composeCsv(MembraneConstants.PDBTM_NR_BETA_DATASET_DIRECTORY);
+        MembraneConstants.write(MembraneConstants.PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("contact").resolve("contact-distance.csv"),
+                header + beta);
     }
 
     private static String composeCsv(Path directory) {
         return MembraneConstants.lines(directory.resolve("ids.list"))
-                .limit(1)
                 .map(line -> handleLine(line, directory))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -155,8 +157,8 @@ public class A0X_WriteContactCsv {
                 size2 + ";" +
                 interaction.getClass().getSimpleName() + ";" +
                 StandardFormat.format(caDistance) + ";" +
-                rigidity1 + ";" +
-                rigidity2;
+                StandardFormat.format(rigidity1) + ";" +
+                StandardFormat.format(rigidity2);
 
         return Optional.of(output);
     }
