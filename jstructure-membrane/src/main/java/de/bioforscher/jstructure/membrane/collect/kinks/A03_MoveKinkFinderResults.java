@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.kinks;
+package de.bioforscher.jstructure.membrane.collect.kinks;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 

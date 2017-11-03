@@ -121,7 +121,7 @@ public class SetOperations {
         if(fragmentSize < 2) {
             throw new IllegalArgumentException("fragment size cannot be smaller than 2 - found " + fragmentSize);
         }
-        if(fragmentSize >= elements.size()) {
+        if(fragmentSize > elements.size()) {
             throw new IllegalArgumentException("fragment size cannot be equal or exceed number of elements - found " +
                     fragmentSize + " and " + elements.size() + " elements");
         }

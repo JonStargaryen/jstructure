@@ -1,9 +1,11 @@
-package de.bioforscher.jstructure.membrane;
+package de.bioforscher.jstructure.membrane.foldingcores;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.impl.MarkovClusteringAlgorithm;
+import de.bioforscher.jstructure.membrane.GraphFactory;
+import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.visualization.GraphVisualizer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;

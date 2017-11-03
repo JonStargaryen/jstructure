@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.pdbtm;
+package de.bioforscher.jstructure.membrane.collect.pdbtm;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.membrane.DatasetComposer;

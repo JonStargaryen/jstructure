@@ -17,6 +17,7 @@ import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -37,31 +38,42 @@ public class ComposeCSADataset {
             new PLIPIntraMolecularAnnotator();
 
     public static void main(String[] args) {
-        Map<String, List<String>> proteinMap = MembraneConstants.lines(MembraneConstants.GIT_DIRECTORY.resolve("gmlvq_main")
+        MembraneConstants.list(MembraneConstants.GIT_DIRECTORY.resolve("gmlvq_main")
                 .resolve("data")
                 .resolve("csa_new")
-                .resolve("test")
-                .resolve("test.csv"))
+                .resolve("motifs_BLAST_10e80_matches"))
+                .map(path -> path.resolve("summary.csv"))
+                .forEach(ComposeCSADataset::handleCsv);
+    }
+
+    private static int counter;
+    private static int binSize;
+
+    private static void handleCsv(Path csv) {
+        System.out.println("handling bin " + csv);
+        Map<String, List<String>> proteinMap = MembraneConstants.lines(csv)
                 .filter(line -> !line.startsWith("match"))
                 .filter(line -> Double.valueOf(line.split(",")[2]) < P_VALUE_CUTOFF)
                 .collect(Collectors.groupingBy(line -> line.split("_")[0]));
+
+        counter = 1;
+        binSize = proteinMap.size();
 
         String output = proteinMap.entrySet()
                 .stream()
                 .map(ComposeCSADataset::handleBin)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .peek(System.out::println)
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        System.out.println();
-        System.out.println(output);
+        Path parent = csv.getParent();
+        MembraneConstants.write(parent.resolve(parent.toFile().getName() + ".arff"), output);
     }
 
     private static Optional<String> handleBin(Map.Entry<String, List<String>> entry) {
         String pdbId = entry.getKey();
         try {
-            System.out.println("annotating " + pdbId);
+            System.out.println("annotating " + pdbId + " - " + counter + " / " + binSize);
             Structure structure = StructureParser.source(pdbId)
                     .minimalParsing(true)
                     .parse();
@@ -79,7 +91,10 @@ public class ComposeCSADataset {
                     .map(Optional::get)
                     .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {
+            e.printStackTrace();
             return Optional.empty();
+        } finally {
+            counter++;
         }
     }
 
@@ -110,6 +125,7 @@ public class ComposeCSADataset {
                             .collect(Collectors.joining(","))
                     + ",?");
         } catch (Exception e) {
+            e.printStackTrace();
             return Optional.empty();
         }
     }

@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.contact;
+package de.bioforscher.jstructure.membrane.contact.definition;
 
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 /**
  * Visualize the impact of the contact definition on the way helices interact in 1fft.
  */
-public class A01_CreatePyMolFilesOfContactDefinition {
+public class CreatePyMolFilesOfContactDefinitions {
     public static void main(String[] args) {
         String pdbId = "1fft";
         String chainId = "A";
@@ -117,7 +117,10 @@ public class A01_CreatePyMolFilesOfContactDefinition {
                     "-0.041166950,   -0.264269710,   -0.963568509,\\" + System.lineSeparator() +
                      "0.000888713,    0.000804799,  -85.159309387,\\" + System.lineSeparator() +
                     "30.064170837,  291.794433594,  205.639144897,\\" + System.lineSeparator() +
-                    "-1428.911987305, 1599.334594727,  -20.000000000)";
+                    "-1428.911987305, 1599.334594727,  -20.000000000)" + System.lineSeparator() +
+                "color grey60" + System.lineSeparator() +
+                "set ray_trace_mode, 3" + System.lineSeparator() +
+                "hide labels";
 
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("pymol").resolve(pdbId + "_"
                 + chainId + "_" + interactionScheme + ".pml"), output);

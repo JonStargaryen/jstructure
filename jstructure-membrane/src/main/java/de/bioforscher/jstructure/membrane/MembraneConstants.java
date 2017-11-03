@@ -139,4 +139,38 @@ public class MembraneConstants {
 
         return segment1.isPresent() && segment2.isPresent() && !segment1.equals(segment2);
     }
+
+    private static final int SEQUENCE_WINDOW = 10;
+    public static String surroundingSequence(AminoAcid aminoAcid) {
+        StringBuilder upstreamSequence = new StringBuilder();
+        StringBuilder downstreamSequence = new StringBuilder();
+
+        Optional<AminoAcid> aminoAcidOptional = aminoAcid.getPreviousAminoAcid();
+        for(int i = 0; i < SEQUENCE_WINDOW; i++) {
+            if(aminoAcidOptional.isPresent()) {
+                upstreamSequence.append(aminoAcidOptional.get().getOneLetterCode());
+                aminoAcidOptional = aminoAcidOptional.get().getPreviousAminoAcid();
+            } else {
+                upstreamSequence.append("-");
+                aminoAcidOptional = Optional.empty();
+            }
+        }
+
+        aminoAcidOptional = aminoAcid.getNextAminoAcid();
+        for(int i = 0; i < SEQUENCE_WINDOW; i++) {
+            if(aminoAcidOptional.isPresent()) {
+                downstreamSequence.append(aminoAcidOptional.get().getOneLetterCode());
+                aminoAcidOptional = aminoAcidOptional.get().getNextAminoAcid();
+            } else {
+                downstreamSequence.append("-");
+                aminoAcidOptional = Optional.empty();
+            }
+        }
+
+        return upstreamSequence.reverse().toString() + aminoAcid.getOneLetterCode() + downstreamSequence;
+    }
+
+    public static double minMaxNormalize(double v, double min, double max) {
+        return (v - min) / (max  - min);
+    }
 }

@@ -122,6 +122,10 @@ public class GraphFactory {
                 .distanceFast(aminoAcid2.getCa()) < 7 * 7),
         CALPHA8((aminoAcid1, aminoAcid2) -> aminoAcid1.getCa().calculate()
                 .distanceFast(aminoAcid2.getCa()) < 8 * 8),
+        CALPHA10((aminoAcid1, aminoAcid2) -> aminoAcid1.getCa().calculate()
+                .distanceFast(aminoAcid2.getCa()) < 10 * 10),
+        CALPHA12((aminoAcid1, aminoAcid2) -> aminoAcid1.getCa().calculate()
+                .distanceFast(aminoAcid2.getCa()) < 12 * 12),
         SALENTIN2015((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
                 .areInContact(aminoAcid1, aminoAcid2));
 
