@@ -32,10 +32,10 @@ public class DatasetComposer {
         MembraneConstants.write(this.outputPath.resolve("ids.list"), selectedIds);
     }
 
-    public DatasetComposer(Path outputPath) {
+    public DatasetComposer(Path outputPath, boolean parseOpm) {
         this.outputPath = outputPath;
         String selectedIds = MembraneConstants.lines(outputPath.resolve("ids.list"))
-                .filter(chainId -> handlePdbId(chainId, false))
+                .filter(chainId -> handlePdbId(chainId, parseOpm))
                 .collect(Collectors.joining(System.lineSeparator()));
         // overwrite list
         MembraneConstants.write(this.outputPath.resolve("ids.list"), selectedIds);

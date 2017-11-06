@@ -55,11 +55,13 @@ public class MembraneConstants {
     public static final Path PDBTM_NR_BETA_DATASET_NETWORK_DIRECTORY = PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("network");
     public static final Path FOLDING_CORES_DIRECTORY = DATASETS_DIRECTORY.resolve("foldingcores");
     public static final Path DIVISION_DIRECTORY = DATASETS_DIRECTORY.resolve("division");
+    public static final Path COUPLING_DIRECTORY = DATASETS_DIRECTORY.resolve("membrane_couplings");
     public static final int MINIMUM_HELIX_LENGTH = 15;
 
     public static Stream<String> lines(Path path) {
         try {
-            return Files.lines(path);
+            return Files.lines(path)
+                    .filter(line -> !line.startsWith("#"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -67,7 +69,9 @@ public class MembraneConstants {
 
     public static Stream<String> lines(String url) {
         try {
-            return new BufferedReader(new InputStreamReader(new URL(url).openStream())).lines();
+            return new BufferedReader(new InputStreamReader(new URL(url).openStream()))
+                    .lines()
+                    .filter(line -> !line.startsWith("#"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
