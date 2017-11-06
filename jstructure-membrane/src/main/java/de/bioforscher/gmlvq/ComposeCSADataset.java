@@ -17,6 +17,7 @@ import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,8 @@ public class ComposeCSADataset {
                 .resolve("data")
                 .resolve("csa_new")
                 .resolve("motifs_BLAST_10e80_matches"))
+                // skip already computed results
+                .filter(path -> !Files.exists(path.resolve(path.toFile().getName() + ".arff")))
                 .map(path -> path.resolve("summary.csv"))
                 .forEach(ComposeCSADataset::handleCsv);
     }

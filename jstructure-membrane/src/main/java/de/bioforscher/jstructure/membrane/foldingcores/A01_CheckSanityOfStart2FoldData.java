@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.membrane.foldingcores.interactiontypes;
+package de.bioforscher.jstructure.membrane.foldingcores;
 
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -7,12 +7,13 @@ import java.nio.file.Path;
 
 /**
  * Based on: http://www.sciencedirect.com/science/article/pii/S0006349515048122?via%3Dihub#mmc1
+ * check for correctness of chain annotation
  */
-public class A01_CheckSanity {
+public class A01_CheckSanityOfStart2FoldData {
     public static void main(String[] args) {
         MembraneConstants.lines(MembraneConstants.FOLDING_CORES_DIRECTORY.resolve("sanity.txt"))
                 .filter(line -> !line.startsWith("#"))
-                .forEach(A01_CheckSanity::checkSanity);
+                .forEach(A01_CheckSanityOfStart2FoldData::checkSanity);
     }
 
     private static void checkSanity(String line) {
