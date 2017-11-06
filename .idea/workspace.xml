@@ -1,48 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/Kink.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/read.me" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/afm/A01_CollectData.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeCsv.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A03_AminoAcidPropensityForHelixHelixInteraction.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A04_RigidityUponContact.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A05_CooccurrenceMatrixCsv.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A06_WriteContactDistanceCsv.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A01_WriteFastaSequences.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A02_MoveDynaMineResults.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A03_AnnotateFunctionalResidues.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/FunctionalSite.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/TransmembraneRegion.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/UniProtAnnotationContainer.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/UniProtAnnotator.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/read.me" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/evolution/A01_WriteEvolutionaryInformationCsv.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/order/A01_PrintModularityScoresOfFoldons.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/general/A01_AminoAcidDistribution.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A04_WriteKinkCsv.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/A01_WriteInteractionPairCsv.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/validation/S01_ExperimentalValidation.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/A01_WriteDefinitionFiles.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A01_WriteDefinitionFiles.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_CreatePyMolFilesOfContactDefinition.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/definition/CreatePyMolFilesOfContactDefinitions.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A01_OutputPdbList.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A01_OutputPdbList.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A02_RunKinkFinderManually.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A02_RunKinkFinderManually.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A03_MoveKinkFinderResults.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A03_MoveKinkFinderResults.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/run.sh" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/run.sh" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/A01_DownloadDataset.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/A01_DownloadDataset.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/A02_ComputeEvolutionaryInformationProfile.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/A02_ComputeEvolutionaryInformationProfile.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/B01_DownloadDataset.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/B01_DownloadDataset.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/B02_ComputeEvolutionaryInformationProfile.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/B02_ComputeEvolutionaryInformationProfile.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/run.sh" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/dynamine/run.sh" />
+    <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="better impl meaningful equals method">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/helix/A01_WriteHelixCsv.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/weblogos/A01_ExtractSequencesOfContacts.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/SetOperations.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/SetOperations.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java" afterPath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/gmlvq/ComposeCSADataset.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/gmlvq/ComposeCSADataset.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/GraphFactory.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/GraphFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/rigidity/DynaMineBridge.java" afterPath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/rigidity/DynaMineBridge.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -150,42 +116,7 @@
     <favorites_list name="jstructure" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="A01_WriteAminoAcidContactCsv.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="27" column="43" lean-forward="false" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="A01_WriteContactCsv.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3761">
-              <caret line="238" column="71" lean-forward="true" selection-start-line="238" selection-start-column="71" selection-end-line="238" selection-end-column="71" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MembraneConstants.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="143" column="54" lean-forward="false" selection-start-line="143" selection-start-column="54" selection-end-line="143" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -194,6 +125,7 @@
         <option value="spring-beans.schema" />
         <option value="Enum" />
         <option value="Interface" />
+        <option value="AnnotationType" />
         <option value="JUnit4 Test Class" />
         <option value="Class" />
       </list>
@@ -201,6 +133,10 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+      <find>black</find>
+      <find>divS</find>
+      <find>tooltipD</find>
+      <find>tool</find>
       <find>pD.d</find>
       <find>05/</find>
       <find>Throw</find>
@@ -227,10 +163,6 @@
       <find>pdb</find>
       <find>1o0c</find>
       <find>stack</find>
-      <find>FeatureView</find>
-      <find>partition</find>
-      <find>partitioning</find>
-      <find>ERROR Unable to deserialize object from avro_binray</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\S\git\jstructure\jstructure-core</dir>
@@ -252,57 +184,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/FunctionalSiteAnnotator.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/UniProtAnnotator.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/TransmembraneRegion.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/UniProtAnnotationContainer.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/A03_AnnotateFunctionalResidues.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/A02_MoveDynaMineResults.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/A02_ComputeEvolutionaryInformationProfile.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/transmembranerigidity/A01_WriteCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/afm/A01_CollectData.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/afm/read.me" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/read.me" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/read.me" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/IdentifierFactory.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/order/A01_PrintModularityScoresOfFoldons.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/interactiontypes/A02_WriteCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/TransMembraneSubunit.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/A01_WriteDefinitionFiles.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/validation/S01_ExperimentalValidation.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/visualization/GraphVisualizerTest.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/GraphFactory.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/contactdefinition/A01_CreatePyMolFiles.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/PlipGraphFactoryTest.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A01_OutputPdbList.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/read.me" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A03_MoveKinkFinderResults.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/GraphFactory.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/SetOperations.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/A02_ComputeEvolutionaryInformationProfile.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/evolution/A01_WriteEvolutionaryInformationCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/definition/A01_CreatePyMolFilesOfContactDefinition.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/definition/CreatePyMolFilesOfContactDefinitions.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/general/A01_AminoAcidDistribution.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A03_MoveKinkFinderResults.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/read.me" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A04_WriteKinkCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologousEntryContainer.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/energyprofile/EgorAgreementCalculatorTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/StructureContainer.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contactdefinition/A01_CreatePyMolFiles.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contactdefinition/A01_CreatePyMolFilesOfContactDefinition.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contactn/A01_CreatePyMolFilesOfContactDefinition.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_CreatePyMolFilesOfContactDefinition.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureElement.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureType.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/A01_WriteCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/IntegerRange.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/MembraneContainer.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/A01_WriteInteractionPairCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A01_WriteDefinitionFiles.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A06_WriteContactDistanceCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_WriteContactCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeHistogram.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A0X_WriteContactCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionType.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/StructureParserTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/AminoAcid.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/GroupPrototypeParserTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureElementTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/GenericSecondaryStructure.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/Demo.java" />
+        <option value="$PROJECT_DIR$/readme.md" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeHistogramCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A03_HelixHelixInteractionTypeCsvByAminoAcid.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A05_CooccurrenceMatrixCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A04_RigidityUponContact.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A03_AminoAcidPropensityForHelixHelixInteraction.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteAminoAcidContactCsv.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/Optinal.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/gmlvq/ComposeCSADataset.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/Kink.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A04_RigidityUponContact.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/general/A01_AminoAcidDistribution.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Pair.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A05_CooccurrenceMatrixCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/weblogos/A01_ExtractSequencesOfContacts.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/LogoBoundry.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/TestNestedWeblogo.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoInputer.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoDataStructure.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoApplet.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/SequenceLogoDrawer.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/utils/Utilities.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/datastructure/WeblogoDataStructure.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/datastructure/NestedWebLogoCreator.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoXMLParser.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/resources/weblogo.xml" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/rigidity/DynaMineBridge.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java" />
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/helix/A01_WriteHelixCsv.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java" />
       </list>
     </option>
   </component>
@@ -333,15 +265,14 @@
   <component name="MavenRunner">
     <option name="skipTests" value="true" />
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="2" />
-    <option name="width" value="3440" />
-    <option name="height" value="1438" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="width" value="976" />
+    <option name="height" value="1038" />
   </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
     <ConfirmationsSetting value="2" id="Add" />
-    <ConfirmationsSetting value="2" id="Remove" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -358,10 +289,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -393,6 +320,15 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -401,7 +337,19 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
+              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
               <item name="membrane" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -410,7 +358,9 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
               <item name="membrane" type="462c0819:PsiDirectoryNode" />
               <item name="aminoacid" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -420,7 +370,9 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
               <item name="membrane" type="462c0819:PsiDirectoryNode" />
               <item name="contact" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -430,14 +382,35 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="de" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
               <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="foldingcores" type="462c0819:PsiDirectoryNode" />
+              <item name="helix" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="d3" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -450,10 +423,10 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
-    <property name="SearchEverywhereHistoryKey" value="SecondaryStr&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.sse.SecondaryStructureType&#10;StructureP&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureParser&#10;MCL&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL&#10;EnergyC&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator&#10;EnergyPr&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.energyprofile.EnergyProfile&#10;PLIPAn&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java&#10;Conser&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.ConservationCalculatorImpl&#10;Conserva&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/ConservationCalculatorImpl.java&#10;Local&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/LocalBlastWrapper.java&#10;UniPH&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator&#10;getAllChains&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.MutationEffectPredictionServiceImpl#getStreamOfAllChains&#10;StructureParser&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java&#10;StructureC&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureCollectors.java&#10;Nucl&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java&#10;Nucle&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide&#10;Group&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/GroupContainer.java&#10;FileCon&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/io/FileConvert.java&#10;StructureImpl&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6.jar!/org/biojava/nbio/structure/StructureImpl.class&#10;toPDB&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.AtomRecordProvider#toPDBString&#10;ProteinP&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/ProteinParserTest.java&#10;PdbFile&#9;PSI&#9;JAVA://org.biojava.nbio.structure.io.PDBFileParser&#10;PDBH&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/PDBHeader.java&#10;PDBHeader&#9;PSI&#9;JAVA://org.biojava.nbio.structure.PDBHeader&#10;Sele&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Selecti&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Clustal&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/ClustalOmegaRestQuery.java&#10;Uni&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;Protp&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/ProteinParser.java&#10;createProtein&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.old.impl.MutationEffectPredictionServiceImpl#createProtein&#10;ResidueIde&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ResidueIdentifier.java&#10;UniProtService&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator#uniProtBlastService&#10;UniProt&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;StructureCol&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureCollectors&#10;Advanced&#9;PSI&#9;JAVA://studies.poznan.AdvancedEnergyProfileRunner&#10;UNI&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;PLIPRest&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java&#10;getResourceAs&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#getResourceAsStream&#10;getResource&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.feature.AbstractFeatureProvider#getResourceAsStream&#10;Access&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceAreaCalculator.java&#10;Torsion&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/TorsionAngles.java&#10;Selection&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.selection.Selection&#10;createPro&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#createPrototype&#10;OPM&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/opm/OPMDatabaseQuery.java&#10;jdk&#9;ACTION&#9;SwitchBootJdk&#10;PLIPI&#9;PSI&#9;JAVA://de.bioforscher.jstructure.parser.plip.PLIPInteraction&#10;accessiblesurf&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.family.AminoAcidFamily#getMaximalAccessibleSurfaceArea&#10;select&#9;PSI&#9;JAVA://selection.SelectionIntegrationTest&#10;dihe&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.sse.SecondaryStructureAnnotator#calculateDihedralAngles&#10;torsion&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mathematics.LinearAlgebraAtom#computeTorsionAngles&#10;phi&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.topology.ANVIL.HphobHphilConsumer" />
+    <property name="SearchEverywhereHistoryKey" value="StructureP&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java&#10;Secondary&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureElementTest.java&#10;SequenceM&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/motif/SequenceMotifAnnotator.java&#10;Generic&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/GenericSecondaryStructure.java&#10; MembraneC&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/MembraneContainer.java&#10;Orien&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java&#10;DefaultF&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.container.StructureContainer.DefaultFeatureProviderMap&#10;Atom&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.Atom&#10;PLIPRe&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java&#10;PLIPAn&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java&#10;Conser&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.ConservationCalculatorImpl&#10;Conserva&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/ConservationCalculatorImpl.java&#10;Local&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/LocalBlastWrapper.java&#10;UniPH&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator&#10;getAllChains&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.MutationEffectPredictionServiceImpl#getStreamOfAllChains&#10;StructureParser&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java&#10;StructureC&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureCollectors.java&#10;Nucl&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java&#10;Nucle&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide&#10;Group&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/GroupContainer.java&#10;FileCon&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/io/FileConvert.java&#10;StructureImpl&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6.jar!/org/biojava/nbio/structure/StructureImpl.class&#10;toPDB&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.AtomRecordProvider#toPDBString&#10;ProteinP&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/ProteinParserTest.java&#10;PdbFile&#9;PSI&#9;JAVA://org.biojava.nbio.structure.io.PDBFileParser&#10;PDBH&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/PDBHeader.java&#10;PDBHeader&#9;PSI&#9;JAVA://org.biojava.nbio.structure.PDBHeader&#10;Sele&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Selecti&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Clustal&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/ClustalOmegaRestQuery.java&#10;Uni&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;Protp&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/ProteinParser.java&#10;createProtein&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.old.impl.MutationEffectPredictionServiceImpl#createProtein&#10;ResidueIde&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ResidueIdentifier.java&#10;UniProtService&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator#uniProtBlastService&#10;UniProt&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;StructureCol&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureCollectors&#10;Advanced&#9;PSI&#9;JAVA://studies.poznan.AdvancedEnergyProfileRunner&#10;UNI&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;PLIPRest&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java&#10;getResourceAs&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#getResourceAsStream&#10;getResource&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.feature.AbstractFeatureProvider#getResourceAsStream&#10;Access&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceAreaCalculator.java&#10;Torsion&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/TorsionAngles.java&#10;Selection&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.selection.Selection&#10;createPro&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#createPrototype&#10;OPM&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/opm/OPMDatabaseQuery.java&#10;jdk&#9;ACTION&#9;SwitchBootJdk&#10;PLIPI&#9;PSI&#9;JAVA://de.bioforscher.jstructure.parser.plip.PLIPInteraction&#10;accessiblesurf&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.family.AminoAcidFamily#getMaximalAccessibleSurfaceArea" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Confirmation" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/explorer/src/main/java" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/jstructure-membrane/src/main/java" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="RequestMappingsPanelWidth0" value="75" />
     <property name="RequestMappingsPanelOrder0" value="0" />
@@ -463,19 +436,12 @@
     <property name="RequestMappingsPanelOrder2" value="2" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="de.bioforscher.jstructure.membrane.aminoacid" />
-      <recent name="de.bioforscher.jstructure.membrane.modularity.division" />
-      <recent name="de.bioforscher.jstructure.membrane.modularity.visualization" />
-      <recent name="de.bioforscher.jstructure.mutation.impl" />
-      <recent name="de.bioforscher.jstructure.mmm.impl" />
-    </key>
     <key name="CreateTestDialog.RecentsKey">
-      <recent name="de.bioforscher.jstructure.membrane.modularity.visualization" />
-      <recent name="de.bioforscher.jstructure.membrane.modularity" />
-      <recent name="de.bioforscher.jstructure.mathematics.graph.clustering.algorithms" />
-      <recent name="de.bioforscher.jstructure.mathematics.graph.clustering" />
-      <recent name="de.bioforscher.jstructure.feature.interactions" />
+      <recent name="de.bioforscher.jstructure.feature.sse" />
+      <recent name="de.bioforscher.jstructure.feature.energyprofile" />
+      <recent name="de.bioforscher.jstructure.model.structure.container" />
+      <recent name="de.bioforscher.jstructure.model.feature" />
+      <recent name="de.bioforscher.jstructure.feature.rigidity" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -483,309 +449,35 @@
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="de.bioforscher.jstructure.membrane" />
       <recent name="de.bioforscher.jstructure.mathematics" />
+      <recent name="de.bioforscher.jstructure.mathematics.graph.partitioning" />
       <recent name="de.bioforscher.jstructure.model.identifier" />
       <recent name="de.bioforscher.jstructure.model" />
-      <recent name="de.bioforscher.jstructure.mutation.impl" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/jstructure-align/src/test/resources" />
+      <recent name="$PROJECT_DIR$/jstructure-mmm-bridge" />
+      <recent name="$PROJECT_DIR$/jstructure-core/src/main/resources" />
+      <recent name="$PROJECT_DIR$/jstructure-all/src/main/resources" />
+      <recent name="$PROJECT_DIR$/jstructure-core/src/main/resources/prototype" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/test/resources/dynamine" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/test/resources/netcarto" />
+      <recent name="C:\Users\S\git\jstructure\jstructure-membrane\src\main\java\edu\ufl\cise\bioinformatics\nestedweblogo" />
+      <recent name="C:\Users\S\git\jstructure\jstructure-membrane\src\main\java\edu\ufl\cise\bioinformatics\nestedweblogo\utils" />
+      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/resources" />
       <recent name="$PROJECT_DIR$/jstructure-membrane/src/test/resources/plip" />
+      <recent name="$PROJECT_DIR$/jstructure-core/src/test/resources" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="de.bioforscher.jstructure.membrane.modularity.pdbtm" />
       <recent name="de.bioforscher.testutil" />
       <recent name="de.bioforscher.jstructure.parser" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/dynamine" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/resources/d3" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/java/d3" />
-      <recent name="$PROJECT_DIR$/jstructure-membrane/src/test/resources/exp" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="de.bioforscher.jstructure.model.feature" />
+      <recent name="de.bioforscher.jstructure.mutation.impl" />
+      <recent name="de.bioforscher.jstructure.mmm.impl" />
+      <recent name="de.bioforscher.jstructure.mmm" />
+      <recent name="de.bioforscher.jstructure.mutation" />
     </key>
-  </component>
-  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
-    <UpdatedFiles>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Updated from server" />
-        <option name="myStatusName" value="Changed on server" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="CHANGED_ON_SERVER" />
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated" />
-          <option name="myStatusName" value="Changed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/workspace.xml</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/AlignmentPolicy.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/StructureAlignmentResult.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/SingleValueDecompositionAligner.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/StructureAlignmentResultImpl.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-align/src/test/java/de/bioforscher/jstructure/align/AtomMappingTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Edge.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/PartitionedGraph.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/Module.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/PartitioningScorer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/AbstractFeatureable.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/FeatureContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/FeatureContainerEntry.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/FeatureContainerRoot.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/FeatureProvider.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/EnzymeClassificationIdentifier.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/ProteinFamilyIdentifier.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/ResidueIdentifier.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Atom.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Group.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/AminoAcid.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/AtomContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/StructureContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/IntegerRange.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/partitioning/PartitioningScorerTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/SetOperationsTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/GroupPrototypeParserTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/StructureParserTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceArea.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceAreaCalculator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/asa/AtomRadius.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/cerosene/CeroseneEmbedding.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/cerosene/SequenceCerosene.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EgorAgreement.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EgorAgreementCalculator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfile.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfileAligner.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfileCalculator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfilePredictor.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/evolution/EvolutionaryInformation.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/evolution/EvolutionaryInformationCalculator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionType.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPLigandAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/loopfraction/LoopFraction.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/loopfraction/LoopFractionCalculator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/loopfraction/RawLoopFraction.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/mapping/ChainMapping.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/mapping/ResidueMapping.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/motif/SequenceMotifAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/motif/SequenceMotifContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/rigidity/BackboneRigidity.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/GenericSecondaryStructure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/assp/ASSPSecondaryStructure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/assp/AssignmentOfSecondaryStructureInProteinsWrapper.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/dssp/DSSPSecondaryStructure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/dssp/DictionaryOfProteinSecondaryStructure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/MembraneContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/Topology.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtFeatureContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologousEntryContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceAreaCalculatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfileCalculatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/energyprofile/EnergyProfilePredictorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/interactions/PLIPLigandAnnotatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/loopfraction/LoopFractionCalculatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/mapping/SiftsMappingAnnotatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/sse/DictionaryOfProteinSecondaryStructureTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/sse/assp/AssignmentOfSecondaryStructureInProteinsWrapperTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/jstructure-membrane.iml</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/PlipGraphFactoryTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/readme.md</PATH>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Created" />
-          <option name="myStatusName" value="Created" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CREATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Calculable.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Fragment.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Pair.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/SetOperations.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/GraphPartitioningAlgorithm.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/impl/MarkovClusteringAlgorithm.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/DefaultFeatureProvider.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/Demo.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/partitioning/impl/MarkovClusteringAlgorithmTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/container/DefaultFeatureProviderMapTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureType.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/energyprofile/EgorAgreementCalculatorTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureElementTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/A01_WriteDefinitionFiles.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/GraphFactory.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/afm/A01_CollectData.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/afm/read.me</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_CreatePyMolFilesOfContactDefinition.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A03_AminoAcidPropensityForHelixHelixInteraction.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A04_RigidityUponContact.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A05_CooccurrenceMatrixCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A0X_WriteContactCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A01_WriteFastaSequences.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A02_MoveDynaMineResults.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A03_AnnotateFunctionalResidues.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/FunctionalSite.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/TransmembraneRegion.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/UniProtAnnotationContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/UniProtAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/read.me</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/interactiontypes/A01_CheckSanity.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/interactiontypes/A02_WriteCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/order/A01_PrintModularityScoresOfFoldons.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/read.me</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/general/A01_AminoAcidDistribution.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/A01_DownloadDataset.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/A02_ComputeEvolutionaryInformationProfile.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/B01_DownloadDataset.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/pdbtm/B02_ComputeEvolutionaryInformationProfile.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/A01_WriteInteractionPairCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/validation/S01_ExperimentalValidation.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/visualization/GraphVisualizer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/visualization/JsonChain.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/visualization/JsonModule.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/visualization/JsonPartitioning.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/visualization/JsonRange.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/visualization/JsonSecondaryStructure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/visualization/GraphVisualizerTest.java</PATH>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Deleted" />
-          <option name="myStatusName" value="Deleted" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="true" />
-          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/algorithms/GraphPartitioningAlgorithm.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/algorithms/MCL.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Calculable.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Fragment.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/Pair.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/SetOperations.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/Identifiable.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/graph/partitioning/algorithms/MCLTest.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureElement.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/A01_WriteDefinitionFiles.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/GraphFactory.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/afm/A01_CollectData.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/afm/read.me</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/contactdefinition/A01_CreatePyMolFiles.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/A01_WriteFastaSequences.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/A02_MoveDynaMineResults.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/A03_AnnotateFunctionalResidues.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/FunctionalSite.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/TransmembraneRegion.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/UniProtAnnotationContainer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/UniProtAnnotator.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/read.me</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/interactiontypes/A01_CheckSanity.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/interactiontypes/A02_WriteCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/order/A01_PrintModularityScoresOfFoldons.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/read.me</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/A01_DownloadDataset.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/A02_ComputeEvolutionaryInformationProfile.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/B01_DownloadDataset.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/pdbtm/B02_ComputeEvolutionaryInformationProfile.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/transmembranerigidity/A01_WriteCsv.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/validation/S01_ExperimentalValidation.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/GraphVisualizer.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/JsonChain.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/JsonModule.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/JsonPartitioning.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/JsonRange.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/JsonSecondaryStructure.java</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/visualization/GraphVisualizerTest.java</PATH>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Restored" />
-          <option name="myStatusName" value="Will be restored" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="RESTORED" />
-        </FILE-GROUP>
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Modified" />
-        <option name="myStatusName" value="Modified" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MODIFIED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Skipped" />
-        <option name="myStatusName" value="Skipped" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="SKIPPED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with conflicts" />
-        <option name="myStatusName" value="Will be merged with conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_CONFLICTS" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with tree conflicts" />
-        <option name="myStatusName" value="Merged with tree conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with property conflicts" />
-        <option name="myStatusName" value="Will be merged with property conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged" />
-        <option name="myStatusName" value="Will be merged" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Not in repository" />
-        <option name="myStatusName" value="Not in repository" />
-        <option name="mySupportsDeletion" value="true" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="UNKNOWN" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Locally added" />
-        <option name="myStatusName" value="Locally added" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="LOCALLY_ADDED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Locally removed" />
-        <option name="myStatusName" value="Locally removed" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="LOCALLY_REMOVED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Switched" />
-        <option name="myStatusName" value="Switched" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="SWITCHED" />
-      </FILE-GROUP>
-    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -799,14 +491,23 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.A01_WriteAminoAcidContactCsv">
+  <component name="RunManager" selected="Application.A01_WriteContactCsv">
+    <configuration name="A01_ExtractSequencesOfContacts" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.weblogos.A01_ExtractSequencesOfContacts" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jstructure-membrane" />
+      <envs />
+    </configuration>
     <configuration name="A01_WriteAminoAcidContactCsv" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.aminoacid.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.aminoacid.A01_WriteAminoAcidContactCsv" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
@@ -819,14 +520,9 @@
       <module name="jstructure-membrane" />
       <envs />
     </configuration>
-    <configuration name="A03_MoveKinkFinderResults" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.collect.kinks.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.collect.kinks.A03_MoveKinkFinderResults" />
+    <configuration name="A01_WriteContactCsv" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.contact.A01_WriteContactCsv" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -838,52 +534,9 @@
       <module name="jstructure-membrane" />
       <envs />
     </configuration>
-    <configuration name="A04_WriteKinkCsv" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.collect.kinks.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.kinks.A04_WriteKinkCsv" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="jstructure-membrane" />
-      <envs />
-    </configuration>
-    <configuration name="ComposeCSADataset" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.gmlvq.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.gmlvq.ComposeCSADataset" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="jstructure-membrane" />
-      <envs />
-    </configuration>
-    <configuration name="CreatePyMolFilesOfContactDefinitions" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.contact.definition.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.contact.definition.CreatePyMolFilesOfContactDefinitions" />
+    <configuration name="A01_WriteHelixCsv" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.helix.A01_WriteHelixCsv" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -907,6 +560,45 @@
       <module name="jstructure-explorer" />
       <envs />
     </configuration>
+    <configuration name="SequenceLogoDrawer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="edu.ufl.cise.bioinformatics.nestedweblogo.SequenceLogoDrawer" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jstructure-membrane" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -928,20 +620,16 @@
       <module name="" />
       <envs />
     </configuration>
-    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
-      <setting name="vmparams" value="" />
-      <setting name="cmdLine" value="run-app" />
-      <setting name="passParentEnv" value="true" />
-      <setting name="launchBrowser" value="true" />
-      <setting name="launchBrowserUrl" value="" />
-      <setting name="depsClasspath" value="false" />
-    </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
       <node-interpreter>project</node-interpreter>
       <node-options />
       <gulpfile />
       <tasks />
       <arguments />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JarApplication" factoryName="JAR Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <envs />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
@@ -963,6 +651,32 @@
       </option>
       <envs />
       <patterns />
+    </configuration>
+    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="SCRATCH_FILE_ID" value="0" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <envs />
     </configuration>
     <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -1049,6 +763,11 @@
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
     </configuration>
+    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <envs />
+    </configuration>
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="" />
       <option name="DEPLOY" value="true" />
@@ -1103,31 +822,6 @@
         <option name="INSTRUMENTATION_ENABLED" value="true" />
       </Profilers>
       <method />
-    </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
     </configuration>
     <configuration default="true" type="ArquillianTestNG" factoryName="">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -1249,24 +943,13 @@
       </ExternalSystemSettings>
       <method />
     </configuration>
-    <configuration default="true" type="JarApplication" factoryName="JAR Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <envs />
-    </configuration>
-    <configuration default="true" type="Java Scratch" factoryName="Java Scratch">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="SCRATCH_FILE_ID" value="0" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="" />
-      <envs />
+    <configuration default="true" type="GrailsRunConfigurationType" factoryName="Grails">
+      <setting name="vmparams" value="" />
+      <setting name="cmdLine" value="run-app" />
+      <setting name="passParentEnv" value="true" />
+      <setting name="launchBrowser" value="true" />
+      <setting name="launchBrowserUrl" value="" />
+      <setting name="depsClasspath" value="false" />
     </configuration>
     <configuration default="true" type="JavaScriptTestRunnerJest" factoryName="Jest">
       <node-interpreter value="project" />
@@ -1283,17 +966,6 @@
     </configuration>
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <envs />
     </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
@@ -1316,11 +988,6 @@
         </option>
       </MavenSettings>
       <method />
-    </configuration>
-    <configuration default="true" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <envs />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -1426,19 +1093,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="1" class="java.lang.String" itemvalue="Application.A03_MoveKinkFinderResults" />
-      <item index="2" class="java.lang.String" itemvalue="Application.A04_WriteKinkCsv" />
-      <item index="3" class="java.lang.String" itemvalue="Application.CreatePyMolFilesOfContactDefinitions" />
-      <item index="4" class="java.lang.String" itemvalue="Application.ComposeCSADataset" />
-      <item index="5" class="java.lang.String" itemvalue="Application.A01_WriteAminoAcidContactCsv" />
+      <item index="1" class="java.lang.String" itemvalue="Application.A01_ExtractSequencesOfContacts" />
+      <item index="2" class="java.lang.String" itemvalue="Application.SequenceLogoDrawer" />
+      <item index="3" class="java.lang.String" itemvalue="Application.A01_WriteHelixCsv" />
+      <item index="4" class="java.lang.String" itemvalue="Application.A01_WriteAminoAcidContactCsv" />
+      <item index="5" class="java.lang.String" itemvalue="Application.A01_WriteContactCsv" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.A01_WriteAminoAcidContactCsv" />
-        <item index="1" class="java.lang.String" itemvalue="Application.ComposeCSADataset" />
-        <item index="2" class="java.lang.String" itemvalue="Application.CreatePyMolFilesOfContactDefinitions" />
-        <item index="3" class="java.lang.String" itemvalue="Application.A04_WriteKinkCsv" />
-        <item index="4" class="java.lang.String" itemvalue="Application.A03_MoveKinkFinderResults" />
+        <item index="0" class="java.lang.String" itemvalue="Application.A01_WriteContactCsv" />
+        <item index="1" class="java.lang.String" itemvalue="Application.A01_WriteAminoAcidContactCsv" />
+        <item index="2" class="java.lang.String" itemvalue="Application.A01_WriteHelixCsv" />
+        <item index="3" class="java.lang.String" itemvalue="Application.A01_ExtractSequencesOfContacts" />
+        <item index="4" class="java.lang.String" itemvalue="Application.SequenceLogoDrawer" />
       </list>
     </recent_temporary>
   </component>
@@ -1594,11 +1261,57 @@
       <workItem from="1507560764942" duration="4328000" />
       <workItem from="1507622916929" duration="6611000" />
       <workItem from="1507637325435" duration="62709000" />
-      <workItem from="1508425272810" duration="354000" />
-      <workItem from="1508741267042" duration="20000" />
-      <workItem from="1508743847535" duration="17236000" />
-      <workItem from="1508914700182" duration="14350000" />
-      <workItem from="1508939809160" duration="67417000" />
+      <workItem from="1508425272810" duration="3000" />
+      <workItem from="1508485757236" duration="2566000" />
+      <workItem from="1508501361750" duration="4548000" />
+      <workItem from="1508516851994" duration="696000" />
+      <workItem from="1508518681590" duration="3194000" />
+      <workItem from="1508737940313" duration="51000" />
+      <workItem from="1508778211994" duration="1499000" />
+      <workItem from="1508824832639" duration="296000" />
+      <workItem from="1509038565959" duration="843000" />
+      <workItem from="1509113011109" duration="561000" />
+      <workItem from="1509113635847" duration="71000" />
+      <workItem from="1509114013978" duration="2024000" />
+      <workItem from="1509116545235" duration="4740000" />
+      <workItem from="1509124909464" duration="1671000" />
+      <workItem from="1509176354154" duration="991000" />
+      <workItem from="1509265153571" duration="3077000" />
+      <workItem from="1509276138242" duration="172000" />
+      <workItem from="1509277289019" duration="2276000" />
+      <workItem from="1509292861843" duration="3614000" />
+      <workItem from="1509300279569" duration="663000" />
+      <workItem from="1509309098579" duration="4058000" />
+      <workItem from="1509370608270" duration="582000" />
+      <workItem from="1509440286247" duration="7742000" />
+      <workItem from="1509448287039" duration="9369000" />
+      <workItem from="1509465942081" duration="845000" />
+      <workItem from="1509484846575" duration="2908000" />
+      <workItem from="1509560131010" duration="74000" />
+      <workItem from="1509723123950" duration="388000" />
+      <workItem from="1509743392371" duration="1904000" />
+      <workItem from="1509746629220" duration="73000" />
+      <workItem from="1509746932189" duration="1483000" />
+      <workItem from="1509805465546" duration="593000" />
+      <workItem from="1509813126315" duration="2194000" />
+      <workItem from="1509832930031" duration="2649000" />
+      <workItem from="1509835652940" duration="1777000" />
+      <workItem from="1509869771311" duration="2476000" />
+      <workItem from="1509951233665" duration="64000" />
+    </task>
+    <task id="LOCAL-00118" summary="more fixes for createCopy() and StructureCollectors as well as tests/contracts for consistent behavior&#10;OPM parser working again (as previously the alignment would fail upon not perfectly matching containers)">
+      <created>1498036483250</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1498036483250</updated>
+    </task>
+    <task id="LOCAL-00119" summary="implemented alignment of fragments enriched with interaction data">
+      <created>1498053959885</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1498053959885</updated>
     </task>
     <task id="LOCAL-00120" summary="alignment policies changed, UniProt parser more robust">
       <created>1498143500227</created>
@@ -1894,92 +1607,78 @@
       <option name="project" value="LOCAL" />
       <updated>1508321229174</updated>
     </task>
-    <task id="LOCAL-00162" summary="some clean-up and more edge weighting schemes">
-      <created>1508425303705</created>
+    <task id="LOCAL-00162" summary="foldingcores impl">
+      <created>1508737974551</created>
       <option name="number" value="00162" />
       <option name="presentableId" value="LOCAL-00162" />
       <option name="project" value="LOCAL" />
-      <updated>1508425303705</updated>
+      <updated>1508737974590</updated>
     </task>
-    <task id="LOCAL-00163" summary="stub for the ordering of modules during folding">
-      <created>1508775088477</created>
+    <task id="LOCAL-00163" summary="folding order refined">
+      <created>1508825102252</created>
       <option name="number" value="00163" />
       <option name="presentableId" value="LOCAL-00163" />
       <option name="project" value="LOCAL" />
-      <updated>1508775088478</updated>
+      <updated>1508825102257</updated>
     </task>
-    <task id="LOCAL-00164" summary="visualization for modularity comparision">
-      <created>1508922623489</created>
+    <task id="LOCAL-00164" summary="improved feature provider resolving">
+      <created>1509456457188</created>
       <option name="number" value="00164" />
       <option name="presentableId" value="LOCAL-00164" />
       <option name="project" value="LOCAL" />
-      <updated>1508922623489</updated>
+      <updated>1509456457194</updated>
     </task>
-    <task id="LOCAL-00165" summary="backbone rigidity">
-      <created>1509031456640</created>
+    <task id="LOCAL-00165" summary="cooccurrence matrix">
+      <created>1509484893190</created>
       <option name="number" value="00165" />
       <option name="presentableId" value="LOCAL-00165" />
       <option name="project" value="LOCAL" />
-      <updated>1509031456642</updated>
+      <updated>1509484893191</updated>
     </task>
-    <task id="LOCAL-00166" summary="GMLVQ dataset composition once again">
-      <created>1509090153065</created>
+    <task id="LOCAL-00166" summary="better impl meaningful equals method">
+      <created>1509488455358</created>
       <option name="number" value="00166" />
       <option name="presentableId" value="LOCAL-00166" />
       <option name="project" value="LOCAL" />
-      <updated>1509090153065</updated>
+      <updated>1509488455359</updated>
     </task>
-    <task id="LOCAL-00167" summary="contact visualization with PyMOL">
-      <created>1509102394317</created>
-      <option name="number" value="00167" />
-      <option name="presentableId" value="LOCAL-00167" />
-      <option name="project" value="LOCAL" />
-      <updated>1509102394317</updated>
-    </task>
-    <task id="LOCAL-00168" summary="KinkFinder integration">
-      <created>1509554019507</created>
-      <option name="number" value="00168" />
-      <option name="presentableId" value="LOCAL-00168" />
-      <option name="project" value="LOCAL" />
-      <updated>1509554019507</updated>
-    </task>
-    <option name="localTasksCounter" value="169" />
+    <option name="localTasksCounter" value="167" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="All_in_jstructure-membrane - 2017.10.27 at 11h 07m 32s.xml">
-      <configuration name="All in jstructure-membrane" configurationId="JUnit" />
+    <history-entry file="Demo_test - 2017.10.31 at 12h 05m 49s.xml">
+      <configuration name="Demo.test" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="DynaMineBridgeTest_shouldPredictBackboneRigidity - 2017.10.26 at 09h 06m 22s.xml">
-      <configuration name="DynaMineBridgeTest.shouldPredictBackboneRigidity" configurationId="JUnit" />
+    <history-entry file="Demo_test - 2017.10.31 at 12h 07m 17s.xml">
+      <configuration name="Demo.test" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GraphVisualizerTest_shouldComposeJsonRepresentationFor1f21_A - 2017.10.25 at 16h 41m 27s.xml">
-      <configuration name="GraphVisualizerTest.shouldComposeJsonRepresentationFor1f21_A" configurationId="JUnit" />
+    <history-entry file="Demo_test - 2017.10.31 at 12h 08m 05s.xml">
+      <configuration name="Demo.test" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GraphVisualizerTest_shouldComposeJsonRepresentationFor1f21_A - 2017.10.25 at 16h 43m 21s.xml">
-      <configuration name="GraphVisualizerTest.shouldComposeJsonRepresentationFor1f21_A" configurationId="JUnit" />
+    <history-entry file="Demo_test - 2017.10.31 at 12h 09m 11s.xml">
+      <configuration name="Demo.test" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GraphVisualizerTest_shouldComposeJsonRepresentationFor1f21_A - 2017.10.27 at 11h 07m 41s.xml">
-      <configuration name="GraphVisualizerTest.shouldComposeJsonRepresentationFor1f21_A" configurationId="JUnit" />
+    <history-entry file="Demo_test - 2017.10.31 at 12h 09m 41s.xml">
+      <configuration name="Demo.test" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GraphVisualizerTest_shouldComposeJsonRepresentationFor1f21_A - 2017.10.27 at 11h 08m 06s.xml">
-      <configuration name="GraphVisualizerTest.shouldComposeJsonRepresentationFor1f21_A" configurationId="JUnit" />
+    <history-entry file="SecondaryStructureElementTest_shouldFailOnStructureWithNonStandardAminoAcids - 2017.10.31 at 11h 40m 05s.xml">
+      <configuration name="SecondaryStructureElementTest.shouldFailOnStructureWithNonStandardAminoAcids" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GraphVisualizerTest_shouldComposeJsonRepresentationFor3cyt_I - 2017.10.25 at 16h 38m 54s.xml">
-      <configuration name="GraphVisualizerTest.shouldComposeJsonRepresentationFor3cyt_I" configurationId="JUnit" />
+    <history-entry file="SecondaryStructureElementTest_shouldFailOnStructureWithNonStandardAminoAcids - 2017.10.31 at 11h 40m 15s.xml">
+      <configuration name="SecondaryStructureElementTest.shouldFailOnStructureWithNonStandardAminoAcids" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="GraphVisualizerTest_shouldComposeJsonRepresentationFor3cyt_I - 2017.10.25 at 16h 43m 42s.xml">
-      <configuration name="GraphVisualizerTest.shouldComposeJsonRepresentationFor3cyt_I" configurationId="JUnit" />
+    <history-entry file="SecondaryStructureElementTest_shouldFailOnStructureWithNonStandardAminoAcids - 2017.10.31 at 11h 41m 50s.xml">
+      <configuration name="SecondaryStructureElementTest.shouldFailOnStructureWithNonStandardAminoAcids" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LocalBlastWrapperTest - 2017.10.26 at 10h 18m 42s.xml">
-      <configuration name="LocalBlastWrapperTest" configurationId="JUnit" />
+    <history-entry file="SecondaryStructureElementTest_shouldFailOnStructureWithNonStandardAminoAcids - 2017.10.31 at 12h 07m 14s.xml">
+      <configuration name="SecondaryStructureElementTest.shouldFailOnStructureWithNonStandardAminoAcids" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StructureParserTest_shouldParseInsertedAminoAcids - 2017.10.27 at 09h 20m 22s.xml">
-      <configuration name="StructureParserTest.shouldParseInsertedAminoAcids" configurationId="JUnit" />
+    <history-entry file="SecondaryStructureElementTest_shouldHandleStructureWithNonStandardAminoAcids - 2017.10.31 at 11h 44m 32s.xml">
+      <configuration name="SecondaryStructureElementTest.shouldHandleStructureWithNonStandardAminoAcids" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2130010000" />
+    <option name="totallyTimeSpent" value="2103398000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1991,42 +1690,42 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="2" width="3440" height="1438" extended-state="0" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30374905" sideWeight="0.4639856" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46289212" sideWeight="0.44957983" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42482916" sideWeight="0.46186897" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16266507" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38326997" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42482916" sideWeight="0.53813106" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14652123" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2679914" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893157" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1212485" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12149533" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969988" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46136189" sideWeight="0.55042017" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5136674" sideWeight="0.53329754" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12149533" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30523917" sideWeight="0.4489796" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="100" y="49" width="1480" height="821" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32833132" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3221117" sideWeight="0.4861945" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32118452" sideWeight="0.4861945" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2034,35 +1733,35 @@
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46289212" sideWeight="0.44957983" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4624146" sideWeight="0.44957983" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16266507" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12149533" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1212485" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12149533" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969988" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46136189" sideWeight="0.55042017" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.462127" sideWeight="0.55042017" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30509746" sideWeight="0.4639856" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30523917" sideWeight="0.4639856" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="100" y="49" width="1480" height="821" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36560366" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38326997" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32833132" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26120284" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22502685" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893157" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3221117" sideWeight="0.4861945" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -2099,6 +1798,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <MESSAGE value="stub to create feature vectors of mutation sites" />
+    <MESSAGE value="stub for mutation site descriptor" />
     <MESSAGE value="really rough implementation of structural mutation effect predictor" />
     <MESSAGE value="extracts mmm-bridge" />
     <MESSAGE value="implements scwrl integration" />
@@ -2117,14 +1818,12 @@
     <MESSAGE value="basic implementation of graphs&#10;&#10;support for: graphs, edges, clusters/modules/partitions and partitioned graphs" />
     <MESSAGE value="adds weight (i.e. energy) to interaction types" />
     <MESSAGE value="fixes major bugs in generation of partition of secondary structures" />
-    <MESSAGE value="some clean-up and more edge weighting schemes" />
-    <MESSAGE value="stub for the ordering of modules during folding" />
-    <MESSAGE value="visualization for modularity comparision" />
-    <MESSAGE value="backbone rigidity" />
-    <MESSAGE value="GMLVQ dataset composition once again" />
-    <MESSAGE value="contact visualization with PyMOL" />
-    <MESSAGE value="KinkFinder integration" />
-    <option name="LAST_COMMIT_MESSAGE" value="KinkFinder integration" />
+    <MESSAGE value="foldingcores impl" />
+    <MESSAGE value="folding order refined" />
+    <MESSAGE value="improved feature provider resolving" />
+    <MESSAGE value="cooccurrence matrix" />
+    <MESSAGE value="better impl meaningful equals method" />
+    <option name="LAST_COMMIT_MESSAGE" value="better impl meaningful equals method" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -2136,424 +1835,264 @@
           <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="508" />
+      <option name="time" value="522" />
     </breakpoint-manager>
-    <watches-manager />
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="structure.featureContainer.features.get(0)" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/partitioning/algorithms/MCL.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/StructureContainer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="517">
-          <caret line="191" column="27" lean-forward="false" selection-start-line="191" selection-start-column="27" selection-end-line="191" selection-end-column="27" />
-          <folding />
+        <state relative-caret-position="-380">
+          <caret line="31" column="28" lean-forward="false" selection-start-line="31" selection-start-column="28" selection-end-line="31" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/validation/S01_ExperimentalValidation.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/energyprofile/EgorAgreementCalculatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="81" column="141" lean-forward="false" selection-start-line="81" selection-start-column="141" selection-end-line="81" selection-end-column="141" />
-          <folding />
+        <state relative-caret-position="620">
+          <caret line="31" column="5" lean-forward="false" selection-start-line="31" selection-start-column="5" selection-end-line="31" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/visualization/GraphVisualizer.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/Topology.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="113" column="91" lean-forward="true" selection-start-line="51" selection-start-column="59" selection-end-line="113" selection-end-column="91" />
-          <folding />
+        <state relative-caret-position="138">
+          <caret line="9" column="3" lean-forward="false" selection-start-line="9" selection-start-column="3" selection-end-line="10" selection-end-column="73" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/A01_WriteDefinitionFiles.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/OrientationsOfProteinsInMembranesAnnotator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="738">
-          <caret line="55" column="126" lean-forward="false" selection-start-line="55" selection-start-column="126" selection-end-line="55" selection-end-column="126" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/visualization/GraphVisualizerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="78" column="103" lean-forward="true" selection-start-line="78" selection-start-column="103" selection-end-line="78" selection-end-column="103" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/GraphFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="111" column="76" lean-forward="false" selection-start-line="111" selection-start-column="76" selection-end-line="111" selection-end-column="76" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/contactdefinition/A01_CreatePyMolFiles.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
-          <caret line="118" column="35" lean-forward="true" selection-start-line="118" selection-start-column="35" selection-end-line="118" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/LocalBlastWrapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="643">
-          <caret line="102" column="46" lean-forward="true" selection-start-line="102" selection-start-column="46" selection-end-line="102" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="436" column="45" lean-forward="true" selection-start-line="436" selection-start-column="45" selection-end-line="436" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/PlipGraphFactoryTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="35" column="1" lean-forward="true" selection-start-line="35" selection-start-column="1" selection-end-line="35" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/run.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/dynamine/run.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="6" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/read.me">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="4" column="25" lean-forward="true" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/evolution/EvolutionaryInformation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="17" column="31" lean-forward="true" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/order/A01_PrintModularityScoresOfFoldons.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="30" column="13" lean-forward="false" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/GraphFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1293">
-          <caret line="121" column="59" lean-forward="true" selection-start-line="121" selection-start-column="59" selection-end-line="121" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/SetOperations.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="485">
-          <caret line="123" column="44" lean-forward="true" selection-start-line="123" selection-start-column="44" selection-end-line="123" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/afm/A01_CollectData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A02_MoveDynaMineResults.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A01_WriteFastaSequences.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/division/A03_AnnotateFunctionalResidues.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/validation/S01_ExperimentalValidation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-900">
-          <caret line="23" column="13" lean-forward="false" selection-start-line="23" selection-start-column="13" selection-end-line="23" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/definition/CreatePyMolFilesOfContactDefinitions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="122" column="28" lean-forward="false" selection-start-line="122" selection-start-column="28" selection-end-line="122" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/A02_ComputeEvolutionaryInformationProfile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/dssp/DictionaryOfProteinSecondaryStructure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6855">
-          <caret line="768" column="37" lean-forward="true" selection-start-line="768" selection-start-column="37" selection-end-line="768" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/read.me">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="82" lean-forward="true" selection-start-line="0" selection-start-column="82" selection-end-line="0" selection-end-column="82" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/read.me">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="34" lean-forward="false" selection-start-line="0" selection-start-column="34" selection-end-line="0" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A01_WriteDefinitionFiles.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/A01_WriteInteractionPairCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="20" column="11" lean-forward="false" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A03_MoveKinkFinderResults.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="52" lean-forward="true" selection-start-line="18" selection-start-column="52" selection-end-line="18" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A02_RunKinkFinderManually.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A01_OutputPdbList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/general/A01_AminoAcidDistribution.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="22" column="11" lean-forward="false" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/interactiontypes/A02_WriteCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="46" column="13" lean-forward="false" selection-start-line="46" selection-start-column="13" selection-end-line="46" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/interactiontypes/A01_CheckSanity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="71">
-          <caret line="7" column="3" lean-forward="true" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/Optinal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="140">
+          <caret line="27" column="5" lean-forward="false" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="6" column="12" lean-forward="false" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
+        <state relative-caret-position="80">
+          <caret line="11" column="18" lean-forward="true" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/IntegerRange.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_CreatePyMolFilesOfContactDefinition.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/topology/MembraneContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="680">
+          <caret line="90" column="55" lean-forward="false" selection-start-line="90" selection-start-column="55" selection-end-line="90" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/StandardFormat.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="26" column="36" lean-forward="false" selection-start-line="26" selection-start-column="36" selection-end-line="26" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/StructureParserTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/motif/SequenceMotifAnnotator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29">
+          <caret line="14" column="3" lean-forward="false" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/Alanine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-40">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_66/src.zip!/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="1168" column="14" lean-forward="false" selection-start-line="1168" selection-start-column="14" selection-end-line="1168" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/ResidueIdentifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-22">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="13" column="29" lean-forward="true" selection-start-line="13" selection-start-column="29" selection-end-line="13" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/GroupPrototypeParserTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="32" column="9" lean-forward="true" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/test/java/de/bioforscher/jstructure/feature/sse/SecondaryStructureElementTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="21" column="25" lean-forward="true" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/aminoacid/AminoAcid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4282">
+          <caret line="56" column="16" lean-forward="false" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/Demo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="66" column="42" lean-forward="true" selection-start-line="66" selection-start-column="42" selection-end-line="66" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/readme.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="140">
+            <caret line="7" column="75" lean-forward="false" selection-start-line="7" selection-start-column="75" selection-end-line="7" selection-end-column="75" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="383" column="0" lean-forward="false" selection-start-line="383" selection-start-column="0" selection-end-line="383" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/transmembranerigidity/A01_WriteInteractionPairCsv.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeCsv.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionType.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="9" column="23" lean-forward="false" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A0X_WriteContactCsv.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A04_RigidityUponContact.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A03_AminoAcidPropensityForHelixHelixInteraction.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/general/A01_AminoAcidDistribution.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Pair.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="63" column="22" lean-forward="true" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A05_CooccurrenceMatrixCsv.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/LogoBoundry.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoInputer.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoApplet.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoDataStructure.java" />
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_66/src.zip!/java/lang/String.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3678">
+          <caret line="110" column="19" lean-forward="false" selection-start-line="110" selection-start-column="19" selection-end-line="110" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/utils/nestedsample.txt" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/utils/Utilities.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/TestNestedWeblogo.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/SequenceLogoDrawer.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/datastructure/WeblogoDataStructure.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/datastructure/NestedWebLogoCreator.java" />
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_66/src.zip!/javax/xml/parsers/DocumentBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="698">
+          <caret line="195" column="20" lean-forward="false" selection-start-line="195" selection-start-column="20" selection-end-line="195" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/resources/weblogo.xml" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/edu/ufl/cise/bioinformatics/nestedweblogo/NestedWebLogoXMLParser.java" />
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/weblogos/A01_ExtractSequencesOfContacts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="43" column="43" lean-forward="false" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/rigidity/DynaMineBridge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="114" column="54" lean-forward="true" selection-start-line="114" selection-start-column="54" selection-end-line="114" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/helix/A01_WriteHelixCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-880">
+          <caret line="27" column="78" lean-forward="false" selection-start-line="27" selection-start-column="78" selection-end-line="27" selection-end-column="78" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="292" column="64" lean-forward="false" selection-start-line="292" selection-start-column="64" selection-end-line="292" selection-end-column="64" />
+          <folding>
+            <element signature="e#13014#13015#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="47" column="78" lean-forward="false" selection-start-line="47" selection-start-column="78" selection-end-line="47" selection-end-column="78" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/gmlvq/ComposeCSADataset.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2070">
-          <caret line="137" column="82" lean-forward="true" selection-start-line="137" selection-start-column="82" selection-end-line="137" selection-end-column="82" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_HelixHelixInteractionTypeCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-36">
-          <caret line="40" column="41" lean-forward="true" selection-start-line="40" selection-start-column="41" selection-end-line="40" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A03_AminoAcidPropensityForHelixHelixInteraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="42" column="25" lean-forward="true" selection-start-line="42" selection-start-column="25" selection-end-line="42" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A04_RigidityUponContact.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="737">
-          <caret line="117" column="66" lean-forward="true" selection-start-line="117" selection-start-column="66" selection-end-line="117" selection-end-column="66" />
+        <state relative-caret-position="-280">
+          <caret line="20" column="43" lean-forward="false" selection-start-line="20" selection-start-column="43" selection-end-line="20" selection-end-column="43" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/sse/GenericSecondaryStructure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
+        <state relative-caret-position="378">
           <caret line="77" column="0" lean-forward="false" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/evolution/A01_WriteEvolutionaryInformationCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="611">
-          <caret line="134" column="4" lean-forward="false" selection-start-line="134" selection-start-column="4" selection-end-line="136" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="29" column="11" lean-forward="false" selection-start-line="29" selection-start-column="11" selection-end-line="29" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/kinks/A04_WriteKinkCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2106">
-          <caret line="121" column="5" lean-forward="true" selection-start-line="104" selection-start-column="4" selection-end-line="121" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/Kink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A05_CooccurrenceMatrixCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="25" column="36" lean-forward="false" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A06_WriteContactDistanceCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="90" column="35" lean-forward="true" selection-start-line="80" selection-start-column="12" selection-end-line="90" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="143" column="54" lean-forward="false" selection-start-line="143" selection-start-column="54" selection-end-line="143" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3761">
-          <caret line="238" column="71" lean-forward="true" selection-start-line="238" selection-start-column="71" selection-end-line="238" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/aminoacid/A01_WriteAminoAcidContactCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="27" column="43" lean-forward="false" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

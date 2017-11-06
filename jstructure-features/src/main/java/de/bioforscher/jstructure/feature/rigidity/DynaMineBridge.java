@@ -91,10 +91,21 @@ public class DynaMineBridge extends FeatureProvider {
     }
 
     public void process(Chain chain, String dynamineDocument) {
-        List<String> predictions =  Pattern.compile("[\\r\\n]+").splitAsStream(dynamineDocument)
+        List<Double> predictions =  Pattern.compile("[\\r\\n]+").splitAsStream(dynamineDocument)
                 .filter(line -> line.contains("\t"))
+                .map(line -> line.split("\t")[1])
+                .map(Double::valueOf)
                 .collect(Collectors.toList());
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+
+        double min = predictions.stream()
+                .mapToDouble(Double::valueOf)
+                .min()
+                .orElse(0);
+        double max = predictions.stream()
+                .mapToDouble(Double::valueOf)
+                .max()
+                .orElse(1);
 
         if(predictions.size() != aminoAcids.size()) {
             throw new IllegalArgumentException("parsed lines do not match expectation - " + predictions.size() + " for " +
@@ -102,10 +113,14 @@ public class DynaMineBridge extends FeatureProvider {
         }
 
         for (int i = 0; i < predictions.size(); i++) {
-            double prediction = Double.valueOf(predictions.get(i).split("\t")[1]);
             AminoAcid aminoAcid = aminoAcids.get(i);
-            aminoAcid.getFeatureContainer().addFeature(new BackboneRigidity(this, prediction));
+            double value = minMaxNormalize(predictions.get(i), min, max);
+            aminoAcid.getFeatureContainer().addFeature(new BackboneRigidity(this, value));
         }
+    }
+
+    private static double minMaxNormalize(double v, double min, double max) {
+        return (v - min) / (max  - min);
     }
 
     class DynaMineRequest {

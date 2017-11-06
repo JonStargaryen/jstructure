@@ -3,22 +3,15 @@ package de.bioforscher.jstructure.membrane.aminoacid;
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformation;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.rigidity.BackboneRigidity;
-import de.bioforscher.jstructure.feature.rigidity.DynaMineBridge;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
 import de.bioforscher.jstructure.feature.topology.Topology;
 import de.bioforscher.jstructure.membrane.Kink;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Structure;
-import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import org.jsoup.Jsoup;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,12 +19,6 @@ import java.util.stream.Collectors;
  * Evaluates all amino acids in the alpha-dataset. Indirectly covers interactions.
  */
 public class A01_WriteAminoAcidContactCsv {
-    private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR =
-            new OrientationsOfProteinsInMembranesAnnotator();
-    private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR =
-            new PLIPIntraMolecularAnnotator();
-    private static final DynaMineBridge DYNA_MINE_BRIDGE =
-            new DynaMineBridge();
     private static final Path directory = MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY;
 
     public static void main(String[] args) {
@@ -62,102 +49,23 @@ public class A01_WriteAminoAcidContactCsv {
 
     private static Optional<String> handleLine(String line) {
         try {
-            System.out.println("annotating " + line);
-            String pdbId = line.split("_")[0];
-            String chainId = line.split("_")[1];
+            Optional<MembraneConstants.WrappedChain> wrappedChainOptional = MembraneConstants.handleLine(line, directory);
 
-            Structure structure = StructureParser.source(directory.resolve("pdb").resolve(pdbId + ".pdb"))
-                    .minimalParsing(true)
-                    .parse();
-            Chain chain = structure.select()
-                    .chainName(chainId)
-                    .asChain();
-
-
-            ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR.process(structure,
-                    Jsoup.parse(MembraneConstants.lines(directory.resolve("opm").resolve(pdbId + ".opm"))
-                            .collect(Collectors.joining(System.lineSeparator()))));
-
-            // skip chains with no or a single tm region
-            int tmRegions = 0;
-            boolean inTmRegion = false;
-            List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-            for (int i = 0; i < aminoAcids.size(); i++) {
-                boolean tm = aminoAcids.get(i).getFeature(Topology.class).isTransmembrane();
-                if(i == 0) {
-                    inTmRegion = tm;
-                    continue;
-                }
-
-                if(inTmRegion && !tm) {
-                    tmRegions++;
-                }
-
-                inTmRegion = tm;
-            }
-            if(inTmRegion) {
-                tmRegions++;
-            }
-            if(tmRegions < 2) {
-                System.out.println("skipping structure with " + tmRegions + " TM-regions");
+            if(!wrappedChainOptional.isPresent()) {
+                return Optional.empty();
             }
 
-            PLIP_INTRA_MOLECULAR_ANNOTATOR.process(chain,
-                    Jsoup.parse(MembraneConstants.lines(directory.resolve("plip").resolve(line + ".plip"))
-                            .collect(Collectors.joining(System.lineSeparator()))));
-            DYNA_MINE_BRIDGE.process(chain,
-                    MembraneConstants.lines(directory.resolve("dynamine").resolve(line + "_backbone.pred"))
-                            .collect(Collectors.joining(System.lineSeparator())));
-            List<Double> evolutionaryScores = MembraneConstants.lines(directory.resolve("evol").resolve(line + ".evol"))
-                    .mapToDouble(Double::valueOf)
-                    .boxed()
-                    .collect(Collectors.toList());
-            boolean evolScoresSane = aminoAcids.size() == evolutionaryScores.size();
-            if(evolScoresSane) {
-                for(int i = 0; i < aminoAcids.size(); i++) {
-                    aminoAcids.get(i).getFeatureContainer().addFeature(new EvolutionaryInformation(null, null, evolutionaryScores.get(i)));
-                }
-            }
-
-            // assign kink data
-            boolean kinkException = false;
-            try {
-                MembraneConstants.lines(directory.resolve("kinks").resolve(pdbId + ".kinks"))
-                        .filter(kinkLine -> !kinkLine.startsWith("pdb_code"))
-                        .filter(kinkLine -> kinkLine.substring(4, 5).equals(chainId))
-                        .forEach(kinkLine -> {
-                            String[] split = kinkLine.split(",");
-                            int kinkPosition = Integer.valueOf(split[3]);
-                            double kinkAngle = Double.valueOf(split[6]);
-                            boolean significantKink = kinkAngle > 15;
-                            chain.select()
-                                    .aminoAcids()
-                                    .residueNumber(kinkPosition)
-                                    .asAminoAcid()
-                                    .getFeatureContainer()
-                                    .addFeature(new Kink(kinkAngle, significantKink));
-                        });
-            } catch (Exception e) {
-                e.printStackTrace();
-                kinkException = true;
-            }
-            boolean kinkFinderDataSane = !kinkException;
-
-            double min = chain.aminoAcids()
-                    .mapToDouble(aa -> aa.getFeature(BackboneRigidity.class).getBackboneRigidity())
-                    .min()
-                    .orElse(0);
-            double max = chain.aminoAcids()
-                    .mapToDouble(aa -> aa.getFeature(BackboneRigidity.class).getBackboneRigidity())
-                    .max()
-                    .orElse(1);
+            MembraneConstants.WrappedChain wrappedChain = wrappedChainOptional.get();
+            Chain chain = wrappedChain.getChain();
+            String pdbId = wrappedChain.getPdbId();
+            String chainId = wrappedChain.getChainId();
+            boolean evolScoresSane = wrappedChain.isEvolScoresSane();
+            boolean kinkFinderDataSane = wrappedChain.isKinkFinderDataSane();
 
             String output = chain.aminoAcids()
                     .map(aminoAcid -> handleAminoAcid(pdbId,
                             chainId,
                             aminoAcid,
-                            min,
-                            max,
                             evolScoresSane,
                             kinkFinderDataSane))
                     .filter(Optional::isPresent)
@@ -174,8 +82,6 @@ public class A01_WriteAminoAcidContactCsv {
     private static Optional<String> handleAminoAcid(String pdbId,
                                                     String chainId,
                                                     AminoAcid aminoAcid,
-                                                    double min,
-                                                    double max,
                                                     boolean evolScoresSane,
                                                     boolean kinkFinderDataSane) {
         try {
@@ -216,7 +122,6 @@ public class A01_WriteAminoAcidContactCsv {
                     aminoAcid.getFeatureContainer()
                             .getFeatureOptional(BackboneRigidity.class)
                             .map(BackboneRigidity::getBackboneRigidity)
-                            .map(value -> MembraneConstants.minMaxNormalize(value, min, max))
                             .map(StandardFormat::format)
                             .orElse("NA") + ";" +
 

@@ -1,12 +1,19 @@
 package de.bioforscher.jstructure.membrane;
 
+import de.bioforscher.jstructure.feature.evolution.EvolutionaryInformation;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
+import de.bioforscher.jstructure.feature.rigidity.DynaMineBridge;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
+import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
 import de.bioforscher.jstructure.feature.topology.Topology;
+import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +25,11 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -103,6 +114,187 @@ public class MembraneConstants {
         }
     }
 
+    private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR =
+            new OrientationsOfProteinsInMembranesAnnotator();
+    private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR =
+            new PLIPIntraMolecularAnnotator();
+    private static final DynaMineBridge DYNA_MINE_BRIDGE =
+            new DynaMineBridge();
+
+    public static Optional<WrappedChain> handleLine(String id, Path directory) {
+        try {
+            logger.info("annotating {}",
+                    id);
+            String pdbId = id.split("_")[0];
+            String chainId = id.split("_")[1];
+
+            Structure structure = StructureParser.source(directory.resolve("pdb").resolve(pdbId + ".pdb"))
+                    .minimalParsing(true)
+                    .parse();
+            Chain chain = structure.select()
+                    .chainName(chainId)
+                    .asChain();
+
+            ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR.process(structure,
+                    Jsoup.parse(MembraneConstants.lines(directory.resolve("opm").resolve(pdbId + ".opm"))
+                            .collect(Collectors.joining(System.lineSeparator()))));
+
+            // skip chains with no or a single tm region
+//            int tmRegions = 0;
+//            boolean inTmRegion = false;
+//            List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+//            for (int i = 0; i < aminoAcids.size(); i++) {
+//                boolean tm = aminoAcids.get(i).getFeature(Topology.class).isTransmembrane();
+//                if(i == 0) {
+//                    inTmRegion = tm;
+//                    continue;
+//                }
+//
+//                if(inTmRegion && !tm) {
+//                    tmRegions++;
+//                }
+//
+//                inTmRegion = tm;
+//            }
+//            if(inTmRegion) {
+//                tmRegions++;
+//            }
+            int index = -1;
+            List<List<AminoAcid>> transmembraneHelices = new ArrayList<>();
+            boolean wasPreviouslyTransmembrane = false;
+            List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+            for(AminoAcid aminoAcid : aminoAcids) {
+                boolean transmembrane = aminoAcid.getFeature(Topology.class).isTransmembrane();
+                if(transmembrane) {
+                    if(wasPreviouslyTransmembrane) {
+                        transmembraneHelices.get(index).add(aminoAcid);
+                    } else {
+                        index++;
+                        wasPreviouslyTransmembrane = true;
+                        List<AminoAcid> region = new ArrayList<>();
+                        region.add(aminoAcid);
+                        transmembraneHelices.add(region);
+                    }
+                } else {
+                    if(wasPreviouslyTransmembrane) {
+                        transmembraneHelices.add(new ArrayList<>());
+                    }
+                    wasPreviouslyTransmembrane = false;
+                }
+            }
+            if(wasPreviouslyTransmembrane) {
+                transmembraneHelices.get(index).add(aminoAcids.get(aminoAcids.size() - 1));
+            }
+            transmembraneHelices.removeIf(Collection::isEmpty);
+
+            if(transmembraneHelices.size() < 2) {
+                logger.warn("skipping structure with {} TM-regions",
+                        transmembraneHelices.size());
+                return Optional.empty();
+            }
+
+            PLIP_INTRA_MOLECULAR_ANNOTATOR.process(chain,
+                    Jsoup.parse(MembraneConstants.lines(directory.resolve("plip").resolve(id + ".plip"))
+                            .collect(Collectors.joining(System.lineSeparator()))));
+            DYNA_MINE_BRIDGE.process(chain,
+                    MembraneConstants.lines(directory.resolve("dynamine").resolve(id + "_backbone.pred"))
+                            .collect(Collectors.joining(System.lineSeparator())));
+            List<Double> evolutionaryScores = MembraneConstants.lines(directory.resolve("evol").resolve(id + ".evol"))
+                    .mapToDouble(Double::valueOf)
+                    .boxed()
+                    .collect(Collectors.toList());
+            boolean evolScoresSane = aminoAcids.size() == evolutionaryScores.size();
+            if(evolScoresSane) {
+                for(int i = 0; i < aminoAcids.size(); i++) {
+                    aminoAcids.get(i).getFeatureContainer().addFeature(new EvolutionaryInformation(null, null, evolutionaryScores.get(i)));
+                }
+            }
+
+            // assign kink data
+            boolean kinkException = false;
+            try {
+                MembraneConstants.lines(directory.resolve("kinks").resolve(pdbId + ".kinks"))
+                        .filter(kinkLine -> !kinkLine.startsWith("pdb_code"))
+                        .filter(kinkLine -> kinkLine.substring(4, 5).equals(chainId))
+                        .forEach(kinkLine -> {
+                            String[] split = kinkLine.split(",");
+                            int kinkPosition = Integer.valueOf(split[3]);
+                            double kinkAngle = Double.valueOf(split[6]);
+                            boolean significantKink = kinkAngle > 15;
+                            chain.select()
+                                    .aminoAcids()
+                                    .residueNumber(kinkPosition)
+                                    .asAminoAcid()
+                                    .getFeatureContainer()
+                                    .addFeature(new Kink(kinkAngle, significantKink));
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+                kinkException = true;
+            }
+            boolean kinkFinderDataSane = !kinkException;
+
+            return Optional.of(new WrappedChain(chain,
+                    pdbId,
+                    chainId,
+                    evolScoresSane,
+                    kinkFinderDataSane,
+                    transmembraneHelices));
+        } catch (Exception e) {
+            logger.warn("compution failed for {}",
+                    id,
+                    e);
+            return Optional.empty();
+        }
+    }
+
+    public static class WrappedChain {
+        private final Chain chain;
+        private final String pdbId;
+        private final String chainId;
+        private final boolean evolScoresSane;
+        private final boolean kinkFinderDataSane;
+        private final List<List<AminoAcid>> transmembraneHelices;
+
+        WrappedChain(Chain chain,
+                     String pdbId,
+                     String chainId,
+                     boolean evolScoresSane,
+                     boolean kinkFinderDataSane,
+                     List<List<AminoAcid>> transmembraneHelices) {
+            this.chain = chain;
+            this.pdbId = pdbId;
+            this.chainId = chainId;
+            this.evolScoresSane = evolScoresSane;
+            this.kinkFinderDataSane = kinkFinderDataSane;
+            this.transmembraneHelices = transmembraneHelices;
+        }
+
+        public Chain getChain() {
+            return chain;
+        }
+
+        public String getPdbId() {
+            return pdbId;
+        }
+
+        public String getChainId() {
+            return chainId;
+        }
+
+        public boolean isEvolScoresSane() {
+            return evolScoresSane;
+        }
+
+        public boolean isKinkFinderDataSane() {
+            return kinkFinderDataSane;
+        }
+
+        public List<List<AminoAcid>> getTransmembraneHelices() {
+            return transmembraneHelices;
+        }
+    }
+
     public static boolean isNtmHelixInteraction(PLIPInteraction plipInteraction) {
         if(plipInteraction.getPartner1().getFeature(Topology.class).isTransmembrane() ||
                 plipInteraction.getPartner2().getFeature(Topology.class).isTransmembrane()) {
@@ -168,9 +360,5 @@ public class MembraneConstants {
         }
 
         return upstreamSequence.reverse().toString() + aminoAcid.getOneLetterCode() + downstreamSequence;
-    }
-
-    public static double minMaxNormalize(double v, double min, double max) {
-        return (v - min) / (max  - min);
     }
 }
