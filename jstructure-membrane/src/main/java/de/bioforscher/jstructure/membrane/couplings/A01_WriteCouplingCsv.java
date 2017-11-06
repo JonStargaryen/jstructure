@@ -35,6 +35,17 @@ public class A01_WriteCouplingCsv {
             new OrientationsOfProteinsInMembranesAnnotator();
 
     public static void main(String[] args) {
+        String header = "pdbId;chainId;resId1;resId2;aa1;aa2;sequence1;sequence2;sse31;sse91;sse32;sse92;sseSize1;sseSize2;" +
+                // interaction specific stuff
+                "type;distance;" +
+                // coupling score
+                "coupling;" +
+                // backbone interactions
+                "bb1;bb2;" +
+                // non-local interactions - at least 6 residues apart
+                "nl_halogen1;nl_hydrogen1;nl_hydrophobic1;nl_metal1;nl_picat1;nl_pistack1;nl_salt1;nl_water1;nl_total1;" +
+                // helix-helix interactions - different helix, >15 residues
+                "nl_halogen2;nl_hydrogen2;nl_hydrophobic2;nl_metal2;nl_picat2;nl_pistack2;nl_salt2;nl_water2;nl_total2;" + System.lineSeparator();
         String output = MembraneConstants.lines(directory.resolve("ids.list"))
                 .map(A01_WriteCouplingCsv::handleLine)
                 .filter(Optional::isPresent)
@@ -42,7 +53,7 @@ public class A01_WriteCouplingCsv {
                 .collect(Collectors.joining(System.lineSeparator()));
 
         MembraneConstants.write(directory.resolve("results").resolve("couplings.csv"),
-                output);
+                header + output);
     }
 
     private static Optional<String> handleLine(String id) {
