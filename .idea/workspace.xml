@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_WriteContactTables.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/couplings/A01_WriteCouplingCsv.java" afterPath="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/couplings/A01_WriteCouplingCsv.java" />
     </list>
@@ -112,24 +113,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="A02_WriteFoldingCoreCsv.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A02_WriteFoldingCoreCsv.java">
+      <file leaf-file-name="A02_WriteContactTables.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_WriteContactTables.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="503">
-              <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="A01_WriteContactCsv.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="39" column="120" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="39" selection-end-column="120" />
+            <state relative-caret-position="1566">
+              <caret line="102" column="5" lean-forward="true" selection-start-line="102" selection-start-column="5" selection-end-line="102" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1509956732836" expanded="true" signature="8517:11336" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -138,8 +128,8 @@
       <file leaf-file-name="A01_WriteCouplingCsv.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/couplings/A01_WriteCouplingCsv.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="461">
-              <caret line="55" column="33" lean-forward="true" selection-start-line="55" selection-start-column="33" selection-end-line="55" selection-end-column="33" />
+            <state relative-caret-position="2916">
+              <caret line="167" column="40" lean-forward="false" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -218,7 +208,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/afm/read.me" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/division/read.me" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/modularity/foldingcores/read.me" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/identifier/IdentifierFactory.java" />
@@ -268,6 +257,7 @@
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/couplings/A01_OutputPdbList.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/DatasetComposer.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/couplings/A02_WritePlipAndOpmDocuments.java" />
+        <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_WriteContactTables.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/couplings/A01_WriteCouplingCsv.java" />
       </list>
     </option>
@@ -378,50 +368,7 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
               <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="collect" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
-              <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="collect" type="462c0819:PsiDirectoryNode" />
               <item name="couplings" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
-              <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="collect" type="462c0819:PsiDirectoryNode" />
-              <item name="kinks" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
-              <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="collect" type="462c0819:PsiDirectoryNode" />
-              <item name="pdbtm" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
-              <item name="membrane" type="462c0819:PsiDirectoryNode" />
-              <item name="contact" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -664,6 +611,25 @@
       <module name="jstructure-membrane" />
       <envs />
     </configuration>
+    <configuration name="A02_WriteContactTables" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.membrane.contact.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.contact.A02_WriteContactTables" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jstructure-membrane" />
+      <envs />
+    </configuration>
     <configuration name="A02_WriteFoldingCoreCsv" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -691,25 +657,6 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.membrane.collect.couplings.A02_WritePlipAndOpmDocuments" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="jstructure-membrane" />
-      <envs />
-    </configuration>
-    <configuration name="ComposeCSADataset" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.gmlvq.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.gmlvq.ComposeCSADataset" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -1252,19 +1199,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="1" class="java.lang.String" itemvalue="Application.ComposeCSADataset" />
-      <item index="2" class="java.lang.String" itemvalue="Application.A02_WriteFoldingCoreCsv" />
-      <item index="3" class="java.lang.String" itemvalue="Application.A01_WriteCouplingCsv" />
-      <item index="4" class="java.lang.String" itemvalue="Application.A01_OutputPdbList" />
-      <item index="5" class="java.lang.String" itemvalue="Application.A02_WritePlipAndOpmDocuments" />
+      <item index="1" class="java.lang.String" itemvalue="Application.A02_WriteFoldingCoreCsv" />
+      <item index="2" class="java.lang.String" itemvalue="Application.A01_WriteCouplingCsv" />
+      <item index="3" class="java.lang.String" itemvalue="Application.A01_OutputPdbList" />
+      <item index="4" class="java.lang.String" itemvalue="Application.A02_WritePlipAndOpmDocuments" />
+      <item index="5" class="java.lang.String" itemvalue="Application.A02_WriteContactTables" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.A01_WriteCouplingCsv" />
-        <item index="1" class="java.lang.String" itemvalue="Application.A02_WritePlipAndOpmDocuments" />
-        <item index="2" class="java.lang.String" itemvalue="Application.A01_OutputPdbList" />
-        <item index="3" class="java.lang.String" itemvalue="Application.A02_WriteFoldingCoreCsv" />
-        <item index="4" class="java.lang.String" itemvalue="Application.ComposeCSADataset" />
+        <item index="1" class="java.lang.String" itemvalue="Application.A02_WriteContactTables" />
+        <item index="2" class="java.lang.String" itemvalue="Application.A02_WritePlipAndOpmDocuments" />
+        <item index="3" class="java.lang.String" itemvalue="Application.A01_OutputPdbList" />
+        <item index="4" class="java.lang.String" itemvalue="Application.A02_WriteFoldingCoreCsv" />
       </list>
     </recent_temporary>
   </component>
@@ -1424,14 +1371,7 @@
       <workItem from="1508741267042" duration="20000" />
       <workItem from="1508743847535" duration="17236000" />
       <workItem from="1508914700182" duration="14350000" />
-      <workItem from="1508939809160" duration="80795000" />
-    </task>
-    <task id="LOCAL-00123" summary="GMLVQ: data set creator on kinks">
-      <created>1498577671885</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1498577671885</updated>
+      <workItem from="1508939809160" duration="92810000" />
     </task>
     <task id="LOCAL-00124" summary="ASSP stub - needs final assignment of SSEs and tests/validation">
       <created>1498661852529</created>
@@ -1769,7 +1709,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509979855496</updated>
     </task>
-    <option name="localTasksCounter" value="172" />
+    <task id="LOCAL-00172" summary="obvious fix for coupling analysis">
+      <created>1509980329268</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1509980329268</updated>
+    </task>
+    <option name="localTasksCounter" value="173" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1805,7 +1752,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2143388000" />
+    <option name="totallyTimeSpent" value="2155403000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1818,7 +1765,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="2" width="3440" height="1438" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1829,7 +1775,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46289212" sideWeight="0.44957983" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16266507" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38022813" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38022813" sideWeight="0.6030018" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1841,7 +1787,7 @@
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46365723" sideWeight="0.55042017" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46311787" sideWeight="0.55042017" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1926,7 +1872,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="dropped toAtomContainer etc and standardized by toIsolatedStructure" />
     <MESSAGE value="computation of mutation effect vectors" />
     <MESSAGE value="more fine-grained logging and some bug-fixes of the mutation effect predictor" />
     <MESSAGE value="fine-tuning of mutation site features" />
@@ -1951,7 +1896,8 @@
     <MESSAGE value="some cleanup in CSV-generation&#10;&#10;- moved to only 2 routines&#10;- one to generate csv with focus on amino acids&#10;- one to generate csv with focus on interactions&#10;- about to move everything else (i.e. selection/filtering/folding) to R" />
     <MESSAGE value="code for foldingcore analysis refined" />
     <MESSAGE value="code for coupling analysis" />
-    <option name="LAST_COMMIT_MESSAGE" value="code for coupling analysis" />
+    <MESSAGE value="obvious fix for coupling analysis" />
+    <option name="LAST_COMMIT_MESSAGE" value="obvious fix for coupling analysis" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1963,7 +1909,7 @@
           <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="510" />
+      <option name="time" value="515" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1972,14 +1918,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="436" column="45" lean-forward="true" selection-start-line="436" selection-start-column="45" selection-end-line="436" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/test/java/de/bioforscher/jstructure/membrane/modularity/PlipGraphFactoryTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="396">
@@ -2310,36 +2248,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A02_WriteFoldingCoreCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/kinks/A01_OutputPdbList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/couplings/A02_WritePlipAndOpmDocuments.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/couplings/A01_OutputPdbList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="23" column="45" lean-forward="true" selection-start-line="23" selection-start-column="45" selection-end-line="23" selection-end-column="45" />
           <folding />
         </state>
       </provider>
@@ -2352,14 +2264,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="201" column="83" lean-forward="true" selection-start-line="165" selection-start-column="12" selection-end-line="201" selection-end-column="83" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/pdbtm/A01_DownloadDataset.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -2368,10 +2272,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A02_WriteFoldingCoreCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="503">
+          <caret line="66" column="35" lean-forward="true" selection-start-line="66" selection-start-column="35" selection-end-line="66" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A01_WriteContactCsv.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="39" column="120" lean-forward="false" selection-start-line="25" selection-start-column="24" selection-end-line="39" selection-end-column="120" />
+        <state relative-caret-position="270">
+          <caret line="21" column="45" lean-forward="false" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
             <marker date="1509956732836" expanded="true" signature="8517:11336" ph="{...}" />
@@ -2379,10 +2291,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/couplings/A02_WritePlipAndOpmDocuments.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="38" column="33" lean-forward="true" selection-start-line="38" selection-start-column="33" selection-end-line="38" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/collect/couplings/A01_OutputPdbList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="23" column="45" lean-forward="true" selection-start-line="23" selection-start-column="45" selection-end-line="23" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/MembraneConstants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="262">
+          <caret line="60" column="33" lean-forward="false" selection-start-line="60" selection-start-column="33" selection-end-line="60" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/contact/A02_WriteContactTables.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1566">
+          <caret line="102" column="5" lean-forward="true" selection-start-line="102" selection-start-column="5" selection-end-line="102" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/couplings/A01_WriteCouplingCsv.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="55" column="33" lean-forward="true" selection-start-line="55" selection-start-column="33" selection-end-line="55" selection-end-column="33" />
+        <state relative-caret-position="2916">
+          <caret line="167" column="40" lean-forward="false" selection-start-line="167" selection-start-column="40" selection-end-line="167" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

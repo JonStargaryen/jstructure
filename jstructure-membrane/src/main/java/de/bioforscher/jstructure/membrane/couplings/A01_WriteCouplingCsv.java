@@ -1,12 +1,13 @@
 package de.bioforscher.jstructure.membrane.couplings;
 
 import de.bioforscher.jstructure.StandardFormat;
-import de.bioforscher.jstructure.feature.interactions.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
 import de.bioforscher.jstructure.feature.topology.Topology;
+import de.bioforscher.jstructure.mathematics.Pair;
+import de.bioforscher.jstructure.mathematics.SetOperations;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -16,11 +17,9 @@ import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,7 +36,7 @@ public class A01_WriteCouplingCsv {
     public static void main(String[] args) {
         String header = "pdbId;chainId;resId1;resId2;aa1;aa2;sequence1;sequence2;sse31;sse91;sse32;sse92;sseSize1;sseSize2;" +
                 // interaction specific stuff
-                "type;distance;" +
+                "distance;" +
                 // coupling score
                 "coupling;" +
                 // backbone interactions
@@ -52,7 +51,7 @@ public class A01_WriteCouplingCsv {
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        MembraneConstants.write(directory.resolve("results").resolve("couplings.csv"),
+        MembraneConstants.write(directory.resolve("results").resolve("couplings-all.csv"),
                 header + output);
     }
 
@@ -111,22 +110,19 @@ public class A01_WriteCouplingCsv {
                     Jsoup.parse(MembraneConstants.lines(directory.resolve("plip").resolve(id + ".plip"))
                             .collect(Collectors.joining(System.lineSeparator()))));
 
-            String output = chain.getFeature(PLIPInteractionContainer.class)
-                    .getInteractions()
-                    .stream()
-                    .filter(MembraneConstants::isTmHelixInteraction)
-                    .map(interaction -> handleInteraction(pdbId,
-                            chainId,
-                            interaction))
+            Map<String, Double> scores = new HashMap<>();
+            Files.lines(MembraneConstants.COUPLING_DIRECTORY.resolve("couplings").resolve(pdbId + "_" + chainId + ".txt"))
+                    .map(line -> line.split("\\s+"))
+                    .forEach(split -> {
+                        double score = Double.valueOf(split[5]);
+                        scores.put(split[0] + "," + split[2], score);
+                    });
+
+            return Optional.of(SetOperations.uniquePairsOf(aminoAcids)
+                    .map(pair -> handlePair(pair, scores))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .collect(Collectors.joining(System.lineSeparator()));
-
-            if(output.isEmpty()) {
-                return Optional.empty();
-            }
-
-            return Optional.of(output);
+                    .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {
             logger.warn("compution failed for {}",
                     id,
@@ -135,12 +131,12 @@ public class A01_WriteCouplingCsv {
         }
     }
 
-    private static Optional<String> handleInteraction(String pdbId,
-                                                      String chainId,
-                                                      PLIPInteraction interaction) {
+    private static Optional<String> handlePair(Pair<AminoAcid, AminoAcid> pair, Map<String, Double> scores) {
         try {
-            AminoAcid aminoAcid1 = (AminoAcid) interaction.getPartner1();
-            AminoAcid aminoAcid2 = (AminoAcid) interaction.getPartner2();
+            AminoAcid aminoAcid1 = pair.getLeft();
+            AminoAcid aminoAcid2 = pair.getRight();
+            String pdbId = aminoAcid1.getParentChain().getChainIdentifier().getProteinIdentifier().getPdbId();
+            String chainId = aminoAcid1.getParentChain().getChainIdentifier().getChainId();
 
             PLIPInteractionContainer interactions1 = aminoAcid1.getFeature(PLIPInteractionContainer.class);
             PLIPInteractionContainer interactions2 = aminoAcid2.getFeature(PLIPInteractionContainer.class);
@@ -161,13 +157,16 @@ public class A01_WriteCouplingCsv {
                             .filter(inter -> Math.abs(inter.getPartner1().getResidueIdentifier().getResidueNumber() - inter.getPartner2().getResidueIdentifier().getResidueNumber()) > 6)
                             .collect(Collectors.toList()));
 
-            Optional<Double> score = MembraneConstants.lines(MembraneConstants.COUPLING_DIRECTORY.resolve("couplings").resolve(pdbId + "_" + chainId + ".txt"))
-                    .map(line -> line.split("\\s+"))
-                    .filter(split -> (aminoAcid1.getResidueIdentifier().toString().equals(split[0]) && aminoAcid2.getResidueIdentifier().toString().equals(split[2])) ||
-                            (aminoAcid1.getResidueIdentifier().toString().equals(split[2]) && aminoAcid2.getResidueIdentifier().toString().equals(split[0])))
-                    .findFirst()
-                    .map(split -> split[5])
-                    .map(Double::valueOf);
+            String score;
+            String key1 = aminoAcid1.getResidueIdentifier().toString() + "," + aminoAcid2.getResidueIdentifier().toString();
+            String key2 = aminoAcid2.getResidueIdentifier().toString() + "," + aminoAcid1.getResidueIdentifier().toString();
+            if(scores.containsKey(key1)) {
+                score = StandardFormat.format(scores.get(key1));
+            } else if(scores.containsKey(key2)) {
+                score = StandardFormat.format(scores.get(key2));
+            } else {
+                return Optional.empty();
+            }
 
             GenericSecondaryStructure secondaryStructure1 = aminoAcid1.getFeature(GenericSecondaryStructure.class);
             GenericSecondaryStructure secondaryStructure2 = aminoAcid2.getFeature(GenericSecondaryStructure.class);
@@ -191,11 +190,9 @@ public class A01_WriteCouplingCsv {
                     surroundingSecondaryStructureElement1.getSize() + ";" +
                     surroundingSecondaryStructureElement2.getSize() + ";" +
 
-                    interaction.getClass().getSimpleName() + ";" +
                     StandardFormat.format(aminoAcid1.getCa().calculate().distance(aminoAcid2.getCa())) + ";" +
 
-                    score.map(StandardFormat::format)
-                            .orElse("NA") + ";" +
+                    score + ";" +
 
                     interactions1.getBackboneInteractions().size() + ";" +
                     interactions2.getBackboneInteractions().size() + ";" +
@@ -224,4 +221,173 @@ public class A01_WriteCouplingCsv {
             return Optional.empty();
         }
     }
+
+//    private static Optional<String> handleLine(String id) {
+//        try {
+//            logger.info("annotating {}",
+//                    id);
+//            String pdbId = id.split("_")[0];
+//            String chainId = id.split("_")[1];
+//
+//            Structure structure = StructureParser.source(directory.resolve("pdb").resolve(pdbId + ".pdb"))
+//                    .minimalParsing(true)
+//                    .parse();
+//            Chain chain = structure.select()
+//                    .chainName(chainId)
+//                    .asChain();
+//
+//            ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR.process(structure,
+//                    Jsoup.parse(MembraneConstants.lines(directory.resolve("opm").resolve(pdbId + ".opm"))
+//                            .collect(Collectors.joining(System.lineSeparator()))));
+//            int index = -1;
+//            List<List<AminoAcid>> transmembraneHelices = new ArrayList<>();
+//            boolean wasPreviouslyTransmembrane = false;
+//            List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+//            for(AminoAcid aminoAcid : aminoAcids) {
+//                boolean transmembrane = aminoAcid.getFeature(Topology.class).isTransmembrane();
+//                if(transmembrane) {
+//                    if(wasPreviouslyTransmembrane) {
+//                        transmembraneHelices.get(index).add(aminoAcid);
+//                    } else {
+//                        index++;
+//                        wasPreviouslyTransmembrane = true;
+//                        List<AminoAcid> region = new ArrayList<>();
+//                        region.add(aminoAcid);
+//                        transmembraneHelices.add(region);
+//                    }
+//                } else {
+//                    if(wasPreviouslyTransmembrane) {
+//                        transmembraneHelices.add(new ArrayList<>());
+//                    }
+//                    wasPreviouslyTransmembrane = false;
+//                }
+//            }
+//            if(wasPreviouslyTransmembrane) {
+//                transmembraneHelices.get(index).add(aminoAcids.get(aminoAcids.size() - 1));
+//            }
+//            transmembraneHelices.removeIf(Collection::isEmpty);
+//
+//            if(transmembraneHelices.size() < 2) {
+//                logger.warn("skipping structure with {} TM-regions",
+//                        transmembraneHelices.size());
+//                return Optional.empty();
+//            }
+//
+//            PLIP_INTRA_MOLECULAR_ANNOTATOR.process(chain,
+//                    Jsoup.parse(MembraneConstants.lines(directory.resolve("plip").resolve(id + ".plip"))
+//                            .collect(Collectors.joining(System.lineSeparator()))));
+//
+//            String output = chain.getFeature(PLIPInteractionContainer.class)
+//                    .getInteractions()
+//                    .stream()
+//                    .filter(MembraneConstants::isTmHelixInteraction)
+//                    .map(interaction -> handleInteraction(pdbId,
+//                            chainId,
+//                            interaction))
+//                    .filter(Optional::isPresent)
+//                    .map(Optional::get)
+//                    .collect(Collectors.joining(System.lineSeparator()));
+//
+//            if(output.isEmpty()) {
+//                return Optional.empty();
+//            }
+//
+//            return Optional.of(output);
+//        } catch (Exception e) {
+//            logger.warn("compution failed for {}",
+//                    id,
+//                    e);
+//            return Optional.empty();
+//        }
+//    }
+//
+//    private static Optional<String> handleInteraction(String pdbId,
+//                                                      String chainId,
+//                                                      PLIPInteraction interaction) {
+//        try {
+//            AminoAcid aminoAcid1 = (AminoAcid) interaction.getPartner1();
+//            AminoAcid aminoAcid2 = (AminoAcid) interaction.getPartner2();
+//
+//            PLIPInteractionContainer interactions1 = aminoAcid1.getFeature(PLIPInteractionContainer.class);
+//            PLIPInteractionContainer interactions2 = aminoAcid2.getFeature(PLIPInteractionContainer.class);
+//
+//            // evaluate interaction types
+//            PLIPInteractionContainer nonLocalInteractions1 = new PLIPInteractionContainer(null,
+//                    interactions1
+//                            .getInteractions()
+//                            .stream()
+//                            // interactions have to be non-local
+//                            .filter(inter -> Math.abs(inter.getPartner1().getResidueIdentifier().getResidueNumber() - inter.getPartner2().getResidueIdentifier().getResidueNumber()) > 6)
+//                            .collect(Collectors.toList()));
+//            PLIPInteractionContainer nonLocalInteractions2 = new PLIPInteractionContainer(null,
+//                    interactions2
+//                            .getInteractions()
+//                            .stream()
+//                            // interactions have to be non-local
+//                            .filter(inter -> Math.abs(inter.getPartner1().getResidueIdentifier().getResidueNumber() - inter.getPartner2().getResidueIdentifier().getResidueNumber()) > 6)
+//                            .collect(Collectors.toList()));
+//
+//            Optional<Double> score = MembraneConstants.lines(MembraneConstants.COUPLING_DIRECTORY.resolve("couplings").resolve(pdbId + "_" + chainId + ".txt"))
+//                    .map(line -> line.split("\\s+"))
+//                    .filter(split -> (aminoAcid1.getResidueIdentifier().toString().equals(split[0]) && aminoAcid2.getResidueIdentifier().toString().equals(split[2])) ||
+//                            (aminoAcid1.getResidueIdentifier().toString().equals(split[2]) && aminoAcid2.getResidueIdentifier().toString().equals(split[0])))
+//                    .findFirst()
+//                    .map(split -> split[5])
+//                    .map(Double::valueOf);
+//
+//            GenericSecondaryStructure secondaryStructure1 = aminoAcid1.getFeature(GenericSecondaryStructure.class);
+//            GenericSecondaryStructure secondaryStructure2 = aminoAcid2.getFeature(GenericSecondaryStructure.class);
+//            GenericSecondaryStructure.SecondaryStructureElement surroundingSecondaryStructureElement1 =
+//                    aminoAcid1.getFeature(GenericSecondaryStructure.class).getSurroundingSecondaryStructureElement(aminoAcid1);
+//            GenericSecondaryStructure.SecondaryStructureElement surroundingSecondaryStructureElement2 =
+//                    aminoAcid2.getFeature(GenericSecondaryStructure.class).getSurroundingSecondaryStructureElement(aminoAcid2);
+//
+//            return Optional.of(pdbId + ";" +
+//                    chainId + ";" +
+//                    aminoAcid1.getResidueIdentifier() + ";" +
+//                    aminoAcid2.getResidueIdentifier() + ";" +
+//                    aminoAcid1.getOneLetterCode() + ";" +
+//                    aminoAcid2.getOneLetterCode() + ";" +
+//                    MembraneConstants.surroundingSequence(aminoAcid1) + ";" +
+//                    MembraneConstants.surroundingSequence(aminoAcid2) + ";" +
+//                    secondaryStructure1.getSecondaryStructure().getReducedRepresentation() + ";" +
+//                    secondaryStructure1.getSecondaryStructure().getOneLetterRepresentation() + ";" +
+//                    secondaryStructure2.getSecondaryStructure().getReducedRepresentation() + ";" +
+//                    secondaryStructure2.getSecondaryStructure().getOneLetterRepresentation() + ";" +
+//                    surroundingSecondaryStructureElement1.getSize() + ";" +
+//                    surroundingSecondaryStructureElement2.getSize() + ";" +
+//
+//                    interaction.getClass().getSimpleName() + ";" +
+//                    StandardFormat.format(aminoAcid1.getCa().calculate().distance(aminoAcid2.getCa())) + ";" +
+//
+//                    score.map(StandardFormat::format)
+//                            .orElse("NA") + ";" +
+//
+//                    interactions1.getBackboneInteractions().size() + ";" +
+//                    interactions2.getBackboneInteractions().size() + ";" +
+//
+//                    nonLocalInteractions1.getHalogenBonds().size() + ";" +
+//                    nonLocalInteractions1.getHydrogenBonds().size() + ";" +
+//                    nonLocalInteractions1.getHydrophobicInteractions().size() + ";" +
+//                    nonLocalInteractions1.getMetalComplexes().size() + ";" +
+//                    nonLocalInteractions1.getPiCationInteractions().size() + ";" +
+//                    nonLocalInteractions1.getPiStackings().size() + ";" +
+//                    nonLocalInteractions1.getSaltBridges().size() + ";" +
+//                    nonLocalInteractions1.getWaterBridges().size() + ";" +
+//                    nonLocalInteractions1.getInteractions().size() + ";" +
+//
+//                    nonLocalInteractions2.getHalogenBonds().size() + ";" +
+//                    nonLocalInteractions2.getHydrogenBonds().size() + ";" +
+//                    nonLocalInteractions2.getHydrophobicInteractions().size() + ";" +
+//                    nonLocalInteractions2.getMetalComplexes().size() + ";" +
+//                    nonLocalInteractions2.getPiCationInteractions().size() + ";" +
+//                    nonLocalInteractions2.getPiStackings().size() + ";" +
+//                    nonLocalInteractions2.getSaltBridges().size() + ";" +
+//                    nonLocalInteractions2.getWaterBridges().size() + ";" +
+//                    nonLocalInteractions2.getInteractions().size());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return Optional.empty();
+//        }
+//    }
 }
