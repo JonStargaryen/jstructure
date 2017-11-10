@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.membrane.visualization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
@@ -34,6 +35,22 @@ public class GraphVisualizerTest {
     public void shouldComposeJsonRepresentationFor3cyt_I() throws JsonProcessingException {
         String id = "3cyt_I";
         composeJsonRepresentation(id);
+    }
+
+    @Test
+    @Ignore
+    public void shouldComposeGraphRepresentationFor1brr_A() throws JsonProcessingException {
+        Structure structure = StructureParser.source("1brr")
+                .minimalParsing(true)
+                .parse();
+        Chain chain = structure.select()
+                .chainName("A")
+                .asChain();
+
+        new PLIPIntraMolecularAnnotator().process(structure);
+        Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2015);
+
+        System.out.println(new ObjectMapper().writeValueAsString(new JsonGraph(graph)));
     }
 
     private void composeJsonRepresentation(String id) throws JsonProcessingException {
