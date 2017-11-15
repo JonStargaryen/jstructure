@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import de.bioforscher.jstructure.feature.topology.Topology;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.Module;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -26,6 +27,25 @@ public class JsonChain {
     private final List<Double> z;
     private final List<Double> p;
     private final List<JsonPartitioning> partitionings;
+    private final List<JsonRange> topology;
+
+    public JsonChain(Chain chain, Map<String, PartitionedGraph<AminoAcid>> inSilicoData) {
+        this.sequence = chain.getAminoAcidSequence();
+        this.sse = composeSecondaryStructures(chain);
+
+        this.early = null;
+        this.interactions = null;
+        this.rasa = null;
+        this.dynamine = null;
+        this.efoldmine = null;
+        this.z = null;
+        this.p = null;
+
+        this.partitionings = new ArrayList<>();
+        inSilicoData.forEach((key, value) -> this.partitionings.add(composePartitioning(key, value)));
+
+        this.topology = composeTopology(chain);
+    }
 
     public JsonChain(Chain chain,
                      List<AminoAcid> earlyFoldingResidues,
@@ -71,6 +91,8 @@ public class JsonChain {
         this.partitionings = new ArrayList<>();
         this.partitionings.add(composePartitioning("HDX-MS Modules", experimentalData));
         inSilicoData.forEach((key, value) -> this.partitionings.add(composePartitioning(key, value)));
+
+        this.topology = null;
     }
 
     private List<Double> minMaxNormalize(Collection<Double> values, boolean invert) {
@@ -217,6 +239,38 @@ public class JsonChain {
         return sse;
     }
 
+    private List<JsonRange> composeTopology(Chain chain) {
+        List<AminoAcid> aas = chain.aminoAcids().collect(Collectors.toList());
+        List<JsonRange> topology = new ArrayList<>();
+
+        String lastTopology = "o";
+        AminoAcid start = null;
+        AminoAcid last = null;
+        for(AminoAcid aa : aas) {
+            String currentTopology = aa.getFeature(Topology.class).isTransmembrane() ? "I" : "o";
+            if(lastTopology.equals("o") && !currentTopology.equals("o")) {
+                // topology observed for the first time
+                lastTopology = currentTopology;
+                start = aa;
+            } else if(!lastTopology.equals(currentTopology)) {
+                // topology terminated
+                if(!start.equals(last)) {
+                    topology.add(new JsonRange(start.getResidueIndex() + 1,
+                            last.getResidueIndex() + 1));
+                }
+                lastTopology = currentTopology;
+            }
+            last = aa;
+        }
+
+        if(!lastTopology.equals("o") && !start.equals(last)) {
+            topology.add(new JsonRange(start.getResidueIdentifier().getResidueNumber(),
+                    last.getResidueIdentifier().getResidueNumber()));
+        }
+
+        return topology;
+    }
+
     public String getSequence() {
         return sequence;
     }
@@ -259,5 +313,9 @@ public class JsonChain {
 
     public List<JsonPartitioning> getPartitionings() {
         return partitionings;
+    }
+
+    public List<JsonRange> getTopology() {
+        return topology;
     }
 }

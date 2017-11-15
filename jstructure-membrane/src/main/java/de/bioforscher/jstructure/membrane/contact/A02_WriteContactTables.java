@@ -34,6 +34,7 @@ public class A02_WriteContactTables {
         Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> hydrogenbond = new HashMap<>();
         Map<Pair<AminoAcid.Family, AminoAcid.Family>, Integer> hydrophobic = new HashMap<>();
         Map<AminoAcid.Family, Integer> occurrence = new HashMap<>();
+        int[] count = new int[1];
 
         MembraneConstants.lines(DIRECTORY.resolve("ids.list"))
                 .forEach(line -> {
@@ -61,6 +62,8 @@ public class A02_WriteContactTables {
                                 if(!tm) {
                                     return;
                                 }
+
+                                count[0]++;
 
                                 // normalized by frequency of both interaction partners in the TM layer
                                 occurrence.merge(AminoAcid.Family.resolveGroupPrototype(aminoAcid.getGroupPrototype()), 1, Integer::sum);
@@ -90,6 +93,8 @@ public class A02_WriteContactTables {
                                         });
                             });
                 });
+
+        System.out.println("evaluated " + count[0] + " amino acids");
 
         MembraneConstants.write(MembraneConstants.PDBTM_NR_ALPHA_DATASET_DIRECTORY.resolve("results")
                         .resolve("contacts-freq.tab"),
