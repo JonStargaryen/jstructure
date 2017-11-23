@@ -42,6 +42,34 @@ public class PLIPRestServiceQuery {
                 chainIdentifier.getChainId());
     }
 
+    /**
+     * Compute interactions for a chain not previously processed. Designed for CASP data.
+     * @param chain the chain to process
+     * @return the document containing all results
+     */
+    public static Document calculateIntraChainDocument(Chain chain) {
+        try {
+            String chainId = chain.getChainIdentifier().getChainId();
+            // write PDB structure of data point to temporary file
+            Path structureFilePath = Files.createTempFile("plip_", "_" + chainId + ".pdb");
+            System.out.println(chain.getPdbRepresentation());
+            Files.write(structureFilePath, chain.getPdbRepresentation().getBytes());
+
+            // submit PLIP POST query
+            String url = "https://biosciences.hs-mittweida.de/plip/interaction/calculate/intrachain/" + chainId;
+            logger.info("processing chain '{}' by remote PLIP at:{}'{}'",
+                    chainId,
+                    System.lineSeparator(),
+                    url);
+            PLIPPostRequest plipPostRequest = new PLIPPostRequest(url,
+                    secret,
+                    structureFilePath);
+            return Jsoup.parse(plipPostRequest.getResultXml());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     static Document getLigandDocument(Chain chain) {
         try {
             // write PDB structure of data point to temporary file

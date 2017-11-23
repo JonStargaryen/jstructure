@@ -87,15 +87,11 @@
 
     <modules>
         <module>../jstructure-core</module>
-        <module>../jstructure-design</module>
-        <module>../jstructure-explorer</module>
         <module>../jstructure-align</module>
         <module>../jstructure-testutils</module>
         <module>../jstructure-features</module>
-        <module>../jstructure-mutation</module>
-        <module>../jstructure-mmm-bridge</module>
-        <module>../jstructure-membrane-topology</module>
         <module>../jstructure-membrane</module>
+        <module>../jstructure-equant</module>
     </modules>
 
     <properties>

@@ -19,6 +19,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -104,6 +106,10 @@ public class StructureParser {
             }
         }
     }
+
+    private static final List<String> NUMBERS = IntStream.range(1, 10)
+            .mapToObj(String::valueOf)
+            .collect(Collectors.toList());
 
     /**
      * Parses a single line of a <tt>PDB</tt> file.
@@ -205,15 +211,31 @@ public class StructureParser {
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
         if(line.startsWith(Atom.ATOM_PREFIX) || line.startsWith(Atom.HETATM_PREFIX)) {
-            String elementString = line.substring(76, 78).trim();
-            if(elementString.isEmpty()) {
-                if(strictMode) {
-                    throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + "'" + line + "'");
-                } else {
-                    logger.debug("PDB parsing failed for line:{}'{}'", System.lineSeparator(), line);
-                    elementString = Element.X.name();
-                }
+            String atomName = line.substring(12, 16).trim();
+            String pdbName = line.substring(17, 20).trim();
+//            String elementString = "";
+//            try {
+//                elementString = line.substring(76, 78).trim();
+//            } catch (StringIndexOutOfBoundsException e) {
+//                // happens for malformed files like from CASP
+//                logger.debug("missing element definition in line:{}{}",
+//                        System.lineSeparator(),
+//                        line);
+//            }
+//            if(elementString.isEmpty()) {
+//                if(strictMode) {
+//                    throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + "'" + line + "'");
+//                } else {
+//                    logger.debug("PDB parsing failed for line:{}'{}'", System.lineSeparator(), line);
+////                    elementString = Element.X.name();
+            String elementString = atomName.substring(0,  1);
+
+            // hydrogen atoms start with a digit: take 2nd position in that case
+            if(NUMBERS.contains(elementString)) {
+                elementString = atomName.substring(1, 2);
             }
+//                }
+//            }
 
             Element element = Element.valueOfIgnoreCase(elementString);
             if(skipHydrogens && element.isHydrogen()) {
@@ -221,8 +243,9 @@ public class StructureParser {
             }
 
             String alternativeLocationIndicator = line.substring(16, 17).trim();
-            String pdbName = line.substring(17, 20).trim();
-            ChainIdentifier chainId = IdentifierFactory.createChainIdentifier(protein.getProteinIdentifier(), line.substring(21, 22));
+            String rawChainId = line.substring(21, 22);
+            rawChainId = rawChainId.equals(" ") ? Chain.UNKNOWN_CHAIN.getChainIdentifier().getChainId() : rawChainId;
+            ChainIdentifier chainId = IdentifierFactory.createChainIdentifier(protein.getProteinIdentifier(), rawChainId);
             int resNum = Integer.parseInt(line.substring(22, 26).trim());
             String insertionCode = line.substring(26, 27).trim();
 
@@ -279,7 +302,7 @@ public class StructureParser {
                             Double.valueOf(line.substring(38, 46).trim()),
                             Double.valueOf(line.substring(46, 54).trim())
                     })
-                    .name(line.substring(12, 16).trim())
+                    .name(atomName)
                     .pdbSerial(Integer.valueOf(line.substring(6, 11).trim()))
                     .occupancy(occupancy)
                     .bfactor(bfactor)
@@ -449,7 +472,9 @@ public class StructureParser {
                     if(forceProteinName == null) {
                         String fileName = path.toFile().getName();
                         // will cause file names containing multiple '.' to drop information: pdbFile.getName().split("\\.")[0]
-                        forceProteinName = IdentifierFactory.createProteinIdentifier("", fileName.substring(0, fileName.lastIndexOf(".")));
+                        int end = fileName.lastIndexOf(".");
+                        end = end != -1 ? end : fileName.length();
+                        forceProteinName = IdentifierFactory.createProteinIdentifier("", fileName.substring(0, end));
                     }
                 }
             } catch (IOException e) {
