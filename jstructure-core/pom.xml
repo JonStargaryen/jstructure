@@ -3,6 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>../jstructure-contacts</module>
+    </modules>
 
     <parent>
         <artifactId>jstructure-all</artifactId>
@@ -13,7 +16,7 @@
 
     <artifactId>jstructure-core</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <description>
         The core-package of jstructure which provides the data model and generic implementations of tools to manipulate molecular structures.
     </description>
@@ -21,7 +24,7 @@
     <dependencies>
         <dependency>
             <groupId>de.bioforscher</groupId>
-            <artifactId>jstructure-testutils</artifactId>
+            <artifactId>jstructure-utils</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

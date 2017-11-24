@@ -4,10 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jstructure-align/jstructure-align.iml" filepath="$PROJECT_DIR$/jstructure-align/jstructure-align.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-all/jstructure-all.iml" filepath="$PROJECT_DIR$/jstructure-all/jstructure-all.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-contacts/jstructure-contacts.iml" filepath="$PROJECT_DIR$/jstructure-contacts/jstructure-contacts.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-core/jstructure-core.iml" filepath="$PROJECT_DIR$/jstructure-core/jstructure-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-equant/jstructure-equant.iml" filepath="$PROJECT_DIR$/jstructure-equant/jstructure-equant.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-features/jstructure-features.iml" filepath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-membrane/jstructure-membrane.iml" filepath="$PROJECT_DIR$/jstructure-membrane/jstructure-membrane.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" filepath="$PROJECT_DIR$/jstructure-testutils/jstructure-testutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-utils/jstructure-utils.iml" filepath="$PROJECT_DIR$/jstructure-utils/jstructure-utils.iml" />
     </modules>
   </component>
 </project>

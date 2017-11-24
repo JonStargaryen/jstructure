@@ -13,33 +13,20 @@ import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
+import de.bioforscher.testutil.FileUtils;
 import org.jsoup.Jsoup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
-import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Shared class of project constants and convenience functions used in the membrane modules.
  */
-public class MembraneConstants {
-    private static final Logger logger = LoggerFactory.getLogger(MembraneConstants.class);
-    public static final Path GIT_DIRECTORY = Paths.get(System.getProperty("user.home")).resolve("git");
-    public static final Path PHD_DIRECTORY = GIT_DIRECTORY.resolve("phd_sb_repo");
-    public static final Path DATA_DIRECTORY = PHD_DIRECTORY.resolve("data");
+public class MembraneConstants extends FileUtils {
     public static final Path DATASETS_DIRECTORY = DATA_DIRECTORY.resolve("datasets");
     // test performance and optimal setup of module annotation
     public static final Path MODULARITY_DATASET_DIRECTORY = DATASETS_DIRECTORY.resolve("modularity");
@@ -57,66 +44,6 @@ public class MembraneConstants {
     public static final Path DIVISION_DIRECTORY = DATASETS_DIRECTORY.resolve("division");
     public static final Path COUPLING_DIRECTORY = DATASETS_DIRECTORY.resolve("membrane_couplings");
     public static final int MINIMUM_HELIX_LENGTH = 15;
-
-    public static Stream<String> lines(Path path) {
-        try {
-            return Files.lines(path)
-                    .filter(line -> !line.startsWith("#"));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static Stream<String> lines(String url) {
-        try {
-            return new BufferedReader(new InputStreamReader(new URL(url).openStream()))
-                    .lines()
-                    .filter(line -> !line.startsWith("#"));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static Stream<Path> list(Path path) {
-        try {
-            return Files.list(path);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    public static void write(Path path, String content) {
-        ensureDirectoriesExist(path);
-        try {
-            Files.write(path, content.getBytes());
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    private static void ensureDirectoriesExist(Path path) {
-        if(Files.isDirectory(path)) {
-            throw new IllegalArgumentException(path.toFile().getAbsolutePath() + " is no regular file - cannot process");
-        }
-
-        Path parentDirectory = path.getParent();
-        if(!Files.exists(parentDirectory)) {
-            logger.info("creating directory '{}'", parentDirectory.toFile().getAbsolutePath());
-            try {
-                Files.createDirectories(parentDirectory);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        }
-    }
-
-    public static void move(Path inPath, Path outPath) {
-        try {
-            Files.move(inPath, outPath);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
 
     private static final OrientationsOfProteinsInMembranesAnnotator ORIENTATIONS_OF_PROTEINS_IN_MEMBRANES_ANNOTATOR =
             new OrientationsOfProteinsInMembranesAnnotator();

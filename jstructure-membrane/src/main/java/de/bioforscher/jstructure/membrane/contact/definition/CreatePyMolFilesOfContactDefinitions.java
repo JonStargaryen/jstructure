@@ -1,12 +1,12 @@
 package de.bioforscher.jstructure.membrane.contact.definition;
 
+import de.bioforscher.jstructure.contacts.ProteinGraphFactory;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.topology.MembraneContainer;
 import de.bioforscher.jstructure.feature.topology.OrientationsOfProteinsInMembranesAnnotator;
-import de.bioforscher.jstructure.membrane.MembraneConstants;
-import de.bioforscher.jstructure.membrane.GraphFactory;
 import de.bioforscher.jstructure.mathematics.SetOperations;
+import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -86,7 +86,7 @@ public class CreatePyMolFilesOfContactDefinitions {
                 .map(AminoAcid.class::cast)
                 .collect(Collectors.toList());
 
-        Stream.of(GraphFactory.InteractionScheme.values())
+        Stream.of(ProteinGraphFactory.InteractionScheme.values())
                 .forEach(interactionScheme -> writePyMolFile(pdbId, chainId, range1, range2, aminoAcids1, aminoAcids2, interactionScheme));
     }
 
@@ -96,7 +96,7 @@ public class CreatePyMolFilesOfContactDefinitions {
                                        IntegerRange range2,
                                        List<AminoAcid> aminoAcids1,
                                        List<AminoAcid> aminoAcids2,
-                                       GraphFactory.InteractionScheme interactionScheme) {
+                                       ProteinGraphFactory.InteractionScheme interactionScheme) {
         String output = "fetch " + pdbId + ", async=0" + System.lineSeparator() +
                 "bg_color white" + System.lineSeparator() +
                 // hide non-relevant stuff

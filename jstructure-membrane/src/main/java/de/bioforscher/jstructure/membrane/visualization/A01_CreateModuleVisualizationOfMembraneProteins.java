@@ -1,11 +1,13 @@
 package de.bioforscher.jstructure.membrane.visualization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bioforscher.jstructure.contacts.ProteinGraphFactory;
+import de.bioforscher.jstructure.contacts.visualization.GraphVisualizer;
+import de.bioforscher.jstructure.contacts.visualization.JsonChain;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.mathematics.graph.Graph;
 import de.bioforscher.jstructure.mathematics.graph.PartitionedGraph;
 import de.bioforscher.jstructure.mathematics.graph.partitioning.impl.MarkovClusteringAlgorithm;
-import de.bioforscher.jstructure.membrane.GraphFactory;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -43,11 +45,11 @@ public class A01_CreateModuleVisualizationOfMembraneProteins {
             // force outside annotation with PLIP data
             new PLIPIntraMolecularAnnotator().process(structure);
 
-            Graph<AminoAcid> graph = GraphFactory.createProteinGraph(chain, GraphFactory.InteractionScheme.SALENTIN2015);
+            Graph<AminoAcid> graph = ProteinGraphFactory.createProteinGraph(chain, ProteinGraphFactory.InteractionScheme.SALENTIN2015);
 
             Map<String, PartitionedGraph<AminoAcid>> inSilicoData = new TreeMap<>();
 
-            PartitionedGraph<AminoAcid> netCartoPartitioning = GraphFactory.Partitioned.fromNetCartoFile(graph,
+            PartitionedGraph<AminoAcid> netCartoPartitioning = ProteinGraphFactory.Partitioned.fromNetCartoFile(graph,
                     MembraneConstants.PDBTM_NR_BETA_DATASET_DIRECTORY.resolve("network/" + id + "_plip.modules.dat"));
             inSilicoData.put("NetCarto", netCartoPartitioning);
             MembraneConstants.write(MembraneConstants.DATA_DIRECTORY.resolve("visualization")
@@ -58,7 +60,7 @@ public class A01_CreateModuleVisualizationOfMembraneProteins {
 
             for (int inflation = 120; inflation < 205; inflation = inflation + 5) {
                 double i = inflation / (double) 100;
-                PartitionedGraph<AminoAcid> partitionedGraph = GraphFactory.Partitioned.fromMCL(graph,
+                PartitionedGraph<AminoAcid> partitionedGraph = ProteinGraphFactory.Partitioned.fromMCL(graph,
                         MarkovClusteringAlgorithm.DEFAULT_EXPAND_FACTOR,
                         i);
 
