@@ -58,7 +58,7 @@ public class FileUtils {
         }
     }
 
-    private static void ensureDirectoriesExist(Path path) {
+    public static void ensureDirectoriesExist(Path path) {
         if(Files.isDirectory(path)) {
             throw new IllegalArgumentException(path.toFile().getAbsolutePath() + " is no regular file - cannot process");
         }
