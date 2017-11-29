@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.contacts.ContactsConstants;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class A04_CreateTMAlignScript {
@@ -22,10 +23,12 @@ public class A04_CreateTMAlignScript {
                 .filter(path -> !Files.isDirectory(path))
                 .filter(path -> path.toFile().getName().startsWith(pdbId) && path.toFile().getName().endsWith(".pdb") && path.toFile().getName().contains("_model"))
                 .map(model -> handlePair(target, model))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator()));
     }
 
-    private static String handlePair(Path target, Path model) {
+    private static Optional<String> handlePair(Path target, Path model) {
         String modelName = model.toFile().getName().split("\\.")[0];
         System.out.println(modelName);
 
@@ -37,7 +40,12 @@ public class A04_CreateTMAlignScript {
 
         ContactsConstants.ensureDirectoriesExist(out);
 
-        return composeTMAlignCall(target, model, out);
+        // tmalign output file already exists - do not do anything
+        if(Files.exists(out)) {
+            return Optional.empty();
+        }
+
+        return Optional.of(composeTMAlignCall(target, model, out));
     }
 
     private static String composeTMAlignCall(Path target, Path model, Path out) {

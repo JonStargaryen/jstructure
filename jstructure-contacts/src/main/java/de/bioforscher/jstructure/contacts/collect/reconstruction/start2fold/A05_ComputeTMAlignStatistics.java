@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.contacts.ContactsConstants;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,7 +18,7 @@ public class A05_ComputeTMAlignStatistics {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "pdbId,mode,mapId,modelId,contacts,peraa,rmsd,tmscore" + System.lineSeparator(),
+                        "pdbId,strategy,scheme,mapId,modelId,contacts,peraa,rmsd,tmscore" + System.lineSeparator(),
                         ""));
 
         ContactsConstants.write(ContactsConstants.START2FOLD_DIRECTORY.resolve("reconstruction-performance.csv"),
@@ -29,16 +28,17 @@ public class A05_ComputeTMAlignStatistics {
     private static Optional<String> handleResultFile(Path tmalignFile) {
         String filename = tmalignFile.toFile().getName();
         String pdbId = filename.split("_")[0];
-        String mode = tmalignFile.getParent().toFile().getName().split("-")[1];
+        String strategy = tmalignFile.getParent().toFile().getName().split("-")[1];
+        String scheme = tmalignFile.getParent().toFile().getName().split("-")[2];
         String mapId = "1";
         Path contactMapPath;
-        if(mode.equals("naive")) {
-            mapId = tmalignFile.getParent().toFile().getName().split("-")[2];
+        if(strategy.equals("early")) {
             contactMapPath = ContactsConstants.START2FOLD_DIRECTORY.resolve("maps")
-                    .resolve(pdbId + "_A-naive-" + mapId + ".rr");
+                    .resolve(pdbId + "_A-early-" + scheme + ".rr");
         } else {
+            mapId = tmalignFile.getParent().toFile().getName().split("-")[3];
             contactMapPath = ContactsConstants.START2FOLD_DIRECTORY.resolve("maps")
-                    .resolve(pdbId + "_A-early-" + mode + ".rr");
+                    .resolve(pdbId + "_A-sampled-" + scheme + "-" + mapId + ".rr");
         }
         String modelId = tmalignFile.toFile().getName().split("model")[1].split("\\.")[0];
         int numberOfContacts;
@@ -53,32 +53,20 @@ public class A05_ComputeTMAlignStatistics {
                     .getAsInt();
         }
 
-        double rmsd = -1.0;
-        double tmscore = -1.0;
-        List<String> lines;
-        try(Stream<String> stream = ContactsConstants.lines(tmalignFile)) {
-            lines = stream.collect(Collectors.toList());
-        }
-        for(String line : lines) {
-            if(line.startsWith("Aligned length=")) {
-                rmsd = Double.valueOf(line.split("RMSD=")[1].trim().split(",")[0].trim());
-            }
-            if(line.startsWith("TM-score=")) {
-                tmscore = Double.valueOf(line.split("TM-score=")[1].trim().split("\\(")[0].trim());
-            }
-        }
-
-        if(rmsd == -1.0 || tmscore == -1.0) {
+        try {
+            ContactsConstants.TMAlignResult tmAlignResult = ContactsConstants.parseTMAlignResultFile(tmalignFile);
+            return Optional.of(pdbId + "," +
+                    strategy + "," +
+                    scheme + "," +
+                    mapId + "," +
+                    modelId + "," +
+                    numberOfContacts + "," +
+                    StandardFormat.format(numberOfContacts / (double) numberOfResidues) + "," +
+                    tmAlignResult.getRmsd() + "," +
+                    tmAlignResult.getTmscore());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return Optional.empty();
         }
-
-        return Optional.of(pdbId + "," +
-                mode + "," +
-                mapId + "," +
-                modelId + "," +
-                numberOfContacts + "," +
-                StandardFormat.format(numberOfContacts / (double) numberOfResidues) + "," +
-                rmsd + "," +
-                tmscore);
     }
 }

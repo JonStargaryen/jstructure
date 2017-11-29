@@ -10,6 +10,10 @@ import java.nio.file.Paths;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
+/**
+ * FIXME: CONFOLD/CNS cannot handle long directory names - update script to write stuff to tmp directory and copy from there once finished
+ */
+@Deprecated
 public class A03_CreateConfoldScript {
     private static final Path DIRECTORY = ContactsConstants.START2FOLD_DIRECTORY;
 

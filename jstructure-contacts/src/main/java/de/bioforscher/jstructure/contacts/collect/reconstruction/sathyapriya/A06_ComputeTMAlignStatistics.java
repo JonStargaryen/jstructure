@@ -5,7 +5,6 @@ import de.bioforscher.jstructure.contacts.ContactsConstants;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,33 +53,20 @@ public class A06_ComputeTMAlignStatistics {
                     .getAsInt();
         }
 
-        double rmsd = -1.0;
-        double tmscore = -1.0;
-        List<String> lines;
-        try(Stream<String> stream = ContactsConstants.lines(tmalignFile)) {
-            lines = stream.collect(Collectors.toList());
-        }
-        for(String line : lines) {
-            if(line.startsWith("Aligned length=")) {
-                rmsd = Double.valueOf(line.split("RMSD=")[1].trim().split(",")[0].trim());
-            }
-            if(line.startsWith("TM-score=")) {
-                tmscore = Double.valueOf(line.split("TM-score=")[1].trim().split("\\(")[0].trim());
-            }
-        }
-
-        if(rmsd == -1.0 || tmscore == -1.0) {
+        try {
+            ContactsConstants.TMAlignResult tmAlignResult = ContactsConstants.parseTMAlignResultFile(tmalignFile);
+            return Optional.of(pdbId + "," +
+                    sampling + "," +
+                    mode + "," +
+                    mapId + "," +
+                    modelId + "," +
+                    numberOfContacts + "," +
+                    StandardFormat.format(numberOfContacts / (double) numberOfResidues) + "," +
+                    tmAlignResult.getRmsd() + "," +
+                    tmAlignResult.getTmscore());
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return Optional.empty();
         }
-
-        return Optional.of(pdbId + "," +
-                sampling + "," +
-                mode + "," +
-                mapId + "," +
-                modelId + "," +
-                numberOfContacts + "," +
-                StandardFormat.format(numberOfContacts / (double) numberOfResidues) + "," +
-                rmsd + "," +
-                tmscore);
     }
 }
