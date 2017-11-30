@@ -17,54 +17,107 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class A02_DetermineAverageInteractionDistance {
-    private static final Logger logger = LoggerFactory.getLogger(A02_DetermineAverageInteractionDistance.class);
+public class A02_DetermineInteractionDistances {
+    private static final Logger logger = LoggerFactory.getLogger(A02_DetermineInteractionDistances.class);
 
     public static void main(String[] args) {
         Map<? extends Class<? extends PLIPInteraction>, List<PLIPInteraction>> map = ContactsConstants.lines(ContactsConstants.RECONSTRUCTION_DIRECTORY.resolve("ids.list"))
-                .flatMap(A02_DetermineAverageInteractionDistance::handlePdbId)
+                .flatMap(A02_DetermineInteractionDistances::handlePdbId)
                 .collect(Collectors.groupingBy(PLIPInteraction::getClass));
 
+        System.out.println("average");
         map.entrySet()
                 .stream()
                 .map(entry -> entry.getKey().getSimpleName() + " " + StandardFormat.format(entry.getValue()
                         .stream()
-                        .mapToDouble(A02_DetermineAverageInteractionDistance::calculateDistance)
+                        .mapToDouble(A02_DetermineInteractionDistances::calculateDistance)
                         .average()
                         .getAsDouble()))
                 .forEach(System.out::println);
 
-        System.out.println("OverallAverage " + StandardFormat.format(map.values()
+        System.out.println("Generic " + StandardFormat.format(map.values()
                 .stream()
                 .flatMap(Collection::stream)
-                .mapToDouble(A02_DetermineAverageInteractionDistance::calculateDistance)
+                .mapToDouble(A02_DetermineInteractionDistances::calculateDistance)
                 .average()
                 .getAsDouble()));
 
         /*
+        Averages:
         SaltBridge 6.8865
         WaterBridge 6.5379
-        PiCationInteraction 5.8719
         HydrophobicInteraction 5.9347
         PiStacking 4.7513
+        PiCationInteraction 5.8719
         HydrogenBond 5.8208
+        Generic 5.9308
+
+        performance:
+        - degenerates performance compared to max values
          */
 
+        System.out.println();
+        System.out.println("max");
         map.entrySet()
                 .stream()
                 .map(entry -> entry.getKey().getSimpleName() + " " + StandardFormat.format(entry.getValue()
                         .stream()
-                        .mapToDouble(A02_DetermineAverageInteractionDistance::calculateDistance)
+                        .mapToDouble(A02_DetermineInteractionDistances::calculateDistance)
                         .max()
                         .getAsDouble()))
                 .forEach(System.out::println);
 
-        System.out.println("OverallAverage " + StandardFormat.format(map.values()
+        System.out.println("Generic " + StandardFormat.format(map.values()
                 .stream()
                 .flatMap(Collection::stream)
-                .mapToDouble(A02_DetermineAverageInteractionDistance::calculateDistance)
+                .mapToDouble(A02_DetermineInteractionDistances::calculateDistance)
                 .max()
                 .getAsDouble()));
+
+        /*
+        Maximum values:
+        SaltBridge 10.8307
+        WaterBridge 12.1106
+        HydrophobicInteraction 11.9862
+        PiStacking 5.0976
+        PiCationInteraction 7.393
+        HydrogenBond 11.5943
+        Generic 12.1106
+
+        performance:
+        -
+        -
+         */
+
+        System.out.println();
+        System.out.println("backbone interactions");
+        map.entrySet()
+                .stream()
+                .map(entry -> entry.getKey().getSimpleName() + " " + StandardFormat.format(entry.getValue()
+                        .stream()
+                        .filter(PLIPInteraction::isBackboneInteraction)
+                        .mapToDouble(A02_DetermineInteractionDistances::calculateDistance)
+                        .max()
+                        .orElse(-1)))
+                .forEach(System.out::println);
+
+        System.out.println("Generic " + StandardFormat.format(map.values()
+                .stream()
+                .flatMap(Collection::stream)
+                .mapToDouble(A02_DetermineInteractionDistances::calculateDistance)
+                .max()
+                .getAsDouble()));
+
+        /*
+        Backbone interactions:
+        SaltBridge -1
+        WaterBridge 8.8893
+        HydrophobicInteraction -1
+        PiStacking -1
+        PiCationInteraction -1
+        HydrogenBond 10.0201
+        Generic 12.1106
+        */
     }
 
     private static double calculateDistance(PLIPInteraction plipInteraction) {

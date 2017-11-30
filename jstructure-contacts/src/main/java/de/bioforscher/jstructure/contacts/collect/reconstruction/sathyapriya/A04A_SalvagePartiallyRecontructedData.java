@@ -47,7 +47,10 @@ public class A04A_SalvagePartiallyRecontructedData {
                     String pdbId = jobName.split("-")[0];
                     String mode = jobName.split("-")[1];
                     String mapId = jobName.split("-")[2];
-                    return "/home/bittrich/programs/confold_v1.0/confold.pl -seq /home/bittrich/git/phd_sb_repo/data/reconstruction/maps/" + pdbId + "_A.fasta -rr /home/bittrich/git/phd_sb_repo/data/reconstruction/maps/" + samplingName + "/" + pdbId + "_A-" + mode + "-" + mapId + ".rr -o /home/bittrich/git/phd_sb_repo/data/reconstruction/reconstructions/" + samplingName + "/" + jobName + "/";
+                    return "/home/bittrich/programs/confold_v1.0/confold.pl " +
+                            "-seq /home/bittrich/git/phd_sb_repo/data/reconstruction/maps/" + pdbId + "_A.fasta " +
+                            "-rr /home/bittrich/git/phd_sb_repo/data/reconstruction/maps/" + samplingName + "/" + pdbId + "_A-" + mode + "-" + mapId + ".rr " +
+                            "-o /home/bittrich/git/phd_sb_repo/data/reconstruction/reconstructions/" + samplingName + "/" + jobName + "/";
                 })
                 .collect(Collectors.joining(System.lineSeparator()));
     }
@@ -64,9 +67,8 @@ public class A04A_SalvagePartiallyRecontructedData {
 
     private static void deleteOldPlipReconstructions() {
         ContactsConstants.list(BASE_DIRECTORY)
-                .filter(path -> !path.toFile().getName().equals("p100"))
                 .flatMap(ContactsConstants::list)
-                .filter(path -> path.toFile().getName().contains("-plip-"))
+                .filter(path -> path.toFile().getName().contains("-plip"))
                 .forEach(A04A_SalvagePartiallyRecontructedData::deleteDirectoryRecursively);
     }
 
