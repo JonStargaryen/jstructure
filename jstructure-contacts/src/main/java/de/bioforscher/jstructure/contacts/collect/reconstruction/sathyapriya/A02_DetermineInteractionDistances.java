@@ -85,8 +85,7 @@ public class A02_DetermineInteractionDistances {
         Generic 12.1106
 
         performance:
-        -
-        -
+        - less contacts, lower performance
          */
 
         System.out.println();
@@ -117,6 +116,7 @@ public class A02_DetermineInteractionDistances {
         PiCationInteraction -1
         HydrogenBond 10.0201
         Generic 12.1106
+        - not applicable as additional constraints
         */
     }
 

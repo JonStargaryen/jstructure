@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.contacts.collect.reconstruction.sathyapriya;
 
 import de.bioforscher.jstructure.contacts.ContactsConstants;
-import de.bioforscher.jstructure.contacts.collect.reconstruction.ContactMapCreator;
+import de.bioforscher.jstructure.contacts.collect.reconstruction.ReconstructionContactMapCreator;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -26,6 +26,6 @@ public class A03_CreateContactsMaps {
                 pdbId,
                 structure.chains().count());
 
-        new ContactMapCreator(chain, DIRECTORY);
+        new ReconstructionContactMapCreator(chain, DIRECTORY);
     }
 }

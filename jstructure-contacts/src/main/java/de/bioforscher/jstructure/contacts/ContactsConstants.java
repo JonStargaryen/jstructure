@@ -1,10 +1,15 @@
 package de.bioforscher.jstructure.contacts;
 
+import de.bioforscher.jstructure.mathematics.Pair;
+import de.bioforscher.jstructure.mathematics.SetOperations;
+import de.bioforscher.jstructure.mathematics.graph.Edge;
 import de.bioforscher.jstructure.model.structure.Atom;
+import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.testutil.FileUtils;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,6 +27,32 @@ public class ContactsConstants extends FileUtils {
 
     public static TMAlignResult parseTMAlignResultFile(Path tmAlignPath) {
         return new TMAlignResult(tmAlignPath);
+    }
+
+    private static final double BETA_THRESHOLD = 8.0;
+    public static List<Edge<AminoAcid>> determineNaiveInteractions(List<AminoAcid> aminoAcids) {
+        List<Edge<AminoAcid>> naiveEdges = new ArrayList<>();
+        List<Pair<AminoAcid, AminoAcid>> pairs = SetOperations.uniquePairsOf(aminoAcids).collect(Collectors.toList());
+
+        for(Pair<AminoAcid, AminoAcid> pair : pairs) {
+            AminoAcid aminoAcid1 = pair.getLeft();
+            AminoAcid aminoAcid2 = pair.getRight();
+
+            if(!areNonCovalentGroups(aminoAcid1, aminoAcid2)) {
+                continue;
+            }
+
+            // conventional interaction criterion
+            if(ContactsConstants.getBetaCarbon(aminoAcid1).calculate().distance(ContactsConstants.getBetaCarbon(aminoAcid2)) < BETA_THRESHOLD) {
+                naiveEdges.add(new Edge<>(aminoAcid1, aminoAcid2, BETA_THRESHOLD));
+            }
+        }
+
+        return naiveEdges;
+    }
+
+    public static boolean areNonCovalentGroups(Group group1, Group group2) {
+        return Math.abs(group1.getResidueIndex() - group2.getResidueIndex()) > 1;
     }
 
     public static class TMAlignResult {

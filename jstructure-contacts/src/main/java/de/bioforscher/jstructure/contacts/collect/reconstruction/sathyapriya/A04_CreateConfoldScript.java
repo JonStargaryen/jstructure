@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.contacts.collect.reconstruction.sathyapriya;
 
 import de.bioforscher.jstructure.contacts.ContactsConstants;
-import de.bioforscher.jstructure.contacts.collect.reconstruction.ContactMapCreator;
+import de.bioforscher.jstructure.contacts.collect.reconstruction.ReconstructionContactMapCreator;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -21,7 +21,7 @@ public class A04_CreateConfoldScript {
 
         ContactsConstants.write(DIRECTORY.resolve("full-reconstruction.sh"), fullJobOutput);
 
-        for(ContactMapCreator.Sampling sampling : ContactMapCreator.Sampling.values()) {
+        for(ReconstructionContactMapCreator.Sampling sampling : ReconstructionContactMapCreator.Sampling.values()) {
             String sampledJobOutput = ContactsConstants.lines(ContactsConstants.RECONSTRUCTION_DIRECTORY.resolve("ids.list"))
                     .map(pdbId -> handlePdbIdForSampledJob(pdbId, sampling.getFraction()))
                     .collect(Collectors.joining(System.lineSeparator()));

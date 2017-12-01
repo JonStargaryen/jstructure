@@ -101,6 +101,10 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return residueIdentifier;
     }
 
+    public void setResidueIdentifier(ResidueIdentifier residueIdentifier) {
+        this.residueIdentifier = residueIdentifier;
+    }
+
     /**
      * Returns the index of this group in the parent chain. This is the plain representation of the ordering in the
      * underlying data structure. For identifiers in the PDB format use {@link #getResidueIdentifier()}.

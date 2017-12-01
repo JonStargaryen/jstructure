@@ -2,8 +2,6 @@ package de.bioforscher.jstructure.contacts.collect.reconstruction;
 
 import de.bioforscher.jstructure.contacts.ContactsConstants;
 import de.bioforscher.jstructure.feature.interactions.*;
-import de.bioforscher.jstructure.mathematics.Pair;
-import de.bioforscher.jstructure.mathematics.SetOperations;
 import de.bioforscher.jstructure.mathematics.graph.Edge;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -18,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ContactMapCreator {
-    private static final Logger logger = LoggerFactory.getLogger(ContactMapCreator.class);
+public class ReconstructionContactMapCreator {
+    private static final Logger logger = LoggerFactory.getLogger(ReconstructionContactMapCreator.class);
 
     public enum Sampling {
         p10(10),
@@ -64,7 +62,7 @@ public class ContactMapCreator {
         }
     }
 
-    public ContactMapCreator(Chain chain, Path contactMapDirectory, Path start2foldPath) {
+    public ReconstructionContactMapCreator(Chain chain, Path contactMapDirectory, Path start2foldPath) {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
         List<Group> earlyFoldingResidues = ContactsConstants.lines(start2foldPath)
                 .filter(line -> !line.startsWith("#"))
@@ -81,14 +79,18 @@ public class ContactMapCreator {
                 .getInteractions()
                 .stream()
                 // ignore covalently bound groups
-                .filter(plipInteraction -> areNonCovalentGroups(plipInteraction.getPartner1(), plipInteraction.getPartner2()))
+                .filter(plipInteraction -> ContactsConstants.areNonCovalentGroups(plipInteraction.getPartner1(), plipInteraction.getPartner2()))
                 .map(plipInteraction -> new Edge<>(((AminoAcid) plipInteraction.getPartner1()), ((AminoAcid) plipInteraction.getPartner2()), determinePlipInteractionDistanceByMaximum(plipInteraction)))
                 .collect(Collectors.toList());
         List<Edge<AminoAcid>> earlyFoldingPlipEdges = plipEdges.stream()
                 .filter(edge -> isEarlyFoldingEdge(earlyFoldingResidues, edge))
                 .collect(Collectors.toList());
+        List<Edge<AminoAcid>> lateFoldingPlipEdges = plipEdges.stream()
+                .filter(edge -> !isEarlyFoldingEdge(earlyFoldingResidues, edge))
+                .collect(Collectors.toList());
 
         int earlyFoldingPlipEdgeCount = earlyFoldingPlipEdges.size();
+        int lateFoldingPlipEdgeCount = lateFoldingPlipEdges.size();
 
         String id = chain.getChainIdentifier().getFullName();
         String sequence = chain.getAminoAcidSequence();
@@ -98,40 +100,64 @@ public class ContactMapCreator {
 
         ContactsConstants.write(contactMapDirectory.resolve(id + "-early-plip.rr"),
                 composeRRString(earlyFoldingPlipEdges, sequence));
+        ContactsConstants.write(contactMapDirectory.resolve(id + "-late-plip.rr"),
+                composeRRString(lateFoldingPlipEdges, sequence));
         // create 10 sampled maps with an equal number of contacts
         for(int i = 1; i < 11; i++) {
             Collections.shuffle(plipEdges);
 
-            List<Edge<AminoAcid>> sampledPlipEdges = plipEdges.subList(0, earlyFoldingPlipEdgeCount);
+            List<Edge<AminoAcid>> sampledEarlyPlipEdges = plipEdges.subList(0, earlyFoldingPlipEdgeCount);
             ContactsConstants.write(contactMapDirectory.resolve(id + "-sampled-plip-" + i + ".rr"),
-                    composeRRString(sampledPlipEdges, sequence));
+                    composeRRString(sampledEarlyPlipEdges, sequence));
 
-            List<Edge<AminoAcid>> selectedPlipEdges = selectEdges(plipEdges, aminoAcids, earlyFoldingPlipEdgeCount);
+            List<Edge<AminoAcid>> selectedEarlyPlipEdges = selectEdges(plipEdges, aminoAcids, earlyFoldingPlipEdgeCount);
             ContactsConstants.write(contactMapDirectory.resolve(id + "-selected-plip-" + i + ".rr"),
-                    composeRRString(selectedPlipEdges, sequence));
+                    composeRRString(selectedEarlyPlipEdges, sequence));
+
+            List<Edge<AminoAcid>> sampledLatePlipEdges = plipEdges.subList(0, lateFoldingPlipEdgeCount);
+            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_sampled-plip-" + i + ".rr"),
+                    composeRRString(sampledLatePlipEdges, sequence));
+
+            List<Edge<AminoAcid>> selectedLatePlipEdges = selectEdges(plipEdges, aminoAcids, lateFoldingPlipEdgeCount);
+            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_selected-plip-" + i + ".rr"),
+                    composeRRString(selectedLatePlipEdges, sequence));
         }
 
         // handle conventional interaction scheme
-        List<Edge<AminoAcid>> conventionalEdges = determineNaiveInteractions(chain.aminoAcids().collect(Collectors.toList()));
+        List<Edge<AminoAcid>> conventionalEdges = ContactsConstants.determineNaiveInteractions(chain.aminoAcids().collect(Collectors.toList()));
         List<Edge<AminoAcid>> earlyFoldingConventionalEdges = conventionalEdges.stream()
                 .filter(edge -> isEarlyFoldingEdge(earlyFoldingResidues, edge))
                 .collect(Collectors.toList());
+        List<Edge<AminoAcid>> lateFoldingConventionalEdges = conventionalEdges.stream()
+                .filter(edge -> !isEarlyFoldingEdge(earlyFoldingResidues, edge))
+                .collect(Collectors.toList());
 
         int earlyFoldingConventionalEdgeCount = earlyFoldingConventionalEdges.size();
+        int lateFoldingConventionalEdgeCount = lateFoldingConventionalEdges.size();
 
         ContactsConstants.write(contactMapDirectory.resolve(id + "-early-conventional.rr"),
                 composeRRString(earlyFoldingConventionalEdges, sequence));
+        ContactsConstants.write(contactMapDirectory.resolve(id + "-late-conventional.rr"),
+                composeRRString(lateFoldingConventionalEdges, sequence));
         // create 10 sampled maps with an equal number of contacts
         for(int i = 1; i < 11; i++) {
             Collections.shuffle(conventionalEdges);
 
-            List<Edge<AminoAcid>> sampledConventionalEdges = conventionalEdges.subList(0, earlyFoldingConventionalEdgeCount);
+            List<Edge<AminoAcid>> sampledEarlyConventionalEdges = conventionalEdges.subList(0, earlyFoldingConventionalEdgeCount);
             ContactsConstants.write(contactMapDirectory.resolve(id + "-sampled-conventional-" + i + ".rr"),
-                    composeRRString(sampledConventionalEdges, sequence));
+                    composeRRString(sampledEarlyConventionalEdges, sequence));
 
-            List<Edge<AminoAcid>> selectedConventionalEdges = selectEdges(conventionalEdges, aminoAcids, earlyFoldingConventionalEdgeCount);
+            List<Edge<AminoAcid>> selectedEarlyConventionalEdges = selectEdges(conventionalEdges, aminoAcids, earlyFoldingConventionalEdgeCount);
             ContactsConstants.write(contactMapDirectory.resolve(id + "-selected-conventional-" + i + ".rr"),
-                    composeRRString(selectedConventionalEdges, sequence));
+                    composeRRString(selectedEarlyConventionalEdges, sequence));
+
+            List<Edge<AminoAcid>> sampledLateConventionalEdges = conventionalEdges.subList(0, lateFoldingConventionalEdgeCount);
+            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_sampled-conventional-" + i + ".rr"),
+                    composeRRString(sampledLateConventionalEdges, sequence));
+
+            List<Edge<AminoAcid>> selectedLateConventionalEdges = selectEdges(conventionalEdges, aminoAcids, lateFoldingConventionalEdgeCount);
+            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_selected-conventional-" + i + ".rr"),
+                    composeRRString(selectedLateConventionalEdges, sequence));
         }
     }
 
@@ -154,15 +180,15 @@ public class ContactMapCreator {
         return selectedEdges;
     }
 
-    public ContactMapCreator(Chain chain, Path contactMapDirectory) {
+    public ReconstructionContactMapCreator(Chain chain, Path contactMapDirectory) {
         List<Edge<AminoAcid>> plipEdges = chain.getFeature(PLIPInteractionContainer.class)
                 .getInteractions()
                 .stream()
                 // ignore covalently bound groups
-                .filter(plipInteraction -> areNonCovalentGroups(plipInteraction.getPartner1(), plipInteraction.getPartner2()))
+                .filter(plipInteraction -> ContactsConstants.areNonCovalentGroups(plipInteraction.getPartner1(), plipInteraction.getPartner2()))
                 .map(plipInteraction -> new Edge<>(((AminoAcid) plipInteraction.getPartner1()), ((AminoAcid) plipInteraction.getPartner2()), determinePlipInteractionDistanceByMaximum(plipInteraction)))
                 .collect(Collectors.toList());
-        List<Edge<AminoAcid>> naiveEdges = determineNaiveInteractions(chain.aminoAcids().collect(Collectors.toList()));
+        List<Edge<AminoAcid>> naiveEdges = ContactsConstants.determineNaiveInteractions(chain.aminoAcids().collect(Collectors.toList()));
 //        List<Edge<AminoAcid>> enrichedEdges = enrichNaiveInteractions(naiveEdges, plipEdges);
 
         String id = chain.getChainIdentifier().getFullName();
@@ -241,29 +267,7 @@ public class ContactMapCreator {
     }
 
     private static final int SAMPLING_SIZE = 10;
-    private static final double ALPHA_THRESHOLD = 9.0;
     private static final double BETA_THRESHOLD = 8.0;
-
-    private List<Edge<AminoAcid>> determineNaiveInteractions(List<AminoAcid> aminoAcids) {
-        List<Edge<AminoAcid>> naiveEdges = new ArrayList<>();
-        List<Pair<AminoAcid, AminoAcid>> pairs = SetOperations.uniquePairsOf(aminoAcids).collect(Collectors.toList());
-
-        for(Pair<AminoAcid, AminoAcid> pair : pairs) {
-            AminoAcid aminoAcid1 = pair.getLeft();
-            AminoAcid aminoAcid2 = pair.getRight();
-
-            if(!areNonCovalentGroups(aminoAcid1, aminoAcid2)) {
-                continue;
-            }
-
-            // conventional interaction criterion
-            if(ContactsConstants.getBetaCarbon(aminoAcid1).calculate().distance(ContactsConstants.getBetaCarbon(aminoAcid2)) < BETA_THRESHOLD) {
-                naiveEdges.add(new Edge<>(aminoAcid1, aminoAcid2, BETA_THRESHOLD));
-            }
-        }
-
-        return naiveEdges;
-    }
 
     private double determinePlipInteractionDistanceByMaximum(PLIPInteraction plipInteraction) {
         // max values - TODO move to nr-PDB dataset?
@@ -309,10 +313,5 @@ public class ContactMapCreator {
 
     private boolean isEarlyFoldingInteraction(PLIPInteraction plipInteraction, List<Group> earlyFoldingResidues) {
         return earlyFoldingResidues.contains(plipInteraction.getPartner1()) || earlyFoldingResidues.contains(plipInteraction.getPartner2());
-    }
-
-
-    private boolean areNonCovalentGroups(Group group1, Group group2) {
-        return Math.abs(group1.getResidueIndex() - group2.getResidueIndex()) > 1;
     }
 }

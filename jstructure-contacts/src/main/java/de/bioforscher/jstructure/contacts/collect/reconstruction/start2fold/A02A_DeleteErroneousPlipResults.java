@@ -16,23 +16,32 @@ import java.util.Comparator;
 @Deprecated
 public class A02A_DeleteErroneousPlipResults {
     public static void main(String[] args) {
-        // delete contact maps
-        ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("maps"))
-                .map(Path::toFile)
-                .filter(file -> file.getName().contains("-plip"))
-                .forEach(File::delete);
+//        deleteContactMaps();
 
-        // delete reconstructions
-        ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("reconstructions"))
-                .filter(path -> path.toFile().getName().contains("-plip"))
-                .forEach(A02A_DeleteErroneousPlipResults::deleteDirectoryRecursively);
+//        deleteReconstructions();
 
-        // delete tm results
+//        deleteTMResults();
+    }
+
+    private static void deleteTMResults() {
         ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("tmalign"))
                 .filter(path -> path.toFile().getName().contains("-plip"))
                 .forEach(path -> ContactsConstants.list(path)
                         .map(Path::toFile)
                         .forEach(File::delete));
+    }
+
+    private static void deleteReconstructions() {
+        ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("reconstructions"))
+                .filter(path -> path.toFile().getName().contains("-plip"))
+                .forEach(A02A_DeleteErroneousPlipResults::deleteDirectoryRecursively);
+    }
+
+    private static void deleteContactMaps() {
+        ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("maps"))
+                .map(Path::toFile)
+                .filter(file -> file.getName().contains("-plip"))
+                .forEach(File::delete);
     }
 
     private static void deleteDirectoryRecursively(Path path) {

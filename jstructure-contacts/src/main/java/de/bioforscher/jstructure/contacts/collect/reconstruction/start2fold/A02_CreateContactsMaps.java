@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.contacts.collect.reconstruction.start2fold;
 
 import de.bioforscher.jstructure.contacts.ContactsConstants;
-import de.bioforscher.jstructure.contacts.collect.reconstruction.ContactMapCreator;
+import de.bioforscher.jstructure.contacts.collect.reconstruction.ReconstructionContactMapCreator;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -42,6 +42,6 @@ public class A02_CreateContactsMaps {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("did not find file describing " + pdbId));
 
-        new ContactMapCreator(chain, DIRECTORY, start2foldPath);
+        new ReconstructionContactMapCreator(chain, DIRECTORY, start2foldPath);
     }
 }

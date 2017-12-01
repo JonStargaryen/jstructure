@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.contacts.collect.reconstruction.sathyapriya;
 
 import de.bioforscher.jstructure.contacts.ContactsConstants;
-import de.bioforscher.jstructure.contacts.collect.reconstruction.ContactMapCreator;
+import de.bioforscher.jstructure.contacts.collect.reconstruction.ReconstructionContactMapCreator;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +19,13 @@ public class A04A_SalvagePartiallyRecontructedData {
     public static void main(String[] args) {
 //        deleteOldPlipReconstructions();
 
-//        deletePartialResults();
+        deletePartialResults();
 
         createMissingConfoldScripts();
     }
 
     private static void createMissingConfoldScripts() {
-        for(ContactMapCreator.Sampling sampling : ContactMapCreator.Sampling.values()) {
+        for(ReconstructionContactMapCreator.Sampling sampling : ReconstructionContactMapCreator.Sampling.values()) {
             String samplingPercentage = sampling.name().substring(1);
 
             String output = createMissingConfoldScripts(sampling.name());
