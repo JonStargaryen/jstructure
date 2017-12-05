@@ -32,13 +32,14 @@ public class A05_ComputeTMAlignStatistics {
         String scheme = tmalignFile.getParent().toFile().getName().split("-")[2];
         String mapId = "1";
         Path contactMapPath;
-        if(strategy.equals("early")) {
+        System.out.println(pdbId + " > " + strategy + " > " + scheme + " > " + mapId);
+        if(strategy.equals("early") || strategy.equals("full") || strategy.equals("deleted") || strategy.equals("late")) {
             contactMapPath = ContactsConstants.START2FOLD_DIRECTORY.resolve("maps")
-                    .resolve(pdbId + "_A-early-" + scheme + ".rr");
+                    .resolve(pdbId + "_A-" + strategy + "-" + scheme + ".rr");
         } else {
             mapId = tmalignFile.getParent().toFile().getName().split("-")[3];
             contactMapPath = ContactsConstants.START2FOLD_DIRECTORY.resolve("maps")
-                    .resolve(pdbId + "_A-sampled-" + scheme + "-" + mapId + ".rr");
+                    .resolve(pdbId + "_A-" + strategy + "-" + scheme + "-" + mapId + ".rr");
         }
         String modelId = tmalignFile.toFile().getName().split("model")[1].split("\\.")[0];
         int numberOfContacts;

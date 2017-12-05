@@ -10,10 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReconstructionContactMapCreator {
@@ -98,30 +95,30 @@ public class ReconstructionContactMapCreator {
         ContactsConstants.write(contactMapDirectory.resolve(id + ".fasta"),
                 ">" + id + System.lineSeparator() + sequence);
 
-        ContactsConstants.write(contactMapDirectory.resolve(id + "-early-plip.rr"),
-                composeRRString(earlyFoldingPlipEdges, sequence));
-        ContactsConstants.write(contactMapDirectory.resolve(id + "-late-plip.rr"),
-                composeRRString(lateFoldingPlipEdges, sequence));
-        // create 10 sampled maps with an equal number of contacts
-        for(int i = 1; i < 11; i++) {
-            Collections.shuffle(plipEdges);
-
-            List<Edge<AminoAcid>> sampledEarlyPlipEdges = plipEdges.subList(0, earlyFoldingPlipEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-sampled-plip-" + i + ".rr"),
-                    composeRRString(sampledEarlyPlipEdges, sequence));
-
-            List<Edge<AminoAcid>> selectedEarlyPlipEdges = selectEdges(plipEdges, aminoAcids, earlyFoldingPlipEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-selected-plip-" + i + ".rr"),
-                    composeRRString(selectedEarlyPlipEdges, sequence));
-
-            List<Edge<AminoAcid>> sampledLatePlipEdges = plipEdges.subList(0, lateFoldingPlipEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_sampled-plip-" + i + ".rr"),
-                    composeRRString(sampledLatePlipEdges, sequence));
-
-            List<Edge<AminoAcid>> selectedLatePlipEdges = selectEdges(plipEdges, aminoAcids, lateFoldingPlipEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_selected-plip-" + i + ".rr"),
-                    composeRRString(selectedLatePlipEdges, sequence));
-        }
+//        ContactsConstants.write(contactMapDirectory.resolve(id + "-early-plip.rr"),
+//                composeRRString(earlyFoldingPlipEdges, sequence));
+//        ContactsConstants.write(contactMapDirectory.resolve(id + "-late-plip.rr"),
+//                composeRRString(lateFoldingPlipEdges, sequence));
+//        // create 10 sampled maps with an equal number of contacts
+//        for(int i = 1; i < 11; i++) {
+//            Collections.shuffle(plipEdges);
+//
+//            List<Edge<AminoAcid>> sampledEarlyPlipEdges = plipEdges.subList(0, earlyFoldingPlipEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-sampled-plip-" + i + ".rr"),
+//                    composeRRString(sampledEarlyPlipEdges, sequence));
+//
+//            List<Edge<AminoAcid>> selectedEarlyPlipEdges = selectEdges(plipEdges, aminoAcids, earlyFoldingPlipEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-selected-plip-" + i + ".rr"),
+//                    composeRRString(selectedEarlyPlipEdges, sequence));
+//
+//            List<Edge<AminoAcid>> sampledLatePlipEdges = plipEdges.subList(0, lateFoldingPlipEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_sampled-plip-" + i + ".rr"),
+//                    composeRRString(sampledLatePlipEdges, sequence));
+//
+//            List<Edge<AminoAcid>> selectedLatePlipEdges = selectEdges(plipEdges, aminoAcids, lateFoldingPlipEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_selected-plip-" + i + ".rr"),
+//                    composeRRString(selectedLatePlipEdges, sequence));
+//        }
 
         // handle conventional interaction scheme
         List<Edge<AminoAcid>> conventionalEdges = ContactsConstants.determineNaiveInteractions(chain.aminoAcids().collect(Collectors.toList()));
@@ -135,30 +132,66 @@ public class ReconstructionContactMapCreator {
         int earlyFoldingConventionalEdgeCount = earlyFoldingConventionalEdges.size();
         int lateFoldingConventionalEdgeCount = lateFoldingConventionalEdges.size();
 
-        ContactsConstants.write(contactMapDirectory.resolve(id + "-early-conventional.rr"),
-                composeRRString(earlyFoldingConventionalEdges, sequence));
-        ContactsConstants.write(contactMapDirectory.resolve(id + "-late-conventional.rr"),
-                composeRRString(lateFoldingConventionalEdges, sequence));
+        List<Edge<AminoAcid>> deleteHighestDegreeEdges = deleteNodesWithHighestDegree(conventionalEdges, aminoAcids, lateFoldingConventionalEdgeCount);
+
+        ContactsConstants.write(contactMapDirectory.resolve(id + "-full-conventional.rr"),
+                composeRRString(conventionalEdges, sequence));
+        ContactsConstants.write(contactMapDirectory.resolve(id + "-deleted-conventional.rr"),
+                composeRRString(deleteHighestDegreeEdges, sequence));
+//        ContactsConstants.write(contactMapDirectory.resolve(id + "-early-conventional.rr"),
+//                composeRRString(earlyFoldingConventionalEdges, sequence));
+//        ContactsConstants.write(contactMapDirectory.resolve(id + "-late-conventional.rr"),
+//                composeRRString(lateFoldingConventionalEdges, sequence));
         // create 10 sampled maps with an equal number of contacts
-        for(int i = 1; i < 11; i++) {
-            Collections.shuffle(conventionalEdges);
+//        for(int i = 1; i < 11; i++) {
+//            Collections.shuffle(conventionalEdges);
+//
+//            List<Edge<AminoAcid>> sampledEarlyConventionalEdges = conventionalEdges.subList(0, earlyFoldingConventionalEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-sampled-conventional-" + i + ".rr"),
+//                    composeRRString(sampledEarlyConventionalEdges, sequence));
+//
+//            List<Edge<AminoAcid>> selectedEarlyConventionalEdges = selectEdges(conventionalEdges, aminoAcids, earlyFoldingConventionalEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-selected-conventional-" + i + ".rr"),
+//                    composeRRString(selectedEarlyConventionalEdges, sequence));
+//
+//            List<Edge<AminoAcid>> sampledLateConventionalEdges = conventionalEdges.subList(0, lateFoldingConventionalEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_sampled-conventional-" + i + ".rr"),
+//                    composeRRString(sampledLateConventionalEdges, sequence));
+//
+//            List<Edge<AminoAcid>> selectedLateConventionalEdges = selectEdges(conventionalEdges, aminoAcids, lateFoldingConventionalEdgeCount);
+//            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_selected-conventional-" + i + ".rr"),
+//                    composeRRString(selectedLateConventionalEdges, sequence));
+//        }
+    }
 
-            List<Edge<AminoAcid>> sampledEarlyConventionalEdges = conventionalEdges.subList(0, earlyFoldingConventionalEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-sampled-conventional-" + i + ".rr"),
-                    composeRRString(sampledEarlyConventionalEdges, sequence));
+    private List<Edge<AminoAcid>> deleteNodesWithHighestDegree(List<Edge<AminoAcid>> edges, List<AminoAcid> aminoAcids, int count) {
+        // sort amino acids by their degree
+        aminoAcids.sort(Comparator.comparingInt(aminoAcid -> (int) edges.stream()
+                .filter(edge -> edge.getLeft().equals(aminoAcid) || edge.getRight().equals(aminoAcid))
+                .count()).reversed());
 
-            List<Edge<AminoAcid>> selectedEarlyConventionalEdges = selectEdges(conventionalEdges, aminoAcids, earlyFoldingConventionalEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-selected-conventional-" + i + ".rr"),
-                    composeRRString(selectedEarlyConventionalEdges, sequence));
+        List<Edge<AminoAcid>> edgesToIgnore = new ArrayList<>();
+        for(AminoAcid aminoAcid : aminoAcids) {
+            logger.info("deleting node: {}",
+                    aminoAcid);
 
-            List<Edge<AminoAcid>> sampledLateConventionalEdges = conventionalEdges.subList(0, lateFoldingConventionalEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_sampled-conventional-" + i + ".rr"),
-                    composeRRString(sampledLateConventionalEdges, sequence));
+            edges.stream()
+                    .filter(edge -> edge.getLeft().equals(aminoAcid) || edge.getRight().equals(aminoAcid))
+                    .forEach(edgesToIgnore::add);
 
-            List<Edge<AminoAcid>> selectedLateConventionalEdges = selectEdges(conventionalEdges, aminoAcids, lateFoldingConventionalEdgeCount);
-            ContactsConstants.write(contactMapDirectory.resolve(id + "-late_selected-conventional-" + i + ".rr"),
-                    composeRRString(selectedLateConventionalEdges, sequence));
+            if(edgesToIgnore.size() > count) {
+                break;
+            }
         }
+
+        logger.info("ignoring edges:{}{}",
+                System.lineSeparator(),
+                edgesToIgnore);
+
+        return edges.stream()
+                .filter(edge -> !edgesToIgnore.contains(edge))
+                .peek(System.out::println)
+                .collect(Collectors.toList());
     }
 
     private List<Edge<AminoAcid>> selectEdges(List<Edge<AminoAcid>> edges, List<AminoAcid> aminoAcids, int count) {

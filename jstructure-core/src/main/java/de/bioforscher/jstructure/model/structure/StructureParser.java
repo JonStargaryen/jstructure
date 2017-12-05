@@ -213,31 +213,14 @@ public class StructureParser {
         if(line.startsWith(Atom.ATOM_PREFIX) || line.startsWith(Atom.HETATM_PREFIX)) {
             String atomName = line.substring(12, 16).trim();
             String pdbName = line.substring(17, 20).trim();
-//            String elementString = "";
-//            try {
-//                elementString = line.substring(76, 78).trim();
-//            } catch (StringIndexOutOfBoundsException e) {
-//                // happens for malformed files like from CASP
-//                logger.debug("missing element definition in line:{}{}",
-//                        System.lineSeparator(),
-//                        line);
-//            }
-//            if(elementString.isEmpty()) {
-//                if(strictMode) {
-//                    throw new ParsingException("PDB parsing failed for line:" + System.lineSeparator() + "'" + line + "'");
-//                } else {
-//                    logger.debug("PDB parsing failed for line:{}'{}'", System.lineSeparator(), line);
-////                    elementString = Element.X.name();
-            String elementString = atomName.substring(0,  1);
+//            String elementString = atomName.substring(0,  1);
 
             // hydrogen atoms start with a digit: take 2nd position in that case
-            if(NUMBERS.contains(elementString)) {
-                elementString = atomName.substring(1, 2);
-            }
-//                }
+//            if(NUMBERS.contains(elementString)) {
+//                elementString = atomName.substring(1, 2);
 //            }
 
-            Element element = Element.valueOfIgnoreCase(elementString);
+            Element element = Element.resolveFullAtomName(atomName, line.startsWith(Atom.HETATM_PREFIX));
             if(skipHydrogens && element.isHydrogen()) {
                 return;
             }

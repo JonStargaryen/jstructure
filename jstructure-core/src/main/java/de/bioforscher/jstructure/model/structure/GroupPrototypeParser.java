@@ -124,7 +124,7 @@ public class GroupPrototypeParser {
     }
 
     private Atom mapToPrototypeAtom(Element element) {
-        return Atom.builder(de.bioforscher.jstructure.model.structure.Element.valueOfIgnoreCase(element.getElementsByTag("PDBx:type_symbol").text()),
+        return Atom.builder(de.bioforscher.jstructure.model.structure.Element.resolveElementSymbol(element.getElementsByTag("PDBx:type_symbol").text()),
                 new double[]{
                         Double.valueOf(element.getElementsByTag("PDBx:pdbx_model_Cartn_x_ideal").text()),
                         Double.valueOf(element.getElementsByTag("PDBx:pdbx_model_Cartn_y_ideal").text()),

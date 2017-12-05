@@ -167,13 +167,39 @@ public enum Element {
      * @param elementSymbol element symbol to specify Element.
      * @return the Element specified by the element symbol.
      */
-    public static Element valueOfIgnoreCase(String elementSymbol) throws IllegalArgumentException {
+    public static Element resolveElementSymbol(String elementSymbol) throws IllegalArgumentException {
         Element e = allElements.get(elementSymbol.toLowerCase());
         if (e != null) {
             return e;
         }
         logger.warn("Invalid element symbol: {} - falling back to {}", elementSymbol, Element.X);
         return Element.X;
+    }
+
+    public static Element resolveFullAtomName(String atomName, boolean hetAtm) {
+        try {
+            return resolveFullAtomNameInternal(atomName, hetAtm);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("could not resolve element from atom name '" + atomName + "'");
+        }
+    }
+
+    private static Element resolveFullAtomNameInternal(String atomName, boolean hetAtm) {
+        String numberFreeAtomName = atomName.replaceAll("\\d","");
+
+        if(atomName.isEmpty()) {
+            throw new IllegalArgumentException("could not resolve atom name");
+        }
+
+        // ambiguity between CA representing an alpha carbon or calcium
+        if(!hetAtm && atomName.startsWith("C")) {
+            return Element.C;
+        }
+        Element element = allElements.get(numberFreeAtomName.toLowerCase());
+        if(element == null) {
+            return resolveFullAtomNameInternal(atomName.substring(0, atomName.length() - 1), hetAtm);
+        }
+        return element;
     }
 
     /**

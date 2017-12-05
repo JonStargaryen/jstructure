@@ -22,7 +22,43 @@ public class A03A_SalvagePartiallyRecontructedData {
     public static void main(String[] args) {
 //        deletePartialResults();
 
-        createMissingConventionalSampledConfoldScripts();
+//        createMissingConventionalSampledConfoldScripts();
+
+        createMissingFullAndDeletedConfoldScripts();
+    }
+
+    private static void createMissingFullAndDeletedConfoldScripts() {
+        String fullOutput = ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("maps"))
+                .filter(path -> path.toFile().getName().endsWith("-full-conventional.rr"))
+                .map(path -> {
+                    String jobName = path.toFile().getName().split("\\.")[0];
+                    String pdbId = jobName.split("-")[0];
+                    String mapId = "1";
+                    return "mkdir /home/bittrich/tmp/" + jobName + "/" + System.lineSeparator() +
+                            "/home/bittrich/programs/confold_v1.0/confold.pl " +
+                            "-seq /home/bittrich/git/phd_sb_repo/data/reconstruction-start2fold/maps/" + pdbId + ".fasta " +
+                            "-rr /home/bittrich/git/phd_sb_repo/data/reconstruction-start2fold/maps/" + pdbId + "-full-conventional.rr " +
+                            "-o /home/bittrich/tmp/" + jobName + "/";
+                })
+                .collect(Collectors.joining(System.lineSeparator()));
+        ContactsConstants.write(BASE_DIRECTORY.getParent().resolve("conventional-full-reconstruction.sh"),
+                fullOutput);
+
+        String deletedOutput = ContactsConstants.list(ContactsConstants.START2FOLD_DIRECTORY.resolve("maps"))
+                .filter(path -> path.toFile().getName().endsWith("-deleted-conventional.rr"))
+                .map(path -> {
+                    String jobName = path.toFile().getName().split("\\.")[0];
+                    String pdbId = jobName.split("-")[0];
+                    String mapId = "1";
+                    return "mkdir /home/bittrich/tmp/" + jobName + "/" + System.lineSeparator() +
+                            "/home/bittrich/programs/confold_v1.0/confold.pl " +
+                            "-seq /home/bittrich/git/phd_sb_repo/data/reconstruction-start2fold/maps/" + pdbId + ".fasta " +
+                            "-rr /home/bittrich/git/phd_sb_repo/data/reconstruction-start2fold/maps/" + pdbId + "-deleted-conventional.rr " +
+                            "-o /home/bittrich/tmp/" + jobName + "/";
+                })
+                .collect(Collectors.joining(System.lineSeparator()));
+        ContactsConstants.write(BASE_DIRECTORY.getParent().resolve("conventional-deleted-reconstruction.sh"),
+                deletedOutput);
     }
 
     private static void createMissingConventionalSampledConfoldScripts() {

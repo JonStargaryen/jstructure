@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.contacts.collect.scoring;
 
 import de.bioforscher.jstructure.contacts.ContactsConstants;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
@@ -49,5 +50,15 @@ public class ContactMap {
 
     public List<Contact> getContacts() {
         return contacts;
+    }
+
+    public boolean hasContact(Pair<AminoAcid, AminoAcid> contact) {
+        return hasContact(contact.getLeft(), contact.getRight());
+    }
+
+    public boolean hasContact(AminoAcid aminoAcid1, AminoAcid aminoAcid2) {
+        return contacts.stream()
+                .anyMatch(contact -> (contact.getLeft().equals(aminoAcid1) && contact.getRight().equals(aminoAcid2)) ||
+                        (contact.getLeft().equals(aminoAcid2) && contact.getRight().equals(aminoAcid1)));
     }
 }
