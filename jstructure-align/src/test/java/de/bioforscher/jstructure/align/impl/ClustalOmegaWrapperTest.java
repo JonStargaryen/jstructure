@@ -35,7 +35,7 @@ public class ClustalOmegaWrapperTest {
     public void mapShouldFeatureReferenceAsFirstEntry() {
         Map<String, String> alignmentMap = clustalOmegaWrapper.align(sequences).getAlignedSequences();
         Assert.assertEquals(sequences.size(), alignmentMap.size());
-        Assert.assertEquals("first entry is not refernce",
+        Assert.assertEquals("first entry is not reference",
                 "sequence_1",
                 alignmentMap.entrySet().stream()
                 .findFirst()

@@ -69,7 +69,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.0.1</version>
@@ -81,17 +81,18 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
         </plugins>
     </build>
 
     <modules>
-        <module>../jstructure-core</module>
         <module>../jstructure-align</module>
-        <module>../jstructure-utils</module>
+        <module>../jstructure-contacts</module>
+        <module>../jstructure-core</module>
+        <module>../jstructure-equant</module>
         <module>../jstructure-features</module>
         <module>../jstructure-membrane</module>
-        <module>../jstructure-equant</module>
+        <module>../jstructure-utils</module>
     </modules>
 
     <properties>
