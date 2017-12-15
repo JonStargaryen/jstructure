@@ -87,6 +87,13 @@ public class StructureParser {
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        } finally {
+            try {
+                builder.inputStream.close();
+            } catch (IOException e) {
+               logger.warn("failed to close InputStream while parsing",
+                       e);
+            }
         }
     }
 

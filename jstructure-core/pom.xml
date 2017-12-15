@@ -10,7 +10,6 @@
         <relativePath>../jstructure-all/pom.xml</relativePath>
     </parent>
 
-    <packaging>pom</packaging>
     <artifactId>jstructure-core</artifactId>
     <version>1.0-SNAPSHOT</version>
     <description>

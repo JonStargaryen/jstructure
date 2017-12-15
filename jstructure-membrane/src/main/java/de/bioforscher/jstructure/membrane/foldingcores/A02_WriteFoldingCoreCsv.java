@@ -53,6 +53,7 @@ import java.util.stream.Collectors;
  *     <li>early/late folding</li>
  * </ul>
  */
+@Deprecated
 public class A02_WriteFoldingCoreCsv {
     private static final Logger logger = LoggerFactory.getLogger(A02_WriteFoldingCoreCsv.class);
     private static final DictionaryOfProteinSecondaryStructure DICTIONARY_OF_PROTEIN_SECONDARY_STRUCTURE = new DictionaryOfProteinSecondaryStructure();
@@ -76,7 +77,7 @@ public class A02_WriteFoldingCoreCsv {
                                 "folds" + System.lineSeparator(),
                         ""));
 
-        MembraneConstants.write(MembraneConstants.FOLDING_CORES_DIRECTORY.resolve("foldingcores.csv"),
+        MembraneConstants.write(MembraneConstants.FOLDING_CORES_DIRECTORY.resolve("foldingcores-old.csv"),
                 output);
     }
 

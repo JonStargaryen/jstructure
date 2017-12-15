@@ -10,7 +10,14 @@
         <module name="explorer" />
         <module name="helix-explorer" />
         <module name="jstructre-mmm-bridge" />
+        <module name="jstructure-align" />
+        <module name="jstructure-contacts" />
+        <module name="jstructure-core" />
+        <module name="jstructure-equant" />
+        <module name="jstructure-features" />
+        <module name="jstructure-membrane" />
         <module name="jstructure-testutils" />
+        <module name="jstructure-utils" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

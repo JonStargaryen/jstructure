@@ -24,8 +24,9 @@ public class FileUtils {
 
     public static Stream<String> lines(Path path) {
         try {
-            return Files.lines(path)
-                    .filter(line -> !line.startsWith("#"));
+            try(Stream<String> lines = Files.lines(path)){
+                return lines.filter(line -> !line.startsWith("#"));
+            }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
