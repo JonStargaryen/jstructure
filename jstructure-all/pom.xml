@@ -89,10 +89,10 @@
         <module>../jstructure-align</module>
         <module>../jstructure-contacts</module>
         <module>../jstructure-core</module>
-        <module>../jstructure-equant</module>
         <module>../jstructure-features</module>
         <module>../jstructure-membrane</module>
         <module>../jstructure-utils</module>
+        <module>../jstructure-start2fold</module>
     </modules>
 
     <properties>

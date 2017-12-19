@@ -75,6 +75,15 @@ public class FileUtils {
         }
     }
 
+    public static void copy(Path inPath, Path outPath) {
+        ensureDirectoriesExist(outPath);
+        try {
+            Files.copy(inPath, outPath);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     public static void move(Path inPath, Path outPath) {
         ensureDirectoriesExist(outPath);
         try {

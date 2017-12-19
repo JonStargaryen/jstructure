@@ -1,0 +1,354 @@
+<entry id="STF0026" title="RNase H domain from HIV-1 reverse transcriptase">
+  
+  <protein name="Gag-Pol polyprotein" organism="Human immunodeficiency virus type 1 group M subtype B (isolate BH10) (HIV-1)" number_of_residues="136" uniprot_id="P03366" uniprot_range="1026-1161" pdb_id="1hrh">
+    
+    <experiment id="131">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="25.0" probes="23">None</conditions>
+      <protection protection_level="EARLY">P &gt; 10 at 74 ms</protection>
+      <sequence is_pdb="True">YQLEKEPIVGAETFYVDGAANRETKLGKAGYVTNKGRQKVVPLTNTTNQKTELQAIYLALQDSGLEVNIVTDSQYALGIIQAQPDKSESELVNQIIEQLIKKEKVYLAWVPXXXXXGGNEQVDKLVSAGI</sequence>
+      <details>The pulse-labeling hydrogen exchange was carried out in a Bio- Logic SFM4/Q quench flow machine. Continuous flow mode was used for time points at 12, 22, 36, 74, 136, 363, and 636 ms, while the 1, 1.5, and 6 s time points were collected using an interrupted flow technique. Refolding of completely denatured and deuterated RNaseH was initiated by a 1:10 dilution into a protonated folding buffer (20 mM sodium acetate, 50 mM potassium chloride buffer, pHread 5.5). At the specified refolding time points, labeling of amide protons was achieved by a 1:2 dilution with pulse buffer (200 mM tridacetate for a final pHread of 8.0, 8.4, 8.5, 9.0, and also 200 mM glycine for a final PHread of 9.0). After 20 ms, the labeling pulse was quenched by a twofold dilution with 300 mM sodium acetate, pHread 4.5. The sample was immediately put on ice, concentrated in Amicon cells to ~5 mL and the buffer exchanged to 3 mM deuterated sodium acetate in H2O, pHread 4.5.</details>
+      
+        
+        <residue index="15" code="Y"></residue>
+        
+      
+        
+        <residue index="54" code="Q"></residue>
+        
+      
+        
+        <residue index="55" code="A"></residue>
+        
+      
+        
+        <residue index="57" code="Y"></residue>
+        
+      
+        
+        <residue index="59" code="A"></residue>
+        
+      
+        
+        <residue index="68" code="N"></residue>
+        
+      
+        
+        <residue index="69" code="I"></residue>
+        
+      
+        
+        <residue index="94" code="Q"></residue>
+        
+      
+        
+        <residue index="95" code="I"></residue>
+        
+      
+        
+        <residue index="98" code="Q"></residue>
+        
+      
+        
+        <residue index="99" code="L"></residue>
+        
+      
+        
+        <residue index="106" code="Y"></residue>
+        
+      
+        
+        <residue index="108" code="A"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="132">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="25.0" probes="23">None</conditions>
+      <protection protection_level="INTERMEDIATE">3 &lt; P &lt; 10 at 74 ms</protection>
+      <sequence is_pdb="True">YQLEKEPIVGAETFYVDGAANRETKLGKAGYVTNKGRQKVVPLTNTTNQKTELQAIYLALQDSGLEVNIVTDSQYALGIIQAQPDKSESELVNQIIEQLIKKEKVYLAWVPXXXXXGGNEQVDKLVSAGI</sequence>
+      <details>The pulse-labeling hydrogen exchange was carried out in a Bio- Logic SFM4/Q quench flow machine. Continuous flow mode was used for time points at 12, 22, 36, 74, 136, 363, and 636 ms, while the 1, 1.5, and 6 s time points were collected using an interrupted flow technique. Refolding of completely denatured and deuterated RNaseH was initiated by a 1:10 dilution into a protonated folding buffer (20 mM sodium acetate, 50 mM potassium chloride buffer, pHread 5.5). At the specified refolding time points, labeling of amide protons was achieved by a 1:2 dilution with pulse buffer (200 mM tridacetate for a final pHread of 8.0, 8.4, 8.5, 9.0, and also 200 mM glycine for a final PHread of 9.0). After 20 ms, the labeling pulse was quenched by a twofold dilution with 300 mM sodium acetate, pHread 4.5. The sample was immediately put on ice, concentrated in Amicon cells to ~5 mL and the buffer exchanged to 3 mM deuterated sodium acetate in H2O, pHread 4.5.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="53" code="L"></residue>
+        
+      
+        
+        <residue index="56" code="I"></residue>
+        
+      
+        
+        <residue index="58" code="L"></residue>
+        
+      
+        
+        <residue index="60" code="L"></residue>
+        
+      
+        
+        <residue index="97" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="133">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="25.0" probes="112">None</conditions>
+      <protection protection_level="STRONG">exchange less than 5% during the sample preparation and NMR data collection</protection>
+      <sequence is_pdb="True">YQLEKEPIVGAETFYVDGAANRETKLGKAGYVTNKGRQKVVPLTNTTNQKTELQAIYLALQDSGLEVNIVTDSQYALGIIQAQPDKSESELVNQIIEQLIKKEKVYLAWVPXXXXXGGNEQVDKLVSAGI</sequence>
+      <details>None</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="15" code="Y"></residue>
+        
+      
+        
+        <residue index="16" code="V"></residue>
+        
+      
+        
+        <residue index="53" code="L"></residue>
+        
+      
+        
+        <residue index="54" code="Q"></residue>
+        
+      
+        
+        <residue index="55" code="A"></residue>
+        
+      
+        
+        <residue index="56" code="I"></residue>
+        
+      
+        
+        <residue index="57" code="Y"></residue>
+        
+      
+        
+        <residue index="58" code="L"></residue>
+        
+      
+        
+        <residue index="59" code="A"></residue>
+        
+      
+        
+        <residue index="60" code="L"></residue>
+        
+      
+        
+        <residue index="67" code="V"></residue>
+        
+      
+        
+        <residue index="68" code="N"></residue>
+        
+      
+        
+        <residue index="69" code="I"></residue>
+        
+      
+        
+        <residue index="70" code="V"></residue>
+        
+      
+        
+        <residue index="94" code="Q"></residue>
+        
+      
+        
+        <residue index="95" code="I"></residue>
+        
+      
+        
+        <residue index="97" code="E"></residue>
+        
+      
+        
+        <residue index="98" code="Q"></residue>
+        
+      
+        
+        <residue index="99" code="L"></residue>
+        
+      
+        
+        <residue index="100" code="I"></residue>
+        
+      
+        
+        <residue index="106" code="Y"></residue>
+        
+      
+        
+        <residue index="108" code="A"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

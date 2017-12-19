@@ -1,9 +1,7 @@
 package de.bioforscher.jstructure.membrane.foldingcores;
 
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.membrane.MembraneConstants;
-import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Structure;
-import de.bioforscher.jstructure.model.structure.StructureParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,15 +31,15 @@ public class A04_PyMOLRenderingOfProteins {
             }
             pdbId = id.split("_")[0];
             String chainId = id.split("_")[1];
-            logger.info("processing {} chain {}",
-                    pdbId,
-                    chainId);
+//            logger.info("processing {} chain {}",
+//                    pdbId,
+//                    chainId);
 
-            Structure structure = StructureParser.source(pdbId)
-                    .parse();
-            Chain chain = structure.select()
-                    .chainId(chainId)
-                    .asChain();
+//            Structure structure = StructureParser.source(pdbId)
+//                    .parse();
+//            Chain chain = structure.select()
+//                    .chainId(chainId)
+//                    .asChain();
 
             List<String> residueIdentifiers;
             try (Stream<String> lines = Files.lines(path)) {
@@ -51,13 +49,43 @@ public class A04_PyMOLRenderingOfProteins {
                         .collect(Collectors.toList());
             }
 
-            logger.info("earling folding residues are:{}{}",
-                    System.lineSeparator(),
-                    residueIdentifiers);
+//            logger.info("earling folding residues are:{}{}",
+//                    System.lineSeparator(),
+//                    residueIdentifiers);
+
+            Path outputPath = MembraneConstants.FOLDING_CORES_DIRECTORY.resolve("pymol").resolve(id + ".pml");
+            String pymolCommandString = residueIdentifiers.stream()
+                    .map(A04_PyMOLRenderingOfProteins::handleResidueIdentifier)
+                    .collect(Collectors.joining(System.lineSeparator(),
+                            "reinit" + System.lineSeparator() +
+                            "bg_color white" + System.lineSeparator() +
+                            "unset depth_cue" + System.lineSeparator() +
+                            "set ray_opaque_background, off" + System.lineSeparator() +
+                            "fetch " + pdbId + ", async=0" + System.lineSeparator() +
+                            "bg_color white" + System.lineSeparator() +
+                            // hide non-relevant stuff
+                            "hide everything" + System.lineSeparator() +
+                            "show cartoon, chain " + chainId + System.lineSeparator() +
+                            // decolor everything
+                            "color grey80" + System.lineSeparator() +
+                            // create custom color palette
+                            "set_color efr=[" + StandardFormat.format(23 / 255.0) + ", " + StandardFormat.format(111 / 255.0) + ", " + StandardFormat.format(193 / 255.0) + "]" + System.lineSeparator() +
+                            "set ray_trace_mode, 3" + System.lineSeparator() +
+                            "orient" + System.lineSeparator(),
+                            System.lineSeparator() + "ray" + System.lineSeparator() +
+                            "png " + outputPath.getParent().resolve(id + ".png") + System.lineSeparator()));
+
+            MembraneConstants.write(outputPath, pymolCommandString);
+
+            System.out.println("@" + outputPath);
         } catch (Exception e) {
             logger.warn("computation for {} failed",
                     pdbId,
                     e);
         }
+    }
+
+    private static String handleResidueIdentifier(String residueIdentifier) {
+        return "color efr, resi " + residueIdentifier;
     }
 }
