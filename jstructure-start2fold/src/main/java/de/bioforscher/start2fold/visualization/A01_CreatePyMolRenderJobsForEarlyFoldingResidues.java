@@ -1,4 +1,4 @@
-package de.bioforscher.start2fold.collect;
+package de.bioforscher.start2fold.visualization;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class A03_CreatePyMolRenderJobsForEarlyFoldingResidues {
+public class A01_CreatePyMolRenderJobsForEarlyFoldingResidues {
     public static void main(String[] args) throws IOException {
         String pymolCommand = Files.lines(Start2FoldConstants.PANCSA_LIST)
-                .map(A03_CreatePyMolRenderJobsForEarlyFoldingResidues::composePyMolCommand)
+                .map(A01_CreatePyMolRenderJobsForEarlyFoldingResidues::composePyMolCommand)
                 .collect(Collectors.joining(System.lineSeparator(),
                         // global settings
                         "bg_color white" + System.lineSeparator() +
@@ -64,7 +64,7 @@ public class A03_CreatePyMolRenderJobsForEarlyFoldingResidues {
                 "show cartoon, chain A" + System.lineSeparator() +
                 // decolor everything
                 "color grey80" + System.lineSeparator() +
-                "orient chain A" + System.lineSeparator() +
+                "zoom (chain A)" + System.lineSeparator() +
                 earlyFoldingResidues.stream()
                         .map(res -> "color efr, resi " + res)
                         .collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
