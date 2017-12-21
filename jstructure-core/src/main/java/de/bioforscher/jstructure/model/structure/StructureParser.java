@@ -40,6 +40,7 @@ public class StructureParser {
     private static final String PDB_FETCH_URL = "https://files.rcsb.org/download/%s.pdb";
 
     private boolean skipModels;
+    private boolean skipHetAtms;
     private boolean strictMode;
     private boolean skipHydrogens;
     private boolean minimalParsing;
@@ -52,6 +53,7 @@ public class StructureParser {
     private boolean passedFirstModel;
 
     private StructureParser(OptionalSteps builder) {
+        skipHetAtms = builder.skipHetAtms;
         skipModels = builder.skipModels;
         strictMode = builder.strictMode;
         skipHydrogens = builder.skipHydrogenAtoms;
@@ -217,17 +219,18 @@ public class StructureParser {
 			61 - 66        Real(6.2)    tempFactor    Temperature factor.
 		*	77 - 78        LString(2)   element       Element symbol, right justified.
 			79 - 80        LString(2)   charge        Charge on the atom */
-        if(line.startsWith(Atom.ATOM_PREFIX) || line.startsWith(Atom.HETATM_PREFIX)) {
+		boolean isAtomLine = line.startsWith(Atom.ATOM_PREFIX);
+		boolean isHetAtmLine = line.startsWith(Atom.HETATM_PREFIX);
+		// option to skip hetatm lines - potentially useless but used in the aaRS project
+        if(skipHetAtms && isHetAtmLine) {
+            return;
+        }
+
+        if(isAtomLine || isHetAtmLine) {
             String atomName = line.substring(12, 16).trim();
             String pdbName = line.substring(17, 20).trim();
-//            String elementString = atomName.substring(0,  1);
 
-            // hydrogen atoms start with a digit: take 2nd position in that case
-//            if(NUMBERS.contains(elementString)) {
-//                elementString = atomName.substring(1, 2);
-//            }
-
-            Element element = Element.resolveFullAtomName(atomName, line.startsWith(Atom.HETATM_PREFIX));
+            Element element = Element.resolveFullAtomName(atomName, isHetAtmLine);
             if(skipHydrogens && element.isHydrogen()) {
                 return;
             }
@@ -359,6 +362,7 @@ public class StructureParser {
         InputStream inputStream;
         private String pdbId;
         private Path path;
+        boolean skipHetAtms = false;
         boolean skipModels = true;
         boolean strictMode = false;
         boolean skipHydrogenAtoms = true;
@@ -388,6 +392,11 @@ public class StructureParser {
 
         OptionalSteps(Path path) {
             this.path = path;
+        }
+
+        public OptionalSteps skipHetAtms(boolean skipHetAtms) {
+            this.skipHetAtms = skipHetAtms;
+            return this;
         }
 
         public OptionalSteps skipModels(boolean skipModels) {

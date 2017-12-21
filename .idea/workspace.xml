@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A02_CreatePyMolRenderJobsForStrongResidues.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_CreatePyMolRenderJobsForEarlyFoldingResidues.java" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -120,13 +116,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="36" column="60" lean-forward="true" selection-start-line="36" selection-start-column="60" selection-end-line="36" selection-end-column="60" />
+            <state relative-caret-position="351">
+              <caret line="23" column="42" lean-forward="false" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StructureParser.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="679">
+              <caret line="231" column="0" lean-forward="true" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
+              <folding>
+                <element signature="e#16249#16250#0" expanded="true" />
+                <element signature="e#16279#16280#0" expanded="true" />
+                <element signature="e#16346#16347#0" expanded="true" />
+                <element signature="e#16399#16400#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -135,7 +146,7 @@
       <file leaf-file-name="A02_CreatePyMolRenderJobsForStrongResidues.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A02_CreatePyMolRenderJobsForStrongResidues.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1129">
+            <state relative-caret-position="1260">
               <caret line="70" column="25" lean-forward="false" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -147,7 +158,7 @@
       <file leaf-file-name="A01_ReportGeneralStatistics.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/A01_ReportGeneralStatistics.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
+            <state relative-caret-position="882">
               <caret line="49" column="16" lean-forward="false" selection-start-line="49" selection-start-column="16" selection-end-line="50" selection-end-column="77" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -250,7 +261,6 @@
         <option value="$PROJECT_DIR$/jstructure-features/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-membrane/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-utils/pom.xml" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A02_WriteFoldingCoreCsv.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A03_WriteFoldingCoreCsvWithConventionalContactDefinition.java" />
         <option value="$PROJECT_DIR$/jstructure-membrane/src/main/java/de/bioforscher/jstructure/membrane/foldingcores/A04_PyMOLRenderingOfProteins.java" />
@@ -278,6 +288,7 @@
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A03_CreatePyMolRenderJobsForEarlyFoldingResidues.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A02_CreatePyMolRenderJobsForStrongResidues.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java" />
       </list>
     </option>
   </component>
@@ -326,10 +337,9 @@
     <option name="skipTests" value="true" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
-    <option name="y" value="6" />
-    <option name="width" value="1141" />
-    <option name="height" value="1430" />
+    <option name="y" value="-17" />
+    <option name="width" value="3440" />
+    <option name="height" value="1457" />
   </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
@@ -351,83 +361,66 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
-              <item name="collect" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
-              <item name="parser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
-              <item name="visualization" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="structure" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -512,7 +505,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Spring Boot.ExplorerApplication">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -1357,14 +1350,8 @@
       <workItem from="1512650787138" duration="352000" />
       <workItem from="1512651151444" duration="5682000" />
       <workItem from="1513241183799" duration="8897000" />
-      <workItem from="1513598693296" duration="30815000" />
-    </task>
-    <task id="LOCAL-00139" summary="logging more consistent, creation of AminoAcids now by reflection">
-      <created>1499845793405</created>
-      <option name="number" value="00139" />
-      <option name="presentableId" value="LOCAL-00139" />
-      <option name="project" value="LOCAL" />
-      <updated>1499845793405</updated>
+      <workItem from="1513598693296" duration="33512000" />
+      <workItem from="1513851963222" duration="190000" />
     </task>
     <task id="LOCAL-00140" summary="support for nucleotide families and prototypes">
       <created>1499854325396</created>
@@ -1702,7 +1689,14 @@
       <option name="project" value="LOCAL" />
       <updated>1513693191536</updated>
     </task>
-    <option name="localTasksCounter" value="188" />
+    <task id="LOCAL-00188" summary="pymol renderings refined">
+      <created>1513779209878</created>
+      <option name="number" value="00188" />
+      <option name="presentableId" value="LOCAL-00188" />
+      <option name="project" value="LOCAL" />
+      <updated>1513779209878</updated>
+    </task>
+    <option name="localTasksCounter" value="189" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1738,7 +1732,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2382498000" />
+    <option name="totallyTimeSpent" value="2385385000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1750,23 +1744,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="6" width="1141" height="1430" extended-state="0" />
+    <frame x="0" y="-17" width="3440" height="1457" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28921193" sideWeight="0.50720286" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30604437" sideWeight="0.45562673" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3005997" sideWeight="0.45438176" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50411713" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30604437" sideWeight="0.5443733" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30604437" sideWeight="0.54561824" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903716" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.40988106" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.08667453" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893157" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12116745" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1781,6 +1774,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12146226" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28921193" sideWeight="0.50720286" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="100" y="49" width="1480" height="821" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -1823,7 +1817,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="stub for the ordering of modules during folding" />
     <MESSAGE value="visualization for modularity comparision" />
     <MESSAGE value="backbone rigidity" />
     <MESSAGE value="GMLVQ dataset composition once again" />
@@ -1848,7 +1841,8 @@
     <MESSAGE value="fixes Maven build" />
     <MESSAGE value="pymol rendering stub" />
     <MESSAGE value="dedicated module for start2fold&#10;&#10;- major clean-up&#10;- dataset creation somewhat streamlined - manual efforts remain&#10;- mapping of early folding residues corrected via dedicated sequence alignment&#10;- PyMol visualization script for distribution of early folding residues" />
-    <option name="LAST_COMMIT_MESSAGE" value="dedicated module for start2fold&#10;&#10;- major clean-up&#10;- dataset creation somewhat streamlined - manual efforts remain&#10;- mapping of early folding residues corrected via dedicated sequence alignment&#10;- PyMol visualization script for distribution of early folding residues" />
+    <MESSAGE value="pymol renderings refined" />
+    <option name="LAST_COMMIT_MESSAGE" value="pymol renderings refined" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1873,7 +1867,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1889,7 +1882,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1897,7 +1889,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1905,7 +1896,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1913,7 +1903,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="558">
           <caret line="56" column="94" lean-forward="false" selection-start-line="56" selection-start-column="94" selection-end-line="56" selection-end-column="94" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1928,17 +1917,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="13" column="39" lean-forward="true" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="86" column="13" lean-forward="true" selection-start-line="86" selection-start-column="13" selection-end-line="86" selection-end-column="13" />
-          <folding>
-            <element signature="e#17853#17854#0" expanded="false" />
-            <element signature="e#17895#17896#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1960,10 +1938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3564">
           <caret line="234" column="22" lean-forward="false" selection-start-line="234" selection-start-column="22" selection-end-line="234" selection-end-column="22" />
-          <folding>
-            <element signature="e#9044#9045#0" expanded="false" />
-            <element signature="e#9103#9104#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1978,7 +1952,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="327">
           <caret line="83" column="75" lean-forward="false" selection-start-line="83" selection-start-column="75" selection-end-line="83" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1993,7 +1966,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="816">
           <caret line="167" column="9" lean-forward="true" selection-start-line="167" selection-start-column="9" selection-end-line="167" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2001,7 +1973,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="684">
           <caret line="197" column="9" lean-forward="false" selection-start-line="84" selection-start-column="8" selection-end-line="197" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2009,9 +1980,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="35" column="0" lean-forward="false" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2019,7 +1987,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="86" column="29" lean-forward="false" selection-start-line="78" selection-start-column="28" selection-end-line="86" selection-end-column="29" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2027,7 +1994,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-4">
           <caret line="8" column="62" lean-forward="false" selection-start-line="8" selection-start-column="62" selection-end-line="8" selection-end-column="62" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2035,7 +2001,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="13" column="31" lean-forward="false" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2043,7 +2008,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="451">
           <caret line="126" column="88" lean-forward="false" selection-start-line="109" selection-start-column="24" selection-end-line="126" selection-end-column="88" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2051,7 +2015,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="82" column="46" lean-forward="true" selection-start-line="82" selection-start-column="46" selection-end-line="82" selection-end-column="46" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2059,7 +2022,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="715">
           <caret line="88" column="5" lean-forward="true" selection-start-line="18" selection-start-column="4" selection-end-line="88" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2067,10 +2029,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="10" column="66" lean-forward="false" selection-start-line="10" selection-start-column="66" selection-end-line="10" selection-end-column="66" />
-          <folding>
-            <element signature="e#622#623#0" expanded="false" />
-            <element signature="e#654#655#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2086,7 +2044,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2094,7 +2051,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="38" column="36" lean-forward="true" selection-start-line="38" selection-start-column="36" selection-end-line="38" selection-end-column="36" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2102,7 +2058,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="8" column="10" lean-forward="true" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="10" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2110,7 +2065,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" column="13" lean-forward="false" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2118,10 +2072,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
           <caret line="35" column="47" lean-forward="true" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
-          <folding>
-            <element signature="e#422#423#0" expanded="false" />
-            <element signature="e#474#475#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2137,23 +2087,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="12" column="56" lean-forward="true" selection-start-line="12" selection-start-column="56" selection-end-line="12" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#492#493#0" expanded="false" />
-            <element signature="e#537#538#0" expanded="false" />
-            <element signature="e#704#705#0" expanded="false" />
-            <element signature="e#756#757#0" expanded="false" />
-            <element signature="e#795#796#0" expanded="false" />
-            <element signature="e#854#855#0" expanded="false" />
-            <element signature="e#885#886#0" expanded="false" />
-            <element signature="e#936#937#0" expanded="false" />
-            <element signature="e#967#968#0" expanded="false" />
-            <element signature="e#1018#1019#0" expanded="false" />
-            <element signature="e#1051#1052#0" expanded="false" />
-            <element signature="e#1104#1105#0" expanded="false" />
-            <element signature="e#1137#1138#0" expanded="false" />
-            <element signature="e#1190#1191#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2161,7 +2094,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="21" column="8" lean-forward="false" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2169,7 +2101,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="141" column="0" lean-forward="false" selection-start-line="141" selection-start-column="0" selection-end-line="141" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2177,7 +2108,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="478">
           <caret line="109" column="0" lean-forward="false" selection-start-line="109" selection-start-column="0" selection-end-line="109" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2185,7 +2115,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
           <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2193,7 +2122,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="293">
           <caret line="36" column="39" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2201,25 +2129,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1116">
           <caret line="62" column="4" lean-forward="false" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1193#1194#0" expanded="false" />
-            <element signature="e#1254#1255#0" expanded="false" />
-            <element signature="e#2359#2360#0" expanded="false" />
-            <element signature="e#2394#2395#0" expanded="false" />
-            <element signature="e#2427#2428#0" expanded="false" />
-            <element signature="e#2456#2457#0" expanded="false" />
-            <element signature="e#2507#2508#0" expanded="false" />
-            <element signature="e#2545#2546#0" expanded="false" />
-            <element signature="e#2580#2581#0" expanded="false" />
-            <element signature="e#2611#2612#0" expanded="false" />
-            <element signature="e#2653#2654#0" expanded="false" />
-            <element signature="e#2684#2685#0" expanded="false" />
-            <element signature="e#2942#2943#0" expanded="false" />
-            <element signature="e#2978#2979#0" expanded="false" />
-            <element signature="e#3013#3014#0" expanded="false" />
-            <element signature="e#3048#3049#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2227,7 +2136,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
           <caret line="21" column="8" lean-forward="true" selection-start-line="21" selection-start-column="8" selection-end-line="21" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2235,10 +2143,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="34" column="5" lean-forward="true" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
-          <folding>
-            <element signature="e#1142#1143#0" expanded="false" />
-            <element signature="e#1219#1220#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2246,7 +2150,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="576">
           <caret line="45" column="52" lean-forward="false" selection-start-line="45" selection-start-column="52" selection-end-line="45" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2298,13 +2201,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
           <caret line="88" column="54" lean-forward="true" selection-start-line="88" selection-start-column="15" selection-end-line="88" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/A01_ReportGeneralStatistics.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
+        <state relative-caret-position="882">
           <caret line="49" column="16" lean-forward="false" selection-start-line="49" selection-start-column="16" selection-end-line="50" selection-end-column="77" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -2314,7 +2216,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A02_CreatePyMolRenderJobsForStrongResidues.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1129">
+        <state relative-caret-position="1260">
           <caret line="70" column="25" lean-forward="false" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -2324,10 +2226,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="36" column="60" lean-forward="true" selection-start-line="36" selection-start-column="60" selection-end-line="36" selection-end-column="60" />
+        <state relative-caret-position="351">
+          <caret line="23" column="42" lean-forward="false" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="679">
+          <caret line="231" column="0" lean-forward="true" selection-start-line="231" selection-start-column="0" selection-end-line="231" selection-end-column="0" />
+          <folding>
+            <element signature="e#16249#16250#0" expanded="true" />
+            <element signature="e#16279#16280#0" expanded="true" />
+            <element signature="e#16346#16347#0" expanded="true" />
+            <element signature="e#16399#16400#0" expanded="true" />
           </folding>
         </state>
       </provider>
