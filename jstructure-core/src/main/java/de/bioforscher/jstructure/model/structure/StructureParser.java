@@ -19,8 +19,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -78,14 +76,14 @@ public class StructureParser {
 
                     // if id is missing, use hinted fall back
                     if(idIsMissing()) {
-                        protein.setProteinIdentifier(builder.hintProteinName);
+                        updateProteinIdentifier(builder.hintProteinName);
                     }
                     protein.setTitle(titleString.length() > 0 ? titleString.toString() : DEFAULT_PROTEIN_TITLE);
                 }
             }
 
             if(builder.forceProteinName != null) {
-                protein.setProteinIdentifier(builder.forceProteinName);
+                updateProteinIdentifier(builder.forceProteinName);
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -97,6 +95,14 @@ public class StructureParser {
                        e);
             }
         }
+    }
+
+    private void updateProteinIdentifier(ProteinIdentifier proteinIdentifier) {
+        protein.setProteinIdentifier(proteinIdentifier);
+        protein.chains().forEach(chain -> {
+            ChainIdentifier chainIdentifier = IdentifierFactory.createChainIdentifier(proteinIdentifier, chain.getChainIdentifier().getChainId());
+            chain.setChainIdentifier(chainIdentifier);
+        });
     }
 
     private boolean idIsMissing() {
@@ -115,10 +121,6 @@ public class StructureParser {
             }
         }
     }
-
-    private static final List<String> NUMBERS = IntStream.range(1, 10)
-            .mapToObj(String::valueOf)
-            .collect(Collectors.toList());
 
     /**
      * Parses a single line of a <tt>PDB</tt> file.
@@ -166,6 +168,7 @@ public class StructureParser {
                     logger.warn("failed to parse depositionDate from line '{}'", line, e2);
                 }
             }
+
 
             try {
                 ProteinIdentifier proteinIdentifier = IdentifierFactory.createProteinIdentifier(line.substring(62, 66));

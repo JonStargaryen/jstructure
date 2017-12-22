@@ -54,6 +54,10 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
         }
     }
 
+    public void setChainIdentifier(ChainIdentifier chainIdentifier) {
+        this.chainIdentifier = chainIdentifier;
+    }
+
     public Selection.GroupSelection select() {
         return Selection.on(this);
     }

@@ -1,4 +1,4 @@
-package de.bioforscher.gmlvq;
+package de.bioforscher.jstructure.gmlvq;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
@@ -10,13 +10,16 @@ import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotato
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFractionCalculator;
 import de.bioforscher.jstructure.feature.sse.dssp.DictionaryOfProteinSecondaryStructure;
-import de.bioforscher.jstructure.membrane.MembraneConstants;
 import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.testutil.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -25,8 +28,14 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class ComposeCSADataset {
+/**
+ * Create the class-less arff file for the HDS dataset of the 3DSIG poster.
+ */
+public class A01_AnnotateFeatures {
+    private static final Logger logger = LoggerFactory.getLogger(A01_AnnotateFeatures.class);
     private static final double P_VALUE_CUTOFF = 0.001;
+    private static int counter;
+    private static int binSize;
     private static final AccessibleSurfaceAreaCalculator ACCESSIBLE_SURFACE_AREA_CALCULATOR =
             new AccessibleSurfaceAreaCalculator();
     private static final EnergyProfileCalculator ENERGY_PROFILE_CALCULATOR =
@@ -38,23 +47,15 @@ public class ComposeCSADataset {
     private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR =
             new PLIPIntraMolecularAnnotator();
 
-    public static void main(String[] args) {
-        MembraneConstants.list(MembraneConstants.GIT_DIRECTORY.resolve("gmlvq_main")
+    public static void main(String[] args) throws IOException {
+        Path summaryPath = FileUtils.GIT_DIRECTORY.resolve("gmlvq_main")
                 .resolve("data")
                 .resolve("csa_new")
-                .resolve("motifs_BLAST_10e80_matches"))
-                // skip already computed results
-                .filter(path -> !Files.exists(path.resolve(path.toFile().getName() + ".arff")))
-                .map(path -> path.resolve("summary.csv"))
-                .forEach(ComposeCSADataset::handleCsv);
-    }
+                .resolve("motifs_BLAST_10e80_matches")
+                .resolve("1a0j_1")
+                .resolve("summary.csv");
 
-    private static int counter;
-    private static int binSize;
-
-    private static void handleCsv(Path csv) {
-        System.out.println("handling bin " + csv);
-        Map<String, List<String>> proteinMap = MembraneConstants.lines(csv)
+        Map<String, List<String>> proteinMap = Files.lines(summaryPath)
                 .filter(line -> !line.startsWith("match"))
                 .filter(line -> Double.valueOf(line.split(",")[2]) < P_VALUE_CUTOFF)
                 .collect(Collectors.groupingBy(line -> line.split("_")[0]));
@@ -64,19 +65,21 @@ public class ComposeCSADataset {
 
         String output = proteinMap.entrySet()
                 .stream()
-                .map(ComposeCSADataset::handleBin)
+                .map(A01_AnnotateFeatures::handleBin)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        Path parent = csv.getParent();
-        MembraneConstants.write(parent.resolve(parent.toFile().getName() + ".arff"), output);
+        Files.write(summaryPath.getParent().resolve("summary.arff"), output.getBytes());
     }
 
     private static Optional<String> handleBin(Map.Entry<String, List<String>> entry) {
         String pdbId = entry.getKey();
         try {
-            System.out.println("annotating " + pdbId + " - " + counter + " / " + binSize);
+            logger.info("annotating {} - {} / {}",
+                    pdbId,
+                    counter,
+                    binSize);
             Structure structure = StructureParser.source(pdbId)
                     .minimalParsing(true)
                     .parse();
@@ -89,7 +92,7 @@ public class ComposeCSADataset {
 
             return Optional.of(entry.getValue()
                     .stream()
-                    .map(hit -> handleHit(structure, pdbId, hit))
+                    .map(hit -> handleHit(structure, hit))
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .collect(Collectors.joining(System.lineSeparator())));
@@ -101,7 +104,7 @@ public class ComposeCSADataset {
         }
     }
 
-    private static Optional<String> handleHit(Structure structure, String pdbId, String hit) {
+    private static Optional<String> handleHit(Structure structure, String hit) {
         try {
             String chainId = hit.split("-")[0].split("_")[1];
             Chain chain = structure.select()
@@ -124,7 +127,7 @@ public class ComposeCSADataset {
                     StandardFormat.format(rmsd) + "," +
                     StandardFormat.format(pvalue) + "," +
                     aminoAcids.stream()
-                            .map(ComposeCSADataset::composeAminoAcidFeatures)
+                            .map(A01_AnnotateFeatures::composeAminoAcidFeatures)
                             .collect(Collectors.joining(","))
                     + ",?");
         } catch (Exception e) {

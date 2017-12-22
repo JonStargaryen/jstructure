@@ -14,6 +14,7 @@
         <module name="jstructure-contacts" />
         <module name="jstructure-core" />
         <module name="jstructure-features" />
+        <module name="jstructure-gmlvq" />
         <module name="jstructure-membrane" />
         <module name="jstructure-start2fold" />
         <module name="jstructure-testutils" />
@@ -34,6 +35,7 @@
       <module name="jstructure-equant" target="1.8" />
       <module name="jstructure-explorer" target="1.8" />
       <module name="jstructure-features" target="1.8" />
+      <module name="jstructure-gmlvq" target="1.8" />
       <module name="jstructure-membrane" target="1.8" />
       <module name="jstructure-membrane-topology" target="1.8" />
       <module name="jstructure-mmm-bridge" target="1.8" />
