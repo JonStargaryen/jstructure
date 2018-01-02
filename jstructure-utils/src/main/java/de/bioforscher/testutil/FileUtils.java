@@ -18,7 +18,9 @@ import java.util.stream.Stream;
  */
 public class FileUtils {
     protected static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-    public static final Path GIT_DIRECTORY = Paths.get(System.getProperty("user.home")).resolve("git");
+    public static final Path GIT_DIRECTORY = System.getProperty("os.name").toLowerCase().contains("win") ?
+            Paths.get("D:/").resolve("git") :
+            Paths.get(System.getProperty("user.home")).resolve("git");
     public static final Path PHD_DIRECTORY = GIT_DIRECTORY.resolve("phd_sb_repo");
     public static final Path DATA_DIRECTORY = PHD_DIRECTORY.resolve("data");
 

@@ -10,6 +10,10 @@ import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
  */
 @DefaultFeatureProvider(AccessibleSurfaceAreaCalculator.class)
 public class AccessibleSurfaceArea extends FeatureContainerEntry {
+    /**
+     * see Rost B, Sander C. Conservation and prediction of solvent accessibility in protein families. Proteins 1994 Nov;20(3):216-26.
+     */
+    private static final double BURIED_RASA_THRESHOLD = 0.16;
     private final double accessibleSurfaceArea;
     private final double relativeAccessibleSurfaceArea;
 
@@ -25,5 +29,13 @@ public class AccessibleSurfaceArea extends FeatureContainerEntry {
 
     public double getRelativeAccessibleSurfaceArea() {
         return relativeAccessibleSurfaceArea;
+    }
+
+    public boolean isBuried() {
+        return relativeAccessibleSurfaceArea < BURIED_RASA_THRESHOLD;
+    }
+
+    public boolean isExposed() {
+        return !isBuried();
     }
 }
