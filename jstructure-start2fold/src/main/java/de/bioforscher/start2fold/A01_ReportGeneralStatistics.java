@@ -1,5 +1,6 @@
 package de.bioforscher.start2fold;
 
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.mathematics.SetOperations;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -9,16 +10,14 @@ import de.bioforscher.start2fold.model.FunctionalResidueAnnotation;
 import de.bioforscher.start2fold.model.Start2FoldResidueAnnotation;
 import de.bioforscher.start2fold.parser.FunctionalResidueParser;
 import de.bioforscher.start2fold.parser.Start2FoldXmlParser;
+import edu.northwestern.at.utils.math.statistics.FishersExactTest;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -35,6 +34,7 @@ public class A01_ReportGeneralStatistics {
     private static List<Integer> strong = new ArrayList<>();
     private static List<Integer> weak = new ArrayList<>();
     private static List<String> tableLines = new ArrayList<>();
+    private static List<String> functionalTableLines = new ArrayList<>();
     private static int[] contingencyTable = new int[4];
 
     public static void main(String[] args) throws IOException {
@@ -91,7 +91,22 @@ public class A01_ReportGeneralStatistics {
                 " & functional & non-functional \\\\ \\hline" + System.lineSeparator() +
                 "early & " + contingencyTable[0] + " & " + contingencyTable[1] + " \\\\" + System.lineSeparator() +
                 "late & " + contingencyTable[2] + " & " + contingencyTable[3] + "\\\\" + System.lineSeparator() +
-                "\\end{tabular}") ;
+                "\\end{tabular}");
+        stringJoiner.add("");
+
+        /*
+         * Print functional test results.
+         */
+        stringJoiner.add(functionalTableLines.stream()
+                .collect(Collectors.joining(System.lineSeparator(),
+                        "\\begin{tabular}{ l r r r r r r }" + System.lineSeparator() +
+                                "Start2Fold & residues & early & functional & overlap & \\textit{p}-value & significance \\\\ \\hline" + System.lineSeparator(),
+                        " \\hline" + System.lineSeparator() +
+                                "&&&& " + FishersExactTest.fishersExactTest(contingencyTable[0],
+                                contingencyTable[1],
+                                contingencyTable[2],
+                                contingencyTable[3])[0] + " & ? \\\\" + System.lineSeparator() +
+                                "\\end{tabular}")));
         stringJoiner.add("");
 
         /*
@@ -199,10 +214,27 @@ public class A01_ReportGeneralStatistics {
             nonFunctional.add((int) chain.aminoAcids().count() - functionalResidues.size());
             earlyFunctionalCount = SetOperations.intersection(earlyFoldingResidues, functionalResidues).size();
             overlap.add(earlyFunctionalCount);
-            contingencyTable[0] += earlyFunctionalCount;
-            contingencyTable[1] += SetOperations.intersection(earlyFoldingResidues, nonFunctionalResidues).size();
-            contingencyTable[2] += SetOperations.intersection(lateFoldingResidues, functionalResidues).size();
-            contingencyTable[3] += SetOperations.intersection(lateFoldingResidues, nonFunctionalResidues).size();
+
+            int ef = earlyFunctionalCount;
+            int en = SetOperations.intersection(earlyFoldingResidues, nonFunctionalResidues).size();
+            int lf = SetOperations.intersection(lateFoldingResidues, functionalResidues).size();
+            int ln = SetOperations.intersection(lateFoldingResidues, nonFunctionalResidues).size();
+
+            contingencyTable[0] += ef;
+            contingencyTable[1] += en;
+            contingencyTable[2] += lf;
+            contingencyTable[3] += ln;
+
+            double[] test = FishersExactTest.fishersExactTest(ef, en, lf, ln);
+            System.out.println("values: " + ef + ", " + en + ", " + lf + ", " + ln);
+            System.out.println("test: " + Arrays.toString(test));
+            functionalTableLines.add(entryId + " & " +
+                    chain.aminoAcids().count() + " & " +
+                    earlyFoldingResidues.size() + " & " +
+                    functionalResidues.size() + " & " +
+                    ef + " & " +
+                    StandardFormat.format(test[0]) + " & " +
+                    "? \\\\");
         }
 
         tableLines.add(entryId + " & " +
