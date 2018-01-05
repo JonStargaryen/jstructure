@@ -1,6 +1,7 @@
 package de.bioforscher.start2fold;
 
 import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.mathematics.SetOperations;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -36,6 +37,7 @@ public class A01_ReportGeneralStatistics {
     private static List<String> tableLines = new ArrayList<>();
     private static List<String> functionalTableLines = new ArrayList<>();
     private static int[] contingencyTable = new int[4];
+    private static int[] rasaContingencyTable = new int[4];
 
     public static void main(String[] args) throws IOException {
         StringJoiner stringJoiner = new StringJoiner(System.lineSeparator());
@@ -85,9 +87,19 @@ public class A01_ReportGeneralStatistics {
         stringJoiner.add("");
 
         /*
+         * Print contingency table between rasa-early split.
+         */
+        stringJoiner.add("\\begin{tabular}{l | r r }" + System.lineSeparator() +
+                " & buried & exposed \\\\ \\hline" + System.lineSeparator() +
+                "early & " + rasaContingencyTable[0] + " & " + rasaContingencyTable[1] + " \\\\" + System.lineSeparator() +
+                "late & " + rasaContingencyTable[2] + " & " + rasaContingencyTable[3] + "\\\\" + System.lineSeparator() +
+                "\\end{tabular}");
+        stringJoiner.add("");
+
+        /*
          * Print contingency table between functional-early split.
          */
-        stringJoiner.add("\\begin{tabular}{l r r }" + System.lineSeparator() +
+        stringJoiner.add("\\begin{tabular}{l | r r }" + System.lineSeparator() +
                 " & functional & non-functional \\\\ \\hline" + System.lineSeparator() +
                 "early & " + contingencyTable[0] + " & " + contingencyTable[1] + " \\\\" + System.lineSeparator() +
                 "late & " + contingencyTable[2] + " & " + contingencyTable[3] + "\\\\" + System.lineSeparator() +
@@ -207,6 +219,17 @@ public class A01_ReportGeneralStatistics {
         List<AminoAcid> nonFunctionalResidues = chain.aminoAcids()
                 .filter(aminoAcid -> !functionalResidues.contains(aminoAcid))
                 .collect(Collectors.toList());
+        List<AminoAcid> exposedAminoAcids = chain.aminoAcids()
+                .filter(aminoAcid -> aminoAcid.getFeature(AccessibleSurfaceArea.class).isExposed())
+                .collect(Collectors.toList());
+        List<AminoAcid> buriedAminoAcids = chain.aminoAcids()
+                .filter(aminoAcid -> aminoAcid.getFeature(AccessibleSurfaceArea.class).isBuried())
+                .collect(Collectors.toList());
+
+        rasaContingencyTable[0] += SetOperations.intersection(earlyFoldingResidues, buriedAminoAcids).size();
+        rasaContingencyTable[1] += SetOperations.intersection(earlyFoldingResidues, exposedAminoAcids).size();
+        rasaContingencyTable[2] += SetOperations.intersection(lateFoldingResidues, buriedAminoAcids).size();
+        rasaContingencyTable[3] += SetOperations.intersection(lateFoldingResidues, exposedAminoAcids).size();
 
         int earlyFunctionalCount = 0;
         if(!functionalResidues.isEmpty()) {
