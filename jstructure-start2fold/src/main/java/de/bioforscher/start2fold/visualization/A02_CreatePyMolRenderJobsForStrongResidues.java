@@ -33,7 +33,7 @@ public class A02_CreatePyMolRenderJobsForStrongResidues {
                                 "set ray_opaque_background, off" + System.lineSeparator() +
                                 "bg_color white" + System.lineSeparator() +
                                 // create custom color palette
-                                "set_color efr=[" + StandardFormat.format(244 / 255.0) + ", " + StandardFormat.format(114 / 255.0) + ", " + StandardFormat.format(22 / 255.0) + "]" + System.lineSeparator() +
+                                "set_color efr=[" + StandardFormat.format(89 / 255.0) + ", " + StandardFormat.format(193 / 255.0) + ", " + StandardFormat.format(52 / 255.0) + "]" + System.lineSeparator() +
                                 "set ray_trace_mode, 3" + System.lineSeparator(),
                         ""));
         Files.write(Start2FoldConstants.PYMOL_DIRECTORY.resolve("strong.pml"),
