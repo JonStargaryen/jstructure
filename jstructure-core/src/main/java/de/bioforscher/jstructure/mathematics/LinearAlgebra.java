@@ -1,10 +1,13 @@
 package de.bioforscher.jstructure.mathematics;
 
+import de.bioforscher.jstructure.mathematics.graph.Graph;
+import de.bioforscher.jstructure.mathematics.graph.GraphPath;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.*;
 
 import static de.bioforscher.jstructure.StandardFormat.format;
 
@@ -44,6 +47,10 @@ public class LinearAlgebra {
      */
     public static AtomContainerLinearAlgebra on(AtomContainer atomContainer) {
         return new AtomContainerLinearAlgebra(atomContainer);
+    }
+
+    public static <N> GraphLinearAlgebra<N> on(Graph<N> graph) {
+        return new GraphLinearAlgebra<>(graph);
     }
 
     /**
@@ -221,7 +228,7 @@ public class LinearAlgebra {
     }
 
     public static class AtomContainerLinearAlgebra implements AlgebraicOperations {
-        private AtomContainer atomContainer;
+        private final AtomContainer atomContainer;
 
         AtomContainerLinearAlgebra(AtomContainer atomContainer) {
             this.atomContainer = atomContainer;
@@ -296,6 +303,147 @@ public class LinearAlgebra {
         public AtomContainerLinearAlgebra transform(Transformation transformation) {
             atomContainer.atoms().forEach(transformation::transform);
             return this;
+        }
+    }
+
+    public static class GraphLinearAlgebra<N> implements AlgebraicOperations {
+        private final Graph<N> graph;
+        private final double numberOfNodePairs;
+
+        GraphLinearAlgebra(Graph<N> graph) {
+            this.graph = graph;
+            this.numberOfNodePairs = graph.getNumberOfNodes() * (graph.getNumberOfNodes() - 1) * 0.5;
+        }
+
+        /**
+         * Determines the average path length between all pairs of nodes in a given graph. Graph must be connected.
+         * See Vendruscolo, 2002 for definition.
+         * @return the average path length of this graph
+         */
+        public double graphPathLength() {
+            int numberOfNodes = graph.getNumberOfNodes();
+            double np = numberOfNodes * (numberOfNodes - 1) * 0.5;
+            return 1 / np * SetOperations.uniquePairsOf(graph.getNodes())
+                    .mapToInt(this::determineShortestPathLength)
+                    .sum();
+        }
+
+        /**
+         * Betweenness is defined as the number shortest paths on the graph passing through this node normalized by the
+         * total number of pairs of nodes of the graph.
+         * See Vendruscolo, 2002 for definition.
+         * @param node the node to evaluate
+         * @return the betweenness of this node
+         */
+        public double betweenness(N node) {
+            return shortestPathsPassingThrough(node) / numberOfNodePairs;
+        }
+
+        /**
+         * The maximal path length from this node to any other node within the graph.
+         * See Amitai, 2004 for definition.
+         * @param node the node to evaluate
+         * @return the maximal path length involving this node
+         */
+        public int closeness(N node) {
+            return graph.nodes()
+                    .filter(n -> !node.equals(n))
+                    .map(n -> new Pair<>(n, node))
+                    .mapToInt(this::determineShortestPathLength)
+                    .max()
+                    .orElseThrow(() ->  new IllegalArgumentException("cannot evaluate closeness as graph is not fully connected"));
+        }
+
+        /**
+         * Determine the number of shortest paths present in the graph passing through the specified node.
+         * @param node the node to evaluate
+         * @return the number of shortest paths on the graph passing through
+         */
+        private int shortestPathsPassingThrough(N node) {
+            return (int) SetOperations.uniquePairsOf(graph.getNodes())
+                    .map(this::determineShortestPath)
+                    .filter(graphPath -> graphPath.getElements().contains(node))
+                    .count();
+        }
+
+        private GraphPath<N> determineShortestPath(Pair<N, N> pair) {
+            N source = pair.getLeft();
+            N target = pair.getRight();
+
+            // initialize maps and queue
+            Map<N, Integer> distanceMap = new HashMap<>();
+            Map<N, N> predecessors = new HashMap<>();
+            Queue<N> queue = new LinkedList<>();
+            queue.offer(source);
+            distanceMap.put(source, 0);
+
+            while(!queue.isEmpty()) {
+                N node = queue.poll();
+                for(N neighbor : graph.getNeighborsFor(node)) {
+                    if(!distanceMap.containsKey(target)) {
+                        predecessors.put(target, source);
+
+                        if(neighbor.equals(target)) {
+                            return reconstructShortestPath(predecessors, target);
+                        }
+
+                        distanceMap.put(neighbor, distanceMap.get(source) + 1);
+                        queue.offer(neighbor);
+                    }
+                }
+            }
+
+            // no valid path found
+            return new GraphPath<>(new ArrayList<>());
+        }
+
+        private GraphPath<N> reconstructShortestPath(Map<N, N> predecessors, N target) {
+            N step = target;
+            List<N> steps = new ArrayList<>();
+
+            // return empty path
+            if(!predecessors.containsKey(step)) {
+                return new GraphPath<>(steps);
+            }
+
+            steps.add(step);
+            while(predecessors.containsKey(step)) {
+                step = predecessors.get(step);
+                steps.add(step);
+            }
+
+            Collections.reverse(steps);
+            return new GraphPath<>(steps);
+        }
+
+        private int determineShortestPathLength(Pair<N, N> pair) {
+            return determineShortestPath(pair).size();
+        }
+
+        /**
+         * Evaluates all nodes of a given graph by comparing the actual number of edges in the network of direct
+         * neighbors to the theoretical maximum.
+         * See Vendruscolo, 2002 for definition.
+         * @return the clustering coefficient of this graph
+         */
+        public double clusteringCoefficient() {
+            return graph.nodes()
+                    .mapToDouble(this::clusteringCoefficient)
+                    .average()
+                    .orElseThrow(() -> new IllegalArgumentException("could not compute clustering coefficient of graph " +
+                            graph + " as the graph does not contain edges"));
+        }
+
+        public double clusteringCoefficient(N node) {
+            List<N> neighbors = graph.getNeighborsFor(node);
+            int numberOfNeighbors = neighbors.size();
+            if(numberOfNeighbors == 1) {
+                return 0;
+            }
+            int actualNumberOfEdges = (int) SetOperations.uniquePairsOf(neighbors)
+                    .filter(graph::containsEdge)
+                    .count();
+            return actualNumberOfEdges / (0.5 * (numberOfNeighbors * (numberOfNeighbors - 1)));
         }
     }
 }

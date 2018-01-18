@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.mathematics.graph;
 
+import de.bioforscher.jstructure.mathematics.Calculable;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Pair;
 
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ import java.util.stream.Stream;
  * A really basic implementation of a graph.
  * @param <N> the type of nodes this graph contains
  */
-public class Graph<N> {
+public class Graph<N> implements Calculable<LinearAlgebra.GraphLinearAlgebra> {
     private final List<N> nodes;
     private final List<Edge<N>> edges;
 
@@ -37,6 +39,15 @@ public class Graph<N> {
 
     public boolean containsEdge(Edge<N> edge) {
         return edges.contains(edge);
+    }
+
+    public boolean containsEdge(Pair<N, N> pair) {
+        return containsEdge(pair.getLeft(), pair.getRight());
+    }
+
+    public boolean containsEdge(N node1, N node2) {
+        return edges()
+                .anyMatch(edge -> edge.contains(node1) && edge.contains(node2));
     }
 
     public int getNumberOfNodes() {
@@ -78,6 +89,17 @@ public class Graph<N> {
                 .collect(Collectors.toList());
     }
 
+    public Stream<N> neighborsFor(N node) {
+        return nodes()
+                .filter(candiate -> !node.equals(candiate))
+                .filter(candidate -> edgeBetween(candidate, node).isPresent());
+    }
+
+    public List<N> getNeighborsFor(N node) {
+        return neighborsFor(node)
+                .collect(Collectors.toList());
+    }
+
     public Stream<Pair<Edge<N>, Edge<N>>> commonNeighborhood(Edge<N> edge) {
         N node1 = edge.getLeft();
         N node2 = edge.getRight();
@@ -107,5 +129,10 @@ public class Graph<N> {
 
     public void remove(Edge<N> edgeToRemove) {
         edges.remove(edgeToRemove);
+    }
+
+    @Override
+    public LinearAlgebra.GraphLinearAlgebra<N> calculate() {
+        return LinearAlgebra.on(this);
     }
 }

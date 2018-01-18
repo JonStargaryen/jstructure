@@ -1,7 +1,5 @@
 package de.bioforscher.jstructure.mathematics;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-
 /**
  * The implementing class supports algebraic operations.
  * Created by bittrich on 5/23/17.
