@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.graphs;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 
-public abstract class ResidueTopologicProperties extends FeatureContainerEntry {
+public class ResidueTopologicProperties extends FeatureContainerEntry {
     private final double betweenness;
     private final double closeness;
     private final double clusteringCoefficient;

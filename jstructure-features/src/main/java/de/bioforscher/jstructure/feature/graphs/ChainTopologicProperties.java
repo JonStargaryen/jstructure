@@ -3,7 +3,7 @@ package de.bioforscher.jstructure.feature.graphs;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 
-public abstract class ChainTopologicProperties extends FeatureContainerEntry {
+public class ChainTopologicProperties extends FeatureContainerEntry {
     private final double averagePathLength;
     private final double clusteringCoefficient;
 

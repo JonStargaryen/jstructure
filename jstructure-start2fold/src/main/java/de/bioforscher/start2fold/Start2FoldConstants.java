@@ -3,6 +3,10 @@ package de.bioforscher.start2fold;
 import de.bioforscher.testutil.FileUtils;
 
 import java.nio.file.Path;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Start2FoldConstants extends FileUtils {
     public static final String START2FOLD_URL = "http://start2fold.eu/";
@@ -18,4 +22,19 @@ public class Start2FoldConstants extends FileUtils {
     public static final Path PYMOL_DIRECTORY = BASE_DIRECTORY.resolve("pymol");
     public static final Path EQUANT_DIRECTORY = BASE_DIRECTORY.resolve("equant");
     public static final Path STATISTICS_DIRECTORY = BASE_DIRECTORY.resolve("statistics");
+
+    public static List<Integer> extractFunctioanlResidueNumbers(String[] split) {
+        return Pattern.compile(",")
+                .splitAsStream(split[5].replaceAll("\\[", "").replaceAll("]", ""))
+                .flatMapToInt(numberString -> {
+                    if(!numberString.contains("-")) {
+                        return IntStream.of(Integer.valueOf(numberString));
+                    }
+                    String[] numberStringSplit = numberString.split("-");
+                    return IntStream.rangeClosed(Integer.valueOf(numberStringSplit[0]),
+                            Integer.valueOf(numberStringSplit[1]));
+                })
+                .boxed()
+                .collect(Collectors.toList());
+    }
 }

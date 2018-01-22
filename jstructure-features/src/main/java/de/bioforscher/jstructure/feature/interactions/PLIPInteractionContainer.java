@@ -110,9 +110,21 @@ public class PLIPInteractionContainer extends FeatureContainerEntry {
         return new PLIPInteractionContainer(getFeatureProvider(), filteredInteractions);
     }
 
-    public boolean areInContact(Group group1, Group group2) {
+    /**
+     * Checks whether two groups interact by a given PLIPInteraction.
+     * @param group1 the first group
+     * @param group2 the second group
+     * @param interactionType allowed interaction type
+     * @return if both groups interact
+     */
+    public boolean areInContactByInteractionType(Group group1, Group group2, Class<? extends PLIPInteraction> interactionType) {
         return getInteractions().stream()
+                .filter(interactionType::isInstance)
                 .anyMatch(plipInteraction -> (plipInteraction.getPartner1().equals(group1) && plipInteraction.getPartner2().equals(group2)) ||
                         (plipInteraction.getPartner2().equals(group1) && plipInteraction.getPartner1().equals(group2)));
+    }
+
+    public boolean areInContact(Group group1, Group group2) {
+        return areInContactByInteractionType(group1, group2, PLIPInteraction.class);
     }
 }

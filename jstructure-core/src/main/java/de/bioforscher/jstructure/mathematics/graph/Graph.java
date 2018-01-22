@@ -125,6 +125,7 @@ public class Graph<N> implements Calculable<LinearAlgebra.GraphLinearAlgebra> {
 
     public void remove(N nodeToRemove) {
         nodes.remove(nodeToRemove);
+        edges.removeIf(edge -> edge.contains(nodeToRemove));
     }
 
     public void remove(Edge<N> edgeToRemove) {

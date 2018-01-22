@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Report general features of the dataset - checks for sanity.
@@ -196,18 +195,7 @@ public class A01_ReportGeneralStatistics {
         }
 
         String uniProtId = split[4];
-        List<Integer> functionalResidueNumbers = Pattern.compile(",")
-                .splitAsStream(split[5].replaceAll("\\[", "").replaceAll("]", ""))
-                .flatMapToInt(numberString -> {
-                    if(!numberString.contains("-")) {
-                        return IntStream.of(Integer.valueOf(numberString));
-                    }
-                    String[] numberStringSplit = numberString.split("-");
-                    return IntStream.rangeClosed(Integer.valueOf(numberStringSplit[0]),
-                            Integer.valueOf(numberStringSplit[1]));
-                })
-                .boxed()
-                .collect(Collectors.toList());
+        List<Integer> functionalResidueNumbers = Start2FoldConstants.extractFunctioanlResidueNumbers(split);
         List<AminoAcid> functionalResidues = new ArrayList<>();
         // do nothing if no annotation of functional residues exists
         if(!functionalResidueNumbers.isEmpty()) {

@@ -1,13 +1,14 @@
 package de.bioforscher.jstructure.mathematics;
 
 import de.bioforscher.jstructure.mathematics.graph.Graph;
-import de.bioforscher.jstructure.mathematics.graph.GraphPath;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.util.*;
+import java.util.List;
 
 import static de.bioforscher.jstructure.StandardFormat.format;
 
@@ -18,6 +19,8 @@ import static de.bioforscher.jstructure.StandardFormat.format;
  */
 @ThreadSafe
 public class LinearAlgebra {
+    private static final Logger logger = LoggerFactory.getLogger(LinearAlgebra.class);
+
     private LinearAlgebra() {
         // deny direct instantiation
     }
@@ -309,10 +312,37 @@ public class LinearAlgebra {
     public static class GraphLinearAlgebra<N> implements AlgebraicOperations {
         private final Graph<N> graph;
         private final double numberOfNodePairs;
+        private int[][] dist;
 
         GraphLinearAlgebra(Graph<N> graph) {
             this.graph = graph;
             this.numberOfNodePairs = graph.getNumberOfNodes() * (graph.getNumberOfNodes() - 1) * 0.5;
+            this.dist = new int[graph.getNumberOfNodes()][graph.getNumberOfNodes()];
+
+            int i, j, k;
+
+            for (i = 0; i < graph.getNumberOfNodes(); i++) {
+                for (j = 0; j < graph.getNumberOfNodes(); j++) {
+                    if(i == j) {
+                        dist[i][j] = 0;
+                    } else {
+                        //TODO support for weighted graphs
+                        dist[i][j] = graph.containsEdge(graph.getNodes().get(i), graph.getNodes().get(j)) ?
+                                1 : 999999;
+                    }
+                }
+            }
+
+            for (k = 0; k < graph.getNumberOfNodes(); k++) {
+                for (i = 0; i < graph.getNumberOfNodes(); i++)  {
+                    for (j = 0; j < graph.getNumberOfNodes(); j++) {
+                        // If vertex k is on the shortest path from
+                        // i to j, then update the value of dist[i][j]
+                        if (dist[i][k] + dist[k][j] < dist[i][j])
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
         }
 
         /**
@@ -320,7 +350,7 @@ public class LinearAlgebra {
          * See Vendruscolo, 2002 for definition.
          * @return the average path length of this graph
          */
-        public double graphPathLength() {
+        public double averageGraphPathLength() {
             int numberOfNodes = graph.getNumberOfNodes();
             double np = numberOfNodes * (numberOfNodes - 1) * 0.5;
             return 1 / np * SetOperations.uniquePairsOf(graph.getNodes())
@@ -336,7 +366,8 @@ public class LinearAlgebra {
          * @return the betweenness of this node
          */
         public double betweenness(N node) {
-            return shortestPathsPassingThrough(node) / numberOfNodePairs;
+            return 0;
+//            return shortestPathsPassingThrough(node) / numberOfNodePairs;
         }
 
         /**
@@ -348,77 +379,224 @@ public class LinearAlgebra {
         public int closeness(N node) {
             return graph.nodes()
                     .filter(n -> !node.equals(n))
-                    .map(n -> new Pair<>(n, node))
+                    .map(n -> new Pair<>(node, n))
                     .mapToInt(this::determineShortestPathLength)
                     .max()
                     .orElseThrow(() ->  new IllegalArgumentException("cannot evaluate closeness as graph is not fully connected"));
         }
 
-        /**
-         * Determine the number of shortest paths present in the graph passing through the specified node.
-         * @param node the node to evaluate
-         * @return the number of shortest paths on the graph passing through
-         */
-        private int shortestPathsPassingThrough(N node) {
-            return (int) SetOperations.uniquePairsOf(graph.getNodes())
-                    .map(this::determineShortestPath)
-                    .filter(graphPath -> graphPath.getElements().contains(node))
-                    .count();
-        }
-
-        private GraphPath<N> determineShortestPath(Pair<N, N> pair) {
-            N source = pair.getLeft();
-            N target = pair.getRight();
-
-            // initialize maps and queue
-            Map<N, Integer> distanceMap = new HashMap<>();
-            Map<N, N> predecessors = new HashMap<>();
-            Queue<N> queue = new LinkedList<>();
-            queue.offer(source);
-            distanceMap.put(source, 0);
-
-            while(!queue.isEmpty()) {
-                N node = queue.poll();
-                for(N neighbor : graph.getNeighborsFor(node)) {
-                    if(!distanceMap.containsKey(target)) {
-                        predecessors.put(target, source);
-
-                        if(neighbor.equals(target)) {
-                            return reconstructShortestPath(predecessors, target);
-                        }
-
-                        distanceMap.put(neighbor, distanceMap.get(source) + 1);
-                        queue.offer(neighbor);
-                    }
-                }
-            }
-
-            // no valid path found
-            return new GraphPath<>(new ArrayList<>());
-        }
-
-        private GraphPath<N> reconstructShortestPath(Map<N, N> predecessors, N target) {
-            N step = target;
-            List<N> steps = new ArrayList<>();
-
-            // return empty path
-            if(!predecessors.containsKey(step)) {
-                return new GraphPath<>(steps);
-            }
-
-            steps.add(step);
-            while(predecessors.containsKey(step)) {
-                step = predecessors.get(step);
-                steps.add(step);
-            }
-
-            Collections.reverse(steps);
-            return new GraphPath<>(steps);
-        }
-
         private int determineShortestPathLength(Pair<N, N> pair) {
-            return determineShortestPath(pair).size();
+            int i = graph.getNodes().indexOf(pair.getLeft());
+            int j = graph.getNodes().indexOf(pair.getRight());
+            return dist[i][j];
         }
+
+//        /**
+//         * Determine the number of shortest paths present in the graph passing through the specified node.
+//         * @param node the node to evaluate
+//         * @return the number of shortest paths on the graph passing through
+//         */
+//        private int shortestPathsPassingThrough(N node) {
+//            return (int) SetOperations.uniquePairsOf(graph.getNodes())
+//                    .map(this::determineShortestPath)
+//                    .filter(graphPath -> graphPath.contains(node))
+//                    .count();
+//        }
+
+//        private LinkedList<N> determineShortestPath(Pair<N, N> pair) {
+//            DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(graph);
+//            dijkstraAlgorithm.execute(pair.getLeft());
+//            return dijkstraAlgorithm.getPath(pair.getRight());
+//        }
+//
+//        public class DijkstraAlgorithm {
+//            private final List<N> nodes;
+//            private final List<Edge<N>> edges;
+//            private Set<N> settledNodes;
+//            private Set<N> unSettledNodes;
+//            private Map<N, N> predecessors;
+//            private Map<N, Double> distance;
+//
+//            public DijkstraAlgorithm(Graph<N> graph) {
+//                // create a copy of the array so that we can operate on this array
+//                this.nodes = new ArrayList<>(graph.getNodes());
+//                this.edges = new ArrayList<>(graph.getEdges());
+//            }
+//
+//            public void execute(N source) {
+//                settledNodes = new HashSet<>();
+//                unSettledNodes = new HashSet<>();
+//                distance = new HashMap<>();
+//                predecessors = new HashMap<>();
+//                distance.put(source, 0.0);
+//                unSettledNodes.add(source);
+//                while (unSettledNodes.size() > 0) {
+//                    N node = getMinimum(unSettledNodes);
+//                    settledNodes.add(node);
+//                    unSettledNodes.remove(node);
+//                    findMinimalDistances(node);
+//                }
+//            }
+//
+//            private void findMinimalDistances(N node) {
+//                List<N> adjacentNodes = graph.getNeighborsFor(node);
+//                for(N target : adjacentNodes) {
+//                    if (getShortestDistance(target) > getShortestDistance(node)
+//                            + getDistance(node, target)) {
+//                        distance.put(target, getShortestDistance(node) + getDistance(node, target));
+//                        predecessors.put(target, node);
+//                        unSettledNodes.add(target);
+//                    }
+//                }
+//
+//            }
+//
+//            private double getDistance(N node, N target) {
+//                for (Edge edge : edges) {
+//                    if (edge.contains(node) && edge.contains(target)) {
+//                        return edge.getWeight();
+//                    }
+//                }
+//                throw new RuntimeException("Should not happen");
+//            }
+//
+//            private N getMinimum(Set<N> vertexes) {
+//                N minimum = null;
+//                for (N vertex : vertexes) {
+//                    if (minimum == null) {
+//                        minimum = vertex;
+//                    } else {
+//                        if (getShortestDistance(vertex) < getShortestDistance(minimum)) {
+//                            minimum = vertex;
+//                        }
+//                    }
+//                }
+//                return minimum;
+//            }
+//
+//            private boolean isSettled(N vertex) {
+//                return settledNodes.contains(vertex);
+//            }
+//
+//            private double getShortestDistance(N destination) {
+//                Double d = distance.get(destination);
+//                if (d == null) {
+//                    return Integer.MAX_VALUE;
+//                } else {
+//                    return d;
+//                }
+//            }
+//
+//            /*
+//             * This method returns the path from the source to the selected target and
+//             * NULL if no path exists
+//             */
+//            public LinkedList<N> getPath(N target) {
+//                LinkedList<N> path = new LinkedList<>();
+//                N step = target;
+//                // check if a path exists
+//                if (predecessors.get(step) == null) {
+//                    return null;
+//                }
+//                path.add(step);
+//                while (predecessors.get(step) != null) {
+//                    step = predecessors.get(step);
+//                    path.add(step);
+//                }
+//                // Put it into the correct order
+//                Collections.reverse(path);
+//                return path;
+//            }
+//        }
+
+//        private GraphPath<N> determineShortestPath(Pair<N, N> pair) {
+//            return findBasedOnPredicate(pair.getLeft(), n -> n.equals(pair.getRight()));
+//        }
+//
+//        /**
+//         * Returns the shortest path originating from the source node. The target node is the first node that satisfies
+//         * target predicate. E.g. To to search for a specific node in the graph it is possible to use the identifier in the
+//         * predicate. If no path can be found null is returned.
+//         *
+//         * @param sourceNode The source node.
+//         * @param targetPredicate The predicate the target has to fulfill.
+//         * @return The shortest path.
+//         */
+//        public GraphPath<N> findBasedOnPredicate(N sourceNode, Predicate<N> targetPredicate) {
+//            this.queue.clear();
+//            this.distances.clear();
+//            this.predecessors.clear();
+//            this.queue.offer(sourceNode);
+//            this.distances.put(sourceNode, 0);
+//            // processes
+//            while (!queue.isEmpty()) {
+//                N currentNode = queue.poll();
+//                for (N neighbour : graph.getNeighborsFor(currentNode)) {
+//                    GraphPath<N> path = checkTarget(currentNode, neighbour, targetPredicate);
+//                    if (path != null) {
+//                        return path;
+//                    }
+//                }
+//            }
+//            return null;
+//        }
+//
+//        /**
+//         * Checks whether the current target fulfills the predicate. If this is the case the path from the source to the
+//         * target is returned. Otherwise the target is added to the queue, it is referenced in the predecessors map and the
+//         * distance is set in the distance map.
+//         *
+//         * @param source The source node.
+//         * @param target The target node.
+//         * @param targetPredicate The predicate to fulfill.
+//         * @return The shortest path if the target fulfills the predicate and null otherwise.
+//         */
+//        private GraphPath<N> checkTarget(N source, N target, Predicate<N> targetPredicate) {
+//            System.out.println("checking " + source + " and " + target);
+//            if (!distances.containsKey(target)) {
+//                // until predicate is fulfilled the first time
+//                if (targetPredicate.test(target)) {
+//                    predecessors.put(target, source);
+//                    return getPath(target);
+//                }
+//                // calculate distance and offer to queue
+//                distances.put(target, distances.get(source) + 1);
+//                predecessors.put(target, source);
+//                queue.offer(target);
+//                System.out.println("processed " + source + ", put " + target + " on queue");
+//            }
+//            return null;
+//        }
+//
+//        /**
+//         * Builds the path to the given target node.
+//         *
+//         * @param targetNode The target node.
+//         * @return The path to the node.
+//         */
+//        private GraphPath<N> getPath(N targetNode) {
+//            List<N> path = new ArrayList<>();
+//            N step = targetNode;
+//            if (predecessors.get(step) == null) {
+//                return null;
+//            }
+//            path.add(step);
+//            while (predecessors.get(step) != null) {
+//                step = predecessors.get(step);
+//                path.add(step);
+//            }
+//            Collections.reverse(path);
+//            return new GraphPath<>(path);
+//        }
+//
+//        private int determineShortestPathLength(Pair<N, N> pair) {
+//            LinkedList<N> graphPath = determineShortestPath(pair);
+//            if(graphPath == null) {
+//                return Integer.MAX_VALUE;
+//            } else {
+//                return graphPath.size();
+//            }
+//        }
 
         /**
          * Evaluates all nodes of a given graph by comparing the actual number of edges in the network of direct
@@ -434,6 +612,12 @@ public class LinearAlgebra {
                             graph + " as the graph does not contain edges"));
         }
 
+        /**
+         * The local clustering coefficient. For a given node and all its neighbors: how many edges are present compared
+         * to the theoretical limit?
+         * @param node the node to evaluate
+         * @return the fraction of edges present
+         */
         public double clusteringCoefficient(N node) {
             List<N> neighbors = graph.getNeighborsFor(node);
             int numberOfNeighbors = neighbors.size();
