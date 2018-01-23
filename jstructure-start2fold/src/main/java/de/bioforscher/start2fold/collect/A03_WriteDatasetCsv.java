@@ -52,6 +52,8 @@ public class A03_WriteDatasetCsv {
                                 "asa," +
                                 "eccount,cumstrength,ecstrength,conservation," +
                                 "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
+                                "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
+                                "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
                                 "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
                                 "plip_distinct_neighborhoods," +
                                 "folds,functional" + System.lineSeparator(),
@@ -190,6 +192,12 @@ public class A03_WriteDatasetCsv {
                                 StandardFormat.format(residueTopologicPropertiesContainer.getFullPlip().getBetweenness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getFullPlip().getCloseness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getFullPlip().getClusteringCoefficient()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getHydrogenPlip().getBetweenness()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getHydrogenPlip().getCloseness()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getHydrogenPlip().getClusteringCoefficient()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getHydrophobicPlip().getBetweenness()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getHydrophobicPlip().getCloseness()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getHydrophobicPlip().getClusteringCoefficient()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getBetweenness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getCloseness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getClusteringCoefficient()) + "," +
