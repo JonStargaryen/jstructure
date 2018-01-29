@@ -10,10 +10,16 @@ package de.bioforscher.jstructure.mathematics;
 public class Pair<L, R> {
     private final L left;
     private final R right;
+    private final Object payload;
 
     public Pair(L t1, R t2) {
+        this(t1, t2, null);
+    }
+
+    public Pair(L t1, R t2, Object payload) {
         this.left = t1;
         this.right = t2;
+        this.payload = payload;
     }
 
     public L getLeft() {
@@ -24,12 +30,20 @@ public class Pair<L, R> {
         return right;
     }
 
+    public boolean hasPayload() {
+        return payload != null;
+    }
+
+    public Object getPayload() {
+        return payload;
+    }
+
     /**
      * Returns a new pair container with reversed order.
      * @return a new pair where the first entry is now second and vice versa
      */
     public Pair<R, L> flip() {
-        return new Pair<>(right, left);
+        return new Pair<>(right, left, payload);
     }
 
     /**

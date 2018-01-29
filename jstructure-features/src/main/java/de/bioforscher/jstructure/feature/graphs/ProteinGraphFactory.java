@@ -3,8 +3,7 @@ package de.bioforscher.jstructure.feature.graphs;
 import de.bioforscher.jstructure.feature.interactions.HydrogenBond;
 import de.bioforscher.jstructure.feature.interactions.HydrophobicInteraction;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
-import de.bioforscher.jstructure.mathematics.graph.Edge;
-import de.bioforscher.jstructure.mathematics.graph.Graph;
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
@@ -35,25 +34,25 @@ public class ProteinGraphFactory {
         }
     }
 
-    public static Graph<AminoAcid> createProteinGraph(Chain chain, InteractionScheme interactionScheme) {
+    public static ProteinGraph createProteinGraph(Chain chain, InteractionScheme interactionScheme) {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-        List<Edge<AminoAcid>> interactions = new ArrayList<>();
+        List<Pair<AminoAcid, AminoAcid>> contacts = new ArrayList<>();
 
         for(int i = 0; i < aminoAcids.size() - 1; i++) {
             AminoAcid aminoAcid1 = aminoAcids.get(i);
             for(int j = i + 1; j < aminoAcids.size(); j++) {
                 AminoAcid aminoAcid2 = aminoAcids.get(j);
                 if(j == i + 1) {
-                    interactions.add(new Edge<>(aminoAcid1, aminoAcid2));
+                    contacts.add(new Pair<>(aminoAcid1, aminoAcid2));
                     continue;
                 }
 
                 if(interactionScheme.areInContact(aminoAcid1, aminoAcid2)) {
-                    interactions.add(new Edge<>(aminoAcid1, aminoAcid2));
+                    contacts.add(new Pair<>(aminoAcid1, aminoAcid2));
                 }
             }
         }
 
-        return new Graph<>(aminoAcids, interactions);
+        return new ProteinGraph(aminoAcids, contacts);
     }
 }
