@@ -44,11 +44,38 @@ public class ProteinGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
         return contacts;
     }
 
+    public List<AminoAcid> getContactsOf(AminoAcid aminoAcid) {
+        return filterContactList(contacts, aminoAcid);
+    }
+
+    private List<AminoAcid> filterContactList(List<Pair<AminoAcid, AminoAcid>> list, AminoAcid aminoAcid) {
+        return list.stream()
+                .filter(pair -> filterPair(pair, aminoAcid))
+                .map(pair -> resolvePair(pair, aminoAcid))
+                .collect(Collectors.toList());
+    }
+
+    private boolean filterPair(Pair<AminoAcid, AminoAcid> pair, AminoAcid aminoAcid) {
+        return pair.contains(aminoAcid);
+    }
+
+    private AminoAcid resolvePair(Pair<AminoAcid, AminoAcid> pair, AminoAcid aminoAcid) {
+        return pair.getLeft().equals(aminoAcid) ? pair.getRight() : pair.getLeft();
+    }
+
     public List<Pair<AminoAcid, AminoAcid>> getLocalContacts() {
         return localContacts;
     }
 
+    public List<AminoAcid> getLocalContactsOf(AminoAcid aminoAcid) {
+        return filterContactList(localContacts, aminoAcid);
+    }
+
     public List<Pair<AminoAcid, AminoAcid>> getNonLocalContacts() {
         return nonLocalContacts;
+    }
+
+    public List<AminoAcid> getNonLocalContactsOf(AminoAcid aminoAcid) {
+        return filterContactList(nonLocalContacts, aminoAcid);
     }
 }

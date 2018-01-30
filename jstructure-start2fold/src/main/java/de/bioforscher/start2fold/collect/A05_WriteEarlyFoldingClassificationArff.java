@@ -1,0 +1,545 @@
+package de.bioforscher.start2fold.collect;
+
+import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.energyprofile.EgorAgreement;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.graphs.ResidueTopologicPropertiesContainer;
+import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
+import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
+import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
+import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.StructureParser;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.aminoacid.Proline;
+import de.bioforscher.start2fold.Start2FoldConstants;
+import de.bioforscher.start2fold.model.HotSpotScoring;
+import de.bioforscher.start2fold.model.Start2FoldResidueAnnotation;
+import de.bioforscher.start2fold.parser.EvolutionaryCouplingParser;
+import de.bioforscher.start2fold.parser.Start2FoldXmlParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.ToDoubleFunction;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+public class A05_WriteEarlyFoldingClassificationArff {
+    private static final Logger logger = LoggerFactory.getLogger(A05_WriteEarlyFoldingClassificationArff.class);
+
+    public static void main(String[] args) throws IOException {
+        String output = Files.lines(Start2FoldConstants.PANCSA_LIST)
+                .map(A05_WriteEarlyFoldingClassificationArff::handleLine)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.joining(System.lineSeparator(),
+                        "@RELATION efr" + System.lineSeparator() +
+                                "@ATTRIBUTE pdb string" + System.lineSeparator() +
+                                "@ATTRIBUTE chain string" + System.lineSeparator() +
+                                "@ATTRIBUTE res string" + System.lineSeparator() +
+                                "@ATTRIBUTE aa string" + System.lineSeparator() +
+                                "@ATTRIBUTE sse string" + System.lineSeparator() +
+                                "@ATTRIBUTE sseSize numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE plip_l_hydrogen numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_l_hydrophobic numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_l_bb numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_l_total numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE plip_nl_hydrogen numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_nl_hydrophobic numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_nl_bb numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_nl_total numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE energy numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE egor numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE eccount numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE cumstrength numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE ecstrength numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE conservation numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE asa numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE loopFraction numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE plip_betweenness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_closeness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_clusteringcoefficient numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hydrogen_betweenness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hydrogen_closeness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hydrogen_clusteringcoefficient numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hydrophobic_betweenness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hydrophobic_closeness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hydrophobic_clusteringcoefficient numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_distinct_neighborhoods numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE class {early,late}" + System.lineSeparator() +
+                                "@DATA" + System.lineSeparator(),
+                        ""));
+
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-smoothed-coupling.arff"),
+                output);
+    }
+
+    private static Optional<String> handleLine(String line) {
+        try {
+            logger.info("handling {}",
+                    line);
+            String[] split = line.split(";");
+            String entryId = split[0];
+            String pdbId = split[1];
+            List<Integer> experimentIds = Pattern.compile(",")
+                    .splitAsStream(split[2].replaceAll("\\[", "").replaceAll("]", ""))
+                    .map(Integer::valueOf)
+                    .collect(Collectors.toList());
+
+            Structure structure = StructureParser.source(pdbId).parse();
+            Chain chain = structure.getFirstChain();
+
+            Start2FoldXmlParser.parseSpecificExperiment(chain,
+                    Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml"),
+                    experimentIds);
+
+            EvolutionaryCouplingParser.parseHotSpotFile(chain,
+                    Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
+
+            List<AminoAcid> earlyFoldingResidues = chain.aminoAcids()
+                    .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isEarly())
+                    .collect(Collectors.toList());
+
+            List<AminoAcid> aminoAcids = chain.aminoAcids()
+                    .collect(Collectors.toList());
+
+            aminoAcids.forEach(aminoAcid -> {
+                GenericSecondaryStructure sse = aminoAcid.getFeature(GenericSecondaryStructure.class);
+
+                PLIPInteractionContainer plipInteractionContainer = aminoAcid.getFeature(PLIPInteractionContainer.class);
+                PLIPInteractionContainer nonLocalPlipInteractionContainer = new PLIPInteractionContainer(null,
+                        plipInteractionContainer
+                                .getInteractions()
+                                .stream()
+                                // interactions have to be non-local
+                                .filter(inter -> Math.abs(inter.getPartner1().getResidueIndex() - inter.getPartner2().getResidueIndex()) > 6)
+                                .collect(Collectors.toList()));
+                PLIPInteractionContainer localPlipInteractionContainer = new PLIPInteractionContainer(null,
+                        plipInteractionContainer
+                                .getInteractions()
+                                .stream()
+                                // interactions have to be local
+                                .filter(inter -> !nonLocalPlipInteractionContainer.getInteractions().contains(inter))
+                                .collect(Collectors.toList()));
+
+                ResidueTopologicPropertiesContainer residueTopologicPropertiesContainer =
+                        aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
+
+                // assign features to smooth
+                RawFeatureVector featureVector = new RawFeatureVector(sse.getSurroundingSecondaryStructureElement(aminoAcid).getSize(),
+                        localPlipInteractionContainer.getHydrogenBonds().size(),
+                        localPlipInteractionContainer.getHydrophobicInteractions().size(),
+                        localPlipInteractionContainer.getBackboneInteractions().size(),
+                        localPlipInteractionContainer.getInteractions().size(),
+
+                        nonLocalPlipInteractionContainer.getHydrogenBonds().size(),
+                        nonLocalPlipInteractionContainer.getHydrophobicInteractions().size(),
+                        nonLocalPlipInteractionContainer.getBackboneInteractions().size(),
+                        nonLocalPlipInteractionContainer.getInteractions().size(),
+
+                        aminoAcid.getFeature(EnergyProfile.class).getSolvationEnergy(),
+                        aminoAcid.getFeature(EgorAgreement.class).getEgorPrediction(),
+
+                        aminoAcid.getFeature(HotSpotScoring.class).getEcCount(),
+                        aminoAcid.getFeature(HotSpotScoring.class).getCumStrength(),
+                        aminoAcid.getFeature(HotSpotScoring.class).getEcStrength(),
+                        aminoAcid.getFeature(HotSpotScoring.class).getConservation(),
+
+                        aminoAcid.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea(),
+
+                        residueTopologicPropertiesContainer.getFullPlip().getBetweenness(),
+                        residueTopologicPropertiesContainer.getFullPlip().getCloseness(),
+                        residueTopologicPropertiesContainer.getFullPlip().getClusteringCoefficient(),
+                        residueTopologicPropertiesContainer.getHydrogenPlip().getBetweenness(),
+                        residueTopologicPropertiesContainer.getHydrogenPlip().getCloseness(),
+                        residueTopologicPropertiesContainer.getHydrogenPlip().getClusteringCoefficient(),
+                        residueTopologicPropertiesContainer.getHydrophobicPlip().getBetweenness(),
+                        residueTopologicPropertiesContainer.getHydrophobicPlip().getCloseness(),
+                        residueTopologicPropertiesContainer.getHydrophobicPlip().getClusteringCoefficient(),
+                        residueTopologicPropertiesContainer.getFullPlip().getDistinctNeighborhoodCount());
+
+                aminoAcid.getFeatureContainer().addFeature(featureVector);
+            });
+
+            // smooth features
+            aminoAcids.forEach(aminoAcid -> {
+                int index = aminoAcid.getResidueIndex();
+                List<AminoAcid> aminoAcidsToSmooth = new ArrayList<>();
+                aminoAcidsToSmooth.add(aminoAcid);
+
+                // get N-terminal residues
+                for(int i = 0; i < 4; i++) {
+                    int indexToGet = index - (i + 1);
+                    if(indexToGet > -1) {
+                        aminoAcidsToSmooth.add(aminoAcids.get(indexToGet));
+                    }
+                }
+
+                // get C-terminal residues
+                for(int i = 0; i < 4; i++) {
+                    int indexToGet = index + (i + 1);
+                    if(indexToGet < aminoAcids.size()) {
+                        aminoAcidsToSmooth.add(aminoAcids.get(indexToGet));
+                    }
+                }
+
+                // assign smoothed values
+                smoothValues(aminoAcidsToSmooth, aminoAcid);
+            });
+            
+
+            return Optional.of(aminoAcids.stream()
+                    .filter(aminoAcid -> !(aminoAcid instanceof Proline))
+                    .map(aminoAcid -> {
+                        GenericSecondaryStructure sse = aminoAcid.getFeature(GenericSecondaryStructure.class);
+
+                        SmoothedFeatureVector smoothedFeatureVector = aminoAcid.getFeature(SmoothedFeatureVector.class);
+
+                        return pdbId + "," +
+                                "A" + "," +
+                                aminoAcid.getResidueIdentifier() + "," +
+                                aminoAcid.getOneLetterCode() + "," +
+                                sse.getSecondaryStructure().getOneLetterRepresentation() + "," +
+                                StandardFormat.format(smoothedFeatureVector.getSecondaryStructureElementSize()) + "," +
+
+                                StandardFormat.format(smoothedFeatureVector.getLocalHydrogen()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getLocalHydrophobic()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getLocalBackbone()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getLocalInteractions()) + "," +
+
+                                StandardFormat.format(smoothedFeatureVector.getNonLocalHydrogen()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getNonLocalHydrophobic()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getNonLocalBackbone()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getNonLocalInteractions()) + "," +
+
+                                StandardFormat.format(smoothedFeatureVector.getEnergy()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getEgor()) + "," +
+
+                                StandardFormat.format(smoothedFeatureVector.getEccount()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getCumstrength()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getEcstrength()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getConservation()) + "," +
+
+                                StandardFormat.format(smoothedFeatureVector.getRasa()) + "," +
+                                StandardFormat.format(aminoAcid.getFeature(LoopFraction.class).getLoopFraction()) + "," + // already smoothed
+
+                                StandardFormat.format(smoothedFeatureVector.getBetweenness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getCloseness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getClusteringCoefficient()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getHydrogenBetweenness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getHydrogenCloseness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getHydrogenClusteringCoefficient()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getHydrophobicBetweenness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getHydrophobicCloseness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getHydrophobicClusteringCoefficient()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getDistinctNeighborhoods()) + "," +
+
+                                (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late");
+                    })
+                    .collect(Collectors.joining(System.lineSeparator())));
+        } catch (Exception e) {
+            logger.warn("computation for {} failed",
+                    line,
+                    e);
+            return Optional.empty();
+        }
+    }
+
+    private static void smoothValues(List<AminoAcid> aminoAcidsToSmooth, AminoAcid aminoAcid) {
+        double secondaryStructureElementSize = smoothValue(aminoAcidsToSmooth, FeatureVector::getSecondaryStructureElementSize);
+
+        double localHydrogen = smoothValue(aminoAcidsToSmooth, FeatureVector::getLocalHydrogen);
+        double localHydrophobic = smoothValue(aminoAcidsToSmooth, FeatureVector::getLocalHydrophobic);
+        double localBackbone = smoothValue(aminoAcidsToSmooth, FeatureVector::getLocalBackbone);
+        double localInteractions = smoothValue(aminoAcidsToSmooth, FeatureVector::getLocalInteractions);
+
+        double nonLocalHydrogen = smoothValue(aminoAcidsToSmooth, FeatureVector::getNonLocalHydrogen);
+        double nonLocalHydrophobic = smoothValue(aminoAcidsToSmooth, FeatureVector::getNonLocalHydrophobic);
+        double nonLocalBackbone = smoothValue(aminoAcidsToSmooth, FeatureVector::getNonLocalBackbone);
+        double nonLocalInteractions = smoothValue(aminoAcidsToSmooth, FeatureVector::getNonLocalInteractions);
+
+        double energy = smoothValue(aminoAcidsToSmooth, FeatureVector::getEnergy);
+        double egor = smoothValue(aminoAcidsToSmooth, FeatureVector::getEgor);
+
+        double eccount = smoothValue(aminoAcidsToSmooth, FeatureVector::getEccount);
+        double cumstrength = smoothValue(aminoAcidsToSmooth, FeatureVector::getCumstrength);
+        double ecstrength = smoothValue(aminoAcidsToSmooth, FeatureVector::getEcstrength);
+        double conservation = smoothValue(aminoAcidsToSmooth, FeatureVector::getConservation);
+
+        double rasa = smoothValue(aminoAcidsToSmooth, FeatureVector::getRasa);
+
+        double betweenness = smoothValue(aminoAcidsToSmooth, FeatureVector::getBetweenness);
+        double closeness = smoothValue(aminoAcidsToSmooth, FeatureVector::getCloseness);
+        double clusteringCoefficient = smoothValue(aminoAcidsToSmooth, FeatureVector::getClusteringCoefficient);
+
+        double hydrogenBetweenness = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrogenBetweenness);
+        double hydrogenCloseness = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrogenCloseness);
+        double hydrogenClusteringCoefficient = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrogenClusteringCoefficient);
+
+        double hydrophobicBetweenness = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrophobicBetweenness);
+        double hydrophobicCloseness = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrophobicCloseness);
+        double hydrophobicClusteringCoefficient = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrophobicClusteringCoefficient);
+
+        double distinctNeighborhoods = smoothValue(aminoAcidsToSmooth, FeatureVector::getDistinctNeighborhoods);
+
+        SmoothedFeatureVector smoothedFeatureVector = new SmoothedFeatureVector(secondaryStructureElementSize,
+
+                localHydrogen,
+                localHydrophobic,
+                localBackbone,
+                localInteractions,
+
+                nonLocalHydrogen,
+                nonLocalHydrophobic,
+                nonLocalBackbone,
+                nonLocalInteractions,
+
+                energy,
+                egor,
+
+                eccount,
+                cumstrength,
+                ecstrength,
+                conservation,
+
+                rasa,
+
+                betweenness,
+                closeness,
+                clusteringCoefficient,
+
+                hydrogenBetweenness,
+                hydrogenCloseness,
+                hydrogenClusteringCoefficient,
+
+                hydrophobicBetweenness,
+                hydrophobicCloseness,
+                hydrophobicClusteringCoefficient,
+
+                distinctNeighborhoods);
+
+        aminoAcid.getFeatureContainer().addFeature(smoothedFeatureVector);
+    }
+
+    private static double smoothValue(List<AminoAcid> aminoAcidsToSmooth, ToDoubleFunction<FeatureVector> mapping) {
+        return aminoAcidsToSmooth.stream()
+                .map(aminoAcid -> aminoAcid.getFeature(RawFeatureVector.class))
+                .mapToDouble(mapping)
+                .average()
+                .orElseThrow(() -> new IllegalArgumentException("could not compute average"));
+    }
+
+    static class SmoothedFeatureVector extends FeatureVector {
+        public SmoothedFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double eccount, double cumstrength, double ecstrength, double conservation, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
+            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, eccount, cumstrength, ecstrength, conservation, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+        }
+    }
+    
+    static class RawFeatureVector extends FeatureVector {
+        public RawFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double eccount, double cumstrength, double ecstrength, double conservation, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
+            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, eccount, cumstrength, ecstrength, conservation, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+        }
+    }
+    
+    static abstract class FeatureVector extends FeatureContainerEntry {
+        private final double secondaryStructureElementSize;
+        private final double localHydrogen;
+        private final double localHydrophobic;
+        private final double localBackbone;
+        private final double localInteractions;
+        private final double nonLocalHydrogen;
+        private final double nonLocalHydrophobic;
+        private final double nonLocalBackbone;
+        private final double nonLocalInteractions;
+        private final double energy;
+        private final double egor;
+        private final double eccount;
+        private final double cumstrength;
+        private final double ecstrength;
+        private final double conservation;
+        private final double rasa;
+        private final double betweenness;
+        private final double closeness;
+        private final double clusteringCoefficient;
+        private final double hydrogenBetweenness;
+        private final double hydrogenCloseness;
+        private final double hydrogenClusteringCoefficient;
+        private final double hydrophobicBetweenness;
+        private final double hydrophobicCloseness;
+        private final double hydrophobicClusteringCoefficient;
+        private final double distinctNeighborhoods;
+
+        FeatureVector(double secondaryStructureElementSize,
+                             double localHydrogen,
+                             double localHydrophobic,
+                             double localBackbone,
+                             double localInteractions,
+                             double nonLocalHydrogen,
+                             double nonLocalHydrophobic,
+                             double nonLocalBackbone,
+                             double nonLocalInteractions,
+                             double energy,
+                             double egor,
+                             double eccount,
+                             double cumstrength,
+                             double ecstrength,
+                             double conservation,
+                             double rasa,
+                             double betweenness,
+                             double closeness,
+                             double clusteringCoefficient,
+                             double hydrogenBetweenness,
+                             double hydrogenCloseness,
+                             double hydrogenClusteringCoefficient,
+                             double hydrophobicBetweenness,
+                             double hydrophobicCloseness,
+                             double hydrophobicClusteringCoefficient,
+                             double distinctNeighborhoods) {
+            super(null);
+            this.secondaryStructureElementSize = secondaryStructureElementSize;
+            this.localHydrogen = localHydrogen;
+            this.localHydrophobic = localHydrophobic;
+            this.localBackbone = localBackbone;
+            this.localInteractions = localInteractions;
+            this.nonLocalHydrogen = nonLocalHydrogen;
+            this.nonLocalHydrophobic = nonLocalHydrophobic;
+            this.nonLocalBackbone = nonLocalBackbone;
+            this.nonLocalInteractions = nonLocalInteractions;
+            this.energy = energy;
+            this.egor = egor;
+            this.eccount = eccount;
+            this.cumstrength = cumstrength;
+            this.ecstrength = ecstrength;
+            this.conservation = conservation;
+            this.rasa = rasa;
+            this.betweenness = betweenness;
+            this.closeness = closeness;
+            this.clusteringCoefficient = clusteringCoefficient;
+            this.hydrogenBetweenness = hydrogenBetweenness;
+            this.hydrogenCloseness = hydrogenCloseness;
+            this.hydrogenClusteringCoefficient = hydrogenClusteringCoefficient;
+            this.hydrophobicBetweenness = hydrophobicBetweenness;
+            this.hydrophobicCloseness = hydrophobicCloseness;
+            this.hydrophobicClusteringCoefficient = hydrophobicClusteringCoefficient;
+            this.distinctNeighborhoods = distinctNeighborhoods;
+        }
+
+        double getSecondaryStructureElementSize() {
+            return secondaryStructureElementSize;
+        }
+
+        double getLocalHydrogen() {
+            return localHydrogen;
+        }
+
+        double getLocalHydrophobic() {
+            return localHydrophobic;
+        }
+
+        double getLocalBackbone() {
+            return localBackbone;
+        }
+
+        double getLocalInteractions() {
+            return localInteractions;
+        }
+
+        double getNonLocalHydrogen() {
+            return nonLocalHydrogen;
+        }
+
+        double getNonLocalHydrophobic() {
+            return nonLocalHydrophobic;
+        }
+
+        double getNonLocalBackbone() {
+            return nonLocalBackbone;
+        }
+
+        double getNonLocalInteractions() {
+            return nonLocalInteractions;
+        }
+
+        double getEnergy() {
+            return energy;
+        }
+
+        double getEgor() {
+            return egor;
+        }
+
+        public double getEccount() {
+            return eccount;
+        }
+
+        public double getCumstrength() {
+            return cumstrength;
+        }
+
+        public double getEcstrength() {
+            return ecstrength;
+        }
+
+        public double getConservation() {
+            return conservation;
+        }
+
+        double getRasa() {
+            return rasa;
+        }
+
+        double getBetweenness() {
+            return betweenness;
+        }
+
+        double getCloseness() {
+            return closeness;
+        }
+
+        double getClusteringCoefficient() {
+            return clusteringCoefficient;
+        }
+
+        double getHydrogenBetweenness() {
+            return hydrogenBetweenness;
+        }
+
+        double getHydrogenCloseness() {
+            return hydrogenCloseness;
+        }
+
+        double getHydrogenClusteringCoefficient() {
+            return hydrogenClusteringCoefficient;
+        }
+
+        double getHydrophobicBetweenness() {
+            return hydrophobicBetweenness;
+        }
+
+        double getHydrophobicCloseness() {
+            return hydrophobicCloseness;
+        }
+
+        double getHydrophobicClusteringCoefficient() {
+            return hydrophobicClusteringCoefficient;
+        }
+
+        double getDistinctNeighborhoods() {
+            return distinctNeighborhoods;
+        }
+    }
+}

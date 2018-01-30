@@ -104,7 +104,7 @@ public class TopologicPropertyCalculator extends FeatureProvider {
         private final Map<AminoAcid, ShortestPathAlgorithm.SingleSourcePaths<AminoAcid, DefaultEdge>> shortestPaths;
         private final DijkstraShortestPath<AminoAcid, DefaultEdge> dijkstraShortestPath;
         private final int numberOfNodes;
-        private final int numberOfNodePairs;
+        private final double numberOfNodePairs;
 
         ProteinGraphCalculations(ProteinGraph graph) {
             this.graph = graph;
@@ -115,7 +115,7 @@ public class TopologicPropertyCalculator extends FeatureProvider {
                 this.shortestPaths.put(aminoAcid, dijkstraShortestPath.getPaths(aminoAcid));
             }
             this.numberOfNodes = graph.vertexSet().size();
-            this.numberOfNodePairs = (int) (numberOfNodes * (numberOfNodes - 1) * 0.5);
+            this.numberOfNodePairs = numberOfNodes * (numberOfNodes - 1) * 0.5;
         }
 
         /**
@@ -148,7 +148,7 @@ public class TopologicPropertyCalculator extends FeatureProvider {
          * @return the betweenness of this node
          */
         double betweenness(AminoAcid node) {
-            return shortestPathsPassingThrough(node).size() / numberOfNodePairs;
+            return  shortestPathsPassingThrough(node).size() / numberOfNodePairs;
         }
 
         /**

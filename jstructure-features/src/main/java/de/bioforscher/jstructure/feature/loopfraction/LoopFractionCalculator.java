@@ -74,7 +74,7 @@ public class LoopFractionCalculator extends FeatureProvider {
                 .filter(group -> !group.getFeatureContainer().getFeatureOptional(LoopFraction.class).isPresent())
                 .forEach(group -> {
                     int residueNumber = group.getResidueIdentifier().getResidueNumber();
-                    double smoothedValue =chain.select()
+                    double smoothedValue = chain.select()
                             .aminoAcids()
                             .residueNumber(surroundingResidueNumbers(residueNumber))
                             .asFilteredGroups()

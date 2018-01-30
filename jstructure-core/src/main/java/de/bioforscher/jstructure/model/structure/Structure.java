@@ -69,6 +69,10 @@ public class Structure extends AbstractFeatureable implements ChainContainer/*, 
         return LinearAlgebra.on(this);
     }
 
+    public Chain getFirstChain() {
+        return chains.get(0);
+    }
+
     @Override
     public List<Chain> getChains() {
         return chains;
