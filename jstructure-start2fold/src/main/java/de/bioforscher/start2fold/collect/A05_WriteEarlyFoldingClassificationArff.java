@@ -15,9 +15,7 @@ import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.aminoacid.Proline;
 import de.bioforscher.start2fold.Start2FoldConstants;
-import de.bioforscher.start2fold.model.HotSpotScoring;
 import de.bioforscher.start2fold.model.Start2FoldResidueAnnotation;
-import de.bioforscher.start2fold.parser.EvolutionaryCouplingParser;
 import de.bioforscher.start2fold.parser.Start2FoldXmlParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,12 +38,12 @@ public class A05_WriteEarlyFoldingClassificationArff {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "@RELATION efr" + System.lineSeparator() +
-                                "@ATTRIBUTE pdb string" + System.lineSeparator() +
+                        "@RELATION fc" + System.lineSeparator() +
+                                /*"@ATTRIBUTE pdb string" + System.lineSeparator() +
                                 "@ATTRIBUTE chain string" + System.lineSeparator() +
                                 "@ATTRIBUTE res string" + System.lineSeparator() +
                                 "@ATTRIBUTE aa string" + System.lineSeparator() +
-                                "@ATTRIBUTE sse string" + System.lineSeparator() +
+                                "@ATTRIBUTE sse string" + System.lineSeparator() +*/
                                 "@ATTRIBUTE sseSize numeric" + System.lineSeparator() +
 
                                 "@ATTRIBUTE plip_l_hydrogen numeric" + System.lineSeparator() +
@@ -61,10 +59,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
                                 "@ATTRIBUTE energy numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE egor numeric" + System.lineSeparator() +
 
-                                "@ATTRIBUTE eccount numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE cumstrength numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE ecstrength numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE conservation numeric" + System.lineSeparator() +
+//                                "@ATTRIBUTE eccount numeric" + System.lineSeparator() +
+//                                "@ATTRIBUTE cumstrength numeric" + System.lineSeparator() +
+//                                "@ATTRIBUTE ecstrength numeric" + System.lineSeparator() +
+//                                "@ATTRIBUTE conservation numeric" + System.lineSeparator() +
 
                                 "@ATTRIBUTE asa numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE loopFraction numeric" + System.lineSeparator() +
@@ -78,13 +76,18 @@ public class A05_WriteEarlyFoldingClassificationArff {
                                 "@ATTRIBUTE plip_hydrophobic_betweenness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE plip_hydrophobic_closeness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE plip_hydrophobic_clusteringcoefficient numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE conv_betweenness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE conv_closeness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE conv_clusteringcoefficient numeric" + System.lineSeparator() +
+
                                 "@ATTRIBUTE plip_distinct_neighborhoods numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE conv_distinct_neighborhoods numeric" + System.lineSeparator() +
 
                                 "@ATTRIBUTE class {early,late}" + System.lineSeparator() +
                                 "@DATA" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-smoothed-coupling.arff"),
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores.arff"),
                 output);
     }
 
@@ -107,8 +110,8 @@ public class A05_WriteEarlyFoldingClassificationArff {
                     Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml"),
                     experimentIds);
 
-            EvolutionaryCouplingParser.parseHotSpotFile(chain,
-                    Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
+//            EvolutionaryCouplingParser.parseHotSpotFile(chain,
+//                    Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
 
             List<AminoAcid> earlyFoldingResidues = chain.aminoAcids()
                     .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isEarly())
@@ -126,7 +129,7 @@ public class A05_WriteEarlyFoldingClassificationArff {
                                 .getInteractions()
                                 .stream()
                                 // interactions have to be non-local
-                                .filter(inter -> Math.abs(inter.getPartner1().getResidueIndex() - inter.getPartner2().getResidueIndex()) > 6)
+                                .filter(inter -> Math.abs(inter.getPartner1().getResidueIndex() - inter.getPartner2().getResidueIndex()) > 5)
                                 .collect(Collectors.toList()));
                 PLIPInteractionContainer localPlipInteractionContainer = new PLIPInteractionContainer(null,
                         plipInteractionContainer
@@ -154,10 +157,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
                         aminoAcid.getFeature(EnergyProfile.class).getSolvationEnergy(),
                         aminoAcid.getFeature(EgorAgreement.class).getEgorPrediction(),
 
-                        aminoAcid.getFeature(HotSpotScoring.class).getEcCount(),
-                        aminoAcid.getFeature(HotSpotScoring.class).getCumStrength(),
-                        aminoAcid.getFeature(HotSpotScoring.class).getEcStrength(),
-                        aminoAcid.getFeature(HotSpotScoring.class).getConservation(),
+//                        aminoAcid.getFeature(HotSpotScoring.class).getEcCount(),
+//                        aminoAcid.getFeature(HotSpotScoring.class).getCumStrength(),
+//                        aminoAcid.getFeature(HotSpotScoring.class).getEcStrength(),
+//                        aminoAcid.getFeature(HotSpotScoring.class).getConservation(),
 
                         aminoAcid.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea(),
 
@@ -170,7 +173,11 @@ public class A05_WriteEarlyFoldingClassificationArff {
                         residueTopologicPropertiesContainer.getHydrophobicPlip().getBetweenness(),
                         residueTopologicPropertiesContainer.getHydrophobicPlip().getCloseness(),
                         residueTopologicPropertiesContainer.getHydrophobicPlip().getClusteringCoefficient(),
-                        residueTopologicPropertiesContainer.getFullPlip().getDistinctNeighborhoodCount());
+                        residueTopologicPropertiesContainer.getConventional().getBetweenness(),
+                        residueTopologicPropertiesContainer.getConventional().getCloseness(),
+                        residueTopologicPropertiesContainer.getConventional().getClusteringCoefficient(),
+                        residueTopologicPropertiesContainer.getFullPlip().getDistinctNeighborhoodCount(),
+                       residueTopologicPropertiesContainer.getConventional().getDistinctNeighborhoodCount());
 
                 aminoAcid.getFeatureContainer().addFeature(featureVector);
             });
@@ -209,11 +216,11 @@ public class A05_WriteEarlyFoldingClassificationArff {
 
                         SmoothedFeatureVector smoothedFeatureVector = aminoAcid.getFeature(SmoothedFeatureVector.class);
 
-                        return pdbId + "," +
+                        return /*pdbId + "," +
                                 "A" + "," +
                                 aminoAcid.getResidueIdentifier() + "," +
                                 aminoAcid.getOneLetterCode() + "," +
-                                sse.getSecondaryStructure().getOneLetterRepresentation() + "," +
+                                sse.getSecondaryStructure().getOneLetterRepresentation() + "," +*/
                                 StandardFormat.format(smoothedFeatureVector.getSecondaryStructureElementSize()) + "," +
 
                                 StandardFormat.format(smoothedFeatureVector.getLocalHydrogen()) + "," +
@@ -229,10 +236,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
                                 StandardFormat.format(smoothedFeatureVector.getEnergy()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getEgor()) + "," +
 
-                                StandardFormat.format(smoothedFeatureVector.getEccount()) + "," +
-                                StandardFormat.format(smoothedFeatureVector.getCumstrength()) + "," +
-                                StandardFormat.format(smoothedFeatureVector.getEcstrength()) + "," +
-                                StandardFormat.format(smoothedFeatureVector.getConservation()) + "," +
+//                                StandardFormat.format(smoothedFeatureVector.getEccount()) + "," +
+//                                StandardFormat.format(smoothedFeatureVector.getCumstrength()) + "," +
+//                                StandardFormat.format(smoothedFeatureVector.getEcstrength()) + "," +
+//                                StandardFormat.format(smoothedFeatureVector.getConservation()) + "," +
 
                                 StandardFormat.format(smoothedFeatureVector.getRasa()) + "," +
                                 StandardFormat.format(aminoAcid.getFeature(LoopFraction.class).getLoopFraction()) + "," + // already smoothed
@@ -246,7 +253,12 @@ public class A05_WriteEarlyFoldingClassificationArff {
                                 StandardFormat.format(smoothedFeatureVector.getHydrophobicBetweenness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getHydrophobicCloseness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getHydrophobicClusteringCoefficient()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getConvBetweenness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getConvCloseness()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getConvClusteringCoefficient()) + "," +
+
                                 StandardFormat.format(smoothedFeatureVector.getDistinctNeighborhoods()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getConvDistinctNeighborhoods()) + "," +
 
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late");
                     })
@@ -275,10 +287,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
         double energy = smoothValue(aminoAcidsToSmooth, FeatureVector::getEnergy);
         double egor = smoothValue(aminoAcidsToSmooth, FeatureVector::getEgor);
 
-        double eccount = smoothValue(aminoAcidsToSmooth, FeatureVector::getEccount);
-        double cumstrength = smoothValue(aminoAcidsToSmooth, FeatureVector::getCumstrength);
-        double ecstrength = smoothValue(aminoAcidsToSmooth, FeatureVector::getEcstrength);
-        double conservation = smoothValue(aminoAcidsToSmooth, FeatureVector::getConservation);
+//        double eccount = smoothValue(aminoAcidsToSmooth, FeatureVector::getEccount);
+//        double cumstrength = smoothValue(aminoAcidsToSmooth, FeatureVector::getCumstrength);
+//        double ecstrength = smoothValue(aminoAcidsToSmooth, FeatureVector::getEcstrength);
+//        double conservation = smoothValue(aminoAcidsToSmooth, FeatureVector::getConservation);
 
         double rasa = smoothValue(aminoAcidsToSmooth, FeatureVector::getRasa);
 
@@ -294,7 +306,12 @@ public class A05_WriteEarlyFoldingClassificationArff {
         double hydrophobicCloseness = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrophobicCloseness);
         double hydrophobicClusteringCoefficient = smoothValue(aminoAcidsToSmooth, FeatureVector::getHydrophobicClusteringCoefficient);
 
+        double convBetweenness = smoothValue(aminoAcidsToSmooth, FeatureVector::getConvBetweenness);
+        double convCloseness = smoothValue(aminoAcidsToSmooth, FeatureVector::getConvCloseness);
+        double convClusteringCoefficient = smoothValue(aminoAcidsToSmooth, FeatureVector::getConvClusteringCoefficient);
+
         double distinctNeighborhoods = smoothValue(aminoAcidsToSmooth, FeatureVector::getDistinctNeighborhoods);
+        double convDistinctNeighborhoods = smoothValue(aminoAcidsToSmooth, FeatureVector::getConvDistinctNeighborhoods);
 
         SmoothedFeatureVector smoothedFeatureVector = new SmoothedFeatureVector(secondaryStructureElementSize,
 
@@ -311,10 +328,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
                 energy,
                 egor,
 
-                eccount,
-                cumstrength,
-                ecstrength,
-                conservation,
+//                eccount,
+//                cumstrength,
+//                ecstrength,
+//                conservation,
 
                 rasa,
 
@@ -330,7 +347,12 @@ public class A05_WriteEarlyFoldingClassificationArff {
                 hydrophobicCloseness,
                 hydrophobicClusteringCoefficient,
 
-                distinctNeighborhoods);
+                convBetweenness,
+                convCloseness,
+                convClusteringCoefficient,
+
+                distinctNeighborhoods,
+                convDistinctNeighborhoods);
 
         aminoAcid.getFeatureContainer().addFeature(smoothedFeatureVector);
     }
@@ -344,15 +366,32 @@ public class A05_WriteEarlyFoldingClassificationArff {
     }
 
     static class SmoothedFeatureVector extends FeatureVector {
-        public SmoothedFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double eccount, double cumstrength, double ecstrength, double conservation, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
-            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, eccount, cumstrength, ecstrength, conservation, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+        SmoothedFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double convBetweenness, double convCloseness, double convClusteringCoefficient, double distinctNeighborhoods, double convDistinctNeighborhoods) {
+            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, convBetweenness, convCloseness, convClusteringCoefficient, distinctNeighborhoods, convDistinctNeighborhoods);
         }
+        // constructor without couplings
+//        SmoothedFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
+//            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+//        }
+        // constructor with couplings
+//        public SmoothedFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double eccount, double cumstrength, double ecstrength, double conservation, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
+//            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, eccount, cumstrength, ecstrength, conservation, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+//        }
+
     }
     
     static class RawFeatureVector extends FeatureVector {
-        public RawFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double eccount, double cumstrength, double ecstrength, double conservation, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
-            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, eccount, cumstrength, ecstrength, conservation, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+        RawFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double convBetweenness, double convCloseness, double convClusteringCoefficient, double distinctNeighborhoods, double convDistinctNeighborhoods) {
+            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, convBetweenness, convCloseness, convClusteringCoefficient, distinctNeighborhoods, convDistinctNeighborhoods);
         }
+        // constructor without couplings
+//        RawFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
+//            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+//        }
+        // constructor with couplings
+//        public RawFeatureVector(double secondaryStructureElementSize, double localHydrogen, double localHydrophobic, double localBackbone, double localInteractions, double nonLocalHydrogen, double nonLocalHydrophobic, double nonLocalBackbone, double nonLocalInteractions, double energy, double egor, double eccount, double cumstrength, double ecstrength, double conservation, double rasa, double betweenness, double closeness, double clusteringCoefficient, double hydrogenBetweenness, double hydrogenCloseness, double hydrogenClusteringCoefficient, double hydrophobicBetweenness, double hydrophobicCloseness, double hydrophobicClusteringCoefficient, double distinctNeighborhoods) {
+//            super(secondaryStructureElementSize, localHydrogen, localHydrophobic, localBackbone, localInteractions, nonLocalHydrogen, nonLocalHydrophobic, nonLocalBackbone, nonLocalInteractions, energy, egor, eccount, cumstrength, ecstrength, conservation, rasa, betweenness, closeness, clusteringCoefficient, hydrogenBetweenness, hydrogenCloseness, hydrogenClusteringCoefficient, hydrophobicBetweenness, hydrophobicCloseness, hydrophobicClusteringCoefficient, distinctNeighborhoods);
+//        }
     }
     
     static abstract class FeatureVector extends FeatureContainerEntry {
@@ -367,10 +406,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
         private final double nonLocalInteractions;
         private final double energy;
         private final double egor;
-        private final double eccount;
-        private final double cumstrength;
-        private final double ecstrength;
-        private final double conservation;
+//        private final double eccount;
+//        private final double cumstrength;
+//        private final double ecstrength;
+//        private final double conservation;
         private final double rasa;
         private final double betweenness;
         private final double closeness;
@@ -381,7 +420,11 @@ public class A05_WriteEarlyFoldingClassificationArff {
         private final double hydrophobicBetweenness;
         private final double hydrophobicCloseness;
         private final double hydrophobicClusteringCoefficient;
+        private final double convBetweenness;
+        private final double convCloseness;
+        private final double convClusteringCoefficient;
         private final double distinctNeighborhoods;
+        private final double convDistinctNeighborhoods;
 
         FeatureVector(double secondaryStructureElementSize,
                              double localHydrogen,
@@ -394,10 +437,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
                              double nonLocalInteractions,
                              double energy,
                              double egor,
-                             double eccount,
-                             double cumstrength,
-                             double ecstrength,
-                             double conservation,
+//                             double eccount,
+//                             double cumstrength,
+//                             double ecstrength,
+//                             double conservation,
                              double rasa,
                              double betweenness,
                              double closeness,
@@ -408,7 +451,11 @@ public class A05_WriteEarlyFoldingClassificationArff {
                              double hydrophobicBetweenness,
                              double hydrophobicCloseness,
                              double hydrophobicClusteringCoefficient,
-                             double distinctNeighborhoods) {
+                             double convBetweenness,
+                             double convCloseness,
+                             double convClusteringCoefficient,
+                             double distinctNeighborhoods,
+                             double convDistinctNeighborhoods) {
             super(null);
             this.secondaryStructureElementSize = secondaryStructureElementSize;
             this.localHydrogen = localHydrogen;
@@ -421,10 +468,10 @@ public class A05_WriteEarlyFoldingClassificationArff {
             this.nonLocalInteractions = nonLocalInteractions;
             this.energy = energy;
             this.egor = egor;
-            this.eccount = eccount;
-            this.cumstrength = cumstrength;
-            this.ecstrength = ecstrength;
-            this.conservation = conservation;
+//            this.eccount = eccount;
+//            this.cumstrength = cumstrength;
+//            this.ecstrength = ecstrength;
+//            this.conservation = conservation;
             this.rasa = rasa;
             this.betweenness = betweenness;
             this.closeness = closeness;
@@ -435,7 +482,27 @@ public class A05_WriteEarlyFoldingClassificationArff {
             this.hydrophobicBetweenness = hydrophobicBetweenness;
             this.hydrophobicCloseness = hydrophobicCloseness;
             this.hydrophobicClusteringCoefficient = hydrophobicClusteringCoefficient;
+            this.convBetweenness = convBetweenness;
+            this.convCloseness = convCloseness;
+            this.convClusteringCoefficient = convClusteringCoefficient;
             this.distinctNeighborhoods = distinctNeighborhoods;
+            this.convDistinctNeighborhoods = convDistinctNeighborhoods;
+        }
+
+        public double getConvBetweenness() {
+            return convBetweenness;
+        }
+
+        public double getConvCloseness() {
+            return convCloseness;
+        }
+
+        public double getConvClusteringCoefficient() {
+            return convClusteringCoefficient;
+        }
+
+        public double getConvDistinctNeighborhoods() {
+            return convDistinctNeighborhoods;
         }
 
         double getSecondaryStructureElementSize() {
@@ -482,21 +549,21 @@ public class A05_WriteEarlyFoldingClassificationArff {
             return egor;
         }
 
-        public double getEccount() {
-            return eccount;
-        }
-
-        public double getCumstrength() {
-            return cumstrength;
-        }
-
-        public double getEcstrength() {
-            return ecstrength;
-        }
-
-        public double getConservation() {
-            return conservation;
-        }
+//        public double getEccount() {
+//            return eccount;
+//        }
+//
+//        public double getCumstrength() {
+//            return cumstrength;
+//        }
+//
+//        public double getEcstrength() {
+//            return ecstrength;
+//        }
+//
+//        public double getConservation() {
+//            return conservation;
+//        }
 
         double getRasa() {
             return rasa;

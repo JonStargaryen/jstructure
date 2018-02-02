@@ -200,14 +200,14 @@ public class TopologicPropertyCalculator extends FeatureProvider {
         int distinctNeighborhoodCount(AminoAcid aminoAcid) {
             List<Integer> interactingGroups = graph.getContacts().stream()
                     .filter(plipInteraction -> aminoAcid.equals(plipInteraction.getLeft()) || aminoAcid.equals(plipInteraction.getRight()))
-                    .filter(inter -> Math.abs(inter.getLeft().getResidueIndex() - inter.getRight().getResidueIndex()) > 6)
+                    .filter(inter -> Math.abs(inter.getLeft().getResidueIndex() - inter.getRight().getResidueIndex()) > 5)
                     .map(plipInteraction -> aminoAcid.equals(plipInteraction.getLeft()) ? plipInteraction.getRight() : plipInteraction.getLeft())
                     .map(Group::getResidueIndex)
                     .collect(Collectors.toList());
             List<Integer> distinctNeighborhoods = new ArrayList<>();
             for(int interactingGroup : interactingGroups) {
                 if(distinctNeighborhoods.stream()
-                        .noneMatch(residueIndex -> Math.abs(residueIndex - interactingGroup) > 6)) {
+                        .noneMatch(residueIndex -> Math.abs(residueIndex - interactingGroup) > 5)) {
                     distinctNeighborhoods.add(interactingGroup);
                 }
             }

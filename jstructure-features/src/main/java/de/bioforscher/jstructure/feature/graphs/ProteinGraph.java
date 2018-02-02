@@ -29,11 +29,11 @@ public class ProteinGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
     }
 
     private boolean isNonLocalContact(Pair<AminoAcid, AminoAcid> pair) {
-        return Math.abs(pair.getLeft().getResidueIndex() - pair.getRight().getResidueIndex()) > 6;
+        return Math.abs(pair.getLeft().getResidueIndex() - pair.getRight().getResidueIndex()) > 5;
     }
 
     private boolean isLocalContact(Pair<AminoAcid, AminoAcid> pair) {
-        return Math.abs(pair.getLeft().getResidueIndex() - pair.getRight().getResidueIndex()) <= 6;
+        return Math.abs(pair.getLeft().getResidueIndex() - pair.getRight().getResidueIndex()) < 6;
     }
 
     public List<AminoAcid> getAminoAcids() {

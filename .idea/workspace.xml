@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingClassificationArff.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java" afterPath="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java" />
       <change beforePath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java" afterPath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java" />
       <change beforePath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java" afterPath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java" />
-      <change beforePath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/loopfraction/LoopFractionCalculator.java" afterPath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/loopfraction/LoopFractionCalculator.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingClassificationArff.java" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingClassificationArff.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -124,66 +120,66 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="A05_WriteEarlyFoldingClassificationArff.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="A05_WriteEarlyFoldingClassificationArff.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingClassificationArff.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2862">
-              <caret line="159" column="85" lean-forward="false" selection-start-line="159" selection-start-column="85" selection-end-line="159" selection-end-column="85" />
+            <state relative-caret-position="512">
+              <caret line="64" column="55" lean-forward="true" selection-start-line="61" selection-start-column="53" selection-end-line="64" selection-end-column="55" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#26934#26935#0" expanded="true" />
-                <element signature="e#26994#26995#0" expanded="true" />
-                <element signature="e#27031#27032#0" expanded="true" />
-                <element signature="e#27075#27076#0" expanded="true" />
-                <element signature="e#27115#27116#0" expanded="true" />
-                <element signature="e#27162#27163#0" expanded="true" />
-                <element signature="e#27199#27200#0" expanded="true" />
-                <element signature="e#27243#27244#0" expanded="true" />
-                <element signature="e#27284#27285#0" expanded="true" />
-                <element signature="e#27332#27333#0" expanded="true" />
-                <element signature="e#27372#27373#0" expanded="true" />
-                <element signature="e#27419#27420#0" expanded="true" />
-                <element signature="e#27462#27463#0" expanded="true" />
-                <element signature="e#27512#27513#0" expanded="true" />
-                <element signature="e#27552#27553#0" expanded="true" />
-                <element signature="e#27599#27600#0" expanded="true" />
-                <element signature="e#27643#27644#0" expanded="true" />
-                <element signature="e#27694#27695#0" expanded="true" />
-                <element signature="e#27724#27725#0" expanded="true" />
-                <element signature="e#27761#27762#0" expanded="true" />
-                <element signature="e#27789#27790#0" expanded="true" />
-                <element signature="e#27824#27825#0" expanded="true" />
-                <element signature="e#27862#27863#0" expanded="true" />
-                <element signature="e#27900#27901#0" expanded="true" />
-                <element signature="e#27942#27943#0" expanded="true" />
-                <element signature="e#27984#27985#0" expanded="true" />
-                <element signature="e#28025#28026#0" expanded="true" />
-                <element signature="e#28066#28067#0" expanded="true" />
-                <element signature="e#28109#28110#0" expanded="true" />
-                <element signature="e#28152#28153#0" expanded="true" />
-                <element signature="e#28180#28181#0" expanded="true" />
-                <element signature="e#28215#28216#0" expanded="true" />
-                <element signature="e#28250#28251#0" expanded="true" />
-                <element signature="e#28292#28293#0" expanded="true" />
-                <element signature="e#28325#28326#0" expanded="true" />
-                <element signature="e#28365#28366#0" expanded="true" />
-                <element signature="e#28410#28411#0" expanded="true" />
-                <element signature="e#28462#28463#0" expanded="true" />
-                <element signature="e#28505#28506#0" expanded="true" />
-                <element signature="e#28555#28556#0" expanded="true" />
-                <element signature="e#28596#28597#0" expanded="true" />
-                <element signature="e#28644#28645#0" expanded="true" />
-                <element signature="e#28697#28698#0" expanded="true" />
-                <element signature="e#28757#28758#0" expanded="true" />
-                <element signature="e#28803#28804#0" expanded="true" />
-                <element signature="e#28856#28857#0" expanded="true" />
-                <element signature="e#28900#28901#0" expanded="true" />
-                <element signature="e#28951#28952#0" expanded="true" />
-                <element signature="e#29007#29008#0" expanded="true" />
-                <element signature="e#29070#29071#0" expanded="true" />
-                <element signature="e#29115#29116#0" expanded="true" />
-                <element signature="e#29167#29168#0" expanded="true" />
-                <marker date="1517317408580" expanded="true" signature="5668:15850" ph="{...}" />
+                <element signature="e#34162#34163#0" expanded="true" />
+                <element signature="e#34208#34209#0" expanded="true" />
+                <element signature="e#34252#34253#0" expanded="true" />
+                <element signature="e#34296#34297#0" expanded="true" />
+                <element signature="e#34352#34353#0" expanded="true" />
+                <element signature="e#34408#34409#0" expanded="true" />
+                <element signature="e#34464#34465#0" expanded="true" />
+                <element signature="e#34520#34521#0" expanded="true" />
+                <element signature="e#34573#34574#0" expanded="true" />
+                <element signature="e#34633#34634#0" expanded="true" />
+                <element signature="e#34670#34671#0" expanded="true" />
+                <element signature="e#34714#34715#0" expanded="true" />
+                <element signature="e#34754#34755#0" expanded="true" />
+                <element signature="e#34801#34802#0" expanded="true" />
+                <element signature="e#34838#34839#0" expanded="true" />
+                <element signature="e#34882#34883#0" expanded="true" />
+                <element signature="e#34923#34924#0" expanded="true" />
+                <element signature="e#34971#34972#0" expanded="true" />
+                <element signature="e#35011#35012#0" expanded="true" />
+                <element signature="e#35058#35059#0" expanded="true" />
+                <element signature="e#35101#35102#0" expanded="true" />
+                <element signature="e#35151#35152#0" expanded="true" />
+                <element signature="e#35191#35192#0" expanded="true" />
+                <element signature="e#35238#35239#0" expanded="true" />
+                <element signature="e#35282#35283#0" expanded="true" />
+                <element signature="e#35333#35334#0" expanded="true" />
+                <element signature="e#35363#35364#0" expanded="true" />
+                <element signature="e#35400#35401#0" expanded="true" />
+                <element signature="e#35428#35429#0" expanded="true" />
+                <element signature="e#35463#35464#0" expanded="true" />
+                <element signature="e#35849#35850#0" expanded="true" />
+                <element signature="e#35884#35885#0" expanded="true" />
+                <element signature="e#35919#35920#0" expanded="true" />
+                <element signature="e#35961#35962#0" expanded="true" />
+                <element signature="e#35994#35995#0" expanded="true" />
+                <element signature="e#36034#36035#0" expanded="true" />
+                <element signature="e#36079#36080#0" expanded="true" />
+                <element signature="e#36131#36132#0" expanded="true" />
+                <element signature="e#36174#36175#0" expanded="true" />
+                <element signature="e#36224#36225#0" expanded="true" />
+                <element signature="e#36265#36266#0" expanded="true" />
+                <element signature="e#36313#36314#0" expanded="true" />
+                <element signature="e#36366#36367#0" expanded="true" />
+                <element signature="e#36426#36427#0" expanded="true" />
+                <element signature="e#36472#36473#0" expanded="true" />
+                <element signature="e#36525#36526#0" expanded="true" />
+                <element signature="e#36569#36570#0" expanded="true" />
+                <element signature="e#36620#36621#0" expanded="true" />
+                <element signature="e#36676#36677#0" expanded="true" />
+                <element signature="e#36739#36740#0" expanded="true" />
+                <element signature="e#36784#36785#0" expanded="true" />
+                <element signature="e#36836#36837#0" expanded="true" />
+                <marker date="1517571367723" expanded="true" signature="5946:17000" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -192,8 +188,18 @@
       <file leaf-file-name="A03_WriteDatasetCsv.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2070">
-              <caret line="186" column="53" lean-forward="false" selection-start-line="186" selection-start-column="53" selection-end-line="186" selection-end-column="53" />
+            <state relative-caret-position="-576">
+              <caret line="54" column="82" lean-forward="false" selection-start-line="54" selection-start-column="82" selection-end-line="54" selection-end-column="82" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="A04_WriteTransitionStateCsv.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A04_WriteTransitionStateCsv.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="160">
+              <caret line="47" column="37" lean-forward="false" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -295,7 +301,6 @@
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ResidueTopologicPropertiesContainer.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Graph.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/GraphAlgebraTest.java" />
-        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java" />
         <option value="$PROJECT_DIR$/jstructure-all/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/LinearAlgebra.java" />
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraphFactory.java" />
@@ -315,12 +320,13 @@
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A04_WriteTransitionStateCsv.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Pair.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingArff.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/A01_ReportGeneralStatistics.java" />
-        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java" />
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/loopfraction/LoopFractionCalculator.java" />
+        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java" />
+        <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingClassificationArff.java" />
+        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java" />
       </list>
     </option>
   </component>
@@ -369,9 +375,9 @@
     <option name="skipTests" value="true" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="-17" />
+    <option name="y" value="2" />
     <option name="width" value="3440" />
-    <option name="height" value="1457" />
+    <option name="height" value="1438" />
   </component>
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
@@ -393,9 +399,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -442,7 +445,10 @@
           <select />
         </subPane>
       </pane>
+      <pane id="AndroidView" />
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -455,7 +461,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="js-jscs-nodeInterpreter" value="/usr/bin/node" />
-    <property name="SearchEverywhereHistoryKey" value="Topologi&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java&#10;Sifts&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotator&#10;SequenceMotifD&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition&#10;Elem&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.Element&#10;Evolutionary&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.evolution.EvolutionaryInformationCalculator&#10;dicto&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.sse.DictionaryOfProteinSecondaryStructureTest&#10;SecondaryStr&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.sse.SecondaryStructureType&#10;StructureP&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureParser&#10;MCL&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL&#10;EnergyC&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator&#10;EnergyPr&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.energyprofile.EnergyProfile&#10;PLIPAn&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java&#10;Conser&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.ConservationCalculatorImpl&#10;Conserva&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/ConservationCalculatorImpl.java&#10;Local&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/LocalBlastWrapper.java&#10;UniPH&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator&#10;getAllChains&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.MutationEffectPredictionServiceImpl#getStreamOfAllChains&#10;StructureParser&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java&#10;StructureC&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureCollectors.java&#10;Nucl&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java&#10;Nucle&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide&#10;Group&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/GroupContainer.java&#10;FileCon&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/io/FileConvert.java&#10;StructureImpl&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6.jar!/org/biojava/nbio/structure/StructureImpl.class&#10;toPDB&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.AtomRecordProvider#toPDBString&#10;ProteinP&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/ProteinParserTest.java&#10;PdbFile&#9;PSI&#9;JAVA://org.biojava.nbio.structure.io.PDBFileParser&#10;PDBH&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/PDBHeader.java&#10;PDBHeader&#9;PSI&#9;JAVA://org.biojava.nbio.structure.PDBHeader&#10;Sele&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Selecti&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Clustal&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/ClustalOmegaRestQuery.java&#10;Uni&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;Protp&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/ProteinParser.java&#10;createProtein&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.old.impl.MutationEffectPredictionServiceImpl#createProtein&#10;ResidueIde&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ResidueIdentifier.java&#10;UniProtService&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator#uniProtBlastService&#10;UniProt&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;StructureCol&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureCollectors&#10;Advanced&#9;PSI&#9;JAVA://studies.poznan.AdvancedEnergyProfileRunner&#10;UNI&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;PLIPRest&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java&#10;getResourceAs&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#getResourceAsStream&#10;getResource&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.feature.AbstractFeatureProvider#getResourceAsStream&#10;Access&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceAreaCalculator.java&#10;Torsion&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/TorsionAngles.java&#10;Selection&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.selection.Selection&#10;createPro&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#createPrototype&#10;OPM&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/parser/opm/OPMDatabaseQuery.java&#10;jdk&#9;ACTION&#9;SwitchBootJdk" />
+    <property name="SearchEverywhereHistoryKey" value="&gt; 5&#9;null&#9;null&#10;&gt; 6&#9;null&#9;null&#10;Topologi&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java&#10;Sifts&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.mapping.SiftsMappingAnnotator&#10;SequenceMotifD&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.motif.SequenceMotifDefinition&#10;Elem&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.Element&#10;Evolutionary&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.evolution.EvolutionaryInformationCalculator&#10;dicto&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.sse.DictionaryOfProteinSecondaryStructureTest&#10;SecondaryStr&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.sse.SecondaryStructureType&#10;StructureP&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureParser&#10;MCL&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mathematics.graph.partitioning.algorithms.MCL&#10;EnergyC&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.energyprofile.EnergyProfileCalculator&#10;EnergyPr&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.energyprofile.EnergyProfile&#10;PLIPAn&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java&#10;Conser&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.ConservationCalculatorImpl&#10;Conserva&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-mutation/src/main/java/de/bioforscher/jstructure/mutation/impl/ConservationCalculatorImpl.java&#10;Local&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/LocalBlastWrapper.java&#10;UniPH&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator&#10;getAllChains&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.impl.MutationEffectPredictionServiceImpl#getStreamOfAllChains&#10;StructureParser&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureParser.java&#10;StructureC&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/StructureCollectors.java&#10;Nucl&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/nucleotide/Nucleotide.java&#10;Nucle&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide&#10;Group&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/GroupContainer.java&#10;FileCon&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/io/FileConvert.java&#10;StructureImpl&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6.jar!/org/biojava/nbio/structure/StructureImpl.class&#10;toPDB&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.AtomRecordProvider#toPDBString&#10;ProteinP&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/test/java/de/bioforscher/jstructure/model/structure/ProteinParserTest.java&#10;PdbFile&#9;PSI&#9;JAVA://org.biojava.nbio.structure.io.PDBFileParser&#10;PDBH&#9;FILE&#9;jar://C:/Users/S/.m2/repository/org/biojava/biojava-structure/5.0.0-alpha6/biojava-structure-5.0.0-alpha6-sources.jar!/org/biojava/nbio/structure/PDBHeader.java&#10;PDBHeader&#9;PSI&#9;JAVA://org.biojava.nbio.structure.PDBHeader&#10;Sele&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Selecti&#9;FILE&#9;file://C:/Users/S/git/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java&#10;Clustal&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/ClustalOmegaRestQuery.java&#10;Uni&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;Protp&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/ProteinParser.java&#10;createProtein&#9;PSI&#9;JAVA://de.bioforscher.jstructure.mutation.old.impl.MutationEffectPredictionServiceImpl#createProtein&#10;ResidueIde&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/identifier/ResidueIdentifier.java&#10;UniProtService&#9;PSI&#9;JAVA://de.bioforscher.jstructure.feature.uniprot.homologous.UniProtHomologyAnnotator#uniProtBlastService&#10;UniProt&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;StructureCol&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.StructureCollectors&#10;Advanced&#9;PSI&#9;JAVA://studies.poznan.AdvancedEnergyProfileRunner&#10;UNI&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/uniprot/homologous/UniProtHomologyAnnotator.java&#10;PLIPRest&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java&#10;getResourceAs&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#getResourceAsStream&#10;getResource&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.feature.AbstractFeatureProvider#getResourceAsStream&#10;Access&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/feature/asa/AccessibleSurfaceAreaCalculator.java&#10;Torsion&#9;FILE&#9;file:///home/bittrich/IdeaProjects/jstructure/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/TorsionAngles.java&#10;Selection&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.selection.Selection&#10;createPro&#9;PSI&#9;JAVA://de.bioforscher.jstructure.model.structure.GroupPrototypeParser#createPrototype" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/explorer/src/main/java" />
@@ -527,7 +533,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.A05_WriteEarlyFoldingClassificationArff">
+  <component name="RunManager" selected="Application.A03_WriteDatasetCsv">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
@@ -1200,9 +1206,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.A05_WriteEarlyFoldingClassificationArff" />
-        <item index="1" class="java.lang.String" itemvalue="Application.A04_WriteTransitionStateCsv" />
-        <item index="2" class="java.lang.String" itemvalue="Application.A03_WriteDatasetCsv" />
+        <item index="0" class="java.lang.String" itemvalue="Application.A03_WriteDatasetCsv" />
+        <item index="1" class="java.lang.String" itemvalue="Application.A05_WriteEarlyFoldingClassificationArff" />
+        <item index="2" class="java.lang.String" itemvalue="Application.A04_WriteTransitionStateCsv" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.GraphAlgebraTest" />
         <item index="4" class="java.lang.String" itemvalue="JUnit.GraphAlgebraTest.shouldDetermineAveragePathLength" />
       </list>
@@ -1378,14 +1384,9 @@
       <workItem from="1514970318755" duration="30874000" />
       <workItem from="1515685447478" duration="2749000" />
       <workItem from="1515690560848" duration="64725000" />
-      <workItem from="1517304615578" duration="7004000" />
-    </task>
-    <task id="LOCAL-00148" summary="computation of mutation effect vectors">
-      <created>1500388451720</created>
-      <option name="number" value="00148" />
-      <option name="presentableId" value="LOCAL-00148" />
-      <option name="project" value="LOCAL" />
-      <updated>1500388451720</updated>
+      <workItem from="1517304615578" duration="10726000" />
+      <workItem from="1517502449238" duration="5000" />
+      <workItem from="1517563016880" duration="6418000" />
     </task>
     <task id="LOCAL-00149" summary="more fine-grained logging and some bug-fixes of the mutation effect predictor">
       <created>1500449718839</created>
@@ -1723,7 +1724,14 @@
       <option name="project" value="LOCAL" />
       <updated>1516719224671</updated>
     </task>
-    <option name="localTasksCounter" value="197" />
+    <task id="LOCAL-00197" summary="generation of EFR-GMLVQ arffs">
+      <created>1517317426940</created>
+      <option name="number" value="00197" />
+      <option name="presentableId" value="LOCAL-00197" />
+      <option name="project" value="LOCAL" />
+      <updated>1517317426941</updated>
+    </task>
+    <option name="localTasksCounter" value="198" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1759,7 +1767,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2498676000" />
+    <option name="totallyTimeSpent" value="2508821000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1771,8 +1779,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-17" width="3440" height="1457" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="2" width="3440" height="1438" extended-state="0" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1783,14 +1790,13 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18935362" sideWeight="0.47051886" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.50410956" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36506745" sideWeight="0.5294811" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3703422" sideWeight="0.5294811" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289977" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3307783" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16067217" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893157" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3221117" sideWeight="0.4861945" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12116745" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969988" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -1808,6 +1814,7 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32833132" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297953" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3221117" sideWeight="0.4861945" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1844,7 +1851,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="obvious fix for coupling analysis" />
     <MESSAGE value="routine for contact tables and coupling csv" />
     <MESSAGE value="json representation of graphs" />
     <MESSAGE value="extends contact csv generation by number of observations" />
@@ -1869,7 +1875,8 @@
     <MESSAGE value="first network characteristics implemented" />
     <MESSAGE value="tweaks on topological descriptors&#10;&#10;betweenness still bugged" />
     <MESSAGE value="code for transition state characterisation" />
-    <option name="LAST_COMMIT_MESSAGE" value="code for transition state characterisation" />
+    <MESSAGE value="generation of EFR-GMLVQ arffs" />
+    <option name="LAST_COMMIT_MESSAGE" value="generation of EFR-GMLVQ arffs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1881,7 +1888,7 @@
           <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="571" />
+      <option name="time" value="572" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1890,20 +1897,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/PrimitiveDoubleArrayLinearAlgebraTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="20" column="33" lean-forward="false" selection-start-line="20" selection-start-column="33" selection-end-line="20" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/test/java/de/bioforscher/jstructure/mathematics/LinearAlgebraTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/graph/Graph.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1588">
@@ -1937,7 +1930,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
           <caret line="50" column="5" lean-forward="false" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1966,7 +1958,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="55" column="63" lean-forward="false" selection-start-line="55" selection-start-column="63" selection-end-line="55" selection-end-column="63" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1981,7 +1972,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="7" column="31" lean-forward="true" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1989,7 +1979,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="65">
           <caret line="11" column="56" lean-forward="true" selection-start-line="11" selection-start-column="56" selection-end-line="11" selection-end-column="56" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2018,9 +2007,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="720">
           <caret line="55" column="24" lean-forward="false" selection-start-line="55" selection-start-column="24" selection-end-line="55" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2115,7 +2101,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="23" column="5" lean-forward="true" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2166,7 +2151,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
           <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2184,34 +2168,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="47" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A04_WriteTransitionStateCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="47" column="37" lean-forward="false" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="64" column="0" lean-forward="true" selection-start-line="64" selection-start-column="0" selection-end-line="64" selection-end-column="0" />
-          <folding>
-            <element signature="e#1640#1641#0" expanded="false" />
-            <element signature="e#1673#1674#0" expanded="false" />
-            <element signature="e#1734#1735#0" expanded="false" />
-            <element signature="e#1765#1766#0" expanded="false" />
-            <element signature="e#1830#1831#0" expanded="false" />
-            <element signature="e#1891#1892#0" expanded="false" />
-            <element signature="e#2584#2585#0" expanded="false" />
-            <element signature="e#2620#2621#0" expanded="false" />
-            <element signature="e#2825#2826#0" expanded="false" />
-            <element signature="e#2864#2865#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2219,29 +2175,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="6" column="42" lean-forward="false" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="215" column="0" lean-forward="true" selection-start-line="215" selection-start-column="0" selection-end-line="215" selection-end-column="0" />
-          <folding>
-            <element signature="e#8279#8280#0" expanded="false" />
-            <element signature="e#8371#8372#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="72" column="29" lean-forward="true" selection-start-line="72" selection-start-column="29" selection-end-line="72" selection-end-column="29" />
-          <folding>
-            <element signature="e#2858#2859#0" expanded="true" />
-            <element signature="e#2894#2895#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2249,7 +2182,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="11" column="35" lean-forward="true" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2257,81 +2189,128 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="791">
           <caret line="101" column="46" lean-forward="true" selection-start-line="101" selection-start-column="46" selection-end-line="101" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/AtomRecordProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="15" column="6" lean-forward="false" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="486">
+          <caret line="33" column="0" lean-forward="true" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Group.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-469">
+          <caret line="111" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
-            <element signature="e#966#967#0" expanded="false" />
-            <element signature="e#1012#1013#0" expanded="false" />
+            <element signature="e#4978#4979#0" expanded="true" />
+            <element signature="e#5038#5039#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2070">
-          <caret line="186" column="53" lean-forward="false" selection-start-line="186" selection-start-column="53" selection-end-line="186" selection-end-column="53" />
+        <state relative-caret-position="845">
+          <caret line="183" column="0" lean-forward="true" selection-start-line="183" selection-start-column="0" selection-end-line="183" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/TopologicPropertyCalculator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1061">
+          <caret line="234" column="109" lean-forward="true" selection-start-line="234" selection-start-column="109" selection-end-line="234" selection-end-column="109" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A05_WriteEarlyFoldingClassificationArff.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2862">
-          <caret line="159" column="85" lean-forward="false" selection-start-line="159" selection-start-column="85" selection-end-line="159" selection-end-column="85" />
+        <state relative-caret-position="512">
+          <caret line="64" column="55" lean-forward="true" selection-start-line="61" selection-start-column="53" selection-end-line="64" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#26934#26935#0" expanded="true" />
-            <element signature="e#26994#26995#0" expanded="true" />
-            <element signature="e#27031#27032#0" expanded="true" />
-            <element signature="e#27075#27076#0" expanded="true" />
-            <element signature="e#27115#27116#0" expanded="true" />
-            <element signature="e#27162#27163#0" expanded="true" />
-            <element signature="e#27199#27200#0" expanded="true" />
-            <element signature="e#27243#27244#0" expanded="true" />
-            <element signature="e#27284#27285#0" expanded="true" />
-            <element signature="e#27332#27333#0" expanded="true" />
-            <element signature="e#27372#27373#0" expanded="true" />
-            <element signature="e#27419#27420#0" expanded="true" />
-            <element signature="e#27462#27463#0" expanded="true" />
-            <element signature="e#27512#27513#0" expanded="true" />
-            <element signature="e#27552#27553#0" expanded="true" />
-            <element signature="e#27599#27600#0" expanded="true" />
-            <element signature="e#27643#27644#0" expanded="true" />
-            <element signature="e#27694#27695#0" expanded="true" />
-            <element signature="e#27724#27725#0" expanded="true" />
-            <element signature="e#27761#27762#0" expanded="true" />
-            <element signature="e#27789#27790#0" expanded="true" />
-            <element signature="e#27824#27825#0" expanded="true" />
-            <element signature="e#27862#27863#0" expanded="true" />
-            <element signature="e#27900#27901#0" expanded="true" />
-            <element signature="e#27942#27943#0" expanded="true" />
-            <element signature="e#27984#27985#0" expanded="true" />
-            <element signature="e#28025#28026#0" expanded="true" />
-            <element signature="e#28066#28067#0" expanded="true" />
-            <element signature="e#28109#28110#0" expanded="true" />
-            <element signature="e#28152#28153#0" expanded="true" />
-            <element signature="e#28180#28181#0" expanded="true" />
-            <element signature="e#28215#28216#0" expanded="true" />
-            <element signature="e#28250#28251#0" expanded="true" />
-            <element signature="e#28292#28293#0" expanded="true" />
-            <element signature="e#28325#28326#0" expanded="true" />
-            <element signature="e#28365#28366#0" expanded="true" />
-            <element signature="e#28410#28411#0" expanded="true" />
-            <element signature="e#28462#28463#0" expanded="true" />
-            <element signature="e#28505#28506#0" expanded="true" />
-            <element signature="e#28555#28556#0" expanded="true" />
-            <element signature="e#28596#28597#0" expanded="true" />
-            <element signature="e#28644#28645#0" expanded="true" />
-            <element signature="e#28697#28698#0" expanded="true" />
-            <element signature="e#28757#28758#0" expanded="true" />
-            <element signature="e#28803#28804#0" expanded="true" />
-            <element signature="e#28856#28857#0" expanded="true" />
-            <element signature="e#28900#28901#0" expanded="true" />
-            <element signature="e#28951#28952#0" expanded="true" />
-            <element signature="e#29007#29008#0" expanded="true" />
-            <element signature="e#29070#29071#0" expanded="true" />
-            <element signature="e#29115#29116#0" expanded="true" />
-            <element signature="e#29167#29168#0" expanded="true" />
-            <marker date="1517317408580" expanded="true" signature="5668:15850" ph="{...}" />
+            <element signature="e#34162#34163#0" expanded="true" />
+            <element signature="e#34208#34209#0" expanded="true" />
+            <element signature="e#34252#34253#0" expanded="true" />
+            <element signature="e#34296#34297#0" expanded="true" />
+            <element signature="e#34352#34353#0" expanded="true" />
+            <element signature="e#34408#34409#0" expanded="true" />
+            <element signature="e#34464#34465#0" expanded="true" />
+            <element signature="e#34520#34521#0" expanded="true" />
+            <element signature="e#34573#34574#0" expanded="true" />
+            <element signature="e#34633#34634#0" expanded="true" />
+            <element signature="e#34670#34671#0" expanded="true" />
+            <element signature="e#34714#34715#0" expanded="true" />
+            <element signature="e#34754#34755#0" expanded="true" />
+            <element signature="e#34801#34802#0" expanded="true" />
+            <element signature="e#34838#34839#0" expanded="true" />
+            <element signature="e#34882#34883#0" expanded="true" />
+            <element signature="e#34923#34924#0" expanded="true" />
+            <element signature="e#34971#34972#0" expanded="true" />
+            <element signature="e#35011#35012#0" expanded="true" />
+            <element signature="e#35058#35059#0" expanded="true" />
+            <element signature="e#35101#35102#0" expanded="true" />
+            <element signature="e#35151#35152#0" expanded="true" />
+            <element signature="e#35191#35192#0" expanded="true" />
+            <element signature="e#35238#35239#0" expanded="true" />
+            <element signature="e#35282#35283#0" expanded="true" />
+            <element signature="e#35333#35334#0" expanded="true" />
+            <element signature="e#35363#35364#0" expanded="true" />
+            <element signature="e#35400#35401#0" expanded="true" />
+            <element signature="e#35428#35429#0" expanded="true" />
+            <element signature="e#35463#35464#0" expanded="true" />
+            <element signature="e#35849#35850#0" expanded="true" />
+            <element signature="e#35884#35885#0" expanded="true" />
+            <element signature="e#35919#35920#0" expanded="true" />
+            <element signature="e#35961#35962#0" expanded="true" />
+            <element signature="e#35994#35995#0" expanded="true" />
+            <element signature="e#36034#36035#0" expanded="true" />
+            <element signature="e#36079#36080#0" expanded="true" />
+            <element signature="e#36131#36132#0" expanded="true" />
+            <element signature="e#36174#36175#0" expanded="true" />
+            <element signature="e#36224#36225#0" expanded="true" />
+            <element signature="e#36265#36266#0" expanded="true" />
+            <element signature="e#36313#36314#0" expanded="true" />
+            <element signature="e#36366#36367#0" expanded="true" />
+            <element signature="e#36426#36427#0" expanded="true" />
+            <element signature="e#36472#36473#0" expanded="true" />
+            <element signature="e#36525#36526#0" expanded="true" />
+            <element signature="e#36569#36570#0" expanded="true" />
+            <element signature="e#36620#36621#0" expanded="true" />
+            <element signature="e#36676#36677#0" expanded="true" />
+            <element signature="e#36739#36740#0" expanded="true" />
+            <element signature="e#36784#36785#0" expanded="true" />
+            <element signature="e#36836#36837#0" expanded="true" />
+            <marker date="1517571367723" expanded="true" signature="5946:17000" ph="{...}" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-576">
+          <caret line="54" column="82" lean-forward="false" selection-start-line="54" selection-start-column="82" selection-end-line="54" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A04_WriteTransitionStateCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="47" column="37" lean-forward="false" selection-start-line="47" selection-start-column="37" selection-end-line="47" selection-end-column="37" />
+          <folding />
         </state>
       </provider>
     </entry>

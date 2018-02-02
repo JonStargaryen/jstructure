@@ -7,10 +7,10 @@ import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.geometry.GeometricProperties;
 import de.bioforscher.jstructure.feature.graphs.ResidueTopologicPropertiesContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -55,7 +55,7 @@ public class A03_WriteDatasetCsv {
                                 "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
                                 "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
                                 "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
-                                "plip_distinct_neighborhoods," +
+                                "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "folds,functional" + System.lineSeparator(),
                         ""));
 
@@ -113,7 +113,7 @@ public class A03_WriteDatasetCsv {
                                         .getInteractions()
                                         .stream()
                                         // interactions have to be non-local
-                                        .filter(inter -> Math.abs(inter.getPartner1().getResidueIndex() - inter.getPartner2().getResidueIndex()) > 6)
+                                        .filter(inter -> Math.abs(inter.getPartner1().getResidueIndex() - inter.getPartner2().getResidueIndex()) > 5)
                                         .collect(Collectors.toList()));
                         PLIPInteractionContainer localPlipInteractionContainer = new PLIPInteractionContainer(null,
                                 plipInteractionContainer
@@ -137,21 +137,6 @@ public class A03_WriteDatasetCsv {
                         }
 
                         ResidueTopologicPropertiesContainer residueTopologicPropertiesContainer = aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
-                        List<Integer> interactingGroups = plipInteractionContainer.getInteractions()
-                                .stream()
-                                .filter(plipInteraction -> aminoAcid.equals(plipInteraction.getPartner1()) || aminoAcid.equals(plipInteraction.getPartner2()))
-                                .filter(inter -> Math.abs(inter.getPartner1().getResidueIndex() - inter.getPartner2().getResidueIndex()) > 6)
-                                .map(plipInteraction -> aminoAcid.equals(plipInteraction.getPartner1()) ? plipInteraction.getPartner2() : plipInteraction.getPartner1())
-                                .map(Group::getResidueIndex)
-                                .collect(Collectors.toList());
-                        List<Integer> distinctNeighborhoods = new ArrayList<>();
-                        for(int interactingGroup : interactingGroups) {
-                            if(distinctNeighborhoods.stream()
-                                    .noneMatch(residueIndex -> Math.abs(residueIndex - interactingGroup) > 6)) {
-                                distinctNeighborhoods.add(interactingGroup);
-                            }
-                        }
-                        int distinctNeighborhoodCount = distinctNeighborhoods.size();
 
                         return pdbId + "," +
                                 "A" + "," +
@@ -183,6 +168,7 @@ public class A03_WriteDatasetCsv {
                                 equantScore + "," +
 
                                 StandardFormat.format(aminoAcid.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea()) + "," +
+                                StandardFormat.format(aminoAcid.getFeature(LoopFraction.class).getLoopFraction()) + "," +
 
                                 hotSpotScoring.getEcCount() + "," +
                                 StandardFormat.format(hotSpotScoring.getCumStrength()) + "," +
@@ -202,7 +188,8 @@ public class A03_WriteDatasetCsv {
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getCloseness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getClusteringCoefficient()) + "," +
 
-                                distinctNeighborhoodCount + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getFullPlip().getDistinctNeighborhoodCount()) + "," +
+                                StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getDistinctNeighborhoodCount()) + "," +
 
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
                                 functionalAnnotation;
