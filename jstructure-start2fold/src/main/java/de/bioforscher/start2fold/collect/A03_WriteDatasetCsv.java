@@ -45,11 +45,12 @@ public class A03_WriteDatasetCsv {
                 .collect(Collectors.joining(System.lineSeparator(),
                         "pdb,chain,res,aa,sse3,sse9,sseSize," +
                                 "exposed,dCentroid," +
+                                "terminusDistance," +
                                 "plip_hydrogen,plip_hydrophobic,plip_bb,plip_total," +
                                 "plip_l_hydrogen,plip_l_hydrophobic,plip_l_bb,plip_l_total," +
                                 "plip_nl_hydrogen,plip_nl_hydrophobic,plip_nl_bb,plip_nl_total," +
                                 "energy,egor,equant," +
-                                "asa," +
+                                "asa,loopFraction," +
                                 "eccount,cumstrength,ecstrength,conservation," +
                                 "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
                                 "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
@@ -101,6 +102,8 @@ public class A03_WriteDatasetCsv {
                         .forEach(functionalResidues::add);
             }
 
+            List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+
             return Optional.of(chain.aminoAcids()
                     .map(aminoAcid -> {
                         GenericSecondaryStructure sse = aminoAcid.getFeature(GenericSecondaryStructure.class);
@@ -137,6 +140,8 @@ public class A03_WriteDatasetCsv {
                         }
 
                         ResidueTopologicPropertiesContainer residueTopologicPropertiesContainer = aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
+                        int terminusDistance = aminoAcids.indexOf(aminoAcid);
+                        terminusDistance = Math.min(terminusDistance, aminoAcids.size() - terminusDistance);
 
                         return pdbId + "," +
                                 "A" + "," +
@@ -147,6 +152,7 @@ public class A03_WriteDatasetCsv {
                                 sse.getSurroundingSecondaryStructureElement(aminoAcid).getSize() + "," +
                                 (aminoAcid.getFeature(AccessibleSurfaceArea.class).isExposed() ? "exposed" : "buried") + "," +
                                 StandardFormat.format(aminoAcid.getFeature(GeometricProperties.class).getDistanceToCentroid()) + "," +
+                                terminusDistance + "," +
 
                                 plipInteractionContainer.getHydrogenBonds().size() + "," +
                                 plipInteractionContainer.getHydrophobicInteractions().size() + "," +

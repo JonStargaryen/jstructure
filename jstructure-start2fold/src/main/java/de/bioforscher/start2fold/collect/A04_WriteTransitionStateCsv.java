@@ -25,25 +25,84 @@ public class A04_WriteTransitionStateCsv {
     private static final Logger logger = LoggerFactory.getLogger(A04_WriteTransitionStateCsv.class);
 
     public static void main(String[] args) throws IOException {
-        String output = Files.lines(Start2FoldConstants.PANCSA_LIST)
-                .map(A04_WriteTransitionStateCsv::handleLine)
+        String localOutput = Files.lines(Start2FoldConstants.PANCSA_LIST)
+                .map(A04_WriteTransitionStateCsv::handleLineLocally)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
                         "pdb,chain,res,aa," +
+                                "plip_total," +
+                                "plip_l_total," +
+                                "plip_nl_total," +
+                                "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
+                                "plip_hydrogen_total," +
+                                "plip_hydrogen_l_total," +
+                                "plip_hydrogen_nl_total," +
+                                "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
+                                "plip_hydrophobic_total," +
+                                "plip_hydrophobic_l_total," +
+                                "plip_hydrophobic_nl_total," +
+                                "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
                                 "conv_total," +
                                 "conv_l_total," +
                                 "conv_nl_total," +
-                                "conv_closeness,conv_clusteringcoefficient," +
+                                "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
+                                "plip_distinct_neighborhoods," +
                                 "conv_distinct_neighborhoods," +
+                                "energy," +
+                                "asa,loopFraction," +
                                 "folds,transition" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state.csv"),
-                output);
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state-local.csv"),
+                localOutput);
+
+        String globalOutput = Files.lines(Start2FoldConstants.PANCSA_LIST)
+                .map(A04_WriteTransitionStateCsv::handleLineGlobally)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.joining(System.lineSeparator(),
+                        "pdb,chain," +
+                                "plip_total," +
+                                "plip_l_total," +
+                                "plip_nl_total," +
+                                "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
+                                "plip_hydrogen_total," +
+                                "plip_hydrogen_l_total," +
+                                "plip_hydrogen_nl_total," +
+                                "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
+                                "plip_hydrophobic_total," +
+                                "plip_hydrophobic_l_total," +
+                                "plip_hydrophobic_nl_total," +
+                                "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
+                                "conv_total," +
+                                "conv_l_total," +
+                                "conv_nl_total," +
+                                "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
+                                "plip_distinct_neighborhoods," +
+                                "conv_distinct_neighborhoods," +
+                                "energy," +
+                                "asa,loopFraction," +
+                                "transition" + System.lineSeparator(),
+                        ""));
+
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state-global.csv"),
+                globalOutput);
     }
 
-    private static Optional<String> handleLine(String line) {
+    private static Optional<String> handleLineGlobally(String line) {
+        try {
+            //TODO impl
+            return Optional.empty();
+        } catch (Exception e) {
+            logger.info("calculation failed for {}",
+                    line,
+                    e);
+            return Optional.empty();
+        }
+    }
+
+    private static Optional<String> handleLineLocally(String line) {
         try {
             System.out.println(line);
             String[] split = line.split(";");
