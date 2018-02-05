@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.feature.graphs;
 
 import de.bioforscher.jstructure.mathematics.SetOperations;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import org.jgrapht.GraphPath;
@@ -8,10 +9,7 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultEdge;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProteinGraphCalculations {
@@ -67,6 +65,17 @@ public class ProteinGraphCalculations {
         return  shortestPathsPassingThrough(node).size() / numberOfNodePairs;
     }
 
+    public double betweenness(ResidueIdentifier residueIdentifier) {
+        return betweenness(resolve(residueIdentifier));
+    }
+
+    private AminoAcid resolve(ResidueIdentifier residueIdentifier) {
+        return nodes.stream()
+                .filter(node -> node.getResidueIdentifier().equals(residueIdentifier))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("did not find residue with id " + residueIdentifier));
+    }
+
     /**
      * The maximal path length from this node to any other node within the graph.
      * See Amitai, 2004 for definition.
@@ -79,6 +88,10 @@ public class ProteinGraphCalculations {
                 .mapToInt(GraphPath::getLength)
                 .average()
                 .orElseThrow(() ->  new IllegalArgumentException("cannot evaluate closeness as graph is not fully connected"));
+    }
+
+    public double closeness(ResidueIdentifier residueIdentifier) {
+        return closeness(resolve(residueIdentifier));
     }
 
     /**
@@ -113,6 +126,10 @@ public class ProteinGraphCalculations {
         return actualNumberOfEdges / (0.5 * (numberOfNeighbors * (numberOfNeighbors - 1)));
     }
 
+    public double clusteringCoefficient(ResidueIdentifier residueIdentifier) {
+        return clusteringCoefficient(resolve(residueIdentifier));
+    }
+
     public int distinctNeighborhoodCount(AminoAcid aminoAcid) {
         List<Integer> interactingGroups = graph.getContacts().stream()
                 .filter(plipInteraction -> aminoAcid.equals(plipInteraction.getLeft()) || aminoAcid.equals(plipInteraction.getRight()))
@@ -128,6 +145,10 @@ public class ProteinGraphCalculations {
             }
         }
         return distinctNeighborhoods.size();
+    }
+
+    public int distinctNeighborhoodCount(ResidueIdentifier residueIdentifier) {
+        return distinctNeighborhoodCount(resolve(residueIdentifier));
     }
 
     private List<GraphPath<AminoAcid, DefaultEdge>> shortestPathsPassingThrough(AminoAcid node) {
@@ -149,6 +170,11 @@ public class ProteinGraphCalculations {
     }
 
     private GraphPath<AminoAcid, DefaultEdge> determineShortestPath(AminoAcid source, AminoAcid target) {
-        return shortestPaths.get(source).getPath(target);
+        try {
+            return shortestPaths.get(source).getPath(target);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

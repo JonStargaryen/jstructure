@@ -52,15 +52,11 @@ public class PLIPRestServiceQuery {
             String chainId = chain.getChainIdentifier().getChainId();
             // write PDB structure of data point to temporary file
             Path structureFilePath = Files.createTempFile("plip_", "_" + chainId + ".pdb");
-            System.out.println(chain.getPdbRepresentation());
+//            System.out.println(chain.getPdbRepresentation());
             Files.write(structureFilePath, chain.getPdbRepresentation().getBytes());
 
             // submit PLIP POST query
             String url = "https://biosciences.hs-mittweida.de/plip/interaction/calculate/intrachain/" + chainId;
-            logger.info("processing chain '{}' by remote PLIP at:{}'{}'",
-                    chainId,
-                    System.lineSeparator(),
-                    url);
             PLIPPostRequest plipPostRequest = new PLIPPostRequest(url,
                     secret,
                     structureFilePath);
@@ -86,7 +82,12 @@ public class PLIPRestServiceQuery {
 
     static Document getIntraMolecularDocument(String pdbId, String chainId) {
         try {
-            return getIntraMolecularDocument(new URL(BASE_URL + pdbId + "/" + chainId));
+            try {
+                return getIntraMolecularDocument(new URL(BASE_URL + pdbId + "/" + chainId));
+            } catch (IOException e) {
+                // fallback to first chain may fix problems
+                return getIntraMolecularDocument(new URL(BASE_URL + pdbId + "/A"));
+            }
         } catch (IOException e) {
             throw new UncheckedIOException("failed to fetch PLIP files from REST service", e);
         }

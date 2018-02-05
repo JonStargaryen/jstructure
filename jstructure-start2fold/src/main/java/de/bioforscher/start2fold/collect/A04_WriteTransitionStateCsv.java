@@ -7,6 +7,8 @@ import de.bioforscher.jstructure.feature.graphs.*;
 import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
 import de.bioforscher.jstructure.feature.interactions.PLIPRestServiceQuery;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
+import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -60,7 +62,7 @@ public class A04_WriteTransitionStateCsv {
                                 "folds,transition" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state-local.csv"),
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state.csv"),
                 localOutput);
     }
 
@@ -97,7 +99,11 @@ public class A04_WriteTransitionStateCsv {
             List<Chain> reconstructedChains = Files.list(Paths.get("/home/bittrich/git/phd_sb_repo/data/" +
                     "reconstruction-start2fold/reconstructions/" + pdbId + "-early-conventional-1/stage1/"))
                     .filter(path -> path.toFile().getName().contains("_model"))
-                    .map(path -> StructureParser.source(path).parse().getChains().get(0))
+                    .map(path -> StructureParser.source(path)
+                            .forceProteinName(IdentifierFactory.createProteinIdentifier(pdbId, path.toFile().getName().split("_")[2].split("\\.")[0]))
+                            .parse()
+                            .getChains()
+                            .get(0))
                     .collect(Collectors.toList());
 
             for (Chain reconstructedChain : reconstructedChains) {
@@ -133,6 +139,7 @@ public class A04_WriteTransitionStateCsv {
             return Optional.of(originalChain.aminoAcids()
                     .map(aminoAcid -> {
                         ResidueTopologicPropertiesContainer container = aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
+                        ResidueIdentifier residueIdentifier = aminoAcid.getResidueIdentifier();
 
                         return pdbId + "," +
                                 "A" + "," +
@@ -184,111 +191,111 @@ public class A04_WriteTransitionStateCsv {
                                 aminoAcid.getOneLetterCode() + "," +
 
                                 StandardFormat.format(fullPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(fullPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(fullPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(fullPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(fullPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(fullPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
 
                                 StandardFormat.format(hydrogenPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrogenPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrogenPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrogenPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrogenPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrogenPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
 
                                 StandardFormat.format(hydrophobicPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrophobicPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrophobicPlipGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrophobicPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrophobicPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(hydrophobicPlipGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
 
                                 StandardFormat.format(convGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(convGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(convGraphs.stream()
-                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContactsOf(residueIdentifier).size())
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(convGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(convGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(convGraphCalculations.stream()
-                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
 
                                 StandardFormat.format(fullPlipGraphCalculations.stream()
-                                        .mapToInt(proteinGraphCalculations -> proteinGraphCalculations.distinctNeighborhoodCount(aminoAcid))
+                                        .mapToInt(proteinGraphCalculations -> proteinGraphCalculations.distinctNeighborhoodCount(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
                                 StandardFormat.format(convGraphCalculations.stream()
-                                        .mapToInt(proteinGraphCalculations -> proteinGraphCalculations.distinctNeighborhoodCount(aminoAcid))
+                                        .mapToInt(proteinGraphCalculations -> proteinGraphCalculations.distinctNeighborhoodCount(residueIdentifier))
                                         .average()
                                         .getAsDouble()) + "," +
 
@@ -314,6 +321,7 @@ public class A04_WriteTransitionStateCsv {
                     })
                     .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {
+            e.printStackTrace();
             logger.info("calculation failed for {}",
                     line,
                     e);

@@ -4,6 +4,8 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.stream.Collectors;
  * Created by bittrich on 2/9/17.
  */
 public class PLIPIntraMolecularAnnotator extends FeatureProvider {
+    private static final Logger logger = LoggerFactory.getLogger(PLIPIntraMolecularAnnotator.class);
+
     @Override
     protected void processInternally(Structure protein) {
         protein.chainsWithAminoAcids()
@@ -34,6 +38,9 @@ public class PLIPIntraMolecularAnnotator extends FeatureProvider {
     }
 
     private PLIPInteractionContainer processInternally(Chain chain, Document document) {
+        logger.info("processing chain '{}_{}' by PLIP",
+                chain.getParentStructure().getProteinIdentifier(),
+                chain.getChainIdentifier().getChainId());
         return new PLIPInteractionContainer(this, PLIPParser.parse(chain, document));
     }
 

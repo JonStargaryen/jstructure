@@ -5,6 +5,8 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EgorAgreement;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.geometry.GeometricProperties;
+import de.bioforscher.jstructure.feature.graphs.ProteinGraph;
+import de.bioforscher.jstructure.feature.graphs.ProteinGraphFactory;
 import de.bioforscher.jstructure.feature.graphs.ResidueTopologicPropertiesContainer;
 import de.bioforscher.jstructure.feature.interactions.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
@@ -55,6 +57,7 @@ public class A03_WriteDatasetCsv {
                                 "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
                                 "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
                                 "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
+                                "conv_total,conv_l_total,conv_nl_total," +
                                 "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
                                 "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "folds,functional" + System.lineSeparator(),
@@ -103,6 +106,7 @@ public class A03_WriteDatasetCsv {
             }
 
             List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+            ProteinGraph conventionalProteinGraph = ProteinGraphFactory.createProteinGraph(chain, ProteinGraphFactory.InteractionScheme.CALPHA8);
 
             return Optional.of(chain.aminoAcids()
                     .map(aminoAcid -> {
@@ -191,6 +195,10 @@ public class A03_WriteDatasetCsv {
                                 StandardFormat.format(residueTopologicPropertiesContainer.getHydrophobicPlip().getBetweenness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getHydrophobicPlip().getCloseness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getHydrophobicPlip().getClusteringCoefficient()) + "," +
+
+                                conventionalProteinGraph.getContactsOf(aminoAcid).size() + "," +
+                                conventionalProteinGraph.getLocalContactsOf(aminoAcid).size() + "," +
+                                conventionalProteinGraph.getNonLocalContactsOf(aminoAcid).size() + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getBetweenness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getCloseness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getClusteringCoefficient()) + "," +

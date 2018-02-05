@@ -44,7 +44,7 @@ public interface StructureContainer extends Featureable, AtomRecordWriter, Copya
             return optional.get();
         } else {
             FeatureProvider featureProvider = DefaultFeatureProviderMap.resolve(contentClass);
-            logger.info("feature {} was not present, using {} to compute",
+            logger.debug("feature {} was not present, using {} to compute",
                     contentClass.getSimpleName(),
                     featureProvider.getClass().getSimpleName());
             featureProvider.process(getParentStructure());
@@ -68,7 +68,7 @@ public interface StructureContainer extends Featureable, AtomRecordWriter, Copya
                     Class<? extends FeatureProvider> featureProviderClass = featureContainerEntry.getAnnotation(DefaultFeatureProvider.class).value();
                     FeatureProvider featureProviderInstance = featureProviderClass.newInstance();
                     featureProviderMap.put(featureContainerEntry, featureProviderInstance);
-                    logger.info("establishing mapping {} => {}",
+                    logger.debug("establishing mapping {} => {}",
                             featureContainerEntry.getSimpleName(),
                             featureProviderInstance.getClass().getSimpleName());
                     return featureProviderInstance;

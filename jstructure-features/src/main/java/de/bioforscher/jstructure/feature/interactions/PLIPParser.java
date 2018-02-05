@@ -56,7 +56,7 @@ public class PLIPParser {
                     while(cause.getCause() != null) {
                         cause = cause.getCause();
                     }
-                    logger.warn("encountered exception during plip parsing: {} - {}", cause.getClass(), cause.getMessage());
+                    logger.debug("encountered exception during plip parsing: {} - {}", cause.getClass(), cause.getMessage());
                     // interactions whose parsing failed are ignore and do not result in a thrown exception
                     //TODO strict flag
 //                    throw new ComputationException(e);
