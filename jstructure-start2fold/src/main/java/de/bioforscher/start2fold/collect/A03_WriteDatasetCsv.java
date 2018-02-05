@@ -140,8 +140,9 @@ public class A03_WriteDatasetCsv {
                         }
 
                         ResidueTopologicPropertiesContainer residueTopologicPropertiesContainer = aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
-                        int terminusDistance = aminoAcids.indexOf(aminoAcid);
+                        double terminusDistance = aminoAcids.indexOf(aminoAcid);
                         terminusDistance = Math.min(terminusDistance, aminoAcids.size() - terminusDistance);
+                        terminusDistance /= (double) aminoAcids.size();
 
                         return pdbId + "," +
                                 "A" + "," +
@@ -152,7 +153,7 @@ public class A03_WriteDatasetCsv {
                                 sse.getSurroundingSecondaryStructureElement(aminoAcid).getSize() + "," +
                                 (aminoAcid.getFeature(AccessibleSurfaceArea.class).isExposed() ? "exposed" : "buried") + "," +
                                 StandardFormat.format(aminoAcid.getFeature(GeometricProperties.class).getDistanceToCentroid()) + "," +
-                                terminusDistance + "," +
+                                StandardFormat.format(terminusDistance) + "," +
 
                                 plipInteractionContainer.getHydrogenBonds().size() + "," +
                                 plipInteractionContainer.getHydrophobicInteractions().size() + "," +

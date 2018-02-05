@@ -1,8 +1,12 @@
 package de.bioforscher.start2fold.collect;
 
-import de.bioforscher.jstructure.feature.graphs.ProteinGraph;
-import de.bioforscher.jstructure.feature.graphs.ProteinGraphFactory;
-import de.bioforscher.jstructure.mathematics.Pair;
+import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
+import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
+import de.bioforscher.jstructure.feature.graphs.*;
+import de.bioforscher.jstructure.feature.interactions.PLIPIntraMolecularAnnotator;
+import de.bioforscher.jstructure.feature.interactions.PLIPRestServiceQuery;
+import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
@@ -10,6 +14,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.start2fold.Start2FoldConstants;
 import de.bioforscher.start2fold.model.Start2FoldResidueAnnotation;
 import de.bioforscher.start2fold.parser.Start2FoldXmlParser;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +28,7 @@ import java.util.stream.Collectors;
 
 public class A04_WriteTransitionStateCsv {
     private static final Logger logger = LoggerFactory.getLogger(A04_WriteTransitionStateCsv.class);
+    private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR = new PLIPIntraMolecularAnnotator();
 
     public static void main(String[] args) throws IOException {
         String localOutput = Files.lines(Start2FoldConstants.PANCSA_LIST)
@@ -56,50 +62,6 @@ public class A04_WriteTransitionStateCsv {
 
         Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state-local.csv"),
                 localOutput);
-
-        String globalOutput = Files.lines(Start2FoldConstants.PANCSA_LIST)
-                .map(A04_WriteTransitionStateCsv::handleLineGlobally)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.joining(System.lineSeparator(),
-                        "pdb,chain," +
-                                "plip_total," +
-                                "plip_l_total," +
-                                "plip_nl_total," +
-                                "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
-                                "plip_hydrogen_total," +
-                                "plip_hydrogen_l_total," +
-                                "plip_hydrogen_nl_total," +
-                                "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
-                                "plip_hydrophobic_total," +
-                                "plip_hydrophobic_l_total," +
-                                "plip_hydrophobic_nl_total," +
-                                "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
-                                "conv_total," +
-                                "conv_l_total," +
-                                "conv_nl_total," +
-                                "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
-                                "plip_distinct_neighborhoods," +
-                                "conv_distinct_neighborhoods," +
-                                "energy," +
-                                "asa,loopFraction," +
-                                "transition" + System.lineSeparator(),
-                        ""));
-
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("transition-state-global.csv"),
-                globalOutput);
-    }
-
-    private static Optional<String> handleLineGlobally(String line) {
-        try {
-            //TODO impl
-            return Optional.empty();
-        } catch (Exception e) {
-            logger.info("calculation failed for {}",
-                    line,
-                    e);
-            return Optional.empty();
-        }
     }
 
     private static Optional<String> handleLineLocally(String line) {
@@ -114,21 +76,23 @@ public class A04_WriteTransitionStateCsv {
                     .collect(Collectors.toList());
 
             Structure structure = StructureParser.source(pdbId).parse();
-            Chain chain = structure.chains().findFirst().get();
+            Chain originalChain = structure.chains().findFirst().get();
+            ProteinGraph originalFullPlipGraph = ProteinGraphFactory.createProteinGraph(originalChain,
+                    ProteinGraphFactory.InteractionScheme.SALENTIN2015);
+            ProteinGraph originalHydrogenPlipGraph = ProteinGraphFactory.createProteinGraph(originalChain,
+                    ProteinGraphFactory.InteractionScheme.SALENTIN2015_HYDROGEN_BONDS);
+            ProteinGraph originalHydrophobicPlipGraph = ProteinGraphFactory.createProteinGraph(originalChain,
+                    ProteinGraphFactory.InteractionScheme.SALENTIN2015_HYDROPHOBIC_INTERACTION);
+            ProteinGraph originalConvGraph = ProteinGraphFactory.createProteinGraph(originalChain,
+                    ProteinGraphFactory.InteractionScheme.CALPHA8);
 
-            Start2FoldXmlParser.parseSpecificExperiment(chain,
+            Start2FoldXmlParser.parseSpecificExperiment(originalChain,
                     Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml"),
                     experimentIds);
 
-            List<AminoAcid> earlyFoldingResidues = chain.aminoAcids()
+            List<AminoAcid> earlyFoldingResidues = originalChain.aminoAcids()
                     .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isEarly())
                     .collect(Collectors.toList());
-
-            ProteinGraph proteinGraph = ProteinGraphFactory.createProteinGraph(chain,
-                    ProteinGraphFactory.InteractionScheme.CALPHA8);
-            List<Pair<AminoAcid, AminoAcid>> contacts = proteinGraph.getContacts();
-            List<Pair<AminoAcid, AminoAcid>> localInteractions = proteinGraph.getLocalContacts();
-            List<Pair<AminoAcid, AminoAcid>> nonLocalInteractions = proteinGraph.getNonLocalContacts();
 
             List<Chain> reconstructedChains = Files.list(Paths.get("/home/bittrich/git/phd_sb_repo/data/" +
                     "reconstruction-start2fold/reconstructions/" + pdbId + "-early-conventional-1/stage1/"))
@@ -136,90 +100,219 @@ public class A04_WriteTransitionStateCsv {
                     .map(path -> StructureParser.source(path).parse().getChains().get(0))
                     .collect(Collectors.toList());
 
-            //TODO compute PLIP
-            List<ProteinGraph> reconstructedGraphs = reconstructedChains.stream()
+            for (Chain reconstructedChain : reconstructedChains) {
+                Document document = PLIPRestServiceQuery.calculateIntraChainDocument(reconstructedChain);
+                PLIP_INTRA_MOLECULAR_ANNOTATOR.process(originalChain, document);
+            }
+
+            List<ProteinGraph> convGraphs = reconstructedChains.stream()
                     .map(c -> ProteinGraphFactory.createProteinGraph(c, ProteinGraphFactory.InteractionScheme.CALPHA8))
                     .collect(Collectors.toList());
+            List<ProteinGraphCalculations> convGraphCalculations = convGraphs.stream()
+                    .map(ProteinGraphCalculations::new)
+                    .collect(Collectors.toList());
+            List<ProteinGraph> fullPlipGraphs = reconstructedChains.stream()
+                    .map(c -> ProteinGraphFactory.createProteinGraph(c, ProteinGraphFactory.InteractionScheme.SALENTIN2015))
+                    .collect(Collectors.toList());
+            List<ProteinGraphCalculations> fullPlipGraphCalculations = fullPlipGraphs.stream()
+                    .map(ProteinGraphCalculations::new)
+                    .collect(Collectors.toList());
+            List<ProteinGraph> hydrogenPlipGraphs = reconstructedChains.stream()
+                    .map(c -> ProteinGraphFactory.createProteinGraph(c, ProteinGraphFactory.InteractionScheme.SALENTIN2015_HYDROGEN_BONDS))
+                    .collect(Collectors.toList());
+            List<ProteinGraphCalculations> hydrogenPlipGraphCalculations = fullPlipGraphs.stream()
+                    .map(ProteinGraphCalculations::new)
+                    .collect(Collectors.toList());
+            List<ProteinGraph> hydrophobicPlipGraphs = reconstructedChains.stream()
+                    .map(c -> ProteinGraphFactory.createProteinGraph(c, ProteinGraphFactory.InteractionScheme.SALENTIN2015_HYDROPHOBIC_INTERACTION))
+                    .collect(Collectors.toList());
+            List<ProteinGraphCalculations> hydrophobicPlipGraphCalculations = fullPlipGraphs.stream()
+                    .map(ProteinGraphCalculations::new)
+                    .collect(Collectors.toList());
 
-            //TODO reimpl
-//            return Optional.of(chain.aminoAcids()
-//                    .map(aminoAcid -> {
-//                        ResidueTopologicPropertiesContainer residueTopologicPropertiesContainer = aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
-//                        int distinctNeighborhoodCount = determineDistinctNeighborhoodCount(interactions, aminoAcid);
-//
-//                        double averageInteractionCount = reconstructedGraphs.stream()
-//                                .mapToInt(graph -> filterInteractions(graph, aminoAcid))
-//                                .average()
-//                                .getAsDouble();
-//                        double averageLocalInteractionCount = reconstructedGraphs.stream()
-//                                .mapToInt(graph -> filterLocalInteractions(graph, aminoAcid))
-//                                .average()
-//                                .getAsDouble();
-//                        double averageNonLocalInteractionCount = reconstructedGraphs.stream()
-//                                .mapToInt(graph -> filterNonLocalInteractions(graph, aminoAcid))
-//                                .average()
-//                                .getAsDouble();
-//                        double averageCloseness = reconstructedGraphs.stream()
-//                                .mapToDouble(graph -> {
-//                                    AminoAcid aa = graph.nodes().filter(node -> node.getResidueIdentifier().equals(aminoAcid.getResidueIdentifier())).findFirst().get();
-//                                    return graph.calculate().closeness(aa);
-//                                })
-//                                .average()
-//                                .getAsDouble();
-//                        double averageClusteringCoefficient = reconstructedGraphs.stream()
-//                                .mapToDouble(graph -> {
-//                                    AminoAcid aa = graph.nodes().filter(node -> node.getResidueIdentifier().equals(aminoAcid.getResidueIdentifier())).findFirst().get();
-//                                    return graph.calculate().clusteringCoefficient(aa);
-//                                })
-//                                .average()
-//                                .getAsDouble();
-//                        double averageDistinctNeighborhoodCount = reconstructedGraphs.stream()
-//                                .mapToInt(graph -> {
-//                                    AminoAcid aa = graph.nodes().filter(node -> node.getResidueIdentifier().equals(aminoAcid.getResidueIdentifier())).findFirst().get();
-//                                    return determineDistinctNeighborhoodCount(graph.getEdges(), aa);
-//                                })
-//                                .average()
-//                                .getAsDouble();
-//
-//                        return pdbId + "," +
-//                                "A" + "," +
-//                                aminoAcid.getResidueIdentifier() + "," +
-//                                aminoAcid.getOneLetterCode() + "," +
-//
-//                                contacts.stream()
-//                                        .filter(edge -> edge.contains(aminoAcid)).count() + "," +
-//                                localInteractions.stream()
-//                                        .filter(edge -> edge.contains(aminoAcid)).count() + "," +
-//                                nonLocalInteractions.stream()
-//                                        .filter(edge -> edge.contains(aminoAcid)).count() + "," +
-//
-//                                StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getCloseness()) + "," +
-//                                StandardFormat.format(residueTopologicPropertiesContainer.getConventional().getClusteringCoefficient()) + "," +
-//
-//                                distinctNeighborhoodCount + "," +
-//
-//                                (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
-//                                "native" + System.lineSeparator() +
-//
-//                                pdbId + "," +
-//                                "A" + "," +
-//                                aminoAcid.getResidueIdentifier() + "," +
-//                                aminoAcid.getOneLetterCode() + "," +
-//
-//                                StandardFormat.format(averageInteractionCount) + "," +
-//                                StandardFormat.format(averageLocalInteractionCount) + "," +
-//                                StandardFormat.format(averageNonLocalInteractionCount) + "," +
-//
-//                                StandardFormat.format(averageCloseness) + "," +
-//                                StandardFormat.format(averageClusteringCoefficient) + "," +
-//
-//                                StandardFormat.format(averageDistinctNeighborhoodCount) + "," +
-//
-//                                (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
-//                                "transition";
-//                    })
-//                    .collect(Collectors.joining(System.lineSeparator())));
-            return Optional.empty();
+            return Optional.of(originalChain.aminoAcids()
+                    .map(aminoAcid -> {
+                        ResidueTopologicPropertiesContainer container = aminoAcid.getFeature(ResidueTopologicPropertiesContainer.class);
+
+                        return pdbId + "," +
+                                "A" + "," +
+                                aminoAcid.getResidueIdentifier() + "," +
+                                aminoAcid.getOneLetterCode() + "," +
+
+                                originalFullPlipGraph.getContactsOf(aminoAcid).size() + "," +
+                                originalFullPlipGraph.getLocalContactsOf(aminoAcid).size() + "," +
+                                originalFullPlipGraph.getNonLocalContactsOf(aminoAcid).size() + "," +
+                                StandardFormat.format(container.getFullPlip().getBetweenness()) + "," +
+                                StandardFormat.format(container.getFullPlip().getCloseness()) + "," +
+                                StandardFormat.format(container.getFullPlip().getClusteringCoefficient()) + "," +
+
+                                originalHydrogenPlipGraph.getContactsOf(aminoAcid).size() + "," +
+                                originalHydrogenPlipGraph.getLocalContactsOf(aminoAcid).size() + "," +
+                                originalHydrogenPlipGraph.getNonLocalContactsOf(aminoAcid).size() + "," +
+                                StandardFormat.format(container.getHydrogenPlip().getBetweenness()) + "," +
+                                StandardFormat.format(container.getHydrogenPlip().getCloseness()) + "," +
+                                StandardFormat.format(container.getHydrogenPlip().getClusteringCoefficient()) + "," +
+
+                                originalHydrophobicPlipGraph.getContactsOf(aminoAcid).size() + "," +
+                                originalHydrophobicPlipGraph.getLocalContactsOf(aminoAcid).size() + "," +
+                                originalHydrophobicPlipGraph.getNonLocalContactsOf(aminoAcid).size() + "," +
+                                StandardFormat.format(container.getHydrophobicPlip().getBetweenness()) + "," +
+                                StandardFormat.format(container.getHydrophobicPlip().getCloseness()) + "," +
+                                StandardFormat.format(container.getHydrophobicPlip().getClusteringCoefficient()) + "," +
+
+                                originalConvGraph.getContactsOf(aminoAcid).size() + "," +
+                                originalConvGraph.getLocalContactsOf(aminoAcid).size() + "," +
+                                originalConvGraph.getNonLocalContactsOf(aminoAcid).size() + "," +
+                                StandardFormat.format(container.getConventional().getBetweenness()) + "," +
+                                StandardFormat.format(container.getConventional().getCloseness()) + "," +
+                                StandardFormat.format(container.getConventional().getClusteringCoefficient()) + "," +
+
+                                container.getFullPlip().getDistinctNeighborhoodCount() + "," +
+                                container.getConventional().getDistinctNeighborhoodCount() + "," +
+
+                                StandardFormat.format(aminoAcid.getFeature(EnergyProfile.class).getSolvationEnergy()) + "," +
+
+                                StandardFormat.format(aminoAcid.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea()) + "," +
+                                StandardFormat.format(aminoAcid.getFeature(LoopFraction.class).getLoopFraction()) + "," +
+
+                                (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
+                                "native" + System.lineSeparator() +
+
+                                pdbId + "," +
+                                "A" + "," +
+                                aminoAcid.getResidueIdentifier() + "," +
+                                aminoAcid.getOneLetterCode() + "," +
+
+                                StandardFormat.format(fullPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(fullPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(fullPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(fullPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(fullPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(fullPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                StandardFormat.format(hydrogenPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrogenPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrogenPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrogenPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrogenPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrogenPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                StandardFormat.format(hydrophobicPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrophobicPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrophobicPlipGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrophobicPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrophobicPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(hydrophobicPlipGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                StandardFormat.format(convGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(convGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(convGraphs.stream()
+                                        .mapToInt(proteinGraph -> proteinGraph.getNonLocalContacts().size())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(convGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.betweenness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(convGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.closeness(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(convGraphCalculations.stream()
+                                        .mapToDouble(proteinGraphCalculations -> proteinGraphCalculations.clusteringCoefficient(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                StandardFormat.format(fullPlipGraphCalculations.stream()
+                                        .mapToInt(proteinGraphCalculations -> proteinGraphCalculations.distinctNeighborhoodCount(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(convGraphCalculations.stream()
+                                        .mapToInt(proteinGraphCalculations -> proteinGraphCalculations.distinctNeighborhoodCount(aminoAcid))
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                StandardFormat.format(reconstructedChains.stream()
+                                        .map(chain -> chain.select().residueIdentifier(aminoAcid.getResidueIdentifier()).asAminoAcid())
+                                        .mapToDouble(aa -> aa.getFeature(EnergyProfile.class).getSolvationEnergy())
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                StandardFormat.format(reconstructedChains.stream()
+                                        .map(chain -> chain.select().residueIdentifier(aminoAcid.getResidueIdentifier()).asAminoAcid())
+                                        .mapToDouble(aa -> aa.getFeature(AccessibleSurfaceArea.class).getRelativeAccessibleSurfaceArea())
+                                        .average()
+                                        .getAsDouble()) + "," +
+                                StandardFormat.format(reconstructedChains.stream()
+                                        .map(chain -> chain.select().residueIdentifier(aminoAcid.getResidueIdentifier()).asAminoAcid())
+                                        .mapToDouble(aa -> aa.getFeature(LoopFraction.class).getLoopFraction())
+                                        .average()
+                                        .getAsDouble()) + "," +
+
+                                (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
+                                "transition";
+                    })
+                    .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {
             logger.info("calculation failed for {}",
                     line,
