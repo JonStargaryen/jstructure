@@ -41,49 +41,43 @@ public class A05_WriteEarlyFoldingClassificationArff {
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
                         "@RELATION fc" + System.lineSeparator() +
-                                /*"@ATTRIBUTE pdb string" + System.lineSeparator() +
-                                "@ATTRIBUTE chain string" + System.lineSeparator() +
-                                "@ATTRIBUTE res string" + System.lineSeparator() +
-                                "@ATTRIBUTE aa string" + System.lineSeparator() +
-                                "@ATTRIBUTE sse string" + System.lineSeparator() +*/
-                                "@ATTRIBUTE sseSize numeric" + System.lineSeparator() +
-
-                                "@ATTRIBUTE plip_l_hydrogen numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_l_hydrophobic numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_l_bb numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_l_total numeric" + System.lineSeparator() +
-
-                                "@ATTRIBUTE plip_nl_hydrogen numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_nl_hydrophobic numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_nl_bb numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_nl_total numeric" + System.lineSeparator() +
 
                                 "@ATTRIBUTE energy numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE egor numeric" + System.lineSeparator() +
 
-//                                "@ATTRIBUTE eccount numeric" + System.lineSeparator() +
-//                                "@ATTRIBUTE cumstrength numeric" + System.lineSeparator() +
-//                                "@ATTRIBUTE ecstrength numeric" + System.lineSeparator() +
-//                                "@ATTRIBUTE conservation numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE sse_size numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE loop_fraction numeric" + System.lineSeparator() +
 
-                                "@ATTRIBUTE asa numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE loopFraction numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE rasa numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE plip_local_contacts numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_local_hbonds numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_local_hydrophobic numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_local_backbone numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE plip_long_range_contacts numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_long_range_hbonds numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_long_range_hydrophobic numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_long_range_backbone numeric" + System.lineSeparator() +
 
                                 "@ATTRIBUTE plip_betweenness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE plip_closeness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE plip_clusteringcoefficient numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_hydrogen_betweenness numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_hydrogen_closeness numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE plip_hydrogen_clusteringcoefficient numeric" + System.lineSeparator() +
+
+                                "@ATTRIBUTE plip_hbonds_betweenness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hbonds_closeness numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_hbonds_clusteringcoefficient numeric" + System.lineSeparator() +
+
                                 "@ATTRIBUTE plip_hydrophobic_betweenness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE plip_hydrophobic_closeness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE plip_hydrophobic_clusteringcoefficient numeric" + System.lineSeparator() +
+
                                 "@ATTRIBUTE conv_betweenness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE conv_closeness numeric" + System.lineSeparator() +
                                 "@ATTRIBUTE conv_clusteringcoefficient numeric" + System.lineSeparator() +
 
-                                "@ATTRIBUTE plip_distinct_neighborhoods numeric" + System.lineSeparator() +
-                                "@ATTRIBUTE conv_distinct_neighborhoods numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE plip_neighborhoods numeric" + System.lineSeparator() +
+                                "@ATTRIBUTE conv_neighborhoods numeric" + System.lineSeparator() +
 
                                 "@ATTRIBUTE class {early,late}" + System.lineSeparator() +
                                 "@DATA" + System.lineSeparator(),
@@ -218,43 +212,36 @@ public class A05_WriteEarlyFoldingClassificationArff {
 
                         SmoothedFeatureVector smoothedFeatureVector = aminoAcid.getFeature(SmoothedFeatureVector.class);
 
-                        return /*pdbId + "," +
-                                "A" + "," +
-                                aminoAcid.getResidueIdentifier() + "," +
-                                aminoAcid.getOneLetterCode() + "," +
-                                sse.getSecondaryStructure().getOneLetterRepresentation() + "," +*/
-                                StandardFormat.format(smoothedFeatureVector.getSecondaryStructureElementSize()) + "," +
+                        return StandardFormat.format(smoothedFeatureVector.getEnergy()) + "," +
+                                StandardFormat.format(smoothedFeatureVector.getEgor()) + "," +
 
+                                StandardFormat.format(smoothedFeatureVector.getSecondaryStructureElementSize()) + "," +
+                                StandardFormat.format(aminoAcid.getFeature(LoopFraction.class).getLoopFraction()) + "," + // already smoothed
+
+                                StandardFormat.format(smoothedFeatureVector.getRasa()) + "," +
+
+                                StandardFormat.format(smoothedFeatureVector.getLocalInteractions()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getLocalHydrogen()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getLocalHydrophobic()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getLocalBackbone()) + "," +
-                                StandardFormat.format(smoothedFeatureVector.getLocalInteractions()) + "," +
 
+                                StandardFormat.format(smoothedFeatureVector.getNonLocalInteractions()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getNonLocalHydrogen()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getNonLocalHydrophobic()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getNonLocalBackbone()) + "," +
-                                StandardFormat.format(smoothedFeatureVector.getNonLocalInteractions()) + "," +
-
-                                StandardFormat.format(smoothedFeatureVector.getEnergy()) + "," +
-                                StandardFormat.format(smoothedFeatureVector.getEgor()) + "," +
-
-//                                StandardFormat.format(smoothedFeatureVector.getEccount()) + "," +
-//                                StandardFormat.format(smoothedFeatureVector.getCumstrength()) + "," +
-//                                StandardFormat.format(smoothedFeatureVector.getEcstrength()) + "," +
-//                                StandardFormat.format(smoothedFeatureVector.getConservation()) + "," +
-
-                                StandardFormat.format(smoothedFeatureVector.getRasa()) + "," +
-                                StandardFormat.format(aminoAcid.getFeature(LoopFraction.class).getLoopFraction()) + "," + // already smoothed
 
                                 StandardFormat.format(smoothedFeatureVector.getBetweenness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getCloseness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getClusteringCoefficient()) + "," +
+
                                 StandardFormat.format(smoothedFeatureVector.getHydrogenBetweenness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getHydrogenCloseness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getHydrogenClusteringCoefficient()) + "," +
+
                                 StandardFormat.format(smoothedFeatureVector.getHydrophobicBetweenness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getHydrophobicCloseness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getHydrophobicClusteringCoefficient()) + "," +
+
                                 StandardFormat.format(smoothedFeatureVector.getConvBetweenness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getConvCloseness()) + "," +
                                 StandardFormat.format(smoothedFeatureVector.getConvClusteringCoefficient()) + "," +

@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class A04_WriteTransitionStateCsv {
+    //TODO add plip backbone contacts
     private static final Logger logger = LoggerFactory.getLogger(A04_WriteTransitionStateCsv.class);
     private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR = new PLIPIntraMolecularAnnotator();
 
@@ -39,6 +40,7 @@ public class A04_WriteTransitionStateCsv {
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
                         "pdb,chain,res,aa," +
+
                                 "plip_total," +
                                 "plip_l_total," +
                                 "plip_nl_total," +
