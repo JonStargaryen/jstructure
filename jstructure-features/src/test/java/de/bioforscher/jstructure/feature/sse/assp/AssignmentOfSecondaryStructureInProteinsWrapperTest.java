@@ -12,7 +12,7 @@ import org.junit.Test;
 public class AssignmentOfSecondaryStructureInProteinsWrapperTest {
     @Test
     public void shouldExecuteASSP() {
-        Structure protein = StructureParser.source("2jho").parse();
+        Structure protein = StructureParser.fromPdbId("2jho").parse();
         new AssignmentOfSecondaryStructureInProteinsWrapper().process(protein);
         protein.aminoAcids()
                 .forEach(aminoAcid -> System.out.println(aminoAcid.getIdentifier() + " " +

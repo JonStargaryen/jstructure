@@ -40,7 +40,7 @@ public class EnergyProfileCalculatorTest {
     public void shouldComputeEnergyProfilesForAllStructures() throws IOException {
         // this takes ages
         ids.stream()
-                .map(path -> StructureParser.source(path).parse())
+                .map(path -> StructureParser.fromPdbId(path).parse())
                 .peek(System.out::println)
                 .forEach(protein -> {
                     featureProvider.process(protein);
@@ -55,25 +55,25 @@ public class EnergyProfileCalculatorTest {
 
     @Test
     public void shouldProcessStructureWithSelenomethionine() {
-        Structure protein = StructureParser.source("3TQO").parse();
+        Structure protein = StructureParser.fromPdbId("3TQO").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldProcessStructureWithMPH() {
-        Structure protein = StructureParser.source("1P7P").parse();
+        Structure protein = StructureParser.fromPdbId("1P7P").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldProcessStructure() {
-        Structure protein = StructureParser.source("1ATI").parse();
+        Structure protein = StructureParser.fromPdbId("1ATI").parse();
         featureProvider.process(protein);
     }
 
     @Test
     public void shouldAgreeRegardingEnergyTerms() throws IOException {
-        Structure protein = StructureParser.source("1bs2").parse();
+        Structure protein = StructureParser.fromPdbId("1bs2").parse();
         featureProvider.process(protein);
 
         TestUtils.getResourceAsStream("energy/1bs2.ep2")

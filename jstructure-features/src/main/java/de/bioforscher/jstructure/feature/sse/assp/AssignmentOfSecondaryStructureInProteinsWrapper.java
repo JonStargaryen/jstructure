@@ -7,7 +7,7 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
+import de.bioforscher.jstructure.mathematics.IntegerInterval;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -75,7 +75,7 @@ public class AssignmentOfSecondaryStructureInProteinsWrapper extends FeatureProv
                 .chainName(split[3])
                 .asChain();
         chain.select()
-                .residueNumber(new IntegerRange(Integer.valueOf(split[4]), Integer.valueOf(split[7])))
+                .residueNumber(new IntegerInterval(Integer.valueOf(split[4]), Integer.valueOf(split[7])))
                 .asFilteredGroups()
                 .map(group -> group.getFeature(GenericSecondaryStructure.class))
                 .forEach(ss -> ss.setSecondaryStructure(secondaryStructure));

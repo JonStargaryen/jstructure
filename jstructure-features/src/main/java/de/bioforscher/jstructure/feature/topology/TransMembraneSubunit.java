@@ -1,6 +1,6 @@
 package de.bioforscher.jstructure.feature.topology;
 
-import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
+import de.bioforscher.jstructure.mathematics.IntegerInterval;
 import de.bioforscher.jstructure.model.structure.ParsingException;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class TransMembraneSubunit {
     private String chainId;
     private String tilt;
-    private List<IntegerRange> segments;
+    private List<IntegerInterval> segments;
     private static final Pattern SEGMENTS_PATTERN = Pattern.compile(",");
     private static final Pattern RANGE_PATTERN = Pattern.compile("\\d+");
 
@@ -30,7 +30,7 @@ public class TransMembraneSubunit {
                 .collect(Collectors.toList());
     }
 
-    private IntegerRange mapToIntegerRange(String segment) {
+    private IntegerInterval mapToIntegerRange(String segment) {
         Matcher matcher = RANGE_PATTERN.matcher(segment);
         int start = Integer.MIN_VALUE;
         int end = Integer.MIN_VALUE;
@@ -47,7 +47,7 @@ public class TransMembraneSubunit {
         if(start == Integer.MIN_VALUE || end == Integer.MIN_VALUE) {
             throw new ParsingException("OPM output malformed for segment entry: " + segment);
         }
-        return new IntegerRange(start, end);
+        return new IntegerInterval(start, end);
 
     }
 
@@ -59,7 +59,7 @@ public class TransMembraneSubunit {
         return tilt;
     }
 
-    public List<IntegerRange> getSegments() {
+    public List<IntegerInterval> getSegments() {
         return segments;
     }
 

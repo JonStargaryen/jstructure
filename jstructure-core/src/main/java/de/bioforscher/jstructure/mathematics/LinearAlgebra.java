@@ -3,8 +3,6 @@ package de.bioforscher.jstructure.mathematics;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -17,8 +15,6 @@ import static de.bioforscher.jstructure.StandardFormat.format;
  */
 @ThreadSafe
 public class LinearAlgebra {
-    private static final Logger logger = LoggerFactory.getLogger(LinearAlgebra.class);
-
     private LinearAlgebra() {
         // deny direct instantiation
     }

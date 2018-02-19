@@ -23,7 +23,7 @@ public class A02_CreateContactsMaps {
     }
 
     private static void handlePdbId(String pdbId) {
-        Structure structure = StructureParser.source(pdbId).parse();
+        Structure structure = StructureParser.fromPdbId(pdbId).parse();
         Chain chain = structure.chains().findFirst().get();
         logger.info("processing {} with {} chains",
                 pdbId,

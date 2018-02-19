@@ -4,7 +4,7 @@ import de.bioforscher.jstructure.model.feature.DefaultFeatureProvider;
 import de.bioforscher.jstructure.model.feature.FeatureContainerEntry;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.selection.IntegerRange;
+import de.bioforscher.jstructure.mathematics.IntegerInterval;
 
 import java.util.Collection;
 import java.util.List;
@@ -83,7 +83,7 @@ public class MembraneContainer extends FeatureContainerEntry {
         return getEmbeddingTransmembraneSegment(group).isPresent();
     }
 
-    public Optional<IntegerRange> getEmbeddingTransmembraneSegment(Group group) {
+    public Optional<IntegerInterval> getEmbeddingTransmembraneSegment(Group group) {
         int residueNumber = group.getResidueIdentifier().getResidueNumber();
         return transMembraneHelices.stream()
                 //TODO OPM seems bugged as chainId is always reported in lower case

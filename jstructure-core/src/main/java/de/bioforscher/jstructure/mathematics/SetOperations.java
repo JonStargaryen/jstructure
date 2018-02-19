@@ -16,28 +16,15 @@ public class SetOperations {
         // deny instantiation
     }
 
-    public static <T> Set<T> union(final Collection<T> collection1, final Collection<T> collection2) {
+    public static <T> Set<T> createUnionSet(final Collection<T> collection1, final Collection<T> collection2) {
         return Stream.concat(collection1.stream(), collection2.stream())
                 .collect(Collectors.toSet());
     }
 
-    public static <T> int sizeOfUnion(Collection<T> collection1, Collection<T> collection2) {
-        return (int) Stream.concat(collection1.stream(), collection2.stream())
-                .distinct()
-                .count();
-    }
-
-    public static <T> Set<T> intersection(final Collection<T> collection1, final Collection<T> collection2) {
+    public static <T> Set<T> createIntersectionSet(final Collection<T> collection1, final Collection<T> collection2) {
         return collection1.stream()
                 .filter(collection2::contains)
                 .collect(Collectors.toSet());
-    }
-
-    public static <T> int sizeOfInteraction(Collection<T> collection1, Collection<T> collection2) {
-        return (int) collection1.stream()
-                .filter(collection2::contains)
-                .distinct()
-                .count();
     }
 
     /**
@@ -53,7 +40,7 @@ public class SetOperations {
      * @param <T> the content of the collection
      * @return all {@link Pair} objects which can be created from the collection
      */
-    public static <T> Stream<Pair<T, T>> uniquePairsOf(final List<T> collection) {
+    public static <T> Stream<Pair<T, T>> unorderedPairsOf(final List<T> collection) {
         return IntStream.range(0, collection.size() - 1)
                 .boxed()
                 .flatMap(i -> IntStream.range(i + 1, collection.size())

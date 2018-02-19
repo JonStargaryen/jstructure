@@ -24,7 +24,7 @@ public class CopyableTest {
 
     @Before
     public void setup() {
-        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
         chain = protein.select()

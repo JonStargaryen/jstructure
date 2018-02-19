@@ -37,7 +37,7 @@ public class SetOperationsTest {
 
     @Test
     public void shouldGenerateUnorderedPairs() {
-        List<Pair<Integer, Integer>> pairs = SetOperations.uniquePairsOf(elements1).collect(Collectors.toList());
+        List<Pair<Integer, Integer>> pairs = SetOperations.unorderedPairsOf(elements1).collect(Collectors.toList());
         // generation of unordered pairs for n elements should return n * (n - 1) / 2
         Assert.assertEquals(pairs.size(), elements1.size() * (elements1.size() - 1) / 2);
         pairs.forEach(System.out::println);

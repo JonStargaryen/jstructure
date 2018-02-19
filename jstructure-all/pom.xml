@@ -91,7 +91,6 @@
         <module>../jstructure-features</module>
         <module>../jstructure-utils</module>
         <module>../jstructure-start2fold</module>
-        <module>../jstructure-gmlvq</module>
     </modules>
 
     <properties>

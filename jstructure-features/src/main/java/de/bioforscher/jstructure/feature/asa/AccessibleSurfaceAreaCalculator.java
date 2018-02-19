@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
  */
 public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
     private static final Logger logger = LoggerFactory.getLogger(AccessibleSurfaceAreaCalculator.class);
-    private static final String ATOM_RADIUS = "ATOM_RADIUS";
     // Bosco uses as default 960, Shrake and Rupley seem to use in their paper 92 (not sure if this is actually the same
     // parameter)
     private static final int DEFAULT_N_SPHERE_POINTS = 960;
@@ -75,7 +74,7 @@ public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
         atom.getFeatureContainer().addFeature(new AtomRadius(this, determineRadius(atom)));
     }
 
-    private void assignSingleAsa(AminoAcid group, List<Atom> nonHydrogenAtoms) {
+    private void assignSingleAsa(final AminoAcid group, final List<Atom> nonHydrogenAtoms) {
         double asa = group.select()
                 .nonHydrogenAtoms()
                 .asFilteredAtoms()
@@ -129,7 +128,7 @@ public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
      * @param atom the atom whose radius shall be determined
      * @return the atom's radiues
      */
-    private double determineRadius(Atom atom) {
+    private double determineRadius(final Atom atom) {
         Group parentResidue = atom.getParentGroup();
 
         switch(atom.getElement()) {
@@ -190,7 +189,7 @@ public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
      * @param atom the atom to processUniProtId
      * @return this atom's ASA
      */
-    private double calcSingleAsa(Atom atom, List<Atom> nonHydrogenAtoms) {
+    private double calcSingleAsa(final Atom atom, final List<Atom> nonHydrogenAtoms) {
         List<Atom> neighborAtoms = findNeighbors(atom, nonHydrogenAtoms);
         double radius = probeSize + atom.getFeature(AtomRadius.class).getRadius();
         int accessiblePoints = 0;

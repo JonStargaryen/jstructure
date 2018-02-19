@@ -33,7 +33,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
 
     @Test
     public void shouldClearPseudoAtomsAfterRun() {
-        Structure protein = StructureParser.source(ID).parse();
+        Structure protein = StructureParser.fromPdbId(ID).parse();
         featureProvider.process(protein);
         boolean containsPseudoHydrogenLine = protein.getPdbRepresentation().contains("ATOM      0  H");
         Assert.assertFalse("pseudo-atoms were not removed!", containsPseudoHydrogenLine);
@@ -42,7 +42,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
     @Test
     public void testTorsionAngleComputationForResiduesInDifferentChains() {
         // should ignore amino acids in different chains
-        featureProvider.process(StructureParser.source("4cqn").parse());
+        featureProvider.process(StructureParser.fromPdbId("4cqn").parse());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class DictionaryOfProteinSecondaryStructureTest {
 
     private String getSecondaryStructureAnnotation(String id) {
         // load structure
-        Structure protein = StructureParser.source(id).parse();
+        Structure protein = StructureParser.fromPdbId(id).parse();
         // assign states
         featureProvider.process(protein);
 

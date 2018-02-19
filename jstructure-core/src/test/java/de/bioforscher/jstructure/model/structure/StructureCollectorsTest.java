@@ -19,7 +19,7 @@ public class StructureCollectorsTest {
 
     @Before
     public void setup() {
-        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1BRR))
+        protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1BRR))
                 .minimalParsing(true)
                 .parse();
     }

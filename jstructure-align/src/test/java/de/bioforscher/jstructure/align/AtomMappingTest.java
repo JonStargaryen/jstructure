@@ -21,10 +21,10 @@ public class AtomMappingTest {
 
     @Before
     public void setup() {
-        protein1 = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        protein1 = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
-        protein2 = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        protein2 = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
     }

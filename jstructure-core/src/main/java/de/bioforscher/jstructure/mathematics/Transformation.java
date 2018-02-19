@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class Transformation extends FeatureContainerEntry {
     private static final Logger logger = LoggerFactory.getLogger(Transformation.class);
+
     /**
      * The translation vector describing no shift whatsoever. 3D vector of zeros.
      */

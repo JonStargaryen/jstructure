@@ -15,7 +15,7 @@ public class Demo {
     @Test
     public void test() {
         // fetch a structure or load from local PDB if setup
-        Structure structure = StructureParser.source("1brr").parse();
+        Structure structure = StructureParser.fromPdbId("1brr").parse();
 
         // select a chain
         Chain chainB = structure.select()

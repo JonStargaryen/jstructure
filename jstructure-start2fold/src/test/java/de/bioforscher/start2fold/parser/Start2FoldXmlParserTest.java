@@ -24,7 +24,7 @@ public class Start2FoldXmlParserTest {
 
     @Test
     public void shouldParseStart2FoldXml() {
-        Structure structure = StructureParser.source("1hrh").parse();
+        Structure structure = StructureParser.fromPdbId("1hrh").parse();
         Chain chain = structure.chains().findFirst().get();
         Start2FoldXmlParser.parse(chain, TestUtils.getResourceAsInputStream("STF0026.xml"));
     }
@@ -70,7 +70,7 @@ public class Start2FoldXmlParserTest {
                                 path);
                         // safe are: STF0005, STF0021
                         String pdbId = Jsoup.parse(path.toFile(), "UTF-8").getElementsByTag("protein").attr("pdb_id");
-                        Structure structure = StructureParser.source(pdbId).parse();
+                        Structure structure = StructureParser.fromPdbId(pdbId).parse();
                         Chain chain = structure.chains().findFirst().get();
                         Start2FoldXmlParser.parse(chain, path);
                     } catch (Exception e) {

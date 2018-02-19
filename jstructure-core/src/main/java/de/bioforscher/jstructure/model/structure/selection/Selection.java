@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
+import de.bioforscher.jstructure.mathematics.IntegerInterval;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
@@ -235,7 +236,7 @@ public class Selection {
             return this;
         }
 
-        public AtomSelection pdbSerial(IntegerRange... pdbSerialRanges) {
+        public AtomSelection pdbSerial(IntegerInterval... pdbSerialRanges) {
             registerAtomPredicate(atom -> Stream.of(pdbSerialRanges)
                     .anyMatch(range -> range.getLeft() >= atom.getPdbSerial() && range.getRight() <= atom.getPdbSerial()),
                     "pdb-serial ranges: " + Arrays.toString(pdbSerialRanges));
@@ -385,7 +386,7 @@ public class Selection {
             return this;
         }
 
-        public GroupSelection residueNumber(IntegerRange... residueNumberRanges) {
+        public GroupSelection residueNumber(IntegerInterval... residueNumberRanges) {
             registerGroupPredicate(group -> Stream.of(residueNumberRanges)
                     .anyMatch(range -> group.getResidueIdentifier().getResidueNumber() >= range.getLeft() &&
                             group.getResidueIdentifier().getResidueNumber() <= range.getRight()),

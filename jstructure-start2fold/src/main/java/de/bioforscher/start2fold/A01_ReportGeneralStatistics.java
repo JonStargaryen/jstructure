@@ -138,7 +138,7 @@ public class A01_ReportGeneralStatistics {
     private static void handleStrongFile(Path path) {
         try {
             String pdbId = Jsoup.parse(path.toFile(), "UTF-8").getElementsByTag("protein").attr("pdb_id");
-            Structure structure = StructureParser.source(pdbId).parse();
+            Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
 
             Start2FoldXmlParser.parse(chain, path);
@@ -172,7 +172,7 @@ public class A01_ReportGeneralStatistics {
                 .collect(Collectors.toList());
         int numberOfEarlyFoldingResidues = Integer.valueOf(split[3]);
 
-        Structure structure = StructureParser.source(pdbId).parse();
+        Structure structure = StructureParser.fromPdbId(pdbId).parse();
         Chain chain = structure.chains().findFirst().get();
 
         Start2FoldXmlParser.parseSpecificExperiment(chain,
@@ -214,22 +214,22 @@ public class A01_ReportGeneralStatistics {
                 .filter(aminoAcid -> aminoAcid.getFeature(AccessibleSurfaceArea.class).isBuried())
                 .collect(Collectors.toList());
 
-        rasaContingencyTable[0] += SetOperations.intersection(earlyFoldingResidues, buriedAminoAcids).size();
-        rasaContingencyTable[1] += SetOperations.intersection(earlyFoldingResidues, exposedAminoAcids).size();
-        rasaContingencyTable[2] += SetOperations.intersection(lateFoldingResidues, buriedAminoAcids).size();
-        rasaContingencyTable[3] += SetOperations.intersection(lateFoldingResidues, exposedAminoAcids).size();
+        rasaContingencyTable[0] += SetOperations.createIntersectionSet(earlyFoldingResidues, buriedAminoAcids).size();
+        rasaContingencyTable[1] += SetOperations.createIntersectionSet(earlyFoldingResidues, exposedAminoAcids).size();
+        rasaContingencyTable[2] += SetOperations.createIntersectionSet(lateFoldingResidues, buriedAminoAcids).size();
+        rasaContingencyTable[3] += SetOperations.createIntersectionSet(lateFoldingResidues, exposedAminoAcids).size();
 
         int earlyFunctionalCount = 0;
         if(!functionalResidues.isEmpty()) {
             functional.add(functionalResidues.size());
             nonFunctional.add((int) chain.aminoAcids().count() - functionalResidues.size());
-            earlyFunctionalCount = SetOperations.intersection(earlyFoldingResidues, functionalResidues).size();
+            earlyFunctionalCount = SetOperations.createIntersectionSet(earlyFoldingResidues, functionalResidues).size();
             overlap.add(earlyFunctionalCount);
 
             int ef = earlyFunctionalCount;
-            int en = SetOperations.intersection(earlyFoldingResidues, nonFunctionalResidues).size();
-            int lf = SetOperations.intersection(lateFoldingResidues, functionalResidues).size();
-            int ln = SetOperations.intersection(lateFoldingResidues, nonFunctionalResidues).size();
+            int en = SetOperations.createIntersectionSet(earlyFoldingResidues, nonFunctionalResidues).size();
+            int lf = SetOperations.createIntersectionSet(lateFoldingResidues, functionalResidues).size();
+            int ln = SetOperations.createIntersectionSet(lateFoldingResidues, nonFunctionalResidues).size();
 
             contingencyTable[0] += ef;
             contingencyTable[1] += en;

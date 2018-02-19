@@ -19,7 +19,7 @@ public class LoopFractionCalculatorTest {
 
     @Before
     public void setup() {
-        protein = StructureParser.source("1acj").parse();
+        protein = StructureParser.fromPdbId("1acj").parse();
         featureProvider = new LoopFractionCalculator();
     }
 

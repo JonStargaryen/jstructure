@@ -32,7 +32,7 @@ public class SingleValueDecompositionAlignerTest {
     @Before
     public void setup() {
         structureAligner = new SingleValueDecompositionAligner();
-        protein1acj = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        protein1acj = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
 

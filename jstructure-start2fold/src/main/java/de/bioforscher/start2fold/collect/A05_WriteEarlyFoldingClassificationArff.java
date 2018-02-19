@@ -99,7 +99,7 @@ public class A05_WriteEarlyFoldingClassificationArff {
                     .map(Integer::valueOf)
                     .collect(Collectors.toList());
 
-            Structure structure = StructureParser.source(pdbId).parse();
+            Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.getFirstChain();
 
             Start2FoldXmlParser.parseSpecificExperiment(chain,

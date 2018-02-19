@@ -44,7 +44,7 @@ public class A01_CreatePyMolRenderJobsForEarlyFoldingResidues {
                 .map(Integer::valueOf)
                 .collect(Collectors.toList());
 
-        Structure structure = StructureParser.source(pdbId).parse();
+        Structure structure = StructureParser.fromPdbId(pdbId).parse();
         Chain chain = structure.chains().findFirst().get();
 
         Start2FoldXmlParser.parseSpecificExperiment(chain,

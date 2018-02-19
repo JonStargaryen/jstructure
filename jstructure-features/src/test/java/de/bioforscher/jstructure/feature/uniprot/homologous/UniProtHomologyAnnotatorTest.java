@@ -28,7 +28,7 @@ public class UniProtHomologyAnnotatorTest {
 
     @Test
     public void shouldInferInformationFromHomologousProteins() {
-        Structure protein = StructureParser.source("2ts1").parse();
+        Structure protein = StructureParser.fromPdbId("2ts1").parse();
         uniProtHomologyAnnotator.uniProtBlastService.start();
         uniProtHomologyAnnotator.process(protein);
         uniProtHomologyAnnotator.uniProtBlastService.stop();

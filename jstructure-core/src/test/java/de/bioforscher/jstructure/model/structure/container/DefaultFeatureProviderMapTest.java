@@ -17,7 +17,7 @@ public class DefaultFeatureProviderMapTest {
 
     @Before
     public void setup() {
-        structure = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        structure = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
         atom = structure.atoms()

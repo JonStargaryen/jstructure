@@ -15,7 +15,7 @@ public class PLIPIntraMolecularAnnotatorTest {
 
     @Test
     public void shouldAnnotateSingleProtein() throws IOException {
-        Structure protein = StructureParser.source("4BPM").parse();
+        Structure protein = StructureParser.fromPdbId("4BPM").parse();
         plipAnnotator.process(protein);
         PLIPInteractionContainer plipInteractionContainer = protein.getFeature(PLIPInteractionContainer.class);
         plipInteractionContainer.getInteractions().forEach(System.out::println);
@@ -23,19 +23,19 @@ public class PLIPIntraMolecularAnnotatorTest {
 
     @Test
     public void shouldAnnotateProteinWithWaterBridges() {
-        Structure protein = StructureParser.source("5A1S").parse();
+        Structure protein = StructureParser.fromPdbId("5A1S").parse();
         plipAnnotator.process(protein);
     }
 
     @Test
     public void shouldProteinWithIllReference() {
-        Structure protein = StructureParser.source("3AOU").parse();
+        Structure protein = StructureParser.fromPdbId("3AOU").parse();
         plipAnnotator.process(protein);
     }
 
     @Test
     public void shouldAnnotateProteinWithHalogenBond() {
-        Structure protein = StructureParser.source("4BPM").parse();
+        Structure protein = StructureParser.fromPdbId("4BPM").parse();
         plipAnnotator.process(protein);
     }
 }

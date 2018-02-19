@@ -23,7 +23,7 @@ public class SiftsMappingAnnotatorTest {
 
     @Test
     public void shouldMap4r3z_A() {
-        Structure protein = StructureParser.source("4r3z")
+        Structure protein = StructureParser.fromPdbId("4r3z")
                 .minimalParsing(true)
                 .parse();
         mappingAnnotator.process(protein);
@@ -38,7 +38,7 @@ public class SiftsMappingAnnotatorTest {
 
     @Test
     public void shouldMap1o0c_A() {
-        Structure protein = StructureParser.source("1o0c")
+        Structure protein = StructureParser.fromPdbId("1o0c")
                 .minimalParsing(true)
                 .parse();
         mappingAnnotator.process(protein);
@@ -53,20 +53,20 @@ public class SiftsMappingAnnotatorTest {
 
     @Test(expected = ComputationException.class)
     public void shouldFailForUnknownPdbId() {
-        Structure protein = StructureParser.source(TestUtils.getResourceAsInputStream("uniprot/1bs2_A_renum.pdb"))
+        Structure protein = StructureParser.fromInputStream(TestUtils.getResourceAsInputStream("uniprot/1bs2_A_renum.pdb"))
                 .parse();
         mappingAnnotator.process(protein);
     }
 
     @Test
     public void shouldHandle5tgl() {
-        Structure protein = StructureParser.source("5tgl").parse();
+        Structure protein = StructureParser.fromPdbId("5tgl").parse();
         mappingAnnotator.process(protein);
     }
 
     @Test
     public void shouldDetermineUniProtNumbering() {
-        Structure protein = StructureParser.source("1acj").parse();
+        Structure protein = StructureParser.fromPdbId("1acj").parse();
         mappingAnnotator.process(protein);
 
         ChainMapping chainSiftsMapping = protein.getChains().get(0).getFeature(ChainMapping.class);

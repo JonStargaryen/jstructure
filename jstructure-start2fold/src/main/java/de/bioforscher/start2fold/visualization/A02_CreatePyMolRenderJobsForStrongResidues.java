@@ -45,7 +45,7 @@ public class A02_CreatePyMolRenderJobsForStrongResidues {
             String entryId = path.toFile().getName().split("\\.")[0];
             String pdbId = Jsoup.parse(path.toFile(), "UTF-8").getElementsByTag("protein").attr("pdb_id");
 
-            Structure structure = StructureParser.source(pdbId).parse();
+            Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
 
             Start2FoldXmlParser.parse(chain,

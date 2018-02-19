@@ -13,28 +13,34 @@ public class TorsionAngles {
     private final double psi;
     private final double omega;
 
-    public TorsionAngles(AminoAcid group1, AminoAcid group2) {
+    public TorsionAngles(AminoAcid aminoAcid, AminoAcid nextAminoAcid) {
         try {
-            Atom n1 = group1.getN();
-            Atom ca1 = group1.getCa();
-            Atom c1 = group1.getC();
+            Atom n1 = aminoAcid.getN();
+            Atom ca1 = aminoAcid.getCa();
+            Atom c1 = aminoAcid.getC();
 
-            Atom n2 = group2.getN();
-            Atom ca2 = group2.getCa();
-            Atom c2 = group2.getC();
+            Atom n2 = nextAminoAcid.getN();
+            Atom ca2 = nextAminoAcid.getCa();
+            Atom c2 = nextAminoAcid.getC();
 
-            this.phi = torsionAngle(c1, n2, ca2, c2);
-            this.psi = torsionAngle(n1, ca1, c1, n2);
-            this.omega = torsionAngle(ca1, c1, n2, ca2);
+            this.phi = calculatePhiAngle(c1, n2, ca2, c2);
+            this.psi = calculatePsiAngle(n1, ca1, c1, n2);
+            this.omega = calculateOmegaAngle(ca1, c1, n2, ca2);
         } catch (NullPointerException e) {
-            throw new SelectionException("missing backbone atoms for torsion angle calculation in " + group1 + " or " + group2);
+            throw new SelectionException("missing backbone atoms for torsion angle calculation in " + aminoAcid + " or " + nextAminoAcid);
         }
+    }
+
+    public TorsionAngles(double phi, double psi, double omega) {
+        this.phi = phi;
+        this.psi = psi;
+        this.omega = omega;
     }
 
     /**
      * Computes the torsion angle of 4 consecutive points.
      */
-    public static double torsionAngle(Atom a1, Atom a2, Atom a3, Atom a4) {
+    private static double calculateTorsionAngle(Atom a1, Atom a2, Atom a3, Atom a4) {
         LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra ab = LinearAlgebra.on(a1).subtract(a2.getCoordinates());
         LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra cb = LinearAlgebra.on(a3).subtract(a2.getCoordinates());
         LinearAlgebra.PrimitiveDoubleArrayLinearAlgebra bc = LinearAlgebra.on(a2).subtract(a3.getCoordinates());
@@ -54,10 +60,16 @@ public class TorsionAngles {
         return angle;
     }
 
-    public TorsionAngles(double phi, double psi, double omega) {
-        this.phi = phi;
-        this.psi = psi;
-        this.omega = omega;
+    private static double calculatePhiAngle(Atom c1, Atom n2, Atom ca2, Atom c2) {
+        return calculateTorsionAngle(c1, n2, ca2, c2);
+    }
+
+    private static double calculatePsiAngle(Atom n1, Atom ca1, Atom c1, Atom n2) {
+        return calculateTorsionAngle(n1, ca1, c1, n2);
+    }
+
+    private static double calculateOmegaAngle(Atom ca1, Atom c1, Atom n2, Atom ca2) {
+        return calculateTorsionAngle(ca1, c1, n2, ca2);
     }
 
     public double getPhi() {

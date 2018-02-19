@@ -120,7 +120,7 @@ public class ProteinGraphCalculations {
         if(numberOfNeighbors == 1) {
             return 0;
         }
-        long actualNumberOfEdges = SetOperations.uniquePairsOf(neighbors)
+        long actualNumberOfEdges = SetOperations.unorderedPairsOf(neighbors)
                 .filter(pair -> containsEdge(pair.getLeft(), pair.getRight()))
                 .count();
         return actualNumberOfEdges / (0.5 * (numberOfNeighbors * (numberOfNeighbors - 1)));
@@ -152,7 +152,7 @@ public class ProteinGraphCalculations {
     }
 
     private List<GraphPath<AminoAcid, DefaultEdge>> shortestPathsPassingThrough(AminoAcid node) {
-        return SetOperations.uniquePairsOf(nodes)
+        return SetOperations.unorderedPairsOf(nodes)
                 .map(pair -> shortestPaths.get(pair.getLeft()).getPath(pair.getRight()))
                 .filter(graphPath -> graphPath.getVertexList().contains(node))
                 .collect(Collectors.toList());

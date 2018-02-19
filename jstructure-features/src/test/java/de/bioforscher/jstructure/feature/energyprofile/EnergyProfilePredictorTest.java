@@ -17,7 +17,7 @@ public class EnergyProfilePredictorTest {
 
     @Before
     public void setup() {
-        protein = StructureParser.source("1brr").parse();
+        protein = StructureParser.fromPdbId("1brr").parse();
         energyProfilePredictor = new EnergyProfilePredictor();
     }
 

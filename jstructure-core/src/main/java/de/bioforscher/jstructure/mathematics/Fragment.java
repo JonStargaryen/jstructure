@@ -8,7 +8,7 @@ import java.util.stream.Stream;
  * Created by S on 02.10.2016.
  */
 public class Fragment<T> {
-    private List<T> elements;
+    private final List<T> elements;
 
     public Fragment(List<T> elements) {
         this.elements = elements;

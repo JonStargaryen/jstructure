@@ -85,7 +85,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends FeatureProvider 
                                 .getBytes();
 
                         // parse protein
-                        Structure opmProtein = StructureParser.source(new ByteArrayInputStream(bytes))
+                        Structure opmProtein = StructureParser.fromInputStream(new ByteArrayInputStream(bytes))
                                 .forceProteinName(IdentifierFactory.createProteinIdentifier(downloadLink.split("=")[0].split("/")[1].substring(0, 4)))
                                 .parse();
 
@@ -116,7 +116,7 @@ public class OrientationsOfProteinsInMembranesAnnotator extends FeatureProvider 
 //                                    .map(TransMembraneSubunit::getSegments)
 //                                    .flatMap(Collection::stream)
 //                                    .collect(Collectors.toList())
-//                                    .toArray(new IntegerRange[0]))
+//                                    .toArray(new IntegerInterval[0]))
 //                            .asGroupContainer()
 //                            .getAtomRepresentation()
 //                            .getBytes());

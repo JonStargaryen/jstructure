@@ -36,7 +36,7 @@ public class StructureParserTest {
     @Test
     public void shouldHandleLegacyHeaders() {
         String pdbId = "2m7g";
-        Structure structure = StructureParser.source(pdbId)
+        Structure structure = StructureParser.fromPdbId(pdbId)
                 .minimalParsing(true)
                 .parse();
         Assert.assertEquals("pdbId does not match expectation", pdbId, structure.getProteinIdentifier().getPdbId());
@@ -45,7 +45,7 @@ public class StructureParserTest {
 
     @Test
     public void shouldFormatPdbHeaderCorrectly() {
-        Structure protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1AR1))
+        Structure protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1AR1))
                 .minimalParsing(true)
                 .parse();
         String expected = "HEADER    COMPLEX (OXIDOREDUCTASE/ANTIBODY)       08-AUG-97   1AR1              " + System.lineSeparator();
@@ -57,7 +57,7 @@ public class StructureParserTest {
     @Test
     public void shouldUseLocalPdbDirectory() {
         StructureParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
-        Structure protein = StructureParser.source("10gs")
+        Structure protein = StructureParser.fromPdbId("10gs")
                 .minimalParsing(true)
                 .parse();
         System.out.println(protein);
@@ -68,13 +68,13 @@ public class StructureParserTest {
     public void shouldSkipLigandParsing() {
         //TODO move to structure actually containing nucleotides
         String id = "5GRO";
-        Structure proteinFast = StructureParser.source(id).minimalParsing(true).parse();
+        Structure proteinFast = StructureParser.fromPdbId(id).minimalParsing(true).parse();
         List<Group> ligandsFast = proteinFast.select()
                 .ligands()
                 .asFilteredGroups()
                 .collect(Collectors.toList());
 
-        Structure proteinConventional = StructureParser.source(id).parse();
+        Structure proteinConventional = StructureParser.fromPdbId(id).parse();
         List<Group> ligandsConventional = proteinConventional.select()
                 .ligands()
                 .asFilteredGroups()
@@ -87,7 +87,7 @@ public class StructureParserTest {
 
     @Test
     public void shouldHandleProteinWithOligopeptide() {
-        Structure protein = StructureParser.source("1lyb").parse();
+        Structure protein = StructureParser.fromPdbId("1lyb").parse();
         // contains peptide-like groups - ought to be an AminoAcid
         AminoAcid statine = (AminoAcid) protein.select()
                 .groupName("STA")
@@ -100,12 +100,12 @@ public class StructureParserTest {
 
     @Test
     public void shouldParseNonStandardAminoAcid() {
-        StructureParser.source(TestUtils.getResourceAsInputStream(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb")).parse();
+        StructureParser.fromInputStream(TestUtils.getResourceAsInputStream(PDB_DIRECTORY + "nonstandard/1dw9-first-selenomethionine.pdb")).parse();
     }
 
     @Test
     public void shouldRetrieveAminoAcidSequenceOfAllChains() {
-        Structure protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_5OAZ))
+        Structure protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_5OAZ))
                 .minimalParsing(true)
                 .parse();
         String sequence = protein.getAminoAcidSequence();
@@ -118,7 +118,7 @@ public class StructureParserTest {
 
     @Test
     public void shouldParseInsertedAminoAcids() {
-        Structure protein = StructureParser.source("2w0l").parse();
+        Structure protein = StructureParser.fromPdbId("2w0l").parse();
         List<Group> groups = protein.select()
                 .chainName("A")
                 .residueNumber(95)
@@ -130,7 +130,7 @@ public class StructureParserTest {
 
     @Test
     public void shouldParseAlternativePositions() {
-        Structure protein = StructureParser.source("4bpm").parse();
+        Structure protein = StructureParser.fromPdbId("4bpm").parse();
         protein.select()
                 // atom 61 an alternative position
                 .pdbSerial(61)
@@ -139,7 +139,7 @@ public class StructureParserTest {
 
     @Test
     public void shouldHandleProteinWithNonStandardAminoAcids() {
-        Structure protein = StructureParser.source(NON_STANDARD_PDB_ID).parse();
+        Structure protein = StructureParser.fromPdbId(NON_STANDARD_PDB_ID).parse();
         // ensure that the initial selenomethionine stored as HETATM is correctly parsed
         System.out.println(protein.getAminoAcidSequence());
         Assert.assertThat(protein.getAminoAcidSequence(), startsWith("M"));
@@ -147,12 +147,12 @@ public class StructureParserTest {
 
     @Test(expected = ParsingException.class)
     public void shouldFailForInvalidStructure() {
-        StructureParser.source(TestUtils.getResourceAsInputStream("pdb/invalid.pdb")).strictMode(true).parse();
+        StructureParser.fromInputStream(TestUtils.getResourceAsInputStream("pdb/invalid.pdb")).strictMode(true).parse();
     }
 
     @Test
     public void shouldHandleModifiedResidue() {
-        Structure protein = StructureParser.source("1brr").parse();
+        Structure protein = StructureParser.fromPdbId("1brr").parse();
 
         Group pca = protein.select()
                 .chainName("C")
@@ -172,7 +172,7 @@ public class StructureParserTest {
          * 1bs2 is an aars structure with the amino acid arginine in the binding site (annotated as ATOM record), some
          * water (annotated as HETATM)
          */
-        Structure protein1bs2 = StructureParser.source("1bs2").parse();
+        Structure protein1bs2 = StructureParser.fromPdbId("1bs2").parse();
 
         List<Group> waters = protein1bs2.select()
                 .water()
@@ -222,7 +222,7 @@ public class StructureParserTest {
         String pdbId = supportedProtein.name().split("_")[1];
 
         System.out.println("checking agreement between written and expected ATOM records for " + pdbId);
-        Structure protein = StructureParser.source(TestUtils.getProteinInputStream(supportedProtein))
+        Structure protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(supportedProtein))
                 .minimalParsing(true)
                 .parse();
         List<String> writtenLines = Pattern.compile("\n")

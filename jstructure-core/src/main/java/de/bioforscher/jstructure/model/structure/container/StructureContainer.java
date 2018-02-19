@@ -34,7 +34,7 @@ public interface StructureContainer extends Featureable, AtomRecordWriter, Copya
     /**
      * Access particular features, identified by its content type.
      * @param contentClass the class of the content of interest
-     * @param <C>
+     * @param <C> the content class returned
      * @return the <b>first</b> relevant
      */
     @Override

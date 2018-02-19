@@ -67,9 +67,4 @@ public interface GroupContainer extends AtomContainer {
                 .map(Nucleotide::getOneLetterCode)
                 .collect(Collectors.joining());
     }
-
-//    @Override
-//    default GroupContainer createDeepCopy() {
-//        return (GroupContainer) AtomContainer.super.createDeepCopy();
-//    }
 }

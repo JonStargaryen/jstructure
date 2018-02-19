@@ -38,6 +38,11 @@ public class Pair<L, R> {
         return payload;
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getPayload(Class<T> payloadType) {
+        return (T) getPayload();
+    }
+
     /**
      * Returns a new pair container with reversed order.
      * @return a new pair where the first entry is now second and vice versa

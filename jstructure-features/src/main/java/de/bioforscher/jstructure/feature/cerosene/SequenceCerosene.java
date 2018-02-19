@@ -6,8 +6,6 @@ import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 
-import java.util.stream.IntStream;
-
 /**
  * An adaptation of the sequence cerosene tool which transforms 3D coordinates of a protein in the RGB color space. This
  * allows the identification of residues in spatial proximity on sequence level as they will feature identical color
@@ -40,7 +38,7 @@ public class SequenceCerosene extends FeatureProvider {
         return protein.atoms()
                 .map(Atom::getCoordinates)
                 .map(coordinates -> LinearAlgebra.on(coordinates).subtract(centroid).getValue())
-                .mapToDouble(difference -> IntStream.range(0, 3).mapToDouble(dimension -> difference[dimension]).max().getAsDouble())
+                .mapToDouble(difference -> java.util.Arrays.stream(difference, 0, 3).max().getAsDouble())
                 .max()
                 .orElse(23.0);
     }

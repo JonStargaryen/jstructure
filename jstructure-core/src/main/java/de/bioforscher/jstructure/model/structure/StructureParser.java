@@ -348,16 +348,15 @@ public class StructureParser {
         return protein;
     }
 
-    public static OptionalSteps source(InputStream inputStream) {
+    public static OptionalSteps fromInputStream(InputStream inputStream) {
         return new OptionalSteps(inputStream);
     }
 
-    //TODO users could expect this to be a filepath too - change method name? decide internally on-the-fly?
-    public static OptionalSteps source(String pdbId) {
+    public static OptionalSteps fromPdbId(String pdbId) {
         return new OptionalSteps(pdbId).hintProteinName(IdentifierFactory.createProteinIdentifier(pdbId));
     }
 
-    public static OptionalSteps source(Path path) {
+    public static OptionalSteps fromPath(Path path) {
         return new OptionalSteps(path).hintProteinName(IdentifierFactory.createProteinIdentifier("", path.toFile().getName()));
     }
 

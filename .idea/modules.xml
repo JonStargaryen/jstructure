@@ -6,7 +6,6 @@
       <module fileurl="file://$PROJECT_DIR$/jstructure-all/jstructure-all.iml" filepath="$PROJECT_DIR$/jstructure-all/jstructure-all.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-core/jstructure-core.iml" filepath="$PROJECT_DIR$/jstructure-core/jstructure-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-features/jstructure-features.iml" filepath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
-      <module fileurl="file://$PROJECT_DIR$/jstructure-gmlvq/jstructure-gmlvq.iml" filepath="$PROJECT_DIR$/jstructure-gmlvq/jstructure-gmlvq.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-start2fold/jstructure-start2fold.iml" filepath="$PROJECT_DIR$/jstructure-start2fold/jstructure-start2fold.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-utils/jstructure-utils.iml" filepath="$PROJECT_DIR$/jstructure-utils/jstructure-utils.iml" />
     </modules>

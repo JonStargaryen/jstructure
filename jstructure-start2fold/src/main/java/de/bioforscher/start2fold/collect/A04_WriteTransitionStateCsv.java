@@ -79,7 +79,7 @@ public class A04_WriteTransitionStateCsv {
                     .map(Integer::valueOf)
                     .collect(Collectors.toList());
 
-            Structure structure = StructureParser.source(pdbId).parse();
+            Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain originalChain = structure.chains().findFirst().get();
             ProteinGraph originalFullPlipGraph = ProteinGraphFactory.createProteinGraph(originalChain,
                     ProteinGraphFactory.InteractionScheme.SALENTIN2015);
@@ -101,7 +101,7 @@ public class A04_WriteTransitionStateCsv {
             List<Chain> reconstructedChains = Files.list(Paths.get("/home/bittrich/git/phd_sb_repo/data/" +
                     "reconstruction-start2fold/reconstructions/" + pdbId + "-early-conventional-1/stage1/"))
                     .filter(path -> path.toFile().getName().contains("_model"))
-                    .map(path -> StructureParser.source(path)
+                    .map(path -> StructureParser.fromPath(path)
                             .forceProteinName(IdentifierFactory.createProteinIdentifier(pdbId, path.toFile().getName().split("_")[2].split("\\.")[0]))
                             .parse()
                             .getChains()

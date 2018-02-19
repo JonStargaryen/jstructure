@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public class PLIPInteractionTest {
     @Test
     public void shouldDistinguishBetweenBackboneAndSideChainInteractions() throws IOException {
-        Structure protein = StructureParser.source("1ar1").parse();
+        Structure protein = StructureParser.fromPdbId("1ar1").parse();
         Chain chain = protein.select()
                 .chainName("A")
                 .asChain();

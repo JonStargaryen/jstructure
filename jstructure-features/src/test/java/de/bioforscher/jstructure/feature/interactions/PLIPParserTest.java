@@ -14,7 +14,7 @@ public class PLIPParserTest {
     public void shouldAnnotateProtein() {
         String pdbId = "1brr";
         String chainId = "A";
-        Chain chain = StructureParser.source(pdbId).parse()
+        Chain chain = StructureParser.fromPdbId(pdbId).parse()
                 .select()
                 .chainName(chainId)
                 .asChain();

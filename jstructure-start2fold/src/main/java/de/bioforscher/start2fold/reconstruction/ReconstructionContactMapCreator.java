@@ -228,7 +228,7 @@ public class ReconstructionContactMapCreator {
 
     private static List<Pair<AminoAcid, AminoAcid>> determineNaiveInteractions(List<AminoAcid> aminoAcids) {
         List<Pair<AminoAcid, AminoAcid>> naiveEdges = new ArrayList<>();
-        List<Pair<AminoAcid, AminoAcid>> pairs = SetOperations.uniquePairsOf(aminoAcids).collect(Collectors.toList());
+        List<Pair<AminoAcid, AminoAcid>> pairs = SetOperations.unorderedPairsOf(aminoAcids).collect(Collectors.toList());
 
         for(Pair<AminoAcid, AminoAcid> pair : pairs) {
             AminoAcid aminoAcid1 = pair.getLeft();

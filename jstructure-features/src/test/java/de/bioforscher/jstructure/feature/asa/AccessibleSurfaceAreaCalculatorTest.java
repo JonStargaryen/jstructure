@@ -36,7 +36,7 @@ public class AccessibleSurfaceAreaCalculatorTest {
 
     private static List<Double> getJStructureASA(String id) {
         // load structure
-        Structure protein = StructureParser.source(id).parse();
+        Structure protein = StructureParser.fromPdbId(id).parse();
         // assign states
         new AccessibleSurfaceAreaCalculator().process(protein);
 

@@ -14,7 +14,7 @@ public class EgorAgreementCalculatorTest {
 
     @Before
     public void setup() {
-        structure = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
+        structure = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ))
                 .minimalParsing(true)
                 .parse();
         aminoAcid = structure.aminoAcids()

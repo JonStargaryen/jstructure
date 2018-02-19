@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.model.structure.selection;
 
+import de.bioforscher.jstructure.mathematics.IntegerInterval;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.aminoacid.Arginine;
@@ -25,7 +26,7 @@ public class SelectionTest {
 
     @Before
     public void setup() {
-        protein = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1BRR))
+        protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1BRR))
                 .minimalParsing(true)
                 .parse();
     }
@@ -58,7 +59,7 @@ public class SelectionTest {
     public void shouldSelectBasedOnRange() {
         List<Group> selection = protein.select()
                 .chainName("A")
-                .residueNumber(new IntegerRange(100, 105))
+                .residueNumber(new IntegerInterval(100, 105))
                 .asFilteredGroups()
                 .collect(Collectors.toList());
 
@@ -154,7 +155,7 @@ public class SelectionTest {
 
     @Test
     public void shouldFindSimilarNeighbors() {
-        Structure protein = StructureParser.source("1acj").parse();
+        Structure protein = StructureParser.fromPdbId("1acj").parse();
 
         Atom atom = protein.getAtoms().get(100);
         double probeDistance = 4;

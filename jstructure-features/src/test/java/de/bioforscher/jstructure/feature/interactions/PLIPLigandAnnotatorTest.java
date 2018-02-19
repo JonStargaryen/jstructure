@@ -9,7 +9,7 @@ import org.junit.Test;
 public class PLIPLigandAnnotatorTest {
     @Test
     public void shouldAnnotateLigandInteractions() {
-        Structure structure = StructureParser.source(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ)).parse();
+        Structure structure = StructureParser.fromInputStream(TestUtils.getProteinInputStream(TestUtils.SupportedProtein.PDB_1ACJ)).parse();
         PLIPLigandAnnotator plipLigandAnnotator = new PLIPLigandAnnotator();
         plipLigandAnnotator.process(structure);
 
