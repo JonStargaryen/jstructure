@@ -14,10 +14,6 @@ public abstract class FeatureVector extends FeatureContainerEntry {
     private final double nonLocalInteractions;
     private final double energy;
     private final double egor;
-    //        private final double eccount;
-//        private final double cumstrength;
-//        private final double ecstrength;
-//        private final double conservation;
     private final double rasa;
     private final double betweenness;
     private final double closeness;
@@ -45,10 +41,6 @@ public abstract class FeatureVector extends FeatureContainerEntry {
                   double nonLocalInteractions,
                   double energy,
                   double egor,
-//                             double eccount,
-//                             double cumstrength,
-//                             double ecstrength,
-//                             double conservation,
                   double rasa,
                   double betweenness,
                   double closeness,
@@ -76,10 +68,6 @@ public abstract class FeatureVector extends FeatureContainerEntry {
         this.nonLocalInteractions = nonLocalInteractions;
         this.energy = energy;
         this.egor = egor;
-//            this.eccount = eccount;
-//            this.cumstrength = cumstrength;
-//            this.ecstrength = ecstrength;
-//            this.conservation = conservation;
         this.rasa = rasa;
         this.betweenness = betweenness;
         this.closeness = closeness;
@@ -156,22 +144,6 @@ public abstract class FeatureVector extends FeatureContainerEntry {
     public double getEgor() {
         return egor;
     }
-
-//        public double getEccount() {
-//            return eccount;
-//        }
-//
-//        public double getCumstrength() {
-//            return cumstrength;
-//        }
-//
-//        public double getEcstrength() {
-//            return ecstrength;
-//        }
-//
-//        public double getConservation() {
-//            return conservation;
-//        }
 
     public double getRasa() {
         return rasa;

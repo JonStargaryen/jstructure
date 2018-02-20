@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.align.impl;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class LocalBlastWrapperTest {
     }
 
     @Test
+    @Ignore("skipping long test")
     public void shouldExecutePsiBlast() {
         LocalBlastWrapper.PsiBlastResult result = blastWrapper.executePsiBlastUniref50(sequence);
         Assert.assertFalse(result.getAccessions().isEmpty());

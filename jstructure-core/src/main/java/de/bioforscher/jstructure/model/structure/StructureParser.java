@@ -356,6 +356,10 @@ public class StructureParser {
         return new OptionalSteps(pdbId).hintProteinName(IdentifierFactory.createProteinIdentifier(pdbId));
     }
 
+    public static OptionalSteps fromProteinIdentifier(ProteinIdentifier proteinIdentifier) {
+        return fromPdbId(proteinIdentifier.getPdbId());
+    }
+
     public static OptionalSteps fromPath(Path path) {
         return new OptionalSteps(path).hintProteinName(IdentifierFactory.createProteinIdentifier("", path.toFile().getName()));
     }
