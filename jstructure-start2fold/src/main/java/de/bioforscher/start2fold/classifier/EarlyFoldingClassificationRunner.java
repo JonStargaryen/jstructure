@@ -81,7 +81,7 @@ public class EarlyFoldingClassificationRunner {
         System.out.println();
 
         // report structure characteristics
-        System.out.println("structure: '" + structure.getProteinIdentifier().getFullName() + "'\n" +
+        System.out.println("structure: " + structure.getProteinIdentifier().getFullName() + "\n" +
                 "chains: " + structure.chainsWithAminoAcids()
                                       .map(Chain::getChainIdentifier)
                                       .map(ChainIdentifier::getChainId)
@@ -267,6 +267,5 @@ public class EarlyFoldingClassificationRunner {
 
     private static double round(double value) {
         return (double) Math.round(value * 10000d) / 10000d;
-//        return value;
     }
 }

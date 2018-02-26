@@ -25,6 +25,7 @@ public class Start2FoldConstants extends FileUtils {
     public static final Path EQUANT_DIRECTORY = BASE_DIRECTORY.resolve("equant");
     public static final Path STATISTICS_DIRECTORY = BASE_DIRECTORY.resolve("statistics");
     public static final Path START2FOLD_DIRECTORY = DATA_DIRECTORY.resolve("reconstructions-start2fold");
+    public static final Path THERMOSTABILITY_DIRECTORY = DATA_DIRECTORY.resolve("thermostability");
 
     public static List<Integer> extractFunctioanlResidueNumbers(String[] split) {
         return Pattern.compile(",")
