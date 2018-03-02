@@ -21,7 +21,7 @@ public class PLIPIntraMolecularAnnotator extends FeatureProvider {
     @Override
     protected void processInternally(Structure protein) {
         protein.chainsWithAminoAcids()
-                .parallel()
+//                .parallel()
                 .forEach(chain -> process(chain, getDocument(chain)));
 
         List<PLIPInteraction> plipInteractions = protein.chainsWithAminoAcids()
@@ -38,13 +38,15 @@ public class PLIPIntraMolecularAnnotator extends FeatureProvider {
     }
 
     private PLIPInteractionContainer processInternally(Chain chain, Document document) {
-        logger.info("processing chain '{}_{}' by PLIP",
+        logger.debug("processing chain '{}_{}' by PLIP",
                 chain.getParentStructure().getProteinIdentifier(),
                 chain.getChainIdentifier().getChainId());
         return new PLIPInteractionContainer(this, PLIPParser.parse(chain, document));
     }
 
     public void process(Chain chain, Document document) {
+        logger.debug("assigning results from document to {}",
+                chain.getChainIdentifier().getFullName());
         PLIPInteractionContainer container = processInternally(chain, document);
         chain.getFeatureContainer().addFeature(container);
         chain.aminoAcids()

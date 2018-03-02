@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -48,11 +49,12 @@ public class PLIPRestServiceQuery {
      * @return the document containing all results
      */
     public static Document calculateIntraChainDocument(Chain chain) {
+        logger.debug("calculating PLIP intra-document for {}",
+                chain.getChainIdentifier().getFullName());
         try {
             String chainId = chain.getChainIdentifier().getChainId();
             // write PDB structure of data point to temporary file
             Path structureFilePath = Files.createTempFile("plip_", "_" + chainId + ".pdb");
-//            System.out.println(chain.getPdbRepresentation());
             Files.write(structureFilePath, chain.getPdbRepresentation().getBytes());
 
             // submit PLIP POST query
@@ -67,6 +69,8 @@ public class PLIPRestServiceQuery {
     }
 
     static Document getLigandDocument(Chain chain) {
+        logger.debug("fetching PLIP ligand-document for {}",
+                chain.getChainIdentifier().getFullName());
         try {
             // write PDB structure of data point to temporary file
             Path structureFilePath = Files.createTempFile("plip_", "_" + chain.getChainIdentifier().getFullName() + ".pdb");
@@ -81,6 +85,9 @@ public class PLIPRestServiceQuery {
     }
 
     static Document getIntraMolecularDocument(String pdbId, String chainId) {
+        logger.debug("fetching PLIP intra-document for {}_{}",
+                pdbId,
+                chainId);
         try {
             try {
                 return getIntraMolecularDocument(new URL(BASE_URL + pdbId + "/" + chainId));
@@ -114,7 +121,7 @@ public class PLIPRestServiceQuery {
     }
 
     static class PLIPPostRequest {
-//        private static final Logger logger = LoggerFactory.getLogger(PLIPPostRequest.class);
+        private static final Logger logger = LoggerFactory.getLogger(PLIPPostRequest.class);
         private final String credentials;
         private final Path pdbFilePath;
         private String plipUrl;
@@ -124,7 +131,7 @@ public class PLIPRestServiceQuery {
             this.plipUrl = plipUrl;
             this.credentials = credentials;
             this.pdbFilePath = pdbFilePath;
-//            logger.info("creating PLIP POST for PDB file {}", pdbFilePath);
+            logger.debug("creating PLIP POST for PDB file {}", pdbFilePath);
             this.doPlipPost();
         }
 
@@ -149,8 +156,8 @@ public class PLIPRestServiceQuery {
             output.flush();
             writer.append(crlf).flush();
             writer.append("--").append(boundary).append("--").append(crlf).flush();
-//            int responseCode = ((HttpURLConnection)connection).getResponseCode();
-//            logger.info("PLIP REST service response code is " + responseCode);
+            int responseCode = ((HttpURLConnection) connection).getResponseCode();
+            logger.debug("PLIP REST service response code is " + responseCode);
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder response = new StringBuilder();
 

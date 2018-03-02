@@ -65,6 +65,7 @@ public class PLIPParser {
         }
 
         // merge entries which need merging and remove the merged entries
+        logger.debug("merging PLIP entries");
         List<PLIPInteraction> plipInteractionsToRemove = new ArrayList<>();
         for(PLIPInteraction plipInteraction : plipInteractions) {
             Group partner1 = plipInteraction.getPartner1();
@@ -109,6 +110,7 @@ public class PLIPParser {
             }
         }
 
+        logger.debug("cleaning up PLIP entries");
         for(PLIPInteraction plipInteraction : plipInteractions) {
             // sanity - PLIP does not recognize chain ids correctly, i.e. 'A' and 'a' are assumed to refer to the same chain
             if(plipInteraction.getPartner1().getParentChain() != plipInteraction.getPartner2().getParentChain()) {
@@ -130,6 +132,7 @@ public class PLIPParser {
 
         plipInteractions.removeAll(plipInteractionsToRemove);
 
+        logger.debug("done parsing PLIP data");
         return plipInteractions;
     }
 }

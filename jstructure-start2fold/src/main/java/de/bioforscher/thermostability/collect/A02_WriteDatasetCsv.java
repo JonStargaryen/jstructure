@@ -30,17 +30,15 @@ public class A02_WriteDatasetCsv {
 
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.THERMOSTABILITY_DIRECTORY.resolve("sadeghi.list"))
-                .skip(37)
-                .limit(20)
                 .map(A02_WriteDatasetCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
                         "pdb,chain,res,aa,sse3,sse9,sseSize," +
                                 "exposed," +
-                                "plip_hydrogen,plip_hydrophobic,plip_bb,plip_total," +
-                                "plip_l_hydrogen,plip_l_hydrophobic,plip_l_bb,plip_l_total," +
-                                "plip_nl_hydrogen,plip_nl_hydrophobic,plip_nl_bb,plip_nl_total," +
+                                "plip_hydrogen,plip_hydrophobic,plip_pistack,plip_cation,plip_salt,plip_metal,plip_halogen,plip_water,plip_bb,plip_total," +
+                                "plip_l_hydrogen,plip_l_hydrophobic,plip_l_pistack,plip_l_cation,plip_l_salt,plip_l_metal,plip_halogen,plip_water,plip_l_bb,plip_l_total," +
+                                "plip_nl_hydrogen,plip_nl_hydrophobic,plip_nl_pistack,plip_nl_cation,plip_nl_salt,plip_nl_metal,plip_halogen,plip_water,plip_nl_bb,plip_nl_total," +
                                 "energy,egor," +
                                 "asa,loopFraction," +
                                 "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
@@ -52,7 +50,7 @@ public class A02_WriteDatasetCsv {
                                 "thermophile" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.THERMOSTABILITY_DIRECTORY.resolve("statistics").resolve("thermophile-2.csv"),
+        Start2FoldConstants.write(Start2FoldConstants.THERMOSTABILITY_DIRECTORY.resolve("statistics").resolve("thermophile.csv"),
                 output);
     }
 
@@ -61,8 +59,13 @@ public class A02_WriteDatasetCsv {
             System.out.println(line);
             String[] split = line.split(";");
 
-            return Optional.of(handleProtein(split[0], split[1], "thermophile") + System.lineSeparator() +
+            Optional<String> output = Optional.of(handleProtein(split[0], split[1], "thermophile") + System.lineSeparator() +
                     handleProtein(split[2], split[3], "mesophile"));
+
+            output.ifPresent(s -> Start2FoldConstants.write(Start2FoldConstants.THERMOSTABILITY_DIRECTORY.resolve("statistics").resolve(split[0] + "-" + split[2] + ".csv"),
+                    s));
+
+            return output;
         } catch (Exception e) {
             logger.info("calculation failed for {}",
                     line,
@@ -123,16 +126,34 @@ public class A02_WriteDatasetCsv {
 
                             plipInteractionContainer.getHydrogenBonds().size() + "," +
                             plipInteractionContainer.getHydrophobicInteractions().size() + "," +
+                            plipInteractionContainer.getPiStackings().size() + "," +
+                            plipInteractionContainer.getPiCationInteractions().size() + "," +
+                            plipInteractionContainer.getSaltBridges().size() + "," +
+                            plipInteractionContainer.getMetalComplexes().size() + "," +
+                            plipInteractionContainer.getHalogenBonds().size() + "," +
+                            plipInteractionContainer.getWaterBridges().size() + "," +
                             plipInteractionContainer.getBackboneInteractions().size() + "," +
                             plipInteractionContainer.getInteractions().size() + "," +
 
                             localPlipInteractionContainer.getHydrogenBonds().size() + "," +
                             localPlipInteractionContainer.getHydrophobicInteractions().size() + "," +
+                            localPlipInteractionContainer.getPiStackings().size() + "," +
+                            localPlipInteractionContainer.getPiCationInteractions().size() + "," +
+                            localPlipInteractionContainer.getSaltBridges().size() + "," +
+                            localPlipInteractionContainer.getMetalComplexes().size() + "," +
+                            localPlipInteractionContainer.getHalogenBonds().size() + "," +
+                            localPlipInteractionContainer.getWaterBridges().size() + "," +
                             localPlipInteractionContainer.getBackboneInteractions().size() + "," +
                             localPlipInteractionContainer.getInteractions().size() + "," +
 
                             nonLocalPlipInteractionContainer.getHydrogenBonds().size() + "," +
                             nonLocalPlipInteractionContainer.getHydrophobicInteractions().size() + "," +
+                            nonLocalPlipInteractionContainer.getPiStackings().size() + "," +
+                            nonLocalPlipInteractionContainer.getPiCationInteractions().size() + "," +
+                            nonLocalPlipInteractionContainer.getSaltBridges().size() + "," +
+                            nonLocalPlipInteractionContainer.getMetalComplexes().size() + "," +
+                            nonLocalPlipInteractionContainer.getHalogenBonds().size() + "," +
+                            nonLocalPlipInteractionContainer.getWaterBridges().size() + "," +
                             nonLocalPlipInteractionContainer.getBackboneInteractions().size() + "," +
                             nonLocalPlipInteractionContainer.getInteractions().size() + "," +
 
