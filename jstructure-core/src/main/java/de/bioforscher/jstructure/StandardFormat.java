@@ -13,6 +13,7 @@ import java.util.Locale;
  */
 public class StandardFormat {
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.####", new DecimalFormatSymbols(Locale.US));
+    private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("#", new DecimalFormatSymbols(Locale.US));
 
 //    private static DateTimeFormatter PDB_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MMM-yy");
 private static DateTimeFormatter PDB_DATE_FORMAT = new DateTimeFormatterBuilder()
@@ -30,6 +31,10 @@ private static DateTimeFormatter PDB_DATE_FORMAT = new DateTimeFormatterBuilder(
 
     public static String format(double value) {
         return DECIMAL_FORMAT.format(value);
+    }
+
+    public static String formatToInteger(double value) {
+        return INTEGER_FORMAT.format(value);
     }
 
     public static String format(long value) {
