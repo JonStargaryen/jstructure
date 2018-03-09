@@ -28,6 +28,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Characterizes the reconstructs as transition state structures. How do their properties change compared to the native
+ * structure if we assume that they are folding intermediates.
+ * STATUS: rejected - reconstructions are not meaningful intermediates, shift in properties does not match any expected
+ * pattern
+ */
 public class A04_WriteTransitionStateCsv {
     //TODO add plip backbone contacts
     private static final Logger logger = LoggerFactory.getLogger(A04_WriteTransitionStateCsv.class);
@@ -40,7 +46,6 @@ public class A04_WriteTransitionStateCsv {
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
                         "pdb,chain,res,aa," +
-
                                 "plip_total," +
                                 "plip_l_total," +
                                 "plip_nl_total," +
