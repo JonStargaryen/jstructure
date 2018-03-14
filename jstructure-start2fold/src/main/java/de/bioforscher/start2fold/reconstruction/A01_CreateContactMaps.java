@@ -19,18 +19,20 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class A03_CreateContactMaps {
+public class A01_CreateContactMaps {
     private static final Path BASE_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/start2fold/");
     private static final Path MAP_PATH = BASE_PATH.resolve("reconstruction").resolve("maps");
 
     public static void main(String[] args) throws IOException {
         Files.lines(BASE_PATH.resolve("reconstruction").resolve("ids.list"))
-                .forEach(A03_CreateContactMaps::handleFile);
+                .forEach(A01_CreateContactMaps::handleFile);
     }
 
     private static void handleFile(String line) {
@@ -91,9 +93,69 @@ public class A03_CreateContactMaps {
                 Start2FoldConstants.write(MAP_PATH.resolve(stfId + "-random-" + i + "-" + j + ".rr"),
                         composeRRString(selectedContacts, sequence));
             }
-
-            //TODO append by selection of close, neighbored contacts
         }
+
+        // create samplings of random residues
+        for(int i = 5; i < 100; i = i + 5) {
+            int numberOfResiduesToSelect = (int) (i / (double) 100 * aminoAcids.size());
+            for(int j = 1; j < 6; j++) {
+                Collections.shuffle(aminoAcids);
+                List<AminoAcid> selectedAminoAcids = aminoAcids.subList(0, numberOfResiduesToSelect);
+                Start2FoldConstants.write(MAP_PATH.resolve(stfId + "-residues-" + i + "-" + j + ".rr"),
+                        composeRRString(contacts.stream()
+                                .filter(contact -> selectedAminoAcids.contains(contact.getLeft()) && selectedAminoAcids.contains(contact.getRight()))
+                                .collect(Collectors.toList()), sequence));
+            }
+        }
+
+        // create samplings of comparable nature of EFR contacts
+        for(int j = 1; j < 6; j++) {
+            int numberOfResiduesToSelect = earlyFoldingResidues.size();
+            List<AminoAcid> interactingResidues = getInteractingResidues(aminoAcids, contacts, numberOfResiduesToSelect);
+            Start2FoldConstants.write(MAP_PATH.resolve(stfId + "-interacting-" + percentage + "-" + j + ".rr"),
+                    composeRRString(contacts.stream()
+                            .filter(contact -> interactingResidues.contains(contact.getLeft()) && interactingResidues.contains(contact.getRight()))
+                            .collect(Collectors.toList()), sequence));
+        }
+    }
+
+    private static List<AminoAcid> getInteractingResidues(List<AminoAcid> aminoAcids,
+                                                          List<Pair<AminoAcid, AminoAcid>> contacts,
+                                                          int numberOfResiduesToSelect) {
+        List<AminoAcid> selectedAminoAcids = new ArrayList<>();
+        Collections.shuffle(aminoAcids);
+        selectedAminoAcids.add(aminoAcids.get(0));
+
+        while(selectedAminoAcids.size() < numberOfResiduesToSelect) {
+            List<AminoAcid> adjacentAminoAcids = contacts.stream()
+                    .map(contact -> mapToAdjacentAminoAcid(contact, selectedAminoAcids))
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toList());
+            Collections.shuffle(adjacentAminoAcids);
+            selectedAminoAcids.add(adjacentAminoAcids.get(0));
+        }
+
+        return selectedAminoAcids;
+    }
+
+    private static Optional<AminoAcid> mapToAdjacentAminoAcid(Pair<AminoAcid, AminoAcid> contact, List<AminoAcid> selectedAminoAcids) {
+        AminoAcid aminoAcid1 = contact.getLeft();
+        AminoAcid aminoAcid2 = contact.getRight();
+
+        if(selectedAminoAcids.contains(aminoAcid1) && selectedAminoAcids.contains(aminoAcid2)) {
+            return Optional.empty();
+        }
+
+        if(!selectedAminoAcids.contains(aminoAcid1) && !selectedAminoAcids.contains(aminoAcid2)) {
+            return Optional.empty();
+        }
+
+        if(selectedAminoAcids.contains(aminoAcid1)) {
+            return Optional.of(aminoAcid2);
+        }
+
+        return Optional.of(aminoAcid1);
     }
 
     private static String composeRRString(List<Pair<AminoAcid, AminoAcid>> edges, String sequence) {
