@@ -31,7 +31,7 @@ public class PLIPRestServiceQuery {
                     .getContextClassLoader()
                     .getResourceAsStream("plip_credentials.txt"))).readLine();
             secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
-            logger.info("PLIP Service is running against: {} - authentication provided", BASE_URL);
+            logger.debug("PLIP Service is running against: {} - authentication provided", BASE_URL);
         } catch (IOException | NullPointerException e) {
             throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
         }

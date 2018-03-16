@@ -117,6 +117,18 @@ public class A01_CreateContactMaps {
                             .filter(contact -> interactingResidues.contains(contact.getLeft()) && interactingResidues.contains(contact.getRight()))
                             .collect(Collectors.toList()), sequence));
         }
+
+        // create bin samplings of comparable nature of EFR contacts
+        for(int i = 5; i < 100; i = i + 5) {
+            int numberOfResiduesToSelect = (int) (i / (double) 100 * aminoAcids.size());
+            for (int j = 1; j < 6; j++) {
+                List<AminoAcid> interactingResidues = getInteractingResidues(aminoAcids, contacts, numberOfResiduesToSelect);
+                Start2FoldConstants.write(MAP_PATH.resolve(stfId + "-interacting2-" + percentage + "-" + j + ".rr"),
+                    composeRRString(contacts.stream()
+                            .filter(contact -> interactingResidues.contains(contact.getLeft()) && interactingResidues.contains(contact.getRight()))
+                            .collect(Collectors.toList()), sequence));
+            }
+        }
     }
 
     private static List<AminoAcid> getInteractingResidues(List<AminoAcid> aminoAcids,

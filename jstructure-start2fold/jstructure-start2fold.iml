@@ -129,6 +129,9 @@
     <orderEntry type="library" name="Maven: com.googlecode.netlib-java:netlib-java:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:core:1.1" level="project" />
     <orderEntry type="library" name="Maven: de.bioforscher:gmlvq:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.jfree:jfreechart:1.0.19" level="project" />
+    <orderEntry type="library" name="Maven: org.jfree:jcommon:1.0.23" level="project" />
+    <orderEntry type="library" name="Maven: org.jfree:jfreesvg:3.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.23" level="project" />
