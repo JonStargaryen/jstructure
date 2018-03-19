@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/amyloid/A01_ComparePrionStructures.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A02_CreateAARSScript.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A03_WriteFunctionalClassificationArff.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A04_VisualizeAARSStructures.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A07_WriteCouplingRangeCsv.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java" afterPath="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java" />
-      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/jstructure-start2fold.iml" afterPath="$PROJECT_DIR$/jstructure-start2fold/jstructure-start2fold.iml" />
-      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java" />
-      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A01_CreateContactMaps.java" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A01_CreateContactMaps.java" />
-      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A02_CreateReconstructionScripts.java" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A02_CreateReconstructionScripts.java" />
-      <change beforePath="$PROJECT_DIR$/jstructure-start2fold/src/main/resources/model/efr-classifier.model" afterPath="$PROJECT_DIR$/jstructure-start2fold/src/main/resources/model/efr-classifier.model" />
+      <change beforePath="$PROJECT_DIR$/jstructure-utils/src/main/java/de/bioforscher/testutil/FileUtils.java" afterPath="$PROJECT_DIR$/jstructure-utils/src/main/java/de/bioforscher/testutil/FileUtils.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -126,35 +122,15 @@
     <favorites_list name="jstructure" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="A03_WriteReconstructionPerformanceCsv.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A03_WriteReconstructionPerformanceCsv.java">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="A04_VisualizeAARSStructures.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A04_VisualizeAARSStructures.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="20" column="24" lean-forward="false" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="A02_CreateAARSScript.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A02_CreateAARSScript.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="14" column="93" lean-forward="true" selection-start-line="14" selection-start-column="93" selection-end-line="14" selection-end-column="93" />
+            <state relative-caret-position="1112">
+              <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EarlyFoldingClassificationRunner.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="176" column="36" lean-forward="true" selection-start-line="176" selection-start-column="36" selection-end-line="176" selection-end-column="36" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -175,7 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sele</find>
       <find>Select</find>
       <find>pdbSer</find>
       <find>3a0b</find>
@@ -205,6 +180,7 @@
       <find>0</find>
       <find>envi</find>
       <find>info</find>
+      <find>local</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;,&quot;</replace>
@@ -230,9 +206,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/SetOperations.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/TorsionAngles.java" />
-        <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/mathematics/Transformation.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/AbstractFeatureable.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/feature/FeatureContainer.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/ChainContainer.java" />
@@ -253,7 +226,6 @@
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/model/vector/RawFeatureVector.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/model/vector/SmoothedFeatureVector.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A01_WriteEarlyFoldingClassificationArff.java" />
-        <option value="$PROJECT_DIR$/jstructure-utils/src/main/java/de/bioforscher/testutil/FileUtils.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/Start2FoldConstants.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/thermostability/collect/A01_DownloadThermostabilityDataset.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java" />
@@ -281,6 +253,10 @@
         <option value="$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPRestServiceQuery.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A02_CreateAARSScript.java" />
+        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A07_WriteCouplingRangeCsv.java" />
+        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A03_WriteFunctionalClassificationArff.java" />
+        <option value="$PROJECT_DIR$/jstructure-utils/src/main/java/de/bioforscher/testutil/FileUtils.java" />
+        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A04_VisualizeAARSStructures.java" />
       </list>
     </option>
   </component>
@@ -363,8 +339,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -415,7 +391,27 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
               <item name="start2fold" type="462c0819:PsiDirectoryNode" />
-              <item name="reconstruction" type="462c0819:PsiDirectoryNode" />
+              <item name="classifier" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="collect" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="bioforscher" type="462c0819:PsiDirectoryNode" />
+              <item name="start2fold" type="462c0819:PsiDirectoryNode" />
+              <item name="visualization" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
@@ -427,7 +423,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -512,32 +508,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.A03_WriteReconstructionPerformanceCsv">
+  <component name="RunManager" selected="Application.A04_VisualizeAARSStructures">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <module />
-    </configuration>
-    <configuration name="A01_CreateContactMaps" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.start2fold.reconstruction.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.start2fold.reconstruction.A01_CreateContactMaps" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="jstructure-start2fold" />
-      <envs />
     </configuration>
     <configuration name="A02_CreateAARSScript" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
@@ -558,14 +535,14 @@
       <module name="jstructure-start2fold" />
       <envs />
     </configuration>
-    <configuration name="A02_CreateReconstructionScripts" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="A03_WriteFunctionalClassificationArff" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.start2fold.reconstruction.*" />
+          <option name="PATTERN" value="de.bioforscher.start2fold.classifier.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.start2fold.reconstruction.A02_CreateReconstructionScripts" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.start2fold.classifier.A03_WriteFunctionalClassificationArff" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -596,17 +573,36 @@
       <module name="jstructure-start2fold" />
       <envs />
     </configuration>
-    <configuration name="EarlyFoldingClassificationRunner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="A04_VisualizeAARSStructures" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="de.bioforscher.start2fold.classifier.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.start2fold.classifier.EarlyFoldingClassificationRunner" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="2abd out.out" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.start2fold.classifier.A04_VisualizeAARSStructures" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jstructure-start2fold" />
+      <envs />
+    </configuration>
+    <configuration name="A07_WriteCouplingRangeCsv" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.start2fold.collect.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.start2fold.collect.A07_WriteCouplingRangeCsv" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="ENABLE_SWING_INSPECTOR" value="false" />
@@ -1165,19 +1161,19 @@
     <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Maven.jstructure-all [clean,install]" />
       <item index="1" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="2" class="java.lang.String" itemvalue="Application.A01_CreateContactMaps" />
-      <item index="3" class="java.lang.String" itemvalue="Application.A02_CreateReconstructionScripts" />
-      <item index="4" class="java.lang.String" itemvalue="Application.A03_WriteReconstructionPerformanceCsv" />
-      <item index="5" class="java.lang.String" itemvalue="Application.EarlyFoldingClassificationRunner" />
-      <item index="6" class="java.lang.String" itemvalue="Application.A02_CreateAARSScript" />
+      <item index="2" class="java.lang.String" itemvalue="Application.A03_WriteReconstructionPerformanceCsv" />
+      <item index="3" class="java.lang.String" itemvalue="Application.A02_CreateAARSScript" />
+      <item index="4" class="java.lang.String" itemvalue="Application.A07_WriteCouplingRangeCsv" />
+      <item index="5" class="java.lang.String" itemvalue="Application.A03_WriteFunctionalClassificationArff" />
+      <item index="6" class="java.lang.String" itemvalue="Application.A04_VisualizeAARSStructures" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.A03_WriteReconstructionPerformanceCsv" />
-        <item index="1" class="java.lang.String" itemvalue="Application.A02_CreateAARSScript" />
-        <item index="2" class="java.lang.String" itemvalue="Application.EarlyFoldingClassificationRunner" />
-        <item index="3" class="java.lang.String" itemvalue="Application.A02_CreateReconstructionScripts" />
-        <item index="4" class="java.lang.String" itemvalue="Application.A01_CreateContactMaps" />
+        <item index="0" class="java.lang.String" itemvalue="Application.A04_VisualizeAARSStructures" />
+        <item index="1" class="java.lang.String" itemvalue="Application.A03_WriteFunctionalClassificationArff" />
+        <item index="2" class="java.lang.String" itemvalue="Application.A07_WriteCouplingRangeCsv" />
+        <item index="3" class="java.lang.String" itemvalue="Application.A03_WriteReconstructionPerformanceCsv" />
+        <item index="4" class="java.lang.String" itemvalue="Application.A02_CreateAARSScript" />
       </list>
     </recent_temporary>
   </component>
@@ -1372,14 +1368,8 @@
       <workItem from="1520603095186" duration="599000" />
       <workItem from="1520841140384" duration="5364000" />
       <workItem from="1521014735017" duration="9197000" />
-      <workItem from="1521043759829" duration="17201000" />
-    </task>
-    <task id="LOCAL-00160" summary="adds weight (i.e. energy) to interaction types">
-      <created>1507898415183</created>
-      <option name="number" value="00160" />
-      <option name="presentableId" value="LOCAL-00160" />
-      <option name="project" value="LOCAL" />
-      <updated>1507898415183</updated>
+      <workItem from="1521043759829" duration="17231000" />
+      <workItem from="1521209459305" duration="15748000" />
     </task>
     <task id="LOCAL-00161" summary="fixes major bugs in generation of partition of secondary structures">
       <created>1508321229174</created>
@@ -1717,7 +1707,14 @@
       <option name="project" value="LOCAL" />
       <updated>1521035120949</updated>
     </task>
-    <option name="localTasksCounter" value="209" />
+    <task id="LOCAL-00209" summary="efr-classifier updated for aaRS">
+      <created>1521201026263</created>
+      <option name="number" value="00209" />
+      <option name="presentableId" value="LOCAL-00209" />
+      <option name="project" value="LOCAL" />
+      <updated>1521201026263</updated>
+    </task>
+    <option name="localTasksCounter" value="210" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1753,7 +1750,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2643965000" />
+    <option name="totallyTimeSpent" value="2659743000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1766,30 +1763,29 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="2" width="3440" height="1438" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3272933" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28809705" sideWeight="0.50240093" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28756675" sideWeight="0.50240093" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18935362" sideWeight="0.47051886" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.9256595" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2767248" sideWeight="0.5294811" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27899924" sideWeight="0.5294811" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289977" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09457867" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3497348" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32893157" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12116745" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969988" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45665172" sideWeight="0.5433373" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946917" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1838,7 +1834,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="parser for evolutionary couplings" />
     <MESSAGE value="fixes Maven build" />
     <MESSAGE value="pymol rendering stub" />
     <MESSAGE value="dedicated module for start2fold&#10;&#10;- major clean-up&#10;- dataset creation somewhat streamlined - manual efforts remain&#10;- mapping of early folding residues corrected via dedicated sequence alignment&#10;- PyMol visualization script for distribution of early folding residues" />
@@ -1863,7 +1858,8 @@
     <MESSAGE value="creation of thermophile heatmap" />
     <MESSAGE value="stub for contact map creation" />
     <MESSAGE value="generation and reconstruction performance csv and cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="generation and reconstruction performance csv and cleanup" />
+    <MESSAGE value="efr-classifier updated for aaRS" />
+    <option name="LAST_COMMIT_MESSAGE" value="efr-classifier updated for aaRS" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1904,71 +1900,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/resources/dynamine_credentials.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/out.out" />
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/Start2FoldConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="26" column="105" lean-forward="false" selection-start-line="26" selection-start-column="105" selection-end-line="26" selection-end-column="105" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-utils/src/main/java/de/bioforscher/testutil/FileUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="24" column="76" lean-forward="false" selection-start-line="24" selection-start-column="76" selection-end-line="24" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/thermostability/collect/A01_DownloadThermostabilityDataset.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="18" column="117" lean-forward="false" selection-start-line="18" selection-start-column="48" selection-end-line="18" selection-end-column="117" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPInteractionContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="18" column="36" lean-forward="true" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="33" column="55" lean-forward="false" selection-start-line="33" selection-start-column="55" selection-end-line="33" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/interactions/PLIPIntraMolecularAnnotator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="526">
-          <caret line="47" column="20" lean-forward="false" selection-start-line="47" selection-start-column="20" selection-end-line="47" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A01_DownloadStart2FoldDataset.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="522">
-          <caret line="41" column="9" lean-forward="true" selection-start-line="41" selection-start-column="9" selection-end-line="41" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/thermostability/collect/A02_WriteDatasetCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="70" column="25" lean-forward="true" selection-start-line="70" selection-start-column="25" selection-end-line="70" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/container/StructureContainer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401">
@@ -2047,22 +1978,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="153" column="68" lean-forward="false" selection-start-line="153" selection-start-column="68" selection-end-line="153" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A01_DownloadPdbStructures.java" />
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/LowestQuartileSelector.java" />
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A04_WriteTransitionStateCsv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="94" column="45" lean-forward="false" selection-start-line="94" selection-start-column="45" selection-end-line="95" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/ReconstructionContactMapCreator.java" />
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A03A_SalvagePartiallyRecontructedData.java" />
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/resources/logback.xml">
@@ -2100,21 +2017,11 @@
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A04_CreateTMAlignScript.java" />
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A06_ComputeStatisticsOfLowerQuartile.java" />
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A05_ComputeTMAlignStatistics.java" />
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/amyloid.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="20" lean-forward="false" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/amyloid.java" />
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/amyloid/A01_ComparePrionStructures.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="216">
           <caret line="12" column="61" lean-forward="false" selection-start-line="12" selection-start-column="61" selection-end-line="12" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2142,19 +2049,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A01_WriteEarlyFoldingClassificationArff.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="37" column="0" lean-forward="true" selection-start-line="37" selection-start-column="0" selection-end-line="37" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/resources/model/efr-classifier.model">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="522">
           <caret line="29" column="27" lean-forward="true" selection-start-line="29" selection-start-column="27" selection-end-line="29" selection-end-column="27" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2174,29 +2072,137 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A03_WriteReconstructionPerformanceCsv.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="176" column="36" lean-forward="true" selection-start-line="176" selection-start-column="36" selection-end-line="176" selection-end-column="36" />
+        <state relative-caret-position="522">
+          <caret line="36" column="29" lean-forward="true" selection-start-line="36" selection-start-column="29" selection-end-line="36" selection-end-column="29" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A02_CreateAARSScript.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/parser/EvolutionaryCouplingParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="93" lean-forward="true" selection-start-line="14" selection-start-column="93" selection-end-line="14" selection-end-column="93" />
+        <state relative-caret-position="504">
+          <caret line="41" column="19" lean-forward="true" selection-start-line="20" selection-start-column="8" selection-end-line="41" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A02_RenameCouplingFiles.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A04_WriteTransitionStateCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="204" column="88" lean-forward="true" selection-start-line="204" selection-start-column="88" selection-end-line="204" selection-end-column="88" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/src/main/java/de/bioforscher/jstructure/feature/graphs/ProteinGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="36" column="0" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="38" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A03_WriteFunctionalClassificationArff.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="468">
+          <caret line="95" column="111" lean-forward="false" selection-start-line="95" selection-start-column="111" selection-end-line="95" selection-end-column="111" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A03_WriteReconstructionPerformanceCsv.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A01_WriteEarlyFoldingClassificationArff.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="20" column="24" lean-forward="false" selection-start-line="20" selection-start-column="24" selection-end-line="20" selection-end-column="24" />
+        <state relative-caret-position="288">
+          <caret line="99" column="25" lean-forward="false" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A03_WriteDatasetCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="684">
+          <caret line="105" column="13" lean-forward="false" selection-start-line="97" selection-start-column="12" selection-end-line="105" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A03_CreatePyMolRenderJobsForFunctionalResidues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="27" column="32" lean-forward="false" selection-start-line="27" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/visualization/A01_CreatePyMolRenderJobsForEarlyFoldingResidues.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1026">
+          <caret line="71" column="116" lean-forward="true" selection-start-line="37" selection-start-column="8" selection-end-line="71" selection-end-column="116" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="883">
+          <caret line="147" column="64" lean-forward="false" selection-start-line="147" selection-start-column="64" selection-end-line="147" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A02_CreateAARSScript.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="10" column="63" lean-forward="true" selection-start-line="9" selection-start-column="24" selection-end-line="10" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/collect/A07_WriteCouplingRangeCsv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1656">
+          <caret line="108" column="34" lean-forward="false" selection-start-line="108" selection-start-column="34" selection-end-line="108" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/selection/Selection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="335" column="0" lean-forward="false" selection-start-line="335" selection-start-column="0" selection-end-line="335" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-utils/src/main/java/de/bioforscher/testutil/FileUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="30" column="13" lean-forward="true" selection-start-line="28" selection-start-column="12" selection-end-line="30" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A04_VisualizeAARSStructures.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1112">
+          <caret line="126" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="126" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
