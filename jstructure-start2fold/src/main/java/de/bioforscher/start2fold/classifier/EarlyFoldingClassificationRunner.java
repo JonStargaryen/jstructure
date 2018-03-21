@@ -27,9 +27,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EarlyFoldingClassificationRunner {
@@ -127,33 +125,47 @@ public class EarlyFoldingClassificationRunner {
                         "plip_betweenness,plip_closeness,plip_clusteringcoefficient,plip_hbonds_betweenness," +
                         "plip_hbonds_closeness,plip_hbonds_clusteringcoefficient,plip_hydrophobic_betweenness," +
                         "plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient,conv_betweenness," +
-                        "conv_closeness,conv_clusteringcoefficient,plip_neighborhoods,conv_neighborhoods,folds");
-        structure.aminoAcids().forEach(aminoAcid -> {
-            boolean isProline = aminoAcid instanceof Proline;
+                        "conv_closeness,conv_clusteringcoefficient,plip_neighborhoods,conv_neighborhoods,prob,folds");
 
-            SmoothedFeatureVector smoothedFeatureVector = aminoAcid.getFeature(SmoothedFeatureVector.class);
-            double loopFraction = aminoAcid.getFeature(LoopFraction.class).getLoopFraction();
-            Instance instance = createInstance(smoothedFeatureVector, loopFraction);
-            boolean foldsEarly = false;
-            if(!isProline) {
-                try {
-                    foldsEarly = model.classifyInstance(normalize(instance)) == 0;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        structure.chainsWithAminoAcids()
+                .forEach(chain -> {
+                    List<String> output = structure.aminoAcids()
+                            .map(aminoAcid -> {
+                                boolean isProline = aminoAcid instanceof Proline;
 
-            StringJoiner lineJoiner = new StringJoiner(",");
-            lineJoiner.add(aminoAcid.getParentChain().getChainIdentifier().getChainId())
-                    .add(aminoAcid.getResidueIdentifier().toString())
-                    .add(aminoAcid.getOneLetterCode())
-                    .add(aminoAcid.getFeature(GenericSecondaryStructure.class).getSecondaryStructure().getReducedRepresentation());
-            for(int i = 0; i < instance.numAttributes() - 1; i++) {
-                lineJoiner.add(StandardFormat.format(instance.value(i)));
-            }
-            lineJoiner.add(foldsEarly ? "early" : "late");
-            outputJoiner.add(lineJoiner.toString());
-        });
+                                SmoothedFeatureVector smoothedFeatureVector = aminoAcid.getFeature(SmoothedFeatureVector.class);
+                                double loopFraction = aminoAcid.getFeature(LoopFraction.class).getLoopFraction();
+                                Instance instance = createInstance(smoothedFeatureVector, loopFraction);
+                                double prob = 0.0;
+                                if (!isProline) {
+                                    try {
+                                        prob = model.distributionForInstance(normalize(instance))[0];
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                                StringJoiner lineJoiner = new StringJoiner(",");
+                                lineJoiner.add(aminoAcid.getParentChain().getChainIdentifier().getChainId())
+                                        .add(aminoAcid.getResidueIdentifier().toString())
+                                        .add(aminoAcid.getOneLetterCode())
+                                        .add(aminoAcid.getFeature(GenericSecondaryStructure.class).getSecondaryStructure().getReducedRepresentation());
+                                for (int i = 0; i < instance.numAttributes() - 1; i++) {
+                                    lineJoiner.add(StandardFormat.format(instance.value(i)));
+                                }
+                                lineJoiner.add(StandardFormat.format(prob));
+                                return lineJoiner.toString();
+                            })
+                            .sorted(Comparator.comparingDouble((String line) -> Double.valueOf(line.split(",")[line.split(",").length - 1])).reversed())
+                            .collect(Collectors.toList());
+
+                    int numberOfEarlyFoldingResidues = (int) (0.15 * (int) chain.aminoAcids().count());
+                    int counter = 0;
+                    for(int i = 0; i < chain.aminoAcids().count(); i++) {
+                        outputJoiner.add(output.get(i) + "," + (counter < numberOfEarlyFoldingResidues ? "early" : "late"));
+                        counter++;
+                    }
+                });
 
         // write output
         System.out.println("writing output to " + outputPath);
