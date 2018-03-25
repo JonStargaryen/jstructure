@@ -90,7 +90,8 @@
         <module>../jstructure-core</module>
         <module>../jstructure-features</module>
         <module>../jstructure-utils</module>
-        <module>../jstructure-start2fold</module>
+        <module>../jstructure-residue-graphs</module>
+        <module>../jstructure-structural-information</module>
     </modules>
 
     <properties>
