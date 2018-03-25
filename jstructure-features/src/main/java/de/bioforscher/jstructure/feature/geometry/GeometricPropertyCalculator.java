@@ -5,6 +5,9 @@ import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 
+/**
+ * Reports basic geometric properties such as the distance to the centroid and center of mass of individual residues.
+ */
 public class GeometricPropertyCalculator extends FeatureProvider {
     @Override
     protected void processInternally(Structure structure) {

@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.mathematics;
 
+import de.bioforscher.jstructure.model.feature.FeatureContainer;
+
 /**
  * Implementation of a unordered pair of objects. No ordering is assumed, however, as the entries can be of
  * different content types, one is referred to as left and the other as right entry.
@@ -7,19 +9,13 @@ package de.bioforscher.jstructure.mathematics;
  * @param <R> the content type of the right element
  * Created by S on 02.10.2016.
  */
-public class Pair<L, R> {
+public class Pair<L, R> extends FeatureContainer {
     private final L left;
     private final R right;
-    private final Object payload;
 
     public Pair(L t1, R t2) {
-        this(t1, t2, null);
-    }
-
-    public Pair(L t1, R t2, Object payload) {
         this.left = t1;
         this.right = t2;
-        this.payload = payload;
     }
 
     public L getLeft() {
@@ -30,25 +26,14 @@ public class Pair<L, R> {
         return right;
     }
 
-    public boolean hasPayload() {
-        return payload != null;
-    }
-
-    public Object getPayload() {
-        return payload;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getPayload(Class<T> payloadType) {
-        return (T) getPayload();
-    }
-
     /**
      * Returns a new pair container with reversed order.
      * @return a new pair where the first entry is now second and vice versa
      */
     public Pair<R, L> flip() {
-        return new Pair<>(right, left, payload);
+        Pair<R, L> flippedPair = new Pair<>(right, left);
+        flippedPair.setFeatures(getFeatures());
+        return flippedPair;
     }
 
     /**

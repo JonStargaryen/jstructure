@@ -31,9 +31,9 @@ public class TestUtils {
     /**
      * Fast access to protein instance to be used by tests.
      * Usage:
-     * <code>Protein protein = ProteinParser.source(getProteinInputStream(PDB_1BRR))
-     *                                      .minimalParsing(true)
-     *                                      .parse()</code>
+     * <code>Structure structure = StructureParser.fromInputStream(TestUtils.getProteinInputStream(PDB_1BRR))
+            .minimalParsing(true)
+            .parse()</code>
      * @param supportedProtein the protein's enum entry
      * @return an input stream of that pdb file's content
      */
