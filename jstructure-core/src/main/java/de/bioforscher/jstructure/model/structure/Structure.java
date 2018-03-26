@@ -162,7 +162,13 @@ public class Structure extends AbstractFeatureable implements ChainContainer/*, 
         stringBuilder.append(StandardFormat.format(depositionDate));
         stringBuilder.append("   ");
 
-        stringBuilder.append(getProteinIdentifier().getPdbId().toUpperCase());
+        String pdbId;
+        if(getProteinIdentifier() != null && getProteinIdentifier().getPdbId() != null) {
+            pdbId = getProteinIdentifier().getPdbId().toUpperCase();
+        } else {
+            pdbId = "1XXX";
+        }
+        stringBuilder.append(pdbId);
 
         // final padding
         while (stringBuilder.length() < 80) {
