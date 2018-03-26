@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.si.visualization;
 
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
 public class ContactStructuralInformation {
@@ -83,20 +84,17 @@ public class ContactStructuralInformation {
         return isEarlyFoldingContact;
     }
 
-    @Override
-    public String toString() {
-        return "ContactStructuralInformation{" +
-                "residueIdentifier1=" + residueIdentifier1 +
-                ", residueIdentifier2=" + residueIdentifier2 +
-                ", contactDistanceBin=" + contactDistanceBin +
-                ", averageRmsdIncrease=" + averageRmsdIncrease +
-                ", averageTmScoreIncrease=" + averageTmScoreIncrease +
-                ", averageQIncrease=" + averageQIncrease +
-                ", maximumRmsdIncrease=" + maximumRmsdIncrease +
-                ", maximumTmScoreIncrease=" + maximumTmScoreIncrease +
-                ", maximumQIncrease=" + maximumQIncrease +
-                ", isEarlyFoldingResidue=" + isEarlyFoldingResidue +
-                ", isEarlyFoldingContact=" + isEarlyFoldingContact +
-                '}';
+    public String getCsvLine() {
+        return residueIdentifier1 + "," +
+                residueIdentifier2 + "," +
+                contactDistanceBin + "," +
+                StandardFormat.format(averageRmsdIncrease) + "," +
+                StandardFormat.format(averageTmScoreIncrease) + "," +
+                StandardFormat.format(averageQIncrease) + "," +
+                StandardFormat.format(maximumRmsdIncrease) + "," +
+                StandardFormat.format(maximumTmScoreIncrease) + "," +
+                StandardFormat.format(maximumQIncrease) + "," +
+                isEarlyFoldingResidue + "," +
+                isEarlyFoldingContact;
     }
 }
