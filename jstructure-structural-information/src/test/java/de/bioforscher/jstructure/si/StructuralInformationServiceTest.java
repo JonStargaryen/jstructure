@@ -8,6 +8,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class StructuralInformationServiceTest {
     private Chain shortChain;
@@ -25,13 +28,27 @@ public class StructuralInformationServiceTest {
 
     @Test
     @Ignore
-    public void shouldCalculateStructuralInformation() throws IOException {
-        structuralInformationService.process(shortChain);
+    public void shouldCalculateStructuralInformation() {
+        structuralInformationService.process(shortChain, Paths.get("/tmp/short-si.out"));
     }
 
     @Test
     @Ignore
-    public void shouldCalculateStructuralInformationFor1bdd() throws IOException {
-        structuralInformationService.process(chain1bdd);
+    public void shouldCalculateStructuralInformationFor1bdd() {
+        structuralInformationService.process(chain1bdd, Paths.get("/tmp/1bdd-si.out"));
+    }
+
+    @Test
+    @Ignore
+    public void shouldCalculateStructuralInformationForEarlyFoldingDataset() throws IOException {
+        Path outputPath = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/raw/");
+        Files.list(Paths.get("/home/bittrich/git/phd_sb_repo/data/start2fold/pdb/"))
+                .filter(path -> !path.toFile().getName().startsWith("STF0045"))
+                .forEach(path -> {
+                    Chain chain = StructureParser.fromPath(path)
+                            .parse()
+                            .getFirstChain();
+                    structuralInformationService.process(chain, outputPath.resolve(path.toFile().getName() + ".out"));
+                });
     }
 }

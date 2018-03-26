@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.graph;
 
+import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.mathematics.SetOperations;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -62,7 +63,11 @@ public class ResidueGraphCalculations {
      * @return the betweenness of this node
      */
     public double betweenness(AminoAcid node) {
-        return  shortestPathsPassingThrough(node).size() / numberOfNodePairs;
+        return shortestPathsPassingThrough(node).size() / numberOfNodePairs;
+    }
+
+    public double betweenness(Pair<AminoAcid, AminoAcid> contact) {
+        return shortestPathsPassingThrough(contact).size() / numberOfNodePairs;
     }
 
     public double betweenness(ResidueIdentifier residueIdentifier) {
@@ -155,6 +160,24 @@ public class ResidueGraphCalculations {
         return SetOperations.unorderedPairsOf(nodes)
                 .map(pair -> shortestPaths.get(pair.getLeft()).getPath(pair.getRight()))
                 .filter(graphPath -> graphPath.getVertexList().contains(node))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Determines the set of shortest paths passing through 1 particular edge.
+     * @param contact
+     * @return
+     */
+    private List<GraphPath<AminoAcid, DefaultEdge>> shortestPathsPassingThrough(Pair<AminoAcid, AminoAcid> contact) {
+        AminoAcid aminoAcid1 = contact.getLeft();
+        AminoAcid aminoAcid2 = contact.getRight();
+        return SetOperations.unorderedPairsOf(nodes)
+                .map(pair -> shortestPaths.get(pair.getLeft()).getPath(pair.getRight()))
+                .filter(graphPath -> {
+                    int index1 = graphPath.getVertexList().indexOf(aminoAcid1);
+                    int index2 = graphPath.getVertexList().indexOf(aminoAcid2);
+                    return index1 != -1 && index2 != -1 && Math.abs(index1 - index2) == 1;
+                })
                 .collect(Collectors.toList());
     }
 
