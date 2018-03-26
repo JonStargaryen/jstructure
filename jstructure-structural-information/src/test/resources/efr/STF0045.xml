@@ -1,0 +1,175 @@
+<entry id="STF0045" title="Protein A B-domain">
+  
+  <protein name="Immunoglobulin G-binding protein A" organism="Staphylococcus aureus" number_of_residues="58" uniprot_id="P38507" uniprot_range="212-270" pdb_id="1bdd">
+    
+    <experiment id="184">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="20.0" probes="28">None</conditions>
+      <protection protection_level="STRONG">ΔG(op) &gt; 6 kcal/mol</protection>
+      <sequence is_pdb="True">TADNKFNKEQQNAFYEILHLPNLNEEQRNGFIQSLKDDPSQSANLLAEAKKLNDAQAPKA</sequence>
+      <details>Equilibrium hydrogen exchange experiments were performed by dissolving lyophilized protein directly in potassium phosphate buffer (100 mM, pH* 7.0) in D2O containing various concentrations (0 - 3.0 M) of GdmC1. The GdmCl solution in D2O was prepared by addition of a measured volume of D2O to a weighed sample of deuterated GdmCl. Exchange rates were measured by recording 1H-15N HSQC spectra as a function of time without removing the sample from the magnet.</details>
+      
+        
+        <residue index="28" code="R"></residue>
+        
+      
+        
+        <residue index="35" code="L"></residue>
+        
+      
+        
+        <residue index="49" code="A"></residue>
+        
+      
+        
+        <residue index="50" code="K"></residue>
+        
+      
+        
+        <residue index="51" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="185">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.0 - 5.0" temperature="5.0" probes="20">None</conditions>
+      <protection protection_level="EARLY">proton occupancy &gt; 0.7 at 6 ms refolding time</protection>
+      <sequence is_pdb="True">TADNKFNKEQQNAFYEILHLPNLNEEQRNGFIQSLKDDPSQSANLLAEAKKLNDAQAPKA</sequence>
+      <details>Pulsed H/D exchange measurements were performed at 5 °C. The B-domain of protein A at a concentration of about 3 mg/mL was first unfolded in 6.0 M GdmC1 at pH 5.0 using 10 mM sodium acetate buffer in H2O. Folding was initiated by six times dilution with D2O buffer at pH* 5.0 and was allowed to continue for 6 ms before the labeling pulse was applied for 10 ms. The pulse buffer contained 0.5 M Tris adjusted to pH* 11.5 using KOD. This leads to a pulse of pH* 10.5 after mixing with the folding buffer. The exchange was quenched by D2O buffer containing 0.5 M Tris and 100 mM acetic acid at pH* 0.5. The final pH* of the solution was 4.8 after the quench.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="14" code="F"></residue>
+        
+      
+        
+        <residue index="15" code="Y"></residue>
+        
+      
+        
+        <residue index="16" code="E"></residue>
+        
+      
+        
+        <residue index="17" code="I"></residue>
+        
+      
+        
+        <residue index="18" code="L"></residue>
+        
+      
+        
+        <residue index="20" code="L"></residue>
+        
+      
+        
+        <residue index="22" code="N"></residue>
+        
+      
+        
+        <residue index="23" code="L"></residue>
+        
+      
+        
+        <residue index="28" code="R"></residue>
+        
+      
+        
+        <residue index="29" code="N"></residue>
+        
+      
+        
+        <residue index="31" code="F"></residue>
+        
+      
+        
+        <residue index="34" code="S"></residue>
+        
+      
+        
+        <residue index="35" code="L"></residue>
+        
+      
+        
+        <residue index="36" code="K"></residue>
+        
+      
+        
+        <residue index="47" code="A"></residue>
+        
+      
+        
+        <residue index="48" code="E"></residue>
+        
+      
+        
+        <residue index="49" code="A"></residue>
+        
+      
+        
+        <residue index="50" code="K"></residue>
+        
+      
+        
+        <residue index="51" code="K"></residue>
+        
+      
+        
+        <residue index="52" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>
