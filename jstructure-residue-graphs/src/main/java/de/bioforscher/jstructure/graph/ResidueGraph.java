@@ -1,10 +1,5 @@
 package de.bioforscher.jstructure.graph;
 
-import de.bioforscher.jstructure.feature.interaction.HydrogenBond;
-import de.bioforscher.jstructure.feature.interaction.HydrophobicInteraction;
-import de.bioforscher.jstructure.feature.interaction.PLIPInteractionContainer;
-import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -15,40 +10,24 @@ import org.jgrapht.graph.SimpleGraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a protein as residue graph. Covalent bonds and local contacts are considered too.
+ */
 public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
-    private final List<AminoAcid> aminoAcids;
-    private final List<Pair<AminoAcid, AminoAcid>> contacts;
-    private final List<Pair<AminoAcid, AminoAcid>> localContacts;
-    private final List<Pair<AminoAcid, AminoAcid>> nonLocalContacts;
-    private final String sequence;
-    private final String secondaryStructureElements;
-
-    public enum InteractionScheme {
-        CALPHA8((aminoAcid1, aminoAcid2) -> aminoAcid1.getCa().calculate()
-                .distanceFast(aminoAcid2.getCa()) < 8 * 8),
-        SALENTIN2015((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
-                .areInContact(aminoAcid1, aminoAcid2)),
-        SALENTIN2015_HYDROGEN_BONDS(((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
-                .areInContactByInteractionType(aminoAcid1, aminoAcid2, HydrogenBond.class))),
-        SALENTIN2015_HYDROPHOBIC_INTERACTION(((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
-                .areInContactByInteractionType(aminoAcid1, aminoAcid2, HydrophobicInteraction.class)));
-
-        private final BiPredicate<AminoAcid, AminoAcid> criterion;
-
-        InteractionScheme(BiPredicate<AminoAcid, AminoAcid> criterion) {
-            this.criterion = criterion;
-        }
-
-        public boolean areInContact(AminoAcid aminoAcid1, AminoAcid aminoAcid2) {
-            return criterion.test(aminoAcid1, aminoAcid2);
-        }
-    }
+    protected final List<AminoAcid> aminoAcids;
+    protected final List<Pair<AminoAcid, AminoAcid>> contacts;
+    protected final List<Pair<AminoAcid, AminoAcid>> localContacts;
+    protected final List<Pair<AminoAcid, AminoAcid>> longRangeContacts;
 
     public static ResidueGraph createResidueGraph(Chain chain, InteractionScheme interactionScheme) {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
+        List<Pair<AminoAcid, AminoAcid>> contacts = createContactList(aminoAcids, interactionScheme);
+        return new ResidueGraph(aminoAcids, contacts);
+    }
+
+    protected static List<Pair<AminoAcid, AminoAcid>> createContactList(List<AminoAcid> aminoAcids, InteractionScheme interactionScheme) {
         List<Pair<AminoAcid, AminoAcid>> contacts = new ArrayList<>();
 
         for(int i = 0; i < aminoAcids.size() - 1; i++) {
@@ -66,56 +45,44 @@ public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
             }
         }
 
-        return new ResidueGraph(aminoAcids, contacts);
+        return contacts;
     }
 
-    public ResidueGraph(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts) {
+    public static ResidueGraph createFullPlipResidueGraph(Chain chain) {
+        return createResidueGraph(chain, InteractionScheme.SALENTIN2015);
+    }
+
+    public static ResidueGraph createHydrogenBondPlipResidueGraph(Chain chain) {
+        return createResidueGraph(chain, InteractionScheme.SALENTIN2015_HYDROGEN_BONDS);
+    }
+
+    public static ResidueGraph createHydrophobicInteractionResidueGraph(Chain chain) {
+        return createResidueGraph(chain, InteractionScheme.SALENTIN2015_HYDROPHOBIC_INTERACTION);
+    }
+
+    public static ResidueGraph createDistanceResidueGraph(Chain chain) {
+        return createResidueGraph(chain, InteractionScheme.CALPHA8);
+    }
+
+    ResidueGraph(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts) {
         super(DefaultEdge.class);
         this.aminoAcids = aminoAcids;
         aminoAcids.forEach(this::addVertex);
         this.contacts = contacts;
         contacts.forEach(pair -> addEdge(pair.getLeft(), pair.getRight()));
         this.localContacts = contacts.stream()
-                .filter(this::isLocalContact)
+                .filter(ResidueGraph::isLocalContact)
                 .collect(Collectors.toList());
-        this.nonLocalContacts = contacts.stream()
-                .filter(this::isNonLocalContact)
+        this.longRangeContacts = contacts.stream()
+                .filter(ResidueGraph::isLongRangeContact)
                 .collect(Collectors.toList());
-        this.sequence = aminoAcids.stream()
-                .map(AminoAcid::getOneLetterCode)
-                .collect(Collectors.joining());
-        this.secondaryStructureElements = aminoAcids.stream()
-                .map(aminoAcid -> aminoAcid.getFeature(GenericSecondaryStructure.class))
-                .map(GenericSecondaryStructure::getSecondaryStructure)
-                .map(SecondaryStructureType::getReducedRepresentation)
-                .collect(Collectors.joining());
     }
 
-    public String getSequence() {
-        return sequence;
-    }
-
-    public String getSecondaryStructureElements() {
-        return secondaryStructureElements;
-    }
-
-    public String getCaspRRRepresentation() {
-        // i  j  d1  d2  p
-        // 24 33 0 8 12.279515
-        // i and j: residue numbers
-        return contacts.stream()
-                .map(edge -> (edge.getLeft().getResidueIndex() + 1) + " " +
-                        (edge.getRight().getResidueIndex() + 1) + " 0 8.0 1")
-                .collect(Collectors.joining(System.lineSeparator(),
-                        sequence + System.lineSeparator(),
-                        ""));
-    }
-
-    private boolean isNonLocalContact(Pair<AminoAcid, AminoAcid> pair) {
+    protected static boolean isLongRangeContact(Pair<AminoAcid, AminoAcid> pair) {
         return Math.abs(pair.getLeft().getResidueIndex() - pair.getRight().getResidueIndex()) > 5;
     }
 
-    private boolean isLocalContact(Pair<AminoAcid, AminoAcid> pair) {
+    private static boolean isLocalContact(Pair<AminoAcid, AminoAcid> pair) {
         return Math.abs(pair.getLeft().getResidueIndex() - pair.getRight().getResidueIndex()) < 6;
     }
 
@@ -162,12 +129,12 @@ public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
         return getLocalContactsOf(resolve(residueIdentifier));
     }
 
-    public List<Pair<AminoAcid, AminoAcid>> getNonLocalContacts() {
-        return nonLocalContacts;
+    public List<Pair<AminoAcid, AminoAcid>> getLongRangeContacts() {
+        return longRangeContacts;
     }
 
     public List<AminoAcid> getNonLocalContactsOf(AminoAcid aminoAcid) {
-        return filterContactList(nonLocalContacts, aminoAcid);
+        return filterContactList(longRangeContacts, aminoAcid);
     }
 
     public List<AminoAcid> getNonLocalContactsOf(ResidueIdentifier residueIdentifier) {

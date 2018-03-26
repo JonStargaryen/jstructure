@@ -196,7 +196,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " '" + getIdentifier() + "'";
+        return getIdentifier();
     }
 
     @Override

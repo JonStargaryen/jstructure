@@ -13,7 +13,8 @@
         <module name="jstructure-align" />
         <module name="jstructure-core" />
         <module name="jstructure-features" />
-        <module name="jstructure-start2fold" />
+        <module name="jstructure-residue-graphs" />
+        <module name="jstructure-structural-information" />
         <module name="jstructure-testutils" />
         <module name="jstructure-utils" />
       </profile>
@@ -37,8 +38,10 @@
       <module name="jstructure-membrane-topology" target="1.8" />
       <module name="jstructure-mmm-bridge" target="1.8" />
       <module name="jstructure-mutation" target="1.8" />
+      <module name="jstructure-residue-graphs" target="1.8" />
       <module name="jstructure-site" target="1.8" />
       <module name="jstructure-start2fold" target="1.8" />
+      <module name="jstructure-structural-information" target="1.8" />
       <module name="jstructure-testutils" target="1.8" />
       <module name="jstructure-utils" target="1.8" />
       <module name="jstructurestudies" target="1.8" />
