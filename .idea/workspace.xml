@@ -5,21 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8b1e0bf0-d6d7-4952-9c79-00e1cb316a19" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Experiment.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Method.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/ProtectionLevel.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Start2FoldResidueAnnotation.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/parser/Start2FoldXmlParser.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactDistanceBin.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactStructuralInformation.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserService.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationRunner.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/BFactorWriterService.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/BFactorWriterServiceTest.java" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/jstructure-residue-graphs/src/main/java/de/bioforscher/jstructure/graph/ResidueGraphCalculations.java" afterPath="$PROJECT_DIR$/jstructure-residue-graphs/src/main/java/de/bioforscher/jstructure/graph/ResidueGraphCalculations.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/TMAlignService.java" afterPath="$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/TMAlignService.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" afterPath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
       <change beforePath="$PROJECT_DIR$/jstructure-structural-information/jstructure-structural-information.iml" afterPath="$PROJECT_DIR$/jstructure-structural-information/jstructure-structural-information.iml" />
       <change beforePath="$PROJECT_DIR$/jstructure-structural-information/pom.xml" afterPath="$PROJECT_DIR$/jstructure-structural-information/pom.xml" />
       <change beforePath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/ContactTogglingReconstruction.java" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/ContactTogglingReconstruction.java" />
       <change beforePath="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/StructuralInformationServiceTest.java" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/StructuralInformationServiceTest.java" />
+      <change beforePath="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java" afterPath="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java" />
     </list>
     <ignored path="$PROJECT_DIR$/jstructure-all/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
@@ -138,32 +137,83 @@
       <file leaf-file-name="StructuralInformationParserService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="29" column="44" lean-forward="false" selection-start-line="29" selection-start-column="44" selection-end-line="29" selection-end-column="44" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#888#889#0" expanded="true" />
-                <element signature="e#919#920#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StructuralInformationParserServiceTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-12">
-              <caret line="7" column="24" lean-forward="false" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+            <state relative-caret-position="342">
+              <caret line="119" column="54" lean-forward="false" selection-start-line="119" selection-start-column="54" selection-end-line="119" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContactStructuralInformation.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactStructuralInformation.java">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-structural-information/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1260">
-              <caret line="92" column="69" lean-forward="true" selection-start-line="92" selection-start-column="69" selection-end-line="92" selection-end-column="69" />
+            <state relative-caret-position="447">
+              <caret line="57" column="36" lean-forward="false" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StructuralInformationRunner.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationRunner.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="432">
+              <caret line="24" column="1" lean-forward="false" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StructuralInformationService.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="198">
+              <caret line="32" column="97" lean-forward="false" selection-start-line="32" selection-start-column="97" selection-end-line="32" selection-end-column="97" />
+              <folding>
+                <element signature="e#2274#2275#0" expanded="true" />
+                <element signature="e#2305#2306#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BaselineReconstruction.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1278">
+              <caret line="92" column="42" lean-forward="false" selection-start-line="92" selection-start-column="42" selection-end-line="92" selection-end-column="42" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-core/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-8">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-all/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="284">
+              <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="57" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jstructure-features/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="42" column="28" lean-forward="false" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -240,10 +290,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A03_CreateContactMaps.java" />
-        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A04_CreateScripts.java" />
-        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A04_CreateTMAlignScript.java" />
-        <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A03_WriteReconstructionPerformanceCsv.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/amyloid/A01_ComparePrionStructures.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A01_CreateContactMaps.java" />
         <option value="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction/A02_CreateReconstructionScripts.java" />
@@ -269,28 +315,32 @@
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Group.java" />
         <option value="$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java" />
         <option value="$PROJECT_DIR$/jstructure-residue-graphs/src/main/java/de/bioforscher/jstructure/graph/ReconstructionContactMap.java" />
-        <option value="$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/TMAlignService.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/model/BaselineReconstructionTest.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/ConfoldServiceWorker.java" />
-        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java" />
-        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/ContactTogglingReconstruction.java" />
-        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactDistance.java" />
         <option value="$PROJECT_DIR$/jstructure-residue-graphs/src/main/java/de/bioforscher/jstructure/graph/ResidueGraphCalculations.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformation.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParser.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactDistanceBin.java" />
-        <option value="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/StructuralInformationServiceTest.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/parser/Start2FoldXmlParser.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/ProtectionLevel.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Method.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Experiment.java" />
-        <option value="$PROJECT_DIR$/jstructure-structural-information/pom.xml" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/parser/Start2FoldXmlParser.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Start2FoldResidueAnnotation.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserService.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactStructuralInformation.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/StructuralInformationServiceTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/BFactorWriter.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/BFactorWriterService.java" />
         <option value="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/BFactorWriterServiceTest.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/ContactTogglingReconstruction.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationRunner.java" />
+        <option value="$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/TMAlignService.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/pom.xml" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java" />
       </list>
     </option>
   </component>
@@ -320,26 +370,57 @@
       <expand>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="jstructure-all" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="jstructure-align" type="9519ce18:MavenProjectsStructure$ProjectNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="jstructure-all" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="jstructure-align" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="jstructure-start2fold" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="jstructure-core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="jstructure-start2fold" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="jstructure-core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
           <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="jstructure-start2fold" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
+          <item name="jstructure-features" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-features" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-residue-graphs" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-residue-graphs" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-structural-information" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-structural-information" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-utils" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+        </path>
+        <path>
+          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
+          <item name="jstructure-utils" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
       </expand>
       <select />
@@ -351,7 +432,7 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="4" />
     <option name="y" value="6" />
-    <option name="width" value="1714" />
+    <option name="width" value="1141" />
     <option name="height" value="1430" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -380,6 +461,38 @@
           <expand>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-all" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
               <item name="jstructure-structural-information" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -407,6 +520,15 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jstructure" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-structural-information" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
+              <item name="efr" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
@@ -416,6 +538,21 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jstructure" type="462c0819:PsiDirectoryNode" />
               <item name="si" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-structural-information" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jstructure" type="462c0819:PsiDirectoryNode" />
+              <item name="si" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="jstructure" type="b2602c69:ProjectViewProjectNode" />
+              <item name="jstructure-structural-information" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -429,7 +566,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/jstructure-structural-information/pom.xml" />
     <property name="nodejs_interpreter_path" value="/usr/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -476,11 +613,11 @@
       <recent name="de.bioforscher.jstructure.contacts" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/jstructure-structural-information/src/main/resources" />
+      <recent name="$PROJECT_DIR$/jstructure-structural-information/src/main/resources/pdb" />
       <recent name="$PROJECT_DIR$/jstructure-structural-information/src/test/resources/confold" />
       <recent name="$PROJECT_DIR$/jstructure-start2fold/src/main/resources/model" />
       <recent name="$PROJECT_DIR$/jstructure-start2fold/src/main/resources" />
-      <recent name="$PROJECT_DIR$/jstructure-start2fold/src/main/java" />
-      <recent name="$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/reconstruction" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="de.bioforscher.jstructure.contacts.collect.reconstruction.sathyapriya" />
@@ -497,6 +634,121 @@
       <recent name="$PROJECT_DIR$/jstructure-membrane/src/main/resources/d3" />
     </key>
   </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactStructuralInformation.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserService.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ResidueStructuralInformation.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-structural-information/src/test/resources/efr/STF0045.xml</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/jstructure-structural-information/src/test/resources/si/STF0045.out</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -509,13 +761,32 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.StructuralInformationParserServiceTest.shouldParseStructuralInformationFile">
+  <component name="RunManager" selected="Application.StructuralInformationRunner">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="HTML_USED" value="false" />
       <option name="WIDTH" value="400" />
       <option name="HEIGHT" value="300" />
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <module />
+    </configuration>
+    <configuration name="StructuralInformationRunner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="de.bioforscher.jstructure.si.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.StructuralInformationRunner" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="jstructure-structural-information" />
+      <envs />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
@@ -539,7 +810,7 @@
       <setting name="launchBrowserUrl" value="" />
       <setting name="depsClasspath" value="false" />
     </configuration>
-    <configuration name="StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BFactorWriterServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="de.bioforscher.jstructure.si.visualization.*" />
@@ -550,32 +821,7 @@
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si.visualization" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.visualization.StructuralInformationParserServiceTest" />
-      <option name="METHOD_NAME" value="shouldParseStructuralInformationFile" />
-      <option name="TEST_OBJECT" value="method" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-    </configuration>
-    <configuration name="StructuralInformationServiceTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.si.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="jstructure-structural-information" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.StructuralInformationServiceTest" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.visualization.BFactorWriterServiceTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -589,19 +835,19 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="BFactorWriterServiceTest.shouldWriteBFactorAnnotatedFiles" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.si.*" />
+          <option name="PATTERN" value="de.bioforscher.jstructure.si.visualization.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="jstructure-structural-information" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.StructuralInformationServiceTest" />
-      <option name="METHOD_NAME" value="shouldCalculateStructuralInformation" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si.visualization" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.visualization.BFactorWriterServiceTest" />
+      <option name="METHOD_NAME" value="shouldWriteBFactorAnnotatedFiles" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -614,19 +860,19 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformationFor1bdd" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StructuralInformationParserServiceTest.shouldPrintStructuralInformationByResidue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.si.*" />
+          <option name="PATTERN" value="de.bioforscher.jstructure.si.visualization.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="jstructure-structural-information" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.StructuralInformationServiceTest" />
-      <option name="METHOD_NAME" value="shouldCalculateStructuralInformationFor1bdd" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si.visualization" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.visualization.StructuralInformationParserServiceTest" />
+      <option name="METHOD_NAME" value="shouldPrintStructuralInformationByResidue" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -639,19 +885,19 @@
       <envs />
       <patterns />
     </configuration>
-    <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformationForEarlyFoldingDataset" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="StructuralInformationParserServiceTest.shouldPrintStructuralInformationVsBetweenness" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="de.bioforscher.jstructure.si.*" />
+          <option name="PATTERN" value="de.bioforscher.jstructure.si.visualization.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
       <module name="jstructure-structural-information" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si" />
-      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.StructuralInformationServiceTest" />
-      <option name="METHOD_NAME" value="shouldCalculateStructuralInformationForEarlyFoldingDataset" />
+      <option name="PACKAGE_NAME" value="de.bioforscher.jstructure.si.visualization" />
+      <option name="MAIN_CLASS_NAME" value="de.bioforscher.jstructure.si.visualization.StructuralInformationParserServiceTest" />
+      <option name="METHOD_NAME" value="shouldPrintStructuralInformationVsBetweenness" />
       <option name="TEST_OBJECT" value="method" />
       <option name="VM_PARAMETERS" value="-ea" />
       <option name="PARAMETERS" />
@@ -1192,19 +1438,19 @@
     <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Maven.jstructure-all [clean,install]" />
       <item index="1" class="java.lang.String" itemvalue="Spring Boot.ExplorerApplication" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest.shouldCalculateStructuralInformation" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest.shouldCalculateStructuralInformationFor1bdd" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest.shouldCalculateStructuralInformationForEarlyFoldingDataset" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.BFactorWriterServiceTest.shouldWriteBFactorAnnotatedFiles" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.StructuralInformationParserServiceTest.shouldPrintStructuralInformationVsBetweenness" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.StructuralInformationParserServiceTest.shouldPrintStructuralInformationByResidue" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.BFactorWriterServiceTest" />
+      <item index="6" class="java.lang.String" itemvalue="Application.StructuralInformationRunner" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest.shouldCalculateStructuralInformationForEarlyFoldingDataset" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest.shouldCalculateStructuralInformation" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest.shouldCalculateStructuralInformationFor1bdd" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.StructuralInformationServiceTest" />
+        <item index="0" class="java.lang.String" itemvalue="Application.StructuralInformationRunner" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.BFactorWriterServiceTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.BFactorWriterServiceTest.shouldWriteBFactorAnnotatedFiles" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.StructuralInformationParserServiceTest.shouldPrintStructuralInformationByResidue" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.StructuralInformationParserServiceTest.shouldPrintStructuralInformationVsBetweenness" />
       </list>
     </recent_temporary>
   </component>
@@ -1402,14 +1648,7 @@
       <workItem from="1521043759829" duration="17231000" />
       <workItem from="1521209459305" duration="20830000" />
       <workItem from="1521625262129" duration="4356000" />
-      <workItem from="1521708292207" duration="35252000" />
-    </task>
-    <task id="LOCAL-00164" summary="visualization for modularity comparision">
-      <created>1508922623489</created>
-      <option name="number" value="00164" />
-      <option name="presentableId" value="LOCAL-00164" />
-      <option name="project" value="LOCAL" />
-      <updated>1508922623489</updated>
+      <workItem from="1521708292207" duration="54501000" />
     </task>
     <task id="LOCAL-00165" summary="backbone rigidity">
       <created>1509031456640</created>
@@ -1747,12 +1986,25 @@
       <option name="project" value="LOCAL" />
       <updated>1522073876203</updated>
     </task>
-    <option name="localTasksCounter" value="213" />
+    <task id="LOCAL-00213" summary="stub for visualization of structural information">
+      <created>1522080470727</created>
+      <option name="number" value="00213" />
+      <option name="presentableId" value="LOCAL-00213" />
+      <option name="project" value="LOCAL" />
+      <updated>1522080470727</updated>
+    </task>
+    <option name="localTasksCounter" value="214" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="StructuralInformationParserServiceTest_shouldParseStructuralInformationFile - 2018.03.26 at 17h 49m 01s.xml">
-      <configuration name="StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" configurationId="JUnit" />
+    <history-entry file="BFactorWriterServiceTest - 2018.03.27 at 11h 48m 10s.xml">
+      <configuration name="BFactorWriterServiceTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BFactorWriterServiceTest_shouldWriteBFactorAnnotatedFiles - 2018.03.27 at 08h 44m 11s.xml">
+      <configuration name="BFactorWriterServiceTest.shouldWriteBFactorAnnotatedFiles" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="BFactorWriterServiceTest_shouldWriteBFactorAnnotatedFiles - 2018.03.27 at 11h 47m 56s.xml">
+      <configuration name="BFactorWriterServiceTest.shouldWriteBFactorAnnotatedFiles" configurationId="JUnit" />
     </history-entry>
     <history-entry file="StructuralInformationParserServiceTest_shouldParseStructuralInformationFile - 2018.03.26 at 17h 58m 42s.xml">
       <configuration name="StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" configurationId="JUnit" />
@@ -1760,30 +2012,24 @@
     <history-entry file="StructuralInformationParserServiceTest_shouldParseStructuralInformationFile - 2018.03.26 at 18h 04m 17s.xml">
       <configuration name="StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformation - 2018.03.26 at 15h 17m 49s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" configurationId="JUnit" />
+    <history-entry file="StructuralInformationParserServiceTest_shouldParseStructuralInformationFile - 2018.03.27 at 09h 28m 28s.xml">
+      <configuration name="StructuralInformationParserServiceTest.shouldParseStructuralInformationFile" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformation - 2018.03.26 at 15h 19m 20s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" configurationId="JUnit" />
+    <history-entry file="StructuralInformationParserServiceTest_shouldPrintStructuralInformationByResidue - 2018.03.27 at 09h 48m 05s.xml">
+      <configuration name="StructuralInformationParserServiceTest.shouldPrintStructuralInformationByResidue" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformation - 2018.03.26 at 15h 20m 21s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" configurationId="JUnit" />
+    <history-entry file="StructuralInformationParserServiceTest_shouldPrintStructuralInformationVsBetweenness - 2018.03.27 at 09h 38m 50s.xml">
+      <configuration name="StructuralInformationParserServiceTest.shouldPrintStructuralInformationVsBetweenness" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformation - 2018.03.26 at 15h 28m 29s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" configurationId="JUnit" />
+    <history-entry file="StructuralInformationParserServiceTest_shouldPrintStructuralInformationVsBetweenness - 2018.03.27 at 09h 39m 27s.xml">
+      <configuration name="StructuralInformationParserServiceTest.shouldPrintStructuralInformationVsBetweenness" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformation - 2018.03.26 at 15h 39m 49s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformation - 2018.03.26 at 15h 48m 55s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformation" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformationFor1bdd - 2018.03.26 at 17h 33m 34s.xml">
-      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformationFor1bdd" configurationId="JUnit" />
+    <history-entry file="StructuralInformationServiceTest_shouldCalculateStructuralInformationForEarlyFoldingDataset - 2018.03.27 at 20h 37m 34s.xml">
+      <configuration name="StructuralInformationServiceTest.shouldCalculateStructuralInformationForEarlyFoldingDataset" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2704433000" />
+    <option name="totallyTimeSpent" value="2723682000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1795,7 +2041,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="6" width="1714" height="1430" extended-state="0" />
+    <frame x="4" y="6" width="1141" height="1430" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1805,13 +2051,13 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18935362" sideWeight="0.47051886" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.74040765" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3525114" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2836502" sideWeight="0.48782185" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.47368422" sideWeight="0.5294811" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289977" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24640287" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4739726" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32867885" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12109605" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24969988" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1868,7 +2114,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="pymol renderings refined" />
     <MESSAGE value="option to skip hetatms during parsing" />
     <MESSAGE value="creation of GMLVQ dataset once again" />
     <MESSAGE value="toward statistics files&#10;&#10;- equant parser&#10;- PyMOL generation of functional residue rendering&#10;- support for native Fisher's test though best avoided and done by R" />
@@ -1893,7 +2138,8 @@
     <MESSAGE value="EFR visualization of prediction on aaRS" />
     <MESSAGE value="adds support for multiple chains and will produce a static number of EFR" />
     <MESSAGE value="implementation of structural information service" />
-    <option name="LAST_COMMIT_MESSAGE" value="implementation of structural information service" />
+    <MESSAGE value="stub for visualization of structural information" />
+    <option name="LAST_COMMIT_MESSAGE" value="stub for visualization of structural information" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1905,7 +2151,7 @@
           <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="607" />
+      <option name="time" value="608" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1934,97 +2180,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/EarlyFoldingClassificationRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="229" column="28" lean-forward="true" selection-start-line="229" selection-start-column="28" selection-end-line="229" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A02_CreateAARSScript.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-start2fold/src/main/java/de/bioforscher/start2fold/classifier/A04_VisualizeAARSStructures.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2412">
-          <caret line="134" column="37" lean-forward="false" selection-start-line="134" selection-start-column="37" selection-end-line="134" selection-end-column="37" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/runners/model/FrameworkMethod.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="49" column="0" lean-forward="false" selection-start-line="49" selection-start-column="0" selection-end-line="49" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/result/score/TemplateModelingScore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="53" lean-forward="true" selection-start-line="0" selection-start-column="53" selection-end-line="0" selection-end-column="53" />
-          <folding>
-            <element signature="e#236#237#0" expanded="false" />
-            <element signature="e#280#281#0" expanded="false" />
-            <element signature="e#326#327#0" expanded="false" />
-            <element signature="e#382#383#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/result/TMAlignAlignmentResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="867">
-          <caret line="54" column="60" lean-forward="true" selection-start-line="54" selection-start-column="60" selection-end-line="54" selection-end-column="60" />
-          <folding>
-            <element signature="e#1393#1394#0" expanded="false" />
-            <element signature="e#1423#1424#0" expanded="false" />
-            <element signature="e#1454#1455#0" expanded="false" />
-            <element signature="e#1484#1485#0" expanded="false" />
-            <element signature="e#1521#1522#0" expanded="false" />
-            <element signature="e#1557#1558#0" expanded="false" />
-            <element signature="e#1589#1590#0" expanded="false" />
-            <element signature="e#1617#1618#0" expanded="false" />
-            <element signature="e#1684#1685#0" expanded="false" />
-            <element signature="e#1730#1731#0" expanded="false" />
-            <element signature="e#1995#1996#0" expanded="false" />
-            <element signature="e#2040#2041#0" expanded="false" />
-            <element signature="e#2104#2105#0" expanded="false" />
-            <element signature="e#2149#2150#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/result/score/RootMeanSquareDeviation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="12" selection-end-column="5" />
-          <folding>
-            <element signature="e#242#243#0" expanded="false" />
-            <element signature="e#288#289#0" expanded="false" />
-            <element signature="e#334#335#0" expanded="false" />
-            <element signature="e#390#391#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/service/ExternalLocalService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="9" column="22" lean-forward="false" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-residue-graphs/src/main/java/de/bioforscher/jstructure/graph/InteractionScheme.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -2060,14 +2215,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="595">
           <caret line="198" column="5" lean-forward="true" selection-start-line="198" selection-start-column="5" selection-end-line="198" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-features/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="30" selection-end-column="21" />
           <folding />
         </state>
       </provider>
@@ -2190,14 +2337,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/TMAlignService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-881">
-          <caret line="36" column="53" lean-forward="false" selection-start-line="36" selection-start-column="53" selection-end-line="36" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-core/src/main/java/de/bioforscher/jstructure/model/structure/Structure.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -2243,83 +2382,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/ConfoldServiceWorker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="25" column="24" lean-forward="true" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="154" column="9" lean-forward="true" selection-start-line="154" selection-start-column="9" selection-end-line="154" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#8093#8094#0" expanded="false" />
-            <element signature="e#8125#8126#0" expanded="false" />
-            <element signature="e#8168#8169#0" expanded="false" />
-            <element signature="e#8209#8210#0" expanded="false" />
-            <element signature="e#8249#8250#0" expanded="false" />
-            <element signature="e#8286#8287#0" expanded="false" />
-            <element signature="e#8338#8339#0" expanded="false" />
-            <element signature="e#8368#8369#0" expanded="false" />
-            <element signature="e#8403#8404#0" expanded="false" />
-            <element signature="e#8434#8435#0" expanded="false" />
-            <element signature="e#8479#8480#0" expanded="false" />
-            <element signature="e#8520#8521#0" expanded="false" />
-            <element signature="e#8564#8565#0" expanded="false" />
-            <element signature="e#8604#8605#0" expanded="false" />
-            <element signature="e#8646#8647#0" expanded="false" />
-            <element signature="e#8684#8685#0" expanded="false" />
-            <element signature="e#8739#8740#0" expanded="false" />
-            <element signature="e#8772#8773#0" expanded="false" />
-            <element signature="e#8826#8827#0" expanded="false" />
-            <element signature="e#8871#8872#0" expanded="false" />
-            <element signature="e#8909#8910#0" expanded="false" />
-            <element signature="e#8943#8944#0" expanded="false" />
-            <element signature="e#8984#8985#0" expanded="false" />
-            <element signature="e#9021#9022#0" expanded="false" />
-            <element signature="e#9056#9057#0" expanded="false" />
-            <element signature="e#9087#9088#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/ContactTogglingReconstruction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2358">
-          <caret line="131" column="60" lean-forward="true" selection-start-line="131" selection-start-column="60" selection-end-line="131" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#6226#6227#0" expanded="false" />
-            <element signature="e#6271#6272#0" expanded="false" />
-            <element signature="e#6371#6372#0" expanded="false" />
-            <element signature="e#6415#6416#0" expanded="false" />
-            <element signature="e#6455#6456#0" expanded="false" />
-            <element signature="e#6512#6513#0" expanded="false" />
-            <element signature="e#6547#6548#0" expanded="false" />
-            <element signature="e#6601#6602#0" expanded="false" />
-            <element signature="e#6646#6647#0" expanded="false" />
-            <element signature="e#6684#6685#0" expanded="false" />
-            <element signature="e#6718#6719#0" expanded="false" />
-            <element signature="e#6759#6760#0" expanded="false" />
-            <element signature="e#6796#6797#0" expanded="false" />
-            <element signature="e#6831#6832#0" expanded="false" />
-            <element signature="e#6862#6863#0" expanded="false" />
-            <element signature="e#6898#6899#0" expanded="false" />
-            <element signature="e#6930#6931#0" expanded="false" />
-            <element signature="e#6969#6970#0" expanded="false" />
-            <element signature="e#7004#7005#0" expanded="false" />
-            <element signature="e#7037#7038#0" expanded="false" />
-            <element signature="e#7066#7067#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-residue-graphs/src/main/java/de/bioforscher/jstructure/graph/ResidueGraphCalculations.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="338">
@@ -2356,26 +2418,6 @@
             <element signature="e#936#937#0" expanded="false" />
             <element signature="e#970#971#0" expanded="false" />
             <element signature="e#1003#1004#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/StructuralInformationServiceTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="32" column="5" lean-forward="true" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2562">
-          <caret line="153" column="38" lean-forward="false" selection-start-line="153" selection-start-column="38" selection-end-line="153" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2196#2197#0" expanded="false" />
-            <element signature="e#2227#2228#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2430,20 +2472,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="48" column="21" lean-forward="false" selection-start-line="48" selection-start-column="21" selection-end-line="48" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/efr/model/Start2FoldResidueAnnotation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
           <caret line="7" column="59" lean-forward="false" selection-start-line="7" selection-start-column="59" selection-end-line="7" selection-end-column="59" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2453,36 +2487,167 @@
         <state relative-caret-position="474">
           <caret line="106" column="52" lean-forward="false" selection-start-line="106" selection-start-column="52" selection-end-line="106" selection-end-column="52" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactStructuralInformation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="93" column="66" lean-forward="false" selection-start-line="93" selection-start-column="66" selection-end-line="93" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/ConfoldServiceWorker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/BFactorWriterServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="438">
+          <caret line="38" column="60" lean-forward="true" selection-start-line="38" selection-start-column="60" selection-end-line="38" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/BFactorWriterService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="67">
+          <caret line="12" column="24" lean-forward="true" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/resources/pdb/STF0001.pdb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ResidueStructuralInformation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="62" column="28" lean-forward="true" selection-start-line="62" selection-start-column="28" selection-end-line="62" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/ContactTogglingReconstruction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-688">
+          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/StructuralInformationServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="51" column="19" lean-forward="false" selection-start-line="44" selection-start-column="8" selection-end-line="51" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="59" column="58" lean-forward="true" selection-start-line="59" selection-start-column="58" selection-end-line="59" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="29" column="44" lean-forward="false" selection-start-line="29" selection-start-column="44" selection-end-line="29" selection-end-column="44" />
+        <state relative-caret-position="342">
+          <caret line="119" column="54" lean-forward="false" selection-start-line="119" selection-start-column="54" selection-end-line="119" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-align/src/main/java/de/bioforscher/jstructure/align/impl/TMAlignService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1008">
+          <caret line="32" column="104" lean-forward="true" selection-start-line="32" selection-start-column="104" selection-end-line="32" selection-end-column="104" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-features/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="42" column="28" lean-forward="false" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/resources/logback.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-core/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-all/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="284">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="57" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="447">
+          <caret line="57" column="36" lean-forward="false" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationRunner.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="24" column="1" lean-forward="false" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#888#889#0" expanded="true" />
-            <element signature="e#919#920#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/test/java/de/bioforscher/jstructure/si/visualization/StructuralInformationParserServiceTest.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/model/BaselineReconstruction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-12">
-          <caret line="7" column="24" lean-forward="false" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+        <state relative-caret-position="1278">
+          <caret line="92" column="42" lean-forward="false" selection-start-line="92" selection-start-column="42" selection-end-line="92" selection-end-column="42" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/visualization/ContactStructuralInformation.java">
+    <entry file="file://$PROJECT_DIR$/jstructure-structural-information/src/main/java/de/bioforscher/jstructure/si/StructuralInformationService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
-          <caret line="92" column="69" lean-forward="true" selection-start-line="92" selection-start-column="69" selection-end-line="92" selection-end-column="69" />
-          <folding />
+        <state relative-caret-position="198">
+          <caret line="32" column="97" lean-forward="false" selection-start-line="32" selection-start-column="97" selection-end-line="32" selection-end-column="97" />
+          <folding>
+            <element signature="e#2274#2275#0" expanded="true" />
+            <element signature="e#2305#2306#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

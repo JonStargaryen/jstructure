@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -25,27 +26,28 @@ import java.util.stream.Collectors;
 public class StructuralInformationService extends ExternalLocalService {
     private static final Logger logger = LoggerFactory.getLogger(StructuralInformationService.class);
     private static final StructuralInformationService INSTANCE = new StructuralInformationService();
-    private static final String DEFAULT_SERVICE_LOCATION = "/home/bittrich/programs/confold_v1.0/confold.pl";
+    private static final String DEFAULT_SERVICE_LOCATION = "/home/sb/programs/confold_v1.0/confold.pl";
     /**
      * How many contacts to select for each iteration.
      */
+    //TODO could sample some frequencies to normalize structural change expected from one contact
     private static final double BASELINE_FREQUENCY = 0.3;
     /**
      * How many iterations to perform.
      */
-    private static final int NUMBER_OF_ITERATIONS = 8;
+    private static final int NUMBER_OF_THREADS = 12;
+    private static final double COVERAGE = 0.5;
 
     private final ExecutorService executorService;
 
     private StructuralInformationService() {
         super(DEFAULT_SERVICE_LOCATION);
-        int numberOfProcessors = Runtime.getRuntime().availableProcessors();
-        this.executorService = Executors.newFixedThreadPool(numberOfProcessors);
-        logger.info("{} setup up to sample {}% of contacts in {} iterations using {} threads",
+        this.executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+        logger.info("{} setup up to sample {}% of contacts with coverage {} using {} threads",
                 getClass().getSimpleName(),
                 StandardFormat.formatToInteger(BASELINE_FREQUENCY * 100),
-                NUMBER_OF_ITERATIONS,
-                numberOfProcessors);
+                COVERAGE,
+                NUMBER_OF_THREADS);
     }
 
     public static StructuralInformationService getInstance() {
@@ -91,7 +93,7 @@ public class StructuralInformationService extends ExternalLocalService {
 
             // create sampling containers
             List<Future<BaselineReconstruction>> baselineFutures = new ArrayList<>();
-            for (int iteration = 0; iteration < NUMBER_OF_ITERATIONS; iteration++) {
+            for (int iteration = 0; iteration < (int) (NUMBER_OF_THREADS * COVERAGE); iteration++) {
                 baselineFutures.add(executorService.submit(new BaselineReconstruction(iteration,
                         referenceChainStructurePath,
                         referenceChain,
@@ -121,19 +123,36 @@ public class StructuralInformationService extends ExternalLocalService {
                 }
             }
 
-            List<ContactTogglingReconstruction> contactTogglingReconstructions = contactToggleFutures.stream()
+            StringJoiner output = new StringJoiner(System.lineSeparator());
+            contactToggleFutures.stream()
                     .map(this::getContactToggleFuture)
-                    .collect(Collectors.toList());
+                    .map(contactTogglingReconstruction -> contactTogglingReconstruction.getContactToToggle() + "\t" +
+                            contactTogglingReconstruction.isContactWasRemoved() + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getBaselineReconstruction().getAverageRmsd()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getBaselineReconstruction().getAverageTmScore()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getBaselineReconstruction().getAverageQ()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getAverageRmsd()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getAverageTmScore()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getAverageQ()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getDecreaseRmsd()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getIncreaseTMScore()) + "\t" +
+                            StandardFormat.format(contactTogglingReconstruction.getIncreaseQ()))
+                    .forEach(output::add);
+            Files.write(outputPath, output.toString().getBytes());
 
-            Files.write(outputPath,
-                    contactTogglingReconstructions.stream()
-                            .map(contactTogglingReconstruction -> contactTogglingReconstruction.getContactToToggle() + "\t" +
-                                    contactTogglingReconstruction.isContactWasRemoved() + "\t" +
-                                    StandardFormat.format(contactTogglingReconstruction.getDeltaRmsd()) + "\t" +
-                                    StandardFormat.format(contactTogglingReconstruction.getDeltaTMScore()) + "\t" +
-                                    StandardFormat.format(contactTogglingReconstruction.getDeltaQ()))
-                            .collect(Collectors.joining(System.lineSeparator()))
-                            .getBytes());
+//            List<ContactTogglingReconstruction> contactTogglingReconstructions = contactToggleFutures.stream()
+//                    .map(this::getContactToggleFuture)
+//                    .collect(Collectors.toList());
+//
+//            Files.write(outputPath,
+//                    contactTogglingReconstructions.stream()
+//                            .map(contactTogglingReconstruction -> contactTogglingReconstruction.getContactToToggle() + "\t" +
+//                                    contactTogglingReconstruction.isContactWasRemoved() + "\t" +
+//                                    StandardFormat.format(contactTogglingReconstruction.getDecreaseRmsd()) + "\t" +
+//                                    StandardFormat.format(contactTogglingReconstruction.getIncreaseTMScore()) + "\t" +
+//                                    StandardFormat.format(contactTogglingReconstruction.getIncreaseQ()))
+//                            .collect(Collectors.joining(System.lineSeparator()))
+//                            .getBytes());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

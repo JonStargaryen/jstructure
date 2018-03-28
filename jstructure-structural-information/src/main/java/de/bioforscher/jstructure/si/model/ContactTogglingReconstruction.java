@@ -28,16 +28,15 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
     private final BaselineReconstruction baselineReconstruction;
     private final int counter;
     private final int numberOfCombinations;
-    private final Pair<AminoAcid, AminoAcid> contactToToggle;
+    private final Pair<String, String> contactToToggle;
     private final boolean contactWasRemoved;
     private final ReconstructionContactMap alternateMap;
-    private List<Chain> toggledReconstructions;
     private double averageRmsd;
     private double averageTmScore;
     private double averageQ;
-    private double deltaRmsd;
-    private double deltaTMScore;
-    private double deltaQ;
+    private double decreaseRmsd;
+    private double increaseTMScore;
+    private double increaseQ;
 
     public ContactTogglingReconstruction(BaselineReconstruction baselineReconstruction,
                                          int counter,
@@ -48,14 +47,15 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
         this.baselineReconstruction = baselineReconstruction;
         this.counter = counter;
         this.numberOfCombinations = numberOfCombinations;
-        this.contactToToggle = contactToToggle;
+        this.contactToToggle = new Pair<>(contactToToggle.getLeft().getResidueIdentifier().toString(),
+                contactToToggle.getRight().getResidueIdentifier().toString());
         this.contactWasRemoved = contactWasRemoved;
         this.alternateMap = alternateMap;
     }
 
     @Override
     public ContactTogglingReconstruction call() throws Exception {
-        toggledReconstructions = new ConfoldServiceWorker(baselineReconstruction.getServiceLocation(),
+        List<Chain> toggledReconstructions = new ConfoldServiceWorker(baselineReconstruction.getServiceLocation(),
                 baselineReconstruction.getSequence(),
                 baselineReconstruction.getSecondaryStructure(),
                 alternateMap.getCaspRRRepresentation())
@@ -108,28 +108,29 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
                 StandardFormat.format(averageTmScore),
                 StandardFormat.format(averageQ));
 
-        deltaRmsd = baselineReconstruction.getAverageRmsd() - averageRmsd;
-        deltaTMScore = baselineReconstruction.getAverageTmScore() - averageTmScore;
-        deltaQ = baselineReconstruction.getAverageQ() - averageQ;
-        // invert if contact was removed
         if(contactWasRemoved) {
-            deltaRmsd = -deltaRmsd;
-            deltaTMScore = -deltaTMScore;
-            deltaQ = -deltaQ;
+            decreaseRmsd = averageRmsd - baselineReconstruction.getAverageRmsd();
+            increaseTMScore = baselineReconstruction.getAverageTmScore() - averageTmScore;
+            increaseQ = baselineReconstruction.getAverageQ() - averageQ;
+        } else {
+            decreaseRmsd = baselineReconstruction.getAverageRmsd() - averageRmsd;
+            increaseTMScore = averageTmScore - baselineReconstruction.getAverageTmScore();
+            increaseQ = averageQ - baselineReconstruction.getAverageQ();
         }
-        logger.info("[{} / {}]: delta RMSD: {}, delta TM-score: {}, delta Q: {}",
+
+        logger.info("[{} / {}]: decrease RMSD: {}, increase TM-score: {}, increase Q: {}",
                 counter,
                 numberOfCombinations,
-                StandardFormat.format(deltaRmsd),
-                StandardFormat.format(deltaTMScore),
-                StandardFormat.format(deltaQ));
+                StandardFormat.format(decreaseRmsd),
+                StandardFormat.format(increaseTMScore),
+                StandardFormat.format(increaseQ));
     }
 
     public BaselineReconstruction getBaselineReconstruction() {
         return baselineReconstruction;
     }
 
-    public Pair<AminoAcid, AminoAcid> getContactToToggle() {
+    public Pair<String, String> getContactToToggle() {
         return contactToToggle;
     }
 
@@ -139,10 +140,6 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
 
     public ReconstructionContactMap getAlternateMap() {
         return alternateMap;
-    }
-
-    public List<Chain> getToggledReconstructions() {
-        return toggledReconstructions;
     }
 
     public double getAverageRmsd() {
@@ -157,15 +154,15 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
         return averageQ;
     }
 
-    public double getDeltaRmsd() {
-        return deltaRmsd;
+    public double getDecreaseRmsd() {
+        return decreaseRmsd;
     }
 
-    public double getDeltaTMScore() {
-        return deltaTMScore;
+    public double getIncreaseTMScore() {
+        return increaseTMScore;
     }
 
-    public double getDeltaQ() {
-        return deltaQ;
+    public double getIncreaseQ() {
+        return increaseQ;
     }
 }

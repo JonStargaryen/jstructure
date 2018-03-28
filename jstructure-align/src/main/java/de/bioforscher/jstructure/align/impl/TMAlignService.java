@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class TMAlignService extends ExternalLocalService {
     private static final Logger logger = LoggerFactory.getLogger(TMAlignService.class);
     private static final TMAlignService INSTANCE = new TMAlignService();
-    private static final String DEFAULT_SERVICE_LOCATION = "tmalign";
+    private static final String DEFAULT_SERVICE_LOCATION = "/home/sb/programs/tmalign";
 
     private TMAlignService() {
         super(DEFAULT_SERVICE_LOCATION);
@@ -37,12 +37,16 @@ public class TMAlignService extends ExternalLocalService {
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
         Process process = processBuilder.start();
 
-        List<String> outputLines = new BufferedReader(new InputStreamReader(process.getInputStream()))
-                .lines()
-                .collect(Collectors.toList());
-        List<String> errorLines = new BufferedReader(new InputStreamReader(process.getErrorStream()))
-                .lines()
-                .collect(Collectors.toList());
+        List<String> outputLines;
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                outputLines = br.lines()
+                    .collect(Collectors.toList());
+        }
+        List<String> errorLines;
+        try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+            errorLines = br.lines()
+                    .collect(Collectors.toList());
+        }
 
         process.waitFor();
 
