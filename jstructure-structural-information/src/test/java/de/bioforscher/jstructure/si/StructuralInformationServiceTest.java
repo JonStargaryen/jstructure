@@ -48,7 +48,7 @@ public class StructuralInformationServiceTest {
                     Chain chain = StructureParser.fromPath(path)
                             .parse()
                             .getFirstChain();
-                    structuralInformationService.process(chain, outputPath.resolve(path.toFile().getName() + ".out"));
+                    structuralInformationService.process(chain, outputPath.resolve(path.toFile().getName().split("\\.")[0] + ".out"));
                 });
     }
 }

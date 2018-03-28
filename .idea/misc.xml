@@ -42,6 +42,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/jstructure-all/pom.xml" />
+        <option value="$PROJECT_DIR$/jstructure-structural-information/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
