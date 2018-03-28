@@ -36,7 +36,7 @@ public class StructuralInformationService extends ExternalLocalService {
      * How many iterations to perform.
      */
     private static final int NUMBER_OF_THREADS = 12;
-    private static final double COVERAGE = 0.5;
+    private static final int COVERAGE = 10;
 
     private final ExecutorService executorService;
 
@@ -93,7 +93,7 @@ public class StructuralInformationService extends ExternalLocalService {
 
             // create sampling containers
             List<Future<BaselineReconstruction>> baselineFutures = new ArrayList<>();
-            for (int iteration = 0; iteration < (int) (NUMBER_OF_THREADS * COVERAGE); iteration++) {
+            for (int iteration = 0; iteration < COVERAGE; iteration++) {
                 baselineFutures.add(executorService.submit(new BaselineReconstruction(iteration,
                         referenceChainStructurePath,
                         referenceChain,
