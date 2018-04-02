@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.si.visualization;
+package de.bioforscher.jstructure.si.explorer.model;
 
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;

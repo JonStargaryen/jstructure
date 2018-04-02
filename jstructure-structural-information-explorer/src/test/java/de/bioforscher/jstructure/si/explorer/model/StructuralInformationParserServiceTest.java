@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.si.visualization;
+package de.bioforscher.jstructure.si.explorer.model;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
@@ -6,9 +6,11 @@ import de.bioforscher.jstructure.efr.parser.Start2FoldXmlParser;
 import de.bioforscher.jstructure.graph.ResidueGraph;
 import de.bioforscher.jstructure.graph.ResidueGraphCalculations;
 import de.bioforscher.jstructure.mathematics.Pair;
+import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.si.explorer.StructuralInformationParserService;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Test;
 
@@ -74,10 +76,10 @@ public class StructuralInformationParserServiceTest {
         contactStructuralInformation.stream()
                 .map(si -> {
                     AminoAcid aminoAcid1 = chain.select()
-                            .residueIdentifier(si.getResidueIdentifier1())
+                            .residueIdentifier(IdentifierFactory.createResidueIdentifier(si.getResidueIdentifier1()))
                             .asAminoAcid();
                     AminoAcid aminoAcid2 = chain.select()
-                            .residueIdentifier(si.getResidueIdentifier2())
+                            .residueIdentifier(IdentifierFactory.createResidueIdentifier(si.getResidueIdentifier2()))
                             .asAminoAcid();
                     Pair<AminoAcid, AminoAcid> pair = new Pair<>(aminoAcid1, aminoAcid2);
                     double betweenness = residueGraphCalculations.betweenness(pair);
@@ -120,19 +122,19 @@ public class StructuralInformationParserServiceTest {
         residueStructuralInformation.stream()
                 .map(si -> {
                     AminoAcid aminoAcid = chain.select()
-                            .residueIdentifier(si.getResidueIdentifier())
+                            .residueIdentifier(IdentifierFactory.createResidueIdentifier(si.getResidueIdentifier()))
                             .asAminoAcid();
                     double betweenness = residueGraphCalculations.betweenness(aminoAcid);
                     double closeness = residueGraphCalculations.closeness(aminoAcid);
                     double cc = residueGraphCalculations.clusteringCoefficient(aminoAcid);
                     int degree = residueGraph.degreeOf(aminoAcid);
 
-                    return StandardFormat.format(si.getSumAverageRmsdIncrease()) + "," +
-                            StandardFormat.format(si.getSumAverageTmScoreIncrease()) + "," +
-                            StandardFormat.format(si.getSumAverageQIncrease()) + "," +
-                            StandardFormat.format(si.getSumMaxRmsdIncrease()) + "," +
-                            StandardFormat.format(si.getSumMaxTmScoreIncrease()) + "," +
-                            StandardFormat.format(si.getSumMaxQIncrease()) + "," +
+                    return StandardFormat.format(si.getAverageRmsdIncrease()) + "," +
+                            StandardFormat.format(si.getAverageTmScoreIncrease()) + "," +
+                            StandardFormat.format(si.getAverageQIncrease()) + "," +
+                            StandardFormat.format(si.getMaximumRmsdIncrease()) + "," +
+                            StandardFormat.format(si.getMaximumTmScoreIncrease()) + "," +
+                            StandardFormat.format(si.getMaximumQIncrease()) + "," +
                             StandardFormat.format(betweenness) + "," +
                             StandardFormat.format(closeness) + "," +
                             StandardFormat.format(cc) + "," +

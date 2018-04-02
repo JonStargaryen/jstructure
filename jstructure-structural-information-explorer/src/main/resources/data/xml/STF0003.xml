@@ -1,0 +1,2116 @@
+<entry id="STF0003" title="Horse apo-myoglobin">
+  
+  <protein name="Myoglobin" organism="Equus caballus (Horse)" number_of_residues="153" uniprot_id="P68082" uniprot_range="2-154" pdb_id="1ymb">
+    
+    <experiment id="11">
+      <method type="folding">Pulse labeling HDX MS</method>
+      <conditions pH="2.0 - 10.0" temperature="0.0" probes="every amide site">None</conditions>
+      <protection protection_level="EARLY">amide deuteration level &lt;0.5 at 10ms of folding time</protection>
+      <sequence is_pdb="True">GLSDGEWQQVLNVWGKVEADIAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGTVVLTALGGILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISDAIIHVLHSKHPGDFGADAQGAMTKALELFRNDIAAKYKELGFQG</sequence>
+      <details>Protein refolding and pulsed HDX were carried out using a custom-made four-syringe continuous-flow setup with three sequential mixing steps. Syringe 1 was filled with an aqueous solution of 75 μM acid-unfolded aMb and 30 μM bradykinin in 10 mM HCl. Syringe 2 contained water with dilute ammonium hydroxide. Both syringes were connected to mixer M1 via fused silica capillaries. Refolding was initiated by mixing the contents of syringes 1 and 2 at M1 in a 1:1 volume ratio at a flow rate of 5 μl/min each, resulting in a pH jump from 2 to 10. The outlet of M1 was connected to a folding capillary. Depending on the folding time different capillary i.d. values and lengths were used (10 ms: i.d. 20 μm, l 5 mm; 100 ms: i.d. 50 μm, l 8.5 mm; 1 s: i.d. 75 μm, l 38 mm).</details>
+      
+        
+        <residue index="107" code="I"></residue>
+        
+      
+        
+        <residue index="108" code="S"></residue>
+        
+      
+        
+        <residue index="109" code="D"></residue>
+        
+      
+        
+        <residue index="110" code="A"></residue>
+        
+      
+        
+        <residue index="111" code="I"></residue>
+        
+      
+        
+        <residue index="112" code="I"></residue>
+        
+      
+        
+        <residue index="113" code="H"></residue>
+        
+      
+        
+        <residue index="114" code="V"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+        <residue index="116" code="H"></residue>
+        
+      
+        
+        <residue index="133" code="K"></residue>
+        
+      
+        
+        <residue index="134" code="A"></residue>
+        
+      
+        
+        <residue index="135" code="L"></residue>
+        
+      
+        
+        <residue index="136" code="E"></residue>
+        
+      
+        
+        <residue index="137" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="12">
+      <method type="folding">Pulse labeling HDX MS</method>
+      <conditions pH="2.0 - 10.0" temperature="0.0" probes="every amide site">None</conditions>
+      <protection protection_level="INTERMEDIATE">amide deuteration level 0.5-0.75 at 10ms of folding time</protection>
+      <sequence is_pdb="True">GLSDGEWQQVLNVWGKVEADIAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGTVVLTALGGILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISDAIIHVLHSKHPGDFGADAQGAMTKALELFRNDIAAKYKELGFQG</sequence>
+      <details>Protein refolding and pulsed HDX were carried out using a custom-made four-syringe continuous-flow setup with three sequential mixing steps. Syringe 1 was filled with an aqueous solution of 75 μM acid-unfolded aMb and 30 μM bradykinin in 10 mM HCl. Syringe 2 contained water with dilute ammonium hydroxide. Both syringes were connected to mixer M1 via fused silica capillaries. Refolding was initiated by mixing the contents of syringes 1 and 2 at M1 in a 1:1 volume ratio at a flow rate of 5 μl/min each, resulting in a pH jump from 2 to 10. The outlet of M1 was connected to a folding capillary. Depending on the folding time different capillary i.d. values and lengths were used (10 ms: i.d. 20 μm, l 5 mm; 100 ms: i.d. 50 μm, l 8.5 mm; 1 s: i.d. 75 μm, l 38 mm).</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="138" code="F"></residue>
+        
+      
+        
+        <residue index="139" code="R"></residue>
+        
+      
+        
+        <residue index="142" code="I"></residue>
+        
+      
+        
+        <residue index="146" code="Y"></residue>
+        
+      
+        
+        <residue index="148" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="13">
+      <method type="stability">Native exchange MS</method>
+      <conditions pH="10.0 - 10.0" temperature="0.0" probes="every amide site">None</conditions>
+      <protection protection_level="STRONG">amide deuteration level &lt; 0.25</protection>
+      <sequence is_pdb="True">GLSDGEWQQVLNVWGKVEADIAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGTVVLTALGGILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISDAIIHVLHSKHPGDFGADAQGAMTKALELFRNDIAAKYKELGFQG</sequence>
+      <details>Protein refolding and pulsed HDX were carried out using a custom-made four-syringe continuous-flow setup with three sequential mixing steps. Syringe 1 was filled with an aqueous solution of 75 μM acid-unfolded aMb and 30 μM bradykinin in 10 mM HCl. Syringe 2 contained water with dilute ammonium hydroxide. Both syringes were connected to mixer M1 via fused silica capillaries. Refolding was initiated by mixing the contents of syringes 1 and 2 at M1 in a 1:1 volume ratio at a flow rate of 5 μl/min each, resulting in a pH jump from 2 to 10. The outlet of M1 was connected to a folding capillary. Depending on the folding time different capillary i.d. values and lengths were used (10 ms: i.d. 20 μm, l 5 mm; 100 ms: i.d. 50 μm, l 8.5 mm; 1 s: i.d. 75 μm, l 38 mm). Exchange was measured after one hour folding time.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="Q"></residue>
+        
+      
+        
+        <residue index="9" code="Q"></residue>
+        
+      
+        
+        <residue index="10" code="V"></residue>
+        
+      
+        
+        <residue index="11" code="L"></residue>
+        
+      
+        
+        <residue index="12" code="N"></residue>
+        
+      
+        
+        <residue index="13" code="V"></residue>
+        
+      
+        
+        <residue index="14" code="W"></residue>
+        
+      
+        
+        <residue index="15" code="G"></residue>
+        
+      
+        
+        <residue index="16" code="K"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="18" code="E"></residue>
+        
+      
+        
+        <residue index="25" code="G"></residue>
+        
+      
+        
+        <residue index="26" code="Q"></residue>
+        
+      
+        
+        <residue index="27" code="E"></residue>
+        
+      
+        
+        <residue index="28" code="V"></residue>
+        
+      
+        
+        <residue index="29" code="L"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="31" code="R"></residue>
+        
+      
+        
+        <residue index="32" code="L"></residue>
+        
+      
+        
+        <residue index="33" code="F"></residue>
+        
+      
+        
+        <residue index="34" code="T"></residue>
+        
+      
+        
+        <residue index="35" code="G"></residue>
+        
+      
+        
+        <residue index="36" code="H"></residue>
+        
+      
+        
+        <residue index="40" code="L"></residue>
+        
+      
+        
+        <residue index="41" code="E"></residue>
+        
+      
+        
+        <residue index="45" code="K"></residue>
+        
+      
+        
+        <residue index="54" code="E"></residue>
+        
+      
+        
+        <residue index="55" code="M"></residue>
+        
+      
+        
+        <residue index="56" code="K"></residue>
+        
+      
+        
+        <residue index="67" code="V"></residue>
+        
+      
+        
+        <residue index="68" code="V"></residue>
+        
+      
+        
+        <residue index="69" code="L"></residue>
+        
+      
+        
+        <residue index="70" code="T"></residue>
+        
+      
+        
+        <residue index="128" code="Q"></residue>
+        
+      
+        
+        <residue index="129" code="G"></residue>
+        
+      
+        
+        <residue index="131" code="M"></residue>
+        
+      
+        
+        <residue index="133" code="K"></residue>
+        
+      
+        
+        <residue index="134" code="A"></residue>
+        
+      
+        
+        <residue index="135" code="L"></residue>
+        
+      
+        
+        <residue index="136" code="E"></residue>
+        
+      
+        
+        <residue index="137" code="L"></residue>
+        
+      
+        
+        <residue index="143" code="A"></residue>
+        
+      
+        
+        <residue index="146" code="Y"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="14">
+      <method type="stability">Native exchange MS</method>
+      <conditions pH="10.0 - 10.0" temperature="0.0" probes="every amide site">None</conditions>
+      <protection protection_level="MEDIUM">amide deuteration level 0.25-0.50</protection>
+      <sequence is_pdb="True">GLSDGEWQQVLNVWGKVEADIAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGTVVLTALGGILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISDAIIHVLHSKHPGDFGADAQGAMTKALELFRNDIAAKYKELGFQG</sequence>
+      <details>Protein refolding and pulsed HDX were carried out using a custom-made four-syringe continuous-flow setup with three sequential mixing steps. Syringe 1 was filled with an aqueous solution of 75 μM acid-unfolded aMb and 30 μM bradykinin in 10 mM HCl. Syringe 2 contained water with dilute ammonium hydroxide. Both syringes were connected to mixer M1 via fused silica capillaries. Refolding was initiated by mixing the contents of syringes 1 and 2 at M1 in a 1:1 volume ratio at a flow rate of 5 μl/min each, resulting in a pH jump from 2 to 10. The outlet of M1 was connected to a folding capillary. Depending on the folding time different capillary i.d. values and lengths were used (10 ms: i.d. 20 μm, l 5 mm; 100 ms: i.d. 50 μm, l 8.5 mm; 1 s: i.d. 75 μm, l 38 mm). Exchange was measured after one hour folding time.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="6" code="E"></residue>
+        
+      
+        
+        <residue index="7" code="W"></residue>
+        
+      
+        
+        <residue index="23" code="G"></residue>
+        
+      
+        
+        <residue index="24" code="H"></residue>
+        
+      
+        
+        <residue index="43" code="F"></residue>
+        
+      
+        
+        <residue index="44" code="D"></residue>
+        
+      
+        
+        <residue index="61" code="L"></residue>
+        
+      
+        
+        <residue index="62" code="K"></residue>
+        
+      
+        
+        <residue index="63" code="K"></residue>
+        
+      
+        
+        <residue index="106" code="F"></residue>
+        
+      
+        
+        <residue index="107" code="I"></residue>
+        
+      
+        
+        <residue index="108" code="S"></residue>
+        
+      
+        
+        <residue index="109" code="D"></residue>
+        
+      
+        
+        <residue index="110" code="A"></residue>
+        
+      
+        
+        <residue index="111" code="I"></residue>
+        
+      
+        
+        <residue index="112" code="I"></residue>
+        
+      
+        
+        <residue index="113" code="H"></residue>
+        
+      
+        
+        <residue index="114" code="V"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+        <residue index="116" code="H"></residue>
+        
+      
+        
+        <residue index="130" code="A"></residue>
+        
+      
+        
+        <residue index="132" code="T"></residue>
+        
+      
+        
+        <residue index="140" code="N"></residue>
+        
+      
+        
+        <residue index="142" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="15">
+      <method type="stability">Native exchange MS</method>
+      <conditions pH="10.0 - 10.0" temperature="0.0" probes="every amide site">None</conditions>
+      <protection protection_level="WEAK">amide deuteration level more than 0.50</protection>
+      <sequence is_pdb="True">GLSDGEWQQVLNVWGKVEADIAGHGQEVLIRLFTGHPETLEKFDKFKHLKTEAEMKASEDLKKHGTVVLTALGGILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISDAIIHVLHSKHPGDFGADAQGAMTKALELFRNDIAAKYKELGFQG</sequence>
+      <details>Protein refolding and pulsed HDX were carried out using a custom-made four-syringe continuous-flow setup with three sequential mixing steps. Syringe 1 was filled with an aqueous solution of 75 μM acid-unfolded aMb and 30 μM bradykinin in 10 mM HCl. Syringe 2 contained water with dilute ammonium hydroxide. Both syringes were connected to mixer M1 via fused silica capillaries. Refolding was initiated by mixing the contents of syringes 1 and 2 at M1 in a 1:1 volume ratio at a flow rate of 5 μl/min each, resulting in a pH jump from 2 to 10. The outlet of M1 was connected to a folding capillary. Depending on the folding time different capillary i.d. values and lengths were used (10 ms: i.d. 20 μm, l 5 mm; 100 ms: i.d. 50 μm, l 8.5 mm; 1 s: i.d. 75 μm, l 38 mm). Exchange was measured after one hour folding time.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="2" code="L"></residue>
+        
+      
+        
+        <residue index="3" code="S"></residue>
+        
+      
+        
+        <residue index="4" code="D"></residue>
+        
+      
+        
+        <residue index="5" code="G"></residue>
+        
+      
+        
+        <residue index="19" code="A"></residue>
+        
+      
+        
+        <residue index="20" code="D"></residue>
+        
+      
+        
+        <residue index="21" code="I"></residue>
+        
+      
+        
+        <residue index="22" code="A"></residue>
+        
+      
+        
+        <residue index="37" code="P"></residue>
+        
+      
+        
+        <residue index="38" code="E"></residue>
+        
+      
+        
+        <residue index="39" code="T"></residue>
+        
+      
+        
+        <residue index="42" code="K"></residue>
+        
+      
+        
+        <residue index="46" code="F"></residue>
+        
+      
+        
+        <residue index="47" code="K"></residue>
+        
+      
+        
+        <residue index="48" code="H"></residue>
+        
+      
+        
+        <residue index="49" code="L"></residue>
+        
+      
+        
+        <residue index="50" code="K"></residue>
+        
+      
+        
+        <residue index="51" code="T"></residue>
+        
+      
+        
+        <residue index="52" code="E"></residue>
+        
+      
+        
+        <residue index="53" code="A"></residue>
+        
+      
+        
+        <residue index="57" code="A"></residue>
+        
+      
+        
+        <residue index="58" code="S"></residue>
+        
+      
+        
+        <residue index="59" code="E"></residue>
+        
+      
+        
+        <residue index="60" code="D"></residue>
+        
+      
+        
+        <residue index="64" code="H"></residue>
+        
+      
+        
+        <residue index="65" code="G"></residue>
+        
+      
+        
+        <residue index="66" code="T"></residue>
+        
+      
+        
+        <residue index="71" code="A"></residue>
+        
+      
+        
+        <residue index="72" code="L"></residue>
+        
+      
+        
+        <residue index="73" code="G"></residue>
+        
+      
+        
+        <residue index="74" code="G"></residue>
+        
+      
+        
+        <residue index="75" code="I"></residue>
+        
+      
+        
+        <residue index="76" code="L"></residue>
+        
+      
+        
+        <residue index="77" code="K"></residue>
+        
+      
+        
+        <residue index="78" code="K"></residue>
+        
+      
+        
+        <residue index="79" code="K"></residue>
+        
+      
+        
+        <residue index="80" code="G"></residue>
+        
+      
+        
+        <residue index="81" code="H"></residue>
+        
+      
+        
+        <residue index="82" code="H"></residue>
+        
+      
+        
+        <residue index="83" code="E"></residue>
+        
+      
+        
+        <residue index="84" code="A"></residue>
+        
+      
+        
+        <residue index="85" code="E"></residue>
+        
+      
+        
+        <residue index="86" code="L"></residue>
+        
+      
+        
+        <residue index="87" code="K"></residue>
+        
+      
+        
+        <residue index="88" code="P"></residue>
+        
+      
+        
+        <residue index="89" code="L"></residue>
+        
+      
+        
+        <residue index="90" code="A"></residue>
+        
+      
+        
+        <residue index="91" code="Q"></residue>
+        
+      
+        
+        <residue index="92" code="S"></residue>
+        
+      
+        
+        <residue index="93" code="H"></residue>
+        
+      
+        
+        <residue index="94" code="A"></residue>
+        
+      
+        
+        <residue index="95" code="T"></residue>
+        
+      
+        
+        <residue index="96" code="K"></residue>
+        
+      
+        
+        <residue index="97" code="H"></residue>
+        
+      
+        
+        <residue index="98" code="K"></residue>
+        
+      
+        
+        <residue index="99" code="I"></residue>
+        
+      
+        
+        <residue index="100" code="P"></residue>
+        
+      
+        
+        <residue index="101" code="I"></residue>
+        
+      
+        
+        <residue index="102" code="K"></residue>
+        
+      
+        
+        <residue index="103" code="Y"></residue>
+        
+      
+        
+        <residue index="104" code="L"></residue>
+        
+      
+        
+        <residue index="105" code="E"></residue>
+        
+      
+        
+        <residue index="117" code="S"></residue>
+        
+      
+        
+        <residue index="118" code="K"></residue>
+        
+      
+        
+        <residue index="119" code="H"></residue>
+        
+      
+        
+        <residue index="120" code="P"></residue>
+        
+      
+        
+        <residue index="121" code="G"></residue>
+        
+      
+        
+        <residue index="122" code="D"></residue>
+        
+      
+        
+        <residue index="123" code="F"></residue>
+        
+      
+        
+        <residue index="124" code="G"></residue>
+        
+      
+        
+        <residue index="125" code="A"></residue>
+        
+      
+        
+        <residue index="126" code="D"></residue>
+        
+      
+        
+        <residue index="127" code="A"></residue>
+        
+      
+        
+        <residue index="138" code="F"></residue>
+        
+      
+        
+        <residue index="139" code="R"></residue>
+        
+      
+        
+        <residue index="141" code="D"></residue>
+        
+      
+        
+        <residue index="144" code="A"></residue>
+        
+      
+        
+        <residue index="145" code="K"></residue>
+        
+      
+        
+        <residue index="147" code="K"></residue>
+        
+      
+        
+        <residue index="148" code="E"></residue>
+        
+      
+        
+        <residue index="149" code="L"></residue>
+        
+      
+        
+        <residue index="150" code="G"></residue>
+        
+      
+        
+        <residue index="151" code="F"></residue>
+        
+      
+        
+        <residue index="152" code="Q"></residue>
+        
+      
+        
+        <residue index="153" code="G"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>
