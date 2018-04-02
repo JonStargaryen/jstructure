@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base href="/">
+
+    <title>structural information explorer</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="thirdparty/angular-dropdowns.css">
+    <link rel="stylesheet" href="thirdparty/feature-viewer.css">
+    <link rel="stylesheet" href="thirdparty/trackpad-scroll-emulator.css">
+
+    <link rel="stylesheet" href="app.css">
+</head>
+<body data-ng-app="mpe">
+<header class="clearfix">
+    <a href="home" class="logo">
+        structural information explorer
+    </a>
+
+    <div class="context" data-ng-show="prev">
+        <a data-ng-href="chain/{{prev}}">prev</a>
+    </div>
+    <div class="context" data-ng-show="next">
+        <a data-ng-href="chain/{{next}}">next</a>
+    </div>
+    <ul class="menu">
+        <li data-ng-class="{ active: page() == '/home' }"><a data-ng-href="home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+        <li data-ng-class="{ active: page().startsWith('/chain/') }" data-ng-show="page().startsWith('/chain/')"><a data-ng-href="#"><i class="fa fa-cube" aria-hidden="true"></i> Chain</a></li>
+    </ul>
+</header>
+
+<div data-ng-repeat="alert in alerts" class="alert alert-{{alert.type || 'alert'}} alert-dismissible">
+    {{alert.msg}}
+    <button type="button" data-ng-click='closeAlert($index)' class="close pull-right"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+</div>
+
+<div data-ng-view></div>
+
+<script src="//code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-route.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-resource.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<script src="component/d3-bridge.js"></script>
+<script src="component/feature-viewer-bridge.js"></script>
+<script src="component/protein-viewer-bridge.js"></script>
+
+<script src="thirdparty/angular-dropdowns.js"></script>
+<script src="thirdparty/feature-viewer.js"></script>
+<script src="thirdparty/d3.js"></script>
+<script src="thirdparty/jquery.trackpad-scroll-emulator.min.js"></script>
+<script src="thirdparty/pv.min.js"></script>
+
+<script src="app.js"></script>
+</body>
+</html>

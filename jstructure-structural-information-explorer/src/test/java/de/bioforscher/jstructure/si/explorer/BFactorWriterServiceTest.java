@@ -1,10 +1,12 @@
-package de.bioforscher.jstructure.si.visualization;
+package de.bioforscher.jstructure.si.explorer;
 
 import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
 import de.bioforscher.jstructure.efr.parser.Start2FoldXmlParser;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.si.explorer.model.ContactStructuralInformation;
+import de.bioforscher.jstructure.si.explorer.model.ResidueStructuralInformation;
 import de.bioforscher.testutil.FileUtils;
 import org.junit.Ignore;
 import org.junit.Test;

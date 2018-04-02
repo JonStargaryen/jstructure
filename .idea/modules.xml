@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/jstructure-features/jstructure-features.iml" filepath="$PROJECT_DIR$/jstructure-features/jstructure-features.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-residue-graphs/jstructure-residue-graphs.iml" filepath="$PROJECT_DIR$/jstructure-residue-graphs/jstructure-residue-graphs.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-structural-information/jstructure-structural-information.iml" filepath="$PROJECT_DIR$/jstructure-structural-information/jstructure-structural-information.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jstructure-structural-information-explorer/jstructure-structural-information-explorer.iml" filepath="$PROJECT_DIR$/jstructure-structural-information-explorer/jstructure-structural-information-explorer.iml" />
       <module fileurl="file://$PROJECT_DIR$/jstructure-utils/jstructure-utils.iml" filepath="$PROJECT_DIR$/jstructure-utils/jstructure-utils.iml" />
     </modules>
   </component>
