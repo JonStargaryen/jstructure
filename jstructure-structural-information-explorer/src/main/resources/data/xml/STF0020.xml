@@ -1,0 +1,210 @@
+<entry id="STF0020" title="SNase H124L">
+  
+  <protein name="Thermonuclease " organism="Staphylococcus aureus" number_of_residues="149" uniprot_id="P00644" uniprot_range="83-231" pdb_id="1joo">
+    
+    <experiment id="100">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="15.0" probes="60">None</conditions>
+      <protection protection_level="EARLY">P &gt; 5</protection>
+      <sequence is_pdb="True">ATSTKKLHKEPATLIKAIDGDTVKLMYKGQPMTFRLLLVDTPETKHPKKGVEKYGPEASAFTKKMVENAKKIEVEFDKGQRTDKYGRGLAYIYADGKMVNEALVRQGLAKVAYVYKPNNTHEQLLRKSEAQAKKEKLNIWSEDNADSGQ</sequence>
+      <details>Refolding of deuterated H124L SNase was initiated at 15°C by a 1:2 dilution of the unfolded protein with a refolding buffer containing 150 mM KCl and 75 mM sodium acetate (pH 6.8) such that the final refolding mixture had a pH* of 5.3 and contained 100 mM KCl and 50 mM sodium acetate. Refolding was allowed to continue for a variable length of time.</details>
+      
+        
+        <residue index="23" code="V"></residue>
+        
+      
+        
+        <residue index="24" code="K"></residue>
+        
+      
+        
+        <residue index="25" code="L"></residue>
+        
+      
+        
+        <residue index="26" code="M"></residue>
+        
+      
+        
+        <residue index="27" code="Y"></residue>
+        
+      
+        
+        <residue index="32" code="M"></residue>
+        
+      
+        
+        <residue index="34" code="F"></residue>
+        
+      
+        
+        <residue index="35" code="R"></residue>
+        
+      
+        
+        <residue index="137" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="101">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="15.0" probes="60">None</conditions>
+      <protection protection_level="LATE">2.5 &gt; P &lt; 5</protection>
+      <sequence is_pdb="True">ATSTKKLHKEPATLIKAIDGDTVKLMYKGQPMTFRLLLVDTPETKHPKKGVEKYGPEASAFTKKMVENAKKIEVEFDKGQRTDKYGRGLAYIYADGKMVNEALVRQGLAKVAYVYKPNNTHEQLLRKSEAQAKKEKLNIWSEDNADSGQ</sequence>
+      <details>Refolding of deuterated H124L SNase was initiated at 15°C by a 1:2 dilution of the unfolded protein with a refolding buffer containing 150 mM KCl and 75 mM sodium acetate (pH 6.8) such that the final refolding mixture had a pH* of 5.3 and contained 100 mM KCl and 50 mM sodium acetate. Refolding was allowed to continue for a variable length of time.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="37" code="L"></residue>
+        
+      
+        
+        <residue index="88" code="G"></residue>
+        
+      
+        
+        <residue index="91" code="Y"></residue>
+        
+      
+        
+        <residue index="97" code="K"></residue>
+        
+      
+        
+        <residue index="138" code="N"></residue>
+        
+      
+        
+        <residue index="139" code="I"></residue>
+        
+      
+        
+        <residue index="141" code="S"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="102">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="37.0" probes="100-105">None</conditions>
+      <protection protection_level="STRONG">G(op)(kcal/mol)=~G(global unfolding)</protection>
+      <sequence is_pdb="True">ATSTKKLHKEPATLIKAIDGDTVKLMYKGQPMTFRLLLVDTPETKHPKKGVEKYGPEASAFTKKMVENAKKIEVEFDKGQRTDKYGRGLAYIYADGKMVNEALVRQGLAKVAYVYKPNNTHEQLLRKSEAQAKKEKLNIWSEDNADSGQ</sequence>
+      <details>Samples for exchange studies were prepared by dissolving the lyophilized protein in an aqueous solution (natural isotopic abundance) containing 50 mM succinate-d4 to a final concentration of 3.0 mM. Samples of the nuclease H124L-Ca2+-pdTp ternary complex contained an additional 9.0 mM pdTp and 18 mM CaCl2. The pH was adjusted to 5.1, and the samples were lyophilized to dryness. Immediately prior to NMR data acquisition, the samples were redissolved in 100% D2O and placed into the Bruker AM500 NMR spectrometer.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="22" code="T"></residue>
+        
+      
+        
+        <residue index="24" code="K"></residue>
+        
+      
+        
+        <residue index="25" code="L"></residue>
+        
+      
+        
+        <residue index="26" code="M"></residue>
+        
+      
+        
+        <residue index="34" code="F"></residue>
+        
+      
+        
+        <residue index="37" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

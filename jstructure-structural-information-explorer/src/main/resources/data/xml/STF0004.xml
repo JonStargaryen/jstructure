@@ -1,0 +1,950 @@
+<entry id="STF0004" title="Sperm whale apo-myoglobin">
+  
+  <protein name="Myoglobin" organism="Physeter catodon (Sperm whale) (Physeter macrocephalus)" number_of_residues="153" uniprot_id="P02185" uniprot_range="2-154" pdb_id="1mbc">
+    
+    <experiment id="16">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.8 - 5.8" temperature="25.0" probes="51">None</conditions>
+      <protection protection_level="EARLY">k(cl)/k(op) &gt; 80</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>A solution containing the fully unfolded apo-myoglobin (80 M) at pH 2.2 in HCl/H2O was placed in syringe P. Refolding and H/D exchange was performed at room temperature. The refolding reaction was initiated by a 6-fold dilution of the acid-unfolded apo-myoglobin with either 60 mM acetate buffer or 30 mM citrate buffer in D2O delivered from syringe Q, to a final (uncorrected) pH of 5.8. After refolding times (tf) of 0.4 or 6 ms, the H/D exchange reaction was initiated by a 1/6-fold dilution of the sample solution with D2O buffer containing 350-mM 3-(cyclohexylamino)-1 propanesulfonic acid (CAPS) delivered from syringe R at the desired pH* from 7 to 10.7 to enhance exchange of unprotected amide protons to deuterons. The H/D exchange labeling was allowed to proceed for 3.6 ms.</details>
+      
+        
+        <residue index="10" code="V"></residue>
+        
+      
+        
+        <residue index="11" code="L"></residue>
+        
+      
+        
+        <residue index="14" code="W"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="107" code="I"></residue>
+        
+      
+        
+        <residue index="110" code="A"></residue>
+        
+      
+        
+        <residue index="111" code="I"></residue>
+        
+      
+        
+        <residue index="112" code="I"></residue>
+        
+      
+        
+        <residue index="113" code="H"></residue>
+        
+      
+        
+        <residue index="114" code="V"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+        <residue index="138" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="17">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.8 - 5.8" temperature="25.0" probes="51">None</conditions>
+      <protection protection_level="INTERMEDIATE">50 &lt; k(cl)/k(op) &lt; 80</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>A solution containing the fully unfolded apo-myoglobin (80 M) at pH 2.2 in HCl/H2O was placed in syringe P. Refolding and H/D exchange was performed at room temperature. The refolding reaction was initiated by a 6-fold dilution of the acid-unfolded apo-myoglobin with either 60 mM acetate buffer or 30 mM citrate buffer in D2O delivered from syringe Q, to a final (uncorrected) pH of 5.8. After refolding times (tf) of 0.4 or 6 ms, the H/D exchange reaction was initiated by a 1/6-fold dilution of the sample solution with D2O buffer containing 350-mM 3-(cyclohexylamino)-1 propanesulfonic acid (CAPS) delivered from syringe R at the desired pH* from 7 to 10.7 to enhance exchange of unprotected amide protons to deuterons. The H/D exchange labeling was allowed to proceed for 3.6 ms.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="9" code="L"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="109" code="E"></residue>
+        
+      
+        
+        <residue index="134" code="A"></residue>
+        
+      
+        
+        <residue index="139" code="R"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="18">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.8 - 5.8" temperature="25.0" probes="51">None</conditions>
+      <protection protection_level="LATE">20 &lt; k(cl)/k(op) &lt; 50</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>A solution containing the fully unfolded apo-myoglobin (80 M) at pH 2.2 in HCl/H2O was placed in syringe P. Refolding and H/D exchange was performed at room temperature. The refolding reaction was initiated by a 6-fold dilution of the acid-unfolded apo-myoglobin with either 60 mM acetate buffer or 30 mM citrate buffer in D2O delivered from syringe Q, to a final (uncorrected) pH of 5.8. After refolding times (tf) of 0.4 or 6 ms, the H/D exchange reaction was initiated by a 1/6-fold dilution of the sample solution with D2O buffer containing 350-mM 3-(cyclohexylamino)-1 propanesulfonic acid (CAPS) delivered from syringe R at the desired pH* from 7 to 10.7 to enhance exchange of unprotected amide protons to deuterons. The H/D exchange labeling was allowed to proceed for 3.6 ms.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="29" code="L"></residue>
+        
+      
+        
+        <residue index="31" code="R"></residue>
+        
+      
+        
+        <residue index="32" code="L"></residue>
+        
+      
+        
+        <residue index="33" code="F"></residue>
+        
+      
+        
+        <residue index="104" code="L"></residue>
+        
+      
+        
+        <residue index="106" code="F"></residue>
+        
+      
+        
+        <residue index="135" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="19">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="5.0" probes="every amide site">None</conditions>
+      <protection protection_level="STRONG">P &gt; 50000</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>Apo-Mb in H2O solution was diluted into buffered D2O, initiating H/D exchange. After a period of &quot;exchange-out,&quot; further exchange was quenched by the addition of heme and adjusting the pH, and exchange was evaluated by 2D H NMR.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="10" code="V"></residue>
+        
+      
+        
+        <residue index="11" code="L"></residue>
+        
+      
+        
+        <residue index="14" code="W"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="112" code="I"></residue>
+        
+      
+        
+        <residue index="114" code="V"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="20">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="5.0" probes="every amide site">None</conditions>
+      <protection protection_level="MEDIUM">5000 &lt; P &lt; 50000</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>Apo-Mb in H2O solution was diluted into buffered D2O, initiating H/D exchange. After a period of &quot;exchange-out,&quot; further exchange was quenched by the addition of heme and adjusting the pH, and exchange was evaluated by 2D H NMR.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="9" code="L"></residue>
+        
+      
+        
+        <residue index="18" code="E"></residue>
+        
+      
+        
+        <residue index="29" code="L"></residue>
+        
+      
+        
+        <residue index="31" code="R"></residue>
+        
+      
+        
+        <residue index="33" code="F"></residue>
+        
+      
+        
+        <residue index="40" code="L"></residue>
+        
+      
+        
+        <residue index="69" code="L"></residue>
+        
+      
+        
+        <residue index="110" code="A"></residue>
+        
+      
+        
+        <residue index="133" code="K"></residue>
+        
+      
+        
+        <residue index="138" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="21">
+      <method type="stability">Native exchange in partially folded state by NMR</method>
+      <conditions pH="4.2 - 4.2" temperature="5.0" probes="every amide site">None</conditions>
+      <protection protection_level="STRONG">P &gt; 30</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>Apo-Mb in H2O solution was diluted into buffered D2O, initiating H/D exchange. After a period of &quot;exchange-out,&quot; further exchange was quenched by the addition of heme and adjusting the pH, and exchange was evaluated by 2D H NMR.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="9" code="L"></residue>
+        
+      
+        
+        <residue index="10" code="V"></residue>
+        
+      
+        
+        <residue index="11" code="L"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="107" code="I"></residue>
+        
+      
+        
+        <residue index="112" code="I"></residue>
+        
+      
+        
+        <residue index="114" code="V"></residue>
+        
+      
+        
+        <residue index="142" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="22">
+      <method type="stability">Native exchange in partially folded state by NMR</method>
+      <conditions pH="4.2 - 4.2" temperature="5.0" probes="every amide site">None</conditions>
+      <protection protection_level="MEDIUM">10 &lt; P &lt; 30</protection>
+      <sequence is_pdb="True">VLSEGEWQLVLHVWAKVEADVAGHGQDILIRLFKSHPETLEKFDRFKHLKTEAEMKASEDLKKHGVTVLTALGAILKKKGHHEAELKPLAQSHATKHKIPIKYLEFISEAIIHVLHSRHPGDFGADAQGAMNKALELFRKDIAAKYKELGYQG</sequence>
+      <details>Apo-Mb in H2O solution was diluted into buffered D2O, initiating H/D exchange. After a period of &quot;exchange-out,&quot; further exchange was quenched by the addition of heme and adjusting the pH, and exchange was evaluated by 2D H NMR.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="14" code="W"></residue>
+        
+      
+        
+        <residue index="18" code="E"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="138" code="F"></residue>
+        
+      
+        
+        <residue index="143" code="A"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

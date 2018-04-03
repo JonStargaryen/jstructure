@@ -1,0 +1,450 @@
+<entry id="STF0040" title="B1 immunoglobulin-binding domain of streptococcal protein G">
+  
+  <protein name="Immunoglobulin G-binding protein G" organism="Streptococcus sp. group G" number_of_residues="56" uniprot_id="P06654" uniprot_range="228-282" pdb_id="1pga">
+    
+    <experiment id="171">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.7 - 5.7" temperature="25.0" probes="32">None</conditions>
+      <protection protection_level="STRONG">ΔΔG(op) = ΔΔG(global unfolding)</protection>
+      <sequence is_pdb="True">MTYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE</sequence>
+      <details>The lyophilized protein was dissolved in 99.99% D2O, the pD was adjusted to 5.7 (meter reading), and the HSQC spectra were recorded at a series of time intervals at 25 °C. No solvent suppression was employed in D2O spectra, and the total measurement time per spectrum was ~5.7 min using 256 t1 increments and a relaxation delay of 1.0 s. The decays in integrated peak volumes of individual NHs were fitted to first-order exponential curves. Fifteen to twenty time points were obtained for each domain, with time points ranging from 15 min to 500 h for B1</details>
+      
+        
+        <residue index="5" code="L"></residue>
+        
+      
+        
+        <residue index="6" code="I"></residue>
+        
+      
+        
+        <residue index="27" code="E"></residue>
+        
+      
+        
+        <residue index="30" code="F"></residue>
+        
+      
+        
+        <residue index="44" code="T"></residue>
+        
+      
+        
+        <residue index="51" code="T"></residue>
+        
+      
+        
+        <residue index="52" code="F"></residue>
+        
+      
+        
+        <residue index="53" code="T"></residue>
+        
+      
+        
+        <residue index="54" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="172">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.7 - 5.7" temperature="25.0" probes="32">None</conditions>
+      <protection protection_level="MEDIUM">slow exchanging amide protons</protection>
+      <sequence is_pdb="True">MTYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE</sequence>
+      <details>The lyophilized protein was dissolved in 99.99% D2O, the pD was adjusted to 5.7 (meter reading), and the HSQC spectra were recorded at a series of time intervals at 25 °C. No solvent suppression was employed in D2O spectra, and the total measurement time per spectrum was ~5.7 min using 256 t1 increments and a relaxation delay of 1.0 s. The decays in integrated peak volumes of individual NHs were fitted to first-order exponential curves. Fifteen to twenty time points were obtained for each domain, with time points ranging from 15 min to 500 h for B1</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="Y"></residue>
+        
+      
+        
+        <residue index="4" code="K"></residue>
+        
+      
+        
+        <residue index="7" code="L"></residue>
+        
+      
+        
+        <residue index="18" code="T"></residue>
+        
+      
+        
+        <residue index="20" code="A"></residue>
+        
+      
+        
+        <residue index="25" code="T"></residue>
+        
+      
+        
+        <residue index="26" code="A"></residue>
+        
+      
+        
+        <residue index="28" code="K"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="31" code="K"></residue>
+        
+      
+        
+        <residue index="32" code="Q"></residue>
+        
+      
+        
+        <residue index="33" code="Y"></residue>
+        
+      
+        
+        <residue index="34" code="A"></residue>
+        
+      
+        
+        <residue index="42" code="E"></residue>
+        
+      
+        
+        <residue index="46" code="D"></residue>
+        
+      
+        
+        <residue index="50" code="K"></residue>
+        
+      
+        
+        <residue index="55" code="T"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="173">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="4.0 - 4.0" temperature="5.0" probes="26">None</conditions>
+      <protection protection_level="EARLY">folding rate constant (s-1) ~ 133</protection>
+      <sequence is_pdb="True">MTYKLILNGKTLKGETTTEAVDAATAEKVFKQYANDNGVDGEWTYDDATKTFTVTE</sequence>
+      <details>The quenched-flow HDX experiments were carried out using a Biologic QFM-5 quench-flow apparatus, thermostated at 5 °C. Fully unfolded GB1 was prepared by taking up lyophilized GB1 at a concentration of 3 mg/mL in D2O containing 4.5 M GuDCl and 50 mM sodium d-acetate, pH 4.0 (uncorrected for the deuterium isotope effect),and incubated at 37 °C overnight to ensure complete exchange of all its amide positions. Refolding was initiated by rapidly diluting the unfolded deuterated GB1 18-fold into protonated 50 mM sodium-acetate, pH 4.1. The resulting folding mixture contained 0.17 mg/mL GBl, 0.25 M GuDCl,pH 4.0. At this pH and temperature, the average exchange half-life of the completely exposed amide positions in GB1 is about 4 min. After allowing refolding to occur for varying lengths of time t(fold), the reaction mixture was subjected to a high pH exchange pulse of 25 ms duration. The values of t(fold) ranged from 0 ms (obtained by subjecting unfolded GB1 directly to the high pH exchange pulse) to 370 ms. The high pH exchange pulse was achieved by the addition of 140 mM glycine, pH 10.1, in a ratio of 18:13, resulting in an exchange mixture containing 0.15 M GuDCl, 0.1 mg/mL GBI, 96% H2O/4% D2O, pH9.1. ND-NH exchange was then quenched by adding 2 M acetic acid in a ratio of 31:3 to give a final pH of 3.5.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="Y"></residue>
+        
+      
+        
+        <residue index="4" code="K"></residue>
+        
+      
+        
+        <residue index="5" code="L"></residue>
+        
+      
+        
+        <residue index="6" code="I"></residue>
+        
+      
+        
+        <residue index="7" code="L"></residue>
+        
+      
+        
+        <residue index="18" code="T"></residue>
+        
+      
+        
+        <residue index="20" code="A"></residue>
+        
+      
+        
+        <residue index="25" code="T"></residue>
+        
+      
+        
+        <residue index="26" code="A"></residue>
+        
+      
+        
+        <residue index="27" code="E"></residue>
+        
+      
+        
+        <residue index="28" code="K"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="30" code="F"></residue>
+        
+      
+        
+        <residue index="31" code="K"></residue>
+        
+      
+        
+        <residue index="32" code="Q"></residue>
+        
+      
+        
+        <residue index="33" code="Y"></residue>
+        
+      
+        
+        <residue index="34" code="A"></residue>
+        
+      
+        
+        <residue index="42" code="E"></residue>
+        
+      
+        
+        <residue index="44" code="T"></residue>
+        
+      
+        
+        <residue index="46" code="D"></residue>
+        
+      
+        
+        <residue index="50" code="K"></residue>
+        
+      
+        
+        <residue index="51" code="T"></residue>
+        
+      
+        
+        <residue index="52" code="F"></residue>
+        
+      
+        
+        <residue index="53" code="T"></residue>
+        
+      
+        
+        <residue index="54" code="V"></residue>
+        
+      
+        
+        <residue index="55" code="T"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

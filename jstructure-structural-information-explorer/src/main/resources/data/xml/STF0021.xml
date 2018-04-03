@@ -1,0 +1,856 @@
+<entry id="STF0021" title="Bacteriophage T4 lysozyme">
+  
+  <protein name="Lysozyme" organism="Enterobacteria phage T4 (Bacteriophage T4)" number_of_residues="164" uniprot_id="D9IEF7" uniprot_range="1-164" pdb_id="2lzm">
+    
+    <experiment id="103">
+      <method type="folding">Dead time pulse labeling HDX NMR</method>
+      <conditions pH="10.2 - 10.2" temperature="25.0" probes="60">None</conditions>
+      <protection protection_level="EARLY">proton occupancy &lt; 0.6</protection>
+      <sequence is_pdb="True">MNIFEMLRIDEGLRLKIYKDTEGYYTIGIGHLLTKSPSLNAAKSELDKAIGRNTNGVITKDEAEKLFNQDVDAAVRGILRNAKLKPVYDSLDAVRRAALINMVFQMGETGVAGFTNSLRMLQQKRWDEAAVNLAKSRWYNQTPNRAKRVITTFRTGTWDAYKNL</sequence>
+      <details>Dead-time pulse-labeling experiment, in which the unfolded protein sample in D2O and 8.5 M D-urea was mixed with a H2O solution at pH 10.2 by a ratio of 1:9. After 13 ms, the sample was quenched at pH 3.0. At pH 10.2 and 25 °C, unprotected amide deuterons can exchange with solvent protons in less than 1 ms.</details>
+      
+        
+        <residue index="7" code="L"></residue>
+        
+      
+        
+        <residue index="71" code="V"></residue>
+        
+      
+        
+        <residue index="79" code="L"></residue>
+        
+      
+        
+        <residue index="98" code="A"></residue>
+        
+      
+        
+        <residue index="102" code="M"></residue>
+        
+      
+        
+        <residue index="103" code="V"></residue>
+        
+      
+        
+        <residue index="104" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="104">
+      <method type="folding">Dead time pulse labeling HDX NMR</method>
+      <conditions pH="10.2 - 10.2" temperature="25.0" probes="60">None</conditions>
+      <protection protection_level="INTERMEDIATE">0.6 &lt; proton occupancy &lt; 0.8</protection>
+      <sequence is_pdb="True">MNIFEMLRIDEGLRLKIYKDTEGYYTIGIGHLLTKSPSLNAAKSELDKAIGRNTNGVITKDEAEKLFNQDVDAAVRGILRNAKLKPVYDSLDAVRRAALINMVFQMGETGVAGFTNSLRMLQQKRWDEAAVNLAKSRWYNQTPNRAKRVITTFRTGTWDAYKNL</sequence>
+      <details>Dead-time pulse-labeling experiment, in which the unfolded protein sample in D2O and 8.5 M D-urea was mixed with a H2O solution at pH 10.2 by a ratio of 1:9. After 13 ms, the sample was quenched at pH 3.0. At pH 10.2 and 25 °C, unprotected amide deuterons can exchange with solvent protons in less than 1 ms.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="4" code="F"></residue>
+        
+      
+        
+        <residue index="64" code="E"></residue>
+        
+      
+        
+        <residue index="74" code="A"></residue>
+        
+      
+        
+        <residue index="78" code="I"></residue>
+        
+      
+        
+        <residue index="81" code="N"></residue>
+        
+      
+        
+        <residue index="84" code="L"></residue>
+        
+      
+        
+        <residue index="97" code="A"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="105">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="114">None</conditions>
+      <protection protection_level="STRONG">ΔG(op)(kcal/mol) &gt; 15</protection>
+      <sequence is_pdb="True">MNIFEMLRIDEGLRLKIYKDTEGYYTIGIGHLLTKSPSLNAAKSELDKAIGRNTNGVITKDEAEKLFNQDVDAAVRGILRNAKLKPVYDSLDAVRRAALINMVFQMGETGVAGFTNSLRMLQQKRWDEAAVNLAKSRWYNQTPNRAKRVITTFRTGTWDAYKNL</sequence>
+      <details>The exchange of 114 of the 164 backbone amide protons in T4 lysozyme was monitored as a function of denaturant concentration (eleven samples between 0 M and 2 M GdmCl). Exchange was initiated by spinning the samples through a Quick-sep spin column packed with G-25 resin pre-equilibrated in deuterated buffer (50 mM sodium phosphate, pD 6.0, 0.1 M KCl) with varying amounts of per-deuterated GdmCl. All of these denaturant concentrations are below the folding transition measured by global probes. Exchange was measured by two-dimensional 1H-15N HSQC spectra taken over a period of hours to months.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="5" code="E"></residue>
+        
+      
+        
+        <residue index="7" code="L"></residue>
+        
+      
+        
+        <residue index="10" code="D"></residue>
+        
+      
+        
+        <residue index="66" code="L"></residue>
+        
+      
+        
+        <residue index="71" code="V"></residue>
+        
+      
+        
+        <residue index="72" code="D"></residue>
+        
+      
+        
+        <residue index="73" code="A"></residue>
+        
+      
+        
+        <residue index="74" code="A"></residue>
+        
+      
+        
+        <residue index="76" code="R"></residue>
+        
+      
+        
+        <residue index="79" code="L"></residue>
+        
+      
+        
+        <residue index="85" code="K"></residue>
+        
+      
+        
+        <residue index="96" code="R"></residue>
+        
+      
+        
+        <residue index="97" code="A"></residue>
+        
+      
+        
+        <residue index="98" code="A"></residue>
+        
+      
+        
+        <residue index="99" code="L"></residue>
+        
+      
+        
+        <residue index="100" code="I"></residue>
+        
+      
+        
+        <residue index="101" code="N"></residue>
+        
+      
+        
+        <residue index="102" code="M"></residue>
+        
+      
+        
+        <residue index="103" code="V"></residue>
+        
+      
+        
+        <residue index="104" code="F"></residue>
+        
+      
+        
+        <residue index="105" code="Q"></residue>
+        
+      
+        
+        <residue index="106" code="M"></residue>
+        
+      
+        
+        <residue index="121" code="L"></residue>
+        
+      
+        
+        <residue index="123" code="Q"></residue>
+        
+      
+        
+        <residue index="147" code="K"></residue>
+        
+      
+        
+        <residue index="149" code="V"></residue>
+        
+      
+        
+        <residue index="153" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="106">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="114">None</conditions>
+      <protection protection_level="MEDIUM">13 &lt; ΔG(op)(kcal/mol) &lt; 15</protection>
+      <sequence is_pdb="True">MNIFEMLRIDEGLRLKIYKDTEGYYTIGIGHLLTKSPSLNAAKSELDKAIGRNTNGVITKDEAEKLFNQDVDAAVRGILRNAKLKPVYDSLDAVRRAALINMVFQMGETGVAGFTNSLRMLQQKRWDEAAVNLAKSRWYNQTPNRAKRVITTFRTGTWDAYKNL</sequence>
+      <details>The exchange of 114 of the 164 backbone amide protons in T4 lysozyme was monitored as a function of denaturant concentration (eleven samples between 0 M and 2 M GdmCl). Exchange was initiated by spinning the samples through a Quick-sep spin column packed with G-25 resin pre-equilibrated in deuterated buffer (50 mM sodium phosphate, pD 6.0, 0.1 M KCl) with varying amounts of per-deuterated GdmCl. All of these denaturant concentrations are below the folding transition measured by global probes. Exchange was measured by two-dimensional 1H-15N HSQC spectra taken over a period of hours to months.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="6" code="M"></residue>
+        
+      
+        
+        <residue index="8" code="R"></residue>
+        
+      
+        
+        <residue index="9" code="I"></residue>
+        
+      
+        
+        <residue index="11" code="E"></residue>
+        
+      
+        
+        <residue index="75" code="V"></residue>
+        
+      
+        
+        <residue index="80" code="R"></residue>
+        
+      
+        
+        <residue index="84" code="L"></residue>
+        
+      
+        
+        <residue index="88" code="Y"></residue>
+        
+      
+        
+        <residue index="91" code="L"></residue>
+        
+      
+        
+        <residue index="112" code="A"></residue>
+        
+      
+        
+        <residue index="122" code="Q"></residue>
+        
+      
+        
+        <residue index="131" code="V"></residue>
+        
+      
+        
+        <residue index="150" code="I"></residue>
+        
+      
+        
+        <residue index="151" code="T"></residue>
+        
+      
+        
+        <residue index="152" code="T"></residue>
+        
+      
+        
+        <residue index="154" code="R"></residue>
+        
+      
+        
+        <residue index="156" code="G"></residue>
+        
+      
+        
+        <residue index="157" code="T"></residue>
+        
+      
+        
+        <residue index="161" code="Y"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="107">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="114">None</conditions>
+      <protection protection_level="WEAK">11 &lt; ΔG(op)(kcal/mol) &lt; 13</protection>
+      <sequence is_pdb="True">MNIFEMLRIDEGLRLKIYKDTEGYYTIGIGHLLTKSPSLNAAKSELDKAIGRNTNGVITKDEAEKLFNQDVDAAVRGILRNAKLKPVYDSLDAVRRAALINMVFQMGETGVAGFTNSLRMLQQKRWDEAAVNLAKSRWYNQTPNRAKRVITTFRTGTWDAYKNL</sequence>
+      <details>The exchange of 114 of the 164 backbone amide protons in T4 lysozyme was monitored as a function of denaturant concentration (eleven samples between 0 M and 2 M GdmCl). Exchange was initiated by spinning the samples through a Quick-sep spin column packed with G-25 resin pre-equilibrated in deuterated buffer (50 mM sodium phosphate, pD 6.0, 0.1 M KCl) with varying amounts of per-deuterated GdmCl. All of these denaturant concentrations are below the folding transition measured by global probes. Exchange was measured by two-dimensional 1H-15N HSQC spectra taken over a period of hours to months.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="4" code="F"></residue>
+        
+      
+        
+        <residue index="14" code="R"></residue>
+        
+      
+        
+        <residue index="67" code="F"></residue>
+        
+      
+        
+        <residue index="70" code="D"></residue>
+        
+      
+        
+        <residue index="129" code="A"></residue>
+        
+      
+        
+        <residue index="130" code="A"></residue>
+        
+      
+        
+        <residue index="155" code="T"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

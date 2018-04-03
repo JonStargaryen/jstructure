@@ -1,0 +1,217 @@
+<entry id="STF0053" title="G. gallus alpha-spectrin SH3">
+  
+  <protein name="Spectrin alpha chain, non-erythrocytic 1" organism="Gallus gallus (Chicken)" number_of_residues="62" uniprot_id="P07751" uniprot_range="964-1025" pdb_id="1shg">
+    
+    <experiment id="201">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.0 - 4.0" temperature="25.0" probes="36">None</conditions>
+      <protection protection_level="STRONG">ln(P) &gt; 4</protection>
+      <sequence is_pdb="True">MDETGKELVLALYDYQEKSPREVTMKKGDILTLLNSTNKDWWKVEVNDRQGFVPAAYVKKLD</sequence>
+      <details>H-D exchange was initiated by rapidly dissolving the lyophilized protein in deuterated buffer (20 mM d5-glycine for pH* 3.0 and pH* 2.5 or 20 mM d3-acetate for pH* 4.0). The sample was filtered to remove insoluble protein, and then immediately placed in a 5 mm NMR tube and into the magnet. The final protein concentration was approximately 5 mM when dissolved in 500 µL of deuterated buffer. The pH* of samples was checked after each experiment. Values of pH* reported in D2O solutions represent direct pH meter readings, without correction for isotope effects. The experiment dead times (i.e., time between dissolving the protein and the start of data acquisition) were between 15 and 20 min.</details>
+      
+        
+        <residue index="9" code="V"></residue>
+        
+      
+        
+        <residue index="10" code="L"></residue>
+        
+      
+        
+        <residue index="11" code="A"></residue>
+        
+      
+        
+        <residue index="12" code="L"></residue>
+        
+      
+        
+        <residue index="13" code="Y"></residue>
+        
+      
+        
+        <residue index="15" code="Y"></residue>
+        
+      
+        
+        <residue index="25" code="M"></residue>
+        
+      
+        
+        <residue index="26" code="K"></residue>
+        
+      
+        
+        <residue index="28" code="G"></residue>
+        
+      
+        
+        <residue index="31" code="L"></residue>
+        
+      
+        
+        <residue index="32" code="T"></residue>
+        
+      
+        
+        <residue index="33" code="L"></residue>
+        
+      
+        
+        <residue index="34" code="L"></residue>
+        
+      
+        
+        <residue index="42" code="W"></residue>
+        
+      
+        
+        <residue index="43" code="K"></residue>
+        
+      
+        
+        <residue index="44" code="V"></residue>
+        
+      
+        
+        <residue index="45" code="E"></residue>
+        
+      
+        
+        <residue index="51" code="G"></residue>
+        
+      
+        
+        <residue index="52" code="F"></residue>
+        
+      
+        
+        <residue index="53" code="V"></residue>
+        
+      
+        
+        <residue index="55" code="A"></residue>
+        
+      
+        
+        <residue index="57" code="Y"></residue>
+        
+      
+        
+        <residue index="58" code="V"></residue>
+        
+      
+        
+        <residue index="59" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="202">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.0 - 4.0" temperature="25.0" probes="36">None</conditions>
+      <protection protection_level="MEDIUM">2 &lt; ln(P) &lt; 4</protection>
+      <sequence is_pdb="True">MDETGKELVLALYDYQEKSPREVTMKKGDILTLLNSTNKDWWKVEVNDRQGFVPAAYVKKLD</sequence>
+      <details>H-D exchange was initiated by rapidly dissolving the lyophilized protein in deuterated buffer (20 mM d5-glycine for pH* 3.0 and pH* 2.5 or 20 mM d3-acetate for pH* 4.0). The sample was filtered to remove insoluble protein, and then immediately placed in a 5 mm NMR tube and into the magnet. The final protein concentration was approximately 5 mM when dissolved in 500 µL of deuterated buffer. The pH* of samples was checked after each experiment. Values of pH* reported in D2O solutions represent direct pH meter readings, without correction for isotope effects. The experiment dead times (i.e., time between dissolving the protein and the start of data acquisition) were between 15 and 20 min.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="16" code="Q"></residue>
+        
+      
+        
+        <residue index="22" code="E"></residue>
+        
+      
+        
+        <residue index="23" code="V"></residue>
+        
+      
+        
+        <residue index="24" code="T"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="41" code="W"></residue>
+        
+      
+        
+        <residue index="61" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

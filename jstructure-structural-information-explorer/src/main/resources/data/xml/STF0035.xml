@@ -1,0 +1,298 @@
+<entry id="STF0035" title="PDZ-3 from PSD-95">
+  
+  <protein name="Disks large homolog 4" organism="Rattus norvegicus (Rat)" number_of_residues="119" uniprot_id="P31016" uniprot_range="302-402" pdb_id="1be9">
+    
+    <experiment id="156">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="33">None</conditions>
+      <protection protection_level="STRONG">ΔG(HX) &gt; 7 kcal/mol</protection>
+      <sequence is_pdb="True">GSPEFLGEEDIPREPRRIVIHRGSTGLGFNIIGGEDGEGIFISFILAGGPADLSGELRKGDQILSVNGVDLRNASHEQAAIALKNAGQTVTIIAQYKPEEYSRFEANSRVNSSGRIVTN</sequence>
+      <details>The experiment was done in D2O using 15N-labeled PDZ-3 at pDread 6.0 and 25 °C. The well-dispersed cross-peaks allow the exchange rate constants, k(ex), to be measured accurately for slowly exchanging amide protons.</details>
+      
+        
+        <residue index="18" code="I"></residue>
+        
+      
+        
+        <residue index="20" code="I"></residue>
+        
+      
+        
+        <residue index="41" code="F"></residue>
+        
+      
+        
+        <residue index="42" code="I"></residue>
+        
+      
+        
+        <residue index="58" code="R"></residue>
+        
+      
+        
+        <residue index="60" code="G"></residue>
+        
+      
+        
+        <residue index="61" code="D"></residue>
+        
+      
+        
+        <residue index="62" code="Q"></residue>
+        
+      
+        
+        <residue index="63" code="I"></residue>
+        
+      
+        
+        <residue index="64" code="L"></residue>
+        
+      
+        
+        <residue index="65" code="S"></residue>
+        
+      
+        
+        <residue index="66" code="V"></residue>
+        
+      
+        
+        <residue index="82" code="A"></residue>
+        
+      
+        
+        <residue index="92" code="I"></residue>
+        
+      
+        
+        <residue index="93" code="I"></residue>
+        
+      
+        
+        <residue index="94" code="A"></residue>
+        
+      
+        
+        <residue index="95" code="Q"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="157">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="33">None</conditions>
+      <protection protection_level="MEDIUM">5 &lt; ΔG(HX) (kcal/mol) &lt; 7</protection>
+      <sequence is_pdb="True">GSPEFLGEEDIPREPRRIVIHRGSTGLGFNIIGGEDGEGIFISFILAGGPADLSGELRKGDQILSVNGVDLRNASHEQAAIALKNAGQTVTIIAQYKPEEYSRFEANSRVNSSGRIVTN</sequence>
+      <details>The experiment was done in D2O using 15N-labeled PDZ-3 at pDread 6.0 and 25 °C. The well-dispersed cross-peaks allow the exchange rate constants, k(ex), to be measured accurately for slowly exchanging amide protons.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="30" code="N"></residue>
+        
+      
+        
+        <residue index="32" code="I"></residue>
+        
+      
+        
+        <residue index="40" code="I"></residue>
+        
+      
+        
+        <residue index="43" code="S"></residue>
+        
+      
+        
+        <residue index="69" code="V"></residue>
+        
+      
+        
+        <residue index="71" code="L"></residue>
+        
+      
+        
+        <residue index="79" code="A"></residue>
+        
+      
+        
+        <residue index="80" code="A"></residue>
+        
+      
+        
+        <residue index="81" code="I"></residue>
+        
+      
+        
+        <residue index="83" code="L"></residue>
+        
+      
+        
+        <residue index="84" code="K"></residue>
+        
+      
+        
+        <residue index="90" code="V"></residue>
+        
+      
+        
+        <residue index="97" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="158">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="33">None</conditions>
+      <protection protection_level="WEAK">ΔGHX &lt; 5 kcal/mol </protection>
+      <sequence is_pdb="True">GSPEFLGEEDIPREPRRIVIHRGSTGLGFNIIGGEDGEGIFISFILAGGPADLSGELRKGDQILSVNGVDLRNASHEQAAIALKNAGQTVTIIAQYKPEEYSRFEANSRVNSSGRIVTN</sequence>
+      <details>The experiment was done in D2O using 15N-labeled PDZ-3 at pDread 6.0 and 25 °C. The well-dispersed cross-peaks allow the exchange rate constants, k(ex), to be measured accurately for slowly exchanging amide protons.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="16" code="R"></residue>
+        
+      
+        
+        <residue index="46" code="L"></residue>
+        
+      
+        
+        <residue index="91" code="T"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

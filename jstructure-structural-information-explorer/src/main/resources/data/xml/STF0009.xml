@@ -1,0 +1,820 @@
+<entry id="STF0009" title="C-terminal domain of rat CD2 (CD2.D1)">
+  
+  <protein name="T-cell surface antigen CD2" organism="Rattus norvegicus (Rat)" number_of_residues="98" uniprot_id="P08921" uniprot_range="23-121" pdb_id="1a64">
+    
+    <experiment id="48">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="6.0 - 10.0" temperature="25.0" probes="42">None</conditions>
+      <protection protection_level="EARLY">ln(P) &gt; 1.0</protection>
+      <sequence is_pdb="True">RDSGTVWGALGHGINLNIPNFQMTDDIDEVRWERGSTLVAEFKRK__PFLKSGAFEILANGDLKIKNLTRDDSGTYNVTVYSTNGTRILDKALDLRILE</sequence>
+      <details>A 0.5 mL amount of a 2 mM sample of 15N-labeled CD2.D1 in H2O, containing 2.8 M GuHCl, was mixed against 8.3 vol of D2O, containing 25 mM sodium borate and 25 mM NaH2PO4, at the appropriate pH (not corrected), and 0.448 M Na2SO4, at 25C in a custom-built, rapid mixing device with a dead time of 2-3 ms (gives final concentrations of Na2SO4 and GuHCl of 0.4 and 0.3 M, respectively). Exchange was then quenched by the rapid addition (delay time = 2 s) of 6 mL of ice-cold D2O containing 100 mM sodium d3-acetate, pH 4.0.</details>
+      
+        
+        <residue index="8" code="G"></residue>
+        
+      
+        
+        <residue index="28" code="D"></residue>
+        
+      
+        
+        <residue index="31" code="R"></residue>
+        
+      
+        
+        <residue index="34" code="R"></residue>
+        
+      
+        
+        <residue index="42" code="F"></residue>
+        
+      
+        
+        <residue index="55" code="F"></residue>
+        
+      
+        
+        <residue index="56" code="E"></residue>
+        
+      
+        
+        <residue index="61" code="G"></residue>
+        
+      
+        
+        <residue index="62" code="D"></residue>
+        
+      
+        
+        <residue index="65" code="I"></residue>
+        
+      
+        
+        <residue index="74" code="G"></residue>
+        
+      
+        
+        <residue index="76" code="Y"></residue>
+        
+      
+        
+        <residue index="77" code="N"></residue>
+        
+      
+        
+        <residue index="78" code="V"></residue>
+        
+      
+        
+        <residue index="79" code="T"></residue>
+        
+      
+        
+        <residue index="80" code="V"></residue>
+        
+      
+        
+        <residue index="82" code="S"></residue>
+        
+      
+        
+        <residue index="91" code="K"></residue>
+        
+      
+        
+        <residue index="94" code="D"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="49">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="6.0 - 10.0" temperature="25.0" probes="42">None</conditions>
+      <protection protection_level="INTERMEDIATE">0.5 &lt; ln(P) &lt; 1.0</protection>
+      <sequence is_pdb="True">RDSGTVWGALGHGINLNIPNFQMTDDIDEVRWERGSTLVAEFKRK__PFLKSGAFEILANGDLKIKNLTRDDSGTYNVTVYSTNGTRILDKALDLRILE</sequence>
+      <details>A 0.5 mL amount of a 2 mM sample of 15N-labeled CD2.D1 in H2O, containing 2.8 M GuHCl, was mixed against 8.3 vol of D2O, containing 25 mM sodium borate and 25 mM NaH2PO4, at the appropriate pH (not corrected), and 0.448 M Na2SO4, at 25C in a custom-built, rapid mixing device with a dead time of 2-3 ms (gives final concentrations of Na2SO4 and GuHCl of 0.4 and 0.3 M, respectively). Exchange was then quenched by the rapid addition (delay time = 2 s) of 6 mL of ice-cold D2O containing 100 mM sodium d3-acetate, pH 4.0.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="14" code="I"></residue>
+        
+      
+        
+        <residue index="32" code="W"></residue>
+        
+      
+        
+        <residue index="40" code="A"></residue>
+        
+      
+        
+        <residue index="41" code="E"></residue>
+        
+      
+        
+        <residue index="58" code="L"></residue>
+        
+      
+        
+        <residue index="63" code="L"></residue>
+        
+      
+        
+        <residue index="64" code="K"></residue>
+        
+      
+        
+        <residue index="68" code="L"></residue>
+        
+      
+        
+        <residue index="72" code="D"></residue>
+        
+      
+        
+        <residue index="81" code="Y"></residue>
+        
+      
+        
+        <residue index="93" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="50">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="6.0 - 10.0" temperature="25.0" probes="42">None</conditions>
+      <protection protection_level="LATE">0 &lt; ln(P) &lt; 0.5</protection>
+      <sequence is_pdb="True">RDSGTVWGALGHGINLNIPNFQMTDDIDEVRWERGSTLVAEFKRK__PFLKSGAFEILANGDLKIKNLTRDDSGTYNVTVYSTNGTRILDKALDLRILE</sequence>
+      <details>A 0.5 mL amount of a 2 mM sample of 15N-labeled CD2.D1 in H2O, containing 2.8 M GuHCl, was mixed against 8.3 vol of D2O, containing 25 mM sodium borate and 25 mM NaH2PO4, at the appropriate pH (not corrected), and 0.448 M Na2SO4, at 25C in a custom-built, rapid mixing device with a dead time of 2-3 ms (gives final concentrations of Na2SO4 and GuHCl of 0.4 and 0.3 M, respectively). Exchange was then quenched by the rapid addition (delay time = 2 s) of 6 mL of ice-cold D2O containing 100 mM sodium d3-acetate, pH 4.0.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="16" code="L"></residue>
+        
+      
+        
+        <residue index="30" code="V"></residue>
+        
+      
+        
+        <residue index="57" code="I"></residue>
+        
+      
+        
+        <residue index="88" code="I"></residue>
+        
+      
+        
+        <residue index="95" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="51">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="25.0" probes="35">None</conditions>
+      <protection protection_level="STRONG">ΔG1 &gt; 6.5</protection>
+      <sequence is_pdb="True">RDSGTVWGALGHGINLNIPNFQMTDDIDEVRWERGSTLVAEFKRK__PFLKSGAFEILANGDLKIKNLTRDDSGTYNVTVYSTNGTRILDKALDLRILE</sequence>
+      <details>Freeze-dried 15N-labeled CD2.D1 was dissolved to a concentration of 0.5 mM in D2O, containing 25 mM KH2PO4 (pH* 5.5), 0.2 M Na2SO4, 0.02% sodium azide and the appropriate concentration of Gu2HCl. For each concentration of Gu2HCl, a series of 1H-15N heteronuclear single quantum coherence (HSQC) spectra were acquired at appropriate time intervals in a 500 MHz spectrometer at 25 °C.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="14" code="I"></residue>
+        
+      
+        
+        <residue index="16" code="L"></residue>
+        
+      
+        
+        <residue index="30" code="V"></residue>
+        
+      
+        
+        <residue index="31" code="R"></residue>
+        
+      
+        
+        <residue index="32" code="W"></residue>
+        
+      
+        
+        <residue index="33" code="E"></residue>
+        
+      
+        
+        <residue index="62" code="D"></residue>
+        
+      
+        
+        <residue index="63" code="L"></residue>
+        
+      
+        
+        <residue index="64" code="K"></residue>
+        
+      
+        
+        <residue index="65" code="I"></residue>
+        
+      
+        
+        <residue index="76" code="Y"></residue>
+        
+      
+        
+        <residue index="77" code="N"></residue>
+        
+      
+        
+        <residue index="78" code="V"></residue>
+        
+      
+        
+        <residue index="79" code="T"></residue>
+        
+      
+        
+        <residue index="80" code="V"></residue>
+        
+      
+        
+        <residue index="81" code="Y"></residue>
+        
+      
+        
+        <residue index="93" code="L"></residue>
+        
+      
+        
+        <residue index="95" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="52">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="25.0" probes="35">None</conditions>
+      <protection protection_level="MEDIUM">4 &lt; ΔG1 &lt; 6.5</protection>
+      <sequence is_pdb="True">RDSGTVWGALGHGINLNIPNFQMTDDIDEVRWERGSTLVAEFKRK__PFLKSGAFEILANGDLKIKNLTRDDSGTYNVTVYSTNGTRILDKALDLRILE</sequence>
+      <details>Freeze-dried 15N-labeled CD2.D1 was dissolved to a concentration of 0.5 mM in D2O, containing 25 mM KH2PO4 (pH* 5.5), 0.2 M Na2SO4, 0.02% sodium azide and the appropriate concentration of Gu2HCl. For each concentration of Gu2HCl, a series of 1H-15N heteronuclear single quantum coherence (HSQC) spectra were acquired at appropriate time intervals in a 500 MHz spectrometer at 25 °C.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="G"></residue>
+        
+      
+        
+        <residue index="29" code="E"></residue>
+        
+      
+        
+        <residue index="34" code="R"></residue>
+        
+      
+        
+        <residue index="37" code="T"></residue>
+        
+      
+        
+        <residue index="40" code="A"></residue>
+        
+      
+        
+        <residue index="42" code="F"></residue>
+        
+      
+        
+        <residue index="56" code="E"></residue>
+        
+      
+        
+        <residue index="58" code="L"></residue>
+        
+      
+        
+        <residue index="61" code="G"></residue>
+        
+      
+        
+        <residue index="74" code="G"></residue>
+        
+      
+        
+        <residue index="94" code="D"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

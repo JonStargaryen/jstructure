@@ -1,0 +1,1803 @@
+<entry id="STF0002" title="E. coli apo-maltose binding protein (apo-MBP)">
+  
+  <protein name="Maltose-binding periplasmic protein" organism="Escherichia coli (strain K12)" number_of_residues="370" uniprot_id="P0AEX9" uniprot_range="27-396" pdb_id="1omp">
+    
+    <experiment id="7">
+      <method type="folding">Pulse labeling HDX MS</method>
+      <conditions pH="9.0 - 9.0" temperature="20.0" probes="every amide site">None</conditions>
+      <protection protection_level="EARLY">specific intermediate structure at 7s</protection>
+      <sequence is_pdb="True">KIEEGKLVIWINGDKGYNGLAEVGKKFEKDTGIKVTVEHPDKLEEKFPQVAATGDGPDIIFWAHDRFGGYAQSGLLAEITPDKAFQDKLYPFTWDAVRYNGKLIAYPIAVEALSLIYNKDLLPNPPKTWEEIPALDKELKAKGKSALMFNLQEPYFTWPLIAADGGYAFKYENGKYDIKDVGVDNAGAKAGLTFLVDLIKNKHMNADTDYSIAEAAFNKGETAMTINGPWAWSNIDTSKVNYGVTVLPTFKGQPSKPFVGVLSAGINAASPNKELAKEFLENYLLTDEGLEAVNKDKPLGAVALKSYEEELAKDPRIAATMENAQKGEIMPNIPQMSAFWYAVRTAVINAASGRQTVDEALKDAQTRITK</sequence>
+      <details>Unfolded MBP, initially fully deuterated at exchangeable hydrogen sites in D2O, was allowed to fold for some predetermined time, then probed by a brief pulse of D-to-H labeling to obtain a snapshot of the structure that had been formed to that point. Initial dilution to start folding was into D2O instead of the usual H2O to avoid loss of D during the lengthy (many seconds) prepulse period. For the H-labeling pulse, the refolding protein was diluted by five-fold into H2O buffer at pH 9.</details>
+      
+        
+        <residue index="9" code="I"></residue>
+        
+      
+        
+        <residue index="10" code="W"></residue>
+        
+      
+        
+        <residue index="11" code="I"></residue>
+        
+      
+        
+        <residue index="12" code="N"></residue>
+        
+      
+        
+        <residue index="13" code="G"></residue>
+        
+      
+        
+        <residue index="14" code="D"></residue>
+        
+      
+        
+        <residue index="15" code="K"></residue>
+        
+      
+        
+        <residue index="16" code="G"></residue>
+        
+      
+        
+        <residue index="17" code="Y"></residue>
+        
+      
+        
+        <residue index="18" code="N"></residue>
+        
+      
+        
+        <residue index="19" code="G"></residue>
+        
+      
+        
+        <residue index="20" code="L"></residue>
+        
+      
+        
+        <residue index="21" code="A"></residue>
+        
+      
+        
+        <residue index="22" code="E"></residue>
+        
+      
+        
+        <residue index="23" code="V"></residue>
+        
+      
+        
+        <residue index="24" code="G"></residue>
+        
+      
+        
+        <residue index="25" code="K"></residue>
+        
+      
+        
+        <residue index="26" code="K"></residue>
+        
+      
+        
+        <residue index="27" code="F"></residue>
+        
+      
+        
+        <residue index="28" code="E"></residue>
+        
+      
+        
+        <residue index="29" code="K"></residue>
+        
+      
+        
+        <residue index="30" code="D"></residue>
+        
+      
+        
+        <residue index="31" code="T"></residue>
+        
+      
+        
+        <residue index="32" code="G"></residue>
+        
+      
+        
+        <residue index="33" code="I"></residue>
+        
+      
+        
+        <residue index="34" code="K"></residue>
+        
+      
+        
+        <residue index="35" code="V"></residue>
+        
+      
+        
+        <residue index="36" code="T"></residue>
+        
+      
+        
+        <residue index="37" code="V"></residue>
+        
+      
+        
+        <residue index="38" code="E"></residue>
+        
+      
+        
+        <residue index="39" code="H"></residue>
+        
+      
+        
+        <residue index="40" code="P"></residue>
+        
+      
+        
+        <residue index="41" code="D"></residue>
+        
+      
+        
+        <residue index="42" code="K"></residue>
+        
+      
+        
+        <residue index="43" code="L"></residue>
+        
+      
+        
+        <residue index="60" code="I"></residue>
+        
+      
+        
+        <residue index="61" code="F"></residue>
+        
+      
+        
+        <residue index="62" code="W"></residue>
+        
+      
+        
+        <residue index="260" code="G"></residue>
+        
+      
+        
+        <residue index="261" code="V"></residue>
+        
+      
+        
+        <residue index="262" code="L"></residue>
+        
+      
+        
+        <residue index="263" code="S"></residue>
+        
+      
+        
+        <residue index="264" code="A"></residue>
+        
+      
+        
+        <residue index="265" code="G"></residue>
+        
+      
+        
+        <residue index="266" code="I"></residue>
+        
+      
+        
+        <residue index="267" code="N"></residue>
+        
+      
+        
+        <residue index="268" code="A"></residue>
+        
+      
+        
+        <residue index="269" code="A"></residue>
+        
+      
+        
+        <residue index="270" code="S"></residue>
+        
+      
+        
+        <residue index="271" code="P"></residue>
+        
+      
+        
+        <residue index="272" code="N"></residue>
+        
+      
+        
+        <residue index="273" code="K"></residue>
+        
+      
+        
+        <residue index="274" code="E"></residue>
+        
+      
+        
+        <residue index="275" code="L"></residue>
+        
+      
+        
+        <residue index="276" code="A"></residue>
+        
+      
+        
+        <residue index="277" code="K"></residue>
+        
+      
+        
+        <residue index="278" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="8">
+      <method type="folding">Pulse labeling HDX MS</method>
+      <conditions pH="9.0 - 9.0" temperature="20.0" probes="every amide site">None</conditions>
+      <protection protection_level="INTERMEDIATE">second foldon unit (60-120s)</protection>
+      <sequence is_pdb="True">KIEEGKLVIWINGDKGYNGLAEVGKKFEKDTGIKVTVEHPDKLEEKFPQVAATGDGPDIIFWAHDRFGGYAQSGLLAEITPDKAFQDKLYPFTWDAVRYNGKLIAYPIAVEALSLIYNKDLLPNPPKTWEEIPALDKELKAKGKSALMFNLQEPYFTWPLIAADGGYAFKYENGKYDIKDVGVDNAGAKAGLTFLVDLIKNKHMNADTDYSIAEAAFNKGETAMTINGPWAWSNIDTSKVNYGVTVLPTFKGQPSKPFVGVLSAGINAASPNKELAKEFLENYLLTDEGLEAVNKDKPLGAVALKSYEEELAKDPRIAATMENAQKGEIMPNIPQMSAFWYAVRTAVINAASGRQTVDEALKDAQTRITK</sequence>
+      <details>Unfolded MBP, initially fully deuterated at exchangeable hydrogen sites in D2O, was allowed to fold for some predetermined time, then probed by a brief pulse of D-to-H labeling to obtain a snapshot of the structure that had been formed to that point. Initial dilution to start folding was into D2O instead of the usual H2O to avoid loss of D during the lengthy (many seconds) prepulse period. For the H-labeling pulse, the refolding protein was diluted by five-fold into H2O buffer at pH 9.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="78" code="E"></residue>
+        
+      
+        
+        <residue index="79" code="I"></residue>
+        
+      
+        
+        <residue index="80" code="T"></residue>
+        
+      
+        
+        <residue index="81" code="P"></residue>
+        
+      
+        
+        <residue index="82" code="D"></residue>
+        
+      
+        
+        <residue index="83" code="K"></residue>
+        
+      
+        
+        <residue index="84" code="A"></residue>
+        
+      
+        
+        <residue index="85" code="F"></residue>
+        
+      
+        
+        <residue index="86" code="Q"></residue>
+        
+      
+        
+        <residue index="87" code="D"></residue>
+        
+      
+        
+        <residue index="88" code="K"></residue>
+        
+      
+        
+        <residue index="89" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="9">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="37.0" probes="180">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt; 8</protection>
+      <sequence is_pdb="True">KIEEGKLVIWINGDKGYNGLAEVGKKFEKDTGIKVTVEHPDKLEEKFPQVAATGDGPDIIFWAHDRFGGYAQSGLLAEITPDKAFQDKLYPFTWDAVRYNGKLIAYPIAVEALSLIYNKDLLPNPPKTWEEIPALDKELKAKGKSALMFNLQEPYFTWPLIAADGGYAFKYENGKYDIKDVGVDNAGAKAGLTFLVDLIKNKHMNADTDYSIAEAAFNKGETAMTINGPWAWSNIDTSKVNYGVTVLPTFKGQPSKPFVGVLSAGINAASPNKELAKEFLENYLLTDEGLEAVNKDKPLGAVALKSYEEELAKDPRIAATMENAQKGEIMPNIPQMSAFWYAVRTAVINAASGRQTVDEALKDAQTRITK</sequence>
+      <details>Hydrogen exchange NMR experiments were performed in the absence or presence of guanidine hydrochloride (0.2, 0.3, 0.4, 0.6, and 0.8 M) to stay below the unfolding concentration. The protein samples were lyophilized before being dissolved in D2O. The samples were then loaded on a pretuned and preshimmed NMR spectrometer, and the HSQC spectra were recorded at different time intervals using the same acquisition parameters as described above.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="V"></residue>
+        
+      
+        
+        <residue index="9" code="I"></residue>
+        
+      
+        
+        <residue index="10" code="W"></residue>
+        
+      
+        
+        <residue index="97" code="V"></residue>
+        
+      
+        
+        <residue index="106" code="Y"></residue>
+        
+      
+        
+        <residue index="114" code="S"></residue>
+        
+      
+        
+        <residue index="116" code="I"></residue>
+        
+      
+        
+        <residue index="117" code="Y"></residue>
+        
+      
+        
+        <residue index="118" code="N"></residue>
+        
+      
+        
+        <residue index="124" code="N"></residue>
+        
+      
+        
+        <residue index="129" code="W"></residue>
+        
+      
+        
+        <residue index="149" code="F"></residue>
+        
+      
+        
+        <residue index="157" code="T"></residue>
+        
+      
+        
+        <residue index="160" code="L"></residue>
+        
+      
+        
+        <residue index="163" code="A"></residue>
+        
+      
+        
+        <residue index="193" code="T"></residue>
+        
+      
+        
+        <residue index="205" code="N"></residue>
+        
+      
+        
+        <residue index="224" code="M"></residue>
+        
+      
+        
+        <residue index="225" code="T"></residue>
+        
+      
+        
+        <residue index="227" code="N"></residue>
+        
+      
+        
+        <residue index="250" code="F"></residue>
+        
+      
+        
+        <residue index="263" code="S"></residue>
+        
+      
+        
+        <residue index="265" code="G"></residue>
+        
+      
+        
+        <residue index="266" code="I"></residue>
+        
+      
+        
+        <residue index="279" code="F"></residue>
+        
+      
+        
+        <residue index="281" code="E"></residue>
+        
+      
+        
+        <residue index="283" code="Y"></residue>
+        
+      
+        
+        <residue index="286" code="T"></residue>
+        
+      
+        
+        <residue index="329" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="10">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="37.0" probes="180">None</conditions>
+      <protection protection_level="MEDIUM">5 &lt; log(P) &lt; 8</protection>
+      <sequence is_pdb="True">KIEEGKLVIWINGDKGYNGLAEVGKKFEKDTGIKVTVEHPDKLEEKFPQVAATGDGPDIIFWAHDRFGGYAQSGLLAEITPDKAFQDKLYPFTWDAVRYNGKLIAYPIAVEALSLIYNKDLLPNPPKTWEEIPALDKELKAKGKSALMFNLQEPYFTWPLIAADGGYAFKYENGKYDIKDVGVDNAGAKAGLTFLVDLIKNKHMNADTDYSIAEAAFNKGETAMTINGPWAWSNIDTSKVNYGVTVLPTFKGQPSKPFVGVLSAGINAASPNKELAKEFLENYLLTDEGLEAVNKDKPLGAVALKSYEEELAKDPRIAATMENAQKGEIMPNIPQMSAFWYAVRTAVINAASGRQTVDEALKDAQTRITK</sequence>
+      <details>Hydrogen exchange NMR experiments were performed in the absence or presence of guanidine hydrochloride (0.2, 0.3, 0.4, 0.6, and 0.8 M) to stay below the unfolding concentration. The protein samples were lyophilized before being dissolved in D2O. The samples were then loaded on a pretuned and preshimmed NMR spectrometer, and the HSQC spectra were recorded at different time intervals using the same acquisition parameters as described above.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="24" code="G"></residue>
+        
+      
+        
+        <residue index="25" code="K"></residue>
+        
+      
+        
+        <residue index="26" code="K"></residue>
+        
+      
+        
+        <residue index="33" code="I"></residue>
+        
+      
+        
+        <residue index="35" code="V"></residue>
+        
+      
+        
+        <residue index="36" code="T"></residue>
+        
+      
+        
+        <residue index="38" code="E"></residue>
+        
+      
+        
+        <residue index="53" code="T"></residue>
+        
+      
+        
+        <residue index="60" code="I"></residue>
+        
+      
+        
+        <residue index="61" code="F"></residue>
+        
+      
+        
+        <residue index="62" code="W"></residue>
+        
+      
+        
+        <residue index="71" code="A"></residue>
+        
+      
+        
+        <residue index="72" code="Q"></residue>
+        
+      
+        
+        <residue index="73" code="S"></residue>
+        
+      
+        
+        <residue index="77" code="A"></residue>
+        
+      
+        
+        <residue index="93" code="T"></residue>
+        
+      
+        
+        <residue index="94" code="W"></residue>
+        
+      
+        
+        <residue index="95" code="D"></residue>
+        
+      
+        
+        <residue index="99" code="Y"></residue>
+        
+      
+        
+        <residue index="108" code="I"></residue>
+        
+      
+        
+        <residue index="111" code="E"></residue>
+        
+      
+        
+        <residue index="112" code="A"></residue>
+        
+      
+        
+        <residue index="113" code="L"></residue>
+        
+      
+        
+        <residue index="122" code="L"></residue>
+        
+      
+        
+        <residue index="136" code="D"></residue>
+        
+      
+        
+        <residue index="139" code="L"></residue>
+        
+      
+        
+        <residue index="152" code="Q"></residue>
+        
+      
+        
+        <residue index="153" code="E"></residue>
+        
+      
+        
+        <residue index="156" code="F"></residue>
+        
+      
+        
+        <residue index="158" code="W"></residue>
+        
+      
+        
+        <residue index="162" code="A"></residue>
+        
+      
+        
+        <residue index="169" code="F"></residue>
+        
+      
+        
+        <residue index="170" code="K"></residue>
+        
+      
+        
+        <residue index="181" code="V"></residue>
+        
+      
+        
+        <residue index="183" code="V"></residue>
+        
+      
+        
+        <residue index="189" code="K"></residue>
+        
+      
+        
+        <residue index="191" code="G"></residue>
+        
+      
+        
+        <residue index="194" code="F"></residue>
+        
+      
+        
+        <residue index="195" code="L"></residue>
+        
+      
+        
+        <residue index="196" code="V"></residue>
+        
+      
+        
+        <residue index="206" code="A"></residue>
+        
+      
+        
+        <residue index="212" code="I"></residue>
+        
+      
+        
+        <residue index="220" code="G"></residue>
+        
+      
+        
+        <residue index="222" code="T"></residue>
+        
+      
+        
+        <residue index="223" code="A"></residue>
+        
+      
+        
+        <residue index="228" code="G"></residue>
+        
+      
+        
+        <residue index="241" code="N"></residue>
+        
+      
+        
+        <residue index="243" code="G"></residue>
+        
+      
+        
+        <residue index="245" code="T"></residue>
+        
+      
+        
+        <residue index="249" code="T"></residue>
+        
+      
+        
+        <residue index="253" code="Q"></residue>
+        
+      
+        
+        <residue index="256" code="K"></residue>
+        
+      
+        
+        <residue index="258" code="F"></residue>
+        
+      
+        
+        <residue index="260" code="G"></residue>
+        
+      
+        
+        <residue index="262" code="L"></residue>
+        
+      
+        
+        <residue index="268" code="A"></residue>
+        
+      
+        
+        <residue index="282" code="N"></residue>
+        
+      
+        
+        <residue index="289" code="G"></residue>
+        
+      
+        
+        <residue index="293" code="V"></residue>
+        
+      
+        
+        <residue index="294" code="N"></residue>
+        
+      
+        
+        <residue index="295" code="K"></residue>
+        
+      
+        
+        <residue index="301" code="A"></residue>
+        
+      
+        
+        <residue index="304" code="L"></residue>
+        
+      
+        
+        <residue index="305" code="K"></residue>
+        
+      
+        
+        <residue index="317" code="I"></residue>
+        
+      
+        
+        <residue index="320" code="T"></residue>
+        
+      
+        
+        <residue index="323" code="N"></residue>
+        
+      
+        
+        <residue index="325" code="Q"></residue>
+        
+      
+        
+        <residue index="327" code="G"></residue>
+        
+      
+        
+        <residue index="330" code="M"></residue>
+        
+      
+        
+        <residue index="333" code="I"></residue>
+        
+      
+        
+        <residue index="340" code="W"></residue>
+        
+      
+        
+        <residue index="342" code="A"></residue>
+        
+      
+        
+        <residue index="346" code="A"></residue>
+        
+      
+        
+        <residue index="347" code="V"></residue>
+        
+      
+        
+        <residue index="349" code="N"></residue>
+        
+      
+        
+        <residue index="351" code="A"></residue>
+        
+      
+        
+        <residue index="365" code="Q"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

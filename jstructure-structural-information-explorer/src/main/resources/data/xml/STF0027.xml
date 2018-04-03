@@ -1,0 +1,346 @@
+<entry id="STF0027" title="Ubiquitin">
+  
+  <protein name="Polyubiquitin-C" organism="Homo sapiens (Human)" number_of_residues="76" uniprot_id="P0CG48" uniprot_range="609-684" pdb_id="1ubq">
+    
+    <experiment id="134">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.0 - 5.0" temperature="25.0" probes="26">None</conditions>
+      <protection protection_level="EARLY">at least 80% protection in 8 ms</protection>
+      <sequence is_pdb="True">MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG</sequence>
+      <details>Refolding was initiated by rapid 6-fold dilution with 50 mM acetic acid at pH 5.5 in H2O (or D2O for folding times &gt;1 s). The final pH of the mixture was 5.0, as determined in a separate control. The resulting GdnHCI concentration, 1.0 M, is well below the refolding transition. After the desired refolding time, the labeling pulse was initiated by mixing the protein with an equal volume of 100 mM glycine in H2O at pH 9.75, to give a final pH of 9.4. The pulse was terminated after 31 ms by mixing with an equal volume of 500 mM acetic acid at pH 2.6, yielding a final pH of 3.4.</details>
+      
+        
+        <residue index="3" code="I"></residue>
+        
+      
+        
+        <residue index="4" code="F"></residue>
+        
+      
+        
+        <residue index="5" code="V"></residue>
+        
+      
+        
+        <residue index="6" code="K"></residue>
+        
+      
+        
+        <residue index="13" code="I"></residue>
+        
+      
+        
+        <residue index="16" code="E"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="21" code="D"></residue>
+        
+      
+        
+        <residue index="23" code="I"></residue>
+        
+      
+        
+        <residue index="26" code="V"></residue>
+        
+      
+        
+        <residue index="28" code="A"></residue>
+        
+      
+        
+        <residue index="29" code="K"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="41" code="Q"></residue>
+        
+      
+        
+        <residue index="42" code="R"></residue>
+        
+      
+        
+        <residue index="44" code="I"></residue>
+        
+      
+        
+        <residue index="45" code="F"></residue>
+        
+      
+        
+        <residue index="50" code="L"></residue>
+        
+      
+        
+        <residue index="55" code="T"></residue>
+        
+      
+        
+        <residue index="56" code="L"></residue>
+        
+      
+        
+        <residue index="65" code="S"></residue>
+        
+      
+        
+        <residue index="67" code="L"></residue>
+        
+      
+        
+        <residue index="70" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="135">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.0 - 5.0" temperature="25.0" probes="26">None</conditions>
+      <protection protection_level="LATE">80% protection over 10 ms</protection>
+      <sequence is_pdb="True">MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG</sequence>
+      <details>Refolding was initiated by rapid 6-fold dilution with 50 mM acetic acid at pH 5.5 in H2O (or D2O for folding times &gt;1 s). The final pH of the mixture was 5.0, as determined in a separate control. The resulting GdnHCI concentration, 1.0 M, is well below the refolding transition. After the desired refolding time, the labeling pulse was initiated by mixing the protein with an equal volume of 100 mM glycine in H2O at pH 9.75, to give a final pH of 9.4. The pulse was terminated after 31 ms by mixing with an equal volume of 500 mM acetic acid at pH 2.6, yielding a final pH of 3.4.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="59" code="Y"></residue>
+        
+      
+        
+        <residue index="61" code="I"></residue>
+        
+      
+        
+        <residue index="69" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="136">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="3.5 - 3.5" temperature="22.0" probes="all">None</conditions>
+      <protection protection_level="STRONG">amides which persist exchange</protection>
+      <sequence is_pdb="True">MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG</sequence>
+      <details>None</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="I"></residue>
+        
+      
+        
+        <residue index="4" code="F"></residue>
+        
+      
+        
+        <residue index="5" code="V"></residue>
+        
+      
+        
+        <residue index="7" code="T"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="23" code="I"></residue>
+        
+      
+        
+        <residue index="26" code="V"></residue>
+        
+      
+        
+        <residue index="28" code="A"></residue>
+        
+      
+        
+        <residue index="29" code="K"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="44" code="I"></residue>
+        
+      
+        
+        <residue index="56" code="L"></residue>
+        
+      
+        
+        <residue index="59" code="Y"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

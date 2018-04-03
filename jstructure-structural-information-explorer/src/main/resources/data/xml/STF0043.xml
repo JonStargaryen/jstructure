@@ -1,0 +1,346 @@
+<entry id="STF0043" title="Interleukin-1b subunit">
+  
+  <protein name="Interleukin-1 beta" organism="Homo sapiens (Human)" number_of_residues="153" uniprot_id="P01584" uniprot_range="117-269" pdb_id="1i1b">
+    
+    <experiment id="179">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.1 - 6.1" temperature="36.0" probes="73">None</conditions>
+      <protection protection_level="STRONG">exchange half-lives longer than 20 days</protection>
+      <sequence is_pdb="True">APVRSLNCTLRDSQQKSLVMSGPYELKALHLQGQDMEQQVVFSMSFVQGEESNDKIPVALGLKEKNLYLSCVLKDDKPTLQLESVDPKNYPKKKMEKRFVFNKIEINNKLEFESAQFPNWYISTSQAENMPVFLGGTKGGQDITDFTMQFVSS</sequence>
+      <details>We have made accurate measurements of the exchange rates of 73 slowly amide NH groups in IL-1b by following the intensities of the 15N-&#39;H correlation peaks in a series of double INEPT &quot;Overbodenhausen&quot; experiments recorded after dissolving freeze-dried protein into D2O.</details>
+      
+        
+        <residue index="68" code="Y"></residue>
+        
+      
+        
+        <residue index="69" code="L"></residue>
+        
+      
+        
+        <residue index="72" code="V"></residue>
+        
+      
+        
+        <residue index="81" code="Q"></residue>
+        
+      
+        
+        <residue index="83" code="E"></residue>
+        
+      
+        
+        <residue index="100" code="V"></residue>
+        
+      
+        
+        <residue index="101" code="F"></residue>
+        
+      
+        
+        <residue index="113" code="E"></residue>
+        
+      
+        
+        <residue index="115" code="A"></residue>
+        
+      
+        
+        <residue index="117" code="F"></residue>
+        
+      
+        
+        <residue index="121" code="Y"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="180">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="5.0 - 5.0" temperature="4.0" probes="47">None</conditions>
+      <protection protection_level="EARLY">amide protection half-lives between 0.7 and 1.5 s</protection>
+      <sequence is_pdb="True">APVRSLNCTLRDSQQKSLVMSGPYELKALHLQGQDMEQQVVFSMSFVQGEESNDKIPVALGLKEKNLYLSCVLKDDKPTLQLESVDPKNYPKKKMEKRFVFNKIEINNKLEFESAQFPNWYISTSQAENMPVFLGGTKGGQDITDFTMQFVSS</sequence>
+      <details>Fully unfolded protein in D2O at pH 5.0 is allowed to fold for a length of time T, after which it is subjected to a 16-ms exchange pulse in H2O at pH 9.3, followed immediately by a quench pulse at pH 5.0.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="42" code="F"></residue>
+        
+      
+        
+        <residue index="68" code="Y"></residue>
+        
+      
+        
+        <residue index="69" code="L"></residue>
+        
+      
+        
+        <residue index="70" code="S"></residue>
+        
+      
+        
+        <residue index="72" code="V"></residue>
+        
+      
+        
+        <residue index="79" code="T"></residue>
+        
+      
+        
+        <residue index="81" code="Q"></residue>
+        
+      
+        
+        <residue index="83" code="E"></residue>
+        
+      
+        
+        <residue index="99" code="F"></residue>
+        
+      
+        
+        <residue index="100" code="V"></residue>
+        
+      
+        
+        <residue index="101" code="F"></residue>
+        
+      
+        
+        <residue index="102" code="N"></residue>
+        
+      
+        
+        <residue index="103" code="K"></residue>
+        
+      
+        
+        <residue index="104" code="I"></residue>
+        
+      
+        
+        <residue index="111" code="E"></residue>
+        
+      
+        
+        <residue index="113" code="E"></residue>
+        
+      
+        
+        <residue index="114" code="S"></residue>
+        
+      
+        
+        <residue index="117" code="F"></residue>
+        
+      
+        
+        <residue index="120" code="W"></residue>
+        
+      
+        
+        <residue index="121" code="Y"></residue>
+        
+      
+        
+        <residue index="123" code="S"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="181">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="5.0 - 5.0" temperature="4.0" probes="47">None</conditions>
+      <protection protection_level="INTERMEDIATE">amide protection half-lives between 15 and 25 s</protection>
+      <sequence is_pdb="True">APVRSLNCTLRDSQQKSLVMSGPYELKALHLQGQDMEQQVVFSMSFVQGEESNDKIPVALGLKEKNLYLSCVLKDDKPTLQLESVDPKNYPKKKMEKRFVFNKIEINNKLEFESAQFPNWYISTSQAENMPVFLGGTKGGQDITDFTMQFVSS</sequence>
+      <details>Fully unfolded protein in D2O at pH 5.0 is allowed to fold for a length of time T, after which it is subjected to a 16-ms exchange pulse in H2O at pH 9.3, followed immediately by a quench pulse at pH 5.0.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="43" code="S"></residue>
+        
+      
+        
+        <residue index="58" code="V"></residue>
+        
+      
+        
+        <residue index="71" code="C"></residue>
+        
+      
+        
+        <residue index="115" code="A"></residue>
+        
+      
+        
+        <residue index="132" code="V"></residue>
+        
+      
+        
+        <residue index="146" code="F"></residue>
+        
+      
+        
+        <residue index="147" code="T"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

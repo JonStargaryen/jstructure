@@ -1,0 +1,44 @@
+<entry id="STF0048" title="Alpha-lactalbumin (guinea pig)">
+  
+  <protein name="Alpha-lactalbumin" organism="Cavia porcellus (Guinea pig)" number_of_residues="123" uniprot_id="P00713" uniprot_range="20-142" pdb_id="1hfx">
+    
+    <experiment id="191">
+      <method type="stability">Native exchange in partially folded state by NMR</method>
+      <conditions pH="2.0 - 2.0" temperature="25.0" probes="21">None</conditions>
+      <protection protection_level="STRONG">P &gt; 70</protection>
+      <sequence is_pdb="True">KQLTKCALSHELNDLAGYRDITLPEWLCIIFHISGYDTQAIVKNSDHKEYGLFQINDKDFCESSTTVQSRNICDISCDKLLDDDLTDDIMCVKKILDIKGIDYWLAHKPLCSDKLEQWYCEAQ</sequence>
+      <details>The hydrogen exchange kinetics of individual amide protons in the A-state at pH 2.0 were measured by pH-jump experiments which were performed in three steps: (a) Fully protonated GPLA was dissolved in H2O, the pH was lowered to 2.0, and then the protein was lyophilized. (b) The protein was then dissolved in D2O, giving a solution of the A-state without the need for further pH adjustment. (c) After various lengths of time, aliquots of the protein were restored to the native state by carefully raising the pH to 5.5. The indole hydrogen of W26 has the highest protection factor of &gt; 920.</details>
+      
+        
+        <residue index="26" code="W"></residue>
+        
+      
+        
+        <residue index="28" code="C"></residue>
+        
+      
+        
+        <residue index="29" code="I"></residue>
+        
+      
+        
+        <residue index="30" code="I"></residue>
+        
+      
+        
+        <residue index="31" code="F"></residue>
+        
+      
+        
+        <residue index="95" code="I"></residue>
+        
+      
+        
+        <residue index="96" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

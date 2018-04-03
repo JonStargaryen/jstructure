@@ -1,0 +1,163 @@
+<entry id="STF0039" title="Chymotrypsin Inhibitor 2">
+  
+  <protein name="Subtilisin-chymotrypsin inhibitor-2A" organism="Hordeum vulgare (Barley)" number_of_residues="64" uniprot_id="P01053" uniprot_range="19-84" pdb_id="3ci2">
+    
+    <experiment id="169">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="33.0" probes="34">None</conditions>
+      <protection protection_level="STRONG">ΔΔG(ex) = ΔΔG(global unfolding)</protection>
+      <sequence is_pdb="True">HNLKTEWPELVGKSVEEAKKVILQDKPEAQIIVLPVGTIVTMEYRIDRVRLFVDKLDNIAQVPRVG</sequence>
+      <details>Experiments were perfomed at 33 °C in 50 mM sodium acetate buffer (pH 5.3). The total salt concentration was maintained at 2.5 M throughout the range of GdmCl concentrations by addition of NaCl. Values of m and ΔGapp,0ex were calculated by fitting the exchange data at different [GdmCl] to the equation. Fitting was performed only when k(ex) could be measured for more than six [GdmCl].</details>
+      
+        
+        <residue index="13" code="K"></residue>
+        
+      
+        
+        <residue index="22" code="I"></residue>
+        
+      
+        
+        <residue index="23" code="L"></residue>
+        
+      
+        
+        <residue index="32" code="I"></residue>
+        
+      
+        
+        <residue index="34" code="L"></residue>
+        
+      
+        
+        <residue index="49" code="V"></residue>
+        
+      
+        
+        <residue index="51" code="L"></residue>
+        
+      
+        
+        <residue index="52" code="F"></residue>
+        
+      
+        
+        <residue index="53" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="170">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="33.0" probes="34">None</conditions>
+      <protection protection_level="MEDIUM">m &gt; 2</protection>
+      <sequence is_pdb="True">HNLKTEWPELVGKSVEEAKKVILQDKPEAQIIVLPVGTIVTMEYRIDRVRLFVDKLDNIAQVPRVG</sequence>
+      <details>Experiments were perfomed at 33 °C in 50 mM sodium acetate buffer (pH 5.3). The total salt concentration was maintained at 2.5 M throughout the range of GdmCl concentrations by addition of NaCl. Values of m and ΔGapp,0ex were calculated by fitting the exchange data at different [GdmCl] to the equation. Fitting was performed only when k(ex) could be measured for more than six [GdmCl].</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="7" code="W"></residue>
+        
+      
+        
+        <residue index="10" code="L"></residue>
+        
+      
+        
+        <residue index="11" code="V"></residue>
+        
+      
+        
+        <residue index="20" code="K"></residue>
+        
+      
+        
+        <residue index="21" code="V"></residue>
+        
+      
+        
+        <residue index="24" code="Q"></residue>
+        
+      
+        
+        <residue index="34" code="L"></residue>
+        
+      
+        
+        <residue index="48" code="R"></residue>
+        
+      
+        
+        <residue index="50" code="R"></residue>
+        
+      
+        
+        <residue index="54" code="D"></residue>
+        
+      
+        
+        <residue index="59" code="I"></residue>
+        
+      
+        
+        <residue index="60" code="A"></residue>
+        
+      
+        
+        <residue index="61" code="Q"></residue>
+        
+      
+        
+        <residue index="64" code="R"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

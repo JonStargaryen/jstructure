@@ -91,7 +91,8 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
             Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
             Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
             alignmentResults.add(TM_ALIGN_SERVICE.process(new String[] {
-                    "/home/sb/programs/tmalign",
+//                    "/home/sb/programs/tmalign",
+                    "tmalign",
                     referenceChainPath.toFile().getAbsolutePath(),
                     reconstructPath.toFile().getAbsolutePath()
             }));

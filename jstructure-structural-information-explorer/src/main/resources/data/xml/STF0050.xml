@@ -1,0 +1,338 @@
+<entry id="STF0050" title="Chemotactic protein Chey">
+  
+  <protein name="Chemotaxis protein CheY" organism="Escherichia coli (strain K12)" number_of_residues="128" uniprot_id="P0AE67" uniprot_range="2-129" pdb_id="3chy">
+    
+    <experiment id="194">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="38">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt; 4.3</protection>
+      <sequence is_pdb="True">ADKELKFLVVDDFSTMRRIVRNLLKELGFNNVEEAEDGVDALNKLQAGGYGFVISDWNMPNMDGLELLKTIRADGAMSALPVLMVTAEAKKENIIAAAQAGASGYVVKPFTAATLEEKLNKIFEKLGM</sequence>
+      <details>The H/D exchange of the peptide N1H groups in both proteins was monitored by recording successive magnitude COSY or HSQC spectra, following the transfer of the protein from H2O to D2O. For the wild-type CheY, by monitoring the H-ex with quickly acquired HSQC spectra on a uniformly 15N-labelled protein sample, it was possible to work at pH 6 despite the faster intrinsic exchange.</details>
+      
+        
+        <residue index="7" code="F"></residue>
+        
+      
+        
+        <residue index="21" code="R"></residue>
+        
+      
+        
+        <residue index="23" code="L"></residue>
+        
+      
+        
+        <residue index="24" code="L"></residue>
+        
+      
+        
+        <residue index="25" code="K"></residue>
+        
+      
+        
+        <residue index="27" code="L"></residue>
+        
+      
+        
+        <residue index="29" code="F"></residue>
+        
+      
+        
+        <residue index="52" code="F"></residue>
+        
+      
+        
+        <residue index="55" code="S"></residue>
+        
+      
+        
+        <residue index="120" code="N"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="195">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="38">None</conditions>
+      <protection protection_level="MEDIUM">4.0 &lt; log(P) &lt; 4.3</protection>
+      <sequence is_pdb="True">ADKELKFLVVDDFSTMRRIVRNLLKELGFNNVEEAEDGVDALNKLQAGGYGFVISDWNMPNMDGLELLKTIRADGAMSALPVLMVTAEAKKENIIAAAQAGASGYVVKPFTAATLEEKLNKIFEKLGM</sequence>
+      <details>The H/D exchange of the peptide N1H groups in both proteins was monitored by recording successive magnitude COSY or HSQC spectra, following the transfer of the protein from H2O to D2O. For the wild-type CheY, by monitoring the H-ex with quickly acquired HSQC spectra on a uniformly 15N-labelled protein sample, it was possible to work at pH 6 despite the faster intrinsic exchange.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="11" code="D"></residue>
+        
+      
+        
+        <residue index="26" code="E"></residue>
+        
+      
+        
+        <residue index="35" code="A"></residue>
+        
+      
+        
+        <residue index="41" code="A"></residue>
+        
+      
+        
+        <residue index="53" code="V"></residue>
+        
+      
+        
+        <residue index="70" code="T"></residue>
+        
+      
+        
+        <residue index="84" code="M"></residue>
+        
+      
+        
+        <residue index="86" code="T"></residue>
+        
+      
+        
+        <residue index="118" code="K"></residue>
+        
+      
+        
+        <residue index="119" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="196">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="38">None</conditions>
+      <protection protection_level="WEAK">3.3 &lt; log(P) &lt; 4.0</protection>
+      <sequence is_pdb="True">ADKELKFLVVDDFSTMRRIVRNLLKELGFNNVEEAEDGVDALNKLQAGGYGFVISDWNMPNMDGLELLKTIRADGAMSALPVLMVTAEAKKENIIAAAQAGASGYVVKPFTAATLEEKLNKIFEKLGM</sequence>
+      <details>The H/D exchange of the peptide N1H groups in both proteins was monitored by recording successive magnitude COSY or HSQC spectra, following the transfer of the protein from H2O to D2O. For the wild-type CheY, by monitoring the H-ex with quickly acquired HSQC spectra on a uniformly 15N-labelled protein sample, it was possible to work at pH 6 despite the faster intrinsic exchange.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="9" code="V"></residue>
+        
+      
+        
+        <residue index="10" code="V"></residue>
+        
+      
+        
+        <residue index="33" code="E"></residue>
+        
+      
+        
+        <residue index="37" code="D"></residue>
+        
+      
+        
+        <residue index="42" code="L"></residue>
+        
+      
+        
+        <residue index="54" code="I"></residue>
+        
+      
+        
+        <residue index="71" code="I"></residue>
+        
+      
+        
+        <residue index="82" code="V"></residue>
+        
+      
+        
+        <residue index="83" code="L"></residue>
+        
+      
+        
+        <residue index="85" code="V"></residue>
+        
+      
+        
+        <residue index="106" code="V"></residue>
+        
+      
+        
+        <residue index="108" code="K"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+        <residue index="116" code="E"></residue>
+        
+      
+        
+        <residue index="117" code="E"></residue>
+        
+      
+        
+        <residue index="122" code="I"></residue>
+        
+      
+        
+        <residue index="123" code="F"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

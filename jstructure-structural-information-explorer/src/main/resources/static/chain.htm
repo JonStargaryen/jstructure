@@ -43,6 +43,11 @@
                         <div class="caption">title</div>
                         {{::protein.title}}
 
+                        <div class="caption">baseline reconstruction performance</div>
+                        <div>average RMSD: {{::protein.averageRmsd}}</div>
+                        <div>average TM-score: {{::protein.averageTmScore}}</div>
+                        <div>average Q: {{::protein.averageQ}}</div>
+
                         <div class="caption">feature view</div>
                         <div id="feature-viewer" style="margin-top: -15px;"></div>
                     </div>
@@ -54,8 +59,12 @@
                             <div class="homologous-table-head homologous-table-row">
                                 <div ng-click="sortTypeContacts = 'residueIdentifier1'; sortReverseContacts = !sortReverseContacts">res1
                                     <span ng-show="sortTypeContacts == 'residueIdentifier1'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
+                                <div ng-click="sortTypeContacts = 'aa1'; sortReverseContacts = !sortReverseContacts">aa1
+                                    <span ng-show="sortTypeContacts == 'aa1'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'residueIdentifier2'; sortReverseContacts = !sortReverseContacts">res2
                                     <span ng-show="sortTypeContacts == 'residueIdentifier2'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
+                                <div ng-click="sortTypeContacts = 'aa2'; sortReverseContacts = !sortReverseContacts">aa2
+                                    <span ng-show="sortTypeContacts == 'aa2'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'contactDistanceBin'; sortReverseContacts = !sortReverseContacts">bin
                                     <span ng-show="sortTypeContacts == 'contactDistanceBin'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'averageRmsdIncrease'; sortReverseContacts = !sortReverseContacts">avg RMSD decrease
@@ -74,13 +83,17 @@
                                     <span ng-show="sortTypeContacts == 'earlyFoldingResidue'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'earlyFoldingContact'; sortReverseContacts = !sortReverseContacts">2 EFR
                                     <span ng-show="sortTypeContacts == 'earlyFoldingContact'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
+                                <div ng-click="sortTypeContacts = 'plmScore'; sortReverseContacts = !sortReverseContacts">plm score
+                                    <span ng-show="sortTypeContacts == 'plmScore'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                             </div>
                             <div class="homologous-table-row"
                                  data-ng-repeat="contact in protein.contacts | orderBy:sortTypeContacts:sortReverseContacts"
                                  ng-mouseover="select(contact.residueIdentifier1, contact.residueIdentifier2)"
                                  ng-mouseleave="deselect(contact.residueIdentifier1, contact.residueIdentifier2)">
                                 <div>{{contact.residueIdentifier1}}</div>
+                                <div>{{contact.aa1}}</div>
                                 <div>{{contact.residueIdentifier2}}</div>
+                                <div>{{contact.aa2}}</div>
                                 <div>{{contact.contactDistanceBin}}</div>
                                 <div>{{contact.averageRmsdIncrease}}</div>
                                 <div>{{contact.averageTmScoreIncrease}}</div>
@@ -90,6 +103,7 @@
                                 <div>{{contact.maximumQIncrease}}</div>
                                 <div>{{contact.earlyFoldingResidue}}</div>
                                 <div>{{contact.earlyFoldingContact}}</div>
+                                <div>{{contact.plmScore}}</div>
                             </div>
                         </div>
                     </div>
@@ -101,6 +115,8 @@
                             <div class="homologous-table-head homologous-table-row">
                                 <div ng-click="sortTypeResidues = 'residueIdentifier'; sortReverseResidues = !sortReverseResidues">res
                                     <span ng-show="sortTypeResidues == 'residueIdentifier'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
+                                <div ng-click="sortTypeResidues = 'aa'; sortReverseResidues = !sortReverseResidues">aa
+                                    <span ng-show="sortTypeResidues == 'aa'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeResidues = 'averageRmsdIncrease'; sortReverseResidues = !sortReverseResidues">avg RMSD decrease
                                     <span ng-show="sortTypeResidues == 'averageRmsdIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeResidues = 'averageTmScoreIncrease'; sortReverseResidues = !sortReverseResidues">avg TM-score increase
@@ -121,6 +137,7 @@
                                  ng-mouseover="select(residue.residueIdentifier)"
                                  ng-mouseleave="deselect(residue.residueIdentifier)">
                                 <div>{{residue.residueIdentifier}}</div>
+                                <div>{{residue.aa}}</div>
                                 <div>{{residue.averageRmsdIncrease}}</div>
                                 <div>{{residue.averageTmScoreIncrease}}</div>
                                 <div>{{residue.averageQIncrease}}</div>

@@ -1,0 +1,103 @@
+<entry id="STF0049" title="Alpha-lactalbumin (human)">
+  
+  <protein name="Alpha-lactalbumin" organism="Homo sapiens (Human)" number_of_residues="123" uniprot_id="P00709" uniprot_range="21-142" pdb_id="3b0o">
+    
+    <experiment id="192">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="15.0" probes="45">None</conditions>
+      <protection protection_level="STRONG">k(int)/k(ex) &gt; 100000</protection>
+      <sequence is_pdb="True">MQFTKCELSQLLKDIDGYGGIALPELICTMFHTSGYDTQAIVENNESTEYGLFQISNKLWCKSSQVPQSRNICDISCDKFLDDDITDDIMCAKKILDIKGIDYWLAHKALCTEKLEQWLCEKL</sequence>
+      <details>Hydrogen-deuterium exchange was initiated by dissolving lyophilized samples either in D2O, pH* 2 (molten globule) or native exchange buffer (100 mM d4-imidazole, 3 mM CaCl2 with a final pH* of 6.3). The protein concentration was 80 mM for exchange in the molten globule and 800 mM for exchange in the native state. For the molten globule, exchange was quenched by freezing in liquid nitrogen and subsequent lyophilization at regular intervals from ten seconds to nine days. Dry samples were stored at −80 °C and dissolved in native exchange buffer for analysis.</details>
+      
+        
+        <residue index="33" code="T"></residue>
+        
+      
+        
+        <residue index="61" code="C"></residue>
+        
+      
+        
+        <residue index="73" code="C"></residue>
+        
+      
+        
+        <residue index="77" code="C"></residue>
+        
+      
+        
+        <residue index="80" code="F"></residue>
+        
+      
+        
+        <residue index="91" code="C"></residue>
+        
+      
+        
+        <residue index="92" code="A"></residue>
+        
+      
+        
+        <residue index="93" code="K"></residue>
+        
+      
+        
+        <residue index="94" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="193">
+      <method type="stability">Native exchange in partially folded state by NMR</method>
+      <conditions pH="2.0 - 2.0" temperature="5.0" probes="34">None</conditions>
+      <protection protection_level="STRONG">k(int)/k(ex) &gt; 100</protection>
+      <sequence is_pdb="True">MQFTKCELSQLLKDIDGYGGIALPELICTMFHTSGYDTQAIVENNESTEYGLFQISNKLWCKSSQVPQSRNICDISCDKFLDDDITDDIMCAKKILDIKGIDYWLAHKALCTEKLEQWLCEKL</sequence>
+      <details>Hydrogen-deuterium exchange was initiated by dissolving lyophilized samples either in D2O, pH* 2 (molten globule) or native exchange buffer (100 mM d4-imidazole, 3 mM CaCl2 with a final pH* of 6.3). The protein concentration was 80 mM for exchange in the molten globule and 800 mM for exchange in the native state. For the molten globule, exchange was quenched by freezing in liquid nitrogen and subsequent lyophilization at regular intervals from ten seconds to nine days. Dry samples were stored at −80 °C and dissolved in native exchange buffer for analysis.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="26" code="L"></residue>
+        
+      
+        
+        <residue index="27" code="I"></residue>
+        
+      
+        
+        <residue index="30" code="M"></residue>
+        
+      
+        
+        <residue index="33" code="T"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

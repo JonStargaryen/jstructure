@@ -65,7 +65,7 @@ var FeatureViewerComponent = (function () {
         var avgRmsd = [];
         model.residues.forEach(function (go) {
             avgRmsd.push({
-                x: avgRmsd.length,
+                x: avgRmsd.length + 1,
                 y: go.averageRmsdIncrease
             });
         });
@@ -81,13 +81,61 @@ var FeatureViewerComponent = (function () {
         var maxRmsd = [];
         model.residues.forEach(function (go) {
             maxRmsd.push({
-                x: maxRmsd.length,
+                x: maxRmsd.length + 1,
                 y: go.maximumRmsdIncrease
             });
         });
         fv.addFeature({
             data: maxRmsd,
             name: 'max. RMSD',
+            className: 'tba4',
+            type: 'line',
+            color: '#52b1e9',
+            interpolation: 'basis'
+        });
+
+        var eccount = [];
+        model.residues.forEach(function (go) {
+            eccount.push({
+                x: eccount.length + 1,
+                y: go.eccount
+            });
+        });
+        fv.addFeature({
+            data: eccount,
+            name: 'EC count',
+            className: 'tba4',
+            type: 'line',
+            color: '#52b1e9',
+            interpolation: 'basis'
+        });
+
+        var cumstrength = [];
+        model.residues.forEach(function (go) {
+            cumstrength.push({
+                x: cumstrength.length + 1,
+                y: go.cumstrength
+            });
+        });
+        fv.addFeature({
+            data: cumstrength,
+            name: 'cumulative strength',
+            className: 'tba4',
+            type: 'line',
+            color: '#52b1e9',
+            interpolation: 'basis'
+        });
+
+        var conservation = [];
+        model.residues.forEach(function (go) {
+            conservation.push({
+                x: conservation.length + 1,
+                y: go.conservation
+            });
+        });
+        fv.addFeature({
+            data: conservation,
+            name: 'conservation',
             className: 'tba4',
             type: 'line',
             color: '#52b1e9',

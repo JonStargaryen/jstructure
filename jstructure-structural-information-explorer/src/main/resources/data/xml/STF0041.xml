@@ -1,0 +1,36 @@
+<entry id="STF0041" title="Bacillus amyloliquefaciens ribonuclease">
+  
+  <protein name="Ribonuclease" organism="Bacillus amyloliquefaciens (Bacillus velezensis)" number_of_residues="110" uniprot_id="P00648" uniprot_range="48-157" pdb_id="1a2p">
+    
+    <experiment id="174">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.5 - 7.6" temperature="33.0" probes="41">None</conditions>
+      <protection protection_level="STRONG">k(obs) &lt; E-05/min at pH 6.5 and k(obs) &lt; 2E-04/min at pH 7.6</protection>
+      <sequence is_pdb="True">AQVINTFDGVADYLQTYHKLPDNYITKSEAQALGWVASKGNLADVAPGKSIGGDIFSNREGKLPGKSGRTWREADINYTSGFRNSDRILYSSDWLIYKTTDHYQTFTKIR</sequence>
+      <details>20 mg of lyophilized l5N-labeled protein was in the appropriate buffer containing 90% H2O and 10% D2O. The exchange buffer was 20 mM deuterated imidazole, pD 6.7, or 50 mM deuterated Tris, pD 7.9, containing 0.05% sodium azide, dissolved in D2O. Approximately 20 mg of lyophilized, uniformly l5N-labeled protein was dissolved in the exchange buffer (final concentration ~3 mM), centrifuged, transferred to an NMR tube, and allowed to equilibrate in the magnet for 10 min before the start of the first NMR experiment. The first spectrum was recorded approximately 20 min after the solution of the protein. The sample was kept at 33 or 37 °C, in the NMR tubes, throughout the study, which lasted up to 3 months.</details>
+      
+        
+        <residue index="14" code="L"></residue>
+        
+      
+        
+        <residue index="25" code="I"></residue>
+        
+      
+        
+        <residue index="74" code="A"></residue>
+        
+      
+        
+        <residue index="89" code="L"></residue>
+        
+      
+        
+        <residue index="97" code="Y"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

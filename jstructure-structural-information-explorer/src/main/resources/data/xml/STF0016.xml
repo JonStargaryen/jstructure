@@ -1,0 +1,313 @@
+<entry id="STF0016" title="Turkey ovomucoid third domain (OMTKY3)">
+  
+  <protein name="Ovomucoid" organism="Meleagris gallopavo (Wild turkey)" number_of_residues="56" uniprot_id="P68390" uniprot_range="130-185" pdb_id="1omu">
+    
+    <experiment id="76">
+      <method type="folding">pH-dependent HDX NMR</method>
+      <conditions pH="6.0 - 10.0" temperature="30.0" probes="13">None</conditions>
+      <protection protection_level="EARLY">closing rate time constant &lt; 170 microsec</protection>
+      <sequence is_pdb="True">LAAVSVDCSEYPKPACTLEYRPLCGSDNKTYGNKCNFCNAVVESNGTLTLSHFGKC</sequence>
+      <details>Rates of unfolding and folding have been determined by monitoring NH exchange over a range of pH where (1) the free energy of unfolding is insensitive to pH and (2) the mechanism of exchange changes from one governed by a rapid equilibrium preceding the chemistry of exchange (i.e., EX2 exchange) to one where exchange is limited by the rate of unfolding (i.e., EX1 exchange). The pH dependence of exchange has then been fit to a two-state model to obtain the unfolding and folding rates. Exchange samples were prepared by adjusting aliquots of pure OMTKY3 in H2O to the desired experimental pH with potassium hydroxide. Protein solutions were then lyophilized to a constant weight. Exchange buffers, consisting of 10 mM glycine and 10 mM glycyl-glycine in D2O, were also preadjusted to the desired experimental pH by addition of sodium deuterioxide. The final concentration of buffered OMTKY3 was approximately 2 mM for each experiment. Sample pH was measured after each experiment.</details>
+      
+        
+        <residue index="38" code="C"></residue>
+        
+      
+        
+        <residue index="39" code="N"></residue>
+        
+      
+        
+        <residue index="40" code="A"></residue>
+        
+      
+        
+        <residue index="24" code="C"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="77">
+      <method type="folding">pH-dependent HDX NMR</method>
+      <conditions pH="6.0 - 10.0" temperature="30.0" probes="13">None</conditions>
+      <protection protection_level="INTERMEDIATE">400 &lt; closing rate time constant (microsec) &lt; 1200</protection>
+      <sequence is_pdb="True">LAAVSVDCSEYPKPACTLEYRPLCGSDNKTYGNKCNFCNAVVESNGTLTLSHFGKC</sequence>
+      <details>Rates of unfolding and folding have been determined by monitoring NH exchange over a range of pH where (1) the free energy of unfolding is insensitive to pH and (2) the mechanism of exchange changes from one governed by a rapid equilibrium preceding the chemistry of exchange (i.e., EX2 exchange) to one where exchange is limited by the rate of unfolding (i.e., EX1 exchange). The pH dependence of exchange has then been fit to a two-state model to obtain the unfolding and folding rates. Exchange samples were prepared by adjusting aliquots of pure OMTKY3 in H2O to the desired experimental pH with potassium hydroxide. Protein solutions were then lyophilized to a constant weight. Exchange buffers, consisting of 10 mM glycine and 10 mM glycyl-glycine in D2O, were also preadjusted to the desired experimental pH by addition of sodium deuterioxide. The final concentration of buffered OMTKY3 was approximately 2 mM for each experiment. Sample pH was measured after each experiment.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="25" code="G"></residue>
+        
+      
+        
+        <residue index="28" code="N"></residue>
+        
+      
+        
+        <residue index="29" code="K"></residue>
+        
+      
+        
+        <residue index="31" code="Y"></residue>
+        
+      
+        
+        <residue index="33" code="N"></residue>
+        
+      
+        
+        <residue index="37" code="F"></residue>
+        
+      
+        
+        <residue index="41" code="V"></residue>
+        
+      
+        
+        <residue index="51" code="S"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="78">
+      <method type="folding">pH-dependent HDX NMR</method>
+      <conditions pH="6.0 - 10.0" temperature="30.0" probes="13">None</conditions>
+      <protection protection_level="LATE">closing rate time constant &gt; 1200 microsec</protection>
+      <sequence is_pdb="True">LAAVSVDCSEYPKPACTLEYRPLCGSDNKTYGNKCNFCNAVVESNGTLTLSHFGKC</sequence>
+      <details>Rates of unfolding and folding have been determined by monitoring NH exchange over a range of pH where (1) the free energy of unfolding is insensitive to pH and (2) the mechanism of exchange changes from one governed by a rapid equilibrium preceding the chemistry of exchange (i.e., EX2 exchange) to one where exchange is limited by the rate of unfolding (i.e., EX1 exchange). The pH dependence of exchange has then been fit to a two-state model to obtain the unfolding and folding rates. Exchange samples were prepared by adjusting aliquots of pure OMTKY3 in H2O to the desired experimental pH with potassium hydroxide. Protein solutions were then lyophilized to a constant weight. Exchange buffers, consisting of 10 mM glycine and 10 mM glycyl-glycine in D2O, were also preadjusted to the desired experimental pH by addition of sodium deuterioxide. The final concentration of buffered OMTKY3 was approximately 2 mM for each experiment. Sample pH was measured after each experiment.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="23" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="79">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="3.0 - 3.0" temperature="40.0" probes="&gt;30">None</conditions>
+      <protection protection_level="STRONG">slowly exchanging amid protons</protection>
+      <sequence is_pdb="True">LAAVSVDCSEYPKPACTLEYRPLCGSDNKTYGNKCNFCNAVVESNGTLTLSHFGKC</sequence>
+      <details>Two-dimensional nuclear magnetic resonance spectroscopy has been used to monitor H/D exchange rates for more than 30 residues in turkey ovomucoid third domain. To test whether exchange is governed by global unfolding, rates were measured over a wide range of pH and temperatures where the change in the free energy of unfolding (ΔG(uf)) is known.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="23" code="L"></residue>
+        
+      
+        
+        <residue index="24" code="C"></residue>
+        
+      
+        
+        <residue index="26" code="S"></residue>
+        
+      
+        
+        <residue index="28" code="N"></residue>
+        
+      
+        
+        <residue index="29" code="K"></residue>
+        
+      
+        
+        <residue index="31" code="Y"></residue>
+        
+      
+        
+        <residue index="33" code="N"></residue>
+        
+      
+        
+        <residue index="35" code="C"></residue>
+        
+      
+        
+        <residue index="37" code="F"></residue>
+        
+      
+        
+        <residue index="38" code="C"></residue>
+        
+      
+        
+        <residue index="39" code="N"></residue>
+        
+      
+        
+        <residue index="40" code="A"></residue>
+        
+      
+        
+        <residue index="41" code="V"></residue>
+        
+      
+        
+        <residue index="51" code="S"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

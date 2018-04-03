@@ -1,0 +1,410 @@
+<entry id="STF0025" title="C-terminal domain of the Fas-associated death domain">
+  
+  <protein name="FAS-associated death domain protein" organism="Homo sapiens (Human)" number_of_residues="100" uniprot_id="Q13158" uniprot_range="93-192" pdb_id="1e3y">
+    
+    <experiment id="128">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="6.2 - 6.2" temperature="20.0" probes="24">None</conditions>
+      <protection protection_level="EARLY">Folding rate constants: 20.9±1.7 s(-1)</protection>
+      <sequence is_pdb="True">GSHMGEEDLCAAFNVICDNVGKDWRRLARQLKVSDTKIDSIEDRYPRNLTERVRESLRIWKNTEKENATVAHLVGALRSCQMNLVADLVQEVQQARDLQNRSGA</sequence>
+      <details>15N-Fadd-DD (1 mg/ml) was denatured in 5 M deuterated GndHCl, 10 mM deuterated MES (pD 6.2), and 5 mM deuterated DTT overnight. Refolding was initiated by mixing one volume of the denatured protein solution with four volumes of water-based refolding buffer containing 10 mM MES (pH 6.2) and 5 mM DTT. The concentrations of GndHCl and protein at this point are 1 M and 0.2 mg/ml, respectively. After refolding for a specified period of time, the protein was mixed with five volumes of water-based pulsing buffer containing 50 mM glycine buffer (pH 9.8) and 5 mM DTT, thus being subjected to a high pH pulse step for 5.4 ms. This induces the amide deuterium on the protein to exchange with hydrogen in the solvent. The first three refolding times (9.9, 28.1, and 53.2 ms) were used under continuous mode, and the last five (65, 80, 120, 160, and 200 ms) were used under interrupted mode.</details>
+      
+        
+        <residue index="13" code="F"></residue>
+        
+      
+        
+        <residue index="15" code="V"></residue>
+        
+      
+        
+        <residue index="17" code="C"></residue>
+        
+      
+        
+        <residue index="27" code="L"></residue>
+        
+      
+        
+        <residue index="29" code="R"></residue>
+        
+      
+        
+        <residue index="30" code="Q"></residue>
+        
+      
+        
+        <residue index="31" code="L"></residue>
+        
+      
+        
+        <residue index="32" code="K"></residue>
+        
+      
+        
+        <residue index="33" code="V"></residue>
+        
+      
+        
+        <residue index="41" code="I"></residue>
+        
+      
+        
+        <residue index="53" code="V"></residue>
+        
+      
+        
+        <residue index="56" code="S"></residue>
+        
+      
+        
+        <residue index="57" code="L"></residue>
+        
+      
+        
+        <residue index="59" code="I"></residue>
+        
+      
+        
+        <residue index="60" code="W"></residue>
+        
+      
+        
+        <residue index="61" code="K"></residue>
+        
+      
+        
+        <residue index="74" code="V"></residue>
+        
+      
+        
+        <residue index="75" code="G"></residue>
+        
+      
+        
+        <residue index="76" code="A"></residue>
+        
+      
+        
+        <residue index="78" code="R"></residue>
+        
+      
+        
+        <residue index="82" code="M"></residue>
+        
+      
+        
+        <residue index="86" code="A"></residue>
+        
+      
+        
+        <residue index="89" code="V"></residue>
+        
+      
+        
+        <residue index="94" code="Q"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="129">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.8 - 4.8" temperature="30.0" probes="all">None</conditions>
+      <protection protection_level="STRONG">amides which persist exchange for over a week</protection>
+      <sequence is_pdb="True">MDPFLVLLHSVSSSLSSSELTELKFLCLGRVGKRKLERVQSGLDLFSMLLEQNDLEPGHTELLRELLASLRRHDLLRRVDDFEAGAAAGAAPGEEDLCAAFNVICDNVGKDWRRLARQLKVSDTKIDSIEDRYPRNLTERVRESLRIWKNTEKENATVAHLVGALRSCQMNLVADLVQEVQQARDLQNRSGAMSPMSWNSDASTSEAS</sequence>
+      <details>In the equilibrium HX study, 15N-Fadd-DD (4 mg/ml) was buffer exchanged into 100 mM deuterated K2HPO4/50 mM deuterated citric acid and 5 mM deuterated DTT in 99.0% D2O (pD 4.8). Each HSQC spectrum was acquired every 8 h over the course of 1 week. HX rates were determined by fitting peak intensities from HSQC spectra as a function of time using a single exponential equation. The intensities of each identified peak are normalized against that in the first HSQC spectrum. The protection against exchange rate is expressed as the protection factor, which is the ratio between the sequence-specific intrinsic exchange rate for an amide proton k(int), and measured exchange rate k(ex).</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="147" code="I"></residue>
+        
+      
+        
+        <residue index="148" code="W"></residue>
+        
+      
+        
+        <residue index="162" code="V"></residue>
+        
+      
+        
+        <residue index="177" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="130">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.8 - 4.8" temperature="30.0" probes="all">None</conditions>
+      <protection protection_level="MEDIUM">amides which persist exchange for over a day</protection>
+      <sequence is_pdb="True">MDPFLVLLHSVSSSLSSSELTELKFLCLGRVGKRKLERVQSGLDLFSMLLEQNDLEPGHTELLRELLASLRRHDLLRRVDDFEAGAAAGAAPGEEDLCAAFNVICDNVGKDWRRLARQLKVSDTKIDSIEDRYPRNLTERVRESLRIWKNTEKENATVAHLVGALRSCQMNLVADLVQEVQQARDLQNRSGAMSPMSWNSDASTSEAS</sequence>
+      <details>In the equilibrium HX study, 15N-Fadd-DD (4 mg/ml) was buffer exchanged into 100 mM deuterated K2HPO4/50 mM deuterated citric acid and 5 mM deuterated DTT in 99.0% D2O (pD 4.8). Each HSQC spectrum was acquired every 8 h over the course of 1 week. HX rates were determined by fitting peak intensities from HSQC spectra as a function of time using a single exponential equation. The intensities of each identified peak are normalized against that in the first HSQC spectrum. The protection against exchange rate is expressed as the protection factor, which is the ratio between the sequence-specific intrinsic exchange rate for an amide proton k(int), and measured exchange rate k(ex).</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="101" code="F"></residue>
+        
+      
+        
+        <residue index="103" code="V"></residue>
+        
+      
+        
+        <residue index="105" code="C"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+        <residue index="117" code="R"></residue>
+        
+      
+        
+        <residue index="118" code="Q"></residue>
+        
+      
+        
+        <residue index="119" code="L"></residue>
+        
+      
+        
+        <residue index="121" code="V"></residue>
+        
+      
+        
+        <residue index="129" code="I"></residue>
+        
+      
+        
+        <residue index="141" code="V"></residue>
+        
+      
+        
+        <residue index="144" code="S"></residue>
+        
+      
+        
+        <residue index="145" code="L"></residue>
+        
+      
+        
+        <residue index="149" code="K"></residue>
+        
+      
+        
+        <residue index="163" code="G"></residue>
+        
+      
+        
+        <residue index="164" code="A"></residue>
+        
+      
+        
+        <residue index="166" code="R"></residue>
+        
+      
+        
+        <residue index="170" code="M"></residue>
+        
+      
+        
+        <residue index="174" code="A"></residue>
+        
+      
+        
+        <residue index="182" code="Q"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

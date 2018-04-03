@@ -1,0 +1,151 @@
+<entry id="STF0047" title="Tendamistat">
+  
+  <protein name="Alpha-amylase inhibitor HOE-467A" organism="Streptomyces tendae" number_of_residues="74" uniprot_id="P01092" uniprot_range="31-104" pdb_id="1ok0">
+    
+    <experiment id="189">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="3.0 - 3.0" temperature="50.0" probes="50">None</conditions>
+      <protection protection_level="STRONG">P &gt; 3000</protection>
+      <sequence is_pdb="True">DTTVSEPAPSCVTLYQSWRYSQADNGCAETVTVKVVYEDDTEGLCYAVAPGQITTVGDGYIGSHGHARYLARCL</sequence>
+      <details>A sample of the dry protein was first mixed with D2O. The resulting pD value to the isoelectric for Tendamistat, and the protein remained undissolved. The D2O was removed once by lyophilization. Then a 3 mM solution of the protein in 99.8% D2O was prepared by titrating the pD to 3.0 with a deuteriated perchloric acid solution. Eight NMR samples were removed from the stock solution and heated to 50 °C for 0, 5, 20, 100, 240, 480, 1020, and 4200 min, respectively.</details>
+      
+        
+        <residue index="23" code="A"></residue>
+        
+      
+        
+        <residue index="27" code="C"></residue>
+        
+      
+        
+        <residue index="33" code="V"></residue>
+        
+      
+        
+        <residue index="35" code="V"></residue>
+        
+      
+        
+        <residue index="36" code="V"></residue>
+        
+      
+        
+        <residue index="37" code="Y"></residue>
+        
+      
+        
+        <residue index="46" code="Y"></residue>
+        
+      
+        
+        <residue index="48" code="V"></residue>
+        
+      
+        
+        <residue index="71" code="A"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="190">
+      <method type="stability">Native exchange in partially folded state by NMR</method>
+      <conditions pH="3.0 - 3.0" temperature="25.0" probes="29">None</conditions>
+      <protection protection_level="STRONG">P &gt; 10</protection>
+      <sequence is_pdb="True">DTTVSEPAPSCVTLYQSWRYSQADNGCAETVTVKVVYEDDTEGLCYAVAPGQITTVGDGYIGSHGHARYLARCL</sequence>
+      <details>Redissolving the TFE lyophilisate in 70% TFE, pH 3 results in formation of the TFE state within the dead-time of manual mixing of the CD-monitored kinetics (ca 20 seconds). For bulk exchange experiments the TFE lyophilisate was dissolved in 70% TFE-d3/30% D2O and the pH rapidly adjusted to 3.0 or 4.5. 1D NMR spectra were then consecutively acquired at 25 °C over a period of 16 hours to monitor hydrogen exchange.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="21" code="S"></residue>
+        
+      
+        
+        <residue index="22" code="Q"></residue>
+        
+      
+        
+        <residue index="24" code="D"></residue>
+        
+      
+        
+        <residue index="27" code="C"></residue>
+        
+      
+        
+        <residue index="34" code="K"></residue>
+        
+      
+        
+        <residue index="35" code="V"></residue>
+        
+      
+        
+        <residue index="36" code="V"></residue>
+        
+      
+        
+        <residue index="40" code="D"></residue>
+        
+      
+        
+        <residue index="41" code="T"></residue>
+        
+      
+        
+        <residue index="42" code="E"></residue>
+        
+      
+        
+        <residue index="45" code="C"></residue>
+        
+      
+        
+        <residue index="73" code="C"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

@@ -1,0 +1,115 @@
+<entry id="STF0029" title="Barstar">
+  
+  <protein name="Barstar" organism="Bacillus amyloliquefaciens (Bacillus velezensis)" number_of_residues="89" uniprot_id="P11540" uniprot_range="2-90" pdb_id="1bta">
+    
+    <experiment id="140">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.7 - 6.7" temperature="32.0" probes="13 +2 Trp indole protons">None</conditions>
+      <protection protection_level="STRONG">P &gt; 6000</protection>
+      <sequence is_pdb="True">KKAVINGEQIRSISDLHQTLKKELALPEYYGENLDALWDCLTGWVEYPLVLEWRQFEQSKQLTENGAESVLQVFREAKAEGCDITIILS</sequence>
+      <details>The protection factors were defined based on exchange measurements with different GdnHCl concentrations. D2O and H2O buffer solutions contained 20 mM sodium phosphate at pH 6.7, 32 °C. The reported pH of the D2O buffer is the uncorrected pH meter reading. Protection factors are provided for 0.33 M GdnHCl.</details>
+      
+        
+        <residue index="8" code="E"></residue>
+        
+      
+        
+        <residue index="11" code="R"></residue>
+        
+      
+        
+        <residue index="49" code="L"></residue>
+        
+      
+        
+        <residue index="72" code="Q"></residue>
+        
+      
+        
+        <residue index="78" code="K"></residue>
+        
+      
+        
+        <residue index="87" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="141">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.7 - 6.7" temperature="32.0" probes="13 +2 Trp indole protons">None</conditions>
+      <protection protection_level="MEDIUM">2000 &lt; P &lt; 6000</protection>
+      <sequence is_pdb="True">KKAVINGEQIRSISDLHQTLKKELALPEYYGENLDALWDCLTGWVEYPLVLEWRQFEQSKQLTENGAESVLQVFREAKAEGCDITIILS</sequence>
+      <details>The protection factors were defined based on exchange measurements with different GdnHCl concentrations. D2O and H2O buffer solutions contained 20 mM sodium phosphate at pH 6.7, 32 °C. The reported pH of the D2O buffer is the uncorrected pH meter reading. Protection factors are provided for 0.33 M GdnHCl.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="16" code="L"></residue>
+        
+      
+        
+        <residue index="23" code="E"></residue>
+        
+      
+        
+        <residue index="34" code="L"></residue>
+        
+      
+        
+        <residue index="38" code="W"></residue>
+        
+      
+        
+        <residue index="39" code="D"></residue>
+        
+      
+        
+        <residue index="44" code="W"></residue>
+        
+      
+        
+        <residue index="45" code="V"></residue>
+        
+      
+        
+        <residue index="50" code="V"></residue>
+        
+      
+        
+        <residue index="52" code="E"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

@@ -1,0 +1,578 @@
+<entry id="STF0028" title="Villin 14T">
+  
+  <protein name="Villin-1" organism="Gallus gallus (Chicken)" number_of_residues="126" uniprot_id="P02640" uniprot_range="2-127" pdb_id="2vil">
+    
+    <experiment id="137">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="4.1 - 4.1" temperature="21.0" probes="31">None</conditions>
+      <protection protection_level="EARLY">refolding time constant ~60 ms</protection>
+      <sequence is_pdb="True">VELSKKVTGKLDKTTPGIQIWRIENMEMVPVPTKSYGNFYEGDCYVLLSTRKTGSGFSYNIHYWLGKNSSQDEQGAAAIYTTQMDEYLGSVAVQHREVQGHESETFRAYFKQGLIYKQGGVASGMK</sequence>
+      <details>Quenched-flow experiments were performed using a Biologic QFM-5 rapid mixing module, operated at room temperature (21 °C). For refolding in 2.4 M urea, the lyophilized, 15N-labeled protein was first dissolved (to 40 μM) in 6.5 M urea, 50 mM acetic acid, 15 mM NaCl, and 1 mM DTT (pH 4.1) in D2O (reading unadjusted for isotope effect). This buffer was mixed in a 1:12 ratio with 50 mM acetic acid, 15 mM NaCl, and 2.06 M urea (pH 4.1) in H2O, to produce a refolding environment of 3 μM protein, 2.4 M urea, and pH 4.1. Delays for monitoring the time course of refolding ranged from 6 to 340 ms. To initiate amide hydrogen exchange, the buffer was mixed in a 13:12 ratio with 180 mM glycine and 15 mM NaCl (pH 9.8). The resulting pH was 9.3, which promotes rapid H-D exchange (0.6 ms). The exchange delay was 20 ms. Exchange was quenched by addition in a 25:9 ratio of 1.5 M acetic acid and 15 mM NaCl. The final pH was 3.7, essentially stopping exchange of all interior amides.</details>
+      
+        
+        <residue index="19" code="Q"></residue>
+        
+      
+        
+        <residue index="21" code="W"></residue>
+        
+      
+        
+        <residue index="22" code="R"></residue>
+        
+      
+        
+        <residue index="23" code="I"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="31" code="V"></residue>
+        
+      
+        
+        <residue index="45" code="Y"></residue>
+        
+      
+        
+        <residue index="46" code="V"></residue>
+        
+      
+        
+        <residue index="47" code="L"></residue>
+        
+      
+        
+        <residue index="48" code="L"></residue>
+        
+      
+        
+        <residue index="49" code="S"></residue>
+        
+      
+        
+        <residue index="50" code="T"></residue>
+        
+      
+        
+        <residue index="51" code="R"></residue>
+        
+      
+        
+        <residue index="60" code="N"></residue>
+        
+      
+        
+        <residue index="62" code="H"></residue>
+        
+      
+        
+        <residue index="63" code="Y"></residue>
+        
+      
+        
+        <residue index="64" code="W"></residue>
+        
+      
+        
+        <residue index="65" code="L"></residue>
+        
+      
+        
+        <residue index="77" code="A"></residue>
+        
+      
+        
+        <residue index="79" code="I"></residue>
+        
+      
+        
+        <residue index="80" code="Y"></residue>
+        
+      
+        
+        <residue index="82" code="T"></residue>
+        
+      
+        
+        <residue index="83" code="Q"></residue>
+        
+      
+        
+        <residue index="84" code="M"></residue>
+        
+      
+        
+        <residue index="88" code="L"></residue>
+        
+      
+        
+        <residue index="97" code="E"></residue>
+        
+      
+        
+        <residue index="98" code="V"></residue>
+        
+      
+        
+        <residue index="99" code="Q"></residue>
+        
+      
+        
+        <residue index="108" code="A"></residue>
+        
+      
+        
+        <residue index="109" code="Y"></residue>
+        
+      
+        
+        <residue index="110" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="138">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.15 - 4.15" temperature="25.0" probes="116">None</conditions>
+      <protection protection_level="STRONG">no exchange in one week</protection>
+      <sequence is_pdb="True">VELSKKVTGKLDKTTPGIQIWRIENMEMVPVPTKSYGNFYEGDCYVLLSTRKTGSGFSYNIHYWLGKNSSQDEQGAAAIYTTQMDEYLGSVAVQHREVQGHESETFRAYFKQGLIYKQGGVASGMK</sequence>
+      <details>The sample was lyophilized from NMR buffer (pH  4.15) and then redissolved in D2O at time zero. 15N HSQC spectra were recorded with 8 scans and 128 tt increments. Experiments were started at times 11, 30, 50, 69, 89, 108, 128, 157, 186, 216, 249, 279, 309, 338, 367, 464, 524, 583, 642, 702, 761, 820, 880, 939, 998, 1058, 1117, 1176, 1236, 1295 and 9920 min, sampling over one 24-h period with an additional experiment one week later. Temperature during exchange was maintained at 298 K. For each residue, peak volumes were measured in FELIX, and the natural logarithms of the peak volumes were plotted as a function of time. This representation gives a line with slope equal to the negative of the exchange rate for that residue.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="19" code="Q"></residue>
+        
+      
+        
+        <residue index="22" code="R"></residue>
+        
+      
+        
+        <residue index="23" code="I"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="45" code="Y"></residue>
+        
+      
+        
+        <residue index="46" code="V"></residue>
+        
+      
+        
+        <residue index="47" code="L"></residue>
+        
+      
+        
+        <residue index="48" code="L"></residue>
+        
+      
+        
+        <residue index="49" code="S"></residue>
+        
+      
+        
+        <residue index="51" code="R"></residue>
+        
+      
+        
+        <residue index="60" code="N"></residue>
+        
+      
+        
+        <residue index="62" code="H"></residue>
+        
+      
+        
+        <residue index="63" code="Y"></residue>
+        
+      
+        
+        <residue index="64" code="W"></residue>
+        
+      
+        
+        <residue index="65" code="L"></residue>
+        
+      
+        
+        <residue index="66" code="G"></residue>
+        
+      
+        
+        <residue index="79" code="I"></residue>
+        
+      
+        
+        <residue index="80" code="Y"></residue>
+        
+      
+        
+        <residue index="84" code="M"></residue>
+        
+      
+        
+        <residue index="97" code="E"></residue>
+        
+      
+        
+        <residue index="98" code="V"></residue>
+        
+      
+        
+        <residue index="107" code="R"></residue>
+        
+      
+        
+        <residue index="108" code="A"></residue>
+        
+      
+        
+        <residue index="109" code="Y"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="139">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.15 - 4.15" temperature="25.0" probes="116">None</conditions>
+      <protection protection_level="MEDIUM">very slow exchange (rate constant &lt; E-04)</protection>
+      <sequence is_pdb="True">VELSKKVTGKLDKTTPGIQIWRIENMEMVPVPTKSYGNFYEGDCYVLLSTRKTGSGFSYNIHYWLGKNSSQDEQGAAAIYTTQMDEYLGSVAVQHREVQGHESETFRAYFKQGLIYKQGGVASGMK</sequence>
+      <details>The sample was lyophilized from NMR buffer (pH  4.15) and then redissolved in D2O at time zero. 15N HSQC spectra were recorded with 8 scans and 128 tt increments. Experiments were started at times 11, 30, 50, 69, 89, 108, 128, 157, 186, 216, 249, 279, 309, 338, 367, 464, 524, 583, 642, 702, 761, 820, 880, 939, 998, 1058, 1117, 1176, 1236, 1295 and 9920 min, sampling over one 24-h period with an additional experiment one week later. Temperature during exchange was maintained at 298 K. For each residue, peak volumes were measured in FELIX, and the natural logarithms of the peak volumes were plotted as a function of time. This representation gives a line with slope equal to the negative of the exchange rate for that residue.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="21" code="W"></residue>
+        
+      
+        
+        <residue index="31" code="V"></residue>
+        
+      
+        
+        <residue index="43" code="D"></residue>
+        
+      
+        
+        <residue index="50" code="T"></residue>
+        
+      
+        
+        <residue index="67" code="K"></residue>
+        
+      
+        
+        <residue index="74" code="Q"></residue>
+        
+      
+        
+        <residue index="77" code="A"></residue>
+        
+      
+        
+        <residue index="82" code="T"></residue>
+        
+      
+        
+        <residue index="83" code="Q"></residue>
+        
+      
+        
+        <residue index="88" code="L"></residue>
+        
+      
+        
+        <residue index="99" code="Q"></residue>
+        
+      
+        
+        <residue index="101" code="H"></residue>
+        
+      
+        
+        <residue index="110" code="F"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

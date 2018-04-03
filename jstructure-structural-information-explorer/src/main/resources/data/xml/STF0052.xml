@@ -1,0 +1,283 @@
+<entry id="STF0052" title="Nanobody from Lama glama">
+  
+  <protein name="H14 protein" organism="Lama glama (Llama)" number_of_residues="117" uniprot_id="A2KD53" uniprot_range="2-117" pdb_id="1hcv">
+    
+    <experiment id="199">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.6 - 4.6" temperature="27.0" probes="54">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt; 4</protection>
+      <sequence is_pdb="True">DVQLQESGGGLVQAGGSLRLSCAASGRTGSTYDMGWFRQAPGKERESVAAINWDSARTYYASSVRGRFTISRDNAKKTVYLQMNSLKPEDTAVYTCGAGEGGTWDSWGQGTQVTVSS</sequence>
+      <details>For the hydrogen-deuterium exchange experiments, lyophilized, uniformly 15N-labeled VHH-H14 was dissolved in D2O buffer [10 mM deuterated sodium acetate (99.5% D), 100 mM NaCl, and 0.02% sodium azide (pH 4.6)] to a concentration of 0.5 mM. The pH meter readings were corrected for the isotope effect.</details>
+      
+        
+        <residue index="18" code="L"></residue>
+        
+      
+        
+        <residue index="20" code="L"></residue>
+        
+      
+        
+        <residue index="34" code="M"></residue>
+        
+      
+        
+        <residue index="35" code="G"></residue>
+        
+      
+        
+        <residue index="36" code="W"></residue>
+        
+      
+        
+        <residue index="37" code="F"></residue>
+        
+      
+        
+        <residue index="38" code="R"></residue>
+        
+      
+        
+        <residue index="49" code="A"></residue>
+        
+      
+        
+        <residue index="51" code="I"></residue>
+        
+      
+        
+        <residue index="69" code="T"></residue>
+        
+      
+        
+        <residue index="71" code="S"></residue>
+        
+      
+        
+        <residue index="80" code="Y"></residue>
+        
+      
+        
+        <residue index="81" code="L"></residue>
+        
+      
+        
+        <residue index="82" code="Q"></residue>
+        
+      
+        
+        <residue index="83" code="M"></residue>
+        
+      
+        
+        <residue index="87" code="K"></residue>
+        
+      
+        
+        <residue index="90" code="D"></residue>
+        
+      
+        
+        <residue index="91" code="T"></residue>
+        
+      
+        
+        <residue index="92" code="A"></residue>
+        
+      
+        
+        <residue index="94" code="Y"></residue>
+        
+      
+        
+        <residue index="97" code="G"></residue>
+        
+      
+        
+        <residue index="109" code="Q"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="200">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.6 - 4.6" temperature="27.0" probes="54">None</conditions>
+      <protection protection_level="MEDIUM">2 &lt; log(P) &lt; 4</protection>
+      <sequence is_pdb="True">DVQLQESGGGLVQAGGSLRLSCAASGRTGSTYDMGWFRQAPGKERESVAAINWDSARTYYASSVRGRFTISRDNAKKTVYLQMNSLKPEDTAVYTCGAGEGGTWDSWGQGTQVTVSS</sequence>
+      <details>For the hydrogen-deuterium exchange experiments, lyophilized, uniformly 15N-labeled VHH-H14 was dissolved in D2O buffer [10 mM deuterated sodium acetate (99.5% D), 100 mM NaCl, and 0.02% sodium azide (pH 4.6)] to a concentration of 0.5 mM. The pH meter readings were corrected for the isotope effect.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="12" code="V"></residue>
+        
+      
+        
+        <residue index="14" code="A"></residue>
+        
+      
+        
+        <residue index="16" code="G"></residue>
+        
+      
+        
+        <residue index="17" code="S"></residue>
+        
+      
+        
+        <residue index="21" code="S"></residue>
+        
+      
+        
+        <residue index="23" code="A"></residue>
+        
+      
+        
+        <residue index="46" code="E"></residue>
+        
+      
+        
+        <residue index="48" code="V"></residue>
+        
+      
+        
+        <residue index="50" code="A"></residue>
+        
+      
+        
+        <residue index="52" code="N"></residue>
+        
+      
+        
+        <residue index="61" code="A"></residue>
+        
+      
+        
+        <residue index="68" code="F"></residue>
+        
+      
+        
+        <residue index="84" code="N"></residue>
+        
+      
+        
+        <residue index="93" code="V"></residue>
+        
+      
+        
+        <residue index="95" code="T"></residue>
+        
+      
+        
+        <residue index="99" code="G"></residue>
+        
+      
+        
+        <residue index="106" code="S"></residue>
+        
+      
+        
+        <residue index="108" code="G"></residue>
+        
+      
+        
+        <residue index="113" code="V"></residue>
+        
+      
+        
+        <residue index="114" code="T"></residue>
+        
+      
+        
+        <residue index="115" code="V"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

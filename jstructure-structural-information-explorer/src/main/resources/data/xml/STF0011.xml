@@ -1,0 +1,563 @@
+<entry id="STF0011" title="E. coli dihydrofolate reductase (DHFR)">
+  
+  <protein name="Dihydrofolate reductase" organism="Escherichia coli (strain K12)" number_of_residues="159" uniprot_id="P0ABQ4" uniprot_range="1-159" pdb_id="5dfr">
+    
+    <experiment id="57">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="15.0" probes="26">None</conditions>
+      <protection protection_level="EARLY">Strongly protected within 13 ms</protection>
+      <sequence is_pdb="True">MISLIAALAVDRVIGMENAMPWNLPADLAWFKRNTLDKPVIMGRHTWESIGRPLPGRKNIILSSQPGTDDRVTWVKSVDEAIAACGDVPEIMVIGGGRVYEQFLPKAQKLYLTHIDAEVEGDTHFPDYEPDDWESVFSEFHDADAQNSHSYCFEILERR</sequence>
+      <details>Pulse labeling experiments were performed in a QFM-5 rapid-mixing device. DHFR (3 mg/mL) was denatured and all exchangeable amide hydrogens were deuterated by incubation in 6 M D4-urea, 50 mM potassium phosphate in 99.9% D2O (pH 6.3) at 15 °C for 1 h. Refolding was initiated by rapid sixfold dilution in 50 mM potassium phosphate buffer, pH* 6.3, containing 0.2 mM K2EDTA and 1 mM P-mercaptoethanol for variable time periods (t,) prior to the labeling pulse. The labeling pulse was initiated by a twofold dilution into either 200 mM tris-HCI for pulse pH* values below 9.5, or 200 mM glycine for pH* values at and above 9.5; both buffers contained 0.2 mM K2EDTA and 1 mM 6-mercaptoethanol.</details>
+      
+        
+        <residue index="81" code="A"></residue>
+        
+      
+        
+        <residue index="92" code="M"></residue>
+        
+      
+        
+        <residue index="103" code="F"></residue>
+        
+      
+        
+        <residue index="111" code="Y"></residue>
+        
+      
+        
+        <residue index="157" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="58">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="15.0" probes="26">None</conditions>
+      <protection protection_level="INTERMEDIATE">Weakly protected within 13 ms</protection>
+      <sequence is_pdb="True">MISLIAALAVDRVIGMENAMPWNLPADLAWFKRNTLDKPVIMGRHTWESIGRPLPGRKNIILSSQPGTDDRVTWVKSVDEAIAACGDVPEIMVIGGGRVYEQFLPKAQKLYLTHIDAEVEGDTHFPDYEPDDWESVFSEFHDADAQNSHSYCFEILERR</sequence>
+      <details>Pulse labeling experiments were performed in a QFM-5 rapid-mixing device. DHFR (3 mg/mL) was denatured and all exchangeable amide hydrogens were deuterated by incubation in 6 M D4-urea, 50 mM potassium phosphate in 99.9% D2O (pH 6.3) at 15 °C for 1 h. Refolding was initiated by rapid sixfold dilution in 50 mM potassium phosphate buffer, pH* 6.3, containing 0.2 mM K2EDTA and 1 mM P-mercaptoethanol for variable time periods (t,) prior to the labeling pulse. The labeling pulse was initiated by a twofold dilution into either 200 mM tris-HCI for pulse pH* values below 9.5, or 200 mM glycine for pH* values at and above 9.5; both buffers contained 0.2 mM K2EDTA and 1 mM 6-mercaptoethanol.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="5" code="I"></residue>
+        
+      
+        
+        <residue index="40" code="V"></residue>
+        
+      
+        
+        <residue index="41" code="I"></residue>
+        
+      
+        
+        <residue index="75" code="V"></residue>
+        
+      
+        
+        <residue index="91" code="I"></residue>
+        
+      
+        
+        <residue index="94" code="I"></residue>
+        
+      
+        
+        <residue index="155" code="I"></residue>
+        
+      
+        
+        <residue index="156" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="59">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="15.0" probes="26">None</conditions>
+      <protection protection_level="LATE">Not protected within 13 ms</protection>
+      <sequence is_pdb="True">MISLIAALAVDRVIGMENAMPWNLPADLAWFKRNTLDKPVIMGRHTWESIGRPLPGRKNIILSSQPGTDDRVTWVKSVDEAIAACGDVPEIMVIGGGRVYEQFLPKAQKLYLTHIDAEVEGDTHFPDYEPDDWESVFSEFHDADAQNSHSYCFEILERR</sequence>
+      <details>Pulse labeling experiments were performed in a QFM-5 rapid-mixing device. DHFR (3 mg/mL) was denatured and all exchangeable amide hydrogens were deuterated by incubation in 6 M D4-urea, 50 mM potassium phosphate in 99.9% D2O (pH 6.3) at 15 °C for 1 h. Refolding was initiated by rapid sixfold dilution in 50 mM potassium phosphate buffer, pH* 6.3, containing 0.2 mM K2EDTA and 1 mM P-mercaptoethanol for variable time periods (t,) prior to the labeling pulse. The labeling pulse was initiated by a twofold dilution into either 200 mM tris-HCI for pulse pH* values below 9.5, or 200 mM glycine for pH* values at and above 9.5; both buffers contained 0.2 mM K2EDTA and 1 mM 6-mercaptoethanol.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="S"></residue>
+        
+      
+        
+        <residue index="4" code="L"></residue>
+        
+      
+        
+        <residue index="42" code="M"></residue>
+        
+      
+        
+        <residue index="60" code="I"></residue>
+        
+      
+        
+        <residue index="109" code="K"></residue>
+        
+      
+        
+        <residue index="110" code="L"></residue>
+        
+      
+        
+        <residue index="112" code="L"></residue>
+        
+      
+        
+        <residue index="113" code="T"></residue>
+        
+      
+        
+        <residue index="114" code="H"></residue>
+        
+      
+        
+        <residue index="139" code="E"></residue>
+        
+      
+        
+        <residue index="151" code="Y"></residue>
+        
+      
+        
+        <residue index="153" code="F"></residue>
+        
+      
+        
+        <residue index="154" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="60">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.86 - 6.86" temperature="25.0" probes="all">None</conditions>
+      <protection protection_level="STRONG">amids persisting to exchange for 12 hours</protection>
+      <sequence is_pdb="True">MISLIAALAVDRVIGMENAMPWNLPADLAWFKRNTLDKPVIMGRHTWESIGRPLPGRKNIILSSQPGTDDRVTWVKSVDEAIAACGDVPEIMVIGGGRVYEQFLPKAQKLYLTHIDAEVEGDTHFPDYEPDDWESVFSEFHDADAQNSHSYCFEILERR</sequence>
+      <details>Exchange-out experiment at pH* 6.86 and 25 °C. A lyophilized, fully protonated sample of DHFR containing 1.5 molar excess of folate and appropriate buffer components was dissolved in D2O and a 2QF-COSY spectrum was recorded immediately. Following the acquisition of the initial 2QF-COSY spectrum (- 12 h), a second spectrum was recorded. Cross peaks for amide hydrogens that did not decrease in intensity by more than 25% in the second spectrum relative to the first were chosen.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="S"></residue>
+        
+      
+        
+        <residue index="4" code="L"></residue>
+        
+      
+        
+        <residue index="5" code="I"></residue>
+        
+      
+        
+        <residue index="40" code="V"></residue>
+        
+      
+        
+        <residue index="41" code="I"></residue>
+        
+      
+        
+        <residue index="42" code="M"></residue>
+        
+      
+        
+        <residue index="60" code="I"></residue>
+        
+      
+        
+        <residue index="75" code="V"></residue>
+        
+      
+        
+        <residue index="81" code="A"></residue>
+        
+      
+        
+        <residue index="91" code="I"></residue>
+        
+      
+        
+        <residue index="92" code="M"></residue>
+        
+      
+        
+        <residue index="94" code="I"></residue>
+        
+      
+        
+        <residue index="103" code="F"></residue>
+        
+      
+        
+        <residue index="109" code="K"></residue>
+        
+      
+        
+        <residue index="110" code="L"></residue>
+        
+      
+        
+        <residue index="111" code="Y"></residue>
+        
+      
+        
+        <residue index="112" code="L"></residue>
+        
+      
+        
+        <residue index="113" code="T"></residue>
+        
+      
+        
+        <residue index="114" code="H"></residue>
+        
+      
+        
+        <residue index="139" code="E"></residue>
+        
+      
+        
+        <residue index="151" code="Y"></residue>
+        
+      
+        
+        <residue index="153" code="F"></residue>
+        
+      
+        
+        <residue index="154" code="E"></residue>
+        
+      
+        
+        <residue index="155" code="I"></residue>
+        
+      
+        
+        <residue index="156" code="L"></residue>
+        
+      
+        
+        <residue index="157" code="E"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>
