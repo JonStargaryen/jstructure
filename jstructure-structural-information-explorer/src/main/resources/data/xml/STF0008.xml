@@ -1,0 +1,640 @@
+<entry id="STF0008" title="Cobrotoxin (CBTX)">
+  
+  <protein name="Cobrotoxin" organism="Naja atra (Chinese cobra)" number_of_residues="62" uniprot_id="P60770" uniprot_range="22-83" pdb_id="1coe">
+    
+    <experiment id="43">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="3.0 - 3.0" temperature="5.0" probes="24">None</conditions>
+      <protection protection_level="EARLY">refolding time constant &lt; 20</protection>
+      <sequence is_pdb="True">LECHNQQSSQTPTTTGCSGGETNCYKKRWRDHRGYRTERGCGCPSVKNGIEINCCTTDRCNN</sequence>
+      <details>All experiments were carried out at 5C using a RQF-63 rapid mixing quenched-flow apparatus. Complete denaturation and exchange of the backbone amide protons with deuterium was achieved by dissolving CBTX (20 mg/mL) in 6 M urea-d4 in D2O at pD 2.7. Refolding of denatured protein was initiated by a 11-fold dilution with 50 mM glycine-d5 (pH 3.0) in H2O. At this pH, H/D exchange rate was negligible. After variable refolding times ranging from 9.8 to 500 ms, the solution was diluted again to 11 times of the initial protein volume with 0.2 M sodium borate (pH 9.5) to initiate labeling of the deuterated amides in CBTX with protons.</details>
+      
+        
+        <residue index="28" code="R"></residue>
+        
+      
+        
+        <residue index="45" code="S"></residue>
+        
+      
+        
+        <residue index="50" code="I"></residue>
+        
+      
+        
+        <residue index="53" code="N"></residue>
+        
+      
+        
+        <residue index="55" code="C"></residue>
+        
+      
+        
+        <residue index="62" code="N"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="44">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="3.0 - 3.0" temperature="5.0" probes="24">None</conditions>
+      <protection protection_level="INTERMEDIATE">20 &lt; refolding time constant &lt; 40</protection>
+      <sequence is_pdb="True">LECHNQQSSQTPTTTGCSGGETNCYKKRWRDHRGYRTERGCGCPSVKNGIEINCCTTDRCNN</sequence>
+      <details>All experiments were carried out at 5C using a RQF-63 rapid mixing quenched-flow apparatus. Complete denaturation and exchange of the backbone amide protons with deuterium was achieved by dissolving CBTX (20 mg/mL) in 6 M urea-d4 in D2O at pD 2.7. Refolding of denatured protein was initiated by a 11-fold dilution with 50 mM glycine-d5 (pH 3.0) in H2O. At this pH, H/D exchange rate was negligible. After variable refolding times ranging from 9.8 to 500 ms, the solution was diluted again to 11 times of the initial protein volume with 0.2 M sodium borate (pH 9.5) to initiate labeling of the deuterated amides in CBTX with protons.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="6" code="Q"></residue>
+        
+      
+        
+        <residue index="14" code="T"></residue>
+        
+      
+        
+        <residue index="15" code="T"></residue>
+        
+      
+        
+        <residue index="26" code="K"></residue>
+        
+      
+        
+        <residue index="27" code="K"></residue>
+        
+      
+        
+        <residue index="33" code="R"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="45">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="3.0 - 3.0" temperature="5.0" probes="24">None</conditions>
+      <protection protection_level="LATE">40 &lt; refolding time constant &lt; 60</protection>
+      <sequence is_pdb="True">LECHNQQSSQTPTTTGCSGGETNCYKKRWRDHRGYRTERGCGCPSVKNGIEINCCTTDRCNN</sequence>
+      <details>All experiments were carried out at 5C using a RQF-63 rapid mixing quenched-flow apparatus. Complete denaturation and exchange of the backbone amide protons with deuterium was achieved by dissolving CBTX (20 mg/mL) in 6 M urea-d4 in D2O at pD 2.7. Refolding of denatured protein was initiated by a 11-fold dilution with 50 mM glycine-d5 (pH 3.0) in H2O. At this pH, H/D exchange rate was negligible. After variable refolding times ranging from 9.8 to 500 ms, the solution was diluted again to 11 times of the initial protein volume with 0.2 M sodium borate (pH 9.5) to initiate labeling of the deuterated amides in CBTX with protons.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="2" code="E"></residue>
+        
+      
+        
+        <residue index="10" code="Q"></residue>
+        
+      
+        
+        <residue index="17" code="C"></residue>
+        
+      
+        
+        <residue index="24" code="C"></residue>
+        
+      
+        
+        <residue index="25" code="Y"></residue>
+        
+      
+        
+        <residue index="29" code="W"></residue>
+        
+      
+        
+        <residue index="30" code="R"></residue>
+        
+      
+        
+        <residue index="58" code="D"></residue>
+        
+      
+        
+        <residue index="61" code="N"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="46">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="3.4 - 3.4" temperature="25.0" probes="38">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt; 2</protection>
+      <sequence is_pdb="True">LECHNQQSSQTPTTTGCSGGETNCYKKRWRDHRGYRTERGCGCPSVKNGIEINCCTTDRCNN</sequence>
+      <details>H/D exchange measurements in CTX III and CBTX were monitored using the magnitude COSY spectra recorded at 25°C (pH 3.4) using a Bruker DMX-600 NMR spectrometer. The samples for exchange kinetics of the amide protons in the proteins (CBTX and CTX III) were prepared by dissolving the lyophilized proteins in deuterated buffer at pD 3.6. The concentrations of the proteins (CBTX and CTX III) were 2.0 mM.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="C"></residue>
+        
+      
+        
+        <residue index="6" code="Q"></residue>
+        
+      
+        
+        <residue index="9" code="S"></residue>
+        
+      
+        
+        <residue index="14" code="T"></residue>
+        
+      
+        
+        <residue index="15" code="T"></residue>
+        
+      
+        
+        <residue index="24" code="C"></residue>
+        
+      
+        
+        <residue index="25" code="Y"></residue>
+        
+      
+        
+        <residue index="26" code="K"></residue>
+        
+      
+        
+        <residue index="27" code="K"></residue>
+        
+      
+        
+        <residue index="29" code="W"></residue>
+        
+      
+        
+        <residue index="35" code="Y"></residue>
+        
+      
+        
+        <residue index="38" code="E"></residue>
+        
+      
+        
+        <residue index="39" code="R"></residue>
+        
+      
+        
+        <residue index="42" code="G"></residue>
+        
+      
+        
+        <residue index="53" code="N"></residue>
+        
+      
+        
+        <residue index="55" code="C"></residue>
+        
+      
+        
+        <residue index="59" code="R"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="47">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="3.4 - 3.4" temperature="25.0" probes="38">None</conditions>
+      <protection protection_level="MEDIUM">1 &lt; log(P) &lt; 2</protection>
+      <sequence is_pdb="True">LECHNQQSSQTPTTTGCSGGETNCYKKRWRDHRGYRTERGCGCPSVKNGIEINCCTTDRCNN</sequence>
+      <details>H/D exchange measurements in CTX III and CBTX were monitored using the magnitude COSY spectra recorded at 25°C (pH 3.4) using a Bruker DMX-600 NMR spectrometer. The samples for exchange kinetics of the amide protons in the proteins (CBTX and CTX III) were prepared by dissolving the lyophilized proteins in deuterated buffer at pD 3.6. The concentrations of the proteins (CBTX and CTX III) were 2.0 mM.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="2" code="E"></residue>
+        
+      
+        
+        <residue index="17" code="C"></residue>
+        
+      
+        
+        <residue index="21" code="E"></residue>
+        
+      
+        
+        <residue index="28" code="R"></residue>
+        
+      
+        
+        <residue index="30" code="R"></residue>
+        
+      
+        
+        <residue index="37" code="T"></residue>
+        
+      
+        
+        <residue index="41" code="C"></residue>
+        
+      
+        
+        <residue index="48" code="N"></residue>
+        
+      
+        
+        <residue index="50" code="I"></residue>
+        
+      
+        
+        <residue index="51" code="E"></residue>
+        
+      
+        
+        <residue index="52" code="I"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

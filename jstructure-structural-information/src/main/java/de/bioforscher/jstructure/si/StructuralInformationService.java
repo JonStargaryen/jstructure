@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 public class StructuralInformationService extends ExternalLocalService {
     private static final Logger logger = LoggerFactory.getLogger(StructuralInformationService.class);
     private static final StructuralInformationService INSTANCE = new StructuralInformationService();
-    private static final String DEFAULT_SERVICE_LOCATION = "/home/sb/programs/confold_v1.0/confold.pl";
+//    private static final String DEFAULT_SERVICE_LOCATION = "/home/sb/programs/confold_v1.0/confold.pl";
+    private static final String DEFAULT_SERVICE_LOCATION = "/home/bittrich/programs/confold_v1.0/confold.pl";
     /**
      * How many contacts to select for each iteration.
      */
@@ -35,7 +36,8 @@ public class StructuralInformationService extends ExternalLocalService {
     /**
      * How many iterations to perform.
      */
-    private static final int NUMBER_OF_THREADS = 12;
+//    private static final int NUMBER_OF_THREADS = 12;
+    private static final int NUMBER_OF_THREADS = 7;
     private static final int COVERAGE = 10;
 
     private final ExecutorService executorService;

@@ -1,0 +1,506 @@
+<entry id="STF0030" title="Apo-flavodoxin">
+  
+  <protein name="Flavodoxin-2" organism="Azotobacter vinelandii" number_of_residues="179" uniprot_id="P00324" uniprot_range="2-180" pdb_id="1yob">
+    
+    <experiment id="142">
+      <method type="folding">Denaturant-dependent disappearance of amide cross peaks by NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="114">None</conditions>
+      <protection protection_level="EARLY">2.5 M GuHCl &lt; Cm (midpoint of folding) &lt; 2.8 M GuHCl</protection>
+      <sequence is_pdb="True">AKIGLFFGSNTGKTRKVAKSIKKRFDDETMSDALNVNRVSAEDFAQYQFLILGTPTLGEGELPGLSSDAENESWEEFLPKIEGLDFSGKTVALFGLGDQVGYPENYLDALGELYSFFKDRGAKIVGSWSTDGYEFESSEAVVDGKFVGLALDLDNQSGKTDERVAAWLAQIAPEFGLSL</sequence>
+      <details>Unfolded apoflavodoxin was obtained by denaturing flavodoxin in 6 M guanidine hydrochloride. Subsequently, FMN was removed via gel filtration at 7 M GuHCl. 550 μL NMR samples of apoflavodoxin at various denaturant concentrations were prepared; in total, 18 samples with GuHCl concentrations ranging from 4.05 to 1.58 M GuHCl. The buffer used in all experiments was 100 mM potassium pyrophosphate, pH 6.0. 1H-15N HSQC spectra of unfolded apoflavodoxin were acquired. Subsequently, the chemical shifts of the amides of the unfolded protein were determined in these spectra. In addition, the denaturant-dependent disappearance of the amide cross peaks of unfolded apoflavodoxin were tracked.</details>
+      
+        
+        <residue index="52" code="L"></residue>
+        
+      
+        
+        <residue index="53" code="G"></residue>
+        
+      
+        
+        <residue index="78" code="L"></residue>
+        
+      
+        
+        <residue index="82" code="E"></residue>
+        
+      
+        
+        <residue index="87" code="S"></residue>
+        
+      
+        
+        <residue index="92" code="A"></residue>
+        
+      
+        
+        <residue index="109" code="A"></residue>
+        
+      
+        
+        <residue index="111" code="G"></residue>
+        
+      
+        
+        <residue index="115" code="S"></residue>
+        
+      
+        
+        <residue index="126" code="G"></residue>
+        
+      
+        
+        <residue index="127" code="S"></residue>
+        
+      
+        
+        <residue index="148" code="G"></residue>
+        
+      
+        
+        <residue index="165" code="A"></residue>
+        
+      
+        
+        <residue index="168" code="L"></residue>
+        
+      
+        
+        <residue index="169" code="A"></residue>
+        
+      
+        
+        <residue index="170" code="Q"></residue>
+        
+      
+        
+        <residue index="171" code="I"></residue>
+        
+      
+        
+        <residue index="172" code="A"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="143">
+      <method type="folding">Denaturant-dependent disappearance of amide cross peaks by NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="114">None</conditions>
+      <protection protection_level="INTERMEDIATE">2.2 M GuHCl &lt; Cm (midpoint of folding) &lt; 2.5 M GuHCl</protection>
+      <sequence is_pdb="True">AKIGLFFGSNTGKTRKVAKSIKKRFDDETMSDALNVNRVSAEDFAQYQFLILGTPTLGEGELPGLSSDAENESWEEFLPKIEGLDFSGKTVALFGLGDQVGYPENYLDALGELYSFFKDRGAKIVGSWSTDGYEFESSEAVVDGKFVGLALDLDNQSGKTDERVAAWLAQIAPEFGLSL</sequence>
+      <details>Unfolded apoflavodoxin was obtained by denaturing flavodoxin in 6 M guanidine hydrochloride. Subsequently, FMN was removed via gel filtration at 7 M GuHCl. 550 μL NMR samples of apoflavodoxin at various denaturant concentrations were prepared; in total, 18 samples with GuHCl concentrations ranging from 4.05 to 1.58 M GuHCl. The buffer used in all experiments was 100 mM potassium pyrophosphate, pH 6.0. 1H-15N HSQC spectra of unfolded apoflavodoxin were acquired. Subsequently, the chemical shifts of the amides of the unfolded protein were determined in these spectra. In addition, the denaturant-dependent disappearance of the amide cross peaks of unfolded apoflavodoxin were tracked.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="46" code="Q"></residue>
+        
+      
+        
+        <residue index="54" code="T"></residue>
+        
+      
+        
+        <residue index="83" code="G"></residue>
+        
+      
+        
+        <residue index="86" code="F"></residue>
+        
+      
+        
+        <residue index="95" code="G"></residue>
+        
+      
+        
+        <residue index="101" code="G"></residue>
+        
+      
+        
+        <residue index="122" code="A"></residue>
+        
+      
+        
+        <residue index="129" code="S"></residue>
+        
+      
+        
+        <residue index="130" code="T"></residue>
+        
+      
+        
+        <residue index="143" code="D"></residue>
+        
+      
+        
+        <residue index="144" code="G"></residue>
+        
+      
+        
+        <residue index="150" code="A"></residue>
+        
+      
+        
+        <residue index="167" code="W"></residue>
+        
+      
+        
+        <residue index="176" code="G"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="144">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.2 - 6.2" temperature="30.0" probes="57+2">None</conditions>
+      <protection protection_level="STRONG">ΔG(op) ≥ 6.2 kcal/mol</protection>
+      <sequence is_pdb="True">AKIGLFFGSNTGKTRKVAKSIKKRFDDETMSDALNVNRVSAEDFAQYQFLILGTPTLGEGELPGLSSDAENESWEEFLPKIEGLDFSGKTVALFGLGDQVGYPENYLDALGELYSFFKDRGAKIVGSWSTDGYEFESSEAVVDGKFVGLALDLDNQSGKTDERVAAWLAQIAPEFGLSL</sequence>
+      <details>The H/D exchange measurements were carried out on the resulting 2 mM 15N-labeled apoflavodoxin sample over a five-day period (pH* 6.2, 303 K). The first gradient-enhanced 1H-15N HSQC experiment was started 12 minutes after initiation of exchange and each experiment lasted eight minutes. Peak intensities were measured and used to calculate the amide proton exchange rate, k(ex). ΔG(op) values were determined from the observed rate constants, k(ex), and the intrinsic chemical exchange rates, k(int).</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="5" code="L"></residue>
+        
+      
+        
+        <residue index="6" code="F"></residue>
+        
+      
+        
+        <residue index="49" code="F"></residue>
+        
+      
+        
+        <residue index="50" code="L"></residue>
+        
+      
+        
+        <residue index="51" code="I"></residue>
+        
+      
+        
+        <residue index="52" code="L"></residue>
+        
+      
+        
+        <residue index="53" code="G"></residue>
+        
+      
+        
+        <residue index="81" code="I"></residue>
+        
+      
+        
+        <residue index="90" code="T"></residue>
+        
+      
+        
+        <residue index="91" code="V"></residue>
+        
+      
+        
+        <residue index="92" code="A"></residue>
+        
+      
+        
+        <residue index="93" code="L"></residue>
+        
+      
+        
+        <residue index="94" code="F"></residue>
+        
+      
+        
+        <residue index="111" code="G"></residue>
+        
+      
+        
+        <residue index="114" code="Y"></residue>
+        
+      
+        
+        <residue index="117" code="F"></residue>
+        
+      
+        
+        <residue index="118" code="K"></residue>
+        
+      
+        
+        <residue index="120" code="R"></residue>
+        
+      
+        
+        <residue index="123" code="K"></residue>
+        
+      
+        
+        <residue index="125" code="V"></residue>
+        
+      
+        
+        <residue index="165" code="A"></residue>
+        
+      
+        
+        <residue index="167" code="W"></residue>
+        
+      
+        
+        <residue index="168" code="L"></residue>
+        
+      
+        
+        <residue index="169" code="A"></residue>
+        
+      
+        
+        <residue index="170" code="Q"></residue>
+        
+      
+        
+        <residue index="171" code="I"></residue>
+        
+      
+        
+        <residue index="172" code="A"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

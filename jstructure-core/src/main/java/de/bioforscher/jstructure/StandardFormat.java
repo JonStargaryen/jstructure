@@ -12,7 +12,7 @@ import java.util.Locale;
  * Created by bittrich on 7/13/17.
  */
 public class StandardFormat {
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.0000", new DecimalFormatSymbols(Locale.US));
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.0000", new DecimalFormatSymbols(Locale.US));
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("#", new DecimalFormatSymbols(Locale.US));
 
 //    private static DateTimeFormatter PDB_DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MMM-yy");

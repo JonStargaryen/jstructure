@@ -1,0 +1,109 @@
+<entry id="STF0038" title="Bovine pancreatic trypsin inhibitor">
+  
+  <protein name="Pancreatic trypsin inhibitor" organism="Bos taurus (Bovine)" number_of_residues="58" uniprot_id="P00974" uniprot_range="36-93" pdb_id="5pti">
+    
+    <experiment id="167">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="3.5 - 3.5" temperature="None" probes="13">None</conditions>
+      <protection protection_level="STRONG">slowest exchanging protons</protection>
+      <sequence is_pdb="True">RPDFCLEPPYTGPCKARIIRYFYNAKAGLCQTFVYGGCRAKRNNFKSAEDCMRTCGGA</sequence>
+      <details>Exchange rates for 13 individual, assigned peptide amide protons have been measured for BPTI as a function of pH and temperature. The rates of the slowest exchanging protons group together at pH ~4; these are also the most down-shifted of the resonances in the PMR spectra. Their complete pH-rate profiles from 20-680 °C have been reported.</details>
+      
+        
+        <residue index="20" code="R"></residue>
+        
+      
+        
+        <residue index="21" code="Y"></residue>
+        
+      
+        
+        <residue index="22" code="F"></residue>
+        
+      
+        
+        <residue index="23" code="Y"></residue>
+        
+      
+        
+        <residue index="31" code="Q"></residue>
+        
+      
+        
+        <residue index="33" code="F"></residue>
+        
+      
+        
+        <residue index="45" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="168">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="4.0 - 7.5" temperature="None" probes="8">None</conditions>
+      <protection protection_level="EARLY">-</protection>
+      <sequence is_pdb="True">RPDFCLEPPYTGPCKARIIRYFYNAKAGLCQTFVYGGCRAKRNNFKSAEDCMRTCGGA</sequence>
+      <details>An H2O solution of the fully denatured protein at in 40% (vh) n-propanol at pH 2.0 was mixed with 2 volumes of 0.2 M phosphate buffer in D2O at a range of pD values between about 4.5 and 7.5. This produces conditions at pH values above 4.0 in a 1:2 H2O/D2O mixture containing 13% n-propanol. The initial protein concentration in the H2O solution was 3 mM. pH was measured at 70°C in aliquots of the refolding mixture and is reported without correction for isotope effects or the presence of n-propanol. Syringes, mixer, and reaction tubing were thermostated at 70 °C. For quenching, the mixture was injected through a nozzle into isopentane at -70°C or ice water. The nozzle was placed a few millimeters above the liquid. The reaction time was determined from the calibrated flow rate and the precisely measured reaction volume, i.e., the volume between mixer and quencher. The shortest reaction time achieved was 30 ms. Longer times were set by reduction of the flow rate and/or increased length of the reaction tubing (thermostated at 70°C).</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="21" code="Y"></residue>
+        
+      
+        
+        <residue index="22" code="F"></residue>
+        
+      
+        
+        <residue index="23" code="Y"></residue>
+        
+      
+        
+        <residue index="31" code="Q"></residue>
+        
+      
+        
+        <residue index="33" code="F"></residue>
+        
+      
+        
+        <residue index="35" code="Y"></residue>
+        
+      
+        
+        <residue index="45" code="F"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

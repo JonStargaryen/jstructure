@@ -1,0 +1,337 @@
+<entry id="STF0056" title="cellular retinol-binding protein type-1">
+  
+  <protein name="Retinol-binding protein 1" organism="Rattus norvegicus (Rat)" number_of_residues="134" uniprot_id="P02696" uniprot_range="1-135" pdb_id="1jbh">
+    
+    <experiment id="206">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="124">None</conditions>
+      <protection protection_level="STRONG">no exchange for &gt;220 hours</protection>
+      <sequence is_pdb="True">MPVDFNGYWKMLSNENFEEYLRALDVNVALRKIANLLKPDKEIVQDGDHMIIRTLSTFRNYIMDFQVGKEFEEDLTGIDDRKCMTTVSWDGDKLQCVQKGEKEGRGWTQWIEGDELHLEMRAEGVTCKQVFKKVH</sequence>
+      <details>For the identification of slow exchanging amide protons, the protein sample buffer was replaced with a perdeuterated solution consisting of 20 mM KD2PO4 and 0.05% NaN3 in D2O, as previously described (36). This perdeuterated solution was prepared from the protonated buffer (90% H2O/10% D2O) at pH 6.0 by lyophilizing and redissolving in D2O twice. The buffer exchange was performed at 4°C with Vivaspin centrifugal concentrators (molecular weight cutoff of 10 kDa) in several rounds of filtration over 6–10 h. Following equilibration to 25°C inside the NMR magnet, a series of homonuclear TOCSY (alternating beween 30 and 80 ms spin lock time) and NOESY (alternating between 80 and 150 ms mixing time) experiments were collected over a period of more than 9 days (the first 3.5 days at 600.13 MHz and the remaining time at 499.87 MHz) in order to monitor the amide proton exchange.</details>
+      
+        
+        <residue index="7" code="G"></residue>
+        
+      
+        
+        <residue index="9" code="W"></residue>
+        
+      
+        
+        <residue index="10" code="K"></residue>
+        
+      
+        
+        <residue index="12" code="L"></residue>
+        
+      
+        
+        <residue index="20" code="Y"></residue>
+        
+      
+        
+        <residue index="21" code="L"></residue>
+        
+      
+        
+        <residue index="22" code="R"></residue>
+        
+      
+        
+        <residue index="23" code="A"></residue>
+        
+      
+        
+        <residue index="24" code="L"></residue>
+        
+      
+        
+        <residue index="41" code="K"></residue>
+        
+      
+        
+        <residue index="42" code="E"></residue>
+        
+      
+        
+        <residue index="43" code="I"></residue>
+        
+      
+        
+        <residue index="44" code="V"></residue>
+        
+      
+        
+        <residue index="50" code="M"></residue>
+        
+      
+        
+        <residue index="51" code="I"></residue>
+        
+      
+        
+        <residue index="52" code="I"></residue>
+        
+      
+        
+        <residue index="53" code="R"></residue>
+        
+      
+        
+        <residue index="65" code="F"></residue>
+        
+      
+        
+        <residue index="71" code="F"></residue>
+        
+      
+        
+        <residue index="85" code="T"></residue>
+        
+      
+        
+        <residue index="88" code="S"></residue>
+        
+      
+        
+        <residue index="93" code="K"></residue>
+        
+      
+        
+        <residue index="95" code="Q"></residue>
+        
+      
+        
+        <residue index="96" code="C"></residue>
+        
+      
+        
+        <residue index="107" code="W"></residue>
+        
+      
+        
+        <residue index="108" code="T"></residue>
+        
+      
+        
+        <residue index="109" code="Q"></residue>
+        
+      
+        
+        <residue index="110" code="W"></residue>
+        
+      
+        
+        <residue index="112" code="E"></residue>
+        
+      
+        
+        <residue index="116" code="L"></residue>
+        
+      
+        
+        <residue index="117" code="H"></residue>
+        
+      
+        
+        <residue index="118" code="L"></residue>
+        
+      
+        
+        <residue index="119" code="E"></residue>
+        
+      
+        
+        <residue index="120" code="M"></residue>
+        
+      
+        
+        <residue index="121" code="R"></residue>
+        
+      
+        
+        <residue index="122" code="A"></residue>
+        
+      
+        
+        <residue index="125" code="V"></residue>
+        
+      
+        
+        <residue index="127" code="C"></residue>
+        
+      
+        
+        <residue index="129" code="Q"></residue>
+        
+      
+        
+        <residue index="130" code="V"></residue>
+        
+      
+        
+        <residue index="131" code="F"></residue>
+        
+      
+        
+        <residue index="132" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="207">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="124">None</conditions>
+      <protection protection_level="MEDIUM">no exchange for &gt;20 hours</protection>
+      <sequence is_pdb="True">MPVDFNGYWKMLSNENFEEYLRALDVNVALRKIANLLKPDKEIVQDGDHMIIRTLSTFRNYIMDFQVGKEFEEDLTGIDDRKCMTTVSWDGDKLQCVQKGEKEGRGWTQWIEGDELHLEMRAEGVTCKQVFKKVH</sequence>
+      <details>For the identification of slow exchanging amide protons, the protein sample buffer was replaced with a perdeuterated solution consisting of 20 mM KD2PO4 and 0.05% NaN3 in D2O, as previously described (36). This perdeuterated solution was prepared from the protonated buffer (90% H2O/10% D2O) at pH 6.0 by lyophilizing and redissolving in D2O twice. The buffer exchange was performed at 4°C with Vivaspin centrifugal concentrators (molecular weight cutoff of 10 kDa) in several rounds of filtration over 6–10 h. Following equilibration to 25°C inside the NMR magnet, a series of homonuclear TOCSY (alternating beween 30 and 80 ms spin lock time) and NOESY (alternating between 80 and 150 ms mixing time) experiments were collected over a period of more than 9 days (the first 3.5 days at 600.13 MHz and the remaining time at 499.87 MHz) in order to monitor the amide proton exchange.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="13" code="S"></residue>
+        
+      
+        
+        <residue index="25" code="D"></residue>
+        
+      
+        
+        <residue index="40" code="D"></residue>
+        
+      
+        
+        <residue index="83" code="C"></residue>
+        
+      
+        
+        <residue index="86" code="T"></residue>
+        
+      
+        
+        <residue index="87" code="V"></residue>
+        
+      
+        
+        <residue index="97" code="V"></residue>
+        
+      
+        
+        <residue index="111" code="I"></residue>
+        
+      
+        
+        <residue index="115" code="E"></residue>
+        
+      
+        
+        <residue index="128" code="K"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

@@ -1,6 +1,8 @@
 package de.bioforscher.jstructure.si.explorer.model;
 
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
+import de.bioforscher.jstructure.efr.parser.EvolutionaryCouplingParser;
 import de.bioforscher.jstructure.efr.parser.Start2FoldXmlParser;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -8,9 +10,12 @@ import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.si.explorer.StructuralInformationParserService;
 import de.bioforscher.testutil.TestUtils;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,6 +40,9 @@ public class ExplorerChain {
     private final String title;
     private final String sequence;
     private final List<SecondaryStructureElement> secondaryStructureElements;
+    private final String averageRmsd;
+    private final String averageTmScore;
+    private final String averageQ;
 
     public ExplorerChain(String[] lineSplit) {
         // parse information of list
@@ -68,11 +76,23 @@ public class ExplorerChain {
                 .map(ResidueIdentifier::getResidueNumber)
                 .collect(Collectors.toList());
 
+        EvolutionaryCouplingParser.parseHotSpotFile(chain,
+                TestUtils.getResourceAsInputStream("data/coupling/" + stfId + "_hs.html"));
         this.contacts = STRUCTURAL_INFORMATION_PARSER_SERVICE.parseContactStructuralInformationFile(TestUtils.getResourceAsInputStream("data/raw/" + stfId + ".out"),
                 earlyFoldingResidues);
         this.residues = STRUCTURAL_INFORMATION_PARSER_SERVICE.composeResidueStructuralInformation(aminoAcids,
                 earlyFoldingResidues,
                 contacts);
+        try {
+            EvolutionaryCouplingParser.parsePlmScore(contacts,
+                    Jsoup.parse(TestUtils.getResourceAsInputStream("data/coupling/" + stfId + "_ec.html"), "UTF-8", ""));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        double[] rawBaselinePerformance = STRUCTURAL_INFORMATION_PARSER_SERVICE.parseAveragePerformance(TestUtils.getResourceAsInputStream("data/raw/" + stfId + ".out"));
+        this.averageRmsd = StandardFormat.format(rawBaselinePerformance[0]);
+        this.averageTmScore = StandardFormat.format(rawBaselinePerformance[1]);
+        this.averageQ = StandardFormat.format(rawBaselinePerformance[2]);
 
         this.title = chain.getParentStructure().getTitle();
         this.sequence = chain.getAminoAcidSequence();
@@ -130,6 +150,18 @@ public class ExplorerChain {
 
     public List<ResidueStructuralInformation> getResidues() {
         return residues;
+    }
+
+    public String getAverageRmsd() {
+        return averageRmsd;
+    }
+
+    public String getAverageTmScore() {
+        return averageTmScore;
+    }
+
+    public String getAverageQ() {
+        return averageQ;
     }
 
     public String getTitle() {

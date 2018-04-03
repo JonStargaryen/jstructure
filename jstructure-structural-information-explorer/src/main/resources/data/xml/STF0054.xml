@@ -1,0 +1,228 @@
+<entry id="STF0054" title="E.coli YOJN histidine-phosphotransferase domain">
+  
+  <protein name="Phosphotransferase RcsD" organism="Escherichia coli (strain K12)" number_of_residues="116" uniprot_id="P39838" uniprot_range="775-890" pdb_id="1sr2">
+    
+    <experiment id="203">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="20.0" probes="all amides">None</conditions>
+      <protection protection_level="STRONG">residues that exhibit significant protection (no exchange for &gt; 2 hours)</protection>
+      <sequence is_pdb="True">MQEAVLQLIEVQLAQEEVTESPLGGDENAQLHASGYYALFVDTVPDDVKRLYTEAATSDFAALAQTAHRLKGVFAMLNLVPGKQLCETLEHLIREKDVPGIEKYISDIDSYVKSLL</sequence>
+      <details>The proton-exchange experiments were carried out on a Bruker DMX 600 spectrometer at 293 K. The 15N-labeled YojN-HPt sample was lyophilized and dissolved in the same volume of ice-cold D2O. A series of [1H,15N]-HSQC spectra were acquired every 30 minutes during the first two hours and thereafter every two hours for the following two days.</details>
+      
+        
+        <residue index="48" code="V"></residue>
+        
+      
+        
+        <residue index="49" code="K"></residue>
+        
+      
+        
+        <residue index="50" code="R"></residue>
+        
+      
+        
+        <residue index="51" code="L"></residue>
+        
+      
+        
+        <residue index="52" code="Y"></residue>
+        
+      
+        
+        <residue index="55" code="A"></residue>
+        
+      
+        
+        <residue index="56" code="A"></residue>
+        
+      
+        
+        <residue index="63" code="L"></residue>
+        
+      
+        
+        <residue index="64" code="A"></residue>
+        
+      
+        
+        <residue index="65" code="Q"></residue>
+        
+      
+        
+        <residue index="66" code="T"></residue>
+        
+      
+        
+        <residue index="67" code="A"></residue>
+        
+      
+        
+        <residue index="68" code="H"></residue>
+        
+      
+        
+        <residue index="69" code="R"></residue>
+        
+      
+        
+        <residue index="70" code="L"></residue>
+        
+      
+        
+        <residue index="71" code="K"></residue>
+        
+      
+        
+        <residue index="72" code="G"></residue>
+        
+      
+        
+        <residue index="73" code="V"></residue>
+        
+      
+        
+        <residue index="74" code="F"></residue>
+        
+      
+        
+        <residue index="75" code="A"></residue>
+        
+      
+        
+        <residue index="76" code="M"></residue>
+        
+      
+        
+        <residue index="77" code="L"></residue>
+        
+      
+        
+        <residue index="78" code="N"></residue>
+        
+      
+        
+        <residue index="79" code="L"></residue>
+        
+      
+        
+        <residue index="82" code="G"></residue>
+        
+      
+        
+        <residue index="83" code="K"></residue>
+        
+      
+        
+        <residue index="85" code="L"></residue>
+        
+      
+        
+        <residue index="86" code="C"></residue>
+        
+      
+        
+        <residue index="87" code="E"></residue>
+        
+      
+        
+        <residue index="89" code="L"></residue>
+        
+      
+        
+        <residue index="90" code="E"></residue>
+        
+      
+        
+        <residue index="92" code="L"></residue>
+        
+      
+        
+        <residue index="93" code="I"></residue>
+        
+      
+        
+        <residue index="95" code="E"></residue>
+        
+      
+        
+        <residue index="96" code="K"></residue>
+        
+      
+        
+        <residue index="97" code="D"></residue>
+        
+      
+        
+        <residue index="98" code="V"></residue>
+        
+      
+        
+        <residue index="101" code="I"></residue>
+        
+      
+        
+        <residue index="102" code="E"></residue>
+        
+      
+        
+        <residue index="103" code="K"></residue>
+        
+      
+        
+        <residue index="104" code="Y"></residue>
+        
+      
+        
+        <residue index="105" code="I"></residue>
+        
+      
+        
+        <residue index="106" code="S"></residue>
+        
+      
+        
+        <residue index="107" code="D"></residue>
+        
+      
+        
+        <residue index="108" code="I"></residue>
+        
+      
+        
+        <residue index="109" code="D"></residue>
+        
+      
+        
+        <residue index="110" code="S"></residue>
+        
+      
+        
+        <residue index="111" code="Y"></residue>
+        
+      
+        
+        <residue index="112" code="V"></residue>
+        
+      
+        
+        <residue index="113" code="K"></residue>
+        
+      
+        
+        <residue index="114" code="S"></residue>
+        
+      
+        
+        <residue index="115" code="L"></residue>
+        
+      
+        
+        <residue index="116" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

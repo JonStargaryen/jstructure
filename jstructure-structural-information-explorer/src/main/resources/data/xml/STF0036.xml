@@ -1,0 +1,298 @@
+<entry id="STF0036" title="Redesigned apo-cytochrome b562">
+  
+  <protein name="Soluble cytochrome b562" organism="Escherichia coli" number_of_residues="106" uniprot_id="P0ABE7" uniprot_range="23-128" pdb_id="1yyx">
+    
+    <experiment id="159">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="25.0" probes="33">None</conditions>
+      <protection protection_level="STRONG">ΔGu =~9.6 kcal/mol</protection>
+      <sequence is_pdb="True">ADLEDNWETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKATPPKLEDKSPDSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTIRAYNQKYG</sequence>
+      <details>The exchange reaction was initiated by dissolving protein samples with deuterated amide protons in an exchanging solution using a spin column filled with G25 Sephadex and preequilibrated with exchanging buffer (50 mM NaAc-d, 95% H2O, and 5% D2O). The deuterated Rd-apocyt b562 protein was prepared by dissolving proteins in D2O (pD 7.0, 0.1 M Na2PO4) and heated at 60 °C for more than 30 min. 15N-1H HSQC spectra were recorded using a 500 MHz instrument. Protein concentrations are 2 mM. The peak intensity as a function of time was measured and fitted to single-exponential kinetics to obtain the exchange rate constant.</details>
+      
+        
+        <residue index="26" code="V"></residue>
+        
+      
+        
+        <residue index="27" code="K"></residue>
+        
+      
+        
+        <residue index="28" code="D"></residue>
+        
+      
+        
+        <residue index="29" code="A"></residue>
+        
+      
+        
+        <residue index="32" code="K"></residue>
+        
+      
+        
+        <residue index="35" code="A"></residue>
+        
+      
+        
+        <residue index="40" code="A"></residue>
+        
+      
+        
+        <residue index="70" code="G"></residue>
+        
+      
+        
+        <residue index="71" code="Q"></residue>
+        
+      
+        
+        <residue index="75" code="A"></residue>
+        
+      
+        
+        <residue index="77" code="K"></residue>
+        
+      
+        
+        <residue index="79" code="A"></residue>
+        
+      
+        
+        <residue index="80" code="N"></residue>
+        
+      
+        
+        <residue index="81" code="E"></residue>
+        
+      
+        
+        <residue index="83" code="K"></residue>
+        
+      
+        
+        <residue index="87" code="A"></residue>
+        
+      
+        
+        <residue index="88" code="Q"></residue>
+        
+      
+        
+        <residue index="89" code="A"></residue>
+        
+      
+        
+        <residue index="94" code="L"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="160">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="25.0" probes="33">None</conditions>
+      <protection protection_level="MEDIUM">ΔGu =~6.5 kcal/mol</protection>
+      <sequence is_pdb="True">ADLEDNWETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKATPPKLEDKSPDSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTIRAYNQKYG</sequence>
+      <details>The exchange reaction was initiated by dissolving protein samples with deuterated amide protons in an exchanging solution using a spin column filled with G25 Sephadex and preequilibrated with exchanging buffer (50 mM NaAc-d, 95% H2O, and 5% D2O). The deuterated Rd-apocyt b562 protein was prepared by dissolving proteins in D2O (pD 7.0, 0.1 M Na2PO4) and heated at 60 °C for more than 30 min. 15N-1H HSQC spectra were recorded using a 500 MHz instrument. Protein concentrations are 2 mM. The peak intensity as a function of time was measured and fitted to single-exponential kinetics to obtain the exchange rate constant.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="95" code="K"></residue>
+        
+      
+        
+        <residue index="98" code="I"></residue>
+        
+      
+        
+        <residue index="99" code="R"></residue>
+        
+      
+        
+        <residue index="100" code="A"></residue>
+        
+      
+        
+        <residue index="101" code="Y"></residue>
+        
+      
+        
+        <residue index="106" code="G"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="161">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="25.0" probes="33">None</conditions>
+      <protection protection_level="WEAK">ΔGu =~4.5 kcal/mol</protection>
+      <sequence is_pdb="True">ADLEDNWETLNDNLKVIEKADNAAQVKDALTKMRAAALDAQKATPPKLEDKSPDSPEMKDFRHGFDILVGQIDDALKLANEGKVKEAQAAAEQLKTTIRAYNQKYG</sequence>
+      <details>The exchange reaction was initiated by dissolving protein samples with deuterated amide protons in an exchanging solution using a spin column filled with G25 Sephadex and preequilibrated with exchanging buffer (50 mM NaAc-d, 95% H2O, and 5% D2O). The deuterated Rd-apocyt b562 protein was prepared by dissolving proteins in D2O (pD 7.0, 0.1 M Na2PO4) and heated at 60 °C for more than 30 min. 15N-1H HSQC spectra were recorded using a 500 MHz instrument. Protein concentrations are 2 mM. The peak intensity as a function of time was measured and fitted to single-exponential kinetics to obtain the exchange rate constant.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="E"></residue>
+        
+      
+        
+        <residue index="9" code="T"></residue>
+        
+      
+        
+        <residue index="10" code="L"></residue>
+        
+      
+        
+        <residue index="14" code="L"></residue>
+        
+      
+        
+        <residue index="16" code="V"></residue>
+        
+      
+        
+        <residue index="18" code="E"></residue>
+        
+      
+        
+        <residue index="65" code="F"></residue>
+        
+      
+        
+        <residue index="66" code="D"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

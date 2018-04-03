@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class TMAlignService extends ExternalLocalService {
     private static final Logger logger = LoggerFactory.getLogger(TMAlignService.class);
     private static final TMAlignService INSTANCE = new TMAlignService();
-    private static final String DEFAULT_SERVICE_LOCATION = "/home/sb/programs/tmalign";
+    private static final String DEFAULT_SERVICE_LOCATION = "tmalign";
 
     private TMAlignService() {
         super(DEFAULT_SERVICE_LOCATION);

@@ -1,0 +1,463 @@
+<entry id="STF0010" title="Dictyostelium discoideum hisactophilin-1">
+  
+  <protein name="Hisactophilin-1" organism="Dictyostelium discoideum (Slime mold)" number_of_residues="118" uniprot_id="P13231" uniprot_range="1-118" pdb_id="1hce">
+    
+    <experiment id="53">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="7.8 - 7.8" temperature="20.0" probes="31">None</conditions>
+      <protection protection_level="EARLY">Fast protection rate s(-1) &gt; 20</protection>
+      <sequence is_pdb="True">MGNRAFKSHHGHFLSAEGEAVKTHHGHHDHHTHFHVENHGGKVALKTHCGKYLSIGDHKQVYLSHHLHGDHSLFHLEHHGGKVSIKGHHHHYISADHHGHVSTKEHHDHDTTFEEIII</sequence>
+      <details>Denatured perdeutero hisactophilin (8.0 mg/mL in 6.4 M urea-D4, 250 mM potassium phosphate buffer at pH 7.8, 5 mM DTT, 5 mM EDTA, D2O) was diluted fivefold with D2O, incubated for a series of set refolding times, pH-pulsed using 5 volumes of 62.5 mM glycine/sodium glycinate in H2O (final pH was 9.52 for 29 ms), and pH-quenched with 4 volumes of 112.5 mM triethanolamine buffer in H2O (final pH was 7.7). The sample was immediately concentrated and exchanged by ultrafiltration into 50 mM triethanolamine buffer at pH 7.8 in D2O. Final sample volumes (0.5 mL) contained 5mg/mL hisactophilin. NMR experiments were performed within 2 h after concentration.</details>
+      
+        
+        <residue index="14" code="L"></residue>
+        
+      
+        
+        <residue index="43" code="V"></residue>
+        
+      
+        
+        <residue index="44" code="A"></residue>
+        
+      
+        
+        <residue index="45" code="L"></residue>
+        
+      
+        
+        <residue index="47" code="T"></residue>
+        
+      
+        
+        <residue index="53" code="L"></residue>
+        
+      
+        
+        <residue index="62" code="Y"></residue>
+        
+      
+        
+        <residue index="73" code="L"></residue>
+        
+      
+        
+        <residue index="74" code="F"></residue>
+        
+      
+        
+        <residue index="114" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="54">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="7.8 - 7.8" temperature="20.0" probes="31">None</conditions>
+      <protection protection_level="INTERMEDIATE">10 &lt; fast protection rate s(-1) &lt; 20</protection>
+      <sequence is_pdb="True">MGNRAFKSHHGHFLSAEGEAVKTHHGHHDHHTHFHVENHGGKVALKTHCGKYLSIGDHKQVYLSHHLHGDHSLFHLEHHGGKVSIKGHHHHYISADHHGHVSTKEHHDHDTTFEEIII</sequence>
+      <details>Denatured perdeutero hisactophilin (8.0 mg/mL in 6.4 M urea-D4, 250 mM potassium phosphate buffer at pH 7.8, 5 mM DTT, 5 mM EDTA, D2O) was diluted fivefold with D2O, incubated for a series of set refolding times, pH-pulsed using 5 volumes of 62.5 mM glycine/sodium glycinate in H2O (final pH was 9.52 for 29 ms), and pH-quenched with 4 volumes of 112.5 mM triethanolamine buffer in H2O (final pH was 7.7). The sample was immediately concentrated and exchanged by ultrafiltration into 50 mM triethanolamine buffer at pH 7.8 in D2O. Final sample volumes (0.5 mL) contained 5mg/mL hisactophilin. NMR experiments were performed within 2 h after concentration.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="15" code="S"></residue>
+        
+      
+        
+        <residue index="34" code="F"></residue>
+        
+      
+        
+        <residue index="35" code="H"></residue>
+        
+      
+        
+        <residue index="46" code="K"></residue>
+        
+      
+        
+        <residue index="54" code="S"></residue>
+        
+      
+        
+        <residue index="55" code="I"></residue>
+        
+      
+        
+        <residue index="83" code="V"></residue>
+        
+      
+        
+        <residue index="84" code="S"></residue>
+        
+      
+        
+        <residue index="93" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="55">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="7.8 - 7.8" temperature="20.0" probes="31">None</conditions>
+      <protection protection_level="LATE">4 &lt; fast protection rate s(-1) &lt; 10</protection>
+      <sequence is_pdb="True">MGNRAFKSHHGHFLSAEGEAVKTHHGHHDHHTHFHVENHGGKVALKTHCGKYLSIGDHKQVYLSHHLHGDHSLFHLEHHGGKVSIKGHHHHYISADHHGHVSTKEHHDHDTTFEEIII</sequence>
+      <details>Denatured perdeutero hisactophilin (8.0 mg/mL in 6.4 M urea-D4, 250 mM potassium phosphate buffer at pH 7.8, 5 mM DTT, 5 mM EDTA, D2O) was diluted fivefold with D2O, incubated for a series of set refolding times, pH-pulsed using 5 volumes of 62.5 mM glycine/sodium glycinate in H2O (final pH was 9.52 for 29 ms), and pH-quenched with 4 volumes of 112.5 mM triethanolamine buffer in H2O (final pH was 7.7). The sample was immediately concentrated and exchanged by ultrafiltration into 50 mM triethanolamine buffer at pH 7.8 in D2O. Final sample volumes (0.5 mL) contained 5mg/mL hisactophilin. NMR experiments were performed within 2 h after concentration.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="5" code="A"></residue>
+        
+      
+        
+        <residue index="6" code="F"></residue>
+        
+      
+        
+        <residue index="7" code="K"></residue>
+        
+      
+        
+        <residue index="8" code="S"></residue>
+        
+      
+        
+        <residue index="63" code="L"></residue>
+        
+      
+        
+        <residue index="86" code="K"></residue>
+        
+      
+        
+        <residue index="87" code="G"></residue>
+        
+      
+        
+        <residue index="92" code="Y"></residue>
+        
+      
+        
+        <residue index="94" code="S"></residue>
+        
+      
+        
+        <residue index="95" code="A"></residue>
+        
+      
+        
+        <residue index="113" code="F"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="56">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.9 - 9.7" temperature="17.4" probes="37">None</conditions>
+      <protection protection_level="STRONG">Slow exchange core</protection>
+      <sequence is_pdb="True">MGNRAFKSHHGHFLSAEGEAVKTHHGHHDHHTHFHVENHGGKVALKTHCGKYLSIGDHKQVYLSHHLHGDHSLFHLEHHGGKVSIKGHHHHYISADHHGHVSTKEHHDHDTTFEEIII</sequence>
+      <details>For measurement of the pH dependence of amide exchange rates, purified protein was exchanged into 50 mM potassium phosphate buffer at pH 5.9, 6.8, and 7.8 or 50 mM glycine buffer at pH 8.7 and 9.7 and then lyophilized. H/D exchange was initiated by redissolving the sample in D2O to the same volume that existed prior to lyophilization. The slow exchange core is defined by the authors as the collection of residues with the slowest average exchange rate, the strongest dependence of exchange on denaturant concentration, and the strongest temperature dependence for exchange rates.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="44" code="A"></residue>
+        
+      
+        
+        <residue index="45" code="L"></residue>
+        
+      
+        
+        <residue index="46" code="K"></residue>
+        
+      
+        
+        <residue index="54" code="S"></residue>
+        
+      
+        
+        <residue index="62" code="Y"></residue>
+        
+      
+        
+        <residue index="74" code="F"></residue>
+        
+      
+        
+        <residue index="85" code="I"></residue>
+        
+      
+        
+        <residue index="86" code="K"></residue>
+        
+      
+        
+        <residue index="93" code="I"></residue>
+        
+      
+        
+        <residue index="94" code="S"></residue>
+        
+      
+        
+        <residue index="113" code="F"></residue>
+        
+      
+        
+        <residue index="114" code="E"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

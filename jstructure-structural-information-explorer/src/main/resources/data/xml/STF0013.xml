@@ -1,0 +1,712 @@
+<entry id="STF0013" title="Equine lysozyme">
+  
+  <protein name="Lysozyme C, milk isozyme" organism="Equus caballus (Horse)" number_of_residues="129" uniprot_id="P11376" uniprot_range="1-129" pdb_id="2eql">
+    
+    <experiment id="65">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="7.5 - 7.5" temperature="25.0" probes="46 amides + 3 Trp indole hydrogen atoms">None</conditions>
+      <protection protection_level="EARLY">strong protection within 3.5 ms</protection>
+      <sequence is_pdb="True">KVFSKCELAHKLKAQEMDGFGGYSLANWVCMAEYESNFNTRAFNGKNANGSSDYGLFQLNNKWWCKDNKRSSSNACNIMCSKLLDENIDDDISCAKRVVRDPKGMSAWKAWVKHCKDKDLSEYLASCNL</sequence>
+      <details>Equine lysozyme denatured in 6 M GdnHCl was diluted rapidly with deuterated buffer solution at pH 7.5 and 25 °C, in order to initiate simultaneous hydrogen exchange and protein refolding. The intrinsic time constants for amide hydrogen exchange under these conditions are of the order of 10-200 ms. Exchange was allowed to occur for one minute, and was then quenched by decreasing the pH to 4.5.</details>
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="9" code="A"></residue>
+        
+      
+        
+        <residue index="11" code="K"></residue>
+        
+      
+        
+        <residue index="12" code="L"></residue>
+        
+      
+        
+        <residue index="13" code="K"></residue>
+        
+      
+        
+        <residue index="28" code="W"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="31" code="M"></residue>
+        
+      
+        
+        <residue index="111" code="W"></residue>
+        
+      
+        
+        <residue index="115" code="C"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="66">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="7.5 - 7.5" temperature="25.0" probes="46 amides + 3 Trp indole hydrogen atoms">None</conditions>
+      <protection protection_level="INTERMEDIATE">strong protection within 10 ms</protection>
+      <sequence is_pdb="True">KVFSKCELAHKLKAQEMDGFGGYSLANWVCMAEYESNFNTRAFNGKNANGSSDYGLFQLNNKWWCKDNKRSSSNACNIMCSKLLDENIDDDISCAKRVVRDPKGMSAWKAWVKHCKDKDLSEYLASCNL</sequence>
+      <details>Equine lysozyme denatured in 6 M GdnHCl was diluted rapidly with deuterated buffer solution at pH 7.5 and 25 °C, in order to initiate simultaneous hydrogen exchange and protein refolding. The intrinsic time constants for amide hydrogen exchange under these conditions are of the order of 10-200 ms. Exchange was allowed to occur for one minute, and was then quenched by decreasing the pH to 4.5.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="15" code="Q"></residue>
+        
+      
+        
+        <residue index="23" code="Y"></residue>
+        
+      
+        
+        <residue index="27" code="N"></residue>
+        
+      
+        
+        <residue index="34" code="Y"></residue>
+        
+      
+        
+        <residue index="35" code="E"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="67">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="7.5 - 7.5" temperature="25.0" probes="46 amides + 3 Trp indole hydrogen atoms">None</conditions>
+      <protection protection_level="LATE">strong protection within 50 ms</protection>
+      <sequence is_pdb="True">KVFSKCELAHKLKAQEMDGFGGYSLANWVCMAEYESNFNTRAFNGKNANGSSDYGLFQLNNKWWCKDNKRSSSNACNIMCSKLLDENIDDDISCAKRVVRDPKGMSAWKAWVKHCKDKDLSEYLASCNL</sequence>
+      <details>Equine lysozyme denatured in 6 M GdnHCl was diluted rapidly with deuterated buffer solution at pH 7.5 and 25 °C, in order to initiate simultaneous hydrogen exchange and protein refolding. The intrinsic time constants for amide hydrogen exchange under these conditions are of the order of 10-200 ms. Exchange was allowed to occur for one minute, and was then quenched by decreasing the pH to 4.5.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="4" code="S"></residue>
+        
+      
+        
+        <residue index="38" code="F"></residue>
+        
+      
+        
+        <residue index="61" code="N"></residue>
+        
+      
+        
+        <residue index="108" code="W"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="68">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.5 - 4.5" temperature="25.0" probes="67">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt; 5</protection>
+      <sequence is_pdb="True">KVFSKCELAHKLKAQEMDGFGGYSLANWVCMAEYESNFNTRAFNGKNANGSSDYGLFQLNNKWWCKDNKRSSSNACNIMCSKLLDENIDDDISCAKRVVRDPKGMSAWKAWVKHCKDKDLSEYLASCNL</sequence>
+      <details>Samples for hydrogen exchange studies of the native holo state of equine lysozyme were adjusted to pH 4.5 in H2O and freeze-dried. The protein was then dissolved in D2O in the presence of 10 mM CaCl2, and the apparent pH adjusted to 4.5 using 2HCl and NaO2H. Samples were allowed to undergo exchange at 25 °C for time intervals ranging from a few minutes to 63 days. At the end of each exchange period, phase-sensitive COSY spectra were acquired.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="9" code="A"></residue>
+        
+      
+        
+        <residue index="11" code="K"></residue>
+        
+      
+        
+        <residue index="12" code="L"></residue>
+        
+      
+        
+        <residue index="13" code="K"></residue>
+        
+      
+        
+        <residue index="27" code="N"></residue>
+        
+      
+        
+        <residue index="28" code="W"></residue>
+        
+      
+        
+        <residue index="31" code="M"></residue>
+        
+      
+        
+        <residue index="32" code="A"></residue>
+        
+      
+        
+        <residue index="38" code="F"></residue>
+        
+      
+        
+        <residue index="39" code="N"></residue>
+        
+      
+        
+        <residue index="61" code="N"></residue>
+        
+      
+        
+        <residue index="65" code="C"></residue>
+        
+      
+        
+        <residue index="93" code="S"></residue>
+        
+      
+        
+        <residue index="94" code="C"></residue>
+        
+      
+        
+        <residue index="95" code="A"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="69">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="4.5 - 4.5" temperature="25.0" probes="67">None</conditions>
+      <protection protection_level="MEDIUM">4 &lt; log(P) &lt; 5</protection>
+      <sequence is_pdb="True">KVFSKCELAHKLKAQEMDGFGGYSLANWVCMAEYESNFNTRAFNGKNANGSSDYGLFQLNNKWWCKDNKRSSSNACNIMCSKLLDENIDDDISCAKRVVRDPKGMSAWKAWVKHCKDKDLSEYLASCNL</sequence>
+      <details>Samples for hydrogen exchange studies of the native holo state of equine lysozyme were adjusted to pH 4.5 in H2O and freeze-dried. The protein was then dissolved in D2O in the presence of 10 mM CaCl2, and the apparent pH adjusted to 4.5 using 2HCl and NaO2H. Samples were allowed to undergo exchange at 25 °C for time intervals ranging from a few minutes to 63 days. At the end of each exchange period, phase-sensitive COSY spectra were acquired.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="10" code="H"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="33" code="E"></residue>
+        
+      
+        
+        <residue index="34" code="Y"></residue>
+        
+      
+        
+        <residue index="35" code="E"></residue>
+        
+      
+        
+        <residue index="36" code="S"></residue>
+        
+      
+        
+        <residue index="37" code="N"></residue>
+        
+      
+        
+        <residue index="40" code="T"></residue>
+        
+      
+        
+        <residue index="42" code="A"></residue>
+        
+      
+        
+        <residue index="54" code="Y"></residue>
+        
+      
+        
+        <residue index="57" code="F"></residue>
+        
+      
+        
+        <residue index="58" code="Q"></residue>
+        
+      
+        
+        <residue index="59" code="L"></residue>
+        
+      
+        
+        <residue index="62" code="K"></residue>
+        
+      
+        
+        <residue index="63" code="W"></residue>
+        
+      
+        
+        <residue index="66" code="K"></residue>
+        
+      
+        
+        <residue index="83" code="L"></residue>
+        
+      
+        
+        <residue index="96" code="K"></residue>
+        
+      
+        
+        <residue index="111" code="W"></residue>
+        
+      
+        
+        <residue index="112" code="V"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

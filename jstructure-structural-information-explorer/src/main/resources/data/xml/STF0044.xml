@@ -1,0 +1,181 @@
+<entry id="STF0044" title="B1 immunoglobulin-binding domain of peptostreptococcal protein L">
+  
+  <protein name="Protein LG" organism="Finegoldia magna (Peptostreptococcus magnus)" number_of_residues="62" uniprot_id="Q53291" uniprot_range="24-101" pdb_id="2ptl">
+    
+    <experiment id="182">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="11.0 - 11.0" temperature="60.0" probes="33">None</conditions>
+      <protection protection_level="STRONG">exchange rates close to 0.06 s(-1)</protection>
+      <sequence is_pdb="True">ENKEETPETPETDSEEEVTIKANLIFANGSTQTAEFKGTFEKATSEAYAYADTLKKDNGEYTVDVADKGYTLNIKFAG</sequence>
+      <details>4 mg/ml 15N-labeled protein L in H2O, and D2O adjusted to the desired pH with saturated ammonia were preequilibrated at the desired temperature. H-D exchange was initiated by manually injecting protein L in H2O into an Amicon concentrator containing 10 volumes of D2O with constant stirring, with a mixing dead time less than 2 s under these conditions. The exchange reaction was allowed to proceed for a variable length of time (4 s, 7 s, 10 s, and 10 min). At the end of the exchange period, ice cold D2O at pH 3.0 (adjusted by formic acid) was added directly into the exchange mixture at a 4:1 volume ratio to quench further exchange. The final pH of the mixture was 3.2.</details>
+      
+        
+        <residue index="20" code="I"></residue>
+        
+      
+        
+        <residue index="22" code="A"></residue>
+        
+      
+        
+        <residue index="24" code="L"></residue>
+        
+      
+        
+        <residue index="25" code="I"></residue>
+        
+      
+        
+        <residue index="36" code="F"></residue>
+        
+      
+        
+        <residue index="47" code="A"></residue>
+        
+      
+        
+        <residue index="48" code="Y"></residue>
+        
+      
+        
+        <residue index="49" code="A"></residue>
+        
+      
+        
+        <residue index="50" code="Y"></residue>
+        
+      
+        
+        <residue index="51" code="A"></residue>
+        
+      
+        
+        <residue index="52" code="D"></residue>
+        
+      
+        
+        <residue index="72" code="L"></residue>
+        
+      
+        
+        <residue index="74" code="I"></residue>
+        
+      
+        
+        <residue index="75" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="183">
+      <method type="folding">Dead time pulse labeling HDX NMR</method>
+      <conditions pH="8.5 - 10.0" temperature="40.0" probes="24">None</conditions>
+      <protection protection_level="EARLY">P &gt; 1.4</protection>
+      <sequence is_pdb="True">ENKEETPETPETDSEEEVTIKANLIFANGSTQTAEFKGTFEKATSEAYAYADTLKKDNGEYTVDVADKGYTLNIKFAG</sequence>
+      <details>Deuterated denatured protein was rapidly diluted into H2O buffer lacking denaturant with pH 8.5, 9.0 or 10.0. After 3.5 ms, proton exchange was quenched by addition of low pH buffer. Protection factors were estimated from the fractional proton occupancy at each pH.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="22" code="A"></residue>
+        
+      
+        
+        <residue index="24" code="L"></residue>
+        
+      
+        
+        <residue index="34" code="A"></residue>
+        
+      
+        
+        <residue index="45" code="S"></residue>
+        
+      
+        
+        <residue index="47" code="A"></residue>
+        
+      
+        
+        <residue index="48" code="Y"></residue>
+        
+      
+        
+        <residue index="49" code="A"></residue>
+        
+      
+        
+        <residue index="50" code="Y"></residue>
+        
+      
+        
+        <residue index="51" code="A"></residue>
+        
+      
+        
+        <residue index="61" code="Y"></residue>
+        
+      
+        
+        <residue index="66" code="A"></residue>
+        
+      
+        
+        <residue index="74" code="I"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

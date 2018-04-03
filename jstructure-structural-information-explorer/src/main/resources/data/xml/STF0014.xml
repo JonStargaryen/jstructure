@@ -1,0 +1,394 @@
+<entry id="STF0014" title="Human lysozyme">
+  
+  <protein name="Lysozyme C" organism="Homo sapiens (Human)" number_of_residues="130" uniprot_id="P61626" uniprot_range="19-148" pdb_id="1lz1">
+    
+    <experiment id="70">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="20.0" probes="47">None</conditions>
+      <protection protection_level="EARLY">protection within 3.5 ms</protection>
+      <sequence is_pdb="True">KVFERCELARTLKRLGMDGYRGISLANWMCLAKWESGYNTRATNYNAGDRSTDYGIFQINSRYWCNDGKTPGAVNACHLSCSALLQDNIADAVACAKRVVRDPQGIRAWVAWRNRCQNRDVRQYVQGCGV</sequence>
+      <details>A QFM5 module was used to dilute a solution of human lysozyme in 6 M GuDCl /D2O (1 vol) with 20 mM sodium acetate in H2O, pH 5.5 (10 vol), to initiate the refolding reaction. The intrinsic rate of amide hydrogen exchange at 20 °C at the final refolding pH of 5.3 is approximately 10 s, and thus no significant exchange of amide deuterons occurs over the time course of folding (0-500  ms) monitored in this phase. At different times following the initiation of refolding, the pH of the refolding medium was jumped to 9.3 by dilution with 200 mM sodium borate buffer at pH 10.0 (5 volumes); this labeling pulse was applied for 8 ms.</details>
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="10" code="R"></residue>
+        
+      
+        
+        <residue index="11" code="T"></residue>
+        
+      
+        
+        <residue index="12" code="L"></residue>
+        
+      
+        
+        <residue index="13" code="K"></residue>
+        
+      
+        
+        <residue index="14" code="R"></residue>
+        
+      
+        
+        <residue index="29" code="M"></residue>
+        
+      
+        
+        <residue index="30" code="C"></residue>
+        
+      
+        
+        <residue index="31" code="L"></residue>
+        
+      
+        
+        <residue index="33" code="K"></residue>
+        
+      
+        
+        <residue index="34" code="W"></residue>
+        
+      
+        
+        <residue index="124" code="Y"></residue>
+        
+      
+        
+        <residue index="125" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="71">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="20.0" probes="47">None</conditions>
+      <protection protection_level="INTERMEDIATE">protection within 70 ms</protection>
+      <sequence is_pdb="True">KVFERCELARTLKRLGMDGYRGISLANWMCLAKWESGYNTRATNYNAGDRSTDYGIFQINSRYWCNDGKTPGAVNACHLSCSALLQDNIADAVACAKRVVRDPQGIRAWVAWRNRCQNRDVRQYVQGCGV</sequence>
+      <details>A QFM5 module was used to dilute a solution of human lysozyme in 6 M GuDCl /D2O (1 vol) with 20 mM sodium acetate in H2O, pH 5.5 (10 vol), to initiate the refolding reaction. The intrinsic rate of amide hydrogen exchange at 20 °C at the final refolding pH of 5.3 is approximately 10 s, and thus no significant exchange of amide deuterons occurs over the time course of folding (0-500  ms) monitored in this phase. At different times following the initiation of refolding, the pH of the refolding medium was jumped to 9.3 by dilution with 200 mM sodium borate buffer at pH 10.0 (5 volumes); this labeling pulse was applied for 8 ms.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="64" code="W"></residue>
+        
+      
+        
+        <residue index="65" code="C"></residue>
+        
+      
+        
+        <residue index="79" code="L"></residue>
+        
+      
+        
+        <residue index="91" code="D"></residue>
+        
+      
+        
+        <residue index="92" code="A"></residue>
+        
+      
+        
+        <residue index="93" code="V"></residue>
+        
+      
+        
+        <residue index="94" code="A"></residue>
+        
+      
+        
+        <residue index="95" code="C"></residue>
+        
+      
+        
+        <residue index="96" code="A"></residue>
+        
+      
+        
+        <residue index="97" code="K"></residue>
+        
+      
+        
+        <residue index="98" code="R"></residue>
+        
+      
+        
+        <residue index="100" code="V"></residue>
+        
+      
+        
+        <residue index="110" code="V"></residue>
+        
+      
+        
+        <residue index="112" code="W"></residue>
+        
+      
+        
+        <residue index="116" code="C"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="72">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.3 - 5.3" temperature="20.0" probes="47">None</conditions>
+      <protection protection_level="LATE">protection around 100 ms</protection>
+      <sequence is_pdb="True">KVFERCELARTLKRLGMDGYRGISLANWMCLAKWESGYNTRATNYNAGDRSTDYGIFQINSRYWCNDGKTPGAVNACHLSCSALLQDNIADAVACAKRVVRDPQGIRAWVAWRNRCQNRDVRQYVQGCGV</sequence>
+      <details>A QFM5 module was used to dilute a solution of human lysozyme in 6 M GuDCl /D2O (1 vol) with 20 mM sodium acetate in H2O, pH 5.5 (10 vol), to initiate the refolding reaction. The intrinsic rate of amide hydrogen exchange at 20 °C at the final refolding pH of 5.3 is approximately 10 s, and thus no significant exchange of amide deuterons occurs over the time course of folding (0-500  ms) monitored in this phase. At different times following the initiation of refolding, the pH of the refolding medium was jumped to 9.3 by dilution with 200 mM sodium borate buffer at pH 10.0 (5 volumes); this labeling pulse was applied for 8 ms.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="F"></residue>
+        
+      
+        
+        <residue index="38" code="Y"></residue>
+        
+      
+        
+        <residue index="39" code="N"></residue>
+        
+      
+        
+        <residue index="40" code="T"></residue>
+        
+      
+        
+        <residue index="41" code="R"></residue>
+        
+      
+        
+        <residue index="42" code="A"></residue>
+        
+      
+        
+        <residue index="44" code="N"></residue>
+        
+      
+        
+        <residue index="51" code="S"></residue>
+        
+      
+        
+        <residue index="53" code="D"></residue>
+        
+      
+        
+        <residue index="54" code="Y"></residue>
+        
+      
+        
+        <residue index="58" code="Q"></residue>
+        
+      
+        
+        <residue index="59" code="I"></residue>
+        
+      
+        
+        <residue index="60" code="N"></residue>
+        
+      
+        
+        <residue index="62" code="R"></residue>
+        
+      
+        
+        <residue index="66" code="N"></residue>
+        
+      
+        
+        <residue index="77" code="C"></residue>
+        
+      
+        
+        <residue index="84" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

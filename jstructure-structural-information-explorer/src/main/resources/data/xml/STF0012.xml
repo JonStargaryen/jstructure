@@ -1,0 +1,483 @@
+<entry id="STF0012" title="French bean apoplastocyanin">
+  
+  <protein name="Plastocyanin" organism="Phaseolus vulgaris (Kidney bean) (French bean)" number_of_residues="99" uniprot_id="P00287" uniprot_range="1-99" pdb_id="9pcy">
+    
+    <experiment id="61">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="5.0 - 5.9" temperature="25.0" probes="29">None</conditions>
+      <protection protection_level="EARLY">P &gt; 20</protection>
+      <sequence is_pdb="True">LEVLLGSGDGSLVFVPSEFSVPSGEKIVFKNNAGFPHNVVFDEDEIPAGVDAVKISMPEEELLNAPGETYVVTLDTKGTYSFYCSPHQGAGMVGKVTVN</sequence>
+      <details>Apo-Pc was first exchanged by repetitive ultrafiltration into D2O buffer containing potassium phosphate (50 mM), NaCl (1 M), 2-mercaptoethanol (l0 mM), and EDTA (0.1 mM) (pH* 7.0, direct meter reading uncorrected for isotope effect). The protein was unfolded in the D2O buffer containing 2.2 M GuHCl and kept at 25C for 1 h. The refolding reaction was initiated by 1:21 dilution in D2O buffer without GuHCl. After a delay of 90 s to allow completion of the faster refolding reactions, the competition experiment was initiated by 1:9 dilution with either potassium phosphate (50 mM, pH 5.9) containing NaCl (1 M), 2-mercaptoethanol (10 mM), and EDTA (0.1 mM) in H2O or sodium acetate (50 mM, pH 5.0) containing NaCl (1.5 M), 2-mercaptoethanol (10 mM), and EDTA (0.1 mM) in H2O. The final pH values were 6.0 and 5.2, respectively.</details>
+      
+        
+        <residue index="70" code="Y"></residue>
+        
+      
+        
+        <residue index="72" code="V"></residue>
+        
+      
+        
+        <residue index="80" code="Y"></residue>
+        
+      
+        
+        <residue index="82" code="F"></residue>
+        
+      
+        
+        <residue index="83" code="Y"></residue>
+        
+      
+        
+        <residue index="95" code="K"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="62">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="5.0 - 5.9" temperature="25.0" probes="29">None</conditions>
+      <protection protection_level="INTERMEDIATE">10 &lt; P &lt; 20</protection>
+      <sequence is_pdb="True">LEVLLGSGDGSLVFVPSEFSVPSGEKIVFKNNAGFPHNVVFDEDEIPAGVDAVKISMPEEELLNAPGETYVVTLDTKGTYSFYCSPHQGAGMVGKVTVN</sequence>
+      <details>Apo-Pc was first exchanged by repetitive ultrafiltration into D2O buffer containing potassium phosphate (50 mM), NaCl (1 M), 2-mercaptoethanol (l0 mM), and EDTA (0.1 mM) (pH* 7.0, direct meter reading uncorrected for isotope effect). The protein was unfolded in the D2O buffer containing 2.2 M GuHCl and kept at 25C for 1 h. The refolding reaction was initiated by 1:21 dilution in D2O buffer without GuHCl. After a delay of 90 s to allow completion of the faster refolding reactions, the competition experiment was initiated by 1:9 dilution with either potassium phosphate (50 mM, pH 5.9) containing NaCl (1 M), 2-mercaptoethanol (10 mM), and EDTA (0.1 mM) in H2O or sodium acetate (50 mM, pH 5.0) containing NaCl (1.5 M), 2-mercaptoethanol (10 mM), and EDTA (0.1 mM) in H2O. The final pH values were 6.0 and 5.2, respectively.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="4" code="L"></residue>
+        
+      
+        
+        <residue index="5" code="L"></residue>
+        
+      
+        
+        <residue index="15" code="V"></residue>
+        
+      
+        
+        <residue index="21" code="V"></residue>
+        
+      
+        
+        <residue index="27" code="I"></residue>
+        
+      
+        
+        <residue index="28" code="V"></residue>
+        
+      
+        
+        <residue index="98" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="63">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="5.0 - 5.9" temperature="25.0" probes="29">None</conditions>
+      <protection protection_level="LATE">4 &lt; P &lt; 10</protection>
+      <sequence is_pdb="True">LEVLLGSGDGSLVFVPSEFSVPSGEKIVFKNNAGFPHNVVFDEDEIPAGVDAVKISMPEEELLNAPGETYVVTLDTKGTYSFYCSPHQGAGMVGKVTVN</sequence>
+      <details>Apo-Pc was first exchanged by repetitive ultrafiltration into D2O buffer containing potassium phosphate (50 mM), NaCl (1 M), 2-mercaptoethanol (l0 mM), and EDTA (0.1 mM) (pH* 7.0, direct meter reading uncorrected for isotope effect). The protein was unfolded in the D2O buffer containing 2.2 M GuHCl and kept at 25C for 1 h. The refolding reaction was initiated by 1:21 dilution in D2O buffer without GuHCl. After a delay of 90 s to allow completion of the faster refolding reactions, the competition experiment was initiated by 1:9 dilution with either potassium phosphate (50 mM, pH 5.9) containing NaCl (1 M), 2-mercaptoethanol (10 mM), and EDTA (0.1 mM) in H2O or sodium acetate (50 mM, pH 5.0) containing NaCl (1.5 M), 2-mercaptoethanol (10 mM), and EDTA (0.1 mM) in H2O. The final pH values were 6.0 and 5.2, respectively.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="V"></residue>
+        
+      
+        
+        <residue index="40" code="V"></residue>
+        
+      
+        
+        <residue index="96" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="64">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.0 - 7.0" temperature="20.0" probes="all">None</conditions>
+      <protection protection_level="STRONG">very slowly exchanging amid protons</protection>
+      <sequence is_pdb="True">LEVLLGSGDGSLVFVPSEFSVPSGEKIVFKNNAGFPHNVVFDEDEIPAGVDAVKISMPEEELLNAPGETYVVTLDTKGTYSFYCSPHQGAGMVGKVTVN</sequence>
+      <details>Very slowly exchanging amide protons were identified on the basis of observation of backbone NH/CH peaks in 2QF-COSY or 2Q spectra acquired 3.5 months after exchange into D2O at pH 7.0.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="3" code="V"></residue>
+        
+      
+        
+        <residue index="4" code="L"></residue>
+        
+      
+        
+        <residue index="5" code="L"></residue>
+        
+      
+        
+        <residue index="13" code="V"></residue>
+        
+      
+        
+        <residue index="14" code="F"></residue>
+        
+      
+        
+        <residue index="15" code="V"></residue>
+        
+      
+        
+        <residue index="21" code="V"></residue>
+        
+      
+        
+        <residue index="27" code="I"></residue>
+        
+      
+        
+        <residue index="28" code="V"></residue>
+        
+      
+        
+        <residue index="29" code="F"></residue>
+        
+      
+        
+        <residue index="30" code="K"></residue>
+        
+      
+        
+        <residue index="37" code="H"></residue>
+        
+      
+        
+        <residue index="38" code="N"></residue>
+        
+      
+        
+        <residue index="39" code="V"></residue>
+        
+      
+        
+        <residue index="40" code="V"></residue>
+        
+      
+        
+        <residue index="41" code="F"></residue>
+        
+      
+        
+        <residue index="70" code="Y"></residue>
+        
+      
+        
+        <residue index="72" code="V"></residue>
+        
+      
+        
+        <residue index="78" code="G"></residue>
+        
+      
+        
+        <residue index="80" code="Y"></residue>
+        
+      
+        
+        <residue index="82" code="F"></residue>
+        
+      
+        
+        <residue index="83" code="Y"></residue>
+        
+      
+        
+        <residue index="84" code="C"></residue>
+        
+      
+        
+        <residue index="94" code="G"></residue>
+        
+      
+        
+        <residue index="95" code="K"></residue>
+        
+      
+        
+        <residue index="96" code="V"></residue>
+        
+      
+        
+        <residue index="97" code="T"></residue>
+        
+      
+        
+        <residue index="98" code="V"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

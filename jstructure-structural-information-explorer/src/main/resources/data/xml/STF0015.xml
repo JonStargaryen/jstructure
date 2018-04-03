@@ -1,0 +1,698 @@
+<entry id="STF0015" title="Northern leopard frog onconase">
+  
+  <protein name="Protein P-30" organism="Lithobates pipiens (Northern leopard frog) (Rana pipiens)" number_of_residues="104" uniprot_id="P22069" uniprot_range="2-104" pdb_id="1onc">
+    
+    <experiment id="73">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="20.0" probes="42">None</conditions>
+      <protection protection_level="EARLY">highly protected within 250 ms</protection>
+      <sequence is_pdb="True">EDWLTFQKKHITNTRDVDCDNIMSTNLFHCKDKNTFIYSRPEPVKAICKGIIASKNVLTTSEFYLSDCNVTSRPCKYKLKKSTNKFCVTCENQAPVHFVGVGSC</sequence>
+      <details>Quenched-flow experiments were carried out at 20 °C using a rapid mixing quenched-flow machine. In the first mixing step, refolding of protonated, unfolded ONC (in 6 M GdnHCl) was initiated by a 9-fold dilution into 50 mM sodium acetate buffer, pH 5.5. After defined refolding times (60 - 5000 ms), the samples were diluted 10-fold into D2O buffer (200 mM glycine buffer, 0.667 M GdnHCl, pD 11.0) to initiate the H/D exchange. The exchange was terminated after 8.3 ms by lowering the pH by a 2-fold dilution with D2O, containing 10 M acetic acid and 0.667 M GdnHCl.</details>
+      
+        
+        <residue index="6" code="F"></residue>
+        
+      
+        
+        <residue index="7" code="Q"></residue>
+        
+      
+        
+        <residue index="8" code="K"></residue>
+        
+      
+        
+        <residue index="9" code="K"></residue>
+        
+      
+        
+        <residue index="10" code="H"></residue>
+        
+      
+        
+        <residue index="11" code="I"></residue>
+        
+      
+        
+        <residue index="12" code="T"></residue>
+        
+      
+        
+        <residue index="36" code="F"></residue>
+        
+      
+        
+        <residue index="37" code="I"></residue>
+        
+      
+        
+        <residue index="38" code="Y"></residue>
+        
+      
+        
+        <residue index="39" code="S"></residue>
+        
+      
+        
+        <residue index="44" code="V"></residue>
+        
+      
+        
+        <residue index="45" code="K"></residue>
+        
+      
+        
+        <residue index="46" code="A"></residue>
+        
+      
+        
+        <residue index="47" code="I"></residue>
+        
+      
+        
+        <residue index="48" code="C"></residue>
+        
+      
+        
+        <residue index="49" code="K"></residue>
+        
+      
+        
+        <residue index="65" code="L"></residue>
+        
+      
+        
+        <residue index="66" code="S"></residue>
+        
+      
+        
+        <residue index="67" code="D"></residue>
+        
+      
+        
+        <residue index="86" code="F"></residue>
+        
+      
+        
+        <residue index="87" code="C"></residue>
+        
+      
+        
+        <residue index="88" code="V"></residue>
+        
+      
+        
+        <residue index="89" code="T"></residue>
+        
+      
+        
+        <residue index="90" code="C"></residue>
+        
+      
+        
+        <residue index="91" code="E"></residue>
+        
+      
+        
+        <residue index="93" code="Q"></residue>
+        
+      
+        
+        <residue index="94" code="A"></residue>
+        
+      
+        
+        <residue index="96" code="V"></residue>
+        
+      
+        
+        <residue index="97" code="H"></residue>
+        
+      
+        
+        <residue index="99" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="74">
+      <method type="folding">Quenched-flow HDX NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="20.0" probes="42">None</conditions>
+      <protection protection_level="INTERMEDIATE">protected after 250 ms</protection>
+      <sequence is_pdb="True">EDWLTFQKKHITNTRDVDCDNIMSTNLFHCKDKNTFIYSRPEPVKAICKGIIASKNVLTTSEFYLSDCNVTSRPCKYKLKKSTNKFCVTCENQAPVHFVGVGSC</sequence>
+      <details>Quenched-flow experiments were carried out at 20 °C using a rapid mixing quenched-flow machine. In the first mixing step, refolding of protonated, unfolded ONC (in 6 M GdnHCl) was initiated by a 9-fold dilution into 50 mM sodium acetate buffer, pH 5.5. After defined refolding times (60 - 5000 ms), the samples were diluted 10-fold into D2O buffer (200 mM glycine buffer, 0.667 M GdnHCl, pD 11.0) to initiate the H/D exchange. The exchange was terminated after 8.3 ms by lowering the pH by a 2-fold dilution with D2O, containing 10 M acetic acid and 0.667 M GdnHCl.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="57" code="V"></residue>
+        
+      
+        
+        <residue index="59" code="T"></residue>
+        
+      
+        
+        <residue index="68" code="C"></residue>
+        
+      
+        
+        <residue index="69" code="N"></residue>
+        
+      
+        
+        <residue index="70" code="V"></residue>
+        
+      
+        
+        <residue index="76" code="K"></residue>
+        
+      
+        
+        <residue index="77" code="Y"></residue>
+        
+      
+        
+        <residue index="78" code="K"></residue>
+        
+      
+        
+        <residue index="80" code="K"></residue>
+        
+      
+        
+        <residue index="82" code="S"></residue>
+        
+      
+        
+        <residue index="84" code="N"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="75">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="20.0" probes="all">None</conditions>
+      <protection protection_level="STRONG">amids that persist to exchange for 24 hours</protection>
+      <sequence is_pdb="True">EDWLTFQKKHITNTRDVDCDNIMSTNLFHCKDKNTFIYSRPEPVKAICKGIIASKNVLTTSEFYLSDCNVTSRPCKYKLKKSTNKFCVTCENQAPVHFVGVGSC</sequence>
+      <details>To assess native state H/D exchange in ONC, a series of 2D 15N-HSQC spectra was recorded for 3 days on an Avance II 600 NMR spectrometer after dissolving ONC in D2O buffer.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="6" code="F"></residue>
+        
+      
+        
+        <residue index="7" code="Q"></residue>
+        
+      
+        
+        <residue index="8" code="K"></residue>
+        
+      
+        
+        <residue index="9" code="K"></residue>
+        
+      
+        
+        <residue index="10" code="H"></residue>
+        
+      
+        
+        <residue index="11" code="I"></residue>
+        
+      
+        
+        <residue index="36" code="F"></residue>
+        
+      
+        
+        <residue index="37" code="I"></residue>
+        
+      
+        
+        <residue index="38" code="Y"></residue>
+        
+      
+        
+        <residue index="39" code="S"></residue>
+        
+      
+        
+        <residue index="44" code="V"></residue>
+        
+      
+        
+        <residue index="45" code="K"></residue>
+        
+      
+        
+        <residue index="46" code="A"></residue>
+        
+      
+        
+        <residue index="47" code="I"></residue>
+        
+      
+        
+        <residue index="48" code="C"></residue>
+        
+      
+        
+        <residue index="49" code="K"></residue>
+        
+      
+        
+        <residue index="57" code="V"></residue>
+        
+      
+        
+        <residue index="59" code="T"></residue>
+        
+      
+        
+        <residue index="65" code="L"></residue>
+        
+      
+        
+        <residue index="66" code="S"></residue>
+        
+      
+        
+        <residue index="67" code="D"></residue>
+        
+      
+        
+        <residue index="68" code="C"></residue>
+        
+      
+        
+        <residue index="69" code="N"></residue>
+        
+      
+        
+        <residue index="70" code="V"></residue>
+        
+      
+        
+        <residue index="76" code="K"></residue>
+        
+      
+        
+        <residue index="77" code="Y"></residue>
+        
+      
+        
+        <residue index="78" code="K"></residue>
+        
+      
+        
+        <residue index="80" code="K"></residue>
+        
+      
+        
+        <residue index="82" code="S"></residue>
+        
+      
+        
+        <residue index="84" code="N"></residue>
+        
+      
+        
+        <residue index="86" code="F"></residue>
+        
+      
+        
+        <residue index="87" code="C"></residue>
+        
+      
+        
+        <residue index="88" code="V"></residue>
+        
+      
+        
+        <residue index="89" code="T"></residue>
+        
+      
+        
+        <residue index="90" code="C"></residue>
+        
+      
+        
+        <residue index="91" code="E"></residue>
+        
+      
+        
+        <residue index="93" code="Q"></residue>
+        
+      
+        
+        <residue index="94" code="A"></residue>
+        
+      
+        
+        <residue index="96" code="V"></residue>
+        
+      
+        
+        <residue index="97" code="H"></residue>
+        
+      
+        
+        <residue index="99" code="V"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

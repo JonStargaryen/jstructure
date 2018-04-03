@@ -4,7 +4,9 @@ import de.bioforscher.jstructure.StandardFormat;
 
 public class ContactStructuralInformation {
     private final int residueIdentifier1;
+    private final String aa1;
     private final int residueIdentifier2;
+    private final String aa2;
     private final ContactDistanceBin contactDistanceBin;
 //    private final double baselineRmsd;
 //    private final double baselineTmScore;
@@ -17,9 +19,12 @@ public class ContactStructuralInformation {
     private final double maximumQIncrease;
     private final boolean isEarlyFoldingResidue;
     private final boolean isEarlyFoldingContact;
+    private double plmScore;
 
     public ContactStructuralInformation(int residueIdentifier1,
+                                        String aa1,
                                         int residueIdentifier2,
+                                        String aa2,
                                         ContactDistanceBin contactDistanceBin,
 //                                        double baselineRmsd,
 //                                        double baselineTmScore,
@@ -33,7 +38,9 @@ public class ContactStructuralInformation {
                                         boolean isEarlyFoldingResidue,
                                         boolean isEarlyFoldingContact) {
         this.residueIdentifier1 = residueIdentifier1;
+        this.aa1 = aa1;
         this.residueIdentifier2 = residueIdentifier2;
+        this.aa2 = aa2;
         this.contactDistanceBin = contactDistanceBin;
 //        this.baselineRmsd = baselineRmsd;
 //        this.baselineTmScore = baselineTmScore;
@@ -50,6 +57,14 @@ public class ContactStructuralInformation {
 
     public int getResidueIdentifier1() {
         return residueIdentifier1;
+    }
+
+    public String getAa1() {
+        return aa1;
+    }
+
+    public String getAa2() {
+        return aa2;
     }
 
     public int getResidueIdentifier2() {
@@ -102,6 +117,14 @@ public class ContactStructuralInformation {
 
     public boolean isEarlyFoldingContact() {
         return isEarlyFoldingContact;
+    }
+
+    public double getPlmScore() {
+        return plmScore;
+    }
+
+    public void setPlmScore(double plmScore) {
+        this.plmScore = plmScore;
     }
 
     public String getCsvLine() {

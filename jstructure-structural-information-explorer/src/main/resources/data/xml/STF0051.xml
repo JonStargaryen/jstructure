@@ -1,0 +1,211 @@
+<entry id="STF0051" title="Oxidized P. aeruginosa ferricytochrome c(551)">
+  
+  <protein name="Cytochrome c-551" organism="Pseudomonas aeruginosa (strain ATCC 15692 / DSM 22644 / CIP 104116 / JCM 14847 / LMG 12228 / 1C / PRS 101 / PAO1)" number_of_residues="82" uniprot_id="P00099" uniprot_range="23-104" pdb_id="451c">
+    
+    <experiment id="197">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="31">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt;~ 5</protection>
+      <sequence is_pdb="True">EDPEVLFKNKGCVACHAIDTKMVGPAYKDVAAKFAGQAGAEAELAQRIKNGSQGVWGPIPMPPNAVSDDEAQTLAKWVLSQK</sequence>
+      <details>Hydrogen-exchange rates were measured by monitoring the change in the TOCSY or 1D amide proton peak intensity as a function of time after exchanging a lyophilized sample into D2O. To initiate hydrogen exchange, a sample of oxidized Pa cyt c551 (3.0 mM protein, 5 times molar excess K3[Fe(CN)6], 50 mM NaPi pH 6.0) was lyophilized and dissolved in D2O. The pH* (uncorrected pH value) was immediately adjusted to 6.0 and data acquisition began 8 min after commencement of exchange. 1D (8 scans) and 2D TOCSY (32 scans) spectra were collected without solvent suppression using a Varian INOVA 500 MHz spectrometer at 300 K. Each TOCSY spectrum (4,096 ·256 points, with a 1.1-s recycle time) took about 5 h to acquire. TOCSY data were collected at 8, 13, 18, 25, 32, 37, 42, 96, and 317 h after initiation of exchange.</details>
+      
+        
+        <residue index="16" code="H"></residue>
+        
+      
+        
+        <residue index="47" code="R"></residue>
+        
+      
+        
+        <residue index="49" code="K"></residue>
+        
+      
+        
+        <residue index="50" code="N"></residue>
+        
+      
+        
+        <residue index="51" code="G"></residue>
+        
+      
+        
+        <residue index="52" code="S"></residue>
+        
+      
+        
+        <residue index="61" code="M"></residue>
+        
+      
+        
+        <residue index="72" code="Q"></residue>
+        
+      
+        
+        <residue index="74" code="L"></residue>
+        
+      
+        
+        <residue index="76" code="K"></residue>
+        
+      
+        
+        <residue index="77" code="W"></residue>
+        
+      
+        
+        <residue index="79" code="L"></residue>
+        
+      
+        
+        <residue index="80" code="S"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="198">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.0 - 6.0" temperature="25.0" probes="31">None</conditions>
+      <protection protection_level="MEDIUM">4 &lt; log(P) &lt; 5</protection>
+      <sequence is_pdb="True">EDPEVLFKNKGCVACHAIDTKMVGPAYKDVAAKFAGQAGAEAELAQRIKNGSQGVWGPIPMPPNAVSDDEAQTLAKWVLSQK</sequence>
+      <details>Hydrogen-exchange rates were measured by monitoring the change in the TOCSY or 1D amide proton peak intensity as a function of time after exchanging a lyophilized sample into D2O. To initiate hydrogen exchange, a sample of oxidized Pa cyt c551 (3.0 mM protein, 5 times molar excess K3[Fe(CN)6], 50 mM NaPi pH 6.0) was lyophilized and dissolved in D2O. The pH* (uncorrected pH value) was immediately adjusted to 6.0 and data acquisition began 8 min after commencement of exchange. 1D (8 scans) and 2D TOCSY (32 scans) spectra were collected without solvent suppression using a Varian INOVA 500 MHz spectrometer at 300 K. Each TOCSY spectrum (4,096 ·256 points, with a 1.1-s recycle time) took about 5 h to acquire. TOCSY data were collected at 8, 13, 18, 25, 32, 37, 42, 96, and 317 h after initiation of exchange.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="15" code="C"></residue>
+        
+      
+        
+        <residue index="17" code="A"></residue>
+        
+      
+        
+        <residue index="24" code="G"></residue>
+        
+      
+        
+        <residue index="28" code="K"></residue>
+        
+      
+        
+        <residue index="30" code="V"></residue>
+        
+      
+        
+        <residue index="31" code="A"></residue>
+        
+      
+        
+        <residue index="32" code="A"></residue>
+        
+      
+        
+        <residue index="33" code="K"></residue>
+        
+      
+        
+        <residue index="44" code="L"></residue>
+        
+      
+        
+        <residue index="45" code="A"></residue>
+        
+      
+        
+        <residue index="46" code="Q"></residue>
+        
+      
+        
+        <residue index="48" code="I"></residue>
+        
+      
+        
+        <residue index="55" code="V"></residue>
+        
+      
+        
+        <residue index="64" code="N"></residue>
+        
+      
+        
+        <residue index="71" code="A"></residue>
+        
+      
+        
+        <residue index="73" code="T"></residue>
+        
+      
+        
+        <residue index="75" code="A"></residue>
+        
+      
+        
+        <residue index="78" code="V"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

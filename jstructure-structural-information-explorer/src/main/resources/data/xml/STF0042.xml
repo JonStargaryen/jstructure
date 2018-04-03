@@ -1,0 +1,703 @@
+<entry id="STF0042" title="Hen egg-white lysozyme">
+  
+  <protein name="Lysozyme C" organism="Escherichia coli (strain K12)" number_of_residues="129" uniprot_id="P00698" uniprot_range="19-147" pdb_id="1hel">
+    
+    <experiment id="175">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="7.5 - 7.5" temperature="30.0" probes="68">None</conditions>
+      <protection protection_level="STRONG">very slowly exchanging amide protons; k(ex) &lt; E-07</protection>
+      <sequence is_pdb="True">KVFGRCELAAAMKRHGLDNYRGYSLGNWVCAAKFESNFNTQATNRNTDGSTDYGILQINSRWWCNDGRTPGSRNLCNIPCSALLSSDITASVNCAKKIVSDGNGMNAWVAWRNRCKGTDVQAWIRGCRL</sequence>
+      <details>Exchange was carried out at 30°C in a D2O incubation mixture containing 0.1 M NaC1, 3 mM sodium azide, and 20 mM sodium phosphate buffer, pH 7.5. (uncorrected). Hydrogen exchange was initiated by dissolution of lyophilized protein in the exchange buffer to give a protein concentration of 2.5 mg/ml (0.17 mM). This protein concentration was chosen so that aggregation of lysozyme was negligible. Sixteen samples were withdrawn from the incubation mixture after time intervals ranging from 40 sec to 70 days and the exchange quenched by addition of 2.3 ml of 240 mM deuterated sodium acetate buffer, pH 3.6, giving a final pH of 3.8.</details>
+      
+        
+        <residue index="12" code="M"></residue>
+        
+      
+        
+        <residue index="28" code="W"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="30" code="C"></residue>
+        
+      
+        
+        <residue index="31" code="A"></residue>
+        
+      
+        
+        <residue index="58" code="I"></residue>
+        
+      
+        
+        <residue index="95" code="A"></residue>
+        
+      
+        
+        <residue index="96" code="K"></residue>
+        
+      
+        
+        <residue index="98" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="176">
+      <method type="folding">HDX-folding competition by NMR</method>
+      <conditions pH="4.5 - 9.5" temperature="None" probes="65">None</conditions>
+      <protection protection_level="EARLY">high degree of protection relative to exchange (% exchange &lt; 30)</protection>
+      <sequence is_pdb="True">KVFGRCELAAAMKRHGLDNYRGYSLGNWVCAAKFESNFNTQATNRNTDGSTDYGILQINSRWWCNDGRTPGSRNLCNIPCSALLSSDITASVNCAKKIVSDGNGMNAWVAWRNRCKGTDVQAWIRGCRL</sequence>
+      <details>Refolding experiments were carried out between pH values of 4.5 and 9.5.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="9" code="A"></residue>
+        
+      
+        
+        <residue index="10" code="A"></residue>
+        
+      
+        
+        <residue index="11" code="A"></residue>
+        
+      
+        
+        <residue index="12" code="M"></residue>
+        
+      
+        
+        <residue index="13" code="K"></residue>
+        
+      
+        
+        <residue index="15" code="H"></residue>
+        
+      
+        
+        <residue index="17" code="L"></residue>
+        
+      
+        
+        <residue index="23" code="Y"></residue>
+        
+      
+        
+        <residue index="27" code="N"></residue>
+        
+      
+        
+        <residue index="28" code="W"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="30" code="C"></residue>
+        
+      
+        
+        <residue index="31" code="A"></residue>
+        
+      
+        
+        <residue index="32" code="A"></residue>
+        
+      
+        
+        <residue index="33" code="K"></residue>
+        
+      
+        
+        <residue index="34" code="F"></residue>
+        
+      
+        
+        <residue index="35" code="E"></residue>
+        
+      
+        
+        <residue index="63" code="W"></residue>
+        
+      
+        
+        <residue index="64" code="C"></residue>
+        
+      
+        
+        <residue index="78" code="I"></residue>
+        
+      
+        
+        <residue index="92" code="V"></residue>
+        
+      
+        
+        <residue index="93" code="N"></residue>
+        
+      
+        
+        <residue index="94" code="C"></residue>
+        
+      
+        
+        <residue index="95" code="A"></residue>
+        
+      
+        
+        <residue index="96" code="K"></residue>
+        
+      
+        
+        <residue index="97" code="K"></residue>
+        
+      
+        
+        <residue index="98" code="I"></residue>
+        
+      
+        
+        <residue index="99" code="V"></residue>
+        
+      
+        
+        <residue index="108" code="W"></residue>
+        
+      
+        
+        <residue index="111" code="W"></residue>
+        
+      
+        
+        <residue index="112" code="R"></residue>
+        
+      
+        
+        <residue index="115" code="C"></residue>
+        
+      
+        
+        <residue index="123" code="W"></residue>
+        
+      
+        
+        <residue index="124" code="I"></residue>
+        
+      
+        
+        <residue index="125" code="R"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="177">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="20.0" probes="48">None</conditions>
+      <protection protection_level="EARLY">refolding time constant &lt; 3 ms</protection>
+      <sequence is_pdb="True">KVFGRCELAAAMKRHGLDNYRGYSLGNWVCAAKFESNFNTQATNRNTDGSTDYGILQINSRWWCNDGRTPGSRNLCNIPCSALLSSDITASVNCAKKIVSDGNGMNAWVAWRNRCKGTDVQAWIRGCRL</sequence>
+      <details>Experiments were done at 20 °C using a Biologic QFM5 rapid mixing quench flow apparatus. Lysozyme (20 mg/ml) was initially dissolved in 6M GdnDCl in D2O at pH 6, leading to complete denaturation and substitution of all exchangeable hydrogens by deuterium. Refolding was initiated by dilution of this solution 10-fold into 20 mM sodium acetate, pH 5.5 in H2O. At the resulting pH of 5.2 the half life for amide exchange is about 16 s, so that negligible labelling occurred during this phase. After variable refolding times (3.5-2000 ms) the solution was diluted again with a volume five times that of the initial protein solution of 0.2 M sodium borate, pH 10.0. This initiated labelling at a pH of 9.5. After 8.4 ms the labelling pulse was terminated by further dilution, with a volume again five times that of the initial volume of protein solution, of 0.5 M acetic acid in H2O. The final pH was about 4, at which exchange in the native protein of the investigated amides is very slow.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="12" code="M"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="63" code="W"></residue>
+        
+      
+        
+        <residue index="78" code="I"></residue>
+        
+      
+        
+        <residue index="96" code="K"></residue>
+        
+      
+        
+        <residue index="99" code="V"></residue>
+        
+      
+        
+        <residue index="124" code="I"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="178">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="5.5 - 5.5" temperature="20.0" probes="48">None</conditions>
+      <protection protection_level="INTERMEDIATE">3 ms &lt; refolding time constant &lt; 6 ms</protection>
+      <sequence is_pdb="True">KVFGRCELAAAMKRHGLDNYRGYSLGNWVCAAKFESNFNTQATNRNTDGSTDYGILQINSRWWCNDGRTPGSRNLCNIPCSALLSSDITASVNCAKKIVSDGNGMNAWVAWRNRCKGTDVQAWIRGCRL</sequence>
+      <details>Experiments were done at 20 °C using a Biologic QFM5 rapid mixing quench flow apparatus. Lysozyme (20 mg/ml) was initially dissolved in 6M GdnDCl in D2O at pH 6, leading to complete denaturation and substitution of all exchangeable hydrogens by deuterium. Refolding was initiated by dilution of this solution 10-fold into 20 mM sodium acetate, pH 5.5 in H2O. At the resulting pH of 5.2 the half life for amide exchange is about 16 s, so that negligible labelling occurred during this phase. After variable refolding times (3.5-2000 ms) the solution was diluted again with a volume five times that of the initial protein solution of 0.2 M sodium borate, pH 10.0. This initiated labelling at a pH of 9.5. After 8.4 ms the labelling pulse was terminated by further dilution, with a volume again five times that of the initial volume of protein solution, of 0.5 M acetic acid in H2O. The final pH was about 4, at which exchange in the native protein of the investigated amides is very slow.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="8" code="L"></residue>
+        
+      
+        
+        <residue index="10" code="A"></residue>
+        
+      
+        
+        <residue index="11" code="A"></residue>
+        
+      
+        
+        <residue index="28" code="W"></residue>
+        
+      
+        
+        <residue index="31" code="A"></residue>
+        
+      
+        
+        <residue index="64" code="C"></residue>
+        
+      
+        
+        <residue index="92" code="V"></residue>
+        
+      
+        
+        <residue index="94" code="C"></residue>
+        
+      
+        
+        <residue index="95" code="A"></residue>
+        
+      
+        
+        <residue index="108" code="W"></residue>
+        
+      
+        
+        <residue index="111" code="W"></residue>
+        
+      
+        
+        <residue index="112" code="R"></residue>
+        
+      
+        
+        <residue index="123" code="W"></residue>
+        
+      
+        
+        <residue index="125" code="R"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

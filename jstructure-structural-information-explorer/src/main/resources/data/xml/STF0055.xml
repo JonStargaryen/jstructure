@@ -1,0 +1,625 @@
+<entry id="STF0055" title="P. aeruginosa PSE-4 beta-lactamase">
+  
+  <protein name="Beta-lactamase PSE-4" organism="Pseudomonas aeruginosa" number_of_residues="271" uniprot_id="P16897" uniprot_range="18-288" pdb_id="1g68">
+    
+    <experiment id="204">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.65 - 6.65" temperature="25.0" probes="226">None</conditions>
+      <protection protection_level="STRONG">ΔGHX &gt; 8</protection>
+      <sequence is_pdb="True">SSSKFQQVEQDVKAIEVSLSARIGVSVLDTQNGEYWDYNGNQRFPLTSTFKTIACAKLLYDAEQGKVNPNSTVEIKKADLVTYSPVIEKQVGQAITLDDACFATMTTSDNTAANIILSAVGGPKGVTDFLRQIGDKETRLDRIEPDLNEGKLGDLRDTTTPKAIASTLNKFLFGSALSEMNQKKLESWMVNNQVTGNLLRSVLPAGWNIADRSGAGGFGARSITAVVWSEHQAPIIVSIYLAQTQASMEERNDAIVKIGHSIFDVYTSQSR</sequence>
+      <details>Amide exchange experiments proceeded from TROSY-HSQC spectra of lyophilized PSE-4 dissolved in D2O. The TROSY implementation allowed smaller phase cycling so very short spectra could be acquired with limited baseline distortions. At the beginning, more frequent short spectra (with a low number of transients) were acquired, and at the end, fewer long spectra (with increasing transients) were acquired. To determine the exchange regime, amide exchange experiments were performed for 80 days at pH 6.65, and for six days at pH 7.85. In both situations, 60 spectra were recorded.</details>
+      
+        
+        <residue index="9" code="E"></residue>
+        
+      
+        
+        <residue index="12" code="V"></residue>
+        
+      
+        
+        <residue index="24" code="G"></residue>
+        
+      
+        
+        <residue index="25" code="V"></residue>
+        
+      
+        
+        <residue index="26" code="S"></residue>
+        
+      
+        
+        <residue index="27" code="V"></residue>
+        
+      
+        
+        <residue index="28" code="L"></residue>
+        
+      
+        
+        <residue index="38" code="Y"></residue>
+        
+      
+        
+        <residue index="55" code="C"></residue>
+        
+      
+        
+        <residue index="56" code="A"></residue>
+        
+      
+        
+        <residue index="61" code="D"></residue>
+        
+      
+        
+        <residue index="62" code="A"></residue>
+        
+      
+        
+        <residue index="129" code="F"></residue>
+        
+      
+        
+        <residue index="225" code="A"></residue>
+        
+      
+        
+        <residue index="226" code="V"></residue>
+        
+      
+        
+        <residue index="227" code="V"></residue>
+        
+      
+        
+        <residue index="235" code="I"></residue>
+        
+      
+        
+        <residue index="236" code="I"></residue>
+        
+      
+        
+        <residue index="237" code="V"></residue>
+        
+      
+        
+        <residue index="238" code="S"></residue>
+        
+      
+        
+        <residue index="239" code="I"></residue>
+        
+      
+        
+        <residue index="240" code="Y"></residue>
+        
+      
+        
+        <residue index="256" code="V"></residue>
+        
+      
+        
+        <residue index="259" code="G"></residue>
+        
+      
+        
+        <residue index="260" code="H"></residue>
+        
+      
+        
+        <residue index="261" code="S"></residue>
+        
+      
+        
+        <residue index="264" code="D"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="205">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.65 - 6.65" temperature="25.0" probes="226">None</conditions>
+      <protection protection_level="MEDIUM">6 &lt; ΔGHX &lt; 8</protection>
+      <sequence is_pdb="True">SSSKFQQVEQDVKAIEVSLSARIGVSVLDTQNGEYWDYNGNQRFPLTSTFKTIACAKLLYDAEQGKVNPNSTVEIKKADLVTYSPVIEKQVGQAITLDDACFATMTTSDNTAANIILSAVGGPKGVTDFLRQIGDKETRLDRIEPDLNEGKLGDLRDTTTPKAIASTLNKFLFGSALSEMNQKKLESWMVNNQVTGNLLRSVLPAGWNIADRSGAGGFGARSITAVVWSEHQAPIIVSIYLAQTQASMEERNDAIVKIGHSIFDVYTSQSR</sequence>
+      <details>Amide exchange experiments proceeded from TROSY-HSQC spectra of lyophilized PSE-4 dissolved in D2O. The TROSY implementation allowed smaller phase cycling so very short spectra could be acquired with limited baseline distortions. At the beginning, more frequent short spectra (with a low number of transients) were acquired, and at the end, fewer long spectra (with increasing transients) were acquired. To determine the exchange regime, amide exchange experiments were performed for 80 days at pH 6.65, and for six days at pH 7.85. In both situations, 60 spectra were recorded.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="11" code="D"></residue>
+        
+      
+        
+        <residue index="13" code="K"></residue>
+        
+      
+        
+        <residue index="14" code="A"></residue>
+        
+      
+        
+        <residue index="15" code="I"></residue>
+        
+      
+        
+        <residue index="17" code="V"></residue>
+        
+      
+        
+        <residue index="21" code="A"></residue>
+        
+      
+        
+        <residue index="22" code="R"></residue>
+        
+      
+        
+        <residue index="23" code="I"></residue>
+        
+      
+        
+        <residue index="29" code="D"></residue>
+        
+      
+        
+        <residue index="36" code="W"></residue>
+        
+      
+        
+        <residue index="42" code="Q"></residue>
+        
+      
+        
+        <residue index="44" code="F"></residue>
+        
+      
+        
+        <residue index="53" code="I"></residue>
+        
+      
+        
+        <residue index="54" code="A"></residue>
+        
+      
+        
+        <residue index="57" code="K"></residue>
+        
+      
+        
+        <residue index="59" code="L"></residue>
+        
+      
+        
+        <residue index="60" code="Y"></residue>
+        
+      
+        
+        <residue index="63" code="E"></residue>
+        
+      
+        
+        <residue index="98" code="D"></residue>
+        
+      
+        
+        <residue index="99" code="D"></residue>
+        
+      
+        
+        <residue index="100" code="A"></residue>
+        
+      
+        
+        <residue index="101" code="C"></residue>
+        
+      
+        
+        <residue index="102" code="F"></residue>
+        
+      
+        
+        <residue index="117" code="L"></residue>
+        
+      
+        
+        <residue index="118" code="S"></residue>
+        
+      
+        
+        <residue index="119" code="A"></residue>
+        
+      
+        
+        <residue index="120" code="V"></residue>
+        
+      
+        
+        <residue index="122" code="G"></residue>
+        
+      
+        
+        <residue index="126" code="V"></residue>
+        
+      
+        
+        <residue index="127" code="T"></residue>
+        
+      
+        
+        <residue index="128" code="D"></residue>
+        
+      
+        
+        <residue index="130" code="L"></residue>
+        
+      
+        
+        <residue index="131" code="R"></residue>
+        
+      
+        
+        <residue index="132" code="Q"></residue>
+        
+      
+        
+        <residue index="133" code="I"></residue>
+        
+      
+        
+        <residue index="135" code="D"></residue>
+        
+      
+        
+        <residue index="138" code="T"></residue>
+        
+      
+        
+        <residue index="139" code="R"></residue>
+        
+      
+        
+        <residue index="141" code="D"></residue>
+        
+      
+        
+        <residue index="142" code="R"></residue>
+        
+      
+        
+        <residue index="144" code="E"></residue>
+        
+      
+        
+        <residue index="147" code="L"></residue>
+        
+      
+        
+        <residue index="157" code="D"></residue>
+        
+      
+        
+        <residue index="158" code="T"></residue>
+        
+      
+        
+        <residue index="159" code="T"></residue>
+        
+      
+        
+        <residue index="160" code="T"></residue>
+        
+      
+        
+        <residue index="164" code="I"></residue>
+        
+      
+        
+        <residue index="165" code="A"></residue>
+        
+      
+        
+        <residue index="166" code="S"></residue>
+        
+      
+        
+        <residue index="168" code="L"></residue>
+        
+      
+        
+        <residue index="169" code="N"></residue>
+        
+      
+        
+        <residue index="171" code="F"></residue>
+        
+      
+        
+        <residue index="172" code="L"></residue>
+        
+      
+        
+        <residue index="173" code="F"></residue>
+        
+      
+        
+        <residue index="185" code="L"></residue>
+        
+      
+        
+        <residue index="186" code="E"></residue>
+        
+      
+        
+        <residue index="187" code="S"></residue>
+        
+      
+        
+        <residue index="188" code="W"></residue>
+        
+      
+        
+        <residue index="189" code="M"></residue>
+        
+      
+        
+        <residue index="190" code="V"></residue>
+        
+      
+        
+        <residue index="207" code="W"></residue>
+        
+      
+        
+        <residue index="208" code="N"></residue>
+        
+      
+        
+        <residue index="210" code="A"></residue>
+        
+      
+        
+        <residue index="211" code="D"></residue>
+        
+      
+        
+        <residue index="223" code="I"></residue>
+        
+      
+        
+        <residue index="224" code="T"></residue>
+        
+      
+        
+        <residue index="241" code="L"></residue>
+        
+      
+        
+        <residue index="242" code="A"></residue>
+        
+      
+        
+        <residue index="254" code="A"></residue>
+        
+      
+        
+        <residue index="255" code="I"></residue>
+        
+      
+        
+        <residue index="257" code="K"></residue>
+        
+      
+        
+        <residue index="262" code="I"></residue>
+        
+      
+        
+        <residue index="265" code="V"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

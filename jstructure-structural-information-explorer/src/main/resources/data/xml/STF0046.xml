@@ -1,0 +1,282 @@
+<entry id="STF0046" title="Ribonuclease A">
+  
+  <protein name="Ribonuclease pancreatic" organism="Mus musculus (Mouse)" number_of_residues="124" uniprot_id="P61823" uniprot_range="27-150" pdb_id="1rbx">
+    
+    <experiment id="186">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.5 - 6.5" temperature="35.0" probes="46">None</conditions>
+      <protection protection_level="STRONG">strong protection</protection>
+      <sequence is_pdb="True">KETAAAKFERQHMDSSTSAASSSNYCNQMMKSRNLTKDRCKPVNTFVHESLADVQAVCSQKNVACKNGQTNCYQSYSTMSITDCRETGSSKYPNCAYKTTQANKHIIVACEGNPYVPVHFDASV</sequence>
+      <details>Prior to the HX reaction, RNase A was lyophilized from aqueous solution at pH 6.5 and sucrose was lyophilized twice from D2O solutions at pH* 6.5. HX reaction was initiated by dissolving the lyophilized protein into D2O. At different HX times, ranging from several minutes to about a week, aliquots (~0.6 mL) of the HX reaction were withdrawn and HX was quenched by dropping the pH* to 3.5 with DCl.</details>
+      
+        
+        <residue index="46" code="F"></residue>
+        
+      
+        
+        <residue index="47" code="V"></residue>
+        
+      
+        
+        <residue index="55" code="Q"></residue>
+        
+      
+        
+        <residue index="58" code="C"></residue>
+        
+      
+        
+        <residue index="73" code="Y"></residue>
+        
+      
+        
+        <residue index="74" code="Q"></residue>
+        
+      
+        
+        <residue index="79" code="M"></residue>
+        
+      
+        
+        <residue index="81" code="I"></residue>
+        
+      
+        
+        <residue index="106" code="I"></residue>
+        
+      
+        
+        <residue index="108" code="V"></residue>
+        
+      
+        
+        <residue index="109" code="A"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="187">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="4.0 - 4.0" temperature="10.0" probes="27">None</conditions>
+      <protection protection_level="EARLY">strong protection in I1</protection>
+      <sequence is_pdb="True">KETAAAKFERQHMDSSTSAASSSNYCNQMMKSRNLTKDRCKPVNTFVHESLADVQAVCSQKNVACKNGQTNCYQSYSTMSITDCRETGSSKYPNCAYKTTQANKHIIVACEGNPYVPVHFDASV</sequence>
+      <details>The deuterated RNase A was unfolded in an unfolding buffer (2.65 M guanidine hydrochloride/40 mM glycine, in D2O at a final pH of 2). Refolding of the unfolded RNase A solution (60-70 mg of RNase A per ml) at pH 4 was initiated by diluting 10.5-fold into a refolding buffer (0.442 M sodium sulfate/0.055 M sodium formate, in H2O at pH 4.25). At different times after beginning refolding, the exchange pulse was initiated by diluting 1.5-fold into an exchange buffer [0.4 M sodium sulfate/0.25 M guanidine hydrochloride/0.1 M (final) glycine, in H2O] so that the final pH was 9 or 10. The 37-msec exchange pulse was terminated by diluting 1.33-fold into a quench buffer (0.4 M sodium sulfate/0.25 M guanidine hydrochloride/0.1 M sodium formate), so that the final pH was 2.9. The refolding reaction was then allowed to go to completion (10 min) at this pH. The mixing dead time was 5 msec for each of the three mixing events described above. For the zero time point, the exchange pulse was applied directly to the unfolded protein solution.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="47" code="V"></residue>
+        
+      
+        
+        <residue index="48" code="H"></residue>
+        
+      
+        
+        <residue index="54" code="V"></residue>
+        
+      
+        
+        <residue index="63" code="V"></residue>
+        
+      
+        
+        <residue index="72" code="C"></residue>
+        
+      
+        
+        <residue index="73" code="Y"></residue>
+        
+      
+        
+        <residue index="81" code="I"></residue>
+        
+      
+        
+        <residue index="84" code="C"></residue>
+        
+      
+        
+        <residue index="98" code="K"></residue>
+        
+      
+        
+        <residue index="106" code="I"></residue>
+        
+      
+        
+        <residue index="108" code="V"></residue>
+        
+      
+        
+        <residue index="116" code="V"></residue>
+        
+      
+        
+        <residue index="118" code="V"></residue>
+        
+      
+        
+        <residue index="119" code="H"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="188">
+      <method type="folding">Pulse labeling HDX NMR</method>
+      <conditions pH="4.0 - 4.0" temperature="10.0" probes="27">None</conditions>
+      <protection protection_level="INTERMEDIATE">moderate protection in I1</protection>
+      <sequence is_pdb="True">KETAAAKFERQHMDSSTSAASSSNYCNQMMKSRNLTKDRCKPVNTFVHESLADVQAVCSQKNVACKNGQTNCYQSYSTMSITDCRETGSSKYPNCAYKTTQANKHIIVACEGNPYVPVHFDASV</sequence>
+      <details>The deuterated RNase A was unfolded in an unfolding buffer (2.65 M guanidine hydrochloride/40 mM glycine, in D2O at a final pH of 2). Refolding of the unfolded RNase A solution (60-70 mg of RNase A per ml) at pH 4 was initiated by diluting 10.5-fold into a refolding buffer (0.442 M sodium sulfate/0.055 M sodium formate, in H2O at pH 4.25). At different times after beginning refolding, the exchange pulse was initiated by diluting 1.5-fold into an exchange buffer [0.4 M sodium sulfate/0.25 M guanidine hydrochloride/0.1 M (final) glycine, in H2O] so that the final pH was 9 or 10. The 37-msec exchange pulse was terminated by diluting 1.33-fold into a quench buffer (0.4 M sodium sulfate/0.25 M guanidine hydrochloride/0.1 M sodium formate), so that the final pH was 2.9. The refolding reaction was then allowed to go to completion (10 min) at this pH. The mixing dead time was 5 msec for each of the three mixing events described above. For the zero time point, the exchange pulse was applied directly to the unfolded protein solution.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="31" code="K"></residue>
+        
+      
+        
+        <residue index="34" code="N"></residue>
+        
+      
+        
+        <residue index="43" code="V"></residue>
+        
+      
+        
+        <residue index="59" code="S"></residue>
+        
+      
+        
+        <residue index="60" code="Q"></residue>
+        
+      
+        
+        <residue index="97" code="Y"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>

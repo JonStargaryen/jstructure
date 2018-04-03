@@ -11,11 +11,14 @@
 
     MODULE.constant('features', [
         { name : 'average RMSD increase', tag : 'averageRmsdIncrease' },
-        { name : 'average TM-score increase', tag : 'averageTmScoreIncrease' },
-        { name : 'average Q increase', tag : 'averageQIncrease' },
+        // { name : 'average TM-score increase', tag : 'averageTmScoreIncrease' },
+        // { name : 'average Q increase', tag : 'averageQIncrease' },
         { name : 'maximum RMSD increase', tag : 'maximumRmsdIncrease' },
-        { name : 'maximum TM-score increase', tag : 'maximumTmScoreIncrease' },
-        { name : 'maximum Q increase', tag : 'maximumQIncrease' }
+        // { name : 'maximum TM-score increase', tag : 'maximumTmScoreIncrease' },
+        // { name : 'maximum Q increase', tag : 'maximumQIncrease' }
+        { name : 'EC count', tag : 'eccount' },
+        { name : 'cumulative strength', tag : 'cumstrength' },
+        { name : 'conservation', tag : 'conservation' }
     ]);
 
     MODULE.constant('aminoAcids', [

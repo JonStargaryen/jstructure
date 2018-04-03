@@ -1,0 +1,362 @@
+<entry id="STF0033" title="Forkhead-associated (FHA) domain from Arabidopsis KAPP">
+  
+  <protein name="Protein phosphatase 2C 70" organism="Arabidopsis thaliana (Mouse-ear cress)" number_of_residues="139" uniprot_id="P46014" uniprot_range="180-313" pdb_id="1mzk">
+    
+    <experiment id="150">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="20.0" probes="44">None</conditions>
+      <protection protection_level="STRONG">log(P) &gt; 4.6</protection>
+      <sequence is_pdb="True">SWLFLEVIAGPAIGLQHAVNSTSSSKLPVKLGRVSPSDLALKDSEVSGKHAQITWNSTKFKWELVDMGSLNGTLVNSHSISHPDLGSRKWGNPVELASDDIITLGTTTKVYVRISSQNEFQIPFKIGVASDPMA</sequence>
+      <details>The exchange rates of 44 backbone amide hydrogen atoms were measured at 20 °C at pH 6.3 using 15N transverse relaxation optimized spectroscopy (TROSY) spectra.</details>
+      
+        
+        <residue index="3" code="L"></residue>
+        
+      
+        
+        <residue index="4" code="F"></residue>
+        
+      
+        
+        <residue index="5" code="L"></residue>
+        
+      
+        
+        <residue index="7" code="V"></residue>
+        
+      
+        
+        <residue index="9" code="A"></residue>
+        
+      
+        
+        <residue index="15" code="L"></residue>
+        
+      
+        
+        <residue index="51" code="A"></residue>
+        
+      
+        
+        <residue index="52" code="Q"></residue>
+        
+      
+        
+        <residue index="53" code="I"></residue>
+        
+      
+        
+        <residue index="54" code="T"></residue>
+        
+      
+        
+        <residue index="61" code="K"></residue>
+        
+      
+        
+        <residue index="63" code="E"></residue>
+        
+      
+        
+        <residue index="64" code="L"></residue>
+        
+      
+        
+        <residue index="94" code="V"></residue>
+        
+      
+        
+        <residue index="96" code="L"></residue>
+        
+      
+        
+        <residue index="97" code="A"></residue>
+        
+      
+        
+        <residue index="99" code="D"></residue>
+        
+      
+        
+        <residue index="100" code="D"></residue>
+        
+      
+        
+        <residue index="101" code="I"></residue>
+        
+      
+        
+        <residue index="102" code="I"></residue>
+        
+      
+        
+        <residue index="103" code="T"></residue>
+        
+      
+        
+        <residue index="109" code="K"></residue>
+        
+      
+        
+        <residue index="110" code="V"></residue>
+        
+      
+        
+        <residue index="111" code="Y"></residue>
+        
+      
+        
+        <residue index="112" code="V"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="151">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="20.0" probes="44">None</conditions>
+      <protection protection_level="MEDIUM">4.0 &lt; log(P) &lt; 4.6</protection>
+      <sequence is_pdb="True">SWLFLEVIAGPAIGLQHAVNSTSSSKLPVKLGRVSPSDLALKDSEVSGKHAQITWNSTKFKWELVDMGSLNGTLVNSHSISHPDLGSRKWGNPVELASDDIITLGTTTKVYVRISSQNEFQIPFKIGVASDPMA</sequence>
+      <details>The exchange rates of 44 backbone amide hydrogen atoms were measured at 20 °C at pH 6.3 using 15N transverse relaxation optimized spectroscopy (TROSY) spectra.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="14" code="G"></residue>
+        
+      
+        
+        <residue index="17" code="H"></residue>
+        
+      
+        
+        <residue index="29" code="V"></residue>
+        
+      
+        
+        <residue index="30" code="K"></residue>
+        
+      
+        
+        <residue index="60" code="F"></residue>
+        
+      
+        
+        <residue index="62" code="W"></residue>
+        
+      
+        
+        <residue index="66" code="D"></residue>
+        
+      
+        
+        <residue index="69" code="S"></residue>
+        
+      
+        
+        <residue index="72" code="G"></residue>
+        
+      
+        
+        <residue index="73" code="T"></residue>
+        
+      
+        
+        <residue index="74" code="L"></residue>
+        
+      
+        
+        <residue index="105" code="G"></residue>
+        
+      
+        
+        <residue index="108" code="T"></residue>
+        
+      
+        
+      
+        
+      
+        
+      
+    </experiment>
+    
+    <experiment id="152">
+      <method type="stability">Native exchange NMR</method>
+      <conditions pH="6.3 - 6.3" temperature="20.0" probes="44">None</conditions>
+      <protection protection_level="WEAK">log(P) &lt; 4.0</protection>
+      <sequence is_pdb="True">SWLFLEVIAGPAIGLQHAVNSTSSSKLPVKLGRVSPSDLALKDSEVSGKHAQITWNSTKFKWELVDMGSLNGTLVNSHSISHPDLGSRKWGNPVELASDDIITLGTTTKVYVRISSQNEFQIPFKIGVASDPMA</sequence>
+      <details>The exchange rates of 44 backbone amide hydrogen atoms were measured at 20 °C at pH 6.3 using 15N transverse relaxation optimized spectroscopy (TROSY) spectra.</details>
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+        <residue index="46" code="V"></residue>
+        
+      
+        
+        <residue index="75" code="V"></residue>
+        
+      
+        
+        <residue index="85" code="L"></residue>
+        
+      
+    </experiment>
+    
+  </protein>
+  
+</entry>
