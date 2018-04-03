@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.si.explorer;
 
-import de.bioforscher.jstructure.si.explorer.model.ExplorerChain;
 import de.bioforscher.testutil.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -26,7 +24,7 @@ public class ExplorerService {
     }
 
     @PostConstruct
-    public void activate() throws IOException {
+    public void activate() {
         logger.info("starting protein service");
 
         this.chains = TestUtils.getResourceAsStream("data/pancsa.list")

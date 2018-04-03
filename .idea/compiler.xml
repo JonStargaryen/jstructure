@@ -13,6 +13,7 @@
         <module name="jstructure-align" />
         <module name="jstructure-core" />
         <module name="jstructure-features" />
+        <module name="jstructure-folding-cores" />
         <module name="jstructure-residue-graphs" />
         <module name="jstructure-structural-information" />
         <module name="jstructure-structural-information-explorer" />
@@ -34,6 +35,7 @@
       <module name="jstructure-equant" target="1.8" />
       <module name="jstructure-explorer" target="1.8" />
       <module name="jstructure-features" target="1.8" />
+      <module name="jstructure-folding-cores" target="1.8" />
       <module name="jstructure-gmlvq" target="1.8" />
       <module name="jstructure-membrane" target="1.8" />
       <module name="jstructure-membrane-topology" target="1.8" />
