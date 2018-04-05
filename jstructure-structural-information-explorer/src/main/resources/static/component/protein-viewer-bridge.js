@@ -93,6 +93,11 @@ var ProteinViewerComponent = (function () {
             viewer.requestRedraw();
         };
 
+        this.selectByIndex = function(i) {
+            rendering.setSelection(rendering.select({ rindices : [i] }));
+            viewer.requestRedraw();
+        };
+
         this.deselect = function(res1, res2) {
             if(isContact(res1, res2)) {
                 viewer.rm("contact");
