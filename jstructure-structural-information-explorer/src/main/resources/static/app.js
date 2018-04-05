@@ -142,7 +142,7 @@
                 featureViewer = new FeatureViewerComponent('#feature-viewer',
                     $scope.protein,
                     function(pos) {
-                        proteinViewer.select(+pos.substring(0, pos.length - 1));
+                        proteinViewer.selectByIndex(+pos.substring(0, pos.length - 1) - 1);
                     });
 
                 proteinViewer.loadStructure($scope.protein);
@@ -166,6 +166,10 @@
                     return null;
                 }
             }
+
+            $scope.selectByIndex = function(i) {
+                proteinViewer.selectByIndex(i);
+            };
 
             $scope.select = function(res1, res2) {
                 proteinViewer.select(res1, res2);
