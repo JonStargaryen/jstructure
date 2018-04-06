@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -128,6 +129,8 @@ public class StructuralInformationService extends ExternalLocalService {
             StringJoiner output = new StringJoiner(System.lineSeparator());
             contactToggleFutures.stream()
                     .map(this::getContactToggleFuture)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
                     .map(contactTogglingReconstruction -> contactTogglingReconstruction.getContactToToggle() + "\t" +
                             contactTogglingReconstruction.isContactWasRemoved() + "\t" +
                             StandardFormat.format(contactTogglingReconstruction.getBaselineReconstruction().getAverageRmsd()) + "\t" +
@@ -160,11 +163,13 @@ public class StructuralInformationService extends ExternalLocalService {
         }
     }
 
-    private ContactTogglingReconstruction getContactToggleFuture(Future<ContactTogglingReconstruction> future) {
+    private Optional<ContactTogglingReconstruction> getContactToggleFuture(Future<ContactTogglingReconstruction> future) {
         try {
-            return future.get();
+            return Optional.of(future.get());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.warn("computation of toggling results failed",
+                    e);
+            return Optional.empty();
         }
     }
 

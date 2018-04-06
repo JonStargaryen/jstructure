@@ -52,7 +52,8 @@ public class PLIPRestServiceQuery {
         logger.debug("calculating PLIP intra-document for {}",
                 chain.getChainIdentifier().getFullName());
         try {
-            String chainId = chain.getChainIdentifier().getChainId();
+//            String chainId = chain.getChainIdentifier().getChainId();
+            String chainId = "A";
             // write PDB structure of data point to temporary file
             Path structureFilePath = Files.createTempFile("plip_", "_" + chainId + ".pdb");
             Files.write(structureFilePath, chain.getPdbRepresentation().getBytes());
