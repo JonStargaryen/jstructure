@@ -116,28 +116,36 @@ public class StructuralInformationParserService {
                             computeMaximum(values, 0),
                             computeMaximum(values, 1),
                             computeMaximum(values, 2),
-                            earlyFoldingResidues.stream()
-                                    .map(Group::getResidueIdentifier)
-                                    .map(ResidueIdentifier::getResidueNumber)
-                                    .anyMatch(residueIdentifier -> residueIdentifier.equals(entry.getKey().getLeft())) ||
-                            earlyFoldingResidues.stream()
-                                    .map(Group::getResidueIdentifier)
-                                    .map(ResidueIdentifier::getResidueNumber)
-                                    .anyMatch(residueIdentifier -> residueIdentifier.equals(entry.getKey().getRight())),
-                            earlyFoldingResidues.stream()
-                                    .map(Group::getResidueIdentifier)
-                                    .map(ResidueIdentifier::getResidueNumber)
-                                    .anyMatch(residueIdentifier -> residueIdentifier.equals(entry.getKey().getLeft())) &&
-                            earlyFoldingResidues.stream()
-                                    .map(Group::getResidueIdentifier)
-                                    .map(ResidueIdentifier::getResidueNumber)
-                                    .anyMatch(residueIdentifier -> residueIdentifier.equals(entry.getKey().getRight())));
+                            residueIsInCollection(earlyFoldingResidues, entry.getKey().getLeft(), entry.getKey().getRight()),
+                            contactIsInCollection(earlyFoldingResidues, entry.getKey().getLeft(), entry.getKey().getRight()));
                 })
                 // sort by average RMSD increase
 //                .sorted(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease).reversed())
                 // sort by maximum RMSD increase
 //                .sorted(Comparator.comparingDouble(ContactStructuralInformation::getMaximumRmsdIncrease).reversed())
                 .collect(Collectors.toList());
+    }
+
+    private boolean residueIsInCollection(List<AminoAcid> aminoAcids, int resNum1, int resNum2) {
+        return aminoAcids.stream()
+                .map(Group::getResidueIdentifier)
+                .map(ResidueIdentifier::getResidueNumber)
+                .anyMatch(residueIdentifier -> residueIdentifier.equals(resNum1)) ||
+                aminoAcids.stream()
+                        .map(Group::getResidueIdentifier)
+                        .map(ResidueIdentifier::getResidueNumber)
+                        .anyMatch(residueIdentifier -> residueIdentifier.equals(resNum2));
+    }
+
+    private boolean contactIsInCollection(List<AminoAcid> aminoAcids, int resNum1, int resNum2) {
+        return aminoAcids.stream()
+                .map(Group::getResidueIdentifier)
+                .map(ResidueIdentifier::getResidueNumber)
+                .anyMatch(residueIdentifier -> residueIdentifier.equals(resNum1)) &&
+                aminoAcids.stream()
+                        .map(Group::getResidueIdentifier)
+                        .map(ResidueIdentifier::getResidueNumber)
+                        .anyMatch(residueIdentifier -> residueIdentifier.equals(resNum2));
     }
 
     private double computeAverage(List<double[]> values, int i) {

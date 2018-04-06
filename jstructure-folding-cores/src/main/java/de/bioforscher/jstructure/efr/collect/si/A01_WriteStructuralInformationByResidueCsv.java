@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.efr.collect;
+package de.bioforscher.jstructure.efr.collect.si;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
@@ -30,12 +30,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class A03_WriteDatasetCsv {
-    private static final Logger logger = LoggerFactory.getLogger(A03_WriteDatasetCsv.class);
+public class A01_WriteStructuralInformationByResidueCsv {
+    private static final Logger logger = LoggerFactory.getLogger(A01_WriteStructuralInformationByResidueCsv.class);
 
     public static void main(String[] args) throws IOException {
-        String output = Files.lines(Start2FoldConstants.PANCSA_LIST)
-                .map(A03_WriteDatasetCsv::handleLine)
+        String output = Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
+                .map(A01_WriteStructuralInformationByResidueCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
@@ -55,10 +55,10 @@ public class A03_WriteDatasetCsv {
                                 "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
                                 "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
-                                "folds,functional" + System.lineSeparator(),
+                                "folds,functional,sane" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-new.csv"),
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-si-residues.csv"),
                 output);
     }
 
@@ -72,6 +72,8 @@ public class A03_WriteDatasetCsv {
                     .splitAsStream(split[2].replaceAll("\\[", "").replaceAll("]", ""))
                     .map(Integer::valueOf)
                     .collect(Collectors.toList());
+
+            boolean sane = split[6].equalsIgnoreCase("true");
 
             Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
@@ -90,7 +92,7 @@ public class A03_WriteDatasetCsv {
                     .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isEarly())
                     .collect(Collectors.toList());
 
-            List<Integer> functionalResidueNumbers = Start2FoldConstants.extractFunctioanlResidueNumbers(split);
+            List<Integer> functionalResidueNumbers = Start2FoldConstants.extractFunctionalResidueNumbers(split);
             List<AminoAcid> functionalResidues = new ArrayList<>();
             // do nothing if no annotation of functional residues exists
             if(!functionalResidueNumbers.isEmpty()) {
@@ -219,7 +221,8 @@ public class A03_WriteDatasetCsv {
                                 StandardFormat.format(residueStructuralInformationEntry.getMaximumQIncrease()) + "," +
 
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
-                                functionalAnnotation;
+                                functionalAnnotation + "," +
+                                sane;
                     })
                     .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {

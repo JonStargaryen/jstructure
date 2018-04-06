@@ -78,6 +78,11 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
                 secondaryStructure,
                 sampledMap.getCaspRRRepresentation()).call();
 
+        // write files
+        sampledReconstructions.forEach(sampledReconstruction -> {
+            //TODO impl
+        });
+
         // score baseline models
         computeBaselinePerformance(sampledReconstructions);
 
@@ -103,16 +108,16 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
                 .map(TMAlignAlignmentResult::getRootMeanSquareDeviation)
                 .mapToDouble(RootMeanSquareDeviation::getScore)
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate reconstructs"));
+                .orElseThrow(() -> new ComputationException("could not generate baseline reconstructs"));
         averageTmScore = alignmentResults.stream()
                 .map(TMAlignAlignmentResult::getTemplateModelingScore1)
                 .mapToDouble(TemplateModelingScore::getScore)
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate reconstructs"));
+                .orElseThrow(() -> new ComputationException("could not generate baseline reconstructs"));
         averageQ = reconstructionContactMaps.stream()
                 .mapToDouble(reconstructContactMap -> computeQ(fullMap, reconstructContactMap))
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate reconstructs"));
+                .orElseThrow(() -> new ComputationException("could not generate baseline reconstructs"));
 
         logger.info("baseline reconstruction {} - average RMSD: {}, average TM-score: {}, average Q: {}",
                 iteration,

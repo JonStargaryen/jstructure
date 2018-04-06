@@ -86,16 +86,16 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
                 .map(TMAlignAlignmentResult::getRootMeanSquareDeviation)
                 .mapToDouble(RootMeanSquareDeviation::getScore)
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate reconstructs"));
+                .orElseThrow(() -> new ComputationException("could not generate toggled reconstructs"));
         averageTmScore = alignmentResults.stream()
                 .map(TMAlignAlignmentResult::getTemplateModelingScore1)
                 .mapToDouble(TemplateModelingScore::getScore)
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate reconstructs"));
+                .orElseThrow(() -> new ComputationException("could not generate toggled reconstructs"));
         averageQ = reconstructionContactMaps.stream()
                 .mapToDouble(reconstructContactMap -> BaselineReconstruction.computeQ(baselineReconstruction.getFullMap(), reconstructContactMap))
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate reconstructs"));
+                .orElseThrow(() -> new ComputationException("could not generate toggled reconstructs"));
 
         logger.info("[{} / {}]: {} reconstruction of contact {}",
                 counter,
