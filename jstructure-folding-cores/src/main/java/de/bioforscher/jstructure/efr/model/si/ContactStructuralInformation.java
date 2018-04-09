@@ -1,6 +1,9 @@
-package de.bioforscher.jstructure.efr.model;
+package de.bioforscher.jstructure.efr.model.si;
 
 import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.efr.model.ContactDistanceBin;
+
+import java.util.List;
 
 public class ContactStructuralInformation {
     private final int residueIdentifier1;
@@ -8,9 +11,9 @@ public class ContactStructuralInformation {
     private final int residueIdentifier2;
     private final String aa2;
     private final ContactDistanceBin contactDistanceBin;
-//    private final double baselineRmsd;
-//    private final double baselineTmScore;
-//    private final double baselineQ;
+    private final double baselineRmsd;
+    private final double baselineTmScore;
+    private final double baselineQ;
     private final double averageRmsdIncrease;
     private final double averageTmScoreIncrease;
     private final double averageQIncrease;
@@ -19,6 +22,9 @@ public class ContactStructuralInformation {
     private final double maximumQIncrease;
     private final boolean isEarlyFoldingResidue;
     private final boolean isEarlyFoldingContact;
+    private final double averageRmsdIncreaseZScore;
+    private final double maximumRmsdIncreaseZScore;
+    private final double fractionOfTopScoringContacts;
     private double plmScore;
 
     public ContactStructuralInformation(int residueIdentifier1,
@@ -26,9 +32,9 @@ public class ContactStructuralInformation {
                                         int residueIdentifier2,
                                         String aa2,
                                         ContactDistanceBin contactDistanceBin,
-//                                        double baselineRmsd,
-//                                        double baselineTmScore,
-//                                        double baselineQ,
+                                        double baselineRmsd,
+                                        double baselineTmScore,
+                                        double baselineQ,
                                         double averageRmsdIncrease,
                                         double averageTmScoreIncrease,
                                         double averageQIncrease,
@@ -36,15 +42,21 @@ public class ContactStructuralInformation {
                                         double maximumTmScoreIncrease,
                                         double maximumQIncrease,
                                         boolean isEarlyFoldingResidue,
-                                        boolean isEarlyFoldingContact) {
+                                        boolean isEarlyFoldingContact,
+                                        double averageRmsd,
+                                        double standardDeviationRmsd,
+                                        double averageMaximumRmsd,
+                                        double standardDeviationMaximumRmsd,
+                                        List<ReconstructionStructuralInformation> allReconstructions,
+                                        List<ReconstructionStructuralInformation> topScoringReconstructions) {
         this.residueIdentifier1 = residueIdentifier1;
         this.aa1 = aa1;
         this.residueIdentifier2 = residueIdentifier2;
         this.aa2 = aa2;
         this.contactDistanceBin = contactDistanceBin;
-//        this.baselineRmsd = baselineRmsd;
-//        this.baselineTmScore = baselineTmScore;
-//        this.baselineQ = baselineQ;
+        this.baselineRmsd = baselineRmsd;
+        this.baselineTmScore = baselineTmScore;
+        this.baselineQ = baselineQ;
         this.averageRmsdIncrease = averageRmsdIncrease;
         this.averageTmScoreIncrease = averageTmScoreIncrease;
         this.averageQIncrease = averageQIncrease;
@@ -53,6 +65,17 @@ public class ContactStructuralInformation {
         this.maximumQIncrease = maximumQIncrease;
         this.isEarlyFoldingResidue = isEarlyFoldingResidue;
         this.isEarlyFoldingContact = isEarlyFoldingContact;
+        this.averageRmsdIncreaseZScore = (averageRmsdIncrease - averageRmsd) / standardDeviationRmsd;
+        this.maximumRmsdIncreaseZScore = (maximumRmsdIncrease - averageMaximumRmsd) / standardDeviationMaximumRmsd;
+        double frac = topScoringReconstructions.stream()
+                .filter(recon -> residueIdentifier1 == recon.getResidueIdentifier1() && residueIdentifier2 == recon.getResidueIdentifier2())
+                .count() / (double) allReconstructions.stream()
+                .filter(recon -> residueIdentifier1 == recon.getResidueIdentifier1() && residueIdentifier2 == recon.getResidueIdentifier2())
+                .count();
+        if(!Double.isFinite(frac)) {
+            frac = 0.0;
+        }
+        this.fractionOfTopScoringContacts = frac;
     }
 
     public int getResidueIdentifier1() {
@@ -75,17 +98,17 @@ public class ContactStructuralInformation {
         return contactDistanceBin;
     }
 
-//    public double getBaselineRmsd() {
-//        return baselineRmsd;
-//    }
-//
-//    public double getBaselineTmScore() {
-//        return baselineTmScore;
-//    }
-//
-//    public double getBaselineQ() {
-//        return baselineQ;
-//    }
+    public double getBaselineRmsd() {
+        return baselineRmsd;
+    }
+
+    public double getBaselineTmScore() {
+        return baselineTmScore;
+    }
+
+    public double getBaselineQ() {
+        return baselineQ;
+    }
 
     public double getAverageRmsdIncrease() {
         return averageRmsdIncrease;
@@ -127,13 +150,25 @@ public class ContactStructuralInformation {
         this.plmScore = plmScore;
     }
 
+    public double getAverageRmsdIncreaseZScore() {
+        return averageRmsdIncreaseZScore;
+    }
+
+    public double getMaximumRmsdIncreaseZScore() {
+        return maximumRmsdIncreaseZScore;
+    }
+
+    public double getFractionOfTopScoringContacts() {
+        return fractionOfTopScoringContacts;
+    }
+
     public String getCsvLine() {
         return residueIdentifier1 + "," +
                 residueIdentifier2 + "," +
                 contactDistanceBin + "," +
-//                StandardFormat.format(baselineRmsd) + "," +
-//                StandardFormat.format(baselineTmScore) + "," +
-//                StandardFormat.format(baselineQ) + "," +
+                StandardFormat.format(baselineRmsd) + "," +
+                StandardFormat.format(baselineTmScore) + "," +
+                StandardFormat.format(baselineQ) + "," +
                 StandardFormat.format(averageRmsdIncrease) + "," +
                 StandardFormat.format(averageTmScoreIncrease) + "," +
                 StandardFormat.format(averageQIncrease) + "," +

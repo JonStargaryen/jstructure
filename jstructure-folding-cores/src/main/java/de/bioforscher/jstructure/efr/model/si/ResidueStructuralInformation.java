@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.efr.model;
+package de.bioforscher.jstructure.efr.model.si;
 
 import de.bioforscher.jstructure.StandardFormat;
 
@@ -15,6 +15,9 @@ public class ResidueStructuralInformation {
     private final double eccount;
     private final double cumstrength;
     private final double conservation;
+    private final double averageRmsdIncreaseZScore;
+    private final double maximumRmsdIncreaseZScore;
+    private final double fractionOfTopScoringContacts;
 
     public ResidueStructuralInformation(int residueIdentifier,
                                         String aa,
@@ -27,7 +30,10 @@ public class ResidueStructuralInformation {
                                         boolean isEarlyFoldingResidue,
                                         double eccount,
                                         double cumstrength,
-                                        double conservation) {
+                                        double conservation,
+                                        double averageRmsdIncreaseZScore,
+                                        double maximumRmsdIncreaseZScore,
+                                        double fractionOfTopScoringContacts) {
         this.residueIdentifier = residueIdentifier;
         this.aa = aa;
         this.averageRmsdIncrease = averageRmsdIncrease;
@@ -40,6 +46,9 @@ public class ResidueStructuralInformation {
         this.eccount = eccount;
         this.cumstrength = cumstrength;
         this.conservation = conservation;
+        this.averageRmsdIncreaseZScore = averageRmsdIncreaseZScore;
+        this.maximumRmsdIncreaseZScore = maximumRmsdIncreaseZScore;
+        this.fractionOfTopScoringContacts = fractionOfTopScoringContacts;
     }
 
     public int getResidueIdentifier() {
@@ -88,6 +97,18 @@ public class ResidueStructuralInformation {
 
     public double getConservation() {
         return conservation;
+    }
+
+    public double getAverageRmsdIncreaseZScore() {
+        return averageRmsdIncreaseZScore;
+    }
+
+    public double getMaximumRmsdIncreaseZScore() {
+        return maximumRmsdIncreaseZScore;
+    }
+
+    public double getFractionOfTopScoringContacts() {
+        return fractionOfTopScoringContacts;
     }
 
     public String getCsvLine() {

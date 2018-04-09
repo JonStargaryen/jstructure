@@ -1,8 +1,8 @@
 package model;
 
 import de.bioforscher.jstructure.StandardFormat;
-import de.bioforscher.jstructure.efr.model.ContactStructuralInformation;
-import de.bioforscher.jstructure.efr.model.ResidueStructuralInformation;
+import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
+import de.bioforscher.jstructure.efr.model.si.ResidueStructuralInformation;
 import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
 import de.bioforscher.jstructure.efr.parser.Start2FoldXmlParser;
 import de.bioforscher.jstructure.efr.parser.StructuralInformationParserService;

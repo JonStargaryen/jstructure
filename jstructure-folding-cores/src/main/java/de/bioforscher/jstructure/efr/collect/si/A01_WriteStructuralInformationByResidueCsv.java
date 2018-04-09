@@ -3,6 +3,8 @@ package de.bioforscher.jstructure.efr.collect.si;
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
 import de.bioforscher.jstructure.efr.model.*;
+import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
+import de.bioforscher.jstructure.efr.model.si.ResidueStructuralInformation;
 import de.bioforscher.jstructure.efr.parser.*;
 import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.energyprofile.EgorAgreement;

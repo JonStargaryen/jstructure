@@ -94,21 +94,21 @@ var FeatureViewerComponent = (function () {
             interpolation: 'basis'
         });
 
-        var eccount = [];
-        model.residues.forEach(function (go) {
-            eccount.push({
-                x: eccount.length + 1,
-                y: go.eccount
-            });
-        });
-        fv.addFeature({
-            data: eccount,
-            name: 'EC count',
-            className: 'tba4',
-            type: 'line',
-            color: '#52b1e9',
-            interpolation: 'basis'
-        });
+        // var eccount = [];
+        // model.residues.forEach(function (go) {
+        //     eccount.push({
+        //         x: eccount.length + 1,
+        //         y: go.eccount
+        //     });
+        // });
+        // fv.addFeature({
+        //     data: eccount,
+        //     name: 'EC count',
+        //     className: 'tba4',
+        //     type: 'line',
+        //     color: '#52b1e9',
+        //     interpolation: 'basis'
+        // });
 
         var cumstrength = [];
         model.residues.forEach(function (go) {
@@ -136,6 +136,54 @@ var FeatureViewerComponent = (function () {
         fv.addFeature({
             data: conservation,
             name: 'conservation',
+            className: 'tba4',
+            type: 'line',
+            color: '#52b1e9',
+            interpolation: 'basis'
+        });
+
+        var avgZ = [];
+        model.residues.forEach(function (go) {
+            avgZ.push({
+                x: avgZ.length + 1,
+                y: go.averageRmsdIncreaseZScore
+            });
+        });
+        fv.addFeature({
+            data: avgZ,
+            name: 'average Z',
+            className: 'tba4',
+            type: 'line',
+            color: '#52b1e9',
+            interpolation: 'basis'
+        });
+
+        var maxZ = [];
+        model.residues.forEach(function (go) {
+            maxZ.push({
+                x: maxZ.length + 1,
+                y: go.maximumRmsdIncreaseZScore
+            });
+        });
+        fv.addFeature({
+            data: maxZ,
+            name: 'maxiumum Z',
+            className: 'tba4',
+            type: 'line',
+            color: '#52b1e9',
+            interpolation: 'basis'
+        });
+
+        var top = [];
+        model.residues.forEach(function (go) {
+            top.push({
+                x: top.length + 1,
+                y: go.fractionOfTopScoringContacts
+            });
+        });
+        fv.addFeature({
+            data: top,
+            name: 'frac top scoring',
             className: 'tba4',
             type: 'line',
             color: '#52b1e9',

@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.efr.collect.si;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
-import de.bioforscher.jstructure.efr.model.ContactStructuralInformation;
+import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.efr.model.FunctionalResidueAnnotation;
 import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
 import de.bioforscher.jstructure.efr.parser.EvolutionaryCouplingParser;
@@ -45,6 +45,7 @@ public class A02_WriteStructuralInformationByContactCsv {
                 .collect(Collectors.joining(System.lineSeparator(),
                         "pdb,chain,res1,aa1,res2,aa2,distance," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
+                                "avgRmsdZ,numberOfTopScoringContacts," +
                                 "plm,betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +
                                 "hydrogen,hydrophobic," +
                                 "efr1,efr2,func1,func2,sane" + System.lineSeparator(),
@@ -125,6 +126,8 @@ public class A02_WriteStructuralInformationByContactCsv {
                                 StandardFormat.format(contact.getMaximumRmsdIncrease()) + "," +
                                 StandardFormat.format(contact.getMaximumTmScoreIncrease()) + "," +
                                 StandardFormat.format(contact.getMaximumQIncrease()) + "," +
+                                StandardFormat.format(contact.getAverageRmsdIncreaseZScore()) + "," +
+                                contact.getFractionOfTopScoringContacts() + "," +
 
                                 StandardFormat.format(contact.getPlmScore()) + "," +
                                 StandardFormat.format(residueGraphCalculations.betweenness(pair)) + "," +
