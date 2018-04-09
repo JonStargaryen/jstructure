@@ -2,7 +2,7 @@ package de.bioforscher.jstructure.efr.parser;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
-import de.bioforscher.jstructure.efr.model.ContactStructuralInformation;
+import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.efr.model.HotSpotScoring;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
