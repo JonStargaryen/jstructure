@@ -230,18 +230,18 @@ public class StructuralInformationParserService {
 
     private double computeAverage(List<ReconstructionStructuralInformation> reconstructionStructuralInformation,
                                   ToDoubleFunction<ReconstructionStructuralInformation> function) {
-        return reconstructionStructuralInformation.stream()
+        return Double.valueOf(StandardFormat.format(reconstructionStructuralInformation.stream()
                 .mapToDouble(function)
                 .average()
-                .orElse(0.0);
+                .orElse(0.0)));
     }
 
     private double computeMaximum(List<ReconstructionStructuralInformation> reconstructionStructuralInformation,
                                   ToDoubleFunction<ReconstructionStructuralInformation> function) {
-        return reconstructionStructuralInformation.stream()
+        return Double.valueOf(StandardFormat.format(reconstructionStructuralInformation.stream()
                 .mapToDouble(function)
                 .max()
-                .orElse(0.0);
+                .orElse(0.0)));
     }
 
     public List<ResidueStructuralInformation> composeResidueStructuralInformation(List<AminoAcid> aminoAcids,
