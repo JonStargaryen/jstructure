@@ -7,7 +7,6 @@ import de.bioforscher.jstructure.feature.energyprofile.EgorAgreement;
 import de.bioforscher.jstructure.feature.energyprofile.EnergyProfile;
 import de.bioforscher.jstructure.feature.interaction.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.interaction.PLIPIntraMolecularAnnotator;
-import de.bioforscher.jstructure.feature.interaction.PLIPRestServiceQuery;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.graph.ResidueGraph;
@@ -15,22 +14,25 @@ import de.bioforscher.jstructure.graph.ResidueTopologicPropertiesContainer;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
-import org.jsoup.nodes.Document;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class S01_WriteMisfoldedNativeCsv {
-    private static final Logger logger = LoggerFactory.getLogger(S01_WriteMisfoldedNativeCsv.class);
+public class S02_WriteMisfoldedNativeCsv {
+    private static final Logger logger = LoggerFactory.getLogger(S02_WriteMisfoldedNativeCsv.class);
     private static final PLIPIntraMolecularAnnotator PLIP_INTRA_MOLECULAR_ANNOTATOR = new PLIPIntraMolecularAnnotator();
 
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.DATA_DIRECTORY.resolve("native").resolve("wozniak.list"))
-                .map(S01_WriteMisfoldedNativeCsv::handleLine)
+                .map(S02_WriteMisfoldedNativeCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
@@ -61,8 +63,8 @@ public class S01_WriteMisfoldedNativeCsv {
             System.out.println(line);
             String[] split = line.split(";");
 
-            return Optional.of(handleProtein(split[0].split("_")[0], "misfolded") + System.lineSeparator() +
-                    handleProtein(split[1].split("_")[0], "native"));
+            return Optional.of(handleProtein(split[0].split("_")[0], "misfolded").get() + System.lineSeparator() +
+                    handleProtein(split[1].split("_")[0], "native").get());
         } catch (Exception e) {
             logger.info("calculation failed for {}",
                     line,
@@ -71,21 +73,30 @@ public class S01_WriteMisfoldedNativeCsv {
         }
     }
 
-    private static String handleProtein(String pdbId, String misfolded) {
+    private static Optional<String> handleProtein(String pdbId, String misfolded) {
         System.out.println("handling " + misfolded + " protein " + pdbId);
         Structure structure = StructureParser.fromPdbId(pdbId).parse();
         return handleChain(pdbId, structure.getFirstChain(), misfolded);
     }
 
-    private static String handleChain(String pdbId, Chain chain, String misfolded) {
+    private static Optional<String> handleChain(String pdbId, Chain chain, String misfolded) {
         ResidueGraph conventionalProteinGraph = ResidueGraph.createDistanceResidueGraph(chain);
 
         if(misfolded.equals("misfolded")) {
-            Document chainDocument = PLIPRestServiceQuery.calculateIntraChainDocument(chain);
-            PLIP_INTRA_MOLECULAR_ANNOTATOR.process(chain, chainDocument);
+            Path xmlPath = Paths.get("/home/bittrich/git/phd_sb_repo/data/native/xml/" + pdbId + ".xml");
+            if(!Files.exists(xmlPath)) {
+                return Optional.empty();
+            }
+            try {
+                PLIP_INTRA_MOLECULAR_ANNOTATOR.process(chain,
+                        Jsoup.parse(xmlPath.toFile(),
+                                "UTF-8"));
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
         }
 
-        return chain.aminoAcids()
+        return Optional.of(chain.aminoAcids()
                 .map(aminoAcid -> {
                     GenericSecondaryStructure sse = aminoAcid.getFeature(GenericSecondaryStructure.class);
 
@@ -177,6 +188,6 @@ public class S01_WriteMisfoldedNativeCsv {
 
                             misfolded;
                 })
-                .collect(Collectors.joining(System.lineSeparator()));
+                .collect(Collectors.joining(System.lineSeparator())));
     }
 }
