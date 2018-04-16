@@ -5,12 +5,12 @@ import de.bioforscher.jstructure.graph.ReconstructionContactMap;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
-import de.bioforscher.jstructure.service.ExternalLocalService;
 import de.bioforscher.jstructure.si.model.BaselineReconstruction;
 import de.bioforscher.jstructure.si.model.ContactTogglingReconstruction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -18,17 +18,14 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.StringJoiner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-public class StructuralInformationService extends ExternalLocalService {
+public class StructuralInformationService {
     private static final Logger logger = LoggerFactory.getLogger(StructuralInformationService.class);
     private static final StructuralInformationService INSTANCE = new StructuralInformationService();
-//    private static final String DEFAULT_SERVICE_LOCATION = "/home/sb/programs/confold_v1.0/confold.pl";
-    private static final String DEFAULT_SERVICE_LOCATION = "/home/bittrich/programs/confold_v1.0/confold.pl";
     /**
      * How many contacts to select for each iteration.
      */
@@ -37,28 +34,27 @@ public class StructuralInformationService extends ExternalLocalService {
     /**
      * How many iterations to perform.
      */
-//    private static final int NUMBER_OF_THREADS = 12;
-    private static final int NUMBER_OF_THREADS = 7;
     private static final int COVERAGE = 10;
 
-    private final ExecutorService executorService;
-
     private StructuralInformationService() {
-        super(DEFAULT_SERVICE_LOCATION);
-        this.executorService = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
-        logger.info("{} setup up to sample {}% of contacts with coverage {} using {} threads",
+        logger.info("{} setup up to sample {}% of contacts with coverage {}",
                 getClass().getSimpleName(),
                 StandardFormat.formatToInteger(BASELINE_FREQUENCY * 100),
-                COVERAGE,
-                NUMBER_OF_THREADS);
+                COVERAGE);
     }
 
     public static StructuralInformationService getInstance() {
         return INSTANCE;
     }
 
-    public void process(Chain referenceChain, Path outputPath) {
+    public void process(Chain referenceChain,
+                        String jobName,
+                        Path confoldPath,
+                        Path tmalignPath,
+                        Path outputDirectory,
+                        int numberOfThreads) {
         try {
+            ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
             List<AminoAcid> aminoAcids = referenceChain.aminoAcids().collect(Collectors.toList());
             int numberOfAminoAcids = aminoAcids.size();
             ReconstructionContactMap fullMap = ReconstructionContactMap.createReconstructionContactMap(referenceChain);
@@ -104,7 +100,10 @@ public class StructuralInformationService extends ExternalLocalService {
                         sequence,
                         secondaryStructure,
                         BASELINE_FREQUENCY,
-                        getServiceLocation())));
+                        confoldPath.toFile().getAbsolutePath(),
+                        tmalignPath.toFile().getAbsolutePath(),
+                        outputDirectory,
+                        jobName)));
             }
 
             List<BaselineReconstruction> baselineReconstructions = baselineFutures.stream()
@@ -126,7 +125,8 @@ public class StructuralInformationService extends ExternalLocalService {
                 }
             }
 
-            StringJoiner output = new StringJoiner(System.lineSeparator());
+            Path outputPath = outputDirectory.resolve(jobName + ".out");
+            FileWriter outputWriter = new FileWriter(outputPath.toFile());
             contactToggleFutures.stream()
                     .map(this::getContactToggleFuture)
                     .filter(Optional::isPresent)
@@ -141,23 +141,19 @@ public class StructuralInformationService extends ExternalLocalService {
                             StandardFormat.format(contactTogglingReconstruction.getAverageQ()) + "\t" +
                             StandardFormat.format(contactTogglingReconstruction.getDecreaseRmsd()) + "\t" +
                             StandardFormat.format(contactTogglingReconstruction.getIncreaseTMScore()) + "\t" +
-                            StandardFormat.format(contactTogglingReconstruction.getIncreaseQ()))
-                    .forEach(output::add);
-            Files.write(outputPath, output.toString().getBytes());
+                            StandardFormat.format(contactTogglingReconstruction.getIncreaseQ()) + System.lineSeparator())
+                    .forEach(line -> {
+                        try {
+                            outputWriter.write(line);
+                            outputWriter.flush();
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
 
-//            List<ContactTogglingReconstruction> contactTogglingReconstructions = contactToggleFutures.stream()
-//                    .map(this::getContactToggleFuture)
-//                    .collect(Collectors.toList());
-//
-//            Files.write(outputPath,
-//                    contactTogglingReconstructions.stream()
-//                            .map(contactTogglingReconstruction -> contactTogglingReconstruction.getContactToToggle() + "\t" +
-//                                    contactTogglingReconstruction.isContactWasRemoved() + "\t" +
-//                                    StandardFormat.format(contactTogglingReconstruction.getDecreaseRmsd()) + "\t" +
-//                                    StandardFormat.format(contactTogglingReconstruction.getIncreaseTMScore()) + "\t" +
-//                                    StandardFormat.format(contactTogglingReconstruction.getIncreaseQ()))
-//                            .collect(Collectors.joining(System.lineSeparator()))
-//                            .getBytes());
+            // clean up
+            outputWriter.close();
+            Files.delete(referenceChainStructurePath);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

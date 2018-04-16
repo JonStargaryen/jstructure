@@ -34,7 +34,10 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
     private final String sequence;
     private final String secondaryStructure;
     private final double baselineFrequency;
-    private final String serviceLocation;
+    private final String confoldPath;
+    private final String tmalignPath;
+    private final Path outputPath;
+    private final String jobname;
 
     private ReconstructionContactMap sampledMap;
     private List<Chain> sampledReconstructions;
@@ -49,7 +52,10 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
                                   String sequence,
                                   String secondaryStructure,
                                   double baselineFrequency,
-                                  String serviceLocation) {
+                                  String confoldPath,
+                                  String tmalignPath,
+                                  Path outputPath,
+                                  String jobname) {
         this.iteration = iteration;
         this.referenceChainPath = referenceChainPath;
         this.referenceChain = referenceChain;
@@ -57,7 +63,10 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         this.sequence = sequence;
         this.secondaryStructure = secondaryStructure;
         this.baselineFrequency = baselineFrequency;
-        this.serviceLocation = serviceLocation;
+        this.confoldPath = confoldPath;
+        this.tmalignPath = tmalignPath;
+        this.outputPath = outputPath;
+        this.jobname = jobname;
     }
 
     @Override
@@ -73,15 +82,20 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         this.sampledMap = new ReconstructionContactMap(referenceChain.aminoAcids().collect(Collectors.toList()), sampledContacts);
 
         // reconstruct sampled baseline map
-        sampledReconstructions = new ConfoldServiceWorker(serviceLocation,
+        sampledReconstructions = new ConfoldServiceWorker(confoldPath,
                 sequence,
                 secondaryStructure,
                 sampledMap.getCaspRRRepresentation()).call();
 
-        // write files
-        sampledReconstructions.forEach(sampledReconstruction -> {
-            //TODO impl
-        });
+        // write reconstruction files
+        Path reconstructionDirectory = outputPath.resolve(jobname);
+        if(!Files.exists(reconstructionDirectory)) {
+            Files.createDirectory(reconstructionDirectory);
+        }
+        for(int i = 1; i <= sampledReconstructions.size(); i++) {
+            Files.write(reconstructionDirectory.resolve("baseline-reconstruction-" + i + ".pdb"),
+                    sampledReconstructions.get(i - 1).getPdbRepresentation().getBytes());
+        }
 
         // score baseline models
         computeBaselinePerformance(sampledReconstructions);
@@ -89,15 +103,17 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         return this;
     }
 
-    private void computeBaselinePerformance(List<Chain> reconstructions) throws IOException, InterruptedException {
+    private void computeBaselinePerformance(List<Chain> reconstructions) throws IOException {
         List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
         List<ReconstructionContactMap> reconstructionContactMaps = new ArrayList<>();
+        List<Path> tmpFiles = new ArrayList<>();
+
         for(Chain reconstructedChain : reconstructions) {
             Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
+            tmpFiles.add(reconstructPath);
             Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
             alignmentResults.add(TM_ALIGN_SERVICE.process(new String[] {
-//                    "/home/sb/programs/tmalign",
-                    "tmalign",
+                    tmalignPath,
                     referenceChainPath.toFile().getAbsolutePath(),
                     reconstructPath.toFile().getAbsolutePath()
             }));
@@ -124,6 +140,11 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
                 StandardFormat.format(averageRmsd),
                 StandardFormat.format(averageTmScore),
                 StandardFormat.format(averageQ));
+
+        // cleanup
+        for(Path tmpFile : tmpFiles) {
+            Files.delete(tmpFile);
+        }
     }
 
     static double computeQ(ReconstructionContactMap referenceMap, ReconstructionContactMap reconstructMap) {
@@ -196,8 +217,8 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         return baselineFrequency;
     }
 
-    public String getServiceLocation() {
-        return serviceLocation;
+    public String getConfoldPath() {
+        return confoldPath;
     }
 
     public ReconstructionContactMap getSampledMap() {
@@ -218,5 +239,17 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
 
     public double getAverageQ() {
         return averageQ;
+    }
+
+    public String getTmalignPath() {
+        return tmalignPath;
+    }
+
+    public Path getOutputPath() {
+        return outputPath;
+    }
+
+    public String getJobname() {
+        return jobname;
     }
 }
