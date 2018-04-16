@@ -105,6 +105,10 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         List<ReconstructionContactMap> reconstructionContactMaps = new ArrayList<>();
         List<Path> tmpFiles = new ArrayList<>();
 
+        if(reconstructions.isEmpty()) {
+            throw new ComputationException("reconstruction did not yield any reconstructs");
+        }
+
         for(Chain reconstructedChain : reconstructions) {
             Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
             tmpFiles.add(reconstructPath);
@@ -117,20 +121,24 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
             reconstructionContactMaps.add(ReconstructionContactMap.createReconstructionContactMap(reconstructedChain));
         }
 
+        if(alignmentResults.isEmpty()) {
+            throw new ComputationException("tmalign did not yield any alignments");
+        }
+
         averageRmsd = alignmentResults.stream()
                 .map(TMAlignAlignmentResult::getRootMeanSquareDeviation)
                 .mapToDouble(RootMeanSquareDeviation::getScore)
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate baseline reconstructs"));
+                .getAsDouble();
         averageTmScore = alignmentResults.stream()
                 .map(TMAlignAlignmentResult::getTemplateModelingScore1)
                 .mapToDouble(TemplateModelingScore::getScore)
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate baseline reconstructs"));
+                .getAsDouble();
         averageQ = reconstructionContactMaps.stream()
                 .mapToDouble(reconstructContactMap -> computeQ(fullMap, reconstructContactMap))
                 .average()
-                .orElseThrow(() -> new ComputationException("could not generate baseline reconstructs"));
+                .getAsDouble();
 
         logger.info("baseline reconstruction {} - average RMSD: {}, average TM-score: {}, average Q: {}",
                 iteration,
