@@ -90,6 +90,12 @@ public class StructuralInformationService {
             Path referenceChainStructurePath = Files.createTempFile("confoldservice-ref", ".pdb");
             Files.write(referenceChainStructurePath, referenceChain.getPdbRepresentation().getBytes());
 
+            // create outputDirectory
+            Path reconstructionDirectory = outputDirectory.resolve(jobName);
+            if(!Files.exists(reconstructionDirectory)) {
+                Files.createDirectory(reconstructionDirectory);
+            }
+
             // create sampling containers
             List<Future<BaselineReconstruction>> baselineFutures = new ArrayList<>();
             for (int iteration = 0; iteration < COVERAGE; iteration++) {

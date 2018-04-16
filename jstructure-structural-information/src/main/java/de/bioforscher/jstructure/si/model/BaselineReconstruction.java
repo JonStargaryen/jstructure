@@ -89,11 +89,8 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
 
         // write reconstruction files
         Path reconstructionDirectory = outputPath.resolve(jobname);
-        if(!Files.exists(reconstructionDirectory)) {
-            Files.createDirectory(reconstructionDirectory);
-        }
         for(int i = 1; i <= sampledReconstructions.size(); i++) {
-            Files.write(reconstructionDirectory.resolve("baseline-reconstruction-" + i + ".pdb"),
+            Files.write(reconstructionDirectory.resolve("baseline-reconstruction-" + iteration + "-" + i + ".pdb"),
                     sampledReconstructions.get(i - 1).getPdbRepresentation().getBytes());
         }
 
