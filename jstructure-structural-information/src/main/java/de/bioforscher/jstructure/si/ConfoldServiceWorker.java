@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,11 +36,15 @@ public class ConfoldServiceWorker implements Callable<List<Chain>> {
 
     @Override
     public List<Chain> call() {
+        Path sequencePath = null;
+        Path mapPath = null;
+        Path secondaryStructurePath = null;
+        Path outputDirectory = null;
         try {
-            Path sequencePath = Files.createTempFile("confoldworker-seq", ".fasta");
-            Path mapPath = Files.createTempFile("confoldworker-map", ".rr");
-            Path secondaryStructurePath = Files.createTempFile("confoldworker-sse", ".ss");
-            Path outputDirectory = Files.createTempDirectory("confoldworker-output");
+            sequencePath = Files.createTempFile("confoldworker-seq", ".fasta");
+            mapPath = Files.createTempFile("confoldworker-map", ".rr");
+            secondaryStructurePath = Files.createTempFile("confoldworker-sse", ".ss");
+            outputDirectory = Files.createTempDirectory("confoldworker-output");
 
             Files.write(sequencePath, sequence.getBytes());
             Files.write(mapPath, contacts.getBytes());
@@ -69,25 +74,47 @@ public class ConfoldServiceWorker implements Callable<List<Chain>> {
 
             process.waitFor();
 
-            List<Chain> chains = Files.list(outputDirectory.resolve("stage1"))
+            return Files.list(outputDirectory.resolve("stage1"))
                     .filter(path -> path.toFile().getName().endsWith(".pdb"))
                     .filter(path -> path.toFile().getName().contains("_model"))
                     .map(path -> StructureParser.fromPath(path).parse())
                     .map(Structure::getFirstChain)
                     .collect(Collectors.toList());
-
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
             // cleanup
-            Files.delete(sequencePath);
-            Files.delete(mapPath);
-            Files.delete(secondaryStructurePath);
-            Files.walk(outputDirectory, FileVisitOption.FOLLOW_LINKS)
+            tryDeleteFile(sequencePath);
+            tryDeleteFile(mapPath);
+            tryDeleteFile(secondaryStructurePath);
+            tryDeleteDirectory(outputDirectory);
+        }
+    }
+
+    private void tryDeleteDirectory(Path directory) {
+        if(directory == null) {
+            return;
+        }
+
+        try {
+            Files.walk(directory, FileVisitOption.FOLLOW_LINKS)
                     .sorted(Comparator.reverseOrder())
                     .map(Path::toFile)
                     .forEach(File::delete);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
-            return chains;
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+    private void tryDeleteFile(Path path) {
+        if(path == null) {
+            return;
+        }
+
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 }

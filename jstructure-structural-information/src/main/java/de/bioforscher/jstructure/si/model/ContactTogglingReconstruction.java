@@ -55,7 +55,7 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
 
     @Override
     public ContactTogglingReconstruction call() throws Exception {
-        List<Chain> toggledReconstructions = new ConfoldServiceWorker(baselineReconstruction.getServiceLocation(),
+        List<Chain> toggledReconstructions = new ConfoldServiceWorker(baselineReconstruction.getConfoldPath(),
                 baselineReconstruction.getSequence(),
                 baselineReconstruction.getSecondaryStructure(),
                 alternateMap.getCaspRRRepresentation())
@@ -67,15 +67,17 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
         return this;
     }
 
-    private void computePerformance(List<Chain> reconstructions) throws IOException, InterruptedException {
+    private void computePerformance(List<Chain> reconstructions) throws IOException {
         List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
         List<ReconstructionContactMap> reconstructionContactMaps = new ArrayList<>();
+        List<Path> tmpFiles = new ArrayList<>();
+
         for(Chain reconstructedChain : reconstructions) {
             Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
+            tmpFiles.add(reconstructPath);
             Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
             alignmentResults.add(TM_ALIGN_SERVICE.process(new String[] {
-//                  "/home/sb/programs/tmalign"
-                    "tmalign",
+                    baselineReconstruction.getTmalignPath(),
                     baselineReconstruction.getReferenceChainPath().toFile().getAbsolutePath(),
                     reconstructPath.toFile().getAbsolutePath()
             }));
@@ -125,6 +127,11 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
                 StandardFormat.format(decreaseRmsd),
                 StandardFormat.format(increaseTMScore),
                 StandardFormat.format(increaseQ));
+
+        // cleanup
+        for(Path tmpFile : tmpFiles) {
+            Files.delete(tmpFile);
+        }
     }
 
     public BaselineReconstruction getBaselineReconstruction() {

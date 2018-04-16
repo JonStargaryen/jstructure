@@ -15,7 +15,15 @@ public class StructuralInformationRunner {
     private static final StructuralInformationService STRUCTURAL_INFORMATION_SERVICE = StructuralInformationService.getInstance();
 
     public static void main(String[] args) throws IOException {
-        Path workingDirectory = Paths.get(args[0]);
+        if(args.length != 4) {
+            logger.warn("usage: java -jar si.jar [confoldPath] [tmalignPath]  [workingDirectory] [threads]");
+            return;
+        }
+
+        Path confoldPath = Paths.get(args[0]);
+        Path tmalignPath = Paths.get(args[1]);
+        Path workingDirectory = Paths.get(args[2]);
+        int numberOfThreads = Integer.parseInt(args[3]);
         Files.list(workingDirectory)
                 .filter(path -> path.toFile().getName().endsWith(".pdb"))
                 .forEach(path -> {
@@ -24,7 +32,12 @@ public class StructuralInformationRunner {
                     Chain chain = StructureParser.fromPath(path)
                             .parse()
                             .getFirstChain();
-                    STRUCTURAL_INFORMATION_SERVICE.process(chain, workingDirectory.resolve(path.toFile().getName().split("\\.")[0] + ".out"));
+                    STRUCTURAL_INFORMATION_SERVICE.process(chain,
+                            path.toFile().getName().split("\\.")[0],
+                            confoldPath,
+                            tmalignPath,
+                            workingDirectory,
+                            numberOfThreads);
                 });
     }
 }

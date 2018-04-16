@@ -30,71 +30,85 @@ public class TMAlignService extends ExternalLocalService {
         return INSTANCE;
     }
 
-    public TMAlignAlignmentResult process(String[] arguments) throws IOException, InterruptedException {
-        logger.debug("spawning tmalign process with arguments:{}{}",
-                System.lineSeparator(),
-                arguments);
-        ProcessBuilder processBuilder = new ProcessBuilder(arguments);
-        Process process = processBuilder.start();
+    // added synchronized to address tmalign dying randomly reporting too many open files
+    public synchronized TMAlignAlignmentResult process(String[] arguments) throws ComputationException {
+        return process(arguments, 1);
+    }
 
-        List<String> outputLines;
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+    private synchronized TMAlignAlignmentResult process(String[] arguments,
+                                           int run) {
+        try {
+            logger.debug("spawning tmalign process with arguments:{}{}",
+                    System.lineSeparator(),
+                    arguments);
+            ProcessBuilder processBuilder = new ProcessBuilder(arguments);
+            Process process = processBuilder.start();
+
+            List<String> outputLines;
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 outputLines = br.lines()
-                    .collect(Collectors.toList());
-        }
-        List<String> errorLines;
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-            errorLines = br.lines()
-                    .collect(Collectors.toList());
-        }
+                        .collect(Collectors.toList());
+            }
+            List<String> errorLines;
+            try(BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
+                errorLines = br.lines()
+                        .collect(Collectors.toList());
+            }
 
-        process.waitFor();
+            process.waitFor();
 
-        if(outputLines.stream().anyMatch(line -> line.startsWith("Can not open file:"))) {
-            throw new ComputationException("error during tmalign execution:" + System.lineSeparator() +
-                    outputLines.stream().collect(Collectors.joining(System.lineSeparator())));
-        }
-        // errors are not reported in error stream
-        if(!errorLines.isEmpty()) {
-            throw new ComputationException("error during tmalign execution:" + System.lineSeparator() +
-                    errorLines.stream().collect(Collectors.joining(System.lineSeparator())));
-        }
+            if(outputLines.stream().anyMatch(line -> line.startsWith("Can not open file:"))) {
+                throw new ComputationException("error during tmalign execution:" + System.lineSeparator() +
+                        outputLines.stream().collect(Collectors.joining(System.lineSeparator())));
+            }
+            // errors are not reported in error stream
+            if(!errorLines.isEmpty()) {
+                throw new ComputationException("error during tmalign execution:" + System.lineSeparator() +
+                        errorLines.stream().collect(Collectors.joining(System.lineSeparator())));
+            }
 
-        int length1 = 0;
-        int length2 = 0;
-        int alignedLength = 0;
-        RootMeanSquareDeviation rootMeanSquareDeviation = null;
-        double seqId = 0;
-        TemplateModelingScore templateModelingScore1 = null;
-        TemplateModelingScore templateModelingScore2 = null;
-        for(String outputLine : outputLines) {
-            if(outputLine.startsWith("Length of Chain_1")) {
-                length1 = Integer.valueOf(outputLine.split(":")[1].trim().split("\\s+")[0]);
-            } else if(outputLine.startsWith("Length of Chain_2")) {
-                length2 = Integer.valueOf(outputLine.split(":")[1].trim().split("\\s+")[0]);
-            } else if(outputLine.startsWith("Aligned length")) {
-                String[] split = outputLine.split("=");
-                alignedLength = Integer.valueOf(split[1].split(",")[0].trim());
-                rootMeanSquareDeviation = new RootMeanSquareDeviation(Double.valueOf(split[2].split(",")[0].trim()));
-                seqId = Double.valueOf(split[4].trim());
-            } else if(outputLine.startsWith("TM-score")) {
-                double tmscore = Double.valueOf(outputLine.split("=")[1].split("\\(")[0].trim());
-                TemplateModelingScore templateModelingScore = new TemplateModelingScore(tmscore);
-                if(outputLine.contains("Chain_1")) {
-                    templateModelingScore1 = templateModelingScore;
-                } else {
-                    templateModelingScore2 = templateModelingScore;
+            int length1 = 0;
+            int length2 = 0;
+            int alignedLength = 0;
+            RootMeanSquareDeviation rootMeanSquareDeviation = null;
+            double seqId = 0;
+            TemplateModelingScore templateModelingScore1 = null;
+            TemplateModelingScore templateModelingScore2 = null;
+            for(String outputLine : outputLines) {
+                if(outputLine.startsWith("Length of Chain_1")) {
+                    length1 = Integer.valueOf(outputLine.split(":")[1].trim().split("\\s+")[0]);
+                } else if(outputLine.startsWith("Length of Chain_2")) {
+                    length2 = Integer.valueOf(outputLine.split(":")[1].trim().split("\\s+")[0]);
+                } else if(outputLine.startsWith("Aligned length")) {
+                    String[] split = outputLine.split("=");
+                    alignedLength = Integer.valueOf(split[1].split(",")[0].trim());
+                    rootMeanSquareDeviation = new RootMeanSquareDeviation(Double.valueOf(split[2].split(",")[0].trim()));
+                    seqId = Double.valueOf(split[4].trim());
+                } else if(outputLine.startsWith("TM-score")) {
+                    double tmscore = Double.valueOf(outputLine.split("=")[1].split("\\(")[0].trim());
+                    TemplateModelingScore templateModelingScore = new TemplateModelingScore(tmscore);
+                    if(outputLine.contains("Chain_1")) {
+                        templateModelingScore1 = templateModelingScore;
+                    } else {
+                        templateModelingScore2 = templateModelingScore;
+                    }
                 }
             }
-        }
 
-        return new TMAlignAlignmentResult(length1,
-                length2,
-                alignedLength,
-                rootMeanSquareDeviation,
-                seqId,
-                templateModelingScore1,
-                templateModelingScore2);
+            return new TMAlignAlignmentResult(length1,
+                    length2,
+                    alignedLength,
+                    rootMeanSquareDeviation,
+                    seqId,
+                    templateModelingScore1,
+                    templateModelingScore2);
+        } catch (Exception e) {
+            if(run > 3) {
+                throw new ComputationException("could not run tmalign",
+                        e);
+            }
+            return process(arguments, run + 1);
+        }
     }
 
     public TMAlignAlignmentResult process(StructureAlignmentQuery structureAlignmentQuery) {
@@ -114,8 +128,9 @@ public class TMAlignService extends ExternalLocalService {
             Files.delete(queryPath);
 
             return result;
-        } catch (IOException | InterruptedException e) {
-            throw new ComputationException("could not spawn process", e);
+        } catch (IOException e) {
+            throw new ComputationException("could not run tmalign",
+                    e);
         }
     }
 }

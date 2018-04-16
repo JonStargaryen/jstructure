@@ -29,13 +29,23 @@ public class StructuralInformationServiceTest {
     @Test
     @Ignore
     public void shouldCalculateStructuralInformation() {
-        structuralInformationService.process(shortChain, Paths.get("/tmp/short-si.out"));
+        structuralInformationService.process(shortChain,
+                "shortrun",
+                Paths.get("/home/bittrich/programs/confold_v1.0/confold.pl"),
+                Paths.get("/home/bittrich/programs/tmalign/tmalign"),
+                Paths.get("/tmp/"),
+                8);
     }
 
     @Test
     @Ignore
     public void shouldCalculateStructuralInformationFor1bdd() {
-        structuralInformationService.process(chain1bdd, Paths.get("/tmp/1bdd-si.out"));
+        structuralInformationService.process(chain1bdd,
+                "1bddrun",
+                Paths.get("/home/bittrich/programs/confold_v1.0/confold.pl"),
+                Paths.get("/home/bittrich/programs/tmalign/tmalign"),
+                Paths.get("/tmp/"),
+                8);
     }
 
     @Test
@@ -48,7 +58,12 @@ public class StructuralInformationServiceTest {
                     Chain chain = StructureParser.fromPath(path)
                             .parse()
                             .getFirstChain();
-                    structuralInformationService.process(chain, outputPath.resolve(path.toFile().getName().split("\\.")[0] + ".out"));
+                    structuralInformationService.process(chain,
+                            path.toFile().getName().split("\\.")[0],
+                            Paths.get("/home/bittrich/programs/confold_v1.0/confold.pl"),
+                            Paths.get("/home/bittrich/programs/tmalign/tmalign"),
+                            outputPath,
+                            8);
                 });
     }
 }
