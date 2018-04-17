@@ -80,14 +80,11 @@ public class A01_WriteStructuralInformationByResidueCsv {
             Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
 
-
             Start2FoldXmlParser.parseSpecificExperiment(chain,
                     Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml"),
                     experimentIds);
-
             EvolutionaryCouplingParser.parseHotSpotFile(chain,
                     Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
-
             EQuantParser.parseEQuantFile(chain,
                     Start2FoldConstants.EQUANT_DIRECTORY.resolve(entryId.toLowerCase() + ".equant-small.txt"));
 
@@ -159,7 +156,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
                         terminusDistance = Math.min(terminusDistance, aminoAcids.size() - terminusDistance);
                         terminusDistance /= (double) aminoAcids.size();
 
-                        ResidueStructuralInformation residueStructuralInformationEntry = residueStructuralInformation.get(aminoAcid.getResidueIndex());
+                        ResidueStructuralInformation residueStructuralInformationEntry = residueStructuralInformation.get(aminoAcid.getAminoAcidIndex());
 
                         GenericSecondaryStructure.SecondaryStructureElement surroundingSecondaryStructureElement = sse.getSurroundingSecondaryStructureElement(aminoAcid);
                         int sseSize = surroundingSecondaryStructureElement.getSize();
