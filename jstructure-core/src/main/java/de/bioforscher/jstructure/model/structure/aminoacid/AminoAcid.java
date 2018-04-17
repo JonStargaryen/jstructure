@@ -255,7 +255,6 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
                 return new UnknownAminoAcid(pdbName, residueIdentifier, ligand);
             } else {
                 try {
-                    //TODO intellij warning even though constructor exists in implementing classes
                     return representingClass.getConstructor(ResidueIdentifier.class, boolean.class).newInstance(residueIdentifier, ligand);
                 } catch (Exception e) {
                     throw new RuntimeException("creation of AminoAcid instance failed", e);
@@ -322,6 +321,15 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     private Atom c;
     private Atom o;
     private Atom h;
+
+    public int getAminoAcidIndex() {
+        // determine residue index and subtract number of non-amino acids
+        int residueIndex = getResidueIndex();
+        return residueIndex - (int) getParentChain().aminoAcids()
+                .limit(residueIndex)
+                .filter(Group::isAminoAcid)
+                .count();
+    }
 
     AminoAcid(AminoAcid aminoAcid, boolean deep) {
         super(aminoAcid, deep);
