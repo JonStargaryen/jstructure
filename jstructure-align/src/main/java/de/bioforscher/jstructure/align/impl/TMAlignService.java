@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,6 +105,10 @@ public class TMAlignService extends ExternalLocalService {
                     templateModelingScore2);
         } catch (Exception e) {
             if(run > 3) {
+                logger.warn("tmalign computation finally failed:{}{}",
+                        System.lineSeparator(),
+                        Arrays.toString(arguments),
+                        e);
                 throw new ComputationException("could not run tmalign",
                         e);
             }
