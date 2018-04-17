@@ -111,6 +111,7 @@ public class Group extends AbstractFeatureable implements AtomContainer {
      * @return the index of this residue in the parent chain, starting with 0
      */
     public int getResidueIndex() {
+        //FIXME can result in false numbering if strange groups are present - see 1hrc ACE-0
         return parentChain.getGroups().indexOf(this);
     }
 

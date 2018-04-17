@@ -51,9 +51,9 @@ public class StructuralInformationServiceTest {
     @Test
     @Ignore
     public void shouldCalculateStructuralInformationForEarlyFoldingDataset() throws IOException {
-        Path outputPath = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/raw/");
-        Files.list(Paths.get("/home/bittrich/git/phd_sb_repo/data/start2fold/pdb/"))
-                .filter(path -> !path.toFile().getName().startsWith("STF0045"))
+        Path outputPath = Paths.get("/home/bittrich/si/");
+        Files.list(Paths.get("/home/bittrich/si/"))
+                .filter(path -> !Files.isDirectory(path))
                 .forEach(path -> {
                     Chain chain = StructureParser.fromPath(path)
                             .parse()

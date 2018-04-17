@@ -40,6 +40,7 @@ public class GenericSecondaryStructure extends FeatureContainerEntry {
         private final int size;
         private final int start;
         private final int end;
+        private final int terminusDistance;
 
         SecondaryStructureElement(AminoAcid aminoAcid) {
             Chain chain = aminoAcid.getParentChain();
@@ -74,6 +75,7 @@ public class GenericSecondaryStructure extends FeatureContainerEntry {
                 this.start = index - left;
                 this.end = index + right;
                 this.size = left + right + 1;
+                this.terminusDistance = Math.min(index - start, end - index);
             } catch (StringIndexOutOfBoundsException e) {
                 throw new ComputationException("group numbering was compromised - do not skip ligand parsing when using Group#getResidueIndex", e);
             }
@@ -85,6 +87,10 @@ public class GenericSecondaryStructure extends FeatureContainerEntry {
 
         public int getSize() {
             return size;
+        }
+
+        public int getTerminusDistance() {
+            return terminusDistance;
         }
 
         @Override

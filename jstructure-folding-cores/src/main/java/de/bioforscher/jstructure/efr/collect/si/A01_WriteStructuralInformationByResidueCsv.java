@@ -41,7 +41,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "pdb,chain,res,aa,sse3,sse9,sseSize," +
+                        "pdb,chain,res,aa,sse3,sse9,sseSize,sseTerminusDistance," +
                                 "exposed,dCentroid," +
                                 "terminusDistance," +
                                 "plip_hydrogen,plip_hydrophobic,plip_bb,plip_total," +
@@ -57,7 +57,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
                                 "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
                                 "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
-                                "folds,functional,sane" + System.lineSeparator(),
+                                "folds,functional,strong,sane" + System.lineSeparator(),
                         ""));
 
         Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-si-residues.csv"),
@@ -80,6 +80,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
             Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
 
+
             Start2FoldXmlParser.parseSpecificExperiment(chain,
                     Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml"),
                     experimentIds);
@@ -92,6 +93,9 @@ public class A01_WriteStructuralInformationByResidueCsv {
 
             List<AminoAcid> earlyFoldingResidues = chain.aminoAcids()
                     .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isEarly())
+                    .collect(Collectors.toList());
+            List<AminoAcid> strongResidues = chain.aminoAcids()
+                    .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isStrong())
                     .collect(Collectors.toList());
 
             List<Integer> functionalResidueNumbers = Start2FoldConstants.extractFunctionalResidueNumbers(split);
@@ -157,13 +161,26 @@ public class A01_WriteStructuralInformationByResidueCsv {
 
                         ResidueStructuralInformation residueStructuralInformationEntry = residueStructuralInformation.get(aminoAcid.getResidueIndex());
 
+                        GenericSecondaryStructure.SecondaryStructureElement surroundingSecondaryStructureElement = sse.getSurroundingSecondaryStructureElement(aminoAcid);
+                        int sseSize = surroundingSecondaryStructureElement.getSize();
+                        if(sse.getSecondaryStructure().isCoilType()) {
+                            sseSize = 0;
+                        }
+
+                        int sseTerminusDistance = surroundingSecondaryStructureElement.getTerminusDistance();
+                        if(sse.getSecondaryStructure().isCoilType()) {
+                            sseTerminusDistance = -1;
+                        }
+
                         return pdbId + "," +
                                 "A" + "," +
                                 aminoAcid.getResidueIdentifier() + "," +
                                 aminoAcid.getOneLetterCode() + "," +
                                 sse.getSecondaryStructure().getReducedRepresentation() + "," +
                                 sse.getSecondaryStructure().getOneLetterRepresentation() + "," +
-                                sse.getSurroundingSecondaryStructureElement(aminoAcid).getSize() + "," +
+                                sseSize + "," +
+                                sseTerminusDistance + "," +
+
                                 (aminoAcid.getFeature(AccessibleSurfaceArea.class).isExposed() ? "exposed" : "buried") + "," +
                                 StandardFormat.format(aminoAcid.getFeature(GeometricProperties.class).getDistanceToCentroid()) + "," +
                                 StandardFormat.format(terminusDistance) + "," +
@@ -224,6 +241,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
 
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
                                 functionalAnnotation + "," +
+                                (strongResidues.contains(aminoAcid) ? "strong" : "weak") + "," +
                                 sane;
                     })
                     .collect(Collectors.joining(System.lineSeparator())));
