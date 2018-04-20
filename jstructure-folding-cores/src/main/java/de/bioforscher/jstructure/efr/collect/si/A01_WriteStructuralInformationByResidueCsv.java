@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,8 +81,11 @@ public class A01_WriteStructuralInformationByResidueCsv {
             Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
 
+            Path start2foldXml = Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml");
+            Start2FoldXmlParser.parseStability(chain,
+                    start2foldXml);
             Start2FoldXmlParser.parseSpecificExperiment(chain,
-                    Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml"),
+                    start2foldXml,
                     experimentIds);
             EvolutionaryCouplingParser.parseHotSpotFile(chain,
                     Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
