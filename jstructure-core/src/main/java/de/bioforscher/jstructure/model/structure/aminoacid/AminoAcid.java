@@ -327,7 +327,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         int residueIndex = getResidueIndex();
         return residueIndex - (int) getParentChain().aminoAcids()
                 .limit(residueIndex)
-                .filter(Group::isAminoAcid)
+                .filter(group -> !group.isAminoAcid())
                 .count();
     }
 

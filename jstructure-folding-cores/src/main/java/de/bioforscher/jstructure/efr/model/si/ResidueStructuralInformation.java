@@ -121,4 +121,25 @@ public class ResidueStructuralInformation {
                 StandardFormat.format(maximumQIncrease) + "," +
                 isEarlyFoldingResidue;
     }
+
+    @Override
+    public String toString() {
+        return "ResidueStructuralInformation{" +
+                "residueIdentifier=" + residueIdentifier +
+                ", aa='" + aa + '\'' +
+                ", averageRmsdIncrease=" + averageRmsdIncrease +
+                ", averageTmScoreIncrease=" + averageTmScoreIncrease +
+                ", averageQIncrease=" + averageQIncrease +
+                ", maximumRmsdIncrease=" + maximumRmsdIncrease +
+                ", maximumTmScoreIncrease=" + maximumTmScoreIncrease +
+                ", maximumQIncrease=" + maximumQIncrease +
+                ", isEarlyFoldingResidue=" + isEarlyFoldingResidue +
+                ", eccount=" + eccount +
+                ", cumstrength=" + cumstrength +
+                ", conservation=" + conservation +
+                ", averageRmsdIncreaseZScore=" + averageRmsdIncreaseZScore +
+                ", maximumRmsdIncreaseZScore=" + maximumRmsdIncreaseZScore +
+                ", fractionOfTopScoringContacts=" + fractionOfTopScoringContacts +
+                '}';
+    }
 }

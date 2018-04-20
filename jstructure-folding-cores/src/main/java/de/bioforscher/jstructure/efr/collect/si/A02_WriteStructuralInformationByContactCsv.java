@@ -78,7 +78,6 @@ public class A02_WriteStructuralInformationByContactCsv {
             Path start2foldXml = Start2FoldConstants.XML_DIRECTORY.resolve(entryId + ".xml");
             Start2FoldXmlParser.parseStability(chain,
                     start2foldXml);
-
             Start2FoldXmlParser.parseSpecificExperiment(chain,
                     start2foldXml,
                     experimentIds);
