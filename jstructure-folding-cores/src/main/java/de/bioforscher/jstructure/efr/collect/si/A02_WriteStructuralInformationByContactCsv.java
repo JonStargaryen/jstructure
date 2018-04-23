@@ -45,7 +45,7 @@ public class A02_WriteStructuralInformationByContactCsv {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "pdb,chain,res1,aa1,res2,aa2,distanceBin,dTerminus," +
+                        "pdb,chain,res1,aa1,res2,aa2,distanceBin,dCentroid," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
                                 "avgRmsdZ,numberOfTopScoringContacts," +
                                 "plm,betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +

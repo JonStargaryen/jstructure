@@ -68,7 +68,12 @@ public class StructuralInformationParserService {
                                                                                     List<AminoAcid> earlyFoldingResidues) {
         Map<Pair<Integer, Integer>, List<String>> parsingMap = new HashMap<>();
         try(Stream<String> stream = new BufferedReader(new InputStreamReader(inputStream)).lines()) {
-            stream.forEach(line -> {
+            stream
+                    // consider only added contacts
+//                    .filter(line -> line.contains("false"))
+                    // consider only removed contacts
+//                    .filter(line -> line.contains("true"))
+                    .forEach(line -> {
                 String[] split = line.split("\t");
                 String[] idSplit = split[0].split(",");
                 Pair<Integer, Integer> idPair = new Pair<>(Integer.valueOf(idSplit[0].split("\\(")[1].trim()),
