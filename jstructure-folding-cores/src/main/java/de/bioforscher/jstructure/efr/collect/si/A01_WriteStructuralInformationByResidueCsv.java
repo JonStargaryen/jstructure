@@ -58,6 +58,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
                                 "conv_betweenness,conv_closeness,conv_clusteringcoefficient," +
                                 "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
+                                "avgRmsdZ,numberOfTopScoringContacts," +
                                 "folds,functional,strong,sane" + System.lineSeparator(),
                         ""));
 
@@ -121,6 +122,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
             ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, InteractionScheme.CALPHA8);
 
             return Optional.of(chain.aminoAcids()
+                    .filter(AminoAcid::isStandardAminoAcid)
                     .map(aminoAcid -> {
                         GenericSecondaryStructure sse = aminoAcid.getFeature(GenericSecondaryStructure.class);
 
@@ -239,6 +241,8 @@ public class A01_WriteStructuralInformationByResidueCsv {
                                 StandardFormat.format(residueStructuralInformationEntry.getMaximumRmsdIncrease()) + "," +
                                 StandardFormat.format(residueStructuralInformationEntry.getMaximumTmScoreIncrease()) + "," +
                                 StandardFormat.format(residueStructuralInformationEntry.getMaximumQIncrease()) + "," +
+                                StandardFormat.format(residueStructuralInformationEntry.getAverageRmsdIncreaseZScore()) + "," +
+                                StandardFormat.format(residueStructuralInformationEntry.getFractionOfTopScoringContacts()) + "," +
 
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
                                 functionalAnnotation + "," +

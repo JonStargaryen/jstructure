@@ -322,13 +322,18 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     private Atom o;
     private Atom h;
 
+    /**
+     * Determine the index of this amino acid in a collection of all amino acids.
+     * @return
+     */
     public int getAminoAcidIndex() {
         // determine residue index and subtract number of non-amino acids
         int residueIndex = getResidueIndex();
-        return residueIndex - (int) getParentChain().aminoAcids()
+        int offset = (int) getParentChain().groups()
                 .limit(residueIndex)
                 .filter(group -> !group.isAminoAcid())
                 .count();
+        return residueIndex - offset;
     }
 
     AminoAcid(AminoAcid aminoAcid, boolean deep) {
