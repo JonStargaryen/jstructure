@@ -11,14 +11,15 @@
 
     MODULE.constant('features', [
         { name : 'average RMSD increase', tag : 'averageRmsdIncrease' },
+        { name : 'sum RMSD increase', tag : 'sumRmsdIncrease' },
         // { name : 'average TM-score increase', tag : 'averageTmScoreIncrease' },
         // { name : 'average Q increase', tag : 'averageQIncrease' },
-        { name : 'maximum RMSD increase', tag : 'maximumRmsdIncrease' },
+        // { name : 'maximum RMSD increase', tag : 'maximumRmsdIncrease' },
         // { name : 'maximum TM-score increase', tag : 'maximumTmScoreIncrease' },
         // { name : 'maximum Q increase', tag : 'maximumQIncrease' },
-        { name : 'average Z', tag : 'averageRmsdIncreaseZScore' },
-        { name : 'maximum Z', tag : 'maximumRmsdIncreaseZScore' },
-        { name : '# top scoring', tag : 'fractionOfTopScoringContacts' },
+        // { name : 'average Z', tag : 'averageRmsdIncreaseZScore' },
+        // { name : 'maximum Z', tag : 'maximumRmsdIncreaseZScore' },
+        // { name : '# top scoring', tag : 'fractionOfTopScoringContacts' },
         // { name : 'EC count', tag : 'eccount' },
         { name : 'cumulative strength', tag : 'cumstrength' },
         { name : 'conservation', tag : 'conservation' }

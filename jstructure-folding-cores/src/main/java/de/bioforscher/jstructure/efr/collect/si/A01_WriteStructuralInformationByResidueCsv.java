@@ -114,6 +114,7 @@ public class A01_WriteStructuralInformationByResidueCsv {
 
             List<ContactStructuralInformation> contactStructuralInformation = StructuralInformationParserService.getInstance()
                     .parseContactStructuralInformation(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("raw").resolve(entryId.toUpperCase() + ".out"),
+                            chain,
                             earlyFoldingResidues);
             List<ResidueStructuralInformation> residueStructuralInformation = StructuralInformationParserService.getInstance()
                     .composeResidueStructuralInformation(aminoAcids,
