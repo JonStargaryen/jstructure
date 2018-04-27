@@ -54,7 +54,7 @@ public class ReconstructionContactMap extends ResidueGraph {
         // i and j: residue numbers
         return contacts.stream()
                 .map(edge -> (edge.getLeft().getResidueIndex() + 1) + " " +
-                        (edge.getRight().getResidueIndex() + 1) + " 0 8.0 1")
+                        (edge.getRight().getResidueIndex() + 1) + " 0 10.0 1")
                 .collect(Collectors.joining(System.lineSeparator(),
                         sequence + System.lineSeparator(),
                         ""));

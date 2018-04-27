@@ -11,12 +11,21 @@ public enum InteractionScheme {
     CALPHA8((aminoAcid1, aminoAcid2) -> {
         try {
             return aminoAcid1.getCa().calculate()
-                    .distanceFast(aminoAcid2.getCa()) < 8 * 8;
+                    .distanceFast(aminoAcid2.getCa()) < 100;
         } catch (NullPointerException e) {
             return aminoAcid1.calculate().centroid()
-                    .distanceFast(aminoAcid2.calculate().centroid()) < 8 * 8;
+                    .distanceFast(aminoAcid2.calculate().centroid()) < 100;
         }
     }),
+//    CALPHA01(((aminoAcid1, aminoAcid2) -> {
+//        try {
+//            return aminoAcid1.getCa().calculate()
+//                    .distanceFast(aminoAcid2.getCa()) < 10 * 10;
+//        } catch (NullPointerException e) {
+//            return aminoAcid1.calculate().centroid()
+//                    .distanceFast(aminoAcid2.calculate().centroid()) < 10 * 10;
+//        }
+//    })),
     SALENTIN2015((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
             .areInContact(aminoAcid1, aminoAcid2)),
     SALENTIN2015_HYDROGEN_BONDS(((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
