@@ -38,6 +38,7 @@ public class StructuralInformationParserServiceTest {
 
         List<ContactStructuralInformation> contactStructuralInformation = StructuralInformationParserService.getInstance()
                 .parseContactStructuralInformationFile(TestUtils.getResourceAsInputStream("si/STF0045.out"),
+                        chain,
                         earlyFoldingResidues);
 
         contactStructuralInformation.stream()
@@ -71,6 +72,7 @@ public class StructuralInformationParserServiceTest {
 
         List<ContactStructuralInformation> contactStructuralInformation = StructuralInformationParserService.getInstance()
                 .parseContactStructuralInformationFile(TestUtils.getResourceAsInputStream("si/STF0045.out"),
+                        chain,
                         earlyFoldingResidues);
 
         ResidueGraph residueGraph = ResidueGraph.createDistanceResidueGraph(chain);
@@ -113,6 +115,7 @@ public class StructuralInformationParserServiceTest {
 
         List<ContactStructuralInformation> contactStructuralInformation = StructuralInformationParserService.getInstance()
                 .parseContactStructuralInformationFile(TestUtils.getResourceAsInputStream("si/STF0045.out"),
+                        chain,
                         earlyFoldingResidues);
         List<ResidueStructuralInformation> residueStructuralInformation = StructuralInformationParserService.getInstance()
                 .composeResidueStructuralInformation(aminoAcids,

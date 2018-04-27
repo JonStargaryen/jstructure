@@ -18,6 +18,7 @@ public class ResidueStructuralInformation {
     private final double averageRmsdIncreaseZScore;
     private final double maximumRmsdIncreaseZScore;
     private final double fractionOfTopScoringContacts;
+    private final double sumRmsdIncrease;
 
     public ResidueStructuralInformation(int residueIdentifier,
                                         String aa,
@@ -33,7 +34,8 @@ public class ResidueStructuralInformation {
                                         double conservation,
                                         double averageRmsdIncreaseZScore,
                                         double maximumRmsdIncreaseZScore,
-                                        double fractionOfTopScoringContacts) {
+                                        double fractionOfTopScoringContacts,
+                                        double sumRmsdIncrease) {
         this.residueIdentifier = residueIdentifier;
         this.aa = aa;
         this.averageRmsdIncrease = averageRmsdIncrease;
@@ -49,6 +51,7 @@ public class ResidueStructuralInformation {
         this.averageRmsdIncreaseZScore = averageRmsdIncreaseZScore;
         this.maximumRmsdIncreaseZScore = maximumRmsdIncreaseZScore;
         this.fractionOfTopScoringContacts = fractionOfTopScoringContacts;
+        this.sumRmsdIncrease = sumRmsdIncrease;
     }
 
     public int getResidueIdentifier() {
@@ -111,6 +114,10 @@ public class ResidueStructuralInformation {
         return fractionOfTopScoringContacts;
     }
 
+    public double getSumRmsdIncrease() {
+        return sumRmsdIncrease;
+    }
+
     public String getCsvLine() {
         return residueIdentifier + "," +
                 StandardFormat.format(averageRmsdIncrease) + "," +
@@ -140,6 +147,7 @@ public class ResidueStructuralInformation {
                 ", averageRmsdIncreaseZScore=" + averageRmsdIncreaseZScore +
                 ", maximumRmsdIncreaseZScore=" + maximumRmsdIncreaseZScore +
                 ", fractionOfTopScoringContacts=" + fractionOfTopScoringContacts +
+                ", sumRmsdIncrease=" + sumRmsdIncrease +
                 '}';
     }
 }

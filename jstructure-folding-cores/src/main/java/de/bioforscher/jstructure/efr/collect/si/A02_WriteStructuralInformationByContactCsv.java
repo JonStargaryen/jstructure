@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.efr.collect.si;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
+import de.bioforscher.jstructure.efr.model.ContactDistanceBin;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.efr.model.FunctionalResidueAnnotation;
 import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
@@ -9,8 +10,10 @@ import de.bioforscher.jstructure.efr.parser.EvolutionaryCouplingParser;
 import de.bioforscher.jstructure.efr.parser.FunctionalResidueParser;
 import de.bioforscher.jstructure.efr.parser.Start2FoldXmlParser;
 import de.bioforscher.jstructure.efr.parser.StructuralInformationParserService;
+import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.interaction.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interaction.PLIPInteractionContainer;
+import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.graph.InteractionScheme;
 import de.bioforscher.jstructure.graph.ResidueGraph;
 import de.bioforscher.jstructure.graph.ResidueGraphCalculations;
@@ -45,12 +48,12 @@ public class A02_WriteStructuralInformationByContactCsv {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "pdb,chain,res1,aa1,res2,aa2,distanceBin,dCentroid," +
+                        "pdb,chain,res1,aa1,res2,aa2,distanceBin,long,medium,short,dCentroid," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
                                 "avgRmsdZ,numberOfTopScoringContacts," +
                                 "plm,betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +
                                 "hydrogen,hydrophobic," +
-                                "efr1,efr2,func1,func2,strong1,strong2,sane" + System.lineSeparator(),
+                                "efr1,efr2,func1,func2,strong1,strong2,buried1,buried2,ordered1,ordered2,sane" + System.lineSeparator(),
                         ""));
 
         Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-si-contacts.csv"),
@@ -100,8 +103,17 @@ public class A02_WriteStructuralInformationByContactCsv {
                     .filter(aminoAcid -> aminoAcid.getFeature(Start2FoldResidueAnnotation.class).isStrong())
                     .collect(Collectors.toList());
 
+            List<AminoAcid> orderedResidues = chain.aminoAcids()
+                    .filter(aminoAcid -> !aminoAcid.getFeature(GenericSecondaryStructure.class).getSecondaryStructure().isCoilType())
+                    .collect(Collectors.toList());
+
+            List<AminoAcid> buriedResidues = chain.aminoAcids()
+                    .filter(aminoAcid -> aminoAcid.getFeature(AccessibleSurfaceArea.class).isBuried())
+                    .collect(Collectors.toList());
+
             List<ContactStructuralInformation> contactStructuralInformation = StructuralInformationParserService.getInstance()
                     .parseContactStructuralInformation(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("raw").resolve(entryId.toUpperCase() + ".out"),
+                            chain,
                             earlyFoldingResidues);
             ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, InteractionScheme.CALPHA8);
             ResidueGraphCalculations residueGraphCalculations = new ResidueGraphCalculations(conventionalProteinGraph);
@@ -135,6 +147,9 @@ public class A02_WriteStructuralInformationByContactCsv {
                                 contact.getResidueIdentifier2() + "," +
                                 contact.getAa2() + "," +
                                 contact.getContactDistanceBin() + "," +
+                                (contact.getContactDistanceBin() == ContactDistanceBin.LONG) + "," +
+                                (contact.getContactDistanceBin() == ContactDistanceBin.MEDIUM) + "," +
+                                (contact.getContactDistanceBin() == ContactDistanceBin.SHORT) + "," +
                                 StandardFormat.format(contactCentroid.distance(centroid)) + "," +
 
                                 StandardFormat.format(contact.getAverageRmsdIncrease()) + "," +
@@ -166,6 +181,10 @@ public class A02_WriteStructuralInformationByContactCsv {
                                 contactIsInCollection(functionalResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 residueIsInCollection(strongResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 contactIsInCollection(strongResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                residueIsInCollection(buriedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                contactIsInCollection(buriedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                residueIsInCollection(orderedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                contactIsInCollection(orderedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 sane;
                     })
                     .collect(Collectors.joining(System.lineSeparator())));

@@ -78,21 +78,37 @@ var FeatureViewerComponent = (function () {
             interpolation: 'basis'
         });
 
-        var maxRmsd = [];
+        var sumRmsd = [];
         model.residues.forEach(function (go) {
-            maxRmsd.push({
-                x: maxRmsd.length + 1,
-                y: go.maximumRmsdIncrease
+            sumRmsd.push({
+                x: sumRmsd.length + 1,
+                y: go.sumRmsdIncrease
             });
         });
         fv.addFeature({
-            data: maxRmsd,
-            name: 'max. RMSD',
+            data: sumRmsd,
+            name: 'sum RMSD',
             className: 'tba4',
             type: 'line',
             color: '#52b1e9',
             interpolation: 'basis'
         });
+
+        // var maxRmsd = [];
+        // model.residues.forEach(function (go) {
+        //     maxRmsd.push({
+        //         x: maxRmsd.length + 1,
+        //         y: go.maximumRmsdIncrease
+        //     });
+        // });
+        // fv.addFeature({
+        //     data: maxRmsd,
+        //     name: 'max. RMSD',
+        //     className: 'tba4',
+        //     type: 'line',
+        //     color: '#52b1e9',
+        //     interpolation: 'basis'
+        // });
 
         // var eccount = [];
         // model.residues.forEach(function (go) {
@@ -142,53 +158,53 @@ var FeatureViewerComponent = (function () {
             interpolation: 'basis'
         });
 
-        var avgZ = [];
-        model.residues.forEach(function (go) {
-            avgZ.push({
-                x: avgZ.length + 1,
-                y: go.averageRmsdIncreaseZScore
-            });
-        });
-        fv.addFeature({
-            data: avgZ,
-            name: 'average Z',
-            className: 'tba4',
-            type: 'line',
-            color: '#52b1e9',
-            interpolation: 'basis'
-        });
-
-        var maxZ = [];
-        model.residues.forEach(function (go) {
-            maxZ.push({
-                x: maxZ.length + 1,
-                y: go.maximumRmsdIncreaseZScore
-            });
-        });
-        fv.addFeature({
-            data: maxZ,
-            name: 'maxiumum Z',
-            className: 'tba4',
-            type: 'line',
-            color: '#52b1e9',
-            interpolation: 'basis'
-        });
-
-        var top = [];
-        model.residues.forEach(function (go) {
-            top.push({
-                x: top.length + 1,
-                y: go.fractionOfTopScoringContacts
-            });
-        });
-        fv.addFeature({
-            data: top,
-            name: 'frac top scoring',
-            className: 'tba4',
-            type: 'line',
-            color: '#52b1e9',
-            interpolation: 'basis'
-        });
+        // var avgZ = [];
+        // model.residues.forEach(function (go) {
+        //     avgZ.push({
+        //         x: avgZ.length + 1,
+        //         y: go.averageRmsdIncreaseZScore
+        //     });
+        // });
+        // fv.addFeature({
+        //     data: avgZ,
+        //     name: 'average Z',
+        //     className: 'tba4',
+        //     type: 'line',
+        //     color: '#52b1e9',
+        //     interpolation: 'basis'
+        // });
+        //
+        // var maxZ = [];
+        // model.residues.forEach(function (go) {
+        //     maxZ.push({
+        //         x: maxZ.length + 1,
+        //         y: go.maximumRmsdIncreaseZScore
+        //     });
+        // });
+        // fv.addFeature({
+        //     data: maxZ,
+        //     name: 'maxiumum Z',
+        //     className: 'tba4',
+        //     type: 'line',
+        //     color: '#52b1e9',
+        //     interpolation: 'basis'
+        // });
+        //
+        // var top = [];
+        // model.residues.forEach(function (go) {
+        //     top.push({
+        //         x: top.length + 1,
+        //         y: go.fractionOfTopScoringContacts
+        //     });
+        // });
+        // fv.addFeature({
+        //     data: top,
+        //     name: 'frac top scoring',
+        //     className: 'tba4',
+        //     type: 'line',
+        //     color: '#52b1e9',
+        //     interpolation: 'basis'
+        // });
     }
 
     return FeatureViewerComponent;

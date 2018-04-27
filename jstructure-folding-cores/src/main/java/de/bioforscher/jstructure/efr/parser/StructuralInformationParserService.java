@@ -34,9 +34,12 @@ public class StructuralInformationParserService {
     }
 
     public List<ContactStructuralInformation> parseContactStructuralInformation(Path path,
+                                                                                Chain chain,
                                                                                 List<AminoAcid> earlyFoldingResidues) {
         try {
-            return parseContactStructuralInformationFile(Files.newInputStream(path), earlyFoldingResidues);
+            return parseContactStructuralInformationFile(Files.newInputStream(path),
+                    chain,
+                    earlyFoldingResidues);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -65,6 +68,7 @@ public class StructuralInformationParserService {
     }
 
     public List<ContactStructuralInformation> parseContactStructuralInformationFile(InputStream inputStream,
+                                                                                    Chain chain,
                                                                                     List<AminoAcid> earlyFoldingResidues) {
         Map<Pair<Integer, Integer>, List<String>> parsingMap = new HashMap<>();
         try(Stream<String> stream = new BufferedReader(new InputStreamReader(inputStream)).lines()) {
@@ -87,7 +91,6 @@ public class StructuralInformationParserService {
             });
         }
 
-        Chain chain = earlyFoldingResidues.get(0).getParentChain();
         Map<Pair<Integer, Integer>, List<ReconstructionStructuralInformation>> reconstructionMap = new HashMap<>();
         parsingMap.entrySet()
                 .stream()
@@ -279,7 +282,8 @@ public class StructuralInformationParserService {
                 aminoAcid.getFeature(HotSpotScoring.class).getConservation(),
                 computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getAverageRmsdIncreaseZScore),
                 computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getMaximumRmsdIncreaseZScore),
-                computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getFractionOfTopScoringContacts));
+                computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getFractionOfTopScoringContacts),
+                computeFeatureSum(contactsOfAminoAcid, ContactStructuralInformation::getAverageRmsdIncrease));
     }
 
     private double computeFeatureAverage(List<ContactStructuralInformation> contactOfAminoAcid,
