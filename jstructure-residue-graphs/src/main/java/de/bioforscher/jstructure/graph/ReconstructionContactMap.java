@@ -15,10 +15,19 @@ import java.util.stream.Collectors;
 public class ReconstructionContactMap extends ResidueGraph {
     private final String sequence;
     private final String secondaryStructureElements;
+    private String name;
 
     public static ReconstructionContactMap createReconstructionContactMap(Chain chain) {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
         return new ReconstructionContactMap(aminoAcids, createContactList(aminoAcids, InteractionScheme.CALPHA8));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ReconstructionContactMap(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts) {
@@ -53,8 +62,9 @@ public class ReconstructionContactMap extends ResidueGraph {
         // 24 33 0 8 12.279515
         // i and j: residue numbers
         return contacts.stream()
-                .map(edge -> (edge.getLeft().getResidueIndex() + 1) + " " +
-                        (edge.getRight().getResidueIndex() + 1) + " 0 10.0 1")
+                .map(edge -> (edge.getLeft().getAminoAcidIndex() + 1) + " " +
+                        //TODO changeable contact definition
+                        (edge.getRight().getAminoAcidIndex() + 1) + " 0 8.0 1")
                 .collect(Collectors.joining(System.lineSeparator(),
                         sequence + System.lineSeparator(),
                         ""));

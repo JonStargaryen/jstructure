@@ -1,8 +1,10 @@
-package de.bioforscher.jstructure.si.explorer;
+package de.bioforscher.jstructure.si.analysis;
 
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
 import de.bioforscher.jstructure.efr.model.si.ResidueStructuralInformation;
 import de.bioforscher.jstructure.model.structure.Chain;
+import de.bioforscher.jstructure.si.explorer.DataSource;
+import de.bioforscher.jstructure.si.explorer.ExplorerChain;
 
 import java.nio.file.Files;
 import java.util.List;
@@ -15,13 +17,11 @@ import java.util.List;
 public class A01_WriteBFactorFiles {
     public static void main(String[] args) {
         DataSource.getInstance()
-                .getChains()
-                .values()
-                .stream()
-                .forEach(A01_WriteBFactorFiles::handleLine);
+                .chains()
+                .forEach(A01_WriteBFactorFiles::handleChain);
     }
 
-    private static void handleLine(ExplorerChain explorerChain) {
+    private static void handleChain(ExplorerChain explorerChain) {
         try {
             String entryId = explorerChain.getStfId();
             System.out.println(entryId);

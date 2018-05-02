@@ -25,7 +25,7 @@ public class ExplorerService {
     public void activate() {
         logger.info("starting protein service");
 
-        this.chains = DataSource.getInstance().getChains();
+        this.chains = DataSource.getInstance().getChainMap();
 
         this.ids = chains.values()
                 .stream()

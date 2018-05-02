@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.model.structure;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.AbstractFeatureable;
 import de.bioforscher.jstructure.model.identifier.ChainIdentifier;
+import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.model.structure.container.GroupContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
 
@@ -133,5 +134,9 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
     @Override
     public Chain createShallowCopy() {
         return new Chain(this, false);
+    }
+
+    public List<AminoAcid> getAminoAcids() {
+        return aminoAcids().collect(Collectors.toList());
     }
 }
