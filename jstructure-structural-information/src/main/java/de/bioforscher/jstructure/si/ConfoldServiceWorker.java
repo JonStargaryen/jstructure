@@ -25,9 +25,9 @@ public class ConfoldServiceWorker implements Callable<List<Chain>> {
     private final String contacts;
 
     public ConfoldServiceWorker(String serviceLocation,
-                         String sequence,
-                         String secondaryStructure,
-                         String contacts) {
+                                String sequence,
+                                String secondaryStructure,
+                                String contacts) {
         this.serviceLocation = serviceLocation;
         this.sequence = sequence;
         this.secondaryStructure = secondaryStructure;

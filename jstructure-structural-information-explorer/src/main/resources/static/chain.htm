@@ -69,7 +69,7 @@
                                     <span ng-show="sortTypeContacts == 'contactDistanceBin'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'averageRmsdIncrease'; sortReverseContacts = !sortReverseContacts">avg RMSD decrease
                                     <span ng-show="sortTypeContacts == 'averageRmsdIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
-                                <div ng-click="sortTypeContacts = 'averageTmScoreIncrease'; sortReverseContacts = !sortReverseContacts">avg TM-score increase
+                                <!--div ng-click="sortTypeContacts = 'averageTmScoreIncrease'; sortReverseContacts = !sortReverseContacts">avg TM-score increase
                                     <span ng-show="sortTypeContacts == 'averageTmScoreIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'averageQIncrease'; sortReverseContacts = !sortReverseContacts">avg Q increase
                                     <span ng-show="sortTypeContacts == 'averageQIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
@@ -78,7 +78,9 @@
                                 <div ng-click="sortTypeContacts = 'maximumTmScoreIncrease'; sortReverseContacts = !sortReverseContacts">max TM-score increase
                                     <span ng-show="sortTypeContacts == 'maximumTmScoreIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'maximumQIncrease'; sortReverseContacts = !sortReverseContacts">max Q increase
-                                    <span ng-show="sortTypeContacts == 'maximumQIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
+                                    <span ng-show="sortTypeContacts == 'maximumQIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div-->
+                                <div ng-click="sortTypeContacts = 'sumRmsdIncrease'; sortReverseContacts = !sortReverseContacts">sum RMSD decrease
+                                    <span ng-show="sortTypeContacts == 'sumRmsdIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'earlyFoldingResidue'; sortReverseContacts = !sortReverseContacts">1 EFR
                                     <span ng-show="sortTypeContacts == 'earlyFoldingResidue'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeContacts = 'earlyFoldingContact'; sortReverseContacts = !sortReverseContacts">2 EFR
@@ -96,11 +98,12 @@
                                 <div>{{contact.aa2}}</div>
                                 <div>{{contact.contactDistanceBin}}</div>
                                 <div>{{contact.averageRmsdIncrease}}</div>
-                                <div>{{contact.averageTmScoreIncrease}}</div>
+                                <!--div>{{contact.averageTmScoreIncrease}}</div>
                                 <div>{{contact.averageQIncrease}}</div>
                                 <div>{{contact.maximumRmsdIncrease}}</div>
                                 <div>{{contact.maximumTmScoreIncrease}}</div>
-                                <div>{{contact.maximumQIncrease}}</div>
+                                <div>{{contact.maximumQIncrease}}</div-->
+                                <div>{{contact.sumRmsdIncrease}}</div>
                                 <div>{{contact.earlyFoldingResidue}}</div>
                                 <div>{{contact.earlyFoldingContact}}</div>
                                 <div>{{contact.plmScore}}</div>
@@ -118,7 +121,7 @@
                                     <span ng-show="sortTypeResidues == 'aa'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeResidues = 'averageRmsdIncrease'; sortReverseResidues = !sortReverseResidues">avg RMSD decrease
                                     <span ng-show="sortTypeResidues == 'averageRmsdIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
-                                <div ng-click="sortTypeResidues = 'averageTmScoreIncrease'; sortReverseResidues = !sortReverseResidues">avg TM-score increase
+                                <!--div ng-click="sortTypeResidues = 'averageTmScoreIncrease'; sortReverseResidues = !sortReverseResidues">avg TM-score increase
                                     <span ng-show="sortTypeResidues == 'averageTmScoreIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeResidues = 'averageQIncrease'; sortReverseResidues = !sortReverseResidues">avg Q increase
                                     <span ng-show="sortTypeResidues == 'averageQIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
@@ -127,7 +130,9 @@
                                 <div ng-click="sortTypeResidues = 'maximumTmScoreIncrease'; sortReverseResidues = !sortReverseResidues">max TM-score increase
                                     <span ng-show="sortTypeResidues == 'maximumTmScoreIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeResidues = 'maximumQIncrease'; sortReverseResidues = !sortReverseResidues">max Q increase
-                                    <span ng-show="sortTypeResidues == 'maximumQIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
+                                    <span ng-show="sortTypeResidues == 'maximumQIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div-->
+                                <div ng-click="sortTypeResidues = 'sumRmsdIncrease'; sortReverseResidues = !sortReverseResidues">sum RMSD decrease
+                                    <span ng-show="sortTypeResidues == 'sumRmsdIncrease'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                                 <div ng-click="sortTypeResidues = 'earlyFoldingResidue'; sortReverseResidues = !sortReverseResidues">EFR
                                     <span ng-show="sortTypeResidues == 'earlyFoldingResidue'" ng-class="sortReverseContacts ? 'fa fa-caret-up' : 'fa fa-caret-down'"></span></div>
                             </div>
@@ -138,11 +143,12 @@
                                 <div>{{residue.residueIdentifier}}</div>
                                 <div>{{residue.aa}}</div>
                                 <div>{{residue.averageRmsdIncrease}}</div>
-                                <div>{{residue.averageTmScoreIncrease}}</div>
+                                <!--div>{{residue.averageTmScoreIncrease}}</div>
                                 <div>{{residue.averageQIncrease}}</div>
                                 <div>{{residue.maximumRmsdIncrease}}</div>
                                 <div>{{residue.maximumTmScoreIncrease}}</div>
-                                <div>{{residue.maximumQIncrease}}</div>
+                                <div>{{residue.maximumQIncrease}}</div-->
+                                <div>{{residue.sumRmsdIncrease}}</div>
                                 <div>{{residue.earlyFoldingResidue}}</div>
                             </div>
                         </div>
