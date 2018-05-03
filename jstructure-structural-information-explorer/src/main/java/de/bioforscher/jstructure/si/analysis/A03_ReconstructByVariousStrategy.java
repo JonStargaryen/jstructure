@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.si.analysis;
 
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
-import de.bioforscher.jstructure.align.result.score.RootMeanSquareDeviation;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
 import de.bioforscher.jstructure.mathematics.Pair;
@@ -50,13 +49,13 @@ public class A03_ReconstructByVariousStrategy {
 
     public static void main(String[] args) throws IOException {
         fileWriter = new FileWriter(OUTPUT_PATH.toFile());
-        fileWriter.write("id,strategy,avg" + System.lineSeparator());
+        fileWriter.write("id,strategy,rmsd" + System.lineSeparator());
         executorService = Executors.newFixedThreadPool(8);
 
         DataSource.getInstance()
                 .chains()
                 .filter(explorerChain -> INTERESTING_STRUCTURES.stream()
-                        .anyMatch(id -> explorerChain.getStfId().startsWith(id)))
+                        .noneMatch(id -> explorerChain.getStfId().startsWith(id)))
                 .forEach(A03_ReconstructByVariousStrategy::handleChain);
     }
 
@@ -81,7 +80,7 @@ public class A03_ReconstructByVariousStrategy {
                                         contactStructuralInformation,
                                         numberOfContactsToSelect);
 
-                                contactMap.setName(reconstructionStrategy.getClass().getSimpleName() + "-" + (i + 1));
+                                contactMap.setName(reconstructionStrategy.getName() + "-" + (i + 1));
 
                                 return contactMap;
                             }))
@@ -89,7 +88,7 @@ public class A03_ReconstructByVariousStrategy {
 
             Map<String, List<Future<List<Chain>>>> reconstructionFutures = new HashMap<>();
             for (ReconstructionContactMap contactMap : contactMaps) {
-                String name = contactMap.getName().split("-")[0];
+                String name = contactMap.getClass().getSimpleName().split("-")[0];
                 logger.info("handling contact map definition {}",
                         name);
 
@@ -141,21 +140,18 @@ public class A03_ReconstructByVariousStrategy {
                         throw new ComputationException("tmalign did not yield any alignments");
                     }
 
-                    double averageRmsd = alignmentResults.stream()
-                            .map(TMAlignAlignmentResult::getRootMeanSquareDeviation)
-                            .mapToDouble(RootMeanSquareDeviation::getScore)
-                            .average()
-                            .getAsDouble();
+                    for(TMAlignAlignmentResult alignmentResult : alignmentResults) {
+                        double rmsd = alignmentResult.getRootMeanSquareDeviation().getScore();
+                        String line = explorerChain.getStfId() + "," + name + "," + rmsd;
+                        logger.info(line);
+                        fileWriter.write(line + System.lineSeparator());
+                        fileWriter.flush();
+                    }
 
                     // cleanup
                     for (Path tmpFile : tmpFiles) {
                         Files.delete(tmpFile);
                     }
-
-                    String line = explorerChain.getStfId() + "," + name + "," + averageRmsd;
-                    logger.info(line);
-                    fileWriter.write(line + System.lineSeparator());
-                    fileWriter.flush();
                 } catch (IOException e) {
                     throw new ComputationException(e);
                 }
@@ -184,6 +180,8 @@ public class A03_ReconstructByVariousStrategy {
                                             .asAminoAcid()))
                             .collect(Collectors.toList()));
         }
+
+        String getName();
     }
 
     enum ReconstructionStrategyDefinition {
@@ -215,6 +213,11 @@ public class A03_ReconstructByVariousStrategy {
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
         }
+
+        @Override
+        public String getName() {
+            return "highest";
+        }
     }
 
     static class IgnoreBest implements ReconstructionStrategy {
@@ -231,6 +234,11 @@ public class A03_ReconstructByVariousStrategy {
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
         }
+
+        @Override
+        public String getName() {
+            return "ignore highest";
+        }
     }
 
     static class Random implements ReconstructionStrategy {
@@ -244,6 +252,11 @@ public class A03_ReconstructByVariousStrategy {
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
         }
+
+        @Override
+        public String getName() {
+            return "random";
+        }
     }
 
     static class WorstByAverage implements ReconstructionStrategy {
@@ -254,6 +267,11 @@ public class A03_ReconstructByVariousStrategy {
                     .stream()
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "lowest";
         }
     }
 
@@ -297,6 +315,11 @@ public class A03_ReconstructByVariousStrategy {
 
             return Stream.concat(contacts.stream(), nonNativeContacts.stream())
                     .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "non-native";
         }
     }
 }
