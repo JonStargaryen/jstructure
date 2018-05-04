@@ -80,7 +80,7 @@ public class A03_ReconstructByVariousStrategy {
                                         contactStructuralInformation,
                                         numberOfContactsToSelect);
 
-                                contactMap.setName(reconstructionStrategy.getName() + "-" + (i + 1));
+                                contactMap.setName(reconstructionStrategy.getClass().getSimpleName() + "-" + (i + 1));
 
                                 return contactMap;
                             }))
@@ -88,7 +88,7 @@ public class A03_ReconstructByVariousStrategy {
 
             Map<String, List<Future<List<Chain>>>> reconstructionFutures = new HashMap<>();
             for (ReconstructionContactMap contactMap : contactMaps) {
-                String name = contactMap.getClass().getSimpleName().split("-")[0];
+                String name = contactMap.getName().split("-")[0];
                 logger.info("handling contact map definition {}",
                         name);
 
