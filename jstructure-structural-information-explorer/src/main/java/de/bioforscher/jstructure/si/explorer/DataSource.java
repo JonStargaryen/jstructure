@@ -14,6 +14,7 @@ public class DataSource {
     private DataSource() {
         this.chains = TestUtils.getResourceAsStream("data/ids.list")
                 .map(line -> line.split(";"))
+//                .filter(split -> split[0].equals("1tup_A"))
                 .map(ExplorerChain::new)
                 .collect(Collectors.toMap(ExplorerChain::getStfId, Function.identity()));
     }
@@ -28,5 +29,11 @@ public class DataSource {
 
     public Stream<ExplorerChain> chains() {
         return chains.values().stream();
+    }
+
+    public Stream<ExplorerChain> start2FoldChains() {
+        return chains.values()
+                .stream()
+                .filter(explorerChain -> explorerChain.getStfId().startsWith("STF"));
     }
 }

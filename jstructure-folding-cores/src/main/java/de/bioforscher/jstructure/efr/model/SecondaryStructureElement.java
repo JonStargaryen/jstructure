@@ -52,7 +52,8 @@ public class SecondaryStructureElement {
 
             currentType = type;
             if(!currentType.equals("c")) {
-                int resnum = aminoAcid.getResidueIdentifier().getResidueNumber();
+                int resnum = aminoAcid.getResidueIndex();
+//                int resnum = aminoAcid.getResidueIdentifier().getResidueNumber();
                 if(start == -1) {
                     start = resnum;
                 }

@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.efr.collect.si;
+package de.bioforscher.jstructure.si.analysis;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
@@ -39,12 +39,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class A02_WriteStructuralInformationByContactCsv {
-    private static final Logger logger = LoggerFactory.getLogger(A02_WriteStructuralInformationByContactCsv.class);
+public class A07_WriteStructuralInformationByContactCsv {
+    private static final Logger logger = LoggerFactory.getLogger(A07_WriteStructuralInformationByContactCsv.class);
 
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
-                .map(A02_WriteStructuralInformationByContactCsv::handleLine)
+                .map(A07_WriteStructuralInformationByContactCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),

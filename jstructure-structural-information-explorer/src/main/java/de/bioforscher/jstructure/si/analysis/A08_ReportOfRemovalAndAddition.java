@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.efr.collect.si;
+package de.bioforscher.jstructure.si.analysis;
 
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
 import org.apache.commons.math3.stat.StatUtils;
@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class A03_ReportOfRemovalAndAddition {
+public class A08_ReportOfRemovalAndAddition {
     private static List<Double> removal;
     private static List<Double> addition;
 
@@ -17,7 +17,7 @@ public class A03_ReportOfRemovalAndAddition {
         addition = new ArrayList<>();
 
         Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
-                .forEach(A03_ReportOfRemovalAndAddition::handleLine);
+                .forEach(A08_ReportOfRemovalAndAddition::handleLine);
 
         double[] r = removal.stream()
                 .mapToDouble(Double::valueOf)
