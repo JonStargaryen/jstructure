@@ -54,8 +54,8 @@ public class A03_ReconstructByVariousStrategy {
 
         DataSource.getInstance()
                 .chains()
-                .filter(explorerChain -> INTERESTING_STRUCTURES.stream()
-                        .noneMatch(id -> explorerChain.getStfId().startsWith(id)))
+//                .filter(explorerChain -> INTERESTING_STRUCTURES.stream()
+//                        .noneMatch(id -> explorerChain.getStfId().startsWith(id)))
                 .forEach(A03_ReconstructByVariousStrategy::handleChain);
     }
 
@@ -73,7 +73,10 @@ public class A03_ReconstructByVariousStrategy {
             int numberOfContactsToSelect = (int) (numberOfNativeContacts * DEFAULT_COVERAGE);
 
             List<ReconstructionContactMap> contactMaps = Stream.of(ReconstructionStrategyDefinition.values())
+                    //TODO remove: compute only missing values on the strategy of ignoring the worst 30%
+                    .filter(strategy -> strategy.getReconstructionStrategy().getName().equals("ignore lowest"))
                     .map(ReconstructionStrategyDefinition::getReconstructionStrategy)
+                    .filter(strategy -> strategy.getName().equals("all"))
                     .flatMap(reconstructionStrategy -> IntStream.range(0, REDUNDANCY)
                             .mapToObj(i -> {
                                 ReconstructionContactMap contactMap = reconstructionStrategy.composeReconstructionContactMap(nativeChain,
@@ -189,7 +192,9 @@ public class A03_ReconstructByVariousStrategy {
         IGNORE_BEST(new IgnoreBest()),
         RANDOM(new Random()),
         WORST_BY_AVERAGE(new WorstByAverage()),
-        NON_NATIVE(new NonNative());
+        NON_NATIVE(new NonNative()),
+        ALL(new All()),
+        IGNORE_WORST(new IgnoreWorst());
 
         private ReconstructionStrategy reconstructionStrategy;
 
@@ -202,14 +207,44 @@ public class A03_ReconstructByVariousStrategy {
         }
     }
 
+    static class All implements ReconstructionStrategy {
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain, List<ContactStructuralInformation> contactStructuralInformation, int numberOfContacts) {
+            return contactStructuralInformation.stream()
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "all";
+        }
+    }
+
+    static class IgnoreWorst implements ReconstructionStrategy {
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain, List<ContactStructuralInformation> contactStructuralInformation, int numberOfContacts) {
+            contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease).reversed());
+            return contactStructuralInformation.stream()
+                    .limit(contactStructuralInformation.size() - numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "ignore lowest";
+        }
+    }
+
     static class BestByAverage implements ReconstructionStrategy {
         @Override
         public List<Pair<Integer, Integer>> selectContacts(Chain chain,
                                                            List<ContactStructuralInformation> contactStructuralInformation,
                                                            int numberOfContacts) {
             contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease).reversed());
-            return contactStructuralInformation.subList(0, numberOfContacts)
-                    .stream()
+            return contactStructuralInformation.stream()
+                    .limit(numberOfContacts)
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
         }
