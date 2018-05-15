@@ -44,6 +44,7 @@ public class A07_WriteStructuralInformationByContactCsv {
 
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
+                .filter(line -> line.startsWith("STF"))
                 .map(A07_WriteStructuralInformationByContactCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

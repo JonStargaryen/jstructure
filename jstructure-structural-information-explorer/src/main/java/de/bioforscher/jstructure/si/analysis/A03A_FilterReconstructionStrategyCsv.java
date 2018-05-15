@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
-public class A05_FilterReconstructionStrategyCsv {
+public class A03A_FilterReconstructionStrategyCsv {
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Paths.get("/home/bittrich/git/phd_sb_repo/data/si/statistics/reconstruction-strategy.csv"))
                 .filter(line -> line.startsWith("id") || line.startsWith("STF"))

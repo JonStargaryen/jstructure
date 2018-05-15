@@ -38,6 +38,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
 
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
+                .filter(line -> line.startsWith("STF"))
                 .map(A06_WriteStructuralInformationByResidueCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

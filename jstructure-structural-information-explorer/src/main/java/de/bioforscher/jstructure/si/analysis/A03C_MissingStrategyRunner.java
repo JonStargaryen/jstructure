@@ -2,11 +2,10 @@ package de.bioforscher.jstructure.si.analysis;
 
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
+import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
-import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
-import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.si.ConfoldServiceWorker;
 import de.bioforscher.jstructure.si.explorer.DataSource;
 import de.bioforscher.jstructure.si.explorer.ExplorerChain;
@@ -22,28 +21,79 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
-public class A04_CreateRmsdVsCoveragePlot {
-    private static final Logger logger = LoggerFactory.getLogger(A04_CreateRmsdVsCoveragePlot.class);
+public class A03C_MissingStrategyRunner {
+    private static final Logger logger = LoggerFactory.getLogger(A03C_MissingStrategyRunner.class);
+    private static final double DEFAULT_COVERAGE = 0.3;
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/reconstruction-perc.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/sb/reconstruction.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
 
     private static FileWriter fileWriter;
     private static ExecutorService executorService;
 
+    private static final List<String> MISSING_COMBINATIONS = Pattern.compile("\n").splitAsStream("STF0001,IgnoreWorst\n" +
+            "STF0003,IgnoreWorst\n" +
+            "STF0004,IgnoreWorst\n" +
+            "STF0006,IgnoreWorst\n" +
+            "STF0008,IgnoreWorst\n" +
+            "STF0009,IgnoreWorst\n" +
+            "STF0010,IgnoreWorst\n" +
+            "STF0011,IgnoreWorst\n" +
+            "STF0012,IgnoreWorst\n" +
+            "STF0013,IgnoreWorst\n" +
+            "STF0014,IgnoreWorst\n" +
+            "STF0015,IgnoreWorst\n" +
+            "STF0016,IgnoreWorst\n" +
+            "STF0018,IgnoreWorst\n" +
+            "STF0019,BestByAverage\n" +
+            "STF0019,IgnoreBest\n" +
+            "STF0019,Random\n" +
+            "STF0019,WorstByAverage\n" +
+            "STF0019,NonNative\n" +
+            "STF0019,All\n" +
+            "STF0019,IgnoreWorst\n" +
+            "STF0020,BestByAverage\n" +
+            "STF0020,IgnoreBest\n" +
+            "STF0020,Random\n" +
+            "STF0020,WorstByAverage\n" +
+            "STF0020,NonNative\n" +
+            "STF0020,All\n" +
+            "STF0020,IgnoreWorst\n" +
+            "STF0021,IgnoreWorst\n" +
+            "STF0023,IgnoreWorst\n" +
+            "STF0024,IgnoreWorst\n" +
+            "STF0025,IgnoreWorst\n" +
+            "STF0026,IgnoreWorst\n" +
+            "STF0028,IgnoreWorst\n" +
+            "STF0037,IgnoreWorst\n" +
+            "STF0038,IgnoreWorst\n" +
+            "STF0040,IgnoreWorst\n" +
+            "STF0042,IgnoreWorst\n" +
+            "STF0043,IgnoreWorst\n" +
+            "STF0044,IgnoreWorst\n" +
+            "STF0045,IgnoreWorst\n" +
+            "STF0046,BestByAverage\n" +
+            "STF0046,IgnoreBest\n" +
+            "STF0046,Random\n" +
+            "STF0046,WorstByAverage\n" +
+            "STF0046,NonNative\n" +
+            "STF0046,All\n" +
+            "STF0046,IgnoreWorst")
+            .collect(Collectors.toList());
+
     public static void main(String[] args) throws IOException {
-        boolean fileExisted = Files.exists(OUTPUT_PATH);
-        fileWriter = new FileWriter(OUTPUT_PATH.toFile(), true);
-        if(!fileExisted) {
-            fileWriter.write("id,coverage,rmsd" + System.lineSeparator());
-        }
-        executorService = Executors.newFixedThreadPool(8);
+            fileWriter = new FileWriter(OUTPUT_PATH.toFile());
+            fileWriter.write("id,strategy,rmsd" + System.lineSeparator());
+            executorService = Executors.newFixedThreadPool(16);
 
         DataSource.getInstance()
                 .start2FoldChains()
-                .forEach(A04_CreateRmsdVsCoveragePlot::handleChain);
+                .forEach(A03C_MissingStrategyRunner::handleChain);
     }
 
     private static void handleChain(ExplorerChain explorerChain) {
@@ -55,41 +105,46 @@ public class A04_CreateRmsdVsCoveragePlot {
             Path nativeChainPath = Files.createTempFile("nativechain-", ".pdb");
             Files.write(nativeChainPath, nativeChain.getPdbRepresentation().getBytes());
 
-            ReconstructionContactMap nativeContactMap = ReconstructionContactMap.createReconstructionContactMap(nativeChain);
-            List<AminoAcid> aminoAcids = nativeChain.getAminoAcids();
-            List<Pair<AminoAcid, AminoAcid>> contacts = nativeContactMap.getLongRangeContacts();
-            int numberNativeLongRangeContacts = contacts.size();
-            List<ReconstructionContactMap> reconstructionContactMaps = new ArrayList<>();
+            List<ContactStructuralInformation> contactStructuralInformation = explorerChain.getContacts();
+            int numberOfNativeContacts = contactStructuralInformation.size();
+            int numberOfContactsToSelect = (int) (numberOfNativeContacts * DEFAULT_COVERAGE);
 
-            for(int coverage = 5; coverage <= 100; coverage = coverage + 5) {
-                int numberOfContactsToSelect = (int) Math.round(0.01 * coverage * numberNativeLongRangeContacts);
-                for(int run = 0; run < REDUNDANCY; run++) {
-                    Collections.shuffle(contacts);
-                    List<Pair<AminoAcid, AminoAcid>> selectedContacts = contacts.subList(0, numberOfContactsToSelect);
-                    ReconstructionContactMap contactMap = new ReconstructionContactMap(aminoAcids, selectedContacts);
-                    contactMap.setName("p" + coverage + "-" + (run + 1));
-                    reconstructionContactMaps.add(contactMap);
-                }
+            List<ReconstructionContactMap> contactMaps = Stream.of(A03_ReconstructByVariousStrategy.ReconstructionStrategyDefinition.values())
+                    .map(A03_ReconstructByVariousStrategy.ReconstructionStrategyDefinition::getReconstructionStrategy)
+                    // filter for missing combinations
+                    .filter(strategy -> MISSING_COMBINATIONS.stream()
+                            .filter(combination -> combination.startsWith(explorerChain.getStfId()))
+                            .anyMatch(combination -> combination.endsWith(strategy.getClass().getSimpleName())))
+                    .flatMap(reconstructionStrategy -> IntStream.range(0, REDUNDANCY)
+                            .mapToObj(i -> {
+                                ReconstructionContactMap contactMap = reconstructionStrategy.composeReconstructionContactMap(nativeChain,
+                                        contactStructuralInformation,
+                                        numberOfContactsToSelect);
+
+                                contactMap.setName(reconstructionStrategy.getClass().getSimpleName() + "-" + (i + 1));
+
+                                return contactMap;
+                            }))
+                    .collect(Collectors.toList());
+
+            // nothing to do
+            if(contactMaps.isEmpty()) {
+                return;
             }
 
             Map<String, List<Future<List<Chain>>>> reconstructionFutures = new HashMap<>();
-            for (ReconstructionContactMap contactMap : reconstructionContactMaps) {
+            for (ReconstructionContactMap contactMap : contactMaps) {
                 String name = contactMap.getName().split("-")[0];
-                logger.info("handling contact map with coverage {}",
+                logger.info("handling contact map definition {}",
                         name);
 
                 if(!reconstructionFutures.containsKey(name)) {
                     reconstructionFutures.put(name, new ArrayList<>());
                 }
 
-                if(Files.lines(OUTPUT_PATH)
-                        .anyMatch(line -> line.startsWith(explorerChain.getStfId()) && line.split(",")[1].equals(name))) {
-                    continue;
-                }
-
                 List<Future<List<Chain>>> bin = reconstructionFutures.get(name);
 
-                bin.add(executorService.submit(new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
+                bin.add(executorService.submit(new ConfoldServiceWorker("/home/sb/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
                         contactMap.getCaspRRRepresentation())));
@@ -113,16 +168,15 @@ public class A04_CreateRmsdVsCoveragePlot {
                     List<Path> tmpFiles = new ArrayList<>();
 
                     if (reconstructions.isEmpty()) {
-                        // bin already processed - skipping this may also result in skipping upon failed computation
-                        continue;
+                        throw new ComputationException("reconstruction did not yield any reconstructs");
                     }
 
                     for (Chain reconstructedChain : reconstructions) {
                         Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
                         tmpFiles.add(reconstructPath);
                         Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
-                        alignmentResults.add(TM_ALIGN_SERVICE.process(new String[] {
-                                "/home/bittrich/programs/tmalign/tmalign",
+                        alignmentResults.add(TM_ALIGN_SERVICE.process(new String[]{
+                                "/home/sb/programs/tmalign/tmalign",
                                 nativeChainPath.toFile().getAbsolutePath(),
                                 reconstructPath.toFile().getAbsolutePath()
                         }));
