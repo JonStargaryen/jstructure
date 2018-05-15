@@ -176,7 +176,7 @@ public class A03C_MissingStrategyRunner {
                         tmpFiles.add(reconstructPath);
                         Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
                         alignmentResults.add(TM_ALIGN_SERVICE.process(new String[]{
-                                "/home/sb/programs/tmalign/tmalign",
+                                "/home/sb/programs/tmalign",
                                 nativeChainPath.toFile().getAbsolutePath(),
                                 reconstructPath.toFile().getAbsolutePath()
                         }));
