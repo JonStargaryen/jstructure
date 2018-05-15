@@ -29,7 +29,7 @@ public class A01_WriteBFactorFiles {
             Chain chain = explorerChain.getChain();
             List<ResidueStructuralInformation> residueStructuralInformation = explorerChain.getResidues();
 
-            // assign baseline: all atoms (including hetatms have bfactor 0)
+            // assign baseline: all atoms (including hetatms) have bfactor 0
             chain.atoms().forEach(atom -> atom.setBfactor(0));
 
             chain.aminoAcids()

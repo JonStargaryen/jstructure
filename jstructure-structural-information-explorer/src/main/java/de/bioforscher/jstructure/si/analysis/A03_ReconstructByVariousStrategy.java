@@ -29,16 +29,6 @@ import java.util.stream.Stream;
 
 public class A03_ReconstructByVariousStrategy {
     private static final Logger logger = LoggerFactory.getLogger(A03_ReconstructByVariousStrategy.class);
-    private static final List<String> INTERESTING_STRUCTURES = Stream.of("1lqv",
-            "1mjc",
-            "1ten",
-            "2acy",
-            "3chy",
-            "1rc2",
-            "STF0021",
-            "STF0023",
-            "STF0042")
-            .collect(Collectors.toList());
     private static final double DEFAULT_COVERAGE = 0.3;
     private static final int REDUNDANCY = 10;
     private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/reconstruction.csv");
@@ -53,9 +43,7 @@ public class A03_ReconstructByVariousStrategy {
         executorService = Executors.newFixedThreadPool(8);
 
         DataSource.getInstance()
-                .chains()
-//                .filter(explorerChain -> INTERESTING_STRUCTURES.stream()
-//                        .noneMatch(id -> explorerChain.getStfId().startsWith(id)))
+                .start2FoldChains()
                 .forEach(A03_ReconstructByVariousStrategy::handleChain);
     }
 
@@ -74,7 +62,7 @@ public class A03_ReconstructByVariousStrategy {
 
             List<ReconstructionContactMap> contactMaps = Stream.of(ReconstructionStrategyDefinition.values())
                     //TODO remove: compute only missing values on the strategy of ignoring the worst 30%
-                    .filter(strategy -> strategy.getReconstructionStrategy().getName().equals("ignore lowest"))
+                    .filter(strategy -> !strategy.getReconstructionStrategy().getName().equals("ignore lowest"))
                     .map(ReconstructionStrategyDefinition::getReconstructionStrategy)
                     .filter(strategy -> strategy.getName().equals("all"))
                     .flatMap(reconstructionStrategy -> IntStream.range(0, REDUNDANCY)

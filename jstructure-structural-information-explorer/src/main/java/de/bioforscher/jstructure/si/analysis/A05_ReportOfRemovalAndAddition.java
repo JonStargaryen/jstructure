@@ -6,9 +6,11 @@ import org.apache.commons.math3.stat.StatUtils;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.DoubleStream;
 
-public class A08_ReportOfRemovalAndAddition {
+public class A05_ReportOfRemovalAndAddition {
     private static List<Double> removal;
     private static List<Double> addition;
 
@@ -17,7 +19,8 @@ public class A08_ReportOfRemovalAndAddition {
         addition = new ArrayList<>();
 
         Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
-                .forEach(A08_ReportOfRemovalAndAddition::handleLine);
+                .filter(line -> line.startsWith("STF"))
+                .forEach(A05_ReportOfRemovalAndAddition::handleLine);
 
         double[] r = removal.stream()
                 .mapToDouble(Double::valueOf)
@@ -33,6 +36,13 @@ public class A08_ReportOfRemovalAndAddition {
         System.out.println("addition");
         System.out.println(StatUtils.mean(a));
         System.out.println(Math.sqrt(StatUtils.variance(a)));
+
+        System.out.println(DoubleStream.concat(Arrays.stream(r), Arrays.stream(a))
+                .min()
+                .getAsDouble());
+        System.out.println(DoubleStream.concat(Arrays.stream(r), Arrays.stream(a))
+                .max()
+                .getAsDouble());
     }
 
     private static void handleLine(String line) {
