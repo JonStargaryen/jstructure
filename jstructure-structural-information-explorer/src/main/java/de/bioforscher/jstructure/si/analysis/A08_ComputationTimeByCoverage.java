@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.si.analysis;
 
+import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
@@ -25,31 +26,25 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-public class A04_CreateRmsdVsCoveragePlot {
-    private static final Logger logger = LoggerFactory.getLogger(A04_CreateRmsdVsCoveragePlot.class);
+public class A08_ComputationTimeByCoverage {
+    private static final Logger logger = LoggerFactory.getLogger(A08_ComputationTimeByCoverage.class);
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/reconstruction-perc.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/sb/computation-time.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
 
     private static FileWriter fileWriter;
     private static ExecutorService executorService;
 
     public static void main(String[] args) throws IOException {
-        boolean fileExisted = Files.exists(OUTPUT_PATH);
-        fileWriter = new FileWriter(OUTPUT_PATH.toFile(), true);
-        if(!fileExisted) {
-            fileWriter.write("id,coverage,rmsd" + System.lineSeparator());
-        }
-        executorService = Executors.newFixedThreadPool(8);
+        fileWriter = new FileWriter(OUTPUT_PATH.toFile());
+        fileWriter.write("id,strategy,rmsd,time" + System.lineSeparator());
+        executorService = Executors.newFixedThreadPool(16);
 
-        DataSource.getInstance()
+        ExplorerChain explorerChain = DataSource.getInstance()
                 .start2FoldChains()
-                .forEach(A04_CreateRmsdVsCoveragePlot::handleChain);
-    }
-
-    private static void handleChain(ExplorerChain explorerChain) {
-        logger.info("handling chain {}",
-                explorerChain.getStfId());
+                .filter(chain -> chain.getStfId().equals("STF0023"))
+                .findFirst()
+                .get();
 
         try {
             Chain nativeChain = explorerChain.getChain();
@@ -83,14 +78,9 @@ public class A04_CreateRmsdVsCoveragePlot {
                     reconstructionFutures.put(name, new ArrayList<>());
                 }
 
-                if(Files.lines(OUTPUT_PATH)
-                        .anyMatch(line -> line.startsWith(explorerChain.getStfId()) && line.split(",")[1].equals(name))) {
-                    continue;
-                }
-
                 List<Future<ReconstructionResult>> bin = reconstructionFutures.get(name);
 
-                bin.add(executorService.submit(new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
+                bin.add(executorService.submit(new ConfoldServiceWorker("/home/sb/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
                         contactMap.getCaspRRRepresentation())));
@@ -99,7 +89,7 @@ public class A04_CreateRmsdVsCoveragePlot {
             for (Map.Entry<String, List<Future<ReconstructionResult>>> reconstructionFuture : reconstructionFutures.entrySet()) {
                 try {
                     String name = reconstructionFuture.getKey();
-                    List<Chain> reconstructions = reconstructionFuture.getValue()
+                    List<ReconstructionResult> reconstructions = reconstructionFuture.getValue()
                             .stream()
                             .map(future -> {
                                 try {
@@ -108,10 +98,7 @@ public class A04_CreateRmsdVsCoveragePlot {
                                     throw new ComputationException(e);
                                 }
                             })
-                            .map(ReconstructionResult::getChains)
-                            .flatMap(Collection::stream)
                             .collect(Collectors.toList());
-                    List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
                     List<Path> tmpFiles = new ArrayList<>();
 
                     if (reconstructions.isEmpty()) {
@@ -119,27 +106,24 @@ public class A04_CreateRmsdVsCoveragePlot {
                         continue;
                     }
 
-                    for (Chain reconstructedChain : reconstructions) {
-                        Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
-                        tmpFiles.add(reconstructPath);
-                        Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
-                        alignmentResults.add(TM_ALIGN_SERVICE.process(new String[] {
-                                "/home/bittrich/programs/tmalign/tmalign",
-                                nativeChainPath.toFile().getAbsolutePath(),
-                                reconstructPath.toFile().getAbsolutePath()
-                        }));
-                    }
+                    for (ReconstructionResult reconstructionResult : reconstructions) {
+                        List<Chain> reconstructedChains = reconstructionResult.getChains();
+                        for(Chain reconstructedChain : reconstructedChains) {
+                            Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
+                            tmpFiles.add(reconstructPath);
+                            Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
+                            TMAlignAlignmentResult alignmentResult = TM_ALIGN_SERVICE.process(new String[] {
+                                    "/home/sb/programs/tmalign",
+                                    nativeChainPath.toFile().getAbsolutePath(),
+                                    reconstructPath.toFile().getAbsolutePath()
+                            });
 
-                    if (alignmentResults.isEmpty()) {
-                        throw new ComputationException("tmalign did not yield any alignments");
-                    }
-
-                    for(TMAlignAlignmentResult alignmentResult : alignmentResults) {
-                        double rmsd = alignmentResult.getRootMeanSquareDeviation().getScore();
-                        String line = explorerChain.getStfId() + "," + name + "," + rmsd;
-                        logger.info(line);
-                        fileWriter.write(line + System.lineSeparator());
-                        fileWriter.flush();
+                            double rmsd = alignmentResult.getRootMeanSquareDeviation().getScore();
+                            String line = explorerChain.getStfId() + "," + name + "," + rmsd + "," + StandardFormat.format(reconstructionResult.getTime() * 0.001 / 60);
+                            logger.info(line);
+                            fileWriter.write(line + System.lineSeparator());
+                            fileWriter.flush();
+                        }
                     }
 
                     // cleanup

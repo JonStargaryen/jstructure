@@ -9,6 +9,7 @@ import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.si.ConfoldServiceWorker;
 import de.bioforscher.jstructure.si.explorer.DataSource;
 import de.bioforscher.jstructure.si.explorer.ExplorerChain;
+import de.bioforscher.jstructure.si.model.ReconstructionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,7 +133,7 @@ public class A03C_MissingStrategyRunner {
                 return;
             }
 
-            Map<String, List<Future<List<Chain>>>> reconstructionFutures = new HashMap<>();
+            Map<String, List<Future<ReconstructionResult>>> reconstructionFutures = new HashMap<>();
             for (ReconstructionContactMap contactMap : contactMaps) {
                 String name = contactMap.getName().split("-")[0];
                 logger.info("handling contact map definition {}",
@@ -142,7 +143,7 @@ public class A03C_MissingStrategyRunner {
                     reconstructionFutures.put(name, new ArrayList<>());
                 }
 
-                List<Future<List<Chain>>> bin = reconstructionFutures.get(name);
+                List<Future<ReconstructionResult>> bin = reconstructionFutures.get(name);
 
                 bin.add(executorService.submit(new ConfoldServiceWorker("/home/sb/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
@@ -150,7 +151,7 @@ public class A03C_MissingStrategyRunner {
                         contactMap.getCaspRRRepresentation())));
             }
 
-            for (Map.Entry<String, List<Future<List<Chain>>>> reconstructionFuture : reconstructionFutures.entrySet()) {
+            for (Map.Entry<String, List<Future<ReconstructionResult>>> reconstructionFuture : reconstructionFutures.entrySet()) {
                 try {
                     String name = reconstructionFuture.getKey();
                     List<Chain> reconstructions = reconstructionFuture.getValue()
@@ -162,6 +163,7 @@ public class A03C_MissingStrategyRunner {
                                     throw new ComputationException(e);
                                 }
                             })
+                            .map(ReconstructionResult::getChains)
                             .flatMap(Collection::stream)
                             .collect(Collectors.toList());
                     List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();

@@ -85,7 +85,9 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         sampledReconstructions = new ConfoldServiceWorker(confoldPath,
                 sequence,
                 secondaryStructure,
-                sampledMap.getCaspRRRepresentation()).call();
+                sampledMap.getCaspRRRepresentation())
+                .call()
+                .getChains();
 
         // write reconstruction files
         Path reconstructionDirectory = outputPath.resolve(jobname);
