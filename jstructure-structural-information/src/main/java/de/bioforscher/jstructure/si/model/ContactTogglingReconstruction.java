@@ -59,7 +59,8 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
                 baselineReconstruction.getSequence(),
                 baselineReconstruction.getSecondaryStructure(),
                 alternateMap.getCaspRRRepresentation())
-                .call();
+                .call()
+                .getChains();
 
         // score baseline models
         computePerformance(toggledReconstructions);

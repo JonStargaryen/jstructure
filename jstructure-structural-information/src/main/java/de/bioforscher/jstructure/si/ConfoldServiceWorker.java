@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.si;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
 import de.bioforscher.jstructure.model.structure.StructureParser;
+import de.bioforscher.jstructure.si.model.ReconstructionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-public class ConfoldServiceWorker implements Callable<List<Chain>> {
+public class ConfoldServiceWorker implements Callable<ReconstructionResult> {
     private static final Logger logger = LoggerFactory.getLogger(ConfoldServiceWorker.class);
     private final String serviceLocation;
     private final String sequence;
@@ -35,7 +36,8 @@ public class ConfoldServiceWorker implements Callable<List<Chain>> {
     }
 
     @Override
-    public List<Chain> call() {
+    public ReconstructionResult call() {
+        long start = System.currentTimeMillis();
         Path sequencePath = null;
         Path mapPath = null;
         Path secondaryStructurePath = null;
@@ -74,12 +76,15 @@ public class ConfoldServiceWorker implements Callable<List<Chain>> {
 
             process.waitFor();
 
-            return Files.list(outputDirectory.resolve("stage1"))
+            List<Chain> chains = Files.list(outputDirectory.resolve("stage1"))
                     .filter(path -> path.toFile().getName().endsWith(".pdb"))
                     .filter(path -> path.toFile().getName().contains("_model"))
                     .map(path -> StructureParser.fromPath(path).parse())
                     .map(Structure::getFirstChain)
                     .collect(Collectors.toList());
+
+            long time = System.currentTimeMillis() - start;
+            return new ReconstructionResult(chains, time);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
