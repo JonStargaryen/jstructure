@@ -5,6 +5,7 @@ import de.bioforscher.jstructure.model.structure.*;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,6 +53,10 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
 
     public static boolean isSideChainAtom(Atom atom) {
         return !isBackboneAtom(atom);
+    }
+
+    public interface Filter extends Predicate<AminoAcid> {
+        Filter AROMATIC = aminoAcid -> Family.resolveThreeLetterCode(aminoAcid.getThreeLetterCode()).isAromatic();
     }
 
     public enum Family implements GroupFamily {
@@ -313,6 +318,10 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         @Override
         public String getThreeLetterCode() {
             return groupPrototype.getThreeLetterCode();
+        }
+
+        public boolean isAromatic() {
+            return this.equals(PHENYLALANINE) || this.equals(TYROSINE) || this.equals(TRYPTOPHAN);
         }
     }
 

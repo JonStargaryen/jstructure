@@ -44,6 +44,8 @@ public class A04_CreateRmsdVsCoveragePlot {
 
         DataSource.getInstance()
                 .start2FoldChains()
+                // skip failing computation STF0006
+                .filter(explorerChain -> !explorerChain.getStfId().equals("STF0006") && !explorerChain.getStfId().equals("STF0044"))
                 .forEach(A04_CreateRmsdVsCoveragePlot::handleChain);
     }
 

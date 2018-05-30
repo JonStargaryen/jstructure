@@ -54,7 +54,7 @@ public class A07_WriteStructuralInformationByContactCsv {
                                 "avgRmsdZ,numberOfTopScoringContacts," +
                                 "plm,betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +
                                 "hydrogen,hydrophobic," +
-                                "efr1,efr2,func1,func2,strong1,strong2,buried1,buried2,ordered1,ordered2,sane" + System.lineSeparator(),
+                                "efr1,efr2,func1,func2,strong1,strong2,buried1,buried2,ordered1,ordered2,efrsse1,efrsse2,arom1,arom2,sane" + System.lineSeparator(),
                         ""));
 
         Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-si-contacts.csv"),
@@ -110,6 +110,20 @@ public class A07_WriteStructuralInformationByContactCsv {
 
             List<AminoAcid> buriedResidues = chain.aminoAcids()
                     .filter(aminoAcid -> aminoAcid.getFeature(AccessibleSurfaceArea.class).isBuried())
+                    .collect(Collectors.toList());
+
+            List<AminoAcid> residuesInEarlyFoldingSecondaryStructureElements = chain.aminoAcids()
+                    .filter(aminoAcid -> !aminoAcid.getFeature(GenericSecondaryStructure.class).getSecondaryStructure().isCoilType())
+                    .filter(aminoAcid -> {
+                        GenericSecondaryStructure.SecondaryStructureElement surroundingSecondaryStructureElement = aminoAcid.getFeature(GenericSecondaryStructure.class).getSurroundingSecondaryStructureElement(aminoAcid);
+                        List<AminoAcid> surroundingAminoAcids = chain.getAminoAcids().subList(surroundingSecondaryStructureElement.getStart(), surroundingSecondaryStructureElement.getEnd() + 1);
+                        return surroundingAminoAcids.stream()
+                                .anyMatch(earlyFoldingResidues::contains);
+                    })
+                    .collect(Collectors.toList());
+
+            List<AminoAcid> aromaticResidues = chain.aminoAcids()
+                    .filter(AminoAcid.Filter.AROMATIC)
                     .collect(Collectors.toList());
 
             List<ContactStructuralInformation> contactStructuralInformation = StructuralInformationParserService.getInstance()
@@ -186,6 +200,10 @@ public class A07_WriteStructuralInformationByContactCsv {
                                 contactIsInCollection(buriedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 residueIsInCollection(orderedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 contactIsInCollection(orderedResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                residueIsInCollection(residuesInEarlyFoldingSecondaryStructureElements, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                contactIsInCollection(residuesInEarlyFoldingSecondaryStructureElements, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                residueIsInCollection(aromaticResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
+                                contactIsInCollection(aromaticResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 sane;
                     })
                     .collect(Collectors.joining(System.lineSeparator())));
