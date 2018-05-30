@@ -64,7 +64,7 @@ public class ReconstructionContactMap extends ResidueGraph {
         return contacts.stream()
                 .map(edge -> (edge.getLeft().getAminoAcidIndex() + 1) + " " +
                         //TODO changeable contact definition
-                        (edge.getRight().getAminoAcidIndex() + 1) + " 0 8.0 1")
+                        (edge.getRight().getAminoAcidIndex() + 1) + " 0 9.0 1")
                 .collect(Collectors.joining(System.lineSeparator(),
                         sequence + System.lineSeparator(),
                         ""));

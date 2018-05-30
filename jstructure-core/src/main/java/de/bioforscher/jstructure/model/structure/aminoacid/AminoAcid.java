@@ -330,6 +330,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     private Atom c;
     private Atom o;
     private Atom h;
+    private Atom cb;
 
     /**
      * Determine the index of this amino acid in a collection of all amino acids.
@@ -395,6 +396,15 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     public Atom getH() {
         return h;
     }
+
+    //TODO beta carbon is so often used that maybe there should be a dedicated function for its retrieval
+//    public Atom getCb() {
+//        return cb;
+//    }
+//
+//    public Optional<Atom> getCbOptional() {
+//        return Optional.of(cb);
+//    }
 
     public String getOneLetterCode() {
         return getGroupPrototype().getOneLetterCode().orElse("?");
