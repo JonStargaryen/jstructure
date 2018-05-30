@@ -10,50 +10,50 @@ import java.util.function.BiPredicate;
 
 public enum InteractionScheme {
     //TODO changeable contact definition
-    CALPHA10((aminoAcid1, aminoAcid2) -> {
-        try {
-            return aminoAcid1.getCa().calculate()
-                    .distanceFast(aminoAcid2.getCa()) < 100;
-        } catch (NullPointerException | SelectionException e) {
-            return aminoAcid1.calculate().centroid()
-                    .distanceFast(aminoAcid2.calculate().centroid()) < 100;
-        }
-    }),
-    CBETA9((aminoAcid1, aminoAcid2) -> {
-        try {
-            return aminoAcid1.select()
-                    .betaCarbonAtoms()
-                    .asAtom().calculate()
-                    .distanceFast(aminoAcid2.select()
-                            .betaCarbonAtoms()
-                            .asAtom()) < 9 * 9;
-        } catch (NullPointerException | SelectionException e) {
-            return aminoAcid1.calculate().centroid()
-                    .distanceFast(aminoAcid2.calculate().centroid()) < 9 * 9;
-        }
-    }),
-    CALPHA8((aminoAcid1, aminoAcid2) -> {
-        try {
-            return aminoAcid1.select()
-                    .betaCarbonAtoms()
-                    .asAtom().calculate()
-                    .distanceFast(aminoAcid2.select()
-                            .betaCarbonAtoms()
-                            .asAtom()) < 9 * 9;
-        } catch (NullPointerException | SelectionException e) {
-            return aminoAcid1.calculate().centroid()
-                    .distanceFast(aminoAcid2.calculate().centroid()) < 9 * 9;
-        }
-    }),
-//    CALPHA8((aminoAcid1, aminoAcid2) -> {
+//    CALPHA10((aminoAcid1, aminoAcid2) -> {
 //        try {
 //            return aminoAcid1.getCa().calculate()
-//                    .distanceFast(aminoAcid2.getCa()) < 8 * 8;
+//                    .distanceFast(aminoAcid2.getCa()) < 100;
 //        } catch (NullPointerException | SelectionException e) {
 //            return aminoAcid1.calculate().centroid()
-//                    .distanceFast(aminoAcid2.calculate().centroid()) < 8 * 8;
+//                    .distanceFast(aminoAcid2.calculate().centroid()) < 100;
 //        }
 //    }),
+//    CBETA9((aminoAcid1, aminoAcid2) -> {
+//        try {
+//            return aminoAcid1.select()
+//                    .betaCarbonAtoms()
+//                    .asAtom().calculate()
+//                    .distanceFast(aminoAcid2.select()
+//                            .betaCarbonAtoms()
+//                            .asAtom()) < 9 * 9;
+//        } catch (NullPointerException | SelectionException e) {
+//            return aminoAcid1.calculate().centroid()
+//                    .distanceFast(aminoAcid2.calculate().centroid()) < 9 * 9;
+//        }
+//    }),
+//    CALPHA8((aminoAcid1, aminoAcid2) -> {
+//        try {
+//            return aminoAcid1.select()
+//                    .betaCarbonAtoms()
+//                    .asAtom().calculate()
+//                    .distanceFast(aminoAcid2.select()
+//                            .betaCarbonAtoms()
+//                            .asAtom()) < 9 * 9;
+//        } catch (NullPointerException | SelectionException e) {
+//            return aminoAcid1.calculate().centroid()
+//                    .distanceFast(aminoAcid2.calculate().centroid()) < 9 * 9;
+//        }
+//    }),
+    CALPHA8((aminoAcid1, aminoAcid2) -> {
+        try {
+            return aminoAcid1.getCa().calculate()
+                    .distanceFast(aminoAcid2.getCa()) < 8 * 8;
+        } catch (NullPointerException | SelectionException e) {
+            return aminoAcid1.calculate().centroid()
+                    .distanceFast(aminoAcid2.calculate().centroid()) < 8 * 8;
+        }
+    }),
     SALENTIN2015((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)
             .areInContact(aminoAcid1, aminoAcid2)),
     SALENTIN2015_HYDROGEN_BONDS(((aminoAcid1, aminoAcid2) -> aminoAcid1.getParentChain().getFeature(PLIPInteractionContainer.class)

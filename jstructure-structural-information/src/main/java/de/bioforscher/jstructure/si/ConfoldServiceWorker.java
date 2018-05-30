@@ -56,7 +56,7 @@ public class ConfoldServiceWorker implements Callable<ReconstructionResult> {
                     serviceLocation,
                     "-rrtype",
                     //TODO changeable contact definition
-                    "cb",
+                    "ca",
                     "-seq",
                     sequencePath.toFile().getAbsolutePath(),
                     "-rr",
