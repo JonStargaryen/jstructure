@@ -55,7 +55,8 @@ public class ConfoldServiceWorker implements Callable<ReconstructionResult> {
             String[] arguments = new String[] {
                     serviceLocation,
                     "-rrtype",
-                    "ca",
+                    //TODO changeable contact definition
+                    "cb",
                     "-seq",
                     sequencePath.toFile().getAbsolutePath(),
                     "-rr",
