@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.si.analysis;
 
+import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
@@ -148,7 +149,8 @@ public class A03C_MissingStrategyRunner {
                 bin.add(executorService.submit(new ConfoldServiceWorker("/home/sb/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
-                        contactMap.getCaspRRRepresentation())));
+                        contactMap.getCaspRRRepresentation(),
+                        contactMap.getConfoldRRType())));
             }
 
             for (Map.Entry<String, List<Future<ReconstructionResult>>> reconstructionFuture : reconstructionFutures.entrySet()) {
@@ -200,7 +202,7 @@ public class A03C_MissingStrategyRunner {
                     for (Path tmpFile : tmpFiles) {
                         Files.delete(tmpFile);
                     }
-                } catch (IOException e) {
+                } catch (IOException | AlignmentException e) {
                     throw new ComputationException(e);
                 }
             }

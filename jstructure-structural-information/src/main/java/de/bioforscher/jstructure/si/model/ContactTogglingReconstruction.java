@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.si.model;
 
 import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.align.result.score.RootMeanSquareDeviation;
@@ -58,7 +59,8 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
         List<Chain> toggledReconstructions = new ConfoldServiceWorker(baselineReconstruction.getConfoldPath(),
                 baselineReconstruction.getSequence(),
                 baselineReconstruction.getSecondaryStructure(),
-                alternateMap.getCaspRRRepresentation())
+                alternateMap.getCaspRRRepresentation(),
+                baselineReconstruction.getFullMap().getConfoldRRType())
                 .call()
                 .getChains();
 
@@ -68,7 +70,7 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
         return this;
     }
 
-    private void computePerformance(List<Chain> reconstructions) throws IOException {
+    private void computePerformance(List<Chain> reconstructions) throws AlignmentException, IOException {
         List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
         List<ReconstructionContactMap> reconstructionContactMaps = new ArrayList<>();
         List<Path> tmpFiles = new ArrayList<>();
@@ -82,7 +84,7 @@ public class ContactTogglingReconstruction implements Callable<ContactTogglingRe
                     baselineReconstruction.getReferenceChainPath().toFile().getAbsolutePath(),
                     reconstructPath.toFile().getAbsolutePath()
             }));
-            reconstructionContactMaps.add(ReconstructionContactMap.createReconstructionContactMap(reconstructedChain));
+            reconstructionContactMaps.add(ReconstructionContactMap.createReconstructionContactMap(reconstructedChain, baselineReconstruction.getFullMap().getContactDefinition()));
         }
 
         averageRmsd = alignmentResults.stream()

@@ -14,10 +14,10 @@ import de.bioforscher.jstructure.feature.asa.AccessibleSurfaceArea;
 import de.bioforscher.jstructure.feature.interaction.PLIPInteraction;
 import de.bioforscher.jstructure.feature.interaction.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.graph.InteractionScheme;
 import de.bioforscher.jstructure.graph.ResidueGraph;
 import de.bioforscher.jstructure.graph.ResidueGraphCalculations;
 import de.bioforscher.jstructure.graph.ResidueTopologicPropertiesContainer;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
@@ -130,7 +130,7 @@ public class A07_WriteStructuralInformationByContactCsv {
                     .parseContactStructuralInformation(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("raw").resolve(entryId.toUpperCase() + ".out"),
                             chain,
                             earlyFoldingResidues);
-            ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, InteractionScheme.CALPHA8);
+            ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
             ResidueGraphCalculations residueGraphCalculations = new ResidueGraphCalculations(conventionalProteinGraph);
 
             EvolutionaryCouplingParser.parsePlmScore(contactStructuralInformation,

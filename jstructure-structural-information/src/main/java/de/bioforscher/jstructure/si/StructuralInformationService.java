@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.si;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -57,7 +58,8 @@ public class StructuralInformationService {
             ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
             List<AminoAcid> aminoAcids = referenceChain.aminoAcids().collect(Collectors.toList());
             int numberOfAminoAcids = aminoAcids.size();
-            ReconstructionContactMap fullMap = ReconstructionContactMap.createReconstructionContactMap(referenceChain);
+            ReconstructionContactMap fullMap = ReconstructionContactMap.createReconstructionContactMap(referenceChain,
+                    ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
             List<Pair<AminoAcid, AminoAcid>> contacts = fullMap.getLongRangeContacts();
             int numberOfLongRangeContacts = contacts.size();
 

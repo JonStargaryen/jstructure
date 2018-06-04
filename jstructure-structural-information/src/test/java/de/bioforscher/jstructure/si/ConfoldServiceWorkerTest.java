@@ -26,7 +26,8 @@ public class ConfoldServiceWorkerTest {
         new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
                 sequence,
                 ss,
-                rr)
+                rr,
+                "ca")
                 .call();
     }
 }

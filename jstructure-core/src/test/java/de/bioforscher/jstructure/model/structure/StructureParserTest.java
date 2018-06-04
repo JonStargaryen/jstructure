@@ -228,7 +228,7 @@ public class StructureParserTest {
         List<String> writtenLines = Pattern.compile("\n")
                 .splitAsStream(protein.getPdbRepresentation())
                 .collect(Collectors.toList());
-        List<String> expectedLines = TestUtils.getResourceAsLines("parser/parsed/" + pdbId + ".pdb");
+        List<String> expectedLines = TestUtils.getResourceAsLines("parser/parsed/" + pdbId.toLowerCase() + ".pdb");
 
         Assert.assertEquals("number of lines do not match", expectedLines.size(), writtenLines.size());
 

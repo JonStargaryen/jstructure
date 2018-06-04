@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.graph;
 
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinition;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -17,9 +18,9 @@ public class ReconstructionContactMap extends ResidueGraph {
     private final String secondaryStructureElements;
     private String name;
 
-    public static ReconstructionContactMap createReconstructionContactMap(Chain chain) {
+    public static ReconstructionContactMap createReconstructionContactMap(Chain chain, ContactDefinition contactDefinition) {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-        return new ReconstructionContactMap(aminoAcids, createContactList(aminoAcids, InteractionScheme.CALPHA8));
+        return new ReconstructionContactMap(aminoAcids, createContactList(aminoAcids, contactDefinition), contactDefinition);
     }
 
     public String getName() {
@@ -30,8 +31,8 @@ public class ReconstructionContactMap extends ResidueGraph {
         this.name = name;
     }
 
-    public ReconstructionContactMap(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts) {
-        super(aminoAcids, filterForLongRangeContacts(contacts));
+    public ReconstructionContactMap(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts, ContactDefinition contactDefinition) {
+        super(aminoAcids, filterForLongRangeContacts(contacts), contactDefinition);
         this.sequence = aminoAcids.stream()
                 .map(AminoAcid::getOneLetterCode)
                 .collect(Collectors.joining());
@@ -62,9 +63,7 @@ public class ReconstructionContactMap extends ResidueGraph {
         // 24 33 0 8 12.279515
         // i and j: residue numbers
         return contacts.stream()
-                .map(edge -> (edge.getLeft().getAminoAcidIndex() + 1) + " " +
-                        //TODO changeable contact definition
-                        (edge.getRight().getAminoAcidIndex() + 1) + " 0 8.0 1")
+                .map(edge -> contactDefinition.composeCaspRRLine(edge.getLeft(), edge.getRight()))
                 .collect(Collectors.joining(System.lineSeparator(),
                         sequence + System.lineSeparator(),
                         ""));

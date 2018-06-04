@@ -1,8 +1,10 @@
 package de.bioforscher.jstructure.si.analysis;
 
+import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -58,7 +60,8 @@ public class A04_CreateRmsdVsCoveragePlot {
             Path nativeChainPath = Files.createTempFile("nativechain-", ".pdb");
             Files.write(nativeChainPath, nativeChain.getPdbRepresentation().getBytes());
 
-            ReconstructionContactMap nativeContactMap = ReconstructionContactMap.createReconstructionContactMap(nativeChain);
+            ReconstructionContactMap nativeContactMap = ReconstructionContactMap.createReconstructionContactMap(nativeChain,
+                    ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
             List<AminoAcid> aminoAcids = nativeChain.getAminoAcids();
             List<Pair<AminoAcid, AminoAcid>> contacts = nativeContactMap.getLongRangeContacts();
             int numberNativeLongRangeContacts = contacts.size();
@@ -69,7 +72,7 @@ public class A04_CreateRmsdVsCoveragePlot {
                 for(int run = 0; run < REDUNDANCY; run++) {
                     Collections.shuffle(contacts);
                     List<Pair<AminoAcid, AminoAcid>> selectedContacts = contacts.subList(0, numberOfContactsToSelect);
-                    ReconstructionContactMap contactMap = new ReconstructionContactMap(aminoAcids, selectedContacts);
+                    ReconstructionContactMap contactMap = new ReconstructionContactMap(aminoAcids, selectedContacts, nativeContactMap.getContactDefinition());
                     contactMap.setName("p" + coverage + "-" + (run + 1));
                     reconstructionContactMaps.add(contactMap);
                 }
@@ -95,7 +98,8 @@ public class A04_CreateRmsdVsCoveragePlot {
                 bin.add(executorService.submit(new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
-                        contactMap.getCaspRRRepresentation())));
+                        contactMap.getCaspRRRepresentation(),
+                        nativeContactMap.getConfoldRRType())));
             }
 
             for (Map.Entry<String, List<Future<ReconstructionResult>>> reconstructionFuture : reconstructionFutures.entrySet()) {
@@ -152,7 +156,7 @@ public class A04_CreateRmsdVsCoveragePlot {
                     throw new ComputationException(e);
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | AlignmentException e) {
             throw new ComputationException(e);
         }
     }

@@ -24,15 +24,18 @@ public class ConfoldServiceWorker implements Callable<ReconstructionResult> {
     private final String sequence;
     private final String secondaryStructure;
     private final String contacts;
+    private final String confoldRRType;
 
     public ConfoldServiceWorker(String serviceLocation,
                                 String sequence,
                                 String secondaryStructure,
-                                String contacts) {
+                                String contacts,
+                                String confoldRRType) {
         this.serviceLocation = serviceLocation;
         this.sequence = sequence;
         this.secondaryStructure = secondaryStructure;
         this.contacts = contacts;
+        this.confoldRRType = confoldRRType;
     }
 
     @Override
@@ -55,8 +58,7 @@ public class ConfoldServiceWorker implements Callable<ReconstructionResult> {
             String[] arguments = new String[] {
                     serviceLocation,
                     "-rrtype",
-                    //TODO changeable contact definition
-                    "ca",
+                    confoldRRType,
                     "-seq",
                     sequencePath.toFile().getAbsolutePath(),
                     "-rr",

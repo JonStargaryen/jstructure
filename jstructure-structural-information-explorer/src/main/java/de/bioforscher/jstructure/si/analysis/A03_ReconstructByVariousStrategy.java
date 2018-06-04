@@ -1,9 +1,12 @@
 package de.bioforscher.jstructure.si.analysis;
 
+import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinition;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -34,6 +37,7 @@ public class A03_ReconstructByVariousStrategy {
     private static final int REDUNDANCY = 10;
     private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/reconstruction.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
+    private static final ContactDefinition contactDefinition = ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0);
 
     private static FileWriter fileWriter;
     private static ExecutorService executorService;
@@ -93,7 +97,8 @@ public class A03_ReconstructByVariousStrategy {
                 bin.add(executorService.submit(new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
-                        contactMap.getCaspRRRepresentation())));
+                        contactMap.getCaspRRRepresentation(),
+                        contactMap.getConfoldRRType())));
             }
 
             for (Map.Entry<String, List<Future<ReconstructionResult>>> reconstructionFuture : reconstructionFutures.entrySet()) {
@@ -149,7 +154,7 @@ public class A03_ReconstructByVariousStrategy {
                     throw new ComputationException(e);
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | AlignmentException e) {
             throw new ComputationException(e);
         }
     }
@@ -171,7 +176,8 @@ public class A03_ReconstructByVariousStrategy {
                                     chain.select()
                                             .residueNumber(contact.getRight())
                                             .asAminoAcid()))
-                            .collect(Collectors.toList()));
+                            .collect(Collectors.toList()),
+                    contactDefinition);
         }
 
         String getName();
