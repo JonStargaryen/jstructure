@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
     public static final String THREE_LETTER_CODE = "SEC";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-    private Atom cb;
+//    private Atom cb;
     private Atom se;
 
     Selenocysteine(Selenocysteine selenocysteine, boolean deep) {
@@ -26,9 +26,9 @@ public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-    public Atom getCb() {
-        return cb;
-    }
+//    public Atom getCb() {
+//        return cb;
+//    }
 
     public Atom getSe() {
         return se;
@@ -36,9 +36,9 @@ public class Selenocysteine extends AminoAcid implements NonStandardAminoAcid {
 
     @Override
     protected void addSideChainAtom(Atom atom) {
-        if(atom.getName().equals("CB") && cb == null) {
-            cb = atom;
-        }
+//        if(atom.getName().equals("CB") && cb == null) {
+//            cb = atom;
+//        }
         if(atom.getName().equals("SE") && se == null) {
             se = atom;
         }

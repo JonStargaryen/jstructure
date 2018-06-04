@@ -11,7 +11,6 @@ public abstract class AbstractFeatureable implements Featureable {
 
     protected AbstractFeatureable() {
         this.featureContainer = new FeatureContainer();
-//        featureContainer.addFeature(new FeatureContainerRoot.GlobalFeatureContainer());
     }
 
     @Override

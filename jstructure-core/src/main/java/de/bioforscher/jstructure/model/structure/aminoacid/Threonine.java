@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Threonine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "THR";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-    private Atom cb;
+//    private Atom cb;
     private Atom og1;
     private Atom cg2;
 
@@ -27,9 +27,9 @@ public class Threonine extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-    public Atom getCb() {
-        return cb;
-    }
+//    public Atom getCb() {
+//        return cb;
+//    }
 
     public Atom getOg1() {
         return og1;
@@ -41,9 +41,9 @@ public class Threonine extends AminoAcid implements StandardAminoAcid {
 
     @Override
     protected void addSideChainAtom(Atom atom) {
-        if(atom.getName().equals("CB") && cb == null) {
-            cb = atom;
-        }
+//        if(atom.getName().equals("CB") && cb == null) {
+//            cb = atom;
+//        }
         if(atom.getName().equals("OG1") && og1 == null) {
             og1 = atom;
         }

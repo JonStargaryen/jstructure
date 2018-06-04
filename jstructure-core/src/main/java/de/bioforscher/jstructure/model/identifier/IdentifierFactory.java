@@ -146,7 +146,6 @@ public class IdentifierFactory {
             return createResidueIdentifier(Integer.valueOf(residueNumberString));
         } catch (NumberFormatException e) {
             // has insertion code
-            //TODO could use check for valid residue number pattern
             int splitPoint = residueNumberString.length() - 1;
             return createResidueIdentifier(Integer.valueOf(residueNumberString.substring(0, splitPoint)),
                     residueNumberString.substring(splitPoint));

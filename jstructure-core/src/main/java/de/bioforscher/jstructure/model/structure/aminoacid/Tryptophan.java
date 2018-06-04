@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Tryptophan extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "TRP";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-    private Atom cb;
+//    private Atom cb;
     private Atom cg;
     private Atom cd1;
     private Atom cd2;
@@ -34,9 +34,9 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-    public Atom getCb() {
-        return cb;
-    }
+//    public Atom getCb() {
+//        return cb;
+//    }
 
     public Atom getCg() {
         return cg;
@@ -76,9 +76,9 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
 
     @Override
     protected void addSideChainAtom(Atom atom) {
-        if(atom.getName().equals("CB") && cb == null) {
-            cb = atom;
-        }
+//        if(atom.getName().equals("CB") && cb == null) {
+//            cb = atom;
+//        }
         if(atom.getName().equals("CG") && cg == null) {
             cg = atom;
         }

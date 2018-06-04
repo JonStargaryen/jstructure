@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.*;
+import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 
 import java.util.Optional;
 import java.util.Set;
@@ -26,7 +27,8 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     public static final Set<String> BACKBONE_ATOM_NAMES = Stream.of(ALPHA_CARBON_NAME,
             BACKBONE_CARBON_NAME,
             BACKBONE_NITROGEN_NAME,
-            BACKBONE_OXYGEN_NAME).collect(Collectors.toSet());
+            BACKBONE_OXYGEN_NAME,
+            BACKBONE_HYDROGEN_NAME).collect(Collectors.toSet());
     /**
      * Handle to the list of names representing side getChain atoms of (any of) the standard amino acid. The intersection
      * of this 'set' and that of backbone atoms is empty.
@@ -43,12 +45,13 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
      * @return <code>true</code> iff this atom's name refers to that of a backbone atom
      */
     public static boolean isBackboneAtom(Atom atom) {
-        String atomName = atom.getName();
-        return ALPHA_CARBON_NAME.equals(atomName) ||
-                BACKBONE_CARBON_NAME.equals(atomName) ||
-                BACKBONE_NITROGEN_NAME.equals(atomName) ||
-                BACKBONE_OXYGEN_NAME.equals(atomName) ||
-                BACKBONE_HYDROGEN_NAME.equals(atomName);
+//        String atomName = atom.getName();
+//        return ALPHA_CARBON_NAME.equals(atomName) ||
+//                BACKBONE_CARBON_NAME.equals(atomName) ||
+//                BACKBONE_NITROGEN_NAME.equals(atomName) ||
+//                BACKBONE_OXYGEN_NAME.equals(atomName) ||
+//                BACKBONE_HYDROGEN_NAME.equals(atomName);
+        return BACKBONE_ATOM_NAMES.contains(atom.getName());
     }
 
     public static boolean isSideChainAtom(Atom atom) {
@@ -377,34 +380,57 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         this(groupPrototype, residueIdentifier, false);
     }
 
+    public Optional<Atom> getNOptional() {
+        return Optional.of(n);
+    }
+
     public Atom getN() {
-        return n;
+        return getNOptional().orElseThrow(() -> createNoAtomException("N"));
+    }
+
+    public Optional<Atom> getCaOptional() {
+        return Optional.of(ca);
     }
 
     public Atom getCa() {
-        return ca;
+        return getCaOptional().orElseThrow(() -> createNoAtomException("CA"));
+    }
+
+    public Optional<Atom> getCOptional() {
+        return Optional.of(c);
     }
 
     public Atom getC() {
-        return c;
+        return getCOptional().orElseThrow(() -> createNoAtomException("C"));
+    }
+
+    public Optional<Atom> getOOptional() {
+        return Optional.of(o);
     }
 
     public Atom getO() {
-        return o;
+        return getOOptional().orElseThrow(() -> createNoAtomException("O"));
+    }
+
+    public Optional<Atom> getHOptional() {
+        return Optional.of(h);
     }
 
     public Atom getH() {
-        return h;
+        return getHOptional().orElseThrow(() -> createNoAtomException("H"));
     }
 
-    //TODO beta carbon is so often used that maybe there should be a dedicated function for its retrieval
-//    public Atom getCb() {
-//        return cb;
-//    }
-//
-//    public Optional<Atom> getCbOptional() {
-//        return Optional.of(cb);
-//    }
+    public Optional<Atom> getCbOptional() {
+        return Optional.of(cb);
+    }
+
+    public Atom getCb() {
+        return getCbOptional().orElseThrow(() -> createNoAtomException("CB"));
+    }
+
+    protected SelectionException createNoAtomException(String atomName) {
+        return new SelectionException(this + " contains no " + atomName);
+    }
 
     public String getOneLetterCode() {
         return getGroupPrototype().getOneLetterCode().orElse("?");
@@ -426,6 +452,9 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         }
         if(atom.getName().equals("H") && h == null) {
             h = atom;
+        }
+        if(atom.getName().equals("CB") && cb == null) {
+            cb = atom;
         }
         addSideChainAtom(atom);
     }

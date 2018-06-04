@@ -22,7 +22,7 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
     private Atom ce;
     private Atom cd;
     private Atom cg;
-    private Atom cb;
+//    private Atom cb;
 
     Pyrrolysine(Pyrrolysine pyrrolysine, boolean deep) {
         super(pyrrolysine, deep);
@@ -84,9 +84,9 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
         return cg;
     }
 
-    public Atom getCb() {
-        return cb;
-    }
+//    public Atom getCb() {
+//        return cb;
+//    }
 
     @Override
     protected void addSideChainAtom(Atom atom) {
@@ -126,9 +126,9 @@ public class Pyrrolysine extends AminoAcid implements NonStandardAminoAcid {
         if(atom.getName().equals("CG") && cg == null) {
             cg = atom;
         }
-        if(atom.getName().equals("CB") && cb == null) {
-            cb = atom;
-        }
+//        if(atom.getName().equals("CB") && cb == null) {
+//            cb = atom;
+//        }
     }
 
     @Override
