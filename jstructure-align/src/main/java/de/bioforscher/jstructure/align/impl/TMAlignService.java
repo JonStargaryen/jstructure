@@ -1,5 +1,6 @@
 package de.bioforscher.jstructure.align.impl;
 
+import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.query.StructureAlignmentQuery;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.align.result.score.RootMeanSquareDeviation;
@@ -32,12 +33,12 @@ public class TMAlignService extends ExternalLocalService {
     }
 
     // added synchronized to address tmalign dying randomly reporting too many open files
-    public synchronized TMAlignAlignmentResult process(String[] arguments) throws ComputationException {
+    public synchronized TMAlignAlignmentResult process(String[] arguments) throws AlignmentException {
         return process(arguments, 1);
     }
 
     private synchronized TMAlignAlignmentResult process(String[] arguments,
-                                           int run) {
+                                           int run) throws AlignmentException {
         try {
             logger.debug("spawning tmalign process with arguments:{}{}",
                     System.lineSeparator(),
@@ -109,14 +110,14 @@ public class TMAlignService extends ExternalLocalService {
                         System.lineSeparator(),
                         Arrays.toString(arguments),
                         e);
-                throw new ComputationException("could not run tmalign",
+                throw new AlignmentException("could not run tmalign",
                         e);
             }
             return process(arguments, run + 1);
         }
     }
 
-    public TMAlignAlignmentResult process(StructureAlignmentQuery structureAlignmentQuery) {
+    public TMAlignAlignmentResult process(StructureAlignmentQuery structureAlignmentQuery) throws AlignmentException {
         try {
             Path referencePath = writeStructureToTemporaryFile(structureAlignmentQuery.getReference());
             Path queryPath = writeStructureToTemporaryFile(structureAlignmentQuery.getQuery());
@@ -134,7 +135,7 @@ public class TMAlignService extends ExternalLocalService {
 
             return result;
         } catch (IOException e) {
-            throw new ComputationException("could not run tmalign",
+            throw new AlignmentException("could not run tmalign",
                     e);
         }
     }

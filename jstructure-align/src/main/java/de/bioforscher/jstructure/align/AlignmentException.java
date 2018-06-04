@@ -4,7 +4,7 @@ package de.bioforscher.jstructure.align;
  * Occurs for failed alignments, e.g. when no matching atom pairs could be determined.
  * Created by bittrich on 6/19/17.
  */
-public class AlignmentException extends RuntimeException {
+public class AlignmentException extends Exception {
     public AlignmentException() {
     }
 
