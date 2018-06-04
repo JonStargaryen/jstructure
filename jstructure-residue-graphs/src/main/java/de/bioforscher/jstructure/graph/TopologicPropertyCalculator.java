@@ -15,14 +15,10 @@ public class TopologicPropertyCalculator extends FeatureProvider {
     }
 
     private void processInternally(Chain chain) {
-        ResidueGraph fullPlipGraph = ResidueGraph.createResidueGraph(chain,
-                InteractionScheme.SALENTIN2015);
-        ResidueGraph hydrogenPlipGraph = ResidueGraph.createResidueGraph(chain,
-                InteractionScheme.SALENTIN2015_HYDROGEN_BONDS);
-        ResidueGraph hydrophobicPlipGraph = ResidueGraph.createResidueGraph(chain,
-                InteractionScheme.SALENTIN2015_HYDROPHOBIC_INTERACTION);
-        ResidueGraph conventionalGraph = ResidueGraph.createResidueGraph(chain,
-                InteractionScheme.CALPHA8);
+        ResidueGraph fullPlipGraph = ResidueGraph.createPlipResidueGraph(chain);
+        ResidueGraph hydrogenPlipGraph = ResidueGraph.createHydrogenBondPlipResidueGraph(chain);
+        ResidueGraph hydrophobicPlipGraph = ResidueGraph.createHydrophobicInteractionResidueGraph(chain);
+        ResidueGraph conventionalGraph = ResidueGraph.createDistanceResidueGraph(chain);
 
         ResidueGraphCalculations fullPlipCalculations = new ResidueGraphCalculations(fullPlipGraph);
         ResidueGraphCalculations hydrogenPlipCalculations = new ResidueGraphCalculations(hydrogenPlipGraph);

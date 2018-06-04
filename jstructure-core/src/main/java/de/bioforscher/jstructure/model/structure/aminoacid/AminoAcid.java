@@ -381,7 +381,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public Optional<Atom> getNOptional() {
-        return Optional.of(n);
+        return Optional.ofNullable(n);
     }
 
     public Atom getN() {
@@ -389,7 +389,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public Optional<Atom> getCaOptional() {
-        return Optional.of(ca);
+        return Optional.ofNullable(ca);
     }
 
     public Atom getCa() {
@@ -397,7 +397,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public Optional<Atom> getCOptional() {
-        return Optional.of(c);
+        return Optional.ofNullable(c);
     }
 
     public Atom getC() {
@@ -405,7 +405,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public Optional<Atom> getOOptional() {
-        return Optional.of(o);
+        return Optional.ofNullable(o);
     }
 
     public Atom getO() {
@@ -413,7 +413,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public Optional<Atom> getHOptional() {
-        return Optional.of(h);
+        return Optional.ofNullable(h);
     }
 
     public Atom getH() {
@@ -421,7 +421,7 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
     }
 
     public Optional<Atom> getCbOptional() {
-        return Optional.of(cb);
+        return Optional.ofNullable(cb);
     }
 
     public Atom getCb() {

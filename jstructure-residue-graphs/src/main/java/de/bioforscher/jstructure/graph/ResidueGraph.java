@@ -1,5 +1,7 @@
 package de.bioforscher.jstructure.graph;
 
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinition;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
 import de.bioforscher.jstructure.mathematics.Pair;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
@@ -20,14 +22,15 @@ public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
     protected final List<Pair<AminoAcid, AminoAcid>> contacts;
     protected final List<Pair<AminoAcid, AminoAcid>> localContacts;
     protected final List<Pair<AminoAcid, AminoAcid>> longRangeContacts;
+    protected final ContactDefinition contactDefinition;
 
-    public static ResidueGraph createResidueGraph(Chain chain, InteractionScheme interactionScheme) {
+    public static ResidueGraph createResidueGraph(Chain chain, ContactDefinition contactDefinition) {
         List<AminoAcid> aminoAcids = chain.aminoAcids().collect(Collectors.toList());
-        List<Pair<AminoAcid, AminoAcid>> contacts = createContactList(aminoAcids, interactionScheme);
-        return new ResidueGraph(aminoAcids, contacts);
+        List<Pair<AminoAcid, AminoAcid>> contacts = createContactList(aminoAcids, contactDefinition);
+        return new ResidueGraph(aminoAcids, contacts, contactDefinition);
     }
 
-    protected static List<Pair<AminoAcid, AminoAcid>> createContactList(List<AminoAcid> aminoAcids, InteractionScheme interactionScheme) {
+    protected static List<Pair<AminoAcid, AminoAcid>> createContactList(List<AminoAcid> aminoAcids, ContactDefinition contactDefinition) {
         List<Pair<AminoAcid, AminoAcid>> contacts = new ArrayList<>();
 
         for(int i = 0; i < aminoAcids.size() - 1; i++) {
@@ -39,7 +42,7 @@ public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
                     continue;
                 }
 
-                if(interactionScheme.areInContact(aminoAcid1, aminoAcid2)) {
+                if(contactDefinition.areInContact(aminoAcid1, aminoAcid2)) {
                     contacts.add(new Pair<>(aminoAcid1, aminoAcid2));
                 }
             }
@@ -48,23 +51,23 @@ public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
         return contacts;
     }
 
-    public static ResidueGraph createFullPlipResidueGraph(Chain chain) {
-        return createResidueGraph(chain, InteractionScheme.SALENTIN2015);
+    public static ResidueGraph createPlipResidueGraph(Chain chain) {
+        return createResidueGraph(chain, ContactDefinitionFactory.createPlipContactDefinition());
     }
 
     public static ResidueGraph createHydrogenBondPlipResidueGraph(Chain chain) {
-        return createResidueGraph(chain, InteractionScheme.SALENTIN2015_HYDROGEN_BONDS);
+        return createResidueGraph(chain, ContactDefinitionFactory.createHydrogenBondContactDefinition());
     }
 
     public static ResidueGraph createHydrophobicInteractionResidueGraph(Chain chain) {
-        return createResidueGraph(chain, InteractionScheme.SALENTIN2015_HYDROPHOBIC_INTERACTION);
+        return createResidueGraph(chain, ContactDefinitionFactory.createHydrophobicInteractionContactDefinition());
     }
 
     public static ResidueGraph createDistanceResidueGraph(Chain chain) {
-        return createResidueGraph(chain, InteractionScheme.CALPHA8);
+        return createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
     }
 
-    ResidueGraph(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts) {
+    ResidueGraph(List<AminoAcid> aminoAcids, List<Pair<AminoAcid, AminoAcid>> contacts, ContactDefinition contactDefinition) {
         super(DefaultEdge.class);
         this.aminoAcids = aminoAcids;
         aminoAcids.forEach(this::addVertex);
@@ -76,6 +79,15 @@ public class ResidueGraph extends SimpleGraph<AminoAcid, DefaultEdge> {
         this.longRangeContacts = contacts.stream()
                 .filter(ResidueGraph::isLongRangeContact)
                 .collect(Collectors.toList());
+        this.contactDefinition = contactDefinition;
+    }
+
+    public ContactDefinition getContactDefinition() {
+        return contactDefinition;
+    }
+
+    public String getConfoldRRType() {
+        return contactDefinition.getConfoldRRType();
     }
 
     protected static boolean isLongRangeContact(Pair<AminoAcid, AminoAcid> pair) {

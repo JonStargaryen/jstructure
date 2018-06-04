@@ -13,9 +13,9 @@ import de.bioforscher.jstructure.feature.geometry.GeometricProperties;
 import de.bioforscher.jstructure.feature.interaction.PLIPInteractionContainer;
 import de.bioforscher.jstructure.feature.loopfraction.LoopFraction;
 import de.bioforscher.jstructure.feature.sse.GenericSecondaryStructure;
-import de.bioforscher.jstructure.graph.InteractionScheme;
 import de.bioforscher.jstructure.graph.ResidueGraph;
 import de.bioforscher.jstructure.graph.ResidueTopologicPropertiesContainer;
+import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
 import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Structure;
@@ -121,7 +121,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
                     .composeResidueStructuralInformation(aminoAcids,
                             earlyFoldingResidues,
                             contactStructuralInformation);
-            ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, InteractionScheme.CALPHA8);
+            ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
 
             return Optional.of(chain.aminoAcids()
                     .filter(AminoAcid::isStandardAminoAcid)

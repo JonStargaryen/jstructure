@@ -821,7 +821,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
      * @return true if no backbone hydrogen is present
      */
     private boolean lacksBackboneHydrogen(AminoAcid residue) {
-        return residue.getH() == null;
+        return !residue.getHOptional().isPresent();
     }
 
     /**

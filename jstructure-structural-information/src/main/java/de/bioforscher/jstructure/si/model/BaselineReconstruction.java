@@ -1,6 +1,7 @@
 package de.bioforscher.jstructure.si.model;
 
 import de.bioforscher.jstructure.StandardFormat;
+import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.align.result.score.RootMeanSquareDeviation;
@@ -79,13 +80,14 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         Collections.shuffle(fullContacts);
         int numberOfContactsToSelect = (int) (fullContacts.size() * baselineFrequency);
         List<Pair<AminoAcid, AminoAcid>> sampledContacts = fullContacts.subList(0, numberOfContactsToSelect);
-        this.sampledMap = new ReconstructionContactMap(referenceChain.aminoAcids().collect(Collectors.toList()), sampledContacts);
+        this.sampledMap = new ReconstructionContactMap(referenceChain.aminoAcids().collect(Collectors.toList()), sampledContacts, fullMap.getContactDefinition());
 
         // reconstruct sampled baseline map
         sampledReconstructions = new ConfoldServiceWorker(confoldPath,
                 sequence,
                 secondaryStructure,
-                sampledMap.getCaspRRRepresentation())
+                sampledMap.getCaspRRRepresentation(),
+                fullMap.getConfoldRRType())
                 .call()
                 .getChains();
 
@@ -102,7 +104,7 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
         return this;
     }
 
-    private void computeBaselinePerformance(List<Chain> reconstructions) throws IOException {
+    private void computeBaselinePerformance(List<Chain> reconstructions) throws AlignmentException, IOException {
         List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
         List<ReconstructionContactMap> reconstructionContactMaps = new ArrayList<>();
         List<Path> tmpFiles = new ArrayList<>();
@@ -120,7 +122,7 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
                     referenceChainPath.toFile().getAbsolutePath(),
                     reconstructPath.toFile().getAbsolutePath()
             }));
-            reconstructionContactMaps.add(ReconstructionContactMap.createReconstructionContactMap(reconstructedChain));
+            reconstructionContactMaps.add(ReconstructionContactMap.createReconstructionContactMap(reconstructedChain, fullMap.getContactDefinition()));
         }
 
         if(alignmentResults.isEmpty()) {
@@ -193,7 +195,7 @@ public class BaselineReconstruction implements Callable<BaselineReconstruction> 
                 numberOfCombinations,
                 contactToToggle,
                 contactWasRemoved,
-                new ReconstructionContactMap(sampledMap.getAminoAcids(), contacts));
+                new ReconstructionContactMap(sampledMap.getAminoAcids(), contacts, fullMap.getContactDefinition()));
     }
 
     public int getIteration() {
