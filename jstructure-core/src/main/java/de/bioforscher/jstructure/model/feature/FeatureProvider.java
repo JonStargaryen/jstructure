@@ -30,14 +30,7 @@ public abstract class FeatureProvider {
 
         // 'hook' to postprocessing routine, empty by default but can be overridden by implementations if needed
         postprocessInternally(structure);
-
-        // registered the computed feature entry class
-//        provides().forEach(structure::registerFeature);
     }
-
-//    protected List<Class<? extends FeatureContainerEntry>> provides() {
-//        return Collections.emptyList();
-//    }
 
     private void preprocessInternally(Structure structure) {
 

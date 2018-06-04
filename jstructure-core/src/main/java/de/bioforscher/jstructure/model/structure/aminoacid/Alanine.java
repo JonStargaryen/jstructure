@@ -10,7 +10,7 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 public class Alanine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "ALA";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-    private Atom cb;
+//    private Atom cb;
 
     Alanine(Alanine alanine, boolean deep) {
         super(alanine, deep);
@@ -25,14 +25,14 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-    public Atom getCb() {
-        return cb;
-    }
+//    public Atom getCb() {
+//        return cb;
+//    }
 
     @Override
     protected void addSideChainAtom(Atom atom) {
-        if(atom.getName().equals("CB") && cb == null) {
-            cb = atom;
-        }
+//        if(atom.getName().equals("CB") && cb == null) {
+//            cb = atom;
+//        }
     }
 }

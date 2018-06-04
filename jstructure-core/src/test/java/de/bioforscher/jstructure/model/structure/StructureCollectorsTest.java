@@ -91,8 +91,8 @@ public class StructureCollectorsTest {
         Structure copy = protein.select()
                 .aminoAcids()
                 .asIsolatedStructure();
+        //TODO chains in copy are randomly ordered
         List<Atom> atoms = copy.getAtoms();
-        //TODO test flawed
         for(int i = 1; i < atoms.size(); i++) {
             Atom a1 = atoms.get(i - 1);
             Atom a2 = atoms.get(i);
