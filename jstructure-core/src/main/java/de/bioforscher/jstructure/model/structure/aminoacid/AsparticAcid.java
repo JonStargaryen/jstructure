@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class AsparticAcid extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "ASP";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom od1;
     private Atom od2;
@@ -28,10 +27,6 @@ public class AsparticAcid extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-//    public Atom getCb() {
-//        return cb;
-//    }
-
     public Atom getCg() {
         return cg;
     }
@@ -42,21 +37,5 @@ public class AsparticAcid extends AminoAcid implements StandardAminoAcid {
 
     public Atom getOd2() {
         return od2;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("OD1") && od1 == null) {
-            od1 = atom;
-        }
-        if(atom.getName().equals("OD2") && od2 == null) {
-            od2 = atom;
-        }
     }
 }

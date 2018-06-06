@@ -54,10 +54,15 @@ public class GroupPrototypeParser {
     }
 
     private GroupPrototypeParser(boolean fastMode) {
-        // load prototype files of all amino acids
         String basePath = "prototype/";
-        this.prototypes = Stream.of("ALA", "ARG", "ASN", "ASP", "CYS", "GLN", "GLU", "GLY", "HIS", "HOH", "ILE", "LEU",
-                "LYS", "MET", "MSE", "PHE", "PRO", "PYL", "SEC", "SER", "THR", "TRP", "TYR", "UNK", "UNL", "VAL")
+        // load prototype files of all amino acids
+        this.prototypes = Stream.of("ALA", "ARG", "ASN", "ASP", "CYS", "GLN", "GLU", "GLY", "HIS", "ILE", "LEU",
+                "LYS", "MET", "MSE", "PHE", "PRO", "PYL", "SEC", "SER", "THR", "TRP", "TYR", "UNK", "VAL",
+                // and nucleotides
+                "A", "C", "DA", "DC", "DG", "G", "N", "T", "U",
+                // and water and freaks
+                "HOH", "UNL"
+                )
                 .map(threeLetterCode -> basePath + threeLetterCode + ".xml")
                 .map(this::getResourceAsStream)
                 .map(GroupPrototypeParser::getDocument)

@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "PHE";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom cd1;
     private Atom cd2;
@@ -30,10 +29,6 @@ public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
     public Phenylalanine(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
     }
-
-//    public Atom getCb() {
-//        return cb;
-//    }
 
     public Atom getCg() {
         return cg;
@@ -57,30 +52,5 @@ public class Phenylalanine extends AminoAcid implements StandardAminoAcid {
 
     public Atom getCz() {
         return cz;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("CD1") && cd1 == null) {
-            cd1 = atom;
-        }
-        if(atom.getName().equals("CD2") && cd2 == null) {
-            cd2 = atom;
-        }
-        if(atom.getName().equals("CE1") && ce1 == null) {
-            ce1 = atom;
-        }
-        if(atom.getName().equals("CE2") && ce2 == null) {
-            ce2 = atom;
-        }
-        if(atom.getName().equals("CZ") && cz == null) {
-            cz = atom;
-        }
     }
 }

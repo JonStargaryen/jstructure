@@ -1,8 +1,7 @@
 package de.bioforscher.jstructure.model.structure.nucleotide;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
  * Created by bittrich on 5/30/17.
@@ -25,10 +24,5 @@ public class UnknownNucleotide extends Nucleotide implements StandardNucleotide 
     public UnknownNucleotide(String threeLetterCode,
                             ResidueIdentifier residueIdentifier) {
         this(threeLetterCode, residueIdentifier, false);
-    }
-
-    @Override
-    protected void addBaseAtom(Atom atom) {
-
     }
 }

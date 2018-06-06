@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 public class UnknownAminoAcid extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "UNK";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
 
     UnknownAminoAcid(UnknownAminoAcid unknownAminoAcid, boolean deep) {
@@ -28,21 +27,7 @@ public class UnknownAminoAcid extends AminoAcid implements StandardAminoAcid {
         this(threeLetterCode, residueIdentifier, false);
     }
 
-//    public Atom getCb() {
-//        return cb;
-//    }
-
     public Atom getCg() {
         return cg;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
     }
 }

@@ -26,16 +26,6 @@ public class Deoxycytidine extends Nucleotide implements StandardNucleotide {
         this(residueIdentifier, false);
     }
 
-    @Override
-    protected void addBaseAtom(Atom atom) {
-        if(atom.getName().equals("O2") && o2 == null) {
-            o2 = atom;
-        }
-        if(atom.getName().equals("N4") && n4 == null) {
-            n4 = atom;
-        }
-    }
-
     public Atom getO2() {
         return o2;
     }

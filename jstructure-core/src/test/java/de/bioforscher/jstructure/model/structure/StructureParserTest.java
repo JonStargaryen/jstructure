@@ -1,11 +1,11 @@
 package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.jstructure.model.structure.nucleotide.Nucleotide;
 import de.bioforscher.testutil.TestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,19 +19,26 @@ import static org.hamcrest.CoreMatchers.startsWith;
  * Created by S on 29.09.2016.
  */
 public class StructureParserTest {
-    private static final String PDB_EXTENSION = ".pdb";
     private static final String PDB_DIRECTORY = "parser/";
-//    private static final List<String> PDB_IDS = Arrays.asList("2w0l", "1acj", "1asz", "4bpm");
     private static final List<TestUtils.SupportedProtein> PDB_IDS = Stream.of(TestUtils.SupportedProtein.values())
         .collect(Collectors.toList());
-//    private static final List<InputStream> PDB_FILE_PATHS = PDB_IDS.stream()
-//            .map(f -> PDB_DIRECTORY + f + PDB_EXTENSION)
-//            .map(TestUtils::getResourceAsInputStream)
-//            .collect(Collectors.toList());
     /**
      * contains selenomethionine at pos 1, marked as HETATM
      */
     private static final String NON_STANDARD_PDB_ID = "1dw9";
+
+    @Test
+    public void shouldHandleRNA() {
+        String pdbId = "5new";
+        Structure structure = StructureParser.fromPdbId(pdbId)
+                .minimalParsing(true)
+                .parse();
+        Assert.assertEquals("number of nucleotide groups did not match", 8, structure.nucleotides().count());
+        Assert.assertEquals("number of atoms did not match", 1261, structure.atoms().count());
+        structure.nucleotides()
+                .map(Nucleotide::getN1)
+                .forEach(Assert::assertNotNull);
+    }
 
     @Test
     public void shouldHandleLegacyHeaders() {
@@ -55,18 +62,7 @@ public class StructureParserTest {
     }
 
     @Test
-    public void shouldUseLocalPdbDirectory() {
-        StructureParser.OptionalSteps.setLocalPdbDirectory(Paths.get("/home/bittrich/pdb/"));
-        Structure protein = StructureParser.fromPdbId("10gs")
-                .minimalParsing(true)
-                .parse();
-        System.out.println(protein);
-        Assert.fail("reimpl: test cannot decide where the file came from");
-    }
-
-    @Test
     public void shouldSkipLigandParsing() {
-        //TODO move to structure actually containing nucleotides
         String id = "5GRO";
         Structure proteinFast = StructureParser.fromPdbId(id).minimalParsing(true).parse();
         List<Group> ligandsFast = proteinFast.select()

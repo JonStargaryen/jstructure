@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Cysteine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "CYS";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom sg;
 
     Cysteine(Cysteine cysteine, boolean deep) {
@@ -24,15 +23,5 @@ public class Cysteine extends AminoAcid implements StandardAminoAcid {
 
     public Cysteine(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("SG") && sg == null) {
-            sg = atom;
-        }
     }
 }

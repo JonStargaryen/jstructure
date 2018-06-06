@@ -29,25 +29,6 @@ public class Adenosine extends Nucleotide implements StandardNucleotide {
         this(residueIdentifier, false);
     }
 
-    @Override
-    protected void addBaseAtom(Atom atom) {
-        if(atom.getName().equals("\"O2'\"") && o2prime == null) {
-            o2prime = atom;
-        }
-        if(atom.getName().equals("N9") && n9 == null) {
-            n9 = atom;
-        }
-        if(atom.getName().equals("C8") && c8 == null) {
-            c8 = atom;
-        }
-        if(atom.getName().equals("N7") && n7 == null) {
-            n7 = atom;
-        }
-        if(atom.getName().equals("N6") && n6 == null) {
-            n6 = atom;
-        }
-    }
-
     public Atom getO2prime() {
         return o2prime;
     }

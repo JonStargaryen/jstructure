@@ -3,7 +3,10 @@ package de.bioforscher.jstructure.model.structure.nucleotide;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.*;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -29,6 +32,25 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
     private Atom c4;
     private Atom c5;
     private Atom c6;
+    private static final Set<String> ASSIGNABLE_ATOM_NAMES = Stream.of("op3",
+            "p",
+            "op1",
+            "op2",
+            "o5prime",
+            "c5prime",
+            "c4prime",
+            "o4prime",
+            "c3prime",
+            "o3prime",
+            "c2prime",
+            "c1prime",
+            "n1",
+            "c2",
+            "n3",
+            "c4",
+            "c5",
+            "c6")
+            .collect(Collectors.toSet());
 
     //TODO grouping of atom names & family enum
 
@@ -106,10 +128,13 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
             Class<? extends Nucleotide> representingClass = resolveThreeLetterCode(pdbName).representingClass;
             // use special constructor for UnknownNucleotide
             if(representingClass.isAssignableFrom(UnknownNucleotide.class)) {
-                return new UnknownNucleotide(pdbName, residueIdentifier, ligand);
+                return new UnknownNucleotide(pdbName,
+                        residueIdentifier,
+                        ligand);
             } else {
                 try {
-                    return representingClass.getConstructor(ResidueIdentifier.class, boolean.class).newInstance(residueIdentifier, ligand);
+                    return representingClass.getConstructor(ResidueIdentifier.class, boolean.class)
+                            .newInstance(residueIdentifier, ligand);
                 } catch (Exception e) {
                     throw new RuntimeException("creation of Nucleotide instance failed", e);
                 }
@@ -159,76 +184,148 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
         }
     }
 
+    public Optional<Atom> getOp3Optional() {
+        return Optional.ofNullable(op3);
+    }
+
     public Atom getOp3() {
-        return op3;
+        return getOp3Optional().orElseThrow(() -> createNoAtomException("OP3"));
+    }
+
+    public Optional<Atom> getPOptional() {
+        return Optional.ofNullable(p);
     }
 
     public Atom getP() {
-        return p;
+        return getPOptional().orElseThrow(() -> createNoAtomException("P"));
+    }
+
+    public Optional<Atom> getOp1Optional() {
+        return Optional.ofNullable(op1);
     }
 
     public Atom getOp1() {
-        return op1;
+        return getOp1Optional().orElseThrow(() -> createNoAtomException("OP1"));
+    }
+
+    public Optional<Atom> getOp2Optional() {
+        return Optional.ofNullable(op2);
     }
 
     public Atom getOp2() {
-        return op2;
+        return getOp2Optional().orElseThrow(() -> createNoAtomException("OP2"));
+    }
+
+    public Optional<Atom> getO5primeOptional() {
+        return Optional.ofNullable(o5prime);
     }
 
     public Atom getO5prime() {
-        return o5prime;
+        return getO5primeOptional().orElseThrow(() -> createNoAtomException("O5'"));
+    }
+
+    public Optional<Atom> getC5primeOptional() {
+        return Optional.ofNullable(c5prime);
     }
 
     public Atom getC5prime() {
-        return c5prime;
+        return getC5primeOptional().orElseThrow(() -> createNoAtomException("C5'"));
+    }
+
+    public Optional<Atom> getC4primeOptional() {
+        return Optional.ofNullable(c4prime);
     }
 
     public Atom getC4prime() {
-        return c4prime;
+        return getC4primeOptional().orElseThrow(() -> createNoAtomException("C4'"));
+    }
+
+    public Optional<Atom> getO4primeOptional() {
+        return Optional.ofNullable(o4prime);
     }
 
     public Atom getO4prime() {
-        return o4prime;
+        return getO4primeOptional().orElseThrow(() -> createNoAtomException("O4'"));
+    }
+
+    public Optional<Atom> getC3primeOptional() {
+        return Optional.ofNullable(c3prime);
     }
 
     public Atom getC3prime() {
-        return c3prime;
+        return getC3primeOptional().orElseThrow(() -> createNoAtomException("C3'"));
+    }
+
+    public Optional<Atom> getO3primeOptional() {
+        return Optional.ofNullable(o3prime);
     }
 
     public Atom getO3prime() {
-        return o3prime;
+        return getO3primeOptional().orElseThrow(() -> createNoAtomException("O3'"));
+    }
+
+    public Optional<Atom> getC2primeOptional() {
+        return Optional.ofNullable(c2prime);
     }
 
     public Atom getC2prime() {
-        return c2prime;
+        return getC2primeOptional().orElseThrow(() -> createNoAtomException("C2'"));
+    }
+
+    public Optional<Atom> getC1primeOptional() {
+        return Optional.ofNullable(c1prime);
     }
 
     public Atom getC1prime() {
-        return c1prime;
+        return getC1primeOptional().orElseThrow(() -> createNoAtomException("C1'"));
+    }
+
+    public Optional<Atom> getN1Optional() {
+        return Optional.ofNullable(n1);
     }
 
     public Atom getN1() {
-        return n1;
+        return getN1Optional().orElseThrow(() -> createNoAtomException("N1"));
+    }
+
+    public Optional<Atom> getC2Optional() {
+        return Optional.ofNullable(c2);
     }
 
     public Atom getC2() {
-        return c2;
+        return getC2Optional().orElseThrow(() -> createNoAtomException("C2"));
+    }
+
+    public Optional<Atom> getN3Optional() {
+        return Optional.ofNullable(n3);
     }
 
     public Atom getN3() {
-        return n3;
+        return getN3Optional().orElseThrow(() -> createNoAtomException("N3"));
+    }
+
+    public Optional<Atom> getC4Optional() {
+        return Optional.ofNullable(c4);
     }
 
     public Atom getC4() {
-        return c4;
+        return getC4Optional().orElseThrow(() -> createNoAtomException("C4"));
+    }
+
+    public Optional<Atom> getC5Optional() {
+        return Optional.ofNullable(c5);
     }
 
     public Atom getC5() {
-        return c5;
+        return getC5Optional().orElseThrow(() -> createNoAtomException("C5"));
+    }
+
+    public Optional<Atom> getC6Optional() {
+        return Optional.ofNullable(c6);
     }
 
     public Atom getC6() {
-        return c6;
+        return getC6Optional().orElseThrow(() -> createNoAtomException("C6"));
     }
 
     public String getOneLetterCode() {
@@ -237,64 +334,40 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
 
     @Override
     protected void addAtomInternal(Atom atom) {
-        if(atom.getName().equals("OP3") && op3 == null) {
-            op3 = atom;
-        }
-        if(atom.getName().equals("P") && p == null) {
-            p = atom;
-        }
-        if(atom.getName().equals("OP1") && op1 == null) {
-            op1 = atom;
-        }
-        if(atom.getName().equals("OP2") && op2 == null) {
-            op2 = atom;
-        }
-        if(atom.getName().equals("\"O5'\"") && o5prime == null) {
-            o5prime = atom;
-        }
-        if(atom.getName().equals("\"C5'\"") && c5prime == null) {
-            c5prime = atom;
-        }
-        if(atom.getName().equals("\"C4'\"") && c4prime == null) {
-            c4prime = atom;
-        }
-        if(atom.getName().equals("\"O4'\"") && o4prime == null) {
-            o4prime = atom;
-        }
-        if(atom.getName().equals("\"C3'\"") && c3prime == null) {
-            c3prime = atom;
-        }
-        if(atom.getName().equals("\"O3'\"") && o3prime == null) {
-            o3prime = atom;
-        }
-        if(atom.getName().equals("\"C2'\"") && c2prime == null) {
-            c2prime = atom;
-        }
-        if(atom.getName().equals("\"C1'\"") && c1prime == null) {
-            c1prime = atom;
-        }
-        if(atom.getName().equals("N1") && n1 == null) {
-            n1 = atom;
-        }
-        if(atom.getName().equals("C2") && c2 == null) {
-            c2 = atom;
-        }
-        if(atom.getName().equals("N3") && n3 == null) {
-            n3 = atom;
-        }
-        if(atom.getName().equals("C4") && c4 == null) {
-            c4 = atom;
-        }
-        if(atom.getName().equals("C5") && c5 == null) {
-            c5 = atom;
-        }
-        if(atom.getName().equals("C6") && c6 == null) {
-            c6 = atom;
-        }
-        addBaseAtom(atom);
-    }
+        // assign atoms by reflection
+        String atomName = atom.getName();
+        String fieldName = atomName.toLowerCase()
+                // remove additional characters
+                .replace("\"", "")
+                // replace ' by prime
+                .replace("'", "prime");
 
-    protected abstract void addBaseAtom(Atom atom);
+        // some field names will never be presented: e.g. hydrogen atom
+        if(fieldName.contains("h") && !fieldName.equals("h")) {
+            return;
+        }
+
+        try {
+            // find field in Nucleotide or child classes
+            Field field = ASSIGNABLE_ATOM_NAMES.contains(fieldName) ?
+                    this.getClass().getSuperclass().getDeclaredField(fieldName) :
+                    this.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Object fieldContent = field.get(this);
+
+            // protect already set fields
+            if (fieldContent != null) {
+                return;
+            }
+
+            field.set(this, atom);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.warn("missing field for atom {} in class {}",
+                    atom.getName(),
+                    this.getClass().getSimpleName(),
+                    e);
+        }
+    }
 
     /**
      * Access to the previous nucleotide in the chain.

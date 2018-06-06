@@ -2,8 +2,8 @@ package de.bioforscher.jstructure.model.structure.aminoacid;
 
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.*;
-import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -29,6 +29,13 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
             BACKBONE_NITROGEN_NAME,
             BACKBONE_OXYGEN_NAME,
             BACKBONE_HYDROGEN_NAME).collect(Collectors.toSet());
+    private static final Set<String> ASSIGNABLE_ATOM_NAMES = Stream.of("ca",
+            "c",
+            "n",
+            "o",
+            "h",
+            "cb")
+            .collect(Collectors.toSet());
     /**
      * Handle to the list of names representing side getChain atoms of (any of) the standard amino acid. The intersection
      * of this 'set' and that of backbone atoms is empty.
@@ -45,12 +52,6 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
      * @return <code>true</code> iff this atom's name refers to that of a backbone atom
      */
     public static boolean isBackboneAtom(Atom atom) {
-//        String atomName = atom.getName();
-//        return ALPHA_CARBON_NAME.equals(atomName) ||
-//                BACKBONE_CARBON_NAME.equals(atomName) ||
-//                BACKBONE_NITROGEN_NAME.equals(atomName) ||
-//                BACKBONE_OXYGEN_NAME.equals(atomName) ||
-//                BACKBONE_HYDROGEN_NAME.equals(atomName);
         return BACKBONE_ATOM_NAMES.contains(atom.getName());
     }
 
@@ -428,38 +429,42 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
         return getCbOptional().orElseThrow(() -> createNoAtomException("CB"));
     }
 
-    protected SelectionException createNoAtomException(String atomName) {
-        return new SelectionException(this + " contains no " + atomName);
-    }
-
     public String getOneLetterCode() {
         return getGroupPrototype().getOneLetterCode().orElse("?");
     }
 
     @Override
     protected void addAtomInternal(Atom atom) {
-        if(atom.getName().equals("N") && n == null) {
-            n = atom;
-        }
-        if(atom.getName().equals("CA") && ca == null) {
-            ca = atom;
-        }
-        if(atom.getName().equals("C") && c == null) {
-            c = atom;
-        }
-        if(atom.getName().equals("O") && o == null) {
-            o = atom;
-        }
-        if(atom.getName().equals("H") && h == null) {
-            h = atom;
-        }
-        if(atom.getName().equals("CB") && cb == null) {
-            cb = atom;
-        }
-        addSideChainAtom(atom);
-    }
+        // assign atoms by reflection
+        String atomName = atom.getName();
+        String fieldName = atomName.toLowerCase();
 
-    protected abstract void addSideChainAtom(Atom atom);
+        // some field names will never be presented: terminal oxygen, non-backbone hydrogen atom
+        if(fieldName.equals("oxt") || (fieldName.contains("h") && !fieldName.equals("h"))) {
+            return;
+        }
+
+        try {
+            // find field in AminoAcid or child classes
+            Field field = ASSIGNABLE_ATOM_NAMES.contains(fieldName) ?
+                    this.getClass().getSuperclass().getDeclaredField(fieldName) :
+                    this.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            Object fieldContent = field.get(this);
+
+            // protect already set fields
+            if (fieldContent != null) {
+                return;
+            }
+
+            field.set(this, atom);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.warn("missing field for atom {} in class {}",
+                    atom.getName(),
+                    this.getClass().getSimpleName(),
+                    e);
+        }
+    }
 
     /**
      * Access to the previous amino acid in the chain.

@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 public class Arginine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "ARG";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom cd;
     private Atom ne;
@@ -29,10 +28,6 @@ public class Arginine extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-//    public Atom getCb() {
-//        return cb;
-//    }
-
     public Atom getCg() {
         return cg;
     }
@@ -47,24 +42,5 @@ public class Arginine extends AminoAcid implements StandardAminoAcid {
 
     public Atom getCz() {
         return cz;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("CD") && cd == null) {
-            cd = atom;
-        }
-        if(atom.getName().equals("NE") && ne == null) {
-            ne = atom;
-        }
-        if(atom.getName().equals("CZ") && cz == null) {
-            cz = atom;
-        }
     }
 }

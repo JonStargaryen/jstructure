@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Histidine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "HIS";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom nd1;
     private Atom cd2;
@@ -30,10 +29,6 @@ public class Histidine extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-//    public Atom getCb() {
-//        return cb;
-//    }
-
     public Atom getCg() {
         return cg;
     }
@@ -52,27 +47,5 @@ public class Histidine extends AminoAcid implements StandardAminoAcid {
 
     public Atom getNe2() {
         return ne2;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("ND1") && nd1 == null) {
-            nd1 = atom;
-        }
-        if(atom.getName().equals("CD2") && cd2 == null) {
-            cd2 = atom;
-        }
-        if(atom.getName().equals("CE1") && ce1 == null) {
-            ce1 = atom;
-        }
-        if(atom.getName().equals("NE2") && ne2 == null) {
-            ne2 = atom;
-        }
     }
 }

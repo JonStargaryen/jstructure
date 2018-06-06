@@ -1,6 +1,5 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
-import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
@@ -22,10 +21,5 @@ public class Glycine extends AminoAcid implements StandardAminoAcid {
 
     public Glycine(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-
     }
 }

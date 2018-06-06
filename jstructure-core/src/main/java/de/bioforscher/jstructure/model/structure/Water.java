@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.model.structure;
 
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 
+import java.util.Optional;
+
 /**
  * Represents water molecules.
  * Created by bittrich on 5/24/17.
@@ -22,8 +24,12 @@ public class Water extends Group {
                 true);
     }
 
+    public Optional<Atom> getOOptional() {
+        return Optional.ofNullable(o);
+    }
+
     public Atom getO() {
-        return o;
+        return getOOptional().orElseThrow(() -> createNoAtomException("O"));
     }
 
     @Override

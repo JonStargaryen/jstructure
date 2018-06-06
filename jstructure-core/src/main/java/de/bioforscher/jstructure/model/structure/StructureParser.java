@@ -224,7 +224,7 @@ public class StructureParser {
 			79 - 80        LString(2)   charge        Charge on the atom */
 		boolean isAtomLine = line.startsWith(Atom.ATOM_PREFIX);
 		boolean isHetAtmLine = line.startsWith(Atom.HETATM_PREFIX);
-		// option to skip hetatm lines - potentially useless but used in the aaRS project
+		// option to skip hetatm lines - used in the aaRS project
         if(skipHetAtms && isHetAtmLine) {
             return;
         }
@@ -263,8 +263,10 @@ public class StructureParser {
                     !currentGroup.getResidueIdentifier().getInsertionCode().equals(insertionCode) ||
                     !currentGroup.getParentChain().getChainIdentifier().equals(chainId)) {
                     // residue changed - create new group object and set reference
-                    currentGroup = createGroup(pdbName, IdentifierFactory.createResidueIdentifier(resNum, insertionCode),
-                            terminatedChains.contains(currentChain), minimalParsing);
+                    currentGroup = createGroup(pdbName,
+                            IdentifierFactory.createResidueIdentifier(resNum, insertionCode),
+                            terminatedChains.contains(currentChain),
+                            minimalParsing);
                     currentChain.addGroup(currentGroup);
             }
 

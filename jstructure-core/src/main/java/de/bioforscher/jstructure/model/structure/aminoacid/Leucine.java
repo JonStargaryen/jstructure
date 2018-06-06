@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Leucine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "LEU";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom cd1;
     private Atom cd2;
@@ -28,10 +27,6 @@ public class Leucine extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-//    public Atom getCb() {
-//        return cb;
-//    }
-
     public Atom getCg() {
         return cg;
     }
@@ -42,21 +37,5 @@ public class Leucine extends AminoAcid implements StandardAminoAcid {
 
     public Atom getCd2() {
         return cd2;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("CD1") && cd1 == null) {
-            cd1 = atom;
-        }
-        if(atom.getName().equals("CD2") && cd2 == null) {
-            cd2 = atom;
-        }
     }
 }

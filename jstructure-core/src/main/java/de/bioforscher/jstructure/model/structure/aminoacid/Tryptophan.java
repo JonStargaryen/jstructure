@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.structure.GroupPrototype;
 public class Tryptophan extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "TRP";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom cd1;
     private Atom cd2;
@@ -33,10 +32,6 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
     public Tryptophan(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
     }
-
-//    public Atom getCb() {
-//        return cb;
-//    }
 
     public Atom getCg() {
         return cg;
@@ -72,39 +67,5 @@ public class Tryptophan extends AminoAcid implements StandardAminoAcid {
 
     public Atom getCh2() {
         return ch2;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("CD1") && cd1 == null) {
-            cd1 = atom;
-        }
-        if(atom.getName().equals("CD2") && cd2 == null) {
-            cd2 = atom;
-        }
-        if(atom.getName().equals("CE2") && ce2 == null) {
-            ce2 = atom;
-        }
-        if(atom.getName().equals("NE1") && ne1 == null) {
-            ne1 = atom;
-        }
-        if(atom.getName().equals("CE3") && ce3 == null) {
-            ce3 = atom;
-        }
-        if(atom.getName().equals("CZ2") && cz2 == null) {
-            cz2 = atom;
-        }
-        if(atom.getName().equals("CZ3") && cz3 == null) {
-            cz3 = atom;
-        }
-        if(atom.getName().equals("CH2") && ch2 == null) {
-            ch2 = atom;
-        }
     }
 }

@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 public class Isoleucine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "ILE";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg1;
     private Atom cg2;
     private Atom cd1;
@@ -28,10 +27,6 @@ public class Isoleucine extends AminoAcid implements StandardAminoAcid {
         this(residueIdentifier, false);
     }
 
-//    public Atom getCb() {
-//        return cb;
-//    }
-
     public Atom getCg1() {
         return cg1;
     }
@@ -42,21 +37,5 @@ public class Isoleucine extends AminoAcid implements StandardAminoAcid {
 
     public Atom getCd1() {
         return cd1;
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG1") && cg1 == null) {
-            cg1 = atom;
-        }
-        if(atom.getName().equals("CG2") && cg2 == null) {
-            cg2 = atom;
-        }
-        if(atom.getName().equals("CD1") && cd1 == null) {
-            cd1 = atom;
-        }
     }
 }

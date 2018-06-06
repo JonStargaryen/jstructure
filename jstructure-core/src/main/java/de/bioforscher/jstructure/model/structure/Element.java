@@ -172,7 +172,9 @@ public enum Element {
         if (e != null) {
             return e;
         }
-        logger.warn("Invalid element symbol: {} - falling back to {}", elementSymbol, Element.X);
+        logger.warn("Invalid element symbol: {} - falling back to {}",
+                elementSymbol,
+                Element.X);
         return Element.X;
     }
 
@@ -194,6 +196,10 @@ public enum Element {
         // ambiguity between CA representing an alpha carbon or calcium
         if(!hetAtm && atomName.startsWith("C")) {
             return Element.C;
+        }
+        // ambiguity between ND representing an sidechain nitrogen or Nd
+        if(!hetAtm && atomName.startsWith("N")) {
+            return Element.N;
         }
         Element element = allElements.get(numberFreeAtomName.toLowerCase());
         if(element == null) {

@@ -1,8 +1,7 @@
 package de.bioforscher.jstructure.model.structure.aminoacid;
 
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.GroupPrototype;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
+import de.bioforscher.jstructure.model.structure.GroupPrototype;
 
 /**
  * Created by bittrich on 5/24/17.
@@ -10,7 +9,6 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 public class Alanine extends AminoAcid implements StandardAminoAcid {
     public static final String THREE_LETTER_CODE = "ALA";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
 
     Alanine(Alanine alanine, boolean deep) {
         super(alanine, deep);
@@ -23,16 +21,5 @@ public class Alanine extends AminoAcid implements StandardAminoAcid {
 
     public Alanine(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
-    }
-
-//    public Atom getCb() {
-//        return cb;
-//    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
     }
 }

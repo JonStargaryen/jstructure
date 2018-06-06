@@ -27,19 +27,6 @@ public class Uridine extends Nucleotide implements StandardNucleotide {
         this(residueIdentifier, false);
     }
 
-    @Override
-    protected void addBaseAtom(Atom atom) {
-        if(atom.getName().equals("\"O2'\"") && o2prime == null) {
-            o2prime = atom;
-        }
-        if(atom.getName().equals("O2") && o2 == null) {
-            o2 = atom;
-        }
-        if(atom.getName().equals("O4") && o4 == null) {
-            o4 = atom;
-        }
-    }
-
     public Atom getO2prime() {
         return o2prime;
     }

@@ -10,7 +10,6 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 public class Selenomethionine extends AminoAcid implements NonStandardAminoAcid {
     public static final String THREE_LETTER_CODE = "MSE";
     public static final GroupPrototype GROUP_PROTOTYPE = createPrototypeInstance(THREE_LETTER_CODE);
-//    private Atom cb;
     private Atom cg;
     private Atom se;
     private Atom ce;
@@ -26,22 +25,6 @@ public class Selenomethionine extends AminoAcid implements NonStandardAminoAcid 
 
     public Selenomethionine(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
-    }
-
-    @Override
-    protected void addSideChainAtom(Atom atom) {
-//        if(atom.getName().equals("CB") && cb == null) {
-//            cb = atom;
-//        }
-        if(atom.getName().equals("CG") && cg == null) {
-            cg = atom;
-        }
-        if(atom.getName().equals("SE") && se == null) {
-            se = atom;
-        }
-        if(atom.getName().equals("CE") && ce == null) {
-            ce = atom;
-        }
     }
 
     @Override

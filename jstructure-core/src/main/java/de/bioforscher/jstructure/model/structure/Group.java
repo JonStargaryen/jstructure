@@ -6,6 +6,7 @@ import de.bioforscher.jstructure.model.identifier.IdentifierFactory;
 import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.container.AtomContainer;
 import de.bioforscher.jstructure.model.structure.selection.Selection;
+import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -75,6 +76,10 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         } else {
             this.atoms = new ArrayList<>();
         }
+    }
+
+    protected SelectionException createNoAtomException(String atomName) {
+        return new SelectionException(this + " contains no " + atomName);
     }
 
     public String getThreeLetterCode() {

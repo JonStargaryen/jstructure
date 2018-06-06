@@ -26,17 +26,4 @@ public class Thymidine extends Nucleotide implements StandardNucleotide {
     public Thymidine(ResidueIdentifier residueIdentifier) {
         this(residueIdentifier, false);
     }
-
-    @Override
-    protected void addBaseAtom(Atom atom) {
-        if(atom.getName().equals("O2") && o2 == null) {
-            o2 = atom;
-        }
-        if(atom.getName().equals("O4") && o4 == null) {
-            o4 = atom;
-        }
-        if(atom.getName().equals("C7") && c7 == null) {
-            c7 = atom;
-        }
-    }
 }
