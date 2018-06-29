@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * best decision thresholds: 0.163 for the estimated probabilities.
+ * Compute EF probability of each sequence position in the representative sequences.
  */
 public class A01_ExtractAARSSequences {
     private static final Path SEQUENCE_INPUT = Paths.get("/home/bittrich/git/aars_data/T04_representative_sequences/");
