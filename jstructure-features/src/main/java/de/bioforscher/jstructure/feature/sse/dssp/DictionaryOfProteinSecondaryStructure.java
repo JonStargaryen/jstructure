@@ -1,11 +1,7 @@
 package de.bioforscher.jstructure.feature.sse.dssp;
 
 import de.bioforscher.jstructure.feature.sse.SecondaryStructureType;
-import de.bioforscher.jstructure.mathematics.LinearAlgebra;
-import de.bioforscher.jstructure.mathematics.TorsionAngles;
-import de.bioforscher.jstructure.mathematics.SetOperations;
-import de.bioforscher.jstructure.mathematics.Fragment;
-import de.bioforscher.jstructure.mathematics.Pair;
+import de.bioforscher.jstructure.mathematics.*;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
 import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
@@ -352,7 +348,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
 
                     int[] thisPair = new int[]{i, j};
                     outList.add(thisPair);
-                } catch (NullPointerException e) {
+                } catch (SelectionException e) {
                     logger.debug("missing alpha carbons for {} or {}", res1, res2);
                 }
             }
@@ -439,7 +435,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
                     setSecStrucType(residues, i, SecondaryStructureType.BEND);
                     state.setBend(true);
                 }
-            } catch (NullPointerException e) {
+            } catch (SelectionException e) {
                 logger.debug("missing backbone atoms for {}", residues.subList(i, i + 3));
             }
         }
@@ -649,7 +645,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
                     if (j != (i + 1)) {
                         checkAddHBond(res2, res1);
                     }
-                } catch (NullPointerException e) {
+                } catch (SelectionException e) {
                     logger.debug("missing alpha carbons for {} or {}", res1, res2);
                 }
             }
@@ -839,7 +835,7 @@ public class DictionaryOfProteinSecondaryStructure extends FeatureProvider {
             // pdbSerial of minimal int value flags them as pseudo-hydrogen
             Atom atom = Atom.builder(Element.H, xyz).name("H").build();
             fragmentOfSize2.getElement(1).addAtom(atom);
-        } catch (NullPointerException e) {
+        } catch (SelectionException e) {
             //TODO consistent error-handling
             logger.debug("missing backbone atoms for peptide bond between {} and {} - cannot approximate hydrogen atom position",
                     fragmentOfSize2.getElement(0).getIdentifier(),

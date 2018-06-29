@@ -362,10 +362,12 @@ public abstract class Nucleotide extends Group implements StandardNucleotideIndi
 
             field.set(this, atom);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            logger.warn("missing field for atom {} in class {}",
-                    atom.getName(),
-                    this.getClass().getSimpleName(),
-                    e);
+            if(this.isStandardNucleotide()) {
+                logger.warn("missing field for atom {} in class {}",
+                        atom.getName(),
+                        this.getClass().getSimpleName(),
+                        e);
+            }
         }
     }
 

@@ -459,10 +459,14 @@ public abstract class AminoAcid extends Group implements StandardAminoAcidIndica
 
             field.set(this, atom);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            logger.warn("missing field for atom {} in class {}",
-                    atom.getName(),
-                    this.getClass().getSimpleName(),
-                    e);
+            if(!this.isStandardAminoAcid()) {
+                logger.warn("missing field for atom {} in class {} for group {}-{}",
+                        atom.getName(),
+                        this.getClass().getSimpleName(),
+                        this.getThreeLetterCode(),
+                        this.getResidueIdentifier(),
+                        e);
+            }
         }
     }
 
