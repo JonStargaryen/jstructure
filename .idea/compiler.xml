@@ -37,6 +37,7 @@
       <module name="jstructure-features" target="1.8" />
       <module name="jstructure-folding-cores" target="1.8" />
       <module name="jstructure-gmlvq" target="1.8" />
+      <module name="jstructure-ligand-explorer" target="1.8" />
       <module name="jstructure-membrane" target="1.8" />
       <module name="jstructure-membrane-topology" target="1.8" />
       <module name="jstructure-mmm-bridge" target="1.8" />

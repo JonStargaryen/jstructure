@@ -2,7 +2,10 @@ package de.bioforscher.jstructure.si.analysis;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.efr.Start2FoldConstants;
-import de.bioforscher.jstructure.efr.model.*;
+import de.bioforscher.jstructure.efr.model.EQuantScore;
+import de.bioforscher.jstructure.efr.model.FunctionalResidueAnnotation;
+import de.bioforscher.jstructure.efr.model.HotSpotScoring;
+import de.bioforscher.jstructure.efr.model.Start2FoldResidueAnnotation;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.efr.model.si.ResidueStructuralInformation;
 import de.bioforscher.jstructure.efr.parser.*;
@@ -37,7 +40,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
     private static final Logger logger = LoggerFactory.getLogger(A06_WriteStructuralInformationByResidueCsv.class);
 
     public static void main(String[] args) throws IOException {
-        String output = Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
+        String output = Files.lines(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("pancsa-si.list"))
                 .filter(line -> line.startsWith("STF"))
                 .map(A06_WriteStructuralInformationByResidueCsv::handleLine)
                 .filter(Optional::isPresent)
@@ -60,10 +63,11 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
                                 "avgRmsdZ,numberOfTopScoringContacts," +
-                                "folds,functional,strong,sane" + System.lineSeparator(),
+                                "folds,functional,strong," +
+                                "efrAnnotation,strongAnnotation,functionalAnnotation,ecAnnotation" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-si-residues.csv"),
+        Start2FoldConstants.write(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("statistics").resolve("foldingcores-si-residues.csv"),
                 output);
     }
 
@@ -78,7 +82,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
                     .map(Integer::valueOf)
                     .collect(Collectors.toList());
 
-            boolean sane = split[6].equalsIgnoreCase("true");
+//            boolean sane = split[6].equalsIgnoreCase("true");
 
             Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
@@ -89,8 +93,15 @@ public class A06_WriteStructuralInformationByResidueCsv {
             Start2FoldXmlParser.parseSpecificExperiment(chain,
                     start2foldXml,
                     experimentIds);
-            EvolutionaryCouplingParser.parseHotSpotFile(chain,
-                    Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
+            boolean ecAnnotationTmp = true;
+            try {
+                EvolutionaryCouplingParser.parseHotSpotFile(chain,
+                        Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
+            } catch (Exception e) {
+                ecAnnotationTmp = false;
+            }
+            boolean ecAnnotation = ecAnnotationTmp;
+
             EQuantParser.parseEQuantFile(chain,
                     Start2FoldConstants.EQUANT_DIRECTORY.resolve(entryId.toLowerCase() + ".equant-small.txt"));
 
@@ -122,6 +133,8 @@ public class A06_WriteStructuralInformationByResidueCsv {
                             earlyFoldingResidues,
                             contactStructuralInformation);
             ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
+
+            System.out.println("efr: " + (earlyFoldingResidues.size() > 0) + " strong: " + (strongResidues.size() > 0) + " functional: " + (functionalResidues.size() > 0));
 
             return Optional.of(chain.aminoAcids()
                     .filter(AminoAcid::isStandardAminoAcid)
@@ -249,13 +262,17 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
                                 functionalAnnotation + "," +
                                 (strongResidues.contains(aminoAcid) ? "strong" : "weak") + "," +
-                                sane;
+
+                                (earlyFoldingResidues.size() > 0) + "," +
+                                (strongResidues.size() > 0) + "," +
+                                (functionalResidues.size() > 0) + "," +
+                                ecAnnotation;
                     })
                     .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {
-            logger.info("calculation failed for {}",
+            logger.info("calculation failed for {}\nby: {}",
                     line,
-                    e);
+                    e.getMessage());
             return Optional.empty();
         }
     }

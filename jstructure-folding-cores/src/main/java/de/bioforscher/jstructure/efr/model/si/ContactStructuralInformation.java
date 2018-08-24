@@ -26,6 +26,7 @@ public class ContactStructuralInformation {
     private final double maximumRmsdIncreaseZScore;
     private final double fractionOfTopScoringContacts;
     private double plmScore;
+    private final List<Double> rawValues;
 
     public ContactStructuralInformation(int residueIdentifier1,
                                         String aa1,
@@ -48,7 +49,8 @@ public class ContactStructuralInformation {
                                         double averageMaximumRmsd,
                                         double standardDeviationMaximumRmsd,
                                         List<ReconstructionStructuralInformation> allReconstructions,
-                                        List<ReconstructionStructuralInformation> topScoringReconstructions) {
+                                        List<ReconstructionStructuralInformation> topScoringReconstructions,
+                                        List<Double> rawValues) {
         this.residueIdentifier1 = residueIdentifier1;
         this.aa1 = aa1;
         this.residueIdentifier2 = residueIdentifier2;
@@ -76,6 +78,11 @@ public class ContactStructuralInformation {
             frac = 0.0;
         }
         this.fractionOfTopScoringContacts = frac;
+        this.rawValues = rawValues;
+    }
+
+    public List<Double> getRawValues() {
+        return rawValues;
     }
 
     public int getResidueIdentifier1() {

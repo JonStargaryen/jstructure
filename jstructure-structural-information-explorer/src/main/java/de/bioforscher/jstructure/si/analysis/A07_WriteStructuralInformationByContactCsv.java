@@ -43,7 +43,7 @@ public class A07_WriteStructuralInformationByContactCsv {
     private static final Logger logger = LoggerFactory.getLogger(A07_WriteStructuralInformationByContactCsv.class);
 
     public static void main(String[] args) throws IOException {
-        String output = Files.lines(Start2FoldConstants.BASE_DIRECTORY.resolve("pancsa-si.list"))
+        String output = Files.lines(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("pancsa-si.list"))
                 .filter(line -> line.startsWith("STF"))
                 .map(A07_WriteStructuralInformationByContactCsv::handleLine)
                 .filter(Optional::isPresent)
@@ -54,10 +54,11 @@ public class A07_WriteStructuralInformationByContactCsv {
                                 "avgRmsdZ,numberOfTopScoringContacts," +
                                 "plm,betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +
                                 "hydrogen,hydrophobic," +
-                                "efr1,efr2,func1,func2,strong1,strong2,buried1,buried2,ordered1,ordered2,efrsse1,efrsse2,arom1,arom2,sane" + System.lineSeparator(),
+                                "efr1,efr2,func1,func2,strong1,strong2,buried1,buried2,ordered1,ordered2,efrsse1,efrsse2,arom1,arom2," +
+                                "efrAnnotation,strongAnnotation,functionalAnnotation,ecAnnotation" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-si-contacts.csv"),
+        Start2FoldConstants.write(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("statistics").resolve("foldingcores-si-contacts.csv"),
                 output);
     }
 
@@ -72,7 +73,7 @@ public class A07_WriteStructuralInformationByContactCsv {
                     .map(Integer::valueOf)
                     .collect(Collectors.toList());
 
-            boolean sane = split[6].equalsIgnoreCase("true");
+//            boolean sane = split[6].equalsIgnoreCase("true");
 
             Structure structure = StructureParser.fromPdbId(pdbId).parse();
             Chain chain = structure.chains().findFirst().get();
@@ -133,10 +134,18 @@ public class A07_WriteStructuralInformationByContactCsv {
             ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
             ResidueGraphCalculations residueGraphCalculations = new ResidueGraphCalculations(conventionalProteinGraph);
 
-            EvolutionaryCouplingParser.parsePlmScore(contactStructuralInformation,
-                    Jsoup.parse(Start2FoldConstants.newInputStream(Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId + "_ec.html")), "UTF-8", ""));
+            boolean ecAnnotationTmp = true;
+            try {
+                EvolutionaryCouplingParser.parsePlmScore(contactStructuralInformation,
+                        Jsoup.parse(Start2FoldConstants.newInputStream(Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId + "_ec.html")), "UTF-8", ""));
+            } catch (Exception e) {
+                ecAnnotationTmp = false;
+            }
+            boolean ecAnnotation = ecAnnotationTmp;
 
             PLIPInteractionContainer plipInteractionContainer = chain.getFeature(PLIPInteractionContainer.class);
+
+            System.out.println("efr: " + (earlyFoldingResidues.size() > 0) + " strong: " + (strongResidues.size() > 0) + " functional: " + (functionalResidues.size() > 0) + " couplings: " + ecAnnotation);
 
             return Optional.of(contactStructuralInformation.stream()
                     .map(contact -> {
@@ -204,13 +213,16 @@ public class A07_WriteStructuralInformationByContactCsv {
                                 contactIsInCollection(residuesInEarlyFoldingSecondaryStructureElements, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 residueIsInCollection(aromaticResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
                                 contactIsInCollection(aromaticResidues, contact.getResidueIdentifier1(), contact.getResidueIdentifier2()) + "," +
-                                sane;
+                                (earlyFoldingResidues.size() > 0) + "," +
+                                (strongResidues.size() > 0) + "," +
+                                (functionalResidues.size() > 0) + "," +
+                                ecAnnotation;
                     })
                     .collect(Collectors.joining(System.lineSeparator())));
         } catch (Exception e) {
-            logger.info("calculation failed for {}",
+            logger.info("calculation failed for {}\nby: {}",
                     line,
-                    e);
+                    e.getMessage());
             return Optional.empty();
         }
     }

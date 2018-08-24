@@ -190,7 +190,10 @@ public class StructuralInformationParserService {
                             averageMaximumRmsd,
                             standardDeviationMaximumRmsd,
                             reconstructionStructuralInformation,
-                            topScoringReconstructions);
+                            topScoringReconstructions,
+                            values.stream()
+                                    .map(ReconstructionStructuralInformation::getRmsdIncrease)
+                                    .collect(Collectors.toList()));
                 })
                 .collect(Collectors.toList());
     }
@@ -278,7 +281,11 @@ public class StructuralInformationParserService {
                 computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getAverageRmsdIncreaseZScore),
                 computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getMaximumRmsdIncreaseZScore),
                 computeFeatureAverage(contactsOfAminoAcid, ContactStructuralInformation::getFractionOfTopScoringContacts),
-                computeFeatureSum(contactsOfAminoAcid, ContactStructuralInformation::getAverageRmsdIncrease));
+                computeFeatureSum(contactsOfAminoAcid, ContactStructuralInformation::getAverageRmsdIncrease),
+                contactsOfAminoAcid.stream()
+                        .map(ContactStructuralInformation::getRawValues)
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList()));
     }
 
     private double computeFeatureAverage(List<ContactStructuralInformation> contactOfAminoAcid,

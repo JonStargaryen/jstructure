@@ -14,11 +14,13 @@ import de.bioforscher.jstructure.model.identifier.ResidueIdentifier;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.StructureParser;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
+import de.bioforscher.testutil.FileUtils;
 import de.bioforscher.testutil.TestUtils;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -117,6 +119,24 @@ public class ExplorerChain {
         this.sequence = chain.getAminoAcidSequence();
 
         this.secondaryStructureElements = SecondaryStructureElement.of(chain);
+
+        if(stfId.equals("STF0023")) {
+            String output = residues.stream()
+                    .map(rsi -> {
+                        String residueOutput = rsi.getRawValues().stream()
+                                .map(rv -> rsi.getResidueIdentifier() + "," + rv)
+                                .collect(Collectors.joining(System.lineSeparator()));
+                        if(residueOutput.isEmpty()) {
+                            return rsi.getResidueIdentifier() + ",0";
+                        } else {
+                            return residueOutput;
+                        }
+                    })
+                    .collect(Collectors.joining(System.lineSeparator()));
+
+            FileUtils.write(Paths.get("/home/bittrich/STF0023-detailed.csv"),
+                    output);
+        }
     }
 
     private static List<Integer> parseIntegerList(String element) {

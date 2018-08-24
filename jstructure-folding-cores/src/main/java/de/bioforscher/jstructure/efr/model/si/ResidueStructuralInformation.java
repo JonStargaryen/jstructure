@@ -2,6 +2,8 @@ package de.bioforscher.jstructure.efr.model.si;
 
 import de.bioforscher.jstructure.StandardFormat;
 
+import java.util.List;
+
 public class ResidueStructuralInformation {
     private final int residueIdentifier;
     private final String aa;
@@ -19,6 +21,7 @@ public class ResidueStructuralInformation {
     private final double maximumRmsdIncreaseZScore;
     private final double fractionOfTopScoringContacts;
     private final double sumRmsdIncrease;
+    private final List<Double> rawValues;
 
     public ResidueStructuralInformation(int residueIdentifier,
                                         String aa,
@@ -35,7 +38,8 @@ public class ResidueStructuralInformation {
                                         double averageRmsdIncreaseZScore,
                                         double maximumRmsdIncreaseZScore,
                                         double fractionOfTopScoringContacts,
-                                        double sumRmsdIncrease) {
+                                        double sumRmsdIncrease,
+                                        List<Double> rawValues) {
         this.residueIdentifier = residueIdentifier;
         this.aa = aa;
         this.averageRmsdIncrease = averageRmsdIncrease;
@@ -52,6 +56,7 @@ public class ResidueStructuralInformation {
         this.maximumRmsdIncreaseZScore = maximumRmsdIncreaseZScore;
         this.fractionOfTopScoringContacts = fractionOfTopScoringContacts;
         this.sumRmsdIncrease = sumRmsdIncrease;
+        this.rawValues = rawValues;
     }
 
     public int getResidueIdentifier() {
@@ -116,6 +121,10 @@ public class ResidueStructuralInformation {
 
     public double getSumRmsdIncrease() {
         return sumRmsdIncrease;
+    }
+
+    public List<Double> getRawValues() {
+        return rawValues;
     }
 
     public String getCsvLine() {
