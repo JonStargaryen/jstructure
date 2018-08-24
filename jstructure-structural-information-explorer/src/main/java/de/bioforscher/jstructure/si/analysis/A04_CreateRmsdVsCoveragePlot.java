@@ -10,9 +10,9 @@ import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.si.ConfoldServiceWorker;
-import de.bioforscher.jstructure.si.explorer.DataSource;
 import de.bioforscher.jstructure.si.explorer.ExplorerChain;
 import de.bioforscher.jstructure.si.model.ReconstructionResult;
+import de.bioforscher.testutil.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class A04_CreateRmsdVsCoveragePlot {
     private static final Logger logger = LoggerFactory.getLogger(A04_CreateRmsdVsCoveragePlot.class);
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/reconstruction-perc.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/sb/reconstruction-perc.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
 
     private static FileWriter fileWriter;
@@ -42,12 +42,11 @@ public class A04_CreateRmsdVsCoveragePlot {
         if(!fileExisted) {
             fileWriter.write("id,coverage,rmsd" + System.lineSeparator());
         }
-        executorService = Executors.newFixedThreadPool(8);
+        executorService = Executors.newFixedThreadPool(16);
 
-        DataSource.getInstance()
-                .start2FoldChains()
-                // skip failing computation STF0006
-                .filter(explorerChain -> !explorerChain.getStfId().equals("STF0006") && !explorerChain.getStfId().equals("STF0044"))
+        TestUtils.getResourceAsStream("data/efr.list")
+                .map(line -> line.split(";"))
+                .map(ExplorerChain::new)
                 .forEach(A04_CreateRmsdVsCoveragePlot::handleChain);
     }
 
@@ -88,14 +87,9 @@ public class A04_CreateRmsdVsCoveragePlot {
                     reconstructionFutures.put(name, new ArrayList<>());
                 }
 
-                if(Files.lines(OUTPUT_PATH)
-                        .anyMatch(line -> line.startsWith(explorerChain.getStfId()) && line.split(",")[1].equals(name))) {
-                    continue;
-                }
-
                 List<Future<ReconstructionResult>> bin = reconstructionFutures.get(name);
 
-                bin.add(executorService.submit(new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
+                bin.add(executorService.submit(new ConfoldServiceWorker("/home/sb/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
                         contactMap.getCaspRRRepresentation(),
@@ -120,17 +114,12 @@ public class A04_CreateRmsdVsCoveragePlot {
                     List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
                     List<Path> tmpFiles = new ArrayList<>();
 
-                    if (reconstructions.isEmpty()) {
-                        // bin already processed - skipping this may also result in skipping upon failed computation
-                        continue;
-                    }
-
                     for (Chain reconstructedChain : reconstructions) {
                         Path reconstructPath = Files.createTempFile("confoldservice-recon", ".pdb");
                         tmpFiles.add(reconstructPath);
                         Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
                         alignmentResults.add(TM_ALIGN_SERVICE.process(new String[] {
-                                "/home/bittrich/programs/tmalign/tmalign",
+                                "/home/sb/programs/tmalign",
                                 nativeChainPath.toFile().getAbsolutePath(),
                                 reconstructPath.toFile().getAbsolutePath()
                         }));

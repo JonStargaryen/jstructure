@@ -50,13 +50,13 @@
                 </configuration>
             </plugin>
             <!-- uncomment following plugin declaration: boot for server, assembly for strategy runner jar -->
-            <plugin>
+            <!--plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <addResources>true</addResources>
                 </configuration>
-            </plugin>
+            </plugin-->
             <!-- strategy runner jar for server -->
             <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -117,6 +117,36 @@
                     </execution>
                 </executions>
             </plugin-->
+            <!-- percentage runner for server -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <finalName>percentage</finalName>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>de.bioforscher.jstructure.si.analysis.A04_CreateRmsdVsCoveragePlot</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>.</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
     <properties>
