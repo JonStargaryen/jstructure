@@ -98,7 +98,8 @@ public class ExplorerChain {
             EvolutionaryCouplingParser.parseHotSpotFile(chain,
                     TestUtils.getResourceAsInputStream("data/coupling/" + stfId + "_hs.html"));
             EvolutionaryCouplingParser.parsePlmScore(contacts,
-                    Jsoup.parse(TestUtils.getResourceAsInputStream("data/coupling/" + stfId + "_ec.html"), "UTF-8", ""));
+                    Jsoup.parse(TestUtils.getResourceAsInputStream("data/coupling/" + stfId + "_ec.html"), "UTF-8", ""),
+                    chain.getAminoAcids().size());
         } catch (Exception e) {
             logger.warn("no coupling file for " + stfId);
             aminoAcids.forEach(aminoAcid -> aminoAcid.getFeatureContainer().addFeature(new HotSpotScoring()));

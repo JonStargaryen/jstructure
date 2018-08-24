@@ -45,6 +45,8 @@ public class A07_WriteStructuralInformationByContactCsv {
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("pancsa-si.list"))
                 .filter(line -> line.startsWith("STF"))
+                // skip entries lacking EFR annotation
+                .filter(line -> !line.contains(";[];"))
                 .map(A07_WriteStructuralInformationByContactCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -52,7 +54,8 @@ public class A07_WriteStructuralInformationByContactCsv {
                         "pdb,chain,res1,aa1,res2,aa2,distanceBin,long,medium,short,dCentroid," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
                                 "avgRmsdZ,numberOfTopScoringContacts," +
-                                "plm,betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +
+                                "plm,rank,topScoring02,topScoring04,topScoring06,topScoring08,topScoring10,topScoring12,topScoring14,topScoring16," +
+                                "betweenness,avg_betweenness,avg_closeness,avg_clusteringcoefficient," +
                                 "hydrogen,hydrophobic," +
                                 "efr1,efr2,func1,func2,strong1,strong2,buried1,buried2,ordered1,ordered2,efrsse1,efrsse2,arom1,arom2," +
                                 "efrAnnotation,strongAnnotation,functionalAnnotation,ecAnnotation" + System.lineSeparator(),
@@ -134,14 +137,15 @@ public class A07_WriteStructuralInformationByContactCsv {
             ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
             ResidueGraphCalculations residueGraphCalculations = new ResidueGraphCalculations(conventionalProteinGraph);
 
-            boolean ecAnnotationTmp = true;
             try {
                 EvolutionaryCouplingParser.parsePlmScore(contactStructuralInformation,
-                        Jsoup.parse(Start2FoldConstants.newInputStream(Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId + "_ec.html")), "UTF-8", ""));
+                        Jsoup.parse(Start2FoldConstants.newInputStream(Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId + "_ec.html")), "UTF-8", ""),
+                        chain.getAminoAcids().size());
             } catch (Exception e) {
-                ecAnnotationTmp = false;
+
             }
-            boolean ecAnnotation = ecAnnotationTmp;
+            boolean ecAnnotation = contactStructuralInformation.stream()
+                    .anyMatch(csi -> csi.getPlmScore() != 0.0);
 
             PLIPInteractionContainer plipInteractionContainer = chain.getFeature(PLIPInteractionContainer.class);
 
@@ -186,6 +190,16 @@ public class A07_WriteStructuralInformationByContactCsv {
                                 contact.getFractionOfTopScoringContacts() + "," +
 
                                 StandardFormat.format(contact.getPlmScore()) + "," +
+                                contact.getCouplingRank() + "," +
+                                contact.istop02() + "," +
+                                contact.isTop04() + "," +
+                                contact.isTop06() + "," +
+                                contact.isTop08() + "," +
+                                contact.isTop10() + "," +
+                                contact.isTop12() + "," +
+                                contact.isTop14() + "," +
+                                contact.isTop16() + "," +
+
                                 StandardFormat.format(residueGraphCalculations.betweenness(pair)) + "," +
                                 StandardFormat.format(0.5 * residueTopologicPropertiesContainer1.getConventional().getBetweenness() + 0.5 * residueTopologicPropertiesContainer2.getConventional().getBetweenness()) + "," +
                                 StandardFormat.format(0.5 * residueTopologicPropertiesContainer1.getConventional().getCloseness() + 0.5 * residueTopologicPropertiesContainer2.getConventional().getCloseness()) + "," +

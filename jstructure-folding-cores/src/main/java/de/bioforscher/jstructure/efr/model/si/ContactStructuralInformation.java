@@ -26,7 +26,16 @@ public class ContactStructuralInformation {
     private final double maximumRmsdIncreaseZScore;
     private final double fractionOfTopScoringContacts;
     private double plmScore;
+    private int couplingRank;
     private final List<Double> rawValues;
+    private boolean top02;
+    private boolean top04;
+    private boolean top06;
+    private boolean top08;
+    private boolean top10;
+    private boolean top12;
+    private boolean top14;
+    private boolean top16;
 
     public ContactStructuralInformation(int residueIdentifier1,
                                         String aa1,
@@ -79,6 +88,14 @@ public class ContactStructuralInformation {
         }
         this.fractionOfTopScoringContacts = frac;
         this.rawValues = rawValues;
+    }
+
+    public int getCouplingRank() {
+        return couplingRank;
+    }
+
+    public void setCouplingRank(int couplingRank) {
+        this.couplingRank = couplingRank;
     }
 
     public List<Double> getRawValues() {
@@ -184,5 +201,69 @@ public class ContactStructuralInformation {
                 StandardFormat.format(maximumQIncrease) + "," +
                 isEarlyFoldingResidue + "," +
                 isEarlyFoldingContact;
+    }
+
+    public void markAsTopScoringContact02() {
+        this.top02 = true;
+    }
+
+    public void markAsTopScoringContact04() {
+        this.top04 = true;
+    }
+
+    public void markAsTopScoringContact06() {
+        this.top06 = true;
+    }
+
+    public void markAsTopScoringContact08() {
+        this.top08 = true;
+    }
+
+    public void markAsTopScoringContact10() {
+        this.top10 = true;
+    }
+
+    public void markAsTopScoringContact12() {
+        this.top12 = true;
+    }
+
+    public void markAsTopScoringContact14() {
+        this.top14 = true;
+    }
+
+    public void markAsTopScoringContact16() {
+        this.top16 = true;
+    }
+
+    public boolean isTop04() {
+        return top04;
+    }
+
+    public boolean isTop06() {
+        return top06;
+    }
+
+    public boolean isTop08() {
+        return top08;
+    }
+
+    public boolean isTop10() {
+        return top10;
+    }
+
+    public boolean isTop12() {
+        return top12;
+    }
+
+    public boolean isTop14() {
+        return top14;
+    }
+
+    public boolean isTop16() {
+        return top16;
+    }
+
+    public boolean istop02() {
+        return top02;
     }
 }

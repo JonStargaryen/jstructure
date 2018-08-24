@@ -42,11 +42,13 @@ public class A06_WriteStructuralInformationByResidueCsv {
     public static void main(String[] args) throws IOException {
         String output = Files.lines(Start2FoldConstants.DATA_DIRECTORY.resolve("si").resolve("pancsa-si.list"))
                 .filter(line -> line.startsWith("STF"))
+                // skip entries lacking EFR annotation
+                .filter(line -> !line.contains(";[];"))
                 .map(A06_WriteStructuralInformationByResidueCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
-                        "pdb,chain,res,aa,sse3,sse9,sseSize,sseTerminusDistance," +
+                        "pdb,chain,res,aa,sse3,sse9,helix,strand,coil,sseSize,sseTerminusDistance," +
                                 "exposed,dCentroid," +
                                 "terminusDistance," +
                                 "plip_hydrogen,plip_hydrophobic,plip_bb,plip_total," +
@@ -63,7 +65,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 "plip_distinct_neighborhoods,conv_distinct_neighborhoods," +
                                 "avgRmsd,avgTm,avgQ,maxRmsd,maxTm,maxQ," +
                                 "avgRmsdZ,numberOfTopScoringContacts," +
-                                "folds,functional,strong," +
+                                "folds,efrFolds,functional,strong," +
                                 "efrAnnotation,strongAnnotation,functionalAnnotation,ecAnnotation" + System.lineSeparator(),
                         ""));
 
@@ -93,14 +95,15 @@ public class A06_WriteStructuralInformationByResidueCsv {
             Start2FoldXmlParser.parseSpecificExperiment(chain,
                     start2foldXml,
                     experimentIds);
-            boolean ecAnnotationTmp = true;
+
             try {
                 EvolutionaryCouplingParser.parseHotSpotFile(chain,
                         Start2FoldConstants.COUPLING_DIRECTORY.resolve(entryId.toUpperCase() + "_hs.html"));
             } catch (Exception e) {
-                ecAnnotationTmp = false;
+
             }
-            boolean ecAnnotation = ecAnnotationTmp;
+            boolean ecAnnotation = chain.aminoAcids()
+                    .anyMatch(residue -> residue.getFeature(HotSpotScoring.class).getEcCount() > 0);
 
             EQuantParser.parseEQuantFile(chain,
                     Start2FoldConstants.EQUANT_DIRECTORY.resolve(entryId.toLowerCase() + ".equant-small.txt"));
@@ -133,6 +136,16 @@ public class A06_WriteStructuralInformationByResidueCsv {
                             earlyFoldingResidues,
                             contactStructuralInformation);
             ResidueGraph conventionalProteinGraph = ResidueGraph.createResidueGraph(chain, ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0));
+
+            List<AminoAcid> residuesInEarlyFoldingSecondaryStructureElements = chain.aminoAcids()
+                    .filter(aminoAcid -> !aminoAcid.getFeature(GenericSecondaryStructure.class).getSecondaryStructure().isCoilType())
+                    .filter(aminoAcid -> {
+                        GenericSecondaryStructure.SecondaryStructureElement surroundingSecondaryStructureElement = aminoAcid.getFeature(GenericSecondaryStructure.class).getSurroundingSecondaryStructureElement(aminoAcid);
+                        List<AminoAcid> surroundingAminoAcids = chain.getAminoAcids().subList(surroundingSecondaryStructureElement.getStart(), surroundingSecondaryStructureElement.getEnd() + 1);
+                        return surroundingAminoAcids.stream()
+                                .anyMatch(earlyFoldingResidues::contains);
+                    })
+                    .collect(Collectors.toList());
 
             System.out.println("efr: " + (earlyFoldingResidues.size() > 0) + " strong: " + (strongResidues.size() > 0) + " functional: " + (functionalResidues.size() > 0));
 
@@ -196,6 +209,9 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 aminoAcid.getOneLetterCode() + "," +
                                 sse.getSecondaryStructure().getReducedRepresentation() + "," +
                                 sse.getSecondaryStructure().getOneLetterRepresentation() + "," +
+                                (sse.getSecondaryStructure().isHelixType() ? "true" : "false") + "," +
+                                (sse.getSecondaryStructure().isStrandType() ? "true" : "false") + "," +
+                                (sse.getSecondaryStructure().isCoilType() ? "true" : "false") + "," +
                                 sseSize + "," +
                                 sseTerminusDistance + "," +
 
@@ -260,6 +276,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 StandardFormat.format(residueStructuralInformationEntry.getFractionOfTopScoringContacts()) + "," +
 
                                 (earlyFoldingResidues.contains(aminoAcid) ? "early" : "late") + "," +
+                                (residuesInEarlyFoldingSecondaryStructureElements.contains(aminoAcid) ? "true" : "false") + "," +
                                 functionalAnnotation + "," +
                                 (strongResidues.contains(aminoAcid) ? "strong" : "weak") + "," +
 
