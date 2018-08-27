@@ -36,7 +36,7 @@ public class A03_ReconstructByVariousStrategy {
     private static final Logger logger = LoggerFactory.getLogger(A03_ReconstructByVariousStrategy.class);
     private static final double DEFAULT_COVERAGE = 0.3;
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/strategy.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/sb/strategy.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
     private static final ContactDefinition contactDefinition = ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0);
 
@@ -46,7 +46,7 @@ public class A03_ReconstructByVariousStrategy {
     public static void main(String[] args) throws IOException {
         fileWriter = new FileWriter(OUTPUT_PATH.toFile());
         fileWriter.write("id,strategy,rmsd" + System.lineSeparator());
-        executorService = Executors.newFixedThreadPool(5);
+        executorService = Executors.newFixedThreadPool(16);
 
         TestUtils.getResourceAsStream("data/efr.list")
                 .map(line -> line.split(";"))
@@ -75,7 +75,7 @@ public class A03_ReconstructByVariousStrategy {
                                         contactStructuralInformation,
                                         numberOfContactsToSelect);
 
-                                contactMap.setName(reconstructionStrategy.getClass().getSimpleName() + "-" + (i + 1));
+                                contactMap.setName(reconstructionStrategy.getName() + "-" + (i + 1));
 
                                 return contactMap;
                             }))
@@ -94,7 +94,7 @@ public class A03_ReconstructByVariousStrategy {
 
                 List<Future<ReconstructionResult>> bin = reconstructionFutures.get(name);
 
-                bin.add(executorService.submit(new ConfoldServiceWorker("/home/bittrich/programs/confold_v1.0/confold.pl",
+                bin.add(executorService.submit(new ConfoldServiceWorker("/home/sb/programs/confold_v1.0/confold.pl",
                         contactMap.getSequence(),
                         contactMap.getSecondaryStructureElements(),
                         contactMap.getCaspRRRepresentation(),
@@ -116,6 +116,10 @@ public class A03_ReconstructByVariousStrategy {
                             .map(ReconstructionResult::getChains)
                             .flatMap(Collection::stream)
                             .collect(Collectors.toList());
+                    logger.info("[{}][{}] {} reconstructs in bin",
+                            explorerChain.getStfId(),
+                            name,
+                            reconstructions.size());
                     List<TMAlignAlignmentResult> alignmentResults = new ArrayList<>();
                     List<Path> tmpFiles = new ArrayList<>();
 
@@ -128,11 +132,16 @@ public class A03_ReconstructByVariousStrategy {
                         tmpFiles.add(reconstructPath);
                         Files.write(reconstructPath, reconstructedChain.getPdbRepresentation().getBytes());
                         alignmentResults.add(TM_ALIGN_SERVICE.process(new String[]{
-                                "/home/bittrich/programs/tmalign/tmalign",
+                                "/home/sb/programs/tmalign",
                                 nativeChainPath.toFile().getAbsolutePath(),
                                 reconstructPath.toFile().getAbsolutePath()
                         }));
                     }
+
+                    logger.info("[{}][{}] {} alignments in bin",
+                            explorerChain.getStfId(),
+                            name,
+                            alignmentResults.size());
 
                     if (alignmentResults.isEmpty()) {
                         throw new ComputationException("tmalign did not yield any alignments");
@@ -141,8 +150,9 @@ public class A03_ReconstructByVariousStrategy {
                     for(TMAlignAlignmentResult alignmentResult : alignmentResults) {
                         double rmsd = alignmentResult.getRootMeanSquareDeviation().getScore();
                         String line = explorerChain.getStfId() + "," + name + "," + rmsd;
-                        logger.info("[{}] {}",
+                        logger.info("[{}][{}] {}",
                                 explorerChain.getStfId(),
+                                name,
                                 line);
                         fileWriter.write(line + System.lineSeparator());
                         fileWriter.flush();
@@ -187,15 +197,15 @@ public class A03_ReconstructByVariousStrategy {
 
     enum ReconstructionStrategyDefinition {
         RANDOM(new Random()),
-//        BEST_BY_AVERAGE(new BestByAverage()),
-//        WORST_BY_AVERAGE(new WorstByAverage()),
-//        NON_NATIVE(new BestNativeNonNativeSplit(0, 100)),
-//        BEST25_NON_NATIVE75(new BestNativeNonNativeSplit(25, 75)),
-//        BEST50_NON_NATIVE50(new BestNativeNonNativeSplit(50, 50)),
-//        BEST75_NON_NATIVE25(new BestNativeNonNativeSplit(75, 25)),
-//        WORST25_NON_NATIVE75(new WorstNativeNonNativeSplit(25, 75)),
-//        WORST50_NON_NATIVE50(new WorstNativeNonNativeSplit(50, 50)),
-//        WORST75_NON_NATIVE25(new WorstNativeNonNativeSplit(75, 25)),
+        BEST_BY_AVERAGE(new BestByAverage()),
+        WORST_BY_AVERAGE(new WorstByAverage()),
+        NON_NATIVE(new BestNativeNonNativeSplit(0, 100)),
+        BEST25_NON_NATIVE75(new BestNativeNonNativeSplit(25, 75)),
+        BEST50_NON_NATIVE50(new BestNativeNonNativeSplit(50, 50)),
+        BEST75_NON_NATIVE25(new BestNativeNonNativeSplit(75, 25)),
+        WORST25_NON_NATIVE75(new WorstNativeNonNativeSplit(25, 75)),
+        WORST50_NON_NATIVE50(new WorstNativeNonNativeSplit(50, 50)),
+        WORST75_NON_NATIVE25(new WorstNativeNonNativeSplit(75, 25)),
         SHORT(new Short()),
         LONG(new Long())
         ;
@@ -225,7 +235,7 @@ public class A03_ReconstructByVariousStrategy {
 
         @Override
         public String getName() {
-            return "highest";
+            return "best";
         }
     }
 
@@ -235,10 +245,15 @@ public class A03_ReconstructByVariousStrategy {
                                                            List<ContactStructuralInformation> contactStructuralInformation,
                                                            int numberOfContacts) {
             Collections.shuffle(contactStructuralInformation);
-            return contactStructuralInformation.subList(0, numberOfContacts)
-                    .stream()
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .limit(numberOfContacts)
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
+            logger.info("[{}] selected {} random contacts, aim: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
         }
 
         @Override
@@ -261,7 +276,7 @@ public class A03_ReconstructByVariousStrategy {
 
         @Override
         public String getName() {
-            return "lowest";
+            return "worst";
         }
     }
 
@@ -320,7 +335,7 @@ public class A03_ReconstructByVariousStrategy {
 
         @Override
         public String getName() {
-            return "best" + nativePercentage + "-nonnative" + nonNativePercentage;
+            return "best" + nativePercentage + "_nonnative" + nonNativePercentage;
         }
     }
 
@@ -376,7 +391,7 @@ public class A03_ReconstructByVariousStrategy {
 
         @Override
         public String getName() {
-            return "worst" + nativePercentage + "-nonnative" + nonNativePercentage;
+            return "worst" + nativePercentage + "_nonnative" + nonNativePercentage;
         }
     }
 
@@ -385,11 +400,16 @@ public class A03_ReconstructByVariousStrategy {
         public List<Pair<Integer, Integer>> selectContacts(Chain chain,
                                                            List<ContactStructuralInformation> contactStructuralInformation,
                                                            int numberOfContacts) {
-            return contactStructuralInformation.stream()
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
                     .filter(csi -> csi.getContactDistanceBin() == ContactDistanceBin.SHORT)
                     .limit(numberOfContacts)
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
+            logger.info("[{}] selected {} long contacts, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
         }
 
         @Override
@@ -403,11 +423,16 @@ public class A03_ReconstructByVariousStrategy {
         public List<Pair<Integer, Integer>> selectContacts(Chain chain,
                                                            List<ContactStructuralInformation> contactStructuralInformation,
                                                            int numberOfContacts) {
-            return contactStructuralInformation.stream()
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
                     .filter(csi -> csi.getContactDistanceBin() == ContactDistanceBin.LONG)
                     .limit(numberOfContacts)
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
+            logger.info("[{}] selected {} long contacts, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
         }
 
         @Override
