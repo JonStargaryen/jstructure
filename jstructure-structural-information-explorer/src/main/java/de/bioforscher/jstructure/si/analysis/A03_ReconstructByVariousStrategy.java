@@ -3,6 +3,7 @@ package de.bioforscher.jstructure.si.analysis;
 import de.bioforscher.jstructure.align.AlignmentException;
 import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
+import de.bioforscher.jstructure.efr.model.ContactDistanceBin;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
 import de.bioforscher.jstructure.graph.contact.definition.ContactDefinition;
@@ -12,9 +13,9 @@ import de.bioforscher.jstructure.model.feature.ComputationException;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 import de.bioforscher.jstructure.si.ConfoldServiceWorker;
-import de.bioforscher.jstructure.si.explorer.DataSource;
 import de.bioforscher.jstructure.si.explorer.ExplorerChain;
 import de.bioforscher.jstructure.si.model.ReconstructionResult;
+import de.bioforscher.testutil.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class A03_ReconstructByVariousStrategy {
     private static final Logger logger = LoggerFactory.getLogger(A03_ReconstructByVariousStrategy.class);
     private static final double DEFAULT_COVERAGE = 0.3;
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/git/phd_sb_repo/data/si/reconstruction.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/bittrich/strategy.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
     private static final ContactDefinition contactDefinition = ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0);
 
@@ -45,15 +46,16 @@ public class A03_ReconstructByVariousStrategy {
     public static void main(String[] args) throws IOException {
         fileWriter = new FileWriter(OUTPUT_PATH.toFile());
         fileWriter.write("id,strategy,rmsd" + System.lineSeparator());
-        executorService = Executors.newFixedThreadPool(8);
+        executorService = Executors.newFixedThreadPool(5);
 
-        DataSource.getInstance()
-                .start2FoldChains()
+        TestUtils.getResourceAsStream("data/efr.list")
+                .map(line -> line.split(";"))
+                .map(ExplorerChain::new)
                 .forEach(A03_ReconstructByVariousStrategy::handleChain);
     }
 
     private static void handleChain(ExplorerChain explorerChain) {
-        logger.info("handling chain {}",
+        logger.info("[{}] starting job",
                 explorerChain.getStfId());
 
         try {
@@ -66,10 +68,7 @@ public class A03_ReconstructByVariousStrategy {
             int numberOfContactsToSelect = (int) (numberOfNativeContacts * DEFAULT_COVERAGE);
 
             List<ReconstructionContactMap> contactMaps = Stream.of(ReconstructionStrategyDefinition.values())
-                    //TODO remove: compute only missing values on the strategy of ignoring the worst 30%
-                    .filter(strategy -> !strategy.getReconstructionStrategy().getName().equals("ignore lowest"))
                     .map(ReconstructionStrategyDefinition::getReconstructionStrategy)
-                    .filter(strategy -> strategy.getName().equals("all"))
                     .flatMap(reconstructionStrategy -> IntStream.range(0, REDUNDANCY)
                             .mapToObj(i -> {
                                 ReconstructionContactMap contactMap = reconstructionStrategy.composeReconstructionContactMap(nativeChain,
@@ -85,7 +84,8 @@ public class A03_ReconstructByVariousStrategy {
             Map<String, List<Future<ReconstructionResult>>> reconstructionFutures = new HashMap<>();
             for (ReconstructionContactMap contactMap : contactMaps) {
                 String name = contactMap.getName().split("-")[0];
-                logger.info("handling contact map definition {}",
+                logger.info("[{}] handling contact map definition {}",
+                        explorerChain.getStfId(),
                         name);
 
                 if(!reconstructionFutures.containsKey(name)) {
@@ -141,7 +141,9 @@ public class A03_ReconstructByVariousStrategy {
                     for(TMAlignAlignmentResult alignmentResult : alignmentResults) {
                         double rmsd = alignmentResult.getRootMeanSquareDeviation().getScore();
                         String line = explorerChain.getStfId() + "," + name + "," + rmsd;
-                        logger.info(line);
+                        logger.info("[{}] {}",
+                                explorerChain.getStfId(),
+                                line);
                         fileWriter.write(line + System.lineSeparator());
                         fileWriter.flush();
                     }
@@ -161,8 +163,8 @@ public class A03_ReconstructByVariousStrategy {
 
     interface ReconstructionStrategy {
         List<Pair<Integer, Integer>> selectContacts(Chain chain,
-                                                     List<ContactStructuralInformation> contactStructuralInformation,
-                                                     int numberOfContacts);
+                                                    List<ContactStructuralInformation> contactStructuralInformation,
+                                                    int numberOfContacts);
 
         default ReconstructionContactMap composeReconstructionContactMap(Chain chain,
                                                                          List<ContactStructuralInformation> contactStructuralInformation,
@@ -184,13 +186,19 @@ public class A03_ReconstructByVariousStrategy {
     }
 
     enum ReconstructionStrategyDefinition {
-        BEST_BY_AVERAGE(new BestByAverage()),
-        IGNORE_BEST(new IgnoreBest()),
         RANDOM(new Random()),
-        WORST_BY_AVERAGE(new WorstByAverage()),
-        NON_NATIVE(new NonNative()),
-        ALL(new All()),
-        IGNORE_WORST(new IgnoreWorst());
+//        BEST_BY_AVERAGE(new BestByAverage()),
+//        WORST_BY_AVERAGE(new WorstByAverage()),
+//        NON_NATIVE(new BestNativeNonNativeSplit(0, 100)),
+//        BEST25_NON_NATIVE75(new BestNativeNonNativeSplit(25, 75)),
+//        BEST50_NON_NATIVE50(new BestNativeNonNativeSplit(50, 50)),
+//        BEST75_NON_NATIVE25(new BestNativeNonNativeSplit(75, 25)),
+//        WORST25_NON_NATIVE75(new WorstNativeNonNativeSplit(25, 75)),
+//        WORST50_NON_NATIVE50(new WorstNativeNonNativeSplit(50, 50)),
+//        WORST75_NON_NATIVE25(new WorstNativeNonNativeSplit(75, 25)),
+        SHORT(new Short()),
+        LONG(new Long())
+        ;
 
         private ReconstructionStrategy reconstructionStrategy;
 
@@ -200,36 +208,6 @@ public class A03_ReconstructByVariousStrategy {
 
         public ReconstructionStrategy getReconstructionStrategy() {
             return reconstructionStrategy;
-        }
-    }
-
-    static class All implements ReconstructionStrategy {
-        @Override
-        public List<Pair<Integer, Integer>> selectContacts(Chain chain, List<ContactStructuralInformation> contactStructuralInformation, int numberOfContacts) {
-            return contactStructuralInformation.stream()
-                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public String getName() {
-            return "all";
-        }
-    }
-
-    static class IgnoreWorst implements ReconstructionStrategy {
-        @Override
-        public List<Pair<Integer, Integer>> selectContacts(Chain chain, List<ContactStructuralInformation> contactStructuralInformation, int numberOfContacts) {
-            contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease).reversed());
-            return contactStructuralInformation.stream()
-                    .limit(contactStructuralInformation.size() - numberOfContacts)
-                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public String getName() {
-            return "ignore lowest";
         }
     }
 
@@ -251,32 +229,11 @@ public class A03_ReconstructByVariousStrategy {
         }
     }
 
-    static class IgnoreBest implements ReconstructionStrategy {
-        @Override
-        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
-                                                                 List<ContactStructuralInformation> contactStructuralInformation,
-                                                                 int numberOfContacts) {
-            contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease).reversed());
-            List<ContactStructuralInformation> bestContacts = contactStructuralInformation.subList(0, numberOfContacts);
-            Collections.shuffle(contactStructuralInformation);
-            return contactStructuralInformation.stream()
-                    .filter(contact -> !bestContacts.contains(contact))
-                    .limit(numberOfContacts)
-                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public String getName() {
-            return "ignore highest";
-        }
-    }
-
     static class Random implements ReconstructionStrategy {
         @Override
         public List<Pair<Integer, Integer>> selectContacts(Chain chain,
-                                                                 List<ContactStructuralInformation> contactStructuralInformation,
-                                                                 int numberOfContacts) {
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
             Collections.shuffle(contactStructuralInformation);
             return contactStructuralInformation.subList(0, numberOfContacts)
                     .stream()
@@ -292,7 +249,9 @@ public class A03_ReconstructByVariousStrategy {
 
     static class WorstByAverage implements ReconstructionStrategy {
         @Override
-        public List<Pair<Integer, Integer>> selectContacts(Chain chain, List<ContactStructuralInformation> contactStructuralInformation, int numberOfContacts) {
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
             contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease));
             return contactStructuralInformation.subList(0, numberOfContacts)
                     .stream()
@@ -307,23 +266,34 @@ public class A03_ReconstructByVariousStrategy {
     }
 
     /**
-     * Select best contacts and introduce 50% non-native contacts additionally.
+     * Select some percentage best contacts and introduce some percentage non-native contacts additionally.
      */
-    static class NonNative implements ReconstructionStrategy {
+    static class BestNativeNonNativeSplit implements ReconstructionStrategy {
+        private final int nativePercentage;
+        private final int nonNativePercentage;
+
+        BestNativeNonNativeSplit(int nativePercentage, int nonNativePercentage) {
+            this.nativePercentage = nativePercentage;
+            this.nonNativePercentage = nonNativePercentage;
+        }
+
         @Override
         public List<Pair<Integer, Integer>> selectContacts(Chain chain,
-                                                                 List<ContactStructuralInformation> contactStructuralInformation,
-                                                                 int numberOfContacts) {
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
             contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease).reversed());
-            List<ContactStructuralInformation> information = contactStructuralInformation.subList(0, numberOfContacts);
-            List<Pair<Integer, Integer>> contacts = information.stream()
+            List<Pair<Integer, Integer>> nativeContacts = contactStructuralInformation.stream()
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+
+            List<Pair<Integer, Integer>> selectedNativeContacts = nativeContacts.stream()
+                    .limit((long) (nativePercentage * 0.01 * numberOfContacts))
                     .collect(Collectors.toList());
 
             List<AminoAcid> aminoAcids = chain.getAminoAcids();
             List<Pair<Integer, Integer>> nonNativeContacts = new ArrayList<>();
             // additional non-native contacts
-            int numberOfAdditionalContacts = (int) (0.5 * numberOfContacts);
+            int numberOfAdditionalContacts = (int) (nonNativePercentage * 0.01 * numberOfContacts);
             for (int i = 0; i < numberOfAdditionalContacts; i++) {
                 Pair<Integer, Integer> nonNativeContact = null;
                 while (nonNativeContact == null) {
@@ -335,7 +305,7 @@ public class A03_ReconstructByVariousStrategy {
                     // real contact with enough sequence separation
                     if ((Math.abs(potentialContact.getLeft() - potentialContact.getRight()) > 5) &&
                             // not in native contacts present
-                            (!contacts.contains(potentialContact) && !contacts.contains(potentialContact.flip())) &&
+                            (!nativeContacts.contains(potentialContact) && !nativeContacts.contains(potentialContact.flip())) &&
                             // not in non-native contacts present
                             (!nonNativeContacts.contains(potentialContact) && !nonNativeContacts.contains(potentialContact.flip()))) {
                         nonNativeContact = potentialContact;
@@ -344,13 +314,105 @@ public class A03_ReconstructByVariousStrategy {
                 nonNativeContacts.add(nonNativeContact);
             }
 
-            return Stream.concat(contacts.stream(), nonNativeContacts.stream())
+            return Stream.concat(selectedNativeContacts.stream(), nonNativeContacts.stream())
                     .collect(Collectors.toList());
         }
 
         @Override
         public String getName() {
-            return "non-native";
+            return "best" + nativePercentage + "-nonnative" + nonNativePercentage;
+        }
+    }
+
+    static class WorstNativeNonNativeSplit implements ReconstructionStrategy {
+        private final int nativePercentage;
+        private final int nonNativePercentage;
+
+        WorstNativeNonNativeSplit(int nativePercentage, int nonNativePercentage) {
+            this.nativePercentage = nativePercentage;
+            this.nonNativePercentage = nonNativePercentage;
+        }
+
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
+            contactStructuralInformation.sort(Comparator.comparingDouble(ContactStructuralInformation::getAverageRmsdIncrease));
+            List<Pair<Integer, Integer>> nativeContacts = contactStructuralInformation.stream()
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+
+            List<Pair<Integer, Integer>> selectedNativeContacts = nativeContacts.stream()
+                    .limit((long) (nativePercentage * 0.01 * numberOfContacts))
+                    .collect(Collectors.toList());
+
+            List<AminoAcid> aminoAcids = chain.getAminoAcids();
+            List<Pair<Integer, Integer>> nonNativeContacts = new ArrayList<>();
+            // additional non-native contacts
+            int numberOfAdditionalContacts = (int) (nonNativePercentage * 0.01 * numberOfContacts);
+            for (int i = 0; i < numberOfAdditionalContacts; i++) {
+                Pair<Integer, Integer> nonNativeContact = null;
+                while (nonNativeContact == null) {
+                    Collections.shuffle(aminoAcids);
+                    AminoAcid aminoAcid1 = aminoAcids.get(0);
+                    AminoAcid aminoAcid2 = aminoAcids.get(1);
+                    Pair<Integer, Integer> potentialContact = new Pair<>(aminoAcid1.getResidueIdentifier().getResidueNumber(),
+                            aminoAcid2.getResidueIdentifier().getResidueNumber());
+                    // real contact with enough sequence separation
+                    if ((Math.abs(potentialContact.getLeft() - potentialContact.getRight()) > 5) &&
+                            // not in native contacts present
+                            (!nativeContacts.contains(potentialContact) && !nativeContacts.contains(potentialContact.flip())) &&
+                            // not in non-native contacts present
+                            (!nonNativeContacts.contains(potentialContact) && !nonNativeContacts.contains(potentialContact.flip()))) {
+                        nonNativeContact = potentialContact;
+                    }
+                }
+                nonNativeContacts.add(nonNativeContact);
+            }
+
+            return Stream.concat(selectedNativeContacts.stream(), nonNativeContacts.stream())
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "worst" + nativePercentage + "-nonnative" + nonNativePercentage;
+        }
+    }
+
+    static class Short implements ReconstructionStrategy {
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
+            return contactStructuralInformation.stream()
+                    .filter(csi -> csi.getContactDistanceBin() == ContactDistanceBin.SHORT)
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "short";
+        }
+    }
+
+    static class Long implements ReconstructionStrategy {
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
+            return contactStructuralInformation.stream()
+                    .filter(csi -> csi.getContactDistanceBin() == ContactDistanceBin.LONG)
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "long";
         }
     }
 }
