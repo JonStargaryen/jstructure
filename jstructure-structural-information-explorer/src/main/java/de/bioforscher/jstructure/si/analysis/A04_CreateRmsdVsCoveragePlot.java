@@ -131,7 +131,7 @@ public class A04_CreateRmsdVsCoveragePlot {
 
                     for(TMAlignAlignmentResult alignmentResult : alignmentResults) {
                         double rmsd = alignmentResult.getRootMeanSquareDeviation().getScore();
-                        String line = explorerChain.getStfId() + "," + name + "," + rmsd;
+                        String line = explorerChain.getStfId() + "," + name.replace("p", "") + "," + rmsd;
                         logger.info(line);
                         fileWriter.write(line + System.lineSeparator());
                         fileWriter.flush();

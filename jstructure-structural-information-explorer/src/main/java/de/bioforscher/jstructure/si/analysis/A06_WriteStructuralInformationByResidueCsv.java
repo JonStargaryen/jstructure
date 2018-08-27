@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -56,7 +57,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 "plip_nl_hydrogen,plip_nl_hydrophobic,plip_nl_bb,plip_nl_total," +
                                 "energy,egor,equant," +
                                 "asa,loopFraction," +
-                                "eccount,cumstrength,ecstrength,conservation," +
+                                "eccount,cumstrength,ecstrength,conservation,topScoring04," +
                                 "plip_betweenness,plip_closeness,plip_clusteringcoefficient," +
                                 "plip_hydrogen_betweenness,plip_hydrogen_closeness,plip_hydrogen_clusteringcoefficient," +
                                 "plip_hydrophobic_betweenness,plip_hydrophobic_closeness,plip_hydrophobic_clusteringcoefficient," +
@@ -104,6 +105,17 @@ public class A06_WriteStructuralInformationByResidueCsv {
             }
             boolean ecAnnotation = chain.aminoAcids()
                     .anyMatch(residue -> residue.getFeature(HotSpotScoring.class).getEcCount() > 0);
+            List<AminoAcid> topScoringResidues;
+            if(ecAnnotation) {
+                double fraction = 0.4;
+                int residuesToSelect = (int) (fraction * chain.aminoAcids().count());
+                topScoringResidues = chain.aminoAcids()
+                        .sorted(Comparator.comparingDouble((AminoAcid aminoAcid) -> aminoAcid.getFeature(HotSpotScoring.class).getCumStrength()).reversed())
+                        .limit(residuesToSelect)
+                        .collect(Collectors.toList());
+            } else {
+                topScoringResidues = new ArrayList<>();
+            }
 
             EQuantParser.parseEQuantFile(chain,
                     Start2FoldConstants.EQUANT_DIRECTORY.resolve(entryId.toLowerCase() + ".equant-small.txt"));
@@ -245,6 +257,7 @@ public class A06_WriteStructuralInformationByResidueCsv {
                                 StandardFormat.format(hotSpotScoring.getCumStrength()) + "," +
                                 StandardFormat.format(hotSpotScoring.getEcStrength()) + "," +
                                 hotSpotScoring.getConservation() + "," +
+                                topScoringResidues.contains(aminoAcid) + "," +
 
                                 StandardFormat.format(residueTopologicPropertiesContainer.getFullPlip().getBetweenness()) + "," +
                                 StandardFormat.format(residueTopologicPropertiesContainer.getFullPlip().getCloseness()) + "," +
