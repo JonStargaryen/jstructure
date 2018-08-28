@@ -16,7 +16,7 @@ public class StructuralInformationRunner {
 
     public static void main(String[] args) throws IOException {
         if(args.length != 4) {
-            logger.warn("usage: java -jar si.jar [confoldPath] [tmalignPath]  [workingDirectory] [threads]");
+            logger.warn("usage: java -jar distiller.jar [confoldPath] [tmalignPath]  [workingDirectory] [threads]");
             return;
         }
 
