@@ -36,7 +36,7 @@ public class A03_ReconstructByVariousStrategy {
     private static final Logger logger = LoggerFactory.getLogger(A03_ReconstructByVariousStrategy.class);
     private static final double DEFAULT_COVERAGE = 0.3;
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/sb/strategy.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/sb/strategy-detailed.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
     private static final ContactDefinition contactDefinition = ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0);
 
@@ -196,18 +196,47 @@ public class A03_ReconstructByVariousStrategy {
     }
 
     enum ReconstructionStrategyDefinition {
-        RANDOM(new Random()),
-        BEST_BY_AVERAGE(new BestByAverage()),
-        WORST_BY_AVERAGE(new WorstByAverage()),
-        NON_NATIVE(new BestNativeNonNativeSplit(0, 100)),
-        BEST25_NON_NATIVE75(new BestNativeNonNativeSplit(25, 75)),
-        BEST50_NON_NATIVE50(new BestNativeNonNativeSplit(50, 50)),
-        BEST75_NON_NATIVE25(new BestNativeNonNativeSplit(75, 25)),
-        WORST25_NON_NATIVE75(new WorstNativeNonNativeSplit(25, 75)),
-        WORST50_NON_NATIVE50(new WorstNativeNonNativeSplit(50, 50)),
-        WORST75_NON_NATIVE25(new WorstNativeNonNativeSplit(75, 25)),
-        SHORT(new Short()),
-        LONG(new Long())
+        // initial strategies
+//        RANDOM(new Random()),
+//        BEST_BY_AVERAGE(new BestByAverage()),
+//        WORST_BY_AVERAGE(new WorstByAverage()),
+//        NON_NATIVE(new BestNativeNonNativeSplit(0, 100)),
+//        BEST25_NON_NATIVE75(new BestNativeNonNativeSplit(25, 75)),
+//        BEST50_NON_NATIVE50(new BestNativeNonNativeSplit(50, 50)),
+//        BEST75_NON_NATIVE25(new BestNativeNonNativeSplit(75, 25)),
+//        WORST25_NON_NATIVE75(new WorstNativeNonNativeSplit(25, 75)),
+//        WORST50_NON_NATIVE50(new WorstNativeNonNativeSplit(50, 50)),
+//        WORST75_NON_NATIVE25(new WorstNativeNonNativeSplit(75, 25)),
+//        SHORT(new Short()),
+//        LONG(new Long())
+        // more fine-grained assessment of FP
+        BEST55_NON_NATIVE45(new BestNativeNonNativeSplit(55, 45)),
+        BEST60_NON_NATIVE40(new BestNativeNonNativeSplit(60, 40)),
+        BEST65_NON_NATIVE35(new BestNativeNonNativeSplit(65, 35)),
+        BEST70_NON_NATIVE30(new BestNativeNonNativeSplit(70, 30)),
+        BEST80_NON_NATIVE20(new BestNativeNonNativeSplit(80, 20)),
+        BEST85_NON_NATIVE15(new BestNativeNonNativeSplit(85, 15)),
+        BEST90_NON_NATIVE10(new BestNativeNonNativeSplit(90, 10)),
+        BEST95_NON_NATIVE5(new BestNativeNonNativeSplit(95, 5)),
+        WORST55_NON_NATIVE45(new WorstNativeNonNativeSplit(55, 45)),
+        WORST60_NON_NATIVE40(new WorstNativeNonNativeSplit(60, 40)),
+        WORST65_NON_NATIVE35(new WorstNativeNonNativeSplit(65, 35)),
+        WORST70_NON_NATIVE30(new WorstNativeNonNativeSplit(70, 30)),
+        WORST80_NON_NATIVE20(new WorstNativeNonNativeSplit(80, 20)),
+        WORST85_NON_NATIVE15(new WorstNativeNonNativeSplit(85, 15)),
+        WORST90_NON_NATIVE10(new WorstNativeNonNativeSplit(90, 10)),
+        WORST95_NON_NATIVE5(new WorstNativeNonNativeSplit(95, 5)),
+        RANDOM25_NON_NATIVE75(new RandomNativeNonNativeSplit(25, 75)),
+        RANDOM50_NON_NATIVE50(new RandomNativeNonNativeSplit(50, 50)),
+        RANDOM55_NON_NATIVE45(new RandomNativeNonNativeSplit(55, 45)),
+        RANDOM60_NON_NATIVE40(new RandomNativeNonNativeSplit(60, 40)),
+        RANDOM65_NON_NATIVE35(new RandomNativeNonNativeSplit(65, 35)),
+        RANDOM70_NON_NATIVE30(new RandomNativeNonNativeSplit(70, 30)),
+        RANDOM75_NON_NATIVE30(new RandomNativeNonNativeSplit(75, 25)),
+        RANDOM80_NON_NATIVE20(new RandomNativeNonNativeSplit(80, 20)),
+        RANDOM85_NON_NATIVE15(new RandomNativeNonNativeSplit(85, 15)),
+        RANDOM90_NON_NATIVE10(new RandomNativeNonNativeSplit(90, 10)),
+        RANDOM95_NON_NATIVE5(new RandomNativeNonNativeSplit(95, 5)),
         ;
 
         private ReconstructionStrategy reconstructionStrategy;
@@ -395,6 +424,62 @@ public class A03_ReconstructByVariousStrategy {
         }
     }
 
+    static class RandomNativeNonNativeSplit implements ReconstructionStrategy {
+        private final int nativePercentage;
+        private final int nonNativePercentage;
+
+        RandomNativeNonNativeSplit(int nativePercentage, int nonNativePercentage) {
+            this.nativePercentage = nativePercentage;
+            this.nonNativePercentage = nonNativePercentage;
+        }
+
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
+            Collections.shuffle(contactStructuralInformation);
+            List<Pair<Integer, Integer>> nativeContacts = contactStructuralInformation.stream()
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+
+            List<Pair<Integer, Integer>> selectedNativeContacts = nativeContacts.stream()
+                    .limit((long) (nativePercentage * 0.01 * numberOfContacts))
+                    .collect(Collectors.toList());
+
+            List<AminoAcid> aminoAcids = chain.getAminoAcids();
+            List<Pair<Integer, Integer>> nonNativeContacts = new ArrayList<>();
+            // additional non-native contacts
+            int numberOfAdditionalContacts = (int) (nonNativePercentage * 0.01 * numberOfContacts);
+            for (int i = 0; i < numberOfAdditionalContacts; i++) {
+                Pair<Integer, Integer> nonNativeContact = null;
+                while (nonNativeContact == null) {
+                    Collections.shuffle(aminoAcids);
+                    AminoAcid aminoAcid1 = aminoAcids.get(0);
+                    AminoAcid aminoAcid2 = aminoAcids.get(1);
+                    Pair<Integer, Integer> potentialContact = new Pair<>(aminoAcid1.getResidueIdentifier().getResidueNumber(),
+                            aminoAcid2.getResidueIdentifier().getResidueNumber());
+                    // real contact with enough sequence separation
+                    if ((Math.abs(potentialContact.getLeft() - potentialContact.getRight()) > 5) &&
+                            // not in native contacts present
+                            (!nativeContacts.contains(potentialContact) && !nativeContacts.contains(potentialContact.flip())) &&
+                            // not in non-native contacts present
+                            (!nonNativeContacts.contains(potentialContact) && !nonNativeContacts.contains(potentialContact.flip()))) {
+                        nonNativeContact = potentialContact;
+                    }
+                }
+                nonNativeContacts.add(nonNativeContact);
+            }
+
+            return Stream.concat(selectedNativeContacts.stream(), nonNativeContacts.stream())
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public String getName() {
+            return "random" + nativePercentage + "_nonnative" + nonNativePercentage;
+        }
+    }
+
     static class Short implements ReconstructionStrategy {
         @Override
         public List<Pair<Integer, Integer>> selectContacts(Chain chain,
@@ -405,7 +490,7 @@ public class A03_ReconstructByVariousStrategy {
                     .limit(numberOfContacts)
                     .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
                     .collect(Collectors.toList());
-            logger.info("[{}] selected {} long contacts, target: {}",
+            logger.info("[{}] selected {} short contacts, target: {}",
                     chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
                     pairs.size(),
                     numberOfContacts);

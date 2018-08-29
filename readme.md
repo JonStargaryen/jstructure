@@ -91,35 +91,3 @@ membrane topology, evolutionary information or UniProt data.
 Dependencies between them are resolved automatically and the user can request features which
 will be computed on-the-fly, when they are not already present.
 
-### StructureDistiller
-
-StructureDistiller is an algorithm which allows to quantify the structural relevance of individual 
-contacts and residues in protein structures. From a given protein structure, a contact map is extracted 
-and subsequently the influence of each contact on reconstruction fidelity is evaluated. Run it with:
-
-    java -jar distiller.jar [confoldPath] [tmalignPath] [workingDirectory] [threads]
-
-* `confoldPath` - path to [CONFOLD](https://github.com/multicom-toolbox/CONFOLD) - see page for DSSP 
-and CNS installation
-* `tmalignPath` - path to [TM-align](https://zhanglab.ccmb.med.umich.edu/TM-align/)
-* `workingDirectory` - all files in PDB format in this directory will be processed, output will be 
-written here
-* `threads` - how many threads to use
-
-Output is in the format:
-
-    (24, 68) false 2.4960 0.6408 0.0433 2.5540 0.6337 0.0433 -0.0580 -0.0072 0.0000
-    
-* 1st column: contact identifier, here between residue number 24 and 68
-* 2nd: was the contact removed from the corresponding contact map
-* 3rd: RMSD of baseline reconstruct
-* 4th: TM-score of baseline reconstruct
-* 5th: fraction of native contacts in baseline reconstruct
-* 6th: average RMSD of reconstructs
-* 7th: average TM-score of reconstructs
-* 8th: average fraction of native contacts in reconstructs
-* **9th: average decrease in RMSD for contact**
-* 10th: average increase in TM-score for contact
-* 11th: average increase in fraction of native contacts for contact
-
-Be sure to test the installation of the dependencies beforehand.

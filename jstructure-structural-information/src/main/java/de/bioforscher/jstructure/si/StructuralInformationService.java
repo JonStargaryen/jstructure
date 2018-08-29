@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class StructuralInformationService {
     private static final Logger logger = LoggerFactory.getLogger(StructuralInformationService.class);
     private static final StructuralInformationService INSTANCE = new StructuralInformationService();
+    private static final String VERSION = "0.1";
     /**
      * How many contacts to select for each iteration.
      */
@@ -38,7 +39,9 @@ public class StructuralInformationService {
     private static final int COVERAGE = 10;
 
     private StructuralInformationService() {
-        logger.info("{} setup up to sample {}% of contacts with coverage {}",
+        logger.info("StructureDistiller v{}",
+                VERSION);
+        logger.debug("{} setup up to sample {}% of contacts with coverage {}",
                 getClass().getSimpleName(),
                 StandardFormat.formatToInteger(BASELINE_FREQUENCY * 100),
                 COVERAGE);
