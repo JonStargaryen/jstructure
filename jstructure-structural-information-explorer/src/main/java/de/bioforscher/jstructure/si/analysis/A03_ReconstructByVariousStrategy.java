@@ -210,7 +210,7 @@ public class A03_ReconstructByVariousStrategy {
 //        SHORT(new Short()),
 //        LONG(new Long())
         // more fine-grained assessment of FP
-        BEST55_NON_NATIVE45(new BestNativeNonNativeSplit(55, 45)),
+        /*BEST55_NON_NATIVE45(new BestNativeNonNativeSplit(55, 45)),
         BEST60_NON_NATIVE40(new BestNativeNonNativeSplit(60, 40)),
         BEST65_NON_NATIVE35(new BestNativeNonNativeSplit(65, 35)),
         BEST70_NON_NATIVE30(new BestNativeNonNativeSplit(70, 30)),
@@ -236,7 +236,32 @@ public class A03_ReconstructByVariousStrategy {
         RANDOM80_NON_NATIVE20(new RandomNativeNonNativeSplit(80, 20)),
         RANDOM85_NON_NATIVE15(new RandomNativeNonNativeSplit(85, 15)),
         RANDOM90_NON_NATIVE10(new RandomNativeNonNativeSplit(90, 10)),
-        RANDOM95_NON_NATIVE5(new RandomNativeNonNativeSplit(95, 5)),
+        RANDOM95_NON_NATIVE5(new RandomNativeNonNativeSplit(95, 5)),*/
+        // last bin which is quite uninformative
+        BEST45_NON_NATIVE55(new BestNativeNonNativeSplit(45, 55)),
+        BEST40_NON_NATIVE60(new BestNativeNonNativeSplit(40, 60)),
+        BEST35_NON_NATIVE65(new BestNativeNonNativeSplit(35, 65)),
+        BEST30_NON_NATIVE70(new BestNativeNonNativeSplit(30, 70)),
+        BEST20_NON_NATIVE80(new BestNativeNonNativeSplit(20, 80)),
+        BEST15_NON_NATIVE85(new BestNativeNonNativeSplit(15, 85)),
+        BEST10_NON_NATIVE90(new BestNativeNonNativeSplit(10, 90)),
+        BEST5_NON_NATIVE95(new BestNativeNonNativeSplit(5, 95)),
+        WORST45_NON_NATIVE55(new WorstNativeNonNativeSplit(45, 55)),
+        WORST40_NON_NATIVE60(new WorstNativeNonNativeSplit(40, 60)),
+        WORST35_NON_NATIVE65(new WorstNativeNonNativeSplit(35, 65)),
+        WORST30_NON_NATIVE70(new WorstNativeNonNativeSplit(30, 70)),
+        WORST20_NON_NATIVE80(new WorstNativeNonNativeSplit(20, 80)),
+        WORST15_NON_NATIVE85(new WorstNativeNonNativeSplit(15, 85)),
+        WORST10_NON_NATIVE90(new WorstNativeNonNativeSplit(10, 90)),
+        WORST5_NON_NATIVE95(new WorstNativeNonNativeSplit(5, 95)),
+        RANDOM45_NON_NATIVE55(new RandomNativeNonNativeSplit(45, 55)),
+        RANDOM40_NON_NATIVE60(new RandomNativeNonNativeSplit(40, 60)),
+        RANDOM35_NON_NATIVE65(new RandomNativeNonNativeSplit(35, 65)),
+        RANDOM30_NON_NATIVE70(new RandomNativeNonNativeSplit(30, 70)),
+        RANDOM20_NON_NATIVE80(new RandomNativeNonNativeSplit(20, 80)),
+        RANDOM15_NON_NATIVE85(new RandomNativeNonNativeSplit(15, 85)),
+        RANDOM10_NON_NATIVE90(new RandomNativeNonNativeSplit(10, 90)),
+        RANDOM5_NON_NATIVE95(new RandomNativeNonNativeSplit(5, 95)),
         ;
 
         private ReconstructionStrategy reconstructionStrategy;
