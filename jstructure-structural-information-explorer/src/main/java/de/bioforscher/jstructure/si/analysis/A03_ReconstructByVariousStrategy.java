@@ -5,6 +5,8 @@ import de.bioforscher.jstructure.align.impl.TMAlignService;
 import de.bioforscher.jstructure.align.result.TMAlignAlignmentResult;
 import de.bioforscher.jstructure.efr.model.ContactDistanceBin;
 import de.bioforscher.jstructure.efr.model.si.ContactStructuralInformation;
+import de.bioforscher.jstructure.feature.interaction.PLIPInteraction;
+import de.bioforscher.jstructure.feature.interaction.PLIPInteractionContainer;
 import de.bioforscher.jstructure.graph.ReconstructionContactMap;
 import de.bioforscher.jstructure.graph.contact.definition.ContactDefinition;
 import de.bioforscher.jstructure.graph.contact.definition.ContactDefinitionFactory;
@@ -64,6 +66,28 @@ public class A03_ReconstructByVariousStrategy {
             Files.write(nativeChainPath, nativeChain.getPdbRepresentation().getBytes());
 
             List<ContactStructuralInformation> contactStructuralInformation = explorerChain.getContacts();
+
+            // annotate with PLIP data
+            PLIPInteractionContainer plipInteractionContainer = nativeChain.getFeature(PLIPInteractionContainer.class);
+            for(ContactStructuralInformation csi : contactStructuralInformation) {
+                AminoAcid aminoAcid1 = nativeChain.select()
+                        .residueNumber(csi.getResidueIdentifier1())
+                        .asAminoAcid();
+                AminoAcid aminoAcid2 = nativeChain.select()
+                        .residueNumber(csi.getResidueIdentifier2())
+                        .asAminoAcid();
+                if(plipInteractionContainer.getHydrogenBonds()
+                        .stream()
+                        .anyMatch(hydrogenBond -> isContact(hydrogenBond, aminoAcid1, aminoAcid2))) {
+                    csi.markAsHydrogenBond();
+                }
+                if(plipInteractionContainer.getHydrophobicInteractions()
+                                .stream()
+                                .anyMatch(hydrophobicInteraction -> isContact(hydrophobicInteraction, aminoAcid1, aminoAcid2))) {
+                    csi.markAsHydrophobicInteraction();
+                }
+            }
+
             int numberOfNativeContacts = contactStructuralInformation.size();
             int numberOfContactsToSelect = (int) (numberOfNativeContacts * DEFAULT_COVERAGE);
 
@@ -171,6 +195,11 @@ public class A03_ReconstructByVariousStrategy {
         }
     }
 
+    private static boolean isContact(PLIPInteraction interaction, AminoAcid aminoAcid1, AminoAcid aminoAcid2) {
+        return (interaction.getPartner1().equals(aminoAcid1) && interaction.getPartner2().equals(aminoAcid2)) ||
+                (interaction.getPartner2().equals(aminoAcid1) && interaction.getPartner1().equals(aminoAcid2));
+    }
+
     interface ReconstructionStrategy {
         List<Pair<Integer, Integer>> selectContacts(Chain chain,
                                                     List<ContactStructuralInformation> contactStructuralInformation,
@@ -238,30 +267,32 @@ public class A03_ReconstructByVariousStrategy {
         RANDOM90_NON_NATIVE10(new RandomNativeNonNativeSplit(90, 10)),
         RANDOM95_NON_NATIVE5(new RandomNativeNonNativeSplit(95, 5)),*/
         // last bin which is quite uninformative
-        BEST45_NON_NATIVE55(new BestNativeNonNativeSplit(45, 55)),
-        BEST40_NON_NATIVE60(new BestNativeNonNativeSplit(40, 60)),
-        BEST35_NON_NATIVE65(new BestNativeNonNativeSplit(35, 65)),
-        BEST30_NON_NATIVE70(new BestNativeNonNativeSplit(30, 70)),
-        BEST20_NON_NATIVE80(new BestNativeNonNativeSplit(20, 80)),
-        BEST15_NON_NATIVE85(new BestNativeNonNativeSplit(15, 85)),
-        BEST10_NON_NATIVE90(new BestNativeNonNativeSplit(10, 90)),
-        BEST5_NON_NATIVE95(new BestNativeNonNativeSplit(5, 95)),
-        WORST45_NON_NATIVE55(new WorstNativeNonNativeSplit(45, 55)),
-        WORST40_NON_NATIVE60(new WorstNativeNonNativeSplit(40, 60)),
-        WORST35_NON_NATIVE65(new WorstNativeNonNativeSplit(35, 65)),
-        WORST30_NON_NATIVE70(new WorstNativeNonNativeSplit(30, 70)),
-        WORST20_NON_NATIVE80(new WorstNativeNonNativeSplit(20, 80)),
-        WORST15_NON_NATIVE85(new WorstNativeNonNativeSplit(15, 85)),
-        WORST10_NON_NATIVE90(new WorstNativeNonNativeSplit(10, 90)),
-        WORST5_NON_NATIVE95(new WorstNativeNonNativeSplit(5, 95)),
-        RANDOM45_NON_NATIVE55(new RandomNativeNonNativeSplit(45, 55)),
-        RANDOM40_NON_NATIVE60(new RandomNativeNonNativeSplit(40, 60)),
-        RANDOM35_NON_NATIVE65(new RandomNativeNonNativeSplit(35, 65)),
-        RANDOM30_NON_NATIVE70(new RandomNativeNonNativeSplit(30, 70)),
-        RANDOM20_NON_NATIVE80(new RandomNativeNonNativeSplit(20, 80)),
-        RANDOM15_NON_NATIVE85(new RandomNativeNonNativeSplit(15, 85)),
-        RANDOM10_NON_NATIVE90(new RandomNativeNonNativeSplit(10, 90)),
-        RANDOM5_NON_NATIVE95(new RandomNativeNonNativeSplit(5, 95)),
+//        BEST45_NON_NATIVE55(new BestNativeNonNativeSplit(45, 55)),
+//        BEST40_NON_NATIVE60(new BestNativeNonNativeSplit(40, 60)),
+//        BEST35_NON_NATIVE65(new BestNativeNonNativeSplit(35, 65)),
+//        BEST30_NON_NATIVE70(new BestNativeNonNativeSplit(30, 70)),
+//        BEST20_NON_NATIVE80(new BestNativeNonNativeSplit(20, 80)),
+//        BEST15_NON_NATIVE85(new BestNativeNonNativeSplit(15, 85)),
+//        BEST10_NON_NATIVE90(new BestNativeNonNativeSplit(10, 90)),
+//        BEST5_NON_NATIVE95(new BestNativeNonNativeSplit(5, 95)),
+//        WORST45_NON_NATIVE55(new WorstNativeNonNativeSplit(45, 55)),
+//        WORST40_NON_NATIVE60(new WorstNativeNonNativeSplit(40, 60)),
+//        WORST35_NON_NATIVE65(new WorstNativeNonNativeSplit(35, 65)),
+//        WORST30_NON_NATIVE70(new WorstNativeNonNativeSplit(30, 70)),
+//        WORST20_NON_NATIVE80(new WorstNativeNonNativeSplit(20, 80)),
+//        WORST15_NON_NATIVE85(new WorstNativeNonNativeSplit(15, 85)),
+//        WORST10_NON_NATIVE90(new WorstNativeNonNativeSplit(10, 90)),
+//        WORST5_NON_NATIVE95(new WorstNativeNonNativeSplit(5, 95)),
+//        RANDOM45_NON_NATIVE55(new RandomNativeNonNativeSplit(45, 55)),
+//        RANDOM40_NON_NATIVE60(new RandomNativeNonNativeSplit(40, 60)),
+//        RANDOM35_NON_NATIVE65(new RandomNativeNonNativeSplit(35, 65)),
+//        RANDOM30_NON_NATIVE70(new RandomNativeNonNativeSplit(30, 70)),
+//        RANDOM20_NON_NATIVE80(new RandomNativeNonNativeSplit(20, 80)),
+//        RANDOM15_NON_NATIVE85(new RandomNativeNonNativeSplit(15, 85)),
+//        RANDOM10_NON_NATIVE90(new RandomNativeNonNativeSplit(10, 90)),
+//        RANDOM5_NON_NATIVE95(new RandomNativeNonNativeSplit(5, 95)),
+        HYDROGEN(new HydrogenBond()),
+        HYDROPHOBIC(new HydrophobicInteraction())
         ;
 
         private ReconstructionStrategy reconstructionStrategy;
@@ -548,6 +579,52 @@ public class A03_ReconstructByVariousStrategy {
         @Override
         public String getName() {
             return "long";
+        }
+    }
+
+    static class HydrogenBond implements ReconstructionStrategy {
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .filter(ContactStructuralInformation::isHydrogenBond)
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+            logger.info("[{}] selected {} hydrogen bonds, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
+        }
+
+        @Override
+        public String getName() {
+            return "hydrogen";
+        }
+    }
+
+    static class HydrophobicInteraction implements ReconstructionStrategy {
+        @Override
+        public List<Pair<Integer, Integer>> selectContacts(Chain chain,
+                                                           List<ContactStructuralInformation> contactStructuralInformation,
+                                                           int numberOfContacts) {
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .filter(ContactStructuralInformation::isHydrophobicInteraction)
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+            logger.info("[{}] selected {} hydrophobic interactions, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
+        }
+
+        @Override
+        public String getName() {
+            return "hydrophobic";
         }
     }
 }

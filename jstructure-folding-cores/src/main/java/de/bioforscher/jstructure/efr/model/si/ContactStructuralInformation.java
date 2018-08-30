@@ -36,6 +36,8 @@ public class ContactStructuralInformation {
     private boolean top12;
     private boolean top14;
     private boolean top16;
+    private boolean hydrogenBond;
+    private boolean hydrophobicInteraction;
 
     public ContactStructuralInformation(int residueIdentifier1,
                                         String aa1,
@@ -88,6 +90,14 @@ public class ContactStructuralInformation {
         }
         this.fractionOfTopScoringContacts = frac;
         this.rawValues = rawValues;
+    }
+
+    public boolean isHydrogenBond() {
+        return hydrogenBond;
+    }
+
+    public boolean isHydrophobicInteraction() {
+        return hydrophobicInteraction;
     }
 
     public int getCouplingRank() {
@@ -233,6 +243,18 @@ public class ContactStructuralInformation {
 
     public void markAsTopScoringContact16() {
         this.top16 = true;
+    }
+
+    public void markAsHydrogenBond() {
+        hydrogenBond = true;
+    }
+
+    public void markAsHydrophobicInteraction() {
+        hydrophobicInteraction = true;
+    }
+
+    public boolean isTop02() {
+        return top02;
     }
 
     public boolean isTop04() {
