@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.efr.analysis;
+package de.bioforscher.jstructure.efr.analysis.aars;
 
 import de.bioforscher.jstructure.StandardFormat;
 import de.bioforscher.jstructure.model.structure.Structure;

@@ -1,4 +1,4 @@
-package de.bioforscher.jstructure.efr.analysis;
+package de.bioforscher.jstructure.efr.analysis.aars;
 
 import de.bioforscher.testutil.FileUtils;
 
