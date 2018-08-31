@@ -115,6 +115,8 @@ public class A03B_SplitByStrategy {
                 strategy.equals("short") ||
                 strategy.equals("long") ||
                 strategy.equals("best") ||
-                strategy.equals("worst");
+                strategy.equals("worst") ||
+                strategy.equals("hydrogen") ||
+                strategy.equals("hydrophobic");
     }
 }
