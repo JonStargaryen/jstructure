@@ -50,20 +50,20 @@
                 </configuration>
             </plugin>
             <!-- uncomment following plugin declaration: boot for server, assembly for strategy runner jar -->
-            <!--plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <addResources>true</addResources>
                 </configuration>
-            </plugin-->
+            </plugin>
             <!-- strategy runner jar for server -->
             <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
-                    <finalName>strategy</finalName>
+                    <finalName>strategy-finegrained</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
