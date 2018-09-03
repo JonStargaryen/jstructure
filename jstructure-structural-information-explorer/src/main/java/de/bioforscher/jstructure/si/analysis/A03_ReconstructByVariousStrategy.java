@@ -38,7 +38,7 @@ public class A03_ReconstructByVariousStrategy {
     private static final Logger logger = LoggerFactory.getLogger(A03_ReconstructByVariousStrategy.class);
     private static final double DEFAULT_COVERAGE = 0.3;
     private static final int REDUNDANCY = 10;
-    private static final Path OUTPUT_PATH = Paths.get("/home/sb/strategy-detailed.csv");
+    private static final Path OUTPUT_PATH = Paths.get("/home/sb/strategy-type.csv");
     private static final TMAlignService TM_ALIGN_SERVICE = TMAlignService.getInstance();
     private static final ContactDefinition contactDefinition = ContactDefinitionFactory.createAlphaCarbonContactDefinition(8.0);
 
@@ -94,14 +94,27 @@ public class A03_ReconstructByVariousStrategy {
             List<ReconstructionContactMap> contactMaps = Stream.of(ReconstructionStrategyDefinition.values())
                     .map(ReconstructionStrategyDefinition::getReconstructionStrategy)
                     .flatMap(reconstructionStrategy -> IntStream.range(0, REDUNDANCY)
-                            .mapToObj(i -> {
-                                ReconstructionContactMap contactMap = reconstructionStrategy.composeReconstructionContactMap(nativeChain,
-                                        contactStructuralInformation,
-                                        numberOfContactsToSelect);
+                            .boxed()
+                            .flatMap(i -> {
+                                if(!reconstructionStrategy.isNegatable()) {
+                                    ReconstructionContactMap contactMap = reconstructionStrategy.composeReconstructionContactMap(nativeChain,
+                                            contactStructuralInformation,
+                                            numberOfContactsToSelect);
 
-                                contactMap.setName(reconstructionStrategy.getName() + "-" + (i + 1));
+                                    contactMap.setName(reconstructionStrategy.getName() + "-" + (i + 1));
 
-                                return contactMap;
+                                    return Stream.of(contactMap);
+                                } else {
+                                    // short, long, hydrogen, and hydrophobic bins have to be negated explicitly to get comparable results
+                                    Pair<ReconstructionContactMap, ReconstructionContactMap> contactMapPair = reconstructionStrategy.composeReconstructionAndNegatedReconstructionContactMap(nativeChain,
+                                            contactStructuralInformation,
+                                            numberOfContactsToSelect);
+
+                                    contactMapPair.getLeft().setName(reconstructionStrategy.getName() + "-" + (i + 1));
+                                    contactMapPair.getRight().setName(reconstructionStrategy.getNegatedName() + "-" + (i + 1));
+
+                                    return Stream.of(contactMapPair.getLeft(), contactMapPair.getRight());
+                                }
                             }))
                     .collect(Collectors.toList());
 
@@ -205,6 +218,12 @@ public class A03_ReconstructByVariousStrategy {
                                                     List<ContactStructuralInformation> contactStructuralInformation,
                                                     int numberOfContacts);
 
+        default List<Pair<Integer, Integer>> selectNegatedContacts(Chain chain,
+                                                                   List<ContactStructuralInformation> contactStructuralInformation,
+                                                                   int numberOfContacts) {
+            throw new UnsupportedOperationException("not applicable for this strategy");
+        }
+
         default ReconstructionContactMap composeReconstructionContactMap(Chain chain,
                                                                          List<ContactStructuralInformation> contactStructuralInformation,
                                                                          int numberOfContacts) {
@@ -219,6 +238,62 @@ public class A03_ReconstructByVariousStrategy {
                                             .asAminoAcid()))
                             .collect(Collectors.toList()),
                     contactDefinition);
+        }
+
+        default Pair<ReconstructionContactMap, ReconstructionContactMap> composeReconstructionAndNegatedReconstructionContactMap(Chain chain,
+                                                                                                                                 List<ContactStructuralInformation> contactStructuralInformation,
+                                                                                                                                 int optimalNumberOfContacts) {
+            // see which bin is limiting
+            List<Pair<Integer, Integer>> ptest = selectContacts(chain,
+                    contactStructuralInformation,
+                    optimalNumberOfContacts);
+            List<Pair<Integer, Integer>> ntest = selectNegatedContacts(chain,
+                    contactStructuralInformation,
+                    optimalNumberOfContacts);
+            int ptestsize = ptest.size();
+            int ntestsize = ntest.size();
+
+            int limit;
+            if(ptestsize < ntestsize) {
+                limit = ptestsize;
+            } else {
+                limit = ntestsize;
+            }
+
+            List<Pair<Integer, Integer>> positiveContacts = selectContacts(chain,
+                    contactStructuralInformation,
+                    limit);
+            List<Pair<Integer, Integer>> negativeContacts = selectNegatedContacts(chain,
+                    contactStructuralInformation,
+                    limit);
+
+            return new Pair<>(new ReconstructionContactMap(chain.getAminoAcids(),
+                    positiveContacts.stream()
+                            .map(contact -> new Pair<>(chain.select()
+                                    .residueNumber(contact.getLeft())
+                                    .asAminoAcid(),
+                                    chain.select()
+                                            .residueNumber(contact.getRight())
+                                            .asAminoAcid()))
+                            .collect(Collectors.toList()),
+                    contactDefinition), new ReconstructionContactMap(chain.getAminoAcids(),
+                    negativeContacts.stream()
+                            .map(contact -> new Pair<>(chain.select()
+                                    .residueNumber(contact.getLeft())
+                                    .asAminoAcid(),
+                                    chain.select()
+                                            .residueNumber(contact.getRight())
+                                            .asAminoAcid()))
+                            .collect(Collectors.toList()),
+                    contactDefinition));
+        }
+
+        default boolean isNegatable() {
+            return false;
+        }
+
+        default String getNegatedName() {
+            return "non_" + getName();
         }
 
         String getName();
@@ -236,10 +311,10 @@ public class A03_ReconstructByVariousStrategy {
 //        WORST25_NON_NATIVE75(new WorstNativeNonNativeSplit(25, 75)),
 //        WORST50_NON_NATIVE50(new WorstNativeNonNativeSplit(50, 50)),
 //        WORST75_NON_NATIVE25(new WorstNativeNonNativeSplit(75, 25)),
-//        SHORT(new Short()),
-//        LONG(new Long()),
-//        HYDROGEN(new HydrogenBond()),
-//        HYDROPHOBIC(new HydrophobicInteraction()),
+        SHORT(new Short()),
+        LONG(new Long()),
+        HYDROGEN(new HydrogenBond()),
+        HYDROPHOBIC(new HydrophobicInteraction()),
 //        // more fine-grained assessment of FP
 //        BEST55_NON_NATIVE45(new BestNativeNonNativeSplit(55, 45)),
 //        BEST60_NON_NATIVE40(new BestNativeNonNativeSplit(60, 40)),
@@ -294,22 +369,22 @@ public class A03_ReconstructByVariousStrategy {
 //        RANDOM10_NON_NATIVE90(new RandomNativeNonNativeSplit(10, 90)),
 //        RANDOM5_NON_NATIVE95(new RandomNativeNonNativeSplit(5, 95)),
         // fine-grained bins up to 10%
-        BEST99_NON_NATIVE1(new BestNativeNonNativeSplit(99, 1)),
-        BEST98_NON_NATIVE2(new BestNativeNonNativeSplit(98, 2)),
-        BEST97_NON_NATIVE3(new BestNativeNonNativeSplit(97, 3)),
-        BEST96_NON_NATIVE4(new BestNativeNonNativeSplit(96, 4)),
-        BEST94_NON_NATIVE6(new BestNativeNonNativeSplit(94, 6)),
-        BEST93_NON_NATIVE7(new BestNativeNonNativeSplit(93, 7)),
-        BEST92_NON_NATIVE8(new BestNativeNonNativeSplit(92, 8)),
-        BEST91_NON_NATIVE9(new BestNativeNonNativeSplit(91, 9)),
-        RANDOM99_NON_NATIVE1(new RandomNativeNonNativeSplit(99, 1)),
-        RANDOM98_NON_NATIVE2(new RandomNativeNonNativeSplit(98, 2)),
-        RANDOM97_NON_NATIVE3(new RandomNativeNonNativeSplit(97, 3)),
-        RANDOM96_NON_NATIVE4(new RandomNativeNonNativeSplit(96, 4)),
-        RANDOM94_NON_NATIVE6(new RandomNativeNonNativeSplit(94, 6)),
-        RANDOM93_NON_NATIVE7(new RandomNativeNonNativeSplit(93, 7)),
-        RANDOM92_NON_NATIVE8(new RandomNativeNonNativeSplit(92, 8)),
-        RANDOM91_NON_NATIVE9(new RandomNativeNonNativeSplit(91, 9)),
+//        BEST99_NON_NATIVE1(new BestNativeNonNativeSplit(99, 1)),
+//        BEST98_NON_NATIVE2(new BestNativeNonNativeSplit(98, 2)),
+//        BEST97_NON_NATIVE3(new BestNativeNonNativeSplit(97, 3)),
+//        BEST96_NON_NATIVE4(new BestNativeNonNativeSplit(96, 4)),
+//        BEST94_NON_NATIVE6(new BestNativeNonNativeSplit(94, 6)),
+//        BEST93_NON_NATIVE7(new BestNativeNonNativeSplit(93, 7)),
+//        BEST92_NON_NATIVE8(new BestNativeNonNativeSplit(92, 8)),
+//        BEST91_NON_NATIVE9(new BestNativeNonNativeSplit(91, 9)),
+//        RANDOM99_NON_NATIVE1(new RandomNativeNonNativeSplit(99, 1)),
+//        RANDOM98_NON_NATIVE2(new RandomNativeNonNativeSplit(98, 2)),
+//        RANDOM97_NON_NATIVE3(new RandomNativeNonNativeSplit(97, 3)),
+//        RANDOM96_NON_NATIVE4(new RandomNativeNonNativeSplit(96, 4)),
+//        RANDOM94_NON_NATIVE6(new RandomNativeNonNativeSplit(94, 6)),
+//        RANDOM93_NON_NATIVE7(new RandomNativeNonNativeSplit(93, 7)),
+//        RANDOM92_NON_NATIVE8(new RandomNativeNonNativeSplit(92, 8)),
+//        RANDOM91_NON_NATIVE9(new RandomNativeNonNativeSplit(91, 9)),
         ;
 
         private ReconstructionStrategy reconstructionStrategy;
@@ -571,6 +646,27 @@ public class A03_ReconstructByVariousStrategy {
         }
 
         @Override
+        public List<Pair<Integer, Integer>> selectNegatedContacts(Chain chain,
+                                                                  List<ContactStructuralInformation> contactStructuralInformation,
+                                                                  int numberOfContacts) {
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .filter(csi -> csi.getContactDistanceBin() != ContactDistanceBin.SHORT)
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+            logger.info("[{}] selected {} non-short contacts, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
+        }
+
+        @Override
+        public boolean isNegatable() {
+            return true;
+        }
+
+        @Override
         public String getName() {
             return "short";
         }
@@ -591,6 +687,27 @@ public class A03_ReconstructByVariousStrategy {
                     pairs.size(),
                     numberOfContacts);
             return pairs;
+        }
+
+        @Override
+        public List<Pair<Integer, Integer>> selectNegatedContacts(Chain chain,
+                                                                  List<ContactStructuralInformation> contactStructuralInformation,
+                                                                  int numberOfContacts) {
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .filter(csi -> csi.getContactDistanceBin() != ContactDistanceBin.LONG)
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+            logger.info("[{}] selected {} non-long contacts, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
+        }
+
+        @Override
+        public boolean isNegatable() {
+            return true;
         }
 
         @Override
@@ -617,6 +734,27 @@ public class A03_ReconstructByVariousStrategy {
         }
 
         @Override
+        public List<Pair<Integer, Integer>> selectNegatedContacts(Chain chain,
+                                                                  List<ContactStructuralInformation> contactStructuralInformation,
+                                                                  int numberOfContacts) {
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .filter(csi -> !csi.isHydrogenBond())
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+            logger.info("[{}] selected {} non-hydrogen bonds, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
+        }
+
+        @Override
+        public boolean isNegatable() {
+            return true;
+        }
+
+        @Override
         public String getName() {
             return "hydrogen";
         }
@@ -637,6 +775,27 @@ public class A03_ReconstructByVariousStrategy {
                     pairs.size(),
                     numberOfContacts);
             return pairs;
+        }
+
+        @Override
+        public List<Pair<Integer, Integer>> selectNegatedContacts(Chain chain,
+                                                                  List<ContactStructuralInformation> contactStructuralInformation,
+                                                                  int numberOfContacts) {
+            List<Pair<Integer, Integer>> pairs = contactStructuralInformation.stream()
+                    .filter(csi -> !csi.isHydrophobicInteraction())
+                    .limit(numberOfContacts)
+                    .map(contact -> new Pair<>(contact.getResidueIdentifier1(), contact.getResidueIdentifier2()))
+                    .collect(Collectors.toList());
+            logger.info("[{}] selected {} non-hydrophobic interactions, target: {}",
+                    chain.getChainIdentifier().getProteinIdentifier().getPdbId(),
+                    pairs.size(),
+                    numberOfContacts);
+            return pairs;
+        }
+
+        @Override
+        public boolean isNegatable() {
+            return true;
         }
 
         @Override
