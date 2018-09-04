@@ -52,6 +52,8 @@ public class A03_ReconstructByVariousStrategy {
 
         TestUtils.getResourceAsStream("data/efr.list")
                 .map(line -> line.split(";"))
+                // rerun for failed bins
+//                .filter(split -> split[0].equals("STF0045") || split[0].equals("STF0046"))
                 .map(ExplorerChain::new)
                 .forEach(A03_ReconstructByVariousStrategy::handleChain);
     }
@@ -116,6 +118,8 @@ public class A03_ReconstructByVariousStrategy {
                                     return Stream.of(contactMapPair.getLeft(), contactMapPair.getRight());
                                 }
                             }))
+                    // ensure that at least 1 contact was selected
+                    .filter(reconstructionContactMap -> reconstructionContactMap.getNumberOfContacts() > 0)
                     .collect(Collectors.toList());
 
             Map<String, List<Future<ReconstructionResult>>> reconstructionFutures = new HashMap<>();

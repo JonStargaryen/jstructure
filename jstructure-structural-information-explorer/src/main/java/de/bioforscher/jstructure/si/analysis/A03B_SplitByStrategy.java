@@ -112,11 +112,11 @@ public class A03B_SplitByStrategy {
         String[] split = line.split(",");
         String strategy = split[1];
         return strategy.equals("random") ||
-                strategy.equals("short") ||
-                strategy.equals("long") ||
+                strategy.contains("short") ||
+                strategy.contains("long") ||
                 strategy.equals("best") ||
                 strategy.equals("worst") ||
-                strategy.equals("hydrogen") ||
-                strategy.equals("hydrophobic");
+                strategy.contains("hydrogen") ||
+                strategy.contains("hydrophobic");
     }
 }
