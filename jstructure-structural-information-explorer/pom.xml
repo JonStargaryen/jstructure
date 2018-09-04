@@ -50,15 +50,15 @@
                 </configuration>
             </plugin>
             <!-- uncomment following plugin declaration: boot for server, assembly for strategy runner jar -->
-            <plugin>
+            <!--plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <addResources>true</addResources>
                 </configuration>
-            </plugin>
+            </plugin-->
             <!-- strategy runner jar for server -->
-            <!--plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
@@ -69,7 +69,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>de.bioforscher.jstructure.si.analysis.A03_ReconstructByVariousStrategy</mainClass>
+                            <mainClass>de.bioforscher.jstructure.si.analysis.A04A_CreatePyMolRendering</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>.</Class-Path>
@@ -87,7 +87,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin-->
+            </plugin>
             <!-- benchmark runner jar for server -->
             <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
