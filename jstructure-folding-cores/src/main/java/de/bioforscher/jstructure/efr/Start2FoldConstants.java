@@ -21,6 +21,7 @@ public class Start2FoldConstants extends FileUtils {
     public static final Path PDB_DIRECTORY = BASE_DIRECTORY.resolve("pdb");
     public static final Path COUPLING_DIRECTORY = BASE_DIRECTORY.resolve("coupling");
     public static final Path PANCSA_LIST = BASE_DIRECTORY.resolve("pancsa.list");
+    public static final Path PANCSA_NR_LIST = BASE_DIRECTORY.resolve("pancsa-nr.list");
     public static final Path PYMOL_DIRECTORY = BASE_DIRECTORY.resolve("pymol");
     public static final Path EQUANT_DIRECTORY = BASE_DIRECTORY.resolve("equant");
     public static final Path STATISTICS_DIRECTORY = BASE_DIRECTORY.resolve("statistics");

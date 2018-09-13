@@ -36,12 +36,12 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class A01_WriteDatasetCsv {
-    private static final Logger logger = LoggerFactory.getLogger(A01_WriteDatasetCsv.class);
+public class A02_WriteDatasetCsv {
+    private static final Logger logger = LoggerFactory.getLogger(A02_WriteDatasetCsv.class);
 
     public static void main(String[] args) throws IOException {
-        String output = Files.lines(Start2FoldConstants.PANCSA_LIST)
-                .map(A01_WriteDatasetCsv::handleLine)
+        String output = Files.lines(Start2FoldConstants.PANCSA_NR_LIST)
+                .map(A02_WriteDatasetCsv::handleLine)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining(System.lineSeparator(),
@@ -63,7 +63,7 @@ public class A01_WriteDatasetCsv {
                                 "folds,functional,stable" + System.lineSeparator(),
                         ""));
 
-        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores-new.csv"),
+        Start2FoldConstants.write(Start2FoldConstants.STATISTICS_DIRECTORY.resolve("foldingcores.csv"),
                 output);
     }
 
