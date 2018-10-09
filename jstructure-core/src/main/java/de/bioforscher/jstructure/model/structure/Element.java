@@ -193,6 +193,11 @@ public enum Element {
             throw new IllegalArgumentException("could not resolve atom name");
         }
 
+        // fix for Holmium
+        if(atomName.startsWith("HO")) {
+            return Element.H;
+        }
+
         // ambiguity between CA representing an alpha carbon or calcium
         if(!hetAtm && atomName.startsWith("C")) {
             return Element.C;

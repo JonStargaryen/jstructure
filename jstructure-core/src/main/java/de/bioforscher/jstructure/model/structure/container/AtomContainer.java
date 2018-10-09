@@ -55,6 +55,10 @@ public interface AtomContainer extends StructureContainer, Selectable,
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(protein.getHeader());
 
+        boolean containsPolymerAtoms = sortedAtoms.stream()
+                .map(Atom::getParentGroup)
+                .distinct()
+                .anyMatch(group -> !group.isLigand());
         int previousPdbSerial = 0;
         Group previousGroup = null;
         Chain previousChain = null;
@@ -73,7 +77,7 @@ public interface AtomContainer extends StructureContainer, Selectable,
                     terminatedChains.add(previousChain);
                     writeTerminateRecord(stringBuilder, previousChain, previousGroup, previousPdbSerial);
                     // the current group is a ligand, but the current chain was not yet terminated
-                } else if (currentGroupIsInTerminatedChain && currentChainIsNotMarkedAsTerminated) {
+                } else if (currentGroupIsInTerminatedChain && currentChainIsNotMarkedAsTerminated && containsPolymerAtoms) {
                     // check if chain needs TER record (only polymer chains require it)
                     if(currentChain.groups().count() != currentChain.ligands().count()) {
                         terminatedChains.add(currentChain);
