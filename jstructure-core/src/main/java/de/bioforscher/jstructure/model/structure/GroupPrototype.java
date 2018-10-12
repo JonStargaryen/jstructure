@@ -4,6 +4,7 @@ import de.bioforscher.jstructure.model.structure.aminoacid.AminoAcid;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Represents common properties of groups such as names, polymer-type, and a set of prototypical atom coordinates.
@@ -44,6 +45,8 @@ public class GroupPrototype {
     private final String oneLetterCode;
     private final String threeLetterCode;
     private final List<Atom> prototypeAtoms;
+    private final List<String> aromaticAtoms;
+    private final List<GroupPrototypeParser.Bond> prototypeBonds;
 
     GroupPrototype(String id,
                    String name,
@@ -51,7 +54,9 @@ public class GroupPrototype {
                    String parentCompound,
                    String oneLetterCode,
                    String threeLetterCode,
-                   List<Atom> prototypeAtoms) {
+                   List<Atom> prototypeAtoms,
+                   List<String> aromaticAtomNames,
+                   List<GroupPrototypeParser.Bond> prototypeBonds) {
         this.id = id;
         this.name = name;
         this.polymerType = polymerType;
@@ -59,6 +64,8 @@ public class GroupPrototype {
         this.oneLetterCode = oneLetterCode;
         this.threeLetterCode = threeLetterCode;
         this.prototypeAtoms = prototypeAtoms;
+        this.aromaticAtoms = aromaticAtomNames;
+        this.prototypeBonds = prototypeBonds;
     }
 
     public String getId() {
@@ -101,6 +108,22 @@ public class GroupPrototype {
     public List<Atom> getPrototypeAtoms() {
         return prototypeAtoms;
     }
+
+    public List<String> getAromaticAtoms() {
+        return aromaticAtoms;
+    }
+
+    public List<GroupPrototypeParser.Bond> getPrototypeBonds() {
+        return prototypeBonds;
+    }
+
+    public Stream<String> covalentNeighbors(String atomName) {
+        return prototypeBonds.stream()
+                .map(bond -> bond.getAtomName(atomName))
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
+
 
     public double getMaximumAccessibleSurfaceArea() {
         return AminoAcid.Family.resolveGroupPrototype(this).getMaximumAccessibleSurfaceArea();

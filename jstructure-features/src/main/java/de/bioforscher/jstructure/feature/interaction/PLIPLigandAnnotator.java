@@ -27,7 +27,7 @@ public class PLIPLigandAnnotator extends FeatureProvider {
     }
 
     public static Document getDocument(Chain chain) {
-        return PLIPRestServiceQuery.getLigandDocument(chain);
+        return PLIPRestServiceQuery.calculateLigandDocument(chain);
     }
 
     private PLIPInteractionContainer processInternally(Chain chain, Document document) {

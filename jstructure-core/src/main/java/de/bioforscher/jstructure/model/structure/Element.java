@@ -238,4 +238,12 @@ public enum Element {
     public boolean isHeavyAtom() {
         return !isHydrogen();
     }
+
+    public boolean isCarbon() {
+        return this == C;
+    }
+
+    public boolean isHalogen() {
+        return this == F || this == Cl || this == Br || this == I;
+    }
 }

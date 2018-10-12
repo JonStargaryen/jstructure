@@ -37,7 +37,7 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    public static Document getIntraMolecularDocument(Chain chain) {
+    static Document getIntraMolecularDocument(Chain chain) {
         ChainIdentifier chainIdentifier = chain.getChainIdentifier();
         return getIntraMolecularDocument(chainIdentifier.getProteinIdentifier().getPdbId(),
                 chainIdentifier.getChainId());
@@ -68,7 +68,7 @@ public class PLIPRestServiceQuery {
         }
     }
 
-    static Document getLigandDocument(Chain chain) {
+    public static Document calculateLigandDocument(Chain chain) {
         logger.debug("fetching PLIP ligand-document for {}",
                 chain.getChainIdentifier().getFullName());
         try {

@@ -20,10 +20,10 @@ public abstract class ExternalLocalService extends ExternalService {
     }
 
     protected void executeCommandLineCall(String... arguments) throws IOException, InterruptedException {
-        logger.info("spawning process by arguments:{}{}",
+        logger.debug("spawning process by arguments:{}{}",
                 System.lineSeparator(),
                 Stream.of(arguments).collect(Collectors.joining(System.lineSeparator())));
         ProcessBuilder processBuilder = new ProcessBuilder(arguments);
-        processBuilder.start().waitFor();
+        processBuilder.inheritIO().start().waitFor();
     }
 }

@@ -16,13 +16,14 @@ public abstract class ExternalService implements Service {
     ExternalService(String serviceLocation) {
         this.serviceLocation = serviceLocation;
         String serviceName = this.getClass().getSimpleName();
-        logger.info("{} is a {} external service with its location setup to '{}'",
+        logger.debug("{} is a {} external service with its location setup to '{}'",
                 serviceName,
                 this instanceof ExternalLocalService ? "local" : "web",
                 this.serviceLocation);
         this.servicePrefix = serviceName.toLowerCase();
     }
 
+    @Override
     public String getServiceLocation() {
         return serviceLocation;
     }
@@ -35,5 +36,9 @@ public abstract class ExternalService implements Service {
 
     protected Path createTemporaryOutputFile() throws IOException {
         return Files.createTempFile(servicePrefix, ".out");
+    }
+
+    protected Path createTemporaryOutputDirectory() throws IOException {
+        return Files.createTempDirectory(servicePrefix + "-out");
     }
 }

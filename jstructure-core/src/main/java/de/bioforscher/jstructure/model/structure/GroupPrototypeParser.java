@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -108,12 +105,30 @@ public class GroupPrototypeParser {
                 .attr("id");
 
         List<Atom> prototypeAtoms = new ArrayList<>();
+        List<String> aromaticAtoms = new ArrayList<>();
+        List<Bond> prototypeBonds = new ArrayList<>();
+
         try {
             prototypeAtoms = document.getElementsByTag("PDBx:chem_comp_atomCategory")
                     .first()
                     .children()
                     .stream()
                     .map(this::mapToPrototypeAtom)
+                    .collect(Collectors.toList());
+
+            aromaticAtoms = document.getElementsByTag("PDBx:chem_comp_atomCategory")
+                    .first()
+                    .children()
+                    .stream()
+                    .filter(element -> element.getElementsByTag("PDBx:pdbx_aromatic_flag").text().equals("Y"))
+                    .map(element -> element.attr("atom_id"))
+                    .collect(Collectors.toList());
+
+            prototypeBonds = document.getElementsByTag("PDBx:chem_comp_bondCategory")
+                    .first()
+                    .children()
+                    .stream()
+                    .map(this::mapToPrototypeBond)
                     .collect(Collectors.toList());
         } catch (NullPointerException e) {
             // occurs for the unknown ligand ('UNL') which does not provide any prototype atoms
@@ -125,7 +140,77 @@ public class GroupPrototypeParser {
                 parentCompound,
                 oneLetterCode,
                 threeLetterCode,
-                prototypeAtoms);
+                prototypeAtoms,
+                aromaticAtoms,
+                prototypeBonds);
+    }
+
+    private Bond mapToPrototypeBond(Element element) {
+        return new Bond(element.attr("atom_id_1"),
+                element.attr("atom_id_2"),
+                BondType.resolve(element.getElementsByTag("PDBx:value_order").text()));
+    }
+
+    public class Bond {
+        private final String atomName1;
+        private final String atomName2;
+        private final BondType bondType;
+
+        public Bond(String atomName1,
+                    String atomName2,
+                    BondType bondType) {
+            this.atomName1 = atomName1;
+            this.atomName2 = atomName2;
+            this.bondType = bondType;
+        }
+
+        public String getAtomName1() {
+            return atomName1;
+        }
+
+        public String getAtomName2() {
+            return atomName2;
+        }
+
+        public BondType getBondType() {
+            return bondType;
+        }
+
+        public boolean contains(String atomName) {
+            return atomName1.equals(atomName) || atomName2.equals(atomName);
+        }
+
+        public Optional<String> getAtomName(String atomName) {
+            if(atomName1.equals(atomName)) {
+                return Optional.of(atomName2);
+            } else if(atomName2.equals(atomName)) {
+                return Optional.of(atomName1);
+            } else {
+                return Optional.empty();
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Bond '" + atomName1 + "'-'" + atomName2 + "' : " + bondType;
+        }
+    }
+
+    public enum BondType {
+        SINGLE,
+        DOUBLE,
+        TRIPLE;
+
+        public static BondType resolve(String description) {
+            switch (description) {
+                case "sing":
+                    return BondType.SINGLE;
+                case "doub":
+                    return BondType.DOUBLE;
+                default:
+                    throw new UnsupportedOperationException("cannot handle bond type: " + description);
+            }
+        }
     }
 
     private Atom mapToPrototypeAtom(Element element) {

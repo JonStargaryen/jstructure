@@ -12,6 +12,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -142,6 +143,10 @@ public class Group extends AbstractFeatureable implements AtomContainer {
         return !isLigand() && getPolymerType() == GroupPrototype.PolymerType.NA_LINKING;
     }
 
+    public boolean isPolymer() {
+        return isAminoAcid() || isNucleotide();
+    }
+
     public boolean isWater() {
         return getThreeLetterCode().equals(Water.THREE_LETTER_CODE);
     }
@@ -164,6 +169,24 @@ public class Group extends AbstractFeatureable implements AtomContainer {
      */
     protected void addAtomInternal(Atom atom) {
 
+    }
+
+    public Stream<Atom> covalentNeighbors(Atom atom) {
+        if(!atoms.contains(atom)) {
+            throw new IllegalArgumentException("group does not contain " + atom);
+        }
+
+        return groupPrototype.covalentNeighbors(atom.getName())
+                .map(atomName -> atoms.stream()
+                        .filter(a -> a.getName().equals(atomName))
+                        .findFirst())
+                .filter(Optional::isPresent)
+                .map(Optional::get);
+    }
+
+    public List<Atom> getCovalentNeighbors(Atom atom) {
+        return covalentNeighbors(atom)
+                .collect(Collectors.toList());
     }
 
     protected static GroupPrototype createPrototypeInstance(String id) {
