@@ -65,7 +65,6 @@ public class Transformation extends FeatureContainerEntry {
         if(translation != null) {
             atom.setCoordinates(LinearAlgebra.on(vector).add(translation).getValue());
         }
-
         logger.trace("transf. atom {}", atom.getPdbRepresentation());
         return atom;
     }

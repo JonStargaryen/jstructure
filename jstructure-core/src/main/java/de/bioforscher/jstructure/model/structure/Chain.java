@@ -103,7 +103,7 @@ public class Chain extends AbstractFeatureable implements GroupContainer {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " '" + getIdentifier() + "' groups='" + getGroups().size() + "'";
+        return getClass().getSimpleName() + " " + getIdentifier() + " groups=" + groups.size();
     }
 
     @Override

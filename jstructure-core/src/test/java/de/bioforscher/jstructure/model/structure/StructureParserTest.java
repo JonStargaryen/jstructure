@@ -207,20 +207,16 @@ public class StructureParserTest {
      */
     @Test
     public void shouldWriteEqualAtomRecords() {
-        PDB_IDS.forEach(this::checkAgreement);
+        //TODO remove and add other test-cases
+//        PDB_IDS.forEach(this::checkAgreement);
+        checkAgreement(TestUtils.SupportedProtein.PDB_3G1H);
     }
 
     private void checkAgreement(TestUtils.SupportedProtein supportedProtein) {
-        //TODO remove and add other test-cases
-        if(!supportedProtein.name().contains("1ACJ"))
-            return;
-
         String pdbId = supportedProtein.name().split("_")[1];
 
         System.out.println("checking agreement between written and expected ATOM records for " + pdbId);
-        Structure protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(supportedProtein))
-                .minimalParsing(true)
-                .parse();
+        Structure protein = StructureParser.fromInputStream(TestUtils.getProteinInputStream(supportedProtein)).parse();
         List<String> writtenLines = Pattern.compile("\n")
                 .splitAsStream(protein.getPdbRepresentation())
                 .collect(Collectors.toList());
@@ -229,13 +225,14 @@ public class StructureParserTest {
         Assert.assertEquals("number of lines do not match", expectedLines.size(), writtenLines.size());
 
         for(int i = 0; i < writtenLines.size(); i++) {
-            // some file have shorter lines
+            System.out.println(writtenLines.get(i));
+            // some files have shorter lines
             if(expectedLines.get(i).length() > writtenLines.get(i).length()) {
-                Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
+                Assert.assertTrue("ATOM records do not match" + System.lineSeparator() +
                         "expected: " + expectedLines.get(i) + System.lineSeparator() +
                         "actual:   " + writtenLines.get(i), expectedLines.get(i).startsWith(writtenLines.get(i)));
             } else {
-                Assert.assertTrue("ATOM records do not match!" + System.lineSeparator() +
+                Assert.assertTrue("ATOM records do not match" + System.lineSeparator() +
                         "expected: " + expectedLines.get(i) + System.lineSeparator() +
                         "actual:   " + writtenLines.get(i), writtenLines.get(i).startsWith(expectedLines.get(i)));
             }

@@ -67,7 +67,8 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     public InteractionContainer annotatePolymerInteractions(Structure structure) {
-        //TODO slow, ensure uniqueness of interactions
+        //TODO slow
+        //TODO ensure uniqueness of interactions
         return new InteractionContainer(structure.chainsWithAminoAcids()
                 .map(this::annotatePolymerInteractions)
                 .map(InteractionContainer::getInteractions)
@@ -95,6 +96,10 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private InteractionContainer parseDocument(Structure structure, Document document) {
+        List<Atom> filteredAtoms = structure.atoms()
+                .filter(atom -> atom.getElement().isHeavyAtom())
+                .filter(atom -> !atom.hasAlternativeLocations())
+                .collect(Collectors.toList());
         List<Interaction> interactions = new ArrayList<>();
         for(Element elementTag : document.getElementsByTag("interactions")) {
             parseHalogenBonds(structure, elementTag, interactions);
@@ -105,15 +110,25 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
             parsePiStackingInteractions(structure, elementTag, interactions);
             parseSaltBridges(structure, elementTag, interactions);
             parseWaterBridges(structure, elementTag, interactions);
+//            parseHalogenBonds(filteredAtoms, elementTag, interactions);
+//            parseHydrogenBonds(filteredAtoms, elementTag, interactions);
+//            parseHydrophobicInteractions(filteredAtoms, elementTag, interactions);
+//            parseMetalComplexes(filteredAtoms, elementTag, interactions);
+//            parsePiCationInteractions(filteredAtoms, elementTag, interactions);
+//            parsePiStackingInteractions(filteredAtoms, elementTag, interactions);
+//            parseSaltBridges(filteredAtoms, elementTag, interactions);
+//            parseWaterBridges(filteredAtoms, elementTag, interactions);
         }
         //TODO: check redundancy
         return new InteractionContainer(interactions);
     }
 
     private void parseHalogenBonds(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//        private void parseHalogenBonds(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements halogenBonds = interactionElement.getElementsByTag("halogen_bond");
         halogenBonds.stream()
                 .map(element -> parseHalogenBond(structure, element))
+//                .map(element -> parseHalogenBond(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
@@ -122,6 +137,9 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     private Optional<HalogenBond> parseHalogenBond(Structure structure, Element element) {
         Optional<Atom> optionalDonor = selectAtom(structure, element.getElementsByTag("don_idx").first().text());
         Optional<Atom> optionalAcceptor = selectAtom(structure, element.getElementsByTag("acc_idx").first().text());
+//    private Optional<HalogenBond> parseHalogenBond(List<Atom> filteredAtoms, Element element) {
+//        Optional<Atom> optionalDonor = selectAtom(filteredAtoms, element.getElementsByTag("don_idx").first().text());
+//        Optional<Atom> optionalAcceptor = selectAtom(filteredAtoms, element.getElementsByTag("acc_idx").first().text());
         if(!(optionalDonor.isPresent() && optionalAcceptor.isPresent())) {
             return Optional.empty();
         }
@@ -136,17 +154,22 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private void parseHydrogenBonds(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parseHydrogenBonds(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements hydrogenBonds = interactionElement.getElementsByTag("hydrogen_bond");
         hydrogenBonds.stream()
                 .map(element -> parseHydrogenBond(structure, element))
+//                .map(element -> parseHydrogenBond(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
     }
 
     private Optional<HydrogenBond> parseHydrogenBond(Structure structure, Element element) {
+//    private Optional<HydrogenBond> parseHydrogenBond(List<Atom> filteredAtoms, Element element) {
         Optional<Atom> optionalDonor = selectAtom(structure, element.getElementsByTag("donoridx").first().text());
         Optional<Atom> optionalAcceptor = selectAtom(structure, element.getElementsByTag("acceptoridx").first().text());
+//        Optional<Atom> optionalDonor = selectAtom(filteredAtoms, element.getElementsByTag("donoridx").first().text());
+//        Optional<Atom> optionalAcceptor = selectAtom(filteredAtoms, element.getElementsByTag("acceptoridx").first().text());
         if(!(optionalDonor.isPresent() && optionalAcceptor.isPresent())) {
             return Optional.empty();
         }
@@ -161,9 +184,11 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private void parseHydrophobicInteractions(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parseHydrophobicInteractions(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements hydrophobicInteractions = interactionElement.getElementsByTag("hydrophobic_interaction");
         hydrophobicInteractions.stream()
                 .map(element -> parseHydrophobicInteraction(structure, element))
+//                .map(element -> parseHydrophobicInteraction(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
@@ -172,6 +197,9 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     private Optional<HydrophobicInteraction> parseHydrophobicInteraction(Structure structure, Element element) {
         Optional<Atom> optionalAtom1 = selectAtom(structure, element.getElementsByTag("ligcarbonidx").first().text());
         Optional<Atom> optionalAtom2 = selectAtom(structure, element.getElementsByTag("protcarbonidx").first().text());
+//    private Optional<HydrophobicInteraction> parseHydrophobicInteraction(List<Atom> filteredAtoms, Element element) {
+//        Optional<Atom> optionalAtom1 = selectAtom(filteredAtoms, element.getElementsByTag("ligcarbonidx").first().text());
+//        Optional<Atom> optionalAtom2 = selectAtom(filteredAtoms, element.getElementsByTag("protcarbonidx").first().text());
         if(!(optionalAtom1.isPresent() && optionalAtom2.isPresent())) {
             return Optional.empty();
         }
@@ -186,9 +214,11 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private void parseMetalComplexes(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parseMetalComplexes(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements metalComplexes = interactionElement.getElementsByTag("metal_complex");
         metalComplexes.stream()
                 .map(element -> parseMetalComplex(structure, element))
+//                .map(element -> parseMetalComplex(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
@@ -198,6 +228,10 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
         //TODO: potentially half interaction
         Optional<Atom> optionalAtom1 = selectAtom(structure, element.getElementsByTag("metal_idx").first().text());
         Optional<Atom> optionalAtom2 = selectAtom(structure, element.getElementsByTag("target_idx").first().text());
+//    private Optional<MetalComplex> parseMetalComplex(List<Atom> filteredAtoms, Element element) {
+//        //TODO: potentially half interaction
+//        Optional<Atom> optionalAtom1 = selectAtom(filteredAtoms, element.getElementsByTag("metal_idx").first().text());
+//        Optional<Atom> optionalAtom2 = selectAtom(filteredAtoms, element.getElementsByTag("target_idx").first().text());
         if(!(optionalAtom1.isPresent() && optionalAtom2.isPresent())) {
             return Optional.empty();
         }
@@ -212,15 +246,20 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private void parsePiCationInteractions(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parsePiCationInteractions(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements piCationInteractions = interactionElement.getElementsByTag("pi_cation_interaction");
         piCationInteractions.stream()
                 .map(element -> parsePiCationInteraction(structure, element))
+//                .map(element -> parsePiCationInteraction(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
     }
 
     private Optional<PiCationInteraction> parsePiCationInteraction(Structure structure, Element element) {
+//    private Optional<PiCationInteraction> parsePiCationInteraction(List<Atom> filteredAtoms, Element element) {
+//        Structure structure = filteredAtoms.get(0).getParentStructure();
+
         //TODO check if direction can be reversed: protein is pi system, ligand is cation
         //TODO: potentially half interaction
         Optional<Element> optionalCationCoordinateElement = element.getElementsByTag("protcoo").stream().findFirst();
@@ -256,6 +295,7 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
                 .stream()
                 .map(Element::text)
                 .map(pdbSerial -> selectAtom(structure, pdbSerial))
+//                .map(pdbSerial -> selectAtom(filteredAtoms, pdbSerial))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -270,17 +310,21 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
                 piGroup));
     }
 
-
     private void parsePiStackingInteractions(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parsePiStackingInteractions(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements piStackingInteractions = interactionElement.getElementsByTag("pi_stack");
         piStackingInteractions.stream()
                 .map(element -> parsePiStackingInteraction(structure, element))
+//                .map(element -> parsePiStackingInteraction(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
     }
 
     private Optional<PiStackingInteraction> parsePiStackingInteraction(Structure structure, Element element) {
+//    private Optional<PiStackingInteraction> parsePiStackingInteraction(List<Atom> filteredAtoms, Element element) {
+//        Structure structure = filteredAtoms.get(0).getParentStructure();
+
         //TODO: potentially half interaction
         Optional<Element> optionalCoordinateElement = element.getElementsByTag("protcoo").stream().findFirst();
         if(!optionalCoordinateElement.isPresent()) {
@@ -315,6 +359,7 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
                 .stream()
                 .map(Element::text)
                 .map(pdbSerial -> selectAtom(structure, pdbSerial))
+//                .map(pdbSerial -> selectAtom(filteredAtoms, pdbSerial))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -330,15 +375,20 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private void parseSaltBridges(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parseSaltBridges(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements saltBridges = interactionElement.getElementsByTag("salt_bridge");
         saltBridges.stream()
                 .map(element -> parseSaltBridge(structure, element))
+//                .map(element -> parseSaltBridge(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
     }
 
     private Optional<SaltBridge> parseSaltBridge(Structure structure, Element element) {
+//    private Optional<SaltBridge> parseSaltBridge(List<Atom> filteredAtoms, Element element) {
+//        Structure structure = filteredAtoms.get(0).getParentStructure();
+
         //TODO: potentially half interaction
         Optional<Element> optionalCoordinateElement = element.getElementsByTag("protcoo").stream().findFirst();
         if(!optionalCoordinateElement.isPresent()) {
@@ -373,6 +423,7 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
                 .stream()
                 .map(Element::text)
                 .map(pdbSerial -> selectAtom(structure, pdbSerial))
+//                .map(pdbSerial -> selectAtom(filteredAtoms, pdbSerial))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
@@ -388,9 +439,11 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     }
 
     private void parseWaterBridges(Structure structure, Element interactionElement, List<Interaction> interactions) {
+//    private void parseWaterBridges(List<Atom> filteredAtoms, Element interactionElement, List<Interaction> interactions) {
         Elements waterBridges = interactionElement.getElementsByTag("water_bridge");
         waterBridges.stream()
                 .map(element -> parseWaterBridge(structure, element))
+//                .map(element -> parseWaterBridge(filteredAtoms, element))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .forEach(interactions::add);
@@ -399,6 +452,9 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     private Optional<WaterBridge> parseWaterBridge(Structure structure, Element element) {
         Optional<Atom> optionalDonor = selectAtom(structure, element.getElementsByTag("donor_idx").first().text());
         Optional<Atom> optionalAcceptor = selectAtom(structure, element.getElementsByTag("acceptor_idx").first().text());
+//    private Optional<WaterBridge> parseWaterBridge(List<Atom> filteredAtoms, Element element) {
+//        Optional<Atom> optionalDonor = selectAtom(filteredAtoms, element.getElementsByTag("donor_idx").first().text());
+//        Optional<Atom> optionalAcceptor = selectAtom(filteredAtoms, element.getElementsByTag("acceptor_idx").first().text());
         if(!(optionalDonor.isPresent() && optionalAcceptor.isPresent())) {
             return Optional.empty();
         }
@@ -419,11 +475,16 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
                 .findFirst();
     }
 
+//    private Optional<Atom> selectAtom(List<Atom> filteredAtoms, String pdbSerialString) {
+//        return Optional.of(filteredAtoms.get(Integer.valueOf(pdbSerialString) - 1));
+//    }
+
     private String[] composeLigandCommandLineCall(Structure structure,
                                                   Path outputDirectory) throws IOException {
         logger.info("annotating ligand interaction for {}",
                 structure.getProteinIdentifier().getPdbId());
         Path inputPath = writeStructureToTemporaryFile(structure);
+//       Path inputPath = Paths.get("/home/bittrich/Downloads/3g1h.pdb");
         // base commands - input, output, output format
         return Stream.of("python2",
                 getServiceLocation(),

@@ -225,12 +225,12 @@ public class Group extends AbstractFeatureable implements AtomContainer {
 
     @Override
     public String toString() {
-        return getIdentifier();
+        return getClass().getSimpleName() + " " + getIdentifier() + " atoms=" + atoms.size();
     }
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? threeLetterCode + "-" + residueIdentifier : identifier;
+        return identifier == null ? getParentChain().getIdentifier() + "-" + threeLetterCode + "-" + residueIdentifier : identifier;
     }
 
     @Override

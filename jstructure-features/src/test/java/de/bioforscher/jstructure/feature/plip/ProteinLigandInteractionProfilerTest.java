@@ -17,6 +17,42 @@ public class ProteinLigandInteractionProfilerTest {
     }
 
     @Test
+    public void test_ligand_3g1h() {
+        Structure structure = StructureParser.fromPdbId("3g1h")
+                .parse()
+//                .select()
+//                .chainName("A", "B")
+//                .asIsolatedStructure()
+                ;
+        InteractionContainer interactionContainer = instance.annotateLigandInteractions(structure);
+        // there are strange effects regarding how interactions are associated to individual ligands
+        Group ligand_H2U_A_229 = structure.select()
+                .chainId("A")
+                .residueNumber(229)
+                .asGroup();
+        InteractionContainer ic_H2U_A_229 = interactionContainer.getSubsetOfInteractions(ligand_H2U_A_229);
+        Assert.assertEquals("hydrophobic count does not match",
+                1,
+                ic_H2U_A_229.getHydrophobicInteractions().size());
+        Assert.assertEquals("hydrogen bond count does not match",
+                9,
+                ic_H2U_A_229.getHydrogenBonds().size());
+        Assert.assertEquals("water bridge count does not match",
+                4 + 1, // offset between PLIP CLI and web server
+                ic_H2U_A_229.getWaterBridges().size());
+        Assert.assertEquals("salt bridge count does not match",
+                1,
+                ic_H2U_A_229.getSaltBridges().size());
+    }
+
+    @Test
+    public void test_ligand_5in3() {
+        Structure structure = StructureParser.fromPdbId("5in3").parse();
+        InteractionContainer interactions = instance.annotateLigandInteractions(structure);
+        System.out.println(interactions);
+    }
+
+    @Test
     public void test_ligand_1eve() {
         Structure structure = StructureParser.fromPdbId("1eve").parse();
         Group ligand = structure.select()

@@ -1,7 +1,7 @@
 package de.bioforscher.jstructure.model.structure.container;
 
-import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.mathematics.Calculable;
+import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Chain;
 import de.bioforscher.jstructure.model.structure.Group;
@@ -36,19 +36,26 @@ public interface AtomContainer extends StructureContainer, Selectable,
     }
 
     default String getPdbRepresentation() {
-        Structure protein;
+        Structure structure;
         try {
-            protein = getAtoms().get(0).getParentGroup().getParentChain().getParentStructure();
+            structure = getAtoms().get(0).getParentGroup().getParentChain().getParentStructure();
         } catch (Exception e) {
-            protein = Structure.UNKNOWN_STRUCTURE;
+            structure = Structure.UNKNOWN_STRUCTURE;
         }
 
         // ensure ordering of atoms according to their pdbSerials
         List<Atom> sortedAtoms = atoms()
                 .sorted(Comparator.comparingInt(Atom::getPdbSerial))
                 .collect(Collectors.toList());
+//
+//        // implicitly renumber atoms
+//        for(int i = 0; i < sortedAtoms.size(); i++) {
+//            Atom atom = sortedAtoms.get(i);
+//            atom.setPdbSerial(i + 1);
+//        }
 
-        return getPdbRepresentation(sortedAtoms, protein);
+        return getPdbRepresentation(sortedAtoms, structure);
+//        return getPdbRepresentation(getAtoms(), structure);
     }
 
     static String getPdbRepresentation(List<Atom> sortedAtoms, Structure protein) {

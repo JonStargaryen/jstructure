@@ -232,8 +232,15 @@ public class StructureParser {
         if(isAtomLine || isHetAtmLine) {
             String atomName = line.substring(12, 16).trim();
             String pdbName = line.substring(17, 20).trim();
+            String elementName = line.substring(76, 78).trim();
 
-            Element element = Element.resolveFullAtomName(atomName, isHetAtmLine);
+            Element element;
+            if(elementName.isEmpty()) {
+                // fallback for PDB files lacking annotation of elements
+                element = Element.resolveFullAtomName(atomName, isHetAtmLine);
+            } else {
+                element = Element.resolveElementSymbol(elementName);
+            }
             if(skipHydrogens && element.isHydrogen()) {
                 return;
             }
@@ -373,7 +380,7 @@ public class StructureParser {
         boolean skipHetAtms = false;
         boolean skipModels = true;
         boolean strictMode = false;
-        boolean skipHydrogenAtoms = true;
+        boolean skipHydrogenAtoms = false;
         boolean approximateMissingAtoms = false;
         boolean minimalParsing = false;
         ProteinIdentifier forceProteinName;

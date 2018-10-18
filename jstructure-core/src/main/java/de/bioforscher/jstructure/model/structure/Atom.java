@@ -181,12 +181,12 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " '" + getIdentifier() + "' coords='" + Arrays.toString(coordinates);
+        return getClass().getSimpleName() + " " + getIdentifier();
     }
 
     @Override
     public String getIdentifier() {
-        return identifier == null ? name + "-" + pdbSerial : identifier;
+        return identifier == null ? getParentGroup().getIdentifier() + "-" + name + "-" + pdbSerial : identifier;
     }
 
     @Override
@@ -219,7 +219,7 @@ public class Atom extends AbstractFeatureable implements AtomRecordWriter, Coord
     }
 
     public boolean hasAlternativeLocations() {
-        return !alternativeLocation.isEmpty();
+        return !alternativeLocation.isEmpty() && !alternativeLocation.equals("A");
     }
 
     /**

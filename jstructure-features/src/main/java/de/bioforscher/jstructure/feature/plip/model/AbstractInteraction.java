@@ -2,6 +2,7 @@ package de.bioforscher.jstructure.feature.plip.model;
 
 import de.bioforscher.jstructure.model.structure.Atom;
 import de.bioforscher.jstructure.model.structure.Group;
+import de.bioforscher.jstructure.model.structure.selection.SelectionException;
 
 import java.util.List;
 
@@ -61,5 +62,21 @@ public abstract class AbstractInteraction implements Interaction {
     @Override
     public boolean containsGroup(Group group) {
         return interactingGroup1.equals(group) || interactingGroup2.equals(group);
+    }
+
+    @Override
+    public Group getOpposingGroup(Group group) {
+        if(interactingGroup1.equals(group)) {
+            return interactingGroup2;
+        }
+        if(interactingGroup2.equals(group)) {
+            return interactingGroup1;
+        }
+        throw new SelectionException("interaction " + this + " does not contain group " + group);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " " + interactingGroup1 + " <-> " + interactingGroup2 + " : " + interactingAtoms1 + " <-> " + interactingAtoms2;
     }
 }

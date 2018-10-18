@@ -194,7 +194,11 @@ public enum Element {
         }
 
         // fix for Holmium
-        if(atomName.startsWith("HO")) {
+        if(!hetAtm && atomName.startsWith("HO")) {
+            return Element.H;
+        }
+        // fix for mercury
+        if(!hetAtm && atomName.startsWith("HG")) {
             return Element.H;
         }
 

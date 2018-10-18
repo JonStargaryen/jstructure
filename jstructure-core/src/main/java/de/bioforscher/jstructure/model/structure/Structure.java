@@ -190,7 +190,7 @@ public class Structure extends AbstractFeatureable implements ChainContainer/*, 
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + " '" + getIdentifier() + "' chains='"  + getChains().size() + "'";
+        return getClass().getSimpleName() + " " + getIdentifier() + " chains="  + getChains().size();
     }
 
     @Override

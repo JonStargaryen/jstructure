@@ -25,7 +25,8 @@ public class TestUtils {
         PDB_1BRR,
         PDB_1CYO,
         PDB_2LZM,
-        PDB_5OAZ
+        PDB_5OAZ,
+        PDB_3G1H
     }
 
     /**
@@ -38,7 +39,7 @@ public class TestUtils {
      * @return an input stream of that pdb file's content
      */
     public static InputStream getProteinInputStream(SupportedProtein supportedProtein) {
-        return getResourceAsInputStream("pdb/" + supportedProtein.name().split("_")[1] + ".pdb");
+        return getResourceAsInputStream("pdb/" + supportedProtein.name().split("_")[1].toLowerCase() + ".pdb");
     }
 
     public static InputStream getResourceAsInputStream(String filename) {
