@@ -207,6 +207,8 @@ public class GroupPrototypeParser {
                     return BondType.SINGLE;
                 case "doub":
                     return BondType.DOUBLE;
+                case "trip":
+                    return BondType.TRIPLE;
                 default:
                     throw new UnsupportedOperationException("cannot handle bond type: " + description);
             }

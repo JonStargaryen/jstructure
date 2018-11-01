@@ -2,7 +2,6 @@ package de.bioforscher.jstructure.feature.plip.model;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
 import de.bioforscher.jstructure.model.structure.Group;
 import de.bioforscher.jstructure.model.structure.StructureCollectors;
 
@@ -55,36 +54,36 @@ public interface Interaction {
 
     Group getOpposingGroup(Group group);
 
-    default Atom getPseudoAtomRepresentation() {
-        double[] centroid = LinearAlgebra.on(interactingAtoms1().collect(StructureCollectors.toCentroid()))
+    default double[] getCentroid() {
+        return LinearAlgebra.on(interactingAtoms1().collect(StructureCollectors.toCentroid()))
                 .add(interactingAtoms2().collect(StructureCollectors.toCentroid()))
                 .divide(2)
                 .getValue();
-        Atom  atom = Atom.builder(mapInteractionToElement(this), centroid).build();
-        if(isLigandInteraction()) {
-            Group opposingGroup = getInteractingGroup1().isLigand() ? getInteractingGroup2() : getInteractingGroup1();
-            opposingGroup.addAtom(atom);
-        }
-        return atom;
+//        Atom  atom = Atom.builder(mapInteractionToElement(this), centroid).build();
+//        if(isLigandInteraction()) {
+//            Group opposingGroup = getInteractingGroup1().isLigand() ? getInteractingGroup2() : getInteractingGroup1();
+//            opposingGroup.addAtom(atom);
+//        }
+//        return atom;
     }
 
-    static Element mapInteractionToElement(Interaction interaction) {
-        if(interaction instanceof HalogenBond) {
-            return Element.H;
-        } else if(interaction instanceof HydrogenBond) {
-            return Element.O;
-        } else if(interaction instanceof HydrophobicInteraction) {
-            return Element.C;
-        } else if(interaction instanceof MetalComplex) {
-            return Element.Fe;
-        } else if(interaction instanceof PiCationInteraction) {
-            return Element.Ca;
-        } else if(interaction instanceof PiStackingInteraction) {
-            return Element.K;
-        } else if(interaction instanceof SaltBridge) {
-            return Element.Cl;
-        } else {
-            return Element.Ar;
-        }
-    }
+//    static Element mapInteractionToElement(Interaction interaction) {
+//        if(interaction instanceof HalogenBond) {
+//            return Element.H;
+//        } else if(interaction instanceof HydrogenBond) {
+//            return Element.O;
+//        } else if(interaction instanceof HydrophobicInteraction) {
+//            return Element.C;
+//        } else if(interaction instanceof MetalComplex) {
+//            return Element.Fe;
+//        } else if(interaction instanceof PiCationInteraction) {
+//            return Element.Ca;
+//        } else if(interaction instanceof PiStackingInteraction) {
+//            return Element.K;
+//        } else if(interaction instanceof SaltBridge) {
+//            return Element.Cl;
+//        } else {
+//            return Element.Ar;
+//        }
+//    }
 }

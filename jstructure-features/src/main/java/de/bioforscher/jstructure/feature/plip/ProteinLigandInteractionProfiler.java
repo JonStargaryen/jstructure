@@ -14,7 +14,11 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,9 +34,20 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
     private static final Logger logger = LoggerFactory.getLogger(ProteinLigandInteractionProfiler.class);
     private static final ProteinLigandInteractionProfiler INSTANCE = new ProteinLigandInteractionProfiler();
     private static final String DEFAULT_SERVICE_LOCATION = "/home/bittrich/programs/pliptool/plip/plipcmd.py";
+    private static final String BASE_URL = "https://biosciences.hs-mittweida.de/plip/api/";
+    private String secret;
 
     private ProteinLigandInteractionProfiler() {
         super(DEFAULT_SERVICE_LOCATION);
+        try {
+            String line = new BufferedReader(new InputStreamReader(Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream("plip_credentials.txt"))).readLine();
+            secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
+            logger.debug("PLIP accessed via {} - authentication provided", BASE_URL);
+        } catch (IOException | NullPointerException e) {
+            throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
+        }
     }
 
     public static ProteinLigandInteractionProfiler getInstance() {
@@ -47,6 +62,32 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
         List<Interaction> mergedInteractions = annotateLigandInteractions(structure).getInteractions();
         mergedInteractions.addAll(annotatePolymerInteractions(structure).getInteractions());
         return new InteractionContainer(mergedInteractions);
+    }
+
+    public InteractionContainer fetchLigandInteractions(Structure structure) {
+        try {
+            String pdbId = structure.getProteinIdentifier().getPdbId();
+            String boundary = Long.toHexString(System.currentTimeMillis());
+            URLConnection connection = (new URL("https://biosciences.hs-mittweida.de/plip/api/provided/ligand/" + pdbId)).openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            connection.setRequestProperty("Authorization", "Basic " + secret);
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+
+            String outputContent;
+            while((outputContent = in.readLine()) != null) {
+                response.append(outputContent);
+            }
+
+            in.close();
+
+            Document document = Jsoup.parse(response.toString());
+            return parseDocument(structure, document);
+        } catch (Exception e) {
+            //TODO this happens as no ligand interactions are precomputed at biosciences
+            throw new ComputationException(e);
+        }
     }
 
     public InteractionContainer annotateLigandInteractions(Structure structure) {

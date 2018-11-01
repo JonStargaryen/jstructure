@@ -33,6 +33,14 @@ public class PLIPIntraMolecularAnnotator extends FeatureProvider {
         protein.getFeatureContainer().addFeature(new PLIPInteractionContainer(this, plipInteractions));
     }
 
+    public void process(Chain chain) {
+        process(chain, getDocument(chain));
+
+        List<PLIPInteraction> plipInteractions = chain.getFeature(PLIPInteractionContainer.class).getInteractions();
+
+        chain.getParentStructure().getFeatureContainer().addFeature(new PLIPInteractionContainer(this, plipInteractions));
+    }
+
     public static Document getDocument(Chain chain) {
         return PLIPRestServiceQuery.getIntraMolecularDocument(chain);
     }

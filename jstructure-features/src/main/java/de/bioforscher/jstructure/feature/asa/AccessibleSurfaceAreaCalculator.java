@@ -2,10 +2,7 @@ package de.bioforscher.jstructure.feature.asa;
 
 import de.bioforscher.jstructure.mathematics.LinearAlgebra;
 import de.bioforscher.jstructure.model.feature.FeatureProvider;
-import de.bioforscher.jstructure.model.structure.Atom;
-import de.bioforscher.jstructure.model.structure.Element;
-import de.bioforscher.jstructure.model.structure.Group;
-import de.bioforscher.jstructure.model.structure.Structure;
+import de.bioforscher.jstructure.model.structure.*;
 import de.bioforscher.jstructure.model.structure.aminoacid.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,6 +95,21 @@ public class AccessibleSurfaceAreaCalculator extends FeatureProvider {
                 .forEach(this::assignRadius);
 
         protein.aminoAcids()
+                .parallel()
+                .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
+    }
+
+    public void process(Chain chain) {
+        List<Atom> nonHydrogenAtoms = chain.select()
+                .aminoAcids()
+                .nonHydrogenAtoms()
+                .asFilteredAtoms()
+                .collect(Collectors.toList());
+
+        nonHydrogenAtoms.parallelStream()
+                .forEach(this::assignRadius);
+
+        chain.aminoAcids()
                 .parallel()
                 .forEach(group -> assignSingleAsa(group, nonHydrogenAtoms));
     }
