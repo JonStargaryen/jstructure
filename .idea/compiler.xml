@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="aars-motifs" />
         <module name="design" />
         <module name="explorer" />
         <module name="helix-explorer" />
@@ -22,6 +23,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="aars-motifs" target="1.8" />
       <module name="core" target="1.8" />
       <module name="design" target="1.8" />
       <module name="explorer" target="1.8" />

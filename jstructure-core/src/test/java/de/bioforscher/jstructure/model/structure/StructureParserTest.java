@@ -238,4 +238,33 @@ public class StructureParserTest {
             }
         }
     }
+
+    @Test
+    public void shouldHandleLargeCoordinatesFor3hqv() {
+        Structure structure = StructureParser.fromPdbId("3hqv").parse();
+        Pattern.compile("\n").splitAsStream(structure.getPdbRepresentation())
+                .filter(line -> line.startsWith("ATOM") || line.startsWith("HETATM"))
+                .forEach(line -> Assert.assertFalse("file formatted wrong - contains ',' - line: " + line,
+                        line.contains(",")));
+    }
+
+    @Test
+    public void shouldCorrectOffsetInHeaderFor4xdb() {
+        Structure structure = StructureParser.fromPdbId("4xdb").parse();
+        String header = structure.getHeader();
+
+        Assert.assertEquals("header not fixed",
+                "HEADER    OXIDOREDUCTASE, MEMBRANE PROTEIN, FLAVOP19-DEC-14   4XDB              ".trim(),
+                header.trim());
+    }
+
+    @Test
+    public void shouldLeaveCorrectHeaderUntouchedFor1acj() {
+        Structure structure = StructureParser.fromPdbId("1acj").parse();
+        String header = structure.getHeader();
+
+        Assert.assertEquals("header was manipulated",
+                "HEADER    HYDROLASE(CARBOXYLIC ESTERASE)          18-AUG-93   1ACJ              ".trim(),
+                header.trim());
+    }
 }

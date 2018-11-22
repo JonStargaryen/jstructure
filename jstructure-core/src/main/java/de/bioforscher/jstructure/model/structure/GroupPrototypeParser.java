@@ -246,6 +246,9 @@ public class GroupPrototypeParser {
         if(polymerType.contains("peptide") && polymerType.contains("terminus")) {
             return GroupPrototype.PolymerType.PEPTIDE_TERMINUS;
         }
+        if(polymerType.contains("NA") && polymerType.contains("terminus")) {
+            return GroupPrototype.PolymerType.NA_TERMINUS;
+        }
         throw new ParsingException("'" + polymerType + "' is an unknown polymer type for '" + id + "'");
     }
 

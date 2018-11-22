@@ -14,20 +14,22 @@ import static de.bioforscher.jstructure.model.structure.Atom.HETATM_PREFIX;
  * Created by bittrich on 5/23/17.
  */
 class AtomRecordProvider {
-    static DecimalFormat d3 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+    private static DecimalFormat d3 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
 
     static {
         d3.setMaximumIntegerDigits(4);
         d3.setMinimumFractionDigits(3);
         d3.setMaximumFractionDigits(3);
+        d3.setGroupingUsed(false);
     }
 
-    static DecimalFormat d2 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
+    private static DecimalFormat d2 = (DecimalFormat) NumberFormat.getInstance(Locale.US);
 
     static {
         d2.setMaximumIntegerDigits(3);
         d2.setMinimumFractionDigits(2);
         d2.setMaximumFractionDigits(2);
+        d2.setGroupingUsed(false);
     }
 
     static String toPdbString(Atom atom) {

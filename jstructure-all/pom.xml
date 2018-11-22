@@ -97,6 +97,7 @@
         <module>../jstructure-structural-information</module>
         <module>../jstructure-structural-information-explorer</module>
         <module>../jstructure-folding-cores</module>
+        <module>../aars-motifs</module>
     </modules>
 
     <properties>

@@ -21,6 +21,7 @@ public class GroupPrototype {
         // the case for e.g. STA
         PEPTIDE_LIKE,
         PEPTIDE_TERMINUS,
+        NA_TERMINUS,
         SACCHARIDE
     }
 
