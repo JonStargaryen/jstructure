@@ -150,11 +150,11 @@ public class Structure extends AbstractFeatureable implements ChainContainer/*, 
         String classificationString = classification.length() < 40 ? classification : classification.substring(0, 40);
         stringBuilder.append("HEADER    ");
         stringBuilder.append(classificationString);
-        stringBuilder.append(" ");
+//        stringBuilder.append(" ");
 
         // fill up the white space to the right column
         int l =  classificationString.length() + 10;
-        while (l < 49) {
+        while (l < 50) {
             stringBuilder.append(" ");
             l++;
         }

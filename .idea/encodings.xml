@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/aars-motifs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jstructure-align" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jstructure-all" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jstructure-all/aars-motifs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jstructure-core" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jstructure-features" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jstructure-folding-cores" charset="UTF-8" />
