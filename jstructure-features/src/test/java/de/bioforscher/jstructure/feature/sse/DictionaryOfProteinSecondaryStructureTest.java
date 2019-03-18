@@ -98,4 +98,39 @@ public class DictionaryOfProteinSecondaryStructureTest {
                       .map(type -> String.valueOf(type.type))
                       .collect(Collectors.joining());
     }
+
+    @Test
+    public void test1bta() {
+        Structure structure = StructureParser.fromPdbId("1bta").parse();
+        featureProvider.process(structure);
+        structure.aminoAcids()
+                .forEach(aminoAcid -> {
+            System.out.println(aminoAcid);
+            DSSPSecondaryStructure sse = aminoAcid.getFeature(DSSPSecondaryStructure.class);
+            System.out.println(sse.getSecondaryStructure().name());
+        });
+
+        System.out.println(structure.getFirstChain()
+                .aminoAcids()
+                .map(aminoAcid -> aminoAcid.getFeature(DSSPSecondaryStructure.class).getSecondaryStructure().getOneLetterRepresentation())
+                //.map(c -> !c.equals(" ") ? c : "-")
+                .collect(Collectors.joining()));
+    }
+
+    @Test
+    public void test1btaBiojava() throws IOException, StructureException {
+        org.biojava.nbio.structure.Structure structure = new PDBFileReader().getStructureById("1bta");
+        new SecStrucCalc().calculate(structure, true);
+
+        // return complete DSSP annotation string from BioJava
+        System.out.println(structure.getChains()
+                .stream()
+                .flatMap(chain -> chain.getAtomGroups(GroupType.AMINOACID).stream())
+                .map(aminoAcid -> aminoAcid.getProperty(Group.SEC_STRUC))
+                .map(SecStrucState.class::cast)
+                .map(SecStrucState::getType)
+                .map(type -> String.valueOf(type.type))
+                .map(type -> type.equals(" ") ? "-" : type)
+                .collect(Collectors.joining()));
+    }
 }

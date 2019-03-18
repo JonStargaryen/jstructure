@@ -48,7 +48,8 @@ public class ProteinLigandInteractionProfiler extends ExternalLocalService {
             secret = new String(Base64.getMimeEncoder().encode(line.getBytes()));
             logger.debug("PLIP accessed via {} - authentication provided", BASE_URL);
         } catch (IOException | NullPointerException e) {
-            throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
+            logger.warn("no access to PLIP rest service - no credentials");
+//            throw new IllegalStateException("no credentials provided to access 'biosciences.hs-mittweida.de/plip/'");
         }
     }
 
