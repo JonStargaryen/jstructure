@@ -32,7 +32,7 @@ public class StructuralInformationService {
      * How many contacts to select for each iteration.
      */
     //TODO could sample some frequencies to normalize structural change expected from one contact
-    private static final double BASELINE_FREQUENCY = 0.3;
+//    private static final double BASELINE_FREQUENCY = 0.3;
     /**
      * How many iterations to perform.
      */
@@ -41,9 +41,8 @@ public class StructuralInformationService {
     private StructuralInformationService() {
         logger.info("StructureDistiller v{}",
                 VERSION);
-        logger.debug("{} setup up to sample {}% of contacts with coverage {}",
+        logger.debug("{} setup with coverage {}",
                 getClass().getSimpleName(),
-                StandardFormat.formatToInteger(BASELINE_FREQUENCY * 100),
                 COVERAGE);
     }
 
@@ -56,7 +55,8 @@ public class StructuralInformationService {
                         Path confoldPath,
                         Path tmalignPath,
                         Path outputDirectory,
-                        int numberOfThreads) {
+                        int numberOfThreads,
+                        double baselineFrequency) {
         try {
             ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
             List<AminoAcid> aminoAcids = referenceChain.aminoAcids().collect(Collectors.toList());
@@ -110,7 +110,7 @@ public class StructuralInformationService {
                         fullMap,
                         sequence,
                         secondaryStructure,
-                        BASELINE_FREQUENCY,
+                        baselineFrequency,
                         confoldPath.toFile().getAbsolutePath(),
                         tmalignPath.toFile().getAbsolutePath(),
                         outputDirectory,

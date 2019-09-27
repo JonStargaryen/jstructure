@@ -12,6 +12,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="jstructure-utils" scope="TEST" />
     <orderEntry type="module" module-name="jstructure-residue-graphs" />
     <orderEntry type="module" module-name="jstructure-features" />
     <orderEntry type="module" module-name="jstructure-core" />

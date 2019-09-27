@@ -34,7 +34,8 @@ public class StructuralInformationServiceTest {
                 Paths.get("/home/bittrich/programs/confold_v1.0/confold.pl"),
                 Paths.get("/home/bittrich/programs/tmalign/tmalign"),
                 Paths.get("/tmp/"),
-                8);
+                8,
+                0.3);
     }
 
     @Test
@@ -45,7 +46,8 @@ public class StructuralInformationServiceTest {
                 Paths.get("/home/bittrich/programs/confold_v1.0/confold.pl"),
                 Paths.get("/home/bittrich/programs/tmalign/tmalign"),
                 Paths.get("/tmp/"),
-                8);
+                8,
+                0.3);
     }
 
     @Test
@@ -63,7 +65,8 @@ public class StructuralInformationServiceTest {
                             Paths.get("/home/bittrich/programs/confold_v1.0/confold.pl"),
                             Paths.get("/home/bittrich/programs/tmalign/tmalign"),
                             outputPath,
-                            8);
+                            8,
+                            0.3);
                 });
     }
 }
